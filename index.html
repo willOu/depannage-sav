@@ -51,8 +51,24 @@ h2{font-size:13px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted
 .boardhead h3{margin:0;font-size:22px}
 .boardhead p{margin:4px 0 0;color:var(--muted);font-size:14px}
 .src{font-size:12.5px;color:var(--muted);margin-top:8px}
-.tabs{display:flex;gap:6px;margin:14px 0 10px;position:sticky;top:var(--hh,112px);z-index:3;background:var(--bg);padding:6px 0}
-.tabs button{flex:1 1 auto;min-width:0;border:1px solid var(--line);background:var(--card);border-radius:10px;height:44px;font-weight:600;font-size:13.5px;padding:0 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tabs{display:flex;gap:4px;margin:14px 0 10px;position:sticky;top:var(--hh,112px);z-index:3;background:var(--bg);padding:6px 0}
+.tabs button{flex:1 1 auto;min-width:0;border:1px solid var(--line);background:var(--card);border-radius:10px;height:44px;font-weight:600;font-size:13px;padding:0 5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pfind{width:100%;height:44px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font-size:16px;padding:0 12px;margin:4px 0 6px}
+.prm{border:1px solid var(--line);border-radius:10px;background:var(--card);margin:6px 0;overflow:hidden}
+.prm summary{list-style:none;display:flex;align-items:center;gap:10px;padding:10px 12px;cursor:pointer;min-height:44px}
+.prm summary::-webkit-details-marker{display:none}
+.prm .pc{flex:0 0 auto;min-width:46px;text-align:center;font-family:ui-monospace,Menlo,monospace;font-weight:700;font-size:15px;background:var(--brand);color:#fff;border-radius:6px;padding:3px 6px}
+.prm .pt{flex:1;font-weight:600;font-size:14.5px;line-height:1.3}
+.prm .pd{flex:0 0 auto;font-size:12px;color:var(--muted);text-align:right;line-height:1.2}
+.prm .pd b{display:block;font-family:ui-monospace,Menlo,monospace;font-size:14px;color:var(--ink)}
+.prm[open] summary{border-bottom:1px solid var(--line)}
+.prm .pv{width:100%;border-collapse:collapse;margin:0}
+.prm .pv td{padding:8px 12px;border-top:1px solid var(--line);vertical-align:top;font-size:14px}
+.prm .pv tr:first-child td{border-top:0}
+.prm .pv td:first-child{font-family:ui-monospace,Menlo,monospace;font-weight:700;white-space:nowrap;width:1%}
+.prm .pv td.w{font-family:inherit;font-size:13px}
+.prm .pv tr.isdef td{background:color-mix(in srgb,var(--brand) 12%,transparent)}
+.prm .pn{padding:8px 12px 10px;font-size:13.5px;color:var(--muted);border-top:1px solid var(--line)}
 .tabs button[aria-selected="true"]{background:var(--brand);color:#fff;border-color:var(--brand)}
 .filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
 .filters button{border:1px solid var(--line);background:var(--chip);border-radius:999px;padding:6px 12px;font-size:13.5px}
@@ -178,6 +194,7 @@ function viewBrand(id){
 }
 
 let codeFilter = "tous";
+let paramOpen = "";
 function viewBoard(id, tab){
   const b = findBoard(id); if (!b) return viewHome();
   const { m, c } = b;
@@ -187,7 +204,7 @@ function viewBoard(id, tab){
 
   let h = `<div class="boardhead" style="--c:${m.couleur}"><h3>${esc(c.nom)}</h3><p>${esc(c.modeles)}</p><p>${esc(c.type)}</p><div class="src">Source : ${esc(c.source)}</div></div>
   <div class="tabs" role="tablist">
-    ${[["codes","Codes"],["bornier","Bornier"],["aff","Afficheur"],["appr","Apprentissage"]].map(([k,l]) => `<button role="tab" aria-selected="${tab===k}" onclick="go('#/c/${id}/${k}')">${l}</button>`).join("")}
+    ${[["codes","Codes"],["bornier","Bornier"],["aff","Écran"],["param","Paramètres"],["appr","Apprent."]].map(([k,l]) => `<button role="tab" aria-selected="${tab===k}" onclick="go('#/c/${id}/${k}')">${l}</button>`).join("")}
   </div><div id="pane"></div>`;
   app.innerHTML = h;
   const pane = $("#pane");
@@ -252,6 +269,36 @@ function viewBoard(id, tab){
       });
     }
   }
+  if (tab === "param"){
+    const P = c.parametres;
+    if (!P){
+      pane.innerHTML = `<div class="empty">Paramètres de programmation pas encore ajoutés pour cette carte.<br>Il faut la notice fabricant (chapitre programmation).</div>`;
+    } else {
+      const isDef = (v, d) => { if (v === d) return true; const r = v.match(/^(\d+)[–-](\d+)$/); return r && /^\d+$/.test(d) && +d >= +r[1] && +d <= +r[2]; };
+      const item = x => `<details class="prm" data-c="${esc(x.code)}"><summary><span class="pc">${esc(x.code)}</span><span class="pt">${esc(x.titre)}</span><span class="pd">usine<b>${esc(x.def)}</b></span></summary>
+        <table class="pv">${x.valeurs.map(([v, d]) => `<tr class="${isDef(v, x.def) ? "isdef" : ""}"><td${/\d/.test(v) ? "" : ' class="w"'}>${esc(v)}</td><td>${esc(d)}</td></tr>`).join("")}</table>
+        ${x.note ? `<div class="pn">${esc(x.note)}</div>` : ""}</details>`;
+      pane.innerHTML = `<p class="note">${esc(P.intro)}</p>
+        <details class="prm"><summary><span class="pt">Comment modifier un paramètre</span></summary><div class="pn"><ul class="plain">${P.navigation.map(n => `<li>${esc(n)}</li>`).join("")}</ul></div></details>
+        <input class="pfind" type="search" placeholder="Chercher un paramètre (ex. 51, couple, radio)" aria-label="Chercher un paramètre">
+        <div id="plist"></div>`;
+      const inp = pane.querySelector(".pfind"), pl = $("#plist");
+      const draw = () => {
+        const words = norm(inp.value).split(" ").filter(Boolean);
+        let out = "", n = 0;
+        const exact = P.groupes.some(g => g.items.some(x => norm(x.code) === norm(inp.value)));
+        P.groupes.forEach(g => {
+          const its = exact ? g.items.filter(x => norm(x.code) === norm(inp.value)) : g.items.filter(x => !words.length || norm(x.code) === norm(inp.value) || words.every(w => norm(`${x.code} ${x.titre} ${x.note||""} ${x.valeurs.map(v=>v.join(" ")).join(" ")}`).includes(w)));
+          if (its.length){ n += its.length; out += `<h2>${esc(g.nom)}</h2>` + its.map(item).join(""); }
+        });
+        pl.innerHTML = out || `<div class="empty">Aucun paramètre ne correspond.</div>`;
+        if (words.length && n <= 3) pl.querySelectorAll("details").forEach(d => d.open = true);
+      };
+      inp.oninput = draw;
+      if (paramOpen){ inp.value = paramOpen; paramOpen = ""; }
+      draw();
+    }
+  }
   if (tab === "appr"){
     const a = c.apprentissage;
     pane.innerHTML = `<h2>Avant de commencer</h2><div class="note"><ul class="plain">${a.avant.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>
@@ -309,13 +356,16 @@ function viewSearch(q){
   setHead("Recherche", true);
   const words = norm(q).split(" ").filter(Boolean);
   const match = txt => { const t = norm(txt); return words.every(w => t.includes(w)); };
-  const codes = [], terms = [], boards = [];
+  const codes = [], terms = [], boards = [], params = [];
   BOARDS.forEach(({m, c}) => {
     const ctx = `<span class="badge" style="--c:${m.couleur}">${esc(m.nom)}</span>${esc(c.nom)}`;
     if (match(`${m.nom} ${c.nom} ${c.modeles}`)) boards.push({m, c});
     c.codes.forEach(x => {
       const exact = norm(x.code) === norm(q);
       if (exact || match(`${m.nom} ${c.nom} ${x.code} ${x.titre} ${x.action}`)) codes.push({ x, ctx, exact, id: c.id });
+    });
+    (c.parametres ? c.parametres.groupes.flatMap(g => g.items) : []).forEach(x => {
+      if (match(`${m.nom} ${c.nom} param parametre ${x.code} ${x.titre}`)) params.push({ x, ctx, id: c.id });
     });
     c.bornier.groupes.forEach(g => g.bornes.forEach(t => {
       if (match(`${m.nom} ${c.nom} ${t.n} ${t.label} ${t.desc}`)) terms.push({ t, ctx, id: c.id });
@@ -328,6 +378,8 @@ function viewSearch(q){
     `<div onclick="go('#/c/${r.id}/codes')" style="cursor:pointer">${codeCard(r.x, r.ctx, q)}</div>`).join("") + `</div>`;
   if (terms.length) h += `<h2>Bornes (${terms.length})</h2><table>` + terms.slice(0, 40).map(r =>
     `<tr style="--tc:var(--t-${r.t.t});cursor:pointer" onclick="go('#/c/${r.id}/bornier')"><td>${esc(r.t.n)}</td><td>${r.ctx}<br><b>${highlight(r.t.label,q)}</b> — ${highlight(r.t.desc,q)}</td></tr>`).join("") + `</table>`;
+  if (params.length) h += `<h2>Paramètres (${params.length})</h2><table>` + params.slice(0, 40).map(r =>
+    `<tr style="cursor:pointer" onclick="paramOpen=${esc(JSON.stringify(r.x.code))};go('#/c/${r.id}/param')"><td>${esc(r.x.code)}</td><td>${r.ctx}<br><b>${highlight(r.x.titre,q)}</b> · usine ${esc(r.x.def)}</td></tr>`).join("") + `</table>`;
   if (!h) h = `<div class="empty">Rien trouvé pour « ${esc(q)} ».<br>Essayez le code seul (ex. <b>E8</b>), un mot (ex. <b>encodeur</b>) ou la marque.</div>`;
   app.innerHTML = h;
 }

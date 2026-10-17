@@ -552,6 +552,269 @@ const MARQUES = [
         "Câbles : photocellules RX 4 x 0,5 mm², TX 2 x 0,5 mm² (20 m max) ; clignotant FIFTHY/24 2 x 1 mm² (10 m max)."
       ]
     },
+    parametres: {
+      intro: "Firmware P3.00. Valeur entre parenthèses = réglage usine. Les paramètres se lisent à tout moment mais ne se modifient que moteur arrêté.",
+      navigation: [
+        "UP ▲ / DOWN ▼ : paramètre suivant / précédent.",
+        "+ / − : modifier la valeur (elle clignote). Maintenir pour défiler vite.",
+        "Enregistrer : attendre quelques secondes ou passer à un autre paramètre avec UP/DOWN. L'écran clignote vite = valeur enregistrée.",
+        "Si un mot de passe est actif (CP 01), les valeurs sont visibles mais non modifiables : saisir P1–P4 d'abord."
+      ],
+      groupes: [
+        { nom: "Configuration générale", items: [
+          { code: "A0", def: "00", titre: "Communication RS485 MASTER / SLAVE", valeurs: [
+            ["00", "Standard (centrale seule)."],
+            ["01", "MASTER."],
+            ["02", "SLAVE avec copie des paramètres du MASTER. A0 non modifié ; 50 à 55 réglés pour désactiver les photocellules du SLAVE ; 71 opposé au MASTER."],
+            ["03", "SLAVE avec paramètres indépendants."]],
+            note: "Paramètres modifiables sur le SLAVE : 11, 12, 20, 31, 33, 34, 40, 41, 42, 50 à 55, 71, 73, 74." },
+          { code: "A1", def: "selon moteur", titre: "Modèle d'automatisme", valeurs: [
+            ["01", "BH30/603, BH30/604 (600 kg, irréversible)."],
+            ["02", "BH30/803, BH30/804 (1000 kg)."],
+            ["03", "BH30/503/HS, 504/HS, 603/HS, 604/HS (600 kg, High Speed)."],
+            ["04", "BM30/400 (500 kg)."],
+            ["05", "BM30/300/HS (400 kg, High Speed)."],
+            ["06", "BH30/804/R (800 kg, réversible)."]],
+            note: "Réglé en usine. À ressaisir à la main après un retour aux valeurs usine. Un mauvais modèle = fonctionnement dégradé et erreurs. 03, 05 et 06 désactivent la veille « low power » (L1 non affiché)." },
+          { code: "71", def: "01", titre: "Position du moteur (vue de l'intérieur)", valeurs: [
+            ["00", "Moteur installé à gauche."],
+            ["01", "Moteur installé à droite."]],
+            note: "À ressaisir à la main après un retour aux valeurs usine." },
+          { code: "60", def: "01", titre: "Type de fin de course", valeurs: [
+            ["00", "Micro-interrupteurs (contact sec)."],
+            ["01", "Magnétiques (capteurs à effet Hall)."]],
+            note: "Un bon choix permet de surveiller les contacts même en veille (par ex. déplacement manuel après déverrouillage)." },
+          { code: "65", def: "05", titre: "Espace d'arrêt du moteur", valeurs: [
+            ["01–05", "01 = freinage rapide, arrêt court … 05 = freinage doux, arrêt plus long."]] }
+        ]},
+        { nom: "Logique de fonctionnement", items: [
+          { code: "A2", def: "00", titre: "Refermeture après pause (depuis portail complètement ouvert)", valeurs: [
+            ["00", "Désactivée."],
+            ["01–15", "Nombre de tentatives de refermeture après passage dans la photocellule."],
+            ["99", "Tentatives illimitées."]] },
+          { code: "A3", def: "00", titre: "Refermeture après coupure secteur (black-out)", valeurs: [
+            ["00", "Désactivée."],
+            ["01", "Au retour du courant, ferme après 5 s de préclignotement, en mode récupération de position."]] },
+          { code: "A4", def: "00", titre: "Mode de la commande pas-à-pas (PP)", valeurs: [
+            ["00", "Ouvre – stop – ferme – stop."],
+            ["01", "Copropriété, temporisation renouvelée (PP ignoré pendant l'ouverture)."],
+            ["02", "Copropriété, temporisation non renouvelée (PP ignoré pendant l'ouverture)."],
+            ["03", "Ouvre – ferme – ouvre – ferme."],
+            ["04", "Ouvre – ferme – stop – ouvre."]],
+            note: "En 01 / 02 avec A2 00, la copropriété force une tentative de refermeture (comme A2 01)." },
+          { code: "A5", def: "00", titre: "Préclignotement", valeurs: [
+            ["00", "Désactivé."],
+            ["01–10", "Préclignotement de 1 à 10 s avant chaque manœuvre."],
+            ["99", "5 s avant la fermeture seulement."]] },
+          { code: "A6", def: "00", titre: "Copropriété sur l'ouverture partielle (PED)", valeurs: [
+            ["00", "PED en pas-à-pas."],
+            ["01", "PED ignoré pendant l'ouverture."]] },
+          { code: "A7", def: "00", titre: "Homme présent", valeurs: [
+            ["00", "Désactivé."],
+            ["01", "Activé : maintenir AP / CH pendant la manœuvre."]] },
+          { code: "A8", def: "00", titre: "Voyant portail ouvert / test photocellules / battery saving", valeurs: [
+            ["00", "Voyant : éteint fermé, fixe en manœuvre et ouvert."],
+            ["01", "Voyant : clignote lent en ouverture, fixe ouvert, clignote vite en fermeture, s'éteint 2 fois toutes les 15 s si arrêté à mi-course."],
+            ["02", "Sortie SC utilisée pour le test des photocellules."],
+            ["03", "Sortie SC utilisée pour le battery saving."],
+            ["04", "Battery saving + test photocellules."]],
+            note: "Voyant utilisable seulement si L1 00." },
+          { code: "15", def: "50", titre: "Ouverture partielle", valeurs: [
+            ["10–99", "Pourcentage de la course totale."]] },
+          { code: "16", def: "10", titre: "Fermeture auto après ouverture partielle", valeurs: [
+            ["00–90", "0 à 90 s."], ["92–99", "2 à 9 min."]] },
+          { code: "21", def: "30", titre: "Temps de fermeture automatique", valeurs: [
+            ["00–90", "0 à 90 s."], ["92–99", "2 à 9 min."]],
+            note: "L'intervention des photocellules relance le décompte." },
+          { code: "22", def: "00", titre: "Ouverture avec exclusion de la fermeture auto", valeurs: [
+            ["00", "Désactivée."],
+            ["01", "AP ouvre sans fermeture auto ; l'AP suivant ferme."],
+            ["02", "Idem avec PP."],
+            ["03", "Idem avec PED."]] },
+          { code: "80", def: "00", titre: "Contact horloge", valeurs: [
+            ["00", "Horloge active : le portail s'ouvre et reste ouvert, toute commande est ignorée. Fin d'horloge : il se ferme."],
+            ["01", "Horloge active : s'ouvre et reste ouvert, les commandes sont acceptées. Revenu complètement ouvert, la fonction horloge reprend."]] },
+          { code: "81", def: "00", titre: "Fermeture / ouverture garantie", valeurs: [
+            ["00", "Désactivée (82 non affiché)."],
+            ["01", "Fermeture garantie : après le temps 82, préclignotement 5 s (indépendant de A5) puis fermeture."],
+            ["02", "Fermeture et ouverture : arrêté après PP → ferme après 82 ; arrêté par obstacle en fermeture → ferme après 82 ; arrêté par obstacle en ouverture → s'ouvre après 82."]],
+            note: "Ne s'active pas si : commande d'arrêt reçue ; bord sensible détecte un obstacle dans le même sens ; tentatives A2 épuisées ; position perdue (récupération de position)." },
+          { code: "82", def: "03", titre: "Temps avant fermeture / ouverture garantie", valeurs: [
+            ["02–90", "2 à 90 s de pause."], ["92–99", "2 à 9 min de pause."]],
+            note: "Visible seulement si 81 01." }
+        ]},
+        { nom: "Course : vitesse, ralentissement, accélération", items: [
+          { code: "11", def: "04", titre: "Ralentissement en ouverture (et fermeture pour les non HS)", valeurs: [
+            ["01–05", "01 = ralentit près du fin de course … 05 = ralentit bien avant."]],
+            note: "HS / réversible : 12 règle la fermeture séparément." },
+          { code: "12", def: "04", titre: "Ralentissement en fermeture (High Speed et réversible)", valeurs: [
+            ["01–05", "01 = ralentit près du fin de course … 05 = ralentit bien avant."]] },
+          { code: "13", def: "05", titre: "Espace d'approche à vitesse constante, ouverture", valeurs: [
+            ["05–40", "05 ≈ 15 cm, 10 ≈ 30 cm, 40 ≈ 120 cm. Vitesse réglée par 42."]] },
+          { code: "14", def: "05", titre: "Espace d'approche à vitesse constante, fermeture", valeurs: [
+            ["05–40", "05 ≈ 15 cm, 10 ≈ 30 cm, 40 ≈ 120 cm. Vitesse réglée par 42."]] },
+          { code: "33", def: "04", titre: "Accélération au départ, ouverture (et fermeture pour les non HS)", valeurs: [
+            ["01–05", "01 = démarrage rapide … 05 = démarrage lent et progressif."]] },
+          { code: "34", def: "04", titre: "Accélération au départ, fermeture (High Speed et réversible)", valeurs: [
+            ["01–05", "01 = démarrage rapide … 05 = démarrage lent et progressif."]] },
+          { code: "40", def: "05", titre: "Vitesse en ouverture (et fermeture pour les non HS)", valeurs: [
+            ["01", "60 %."], ["02", "70 %."], ["03", "80 %."], ["04", "90 %."], ["05", "100 %."]],
+            note: "High Speed : 01 = 10 m/min … 05 = 24 m/min. Réversible : 01 = 7 m/min … 05 = 20 m/min." },
+          { code: "41", def: "05", titre: "Vitesse en fermeture (High Speed et réversible)", valeurs: [
+            ["01–05", "High Speed : 10 → 24 m/min. Réversible : 7 → 20 m/min."]] },
+          { code: "42", def: "03", titre: "Vitesse d'approche constante en fin de manœuvre", valeurs: [
+            ["01–08", "01 = 250 tr/min, +50 par cran, 08 = 600 tr/min."]],
+            note: "Indicatif : BH30/800 ≈ 2–5 m/min ; BH30 et BM30 HS ≈ 3–8 m/min ; BH30 réversible ≈ 2–6 m/min." },
+          { code: "36", def: "00", titre: "Couple max d'aide au démarrage (boost)", valeurs: [
+            ["00", "Désactivé."],
+            ["01", "Seulement à l'ouverture, y compris en récupération de position (en fermeture seulement si position connue et portail à plus de 2 m de la fermeture)."],
+            ["02", "À chaque démarrage."]],
+            note: "Couple maxi pendant 5 s ou ≈ 65 cm. Les HS ont une accélération fixe de 2 s." }
+        ]},
+        { nom: "Couple et détection d'obstacle", items: [
+          { code: "30", def: "05", titre: "Couple moteur", valeurs: [
+            ["01", "−35 %."], ["02", "−25 %."], ["03", "−16 %."], ["04", "−8 %."], ["05", "Réglage usine."],
+            ["06", "+8 %."], ["07", "+16 %."], ["08", "+25 %."], ["09", "+35 %."]],
+            note: "Moins de couple = détection plus sensible. En dessous de 03 : installations légères uniquement." },
+          { code: "31", def: "15", titre: "Sensibilité à la force d'impact (anti-écrasement)", valeurs: [
+            ["01–10", "Couple faible (seulement si le niveau moyen ne convient pas)."],
+            ["11–16", "Couple moyen, conseillé."],
+            ["17", "Couple 70 %, 1 s."], ["18", "Couple 80 %, 2 s."], ["19", "Couple maxi, 3 s."], ["20", "Couple maxi, 5 s."]],
+            note: "17 à 20 : bord sensible obligatoire. Réaction trop lente → baisser 31. Force trop élevée → baisser 30." },
+          { code: "37", def: "00", titre: "Couple pendant la récupération de position", valeurs: [
+            ["00", "Uniquement selon 30 / 31."],
+            ["01", "30 / 31 + courant maxi relevé à l'apprentissage."],
+            ["02", "70 %, 1 s."], ["03", "80 %, 2 s."], ["04", "100 %, 3 s."], ["05", "100 %, 5 s."]] },
+          { code: "27", def: "03", titre: "Temps d'inversion après bord sensible / détection d'obstacle", valeurs: [
+            ["00–60", "0 à 60 s."]] },
+          { code: "49", def: "01", titre: "Tentatives de refermeture après bord sensible / obstacle", valeurs: [
+            ["00", "Aucune."], ["01–03", "1 à 3 tentatives (≤ A2 ; seulement si portail complètement ouvert)."]] }
+        ]},
+        { nom: "Sécurités : photocellules et bords", items: [
+          { code: "50", def: "00", titre: "FT1 en ouverture", valeurs: [
+            ["00", "Désactivée."], ["01", "ARRÊT jusqu'à la commande suivante."], ["02", "INVERSION IMMÉDIATE."],
+            ["03", "STOP TEMPORAIRE : reprend l'ouverture une fois dégagée."], ["04", "INVERSION RETARDÉE : s'arrête, ferme une fois dégagée."]] },
+          { code: "51", def: "02", titre: "FT1 en fermeture", valeurs: [
+            ["00", "Désactivée."], ["01", "ARRÊT."], ["02", "INVERSION IMMÉDIATE."],
+            ["03", "STOP TEMPORAIRE : reprend la fermeture une fois dégagée."], ["04", "INVERSION RETARDÉE : s'arrête, ouvre une fois dégagée."]] },
+          { code: "52", def: "01", titre: "FT1 avec portail fermé", valeurs: [
+            ["00", "Ouverture impossible si occultée."], ["01", "Ouvre sur commande même occultée."],
+            ["02", "Occultée = commande d'ouverture (seulement si L1 00)."]],
+            note: "Non visible si A8 02, 03 ou 04." },
+          { code: "53", def: "00", titre: "FT2 en ouverture", valeurs: [
+            ["00", "Désactivée."], ["01", "ARRÊT jusqu'à la commande suivante."], ["02", "INVERSION IMMÉDIATE."],
+            ["03", "STOP TEMPORAIRE : reprend l'ouverture une fois dégagée."], ["04", "INVERSION RETARDÉE : s'arrête, ferme une fois dégagée."]] },
+          { code: "54", def: "00", titre: "FT2 en fermeture", valeurs: [
+            ["00", "Désactivée."], ["01", "ARRÊT."], ["02", "INVERSION IMMÉDIATE."],
+            ["03", "STOP TEMPORAIRE : reprend la fermeture une fois dégagée."], ["04", "INVERSION RETARDÉE : s'arrête, ouvre une fois dégagée."]] },
+          { code: "55", def: "01", titre: "FT2 avec portail fermé", valeurs: [
+            ["00", "Ouverture impossible si occultée."], ["01", "Ouvre sur commande même occultée."],
+            ["02", "Occultée = commande d'ouverture."]],
+            note: "Non visible si A8 02, 03 ou 04." },
+          { code: "56", def: "00", titre: "Fermeture 6 s après passage dans une photocellule", valeurs: [
+            ["00", "Désactivée."], ["01", "Sur FT1."], ["02", "Sur FT2."]],
+            note: "Non visible si A8 03 ou 04 ; non géré en stand-by." },
+          { code: "73", def: "00", titre: "Bord sensible COS1", valeurs: [
+            ["00", "Non installé."],
+            ["01", "Contact NF, inverse uniquement en ouverture."],
+            ["02", "Résistif 8k2, inverse uniquement en ouverture."],
+            ["03", "Contact NF, inverse toujours."],
+            ["04", "Résistif 8k2, inverse toujours."],
+            ["12", "Deux bords 8k2 en parallèle (4k1), inverse seulement en ouverture."],
+            ["14", "Deux bords 8k2 en parallèle (4k1), inverse toujours."]] },
+          { code: "74", def: "00", titre: "Bord sensible COS2", valeurs: [
+            ["00", "Non installé."],
+            ["01", "Contact NF, inverse uniquement en fermeture."],
+            ["02", "Résistif 8k2, inverse uniquement en fermeture."],
+            ["03", "Contact NF, inverse toujours."],
+            ["04", "Résistif 8k2, inverse toujours."],
+            ["12", "Deux bords 8k2 en parallèle (4k1), inverse seulement en ouverture."],
+            ["14", "Deux bords 8k2 en parallèle (4k1), inverse toujours."]] }
+        ]},
+        { nom: "Radio, sorties et éclairage", items: [
+          { code: "76", def: "00", titre: "1er canal radio (PR1)", valeurs: [
+            ["00", "PAS (pas-à-pas)."], ["01", "OUVERTURE PARTIELLE."], ["02", "OUVERTURE."], ["03", "FERMETURE."], ["04", "ARRÊT."],
+            ["05", "Lumière de courtoisie (sortie COR) tant que la télécommande est active ; 79 ignoré."],
+            ["06", "Lumière de courtoisie pas-à-pas : allume / éteint ; 79 ignoré."],
+            ["07", "PAS avec confirmation de sécurité."], ["08", "OUVERTURE PARTIELLE avec confirmation."],
+            ["09", "OUVERTURE avec confirmation."], ["10", "FERMETURE avec confirmation."]],
+            note: "Confirmation : la touche doit être confirmée dans les 2 s par une 2e touche (ex. 76 07 et 77 01 : CHA puis CHB → ouverture partielle). Évite les manœuvres involontaires." },
+          { code: "77", def: "01", titre: "2e canal radio (PR2)", valeurs: [
+            ["00–10", "Mêmes valeurs que 76."]] },
+          { code: "78", def: "00", titre: "Clignotant", valeurs: [
+            ["00", "Intermittence gérée par le clignotant lui-même."],
+            ["01", "Intermittence lente."],
+            ["02", "Lente en ouverture, rapide en fermeture."]] },
+          { code: "20", def: "00", titre: "Mode de la sortie COR", valeurs: [
+            ["00", "Lumière de courtoisie standard, gérée par 79."],
+            ["01", "Fermée si centrale OK, ouverte en alarme."],
+            ["02", "Fermée sur secteur ou batterie chargée ; ouverte si anomalie batterie (seuil 85 ou alarme btLO)."],
+            ["03", "Fermée sans anomalie 1 ni 2 ; ouverte si l'une des deux."],
+            ["04", "Fermée si portail pas complètement ouvert ; ouverte quand complètement ouvert."],
+            ["05", "Fermée si portail pas complètement fermé ; ouverte quand complètement fermé."]],
+            note: "Utilisable seulement si L1 00." },
+          { code: "79", def: "60", titre: "Lumière de courtoisie", valeurs: [
+            ["00", "Désactivée."], ["01", "Impulsion au début de chaque manœuvre."], ["02", "Allumée pendant toute la manœuvre."],
+            ["03–90", "Reste allumée 3 à 90 s après la manœuvre."], ["92–99", "Reste allumée 2 à 9 min après la manœuvre."]],
+            note: "Non visible si 20 différent de 00." }
+        ]},
+        { nom: "Batterie et veille", items: [
+          { code: "85", def: "03", titre: "Gestion du fonctionnement sur batterie", valeurs: [
+            ["00", "Accepte les commandes jusqu'à épuisement ; au minimum, btLO s'affiche (20 V avec B71/BC, 23,7 V avec B71/PBX) et la centrale n'accepte plus de commande."],
+            ["01", "Seuil minimum (22 V B71/BC ; 24,6 V B71/PBX)."],
+            ["02", "Seuil intermédiaire (23 V B71/BC ; 25 V B71/PBX)."],
+            ["03", "Seuil maximum (24 V B71/BC ; 25,4 V B71/PBX)."]],
+            note: "Le comportement au seuil se règle avec 86 ; signalisation possible par COR (20)." },
+          { code: "86", def: "00", titre: "Limitations sur batterie (au seuil 85, pendant plus de 30 s)", valeurs: [
+            ["00", "Aucune limitation (signalisation possible via COR)."],
+            ["01", "N'accepte que l'ouverture et ne referme plus."],
+            ["02", "Préclignote 5 s, ouvre et n'accepte plus que l'ouverture."],
+            ["03", "N'accepte que la fermeture (même si ORO est actif et 80 01)."],
+            ["04", "Préclignote 5 s, ferme et n'accepte plus que l'ouverture."]],
+            note: "Visible seulement si 85 différent de 00." },
+          { code: "87", def: "00", titre: "Type de batterie et réduction de consommation", valeurs: [
+            ["00", "24 V (2×12 V) avec B70/1DC : accélérations / vitesses réduites pour l'autonomie."],
+            ["01", "24 V avec B70/1DC : pas de réduction, consommation maxi."],
+            ["02", "24 V avec chargeur externe B71/PBX : performances réduites pour l'autonomie."],
+            ["03", "24 V avec chargeur externe B71/PBX : pas de réduction, consommation maxi."]] },
+          { code: "L1", def: "04", titre: "Veille « low power »", valeurs: [
+            ["00", "Désactivée."], ["01", "Veille après 5 min d'inactivité."], ["02", "Après 10 min."], ["03", "Après 15 min."], ["04", "Après 20 min."]],
+            note: "Pas de veille portail ouvert en attente de refermeture (A2, 21), ni pendant le décompte de 81/82. Désactivée d'office sur High Speed et réversible (L1 non affiché). Voyant (A8) et COR (20) ne fonctionnent qu'en L1 00." }
+        ]},
+        { nom: "Communication, test et maintenance", items: [
+          { code: "L0", def: "00", titre: "Communication série", valeurs: [
+            ["00", "Désactivée."], ["01", "Module B74/BCONNECT."], ["02", "Carte de débogage (usage interne)."]] },
+          { code: "89", def: "00", titre: "Gestion des paramètres du SLAVE via B74/BCONNECT sur le MASTER", valeurs: [
+            ["00", "Désactivée."],
+            ["01", "Le MASTER permet de voir et modifier les paramètres du SLAVE et de sauvegarder ceux du SLAVE sur B-CONNECT."]],
+            note: "Remettre 00 une fois terminé." },
+          { code: "88", def: "00", titre: "Manœuvres cycliques (modes de test uniquement)", valeurs: [
+            ["00", "Désactivées."],
+            ["01–90", "Ouverture toutes les 1 à 90 s."], ["91–99", "Ouverture toutes les 1 à 9 min."]],
+            note: "Régler aussi A2 et 21. Le cycle complet (ouverture-pause-fermeture) est toujours mené à terme avant le suivant." },
+          { code: "FA", def: "00", titre: "Retour aux valeurs usine", valeurs: [
+            ["Procédure", "Afficher FA 00, maintenir + et − 4 s : rES- clignote, valeurs usine restaurées."],
+            ["Au démarrage", "Maintenir ▲ et ▼ 4 s à la mise sous tension, avant l'affichage de la version firmware."]],
+            note: "Impossible si un mot de passe est actif : le débloquer avec P1–P4 (CP 00 s'affiche). Non restaurés : A0, A1, 60, 71, 86, 87, 89, L0, L1 → vérifier qu'ils correspondent à l'installation." },
+          { code: "n0–n7", def: "lecture", titre: "Identification de la carte", valeurs: [
+            ["n0", "Version matérielle."], ["n1", "Année de production."], ["n2", "Semaine de production."],
+            ["n3 n4 n5", "Numéro de série."], ["n6", "Version firmware."], ["n7", "Version communication MASTER/SLAVE RS485."]] },
+          { code: "oП–o1", def: "lecture", titre: "Compteur de manœuvres", valeurs: [
+            ["oП o0 o1", "Lire à la suite × 100. Ex. 01 23 45 → 1 234 500 manœuvres."]] },
+          { code: "h0–h1", def: "lecture", titre: "Heures de manœuvre", valeurs: [
+            ["h0 h1", "Ex. 01 23 → 123 heures."]] },
+          { code: "d0–d1", def: "lecture", titre: "Jours sous tension", valeurs: [
+            ["d0 d1", "Ex. 01 23 → 123 jours."]] },
+          { code: "P1–P4", def: "00", titre: "Mot de passe", valeurs: [
+            ["Activer", "Saisir P1, P2, P3, P4 ; afficher CP ; maintenir + et − 4 s (l'écran clignote) ; couper puis remettre le courant et vérifier CP 01."],
+            ["Débloquer", "Saisir le mot de passe, vérifier CP 00. Se réactive après 30 min sans appui ou à la remise sous tension."],
+            ["Supprimer", "Débloquer (CP 00), mettre P1 à P4 à 00, afficher CP, maintenir + et − 4 s, couper puis remettre le courant."]],
+            note: "Mot de passe perdu : contacter l'assistance Roger." },
+          { code: "CP", def: "00", titre: "État du mot de passe", valeurs: [
+            ["00", "Protection désactivée."], ["01", "Protection activée."]] }
+        ]}
+      ]
+    },
     apprentissage: {
       avant: [
         "A1 — modèle : 01 BH30/603-604 · 02 BH30/803-804 · 03 BH30 HS (503/504/603/604) · 04 BM30/400 · 05 BM30/300/HS · 06 BH30/804/R.",

@@ -16,7 +16,7 @@ L'HTTPS est obligatoire pour le mode hors ligne : GitHub Pages le fournit.
 Ouvrir l'appli une fois : tout est alors enregistré sur le téléphone.
 
 ## Ajouter ou corriger une fiche
-- Tout le contenu est dans `data.js` (une entrée par carte : codes, bornier, apprentissage).
+- Tout le contenu est dans `data.js` (une entrée par carte : codes, bornier, afficheur, paramètres, apprentissage).
 - Après chaque modification : changer `DATA_VERSION` dans `data.js` **et** `VERSION` dans `sw.js`.
   Les téléphones affichent alors « Nouvelle version disponible — recharger » à la prochaine connexion.
 
