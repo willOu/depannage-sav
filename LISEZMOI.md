@@ -17,6 +17,7 @@ Ouvrir l'appli une fois : tout est alors enregistré sur le téléphone.
 
 ## Ajouter ou corriger une fiche
 - Tout le contenu est dans `data.js` (une entrée par carte : codes, bornier, afficheur, paramètres, apprentissage).
+- Ajouter une entrée en haut de `CHANGELOG` (dans `data.js`) avec la date, les nouveautés et, dans `docs`, le nom des notices ajoutées : elles s'affichent dans Réglages.
 - Après chaque modification : changer `DATA_VERSION` dans `data.js` **et** `VERSION` dans `sw.js`.
   Les téléphones affichent alors « Nouvelle version disponible — recharger » à la prochaine connexion.
 

@@ -30,7 +30,7 @@ header{position:sticky;top:0;z-index:5;background:var(--brand);color:#fff;paddin
 .mark i{width:8px;height:8px;display:block}
 .mark i:nth-child(1){background:var(--blue)}.mark i:nth-child(2){background:var(--orange)}.mark i:nth-child(3){background:#ff4b4b}
 .top h1{font-size:17px;margin:0;flex:1;font-weight:700;letter-spacing:.2px}
-.iconbtn{background:rgba(255,255,255,.14);border:0;border-radius:10px;min-width:40px;height:40px;padding:0 10px;font-size:15px}
+.iconbtn{display:grid;place-items:center;background:rgba(255,255,255,.14);border:0;border-radius:10px;min-width:40px;height:40px;padding:0 10px;font-size:15px}
 .back{background:none;border:0;color:#fff;font-size:15px;padding:6px 0;display:none}
 .search{margin-top:10px;position:relative}
 .search input{width:100%;height:46px;border:0;border-radius:12px;padding:0 14px 0 40px;font-size:16px;background:#fff;color:#1d1a19}
@@ -54,6 +54,28 @@ h2{font-size:13px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted
 .tabs{display:flex;gap:4px;margin:14px 0 10px;position:sticky;top:var(--hh,112px);z-index:3;background:var(--bg);padding:6px 0}
 .tabs button{flex:1 1 auto;min-width:0;border:1px solid var(--line);background:var(--card);border-radius:10px;height:44px;font-weight:600;font-size:13px;padding:0 5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pfind{width:100%;height:44px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font-size:16px;padding:0 12px;margin:4px 0 6px}
+.set{border:1px solid var(--line);border-radius:12px;background:var(--card);margin:6px 0;overflow:hidden}
+.set .row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;min-height:48px;border-top:1px solid var(--line)}
+.set .row:first-child{border-top:0}
+.seg2{display:flex;border:1px solid var(--line);border-radius:9px;overflow:hidden}
+.seg2 button{border:0;background:transparent;color:var(--ink);height:36px;padding:0 14px;font-weight:600;font-size:14px}
+.seg2 button[aria-pressed="true"]{background:var(--brand);color:#fff}
+.cl{padding:12px 14px;border-top:1px solid var(--line)}
+.cl:first-child{border-top:0}
+.cl .d{font-size:12px;color:var(--muted);font-weight:600}
+.cl h4{margin:2px 0 6px;font-size:15px}
+.cl ul{margin:0;padding-left:18px;font-size:14px;line-height:1.45}
+.cl .docs{margin-top:8px;font-size:13px}
+.doc{display:flex;gap:8px;align-items:flex-start;margin-top:4px}
+.doc::before{content:"";flex:0 0 auto;width:14px;height:17px;margin-top:1px;border:2px solid var(--brand);border-radius:2px 6px 2px 2px}
+.dk{padding:11px 14px;border-top:1px solid var(--line)}
+.dk:first-child{border-top:0}
+.dk .n{font-weight:600;font-size:14.5px}
+.dk .s{font-size:13px;color:var(--muted);margin:2px 0 6px}
+.dk .tb{display:flex;flex-wrap:wrap;gap:4px}
+.dk .tb span{font-size:11.5px;font-weight:600;padding:2px 7px;border-radius:999px;background:var(--chip);color:var(--muted)}
+.dk .tb span.ok{background:color-mix(in srgb,#2ea043 18%,transparent);color:#2ea043}
+.mono{font-family:ui-monospace,Menlo,monospace;font-size:13px;color:var(--muted)}
 .prm{border:1px solid var(--line);border-radius:10px;background:var(--card);margin:6px 0;overflow:hidden}
 .prm summary{list-style:none;display:flex;align-items:center;gap:10px;padding:10px 12px;cursor:pointer;min-height:44px}
 .prm summary::-webkit-details-marker{display:none}
@@ -125,6 +147,7 @@ mark{background:#ffe08a;color:#1d1a19;border-radius:3px;padding:0 1px}
     <span class="mark" aria-hidden="true"><i></i><i></i><i></i></span>
     <h1 id="title">Dépannage SAV</h1>
     <button class="iconbtn" id="theme" title="Mode sombre / clair" aria-label="Changer de thème">◐</button>
+    <button class="iconbtn" id="gear" title="Réglages" aria-label="Réglages" onclick="go('#/reglages')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
   </div>
   <button class="back" id="back">‹ Retour</button>
   <div class="search">
@@ -158,7 +181,8 @@ const store = {
 /* thème : sombre par défaut (parkings) */
 function applyTheme(t){ document.documentElement.dataset.theme = t; }
 applyTheme(store.get("theme", "dark"));
-$("#theme").onclick = () => { const t = document.documentElement.dataset.theme === "dark" ? "light" : "dark"; applyTheme(t); store.set("theme", t); };
+function setTheme(t){ applyTheme(t); store.set("theme", t); if (location.hash === "#/reglages") viewSettings(); }
+$("#theme").onclick = () => setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
 
 /* statut réseau */
 function status(){
@@ -384,6 +408,31 @@ function viewSearch(q){
   app.innerHTML = h;
 }
 
+
+/* ---------- réglages ---------- */
+const fdate = d => d.split("-").reverse().join("/");
+function viewSettings(){
+  setHead("Réglages", true);
+  const th = document.documentElement.dataset.theme;
+  let h = `<h2>Affichage</h2><div class="set"><div class="row"><span>Thème</span><div class="seg2">
+      <button aria-pressed="${th==="dark"}" onclick="setTheme('dark')">Sombre</button><button aria-pressed="${th==="light"}" onclick="setTheme('light')">Clair</button></div></div></div>`;
+  h += `<h2>Documentations intégrées (${BOARDS.length})</h2><div class="set">` + BOARDS.map(({m, c}) => {
+    const has = [["Codes", c.codes && c.codes.length], ["Bornier", c.bornier], ["Écran", c.afficheur], ["Paramètres", c.parametres], ["Apprentissage", c.apprentissage]];
+    return `<div class="dk" onclick="go('#/c/${c.id}')" style="cursor:pointer"><div class="n"><span class="badge" style="--c:${m.couleur}">${esc(m.nom)}</span>${esc(c.nom)}</div>
+      <div class="s">${esc(c.source)}</div><div class="tb">${has.map(([l, ok]) => `<span class="${ok?"ok":""}">${ok?"✓ ":""}${l}</span>`).join("")}</div></div>`;
+  }).join("") + `</div>`;
+  h += `<h2>Nouveautés</h2><div class="set">` + CHANGELOG.map(e => `<div class="cl"><div class="d">${fdate(e.date)}</div><h4>${esc(e.titre)}</h4>
+      <ul>${e.items.map(i => `<li>${esc(i)}</li>`).join("")}</ul>
+      ${e.docs && e.docs.length ? `<div class="docs"><b>Documentation ajoutée :</b>${e.docs.map(d => `<div class="doc">${esc(d)}</div>`).join("")}</div>` : ""}</div>`).join("") + `</div>`;
+  h += `<h2>Version</h2><div class="set"><div class="row"><span>Données</span><span class="mono">${fdate(DATA_VERSION)}</span></div>
+      <div class="row"><span>Hors ligne</span><span class="mono" id="swv">…</span></div></div>
+      <p class="note">En cas de doute, la notice livrée avec le matériel fait foi.</p>`;
+  app.innerHTML = h;
+  const sv = $("#swv");
+  if ("caches" in window) caches.keys().then(k => { sv.textContent = k.length ? k.sort().pop().replace("sav-", "") : "pas encore enregistré"; }).catch(() => sv.textContent = "—");
+  else sv.textContent = "non pris en charge";
+}
+
 /* ---------- navigation ---------- */
 function setHead(t, back){ $("#title").textContent = t; $("#back").style.display = back ? "block" : "none"; hh(); }
 function go(hash){ location.hash = hash; }
@@ -398,6 +447,7 @@ function route(){
   window.scrollTo(0, 0);
   if (p[0] === "m") return viewBrand(p[1]);
   if (p[0] === "c") return viewBoard(p[1], p[2]);
+  if (p[0] === "reglages") return viewSettings();
   if (p[0] === "s"){ const q = decodeURIComponent(p.slice(1).join("/")); if ($("#q").value !== q) $("#q").value = q; return viewSearch(q); }
   $("#q").value = "";
   viewHome();

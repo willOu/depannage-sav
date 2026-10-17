@@ -10,6 +10,31 @@
 
 const DATA_VERSION = "2026-10-17";
 
+/* Journal des modifications — ajouter une entrée en haut à chaque mise à jour.
+   docs : nom des notices ajoutées (affichées dans Réglages). */
+const CHANGELOG = [
+  { date: "2026-10-17", titre: "Onglet Paramètres et menu Réglages", items: [
+    "Nouvel onglet Paramètres : tous les paramètres de programmation de la carte, avec valeur usine, valeurs possibles et recherche.",
+    "Roger B70/1DC : 62 paramètres (A0 à CP, y compris High Speed et réversible).",
+    "Les paramètres sortent aussi dans la recherche générale.",
+    "Menu Réglages (roue dentée) : thème, nouveautés, documentations intégrées.",
+    "Mise à jour automatique dès l'ouverture quand il y a du réseau."
+  ], docs: [] },
+  { date: "2026-10-17", titre: "Roger B70/1DC firmware P3.00 et onglet Écran", items: [
+    "Fiche Roger B70/1DC refaite à partir de la notice P3.00 : 42 codes, bornier, apprentissage.",
+    "Nouvel onglet Écran : dessin de l'afficheur et signification de chaque segment (touchez un segment)."
+  ], docs: ["Notice Roger IS117 Rev.30, firmware P3.00"] },
+  { date: "2026-10-17", titre: "Première version", items: [
+    "Codes erreur, bornier et apprentissage pour Came, Nice, FAAC, BFT et Roger, consultables hors ligne."
+  ], docs: [
+    "Notice Came FA02214-FR (03/2025)",
+    "Notice Came 119BU56 v1.0 (01/2008)",
+    "Notice Nice IDV0629A01FR (31/01/2019)",
+    "Notice FAAC 732099 Rev.E (746 E R, 2019)",
+    "Notice BFT D811980 00100_01"
+  ] }
+];
+
 const MARQUES = [
 /* ------------------------------------------------------------------ */
 {
