@@ -13,6 +13,10 @@ const DATA_VERSION = "2026-10-17";
 /* Journal des modifications — ajouter une entrée en haut à chaque mise à jour.
    docs : nom des notices ajoutées (affichées dans Réglages). */
 const CHANGELOG = [
+  { date: "2026-10-17", titre: "Recherche par modèle", items: [
+    "On peut chercher un modèle d'automatisme (ex. Ares 1000, AYRON, BIONIK, RB400, BX708) ou un type (coulissant, battant, barrière) : la carte correspondante s'ouvre.",
+    "La saisie sans espace fonctionne aussi (ex. bta400, rb400)."
+  ], docs: [] },
   { date: "2026-10-17", titre: "BFT LEO B CBB et MERAK BT A à jour", items: [
     "Nouvelle carte BFT LEO B CBB (3 230 L02 / L04, 3 120 F02 / F04) : codes, bornier, paramètres (tableaux A, B, C) et autoconfiguration.",
     "BFT MERAK : mise à jour avec la notice D814459 (MERAK BT A) : nouveaux codes d'erreur, 9 groupes de paramètres, bornier AUX 1 / AUX 2, notes d'apprentissage.",

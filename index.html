@@ -153,7 +153,7 @@ mark{background:#ffe08a;color:#1d1a19;border-radius:3px;padding:0 1px}
   <button class="back" id="back">‹ Retour</button>
   <div class="search">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-    <input id="q" type="search" inputmode="search" autocomplete="off" placeholder="Code, symptôme, borne… (ex. E3, 4 clignot, STOP)" aria-label="Rechercher">
+    <input id="q" type="search" inputmode="search" autocomplete="off" placeholder="Code, modèle, borne… (ex. E3, Ares 1000, STOP)" aria-label="Rechercher">
   </div>
   <div class="status" id="status"></div>
 </header>
@@ -384,7 +384,8 @@ function viewSearch(q){
   const codes = [], terms = [], boards = [], params = [];
   BOARDS.forEach(({m, c}) => {
     const ctx = `<span class="badge" style="--c:${m.couleur}">${esc(m.nom)}</span>${esc(c.nom)}`;
-    if (match(`${m.nom} ${c.nom} ${c.modeles}`)) boards.push({m, c});
+    const bt = norm(`${m.nom} ${c.nom} ${c.modeles} ${c.type} ${c.alias || ""}`), bc = bt.replace(/ /g, "");
+    if (words.every(w => bt.includes(w) || bc.includes(w)) || bc.includes(norm(q).replace(/ /g, ""))) boards.push({m, c});
     c.codes.forEach(x => {
       const exact = norm(x.code) === norm(q);
       if (exact || match(`${m.nom} ${c.nom} ${x.code} ${x.titre} ${x.action}`)) codes.push({ x, ctx, exact, id: c.id });
