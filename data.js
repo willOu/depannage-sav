@@ -18,7 +18,8 @@ const CHANGELOG = [
     "Roger B70/1DC : 62 paramètres (A0 à CP, y compris High Speed et réversible).",
     "Les paramètres sortent aussi dans la recherche générale.",
     "Menu Réglages (roue dentée) : thème, nouveautés, documentations intégrées.",
-    "Mise à jour automatique dès l'ouverture quand il y a du réseau."
+    "Mise à jour automatique dès l'ouverture quand il y a du réseau.",
+    "Les trois carrés de couleur en haut à gauche ramènent à l'accueil."
   ], docs: [] },
   { date: "2026-10-17", titre: "Roger B70/1DC firmware P3.00 et onglet Écran", items: [
     "Fiche Roger B70/1DC refaite à partir de la notice P3.00 : 42 codes, bornier, apprentissage.",

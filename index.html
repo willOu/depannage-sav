@@ -26,7 +26,8 @@ html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-u
 button{font:inherit;color:inherit}
 header{position:sticky;top:0;z-index:5;background:var(--brand);color:#fff;padding:calc(env(safe-area-inset-top) + 10px) 16px 10px}
 .top{display:flex;align-items:center;gap:10px}
-.mark{display:grid;grid-template-columns:repeat(3,8px);gap:3px}
+.mark{display:grid;grid-template-columns:repeat(3,8px);gap:3px;align-content:center;background:none;border:0;padding:14px 10px;margin:-14px -10px;cursor:pointer;border-radius:10px;-webkit-tap-highlight-color:transparent}
+.mark:active{background:rgba(255,255,255,.18)}
 .mark i{width:8px;height:8px;display:block}
 .mark i:nth-child(1){background:var(--blue)}.mark i:nth-child(2){background:var(--orange)}.mark i:nth-child(3){background:#ff4b4b}
 .top h1{font-size:17px;margin:0;flex:1;font-weight:700;letter-spacing:.2px}
@@ -144,7 +145,7 @@ mark{background:#ffe08a;color:#1d1a19;border-radius:3px;padding:0 1px}
 <body>
 <header id="hdr">
   <div class="top">
-    <span class="mark" aria-hidden="true"><i></i><i></i><i></i></span>
+    <button class="mark" id="home" title="Accueil" aria-label="Retour à l'accueil" onclick="$('#q').value='';go('#/')"><i></i><i></i><i></i></button>
     <h1 id="title">Dépannage SAV</h1>
     <button class="iconbtn" id="theme" title="Mode sombre / clair" aria-label="Changer de thème">◐</button>
     <button class="iconbtn" id="gear" title="Réglages" aria-label="Réglages" onclick="go('#/reglages')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
