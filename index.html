@@ -277,6 +277,10 @@ function viewBoard(id, tab){
       pane.innerHTML = `<div class="empty">Schéma de l'afficheur pas encore ajouté pour cette carte.<br>Il faut la page de la notice qui montre l'écran, ou une photo de la carte sous tension.</div>`;
     } else {
       const GN = { commande:"Commande", securite:"Sécurité", led:"Voyant" };
+      if (!a.ecrans || !a.ecrans.length){
+        pane.innerHTML = `<p class="note">${esc(a.intro)}</p>` + (a.autres || []).map(o => `<h2>${esc(o.titre)}</h2><div class="note">${esc(o.texte)}</div>`).join("");
+        return;
+      }
       let p = `<p class="note">${esc(a.intro)}</p><div class="panels">` + a.ecrans.map((e, ei) => `<div class="panel"><h4>${esc(e.nom)}</h4>${drawScreen(e, a.reperes, ei)}</div>`).join("") + `</div>
         <div class="detail" id="segd" hidden></div>
         <div class="legend"><span><i class="chipg g-commande" style="background:#1f6fd0"></i>Commande</span><span><i class="chipg" style="background:#e07b00"></i>Sécurité</span><span><i class="chipg" style="background:#2ea043"></i>Voyant</span><span>Touchez un segment</span></div>

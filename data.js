@@ -13,6 +13,9 @@ const DATA_VERSION = "2026-10-17";
 /* Journal des modifications — ajouter une entrée en haut à chaque mise à jour.
    docs : nom des notices ajoutées (affichées dans Réglages). */
 const CHANGELOG = [
+  { date: "2026-10-17", titre: "Écran de la LEO B CBB", items: [
+    "Onglet Écran de la BFT LEO B CBB : touches, menus, statistiques, messages affichés (SEt, 35.40, BLOC, RST…). La notice ne décrit pas les segments un par un, il n'y a donc pas de dessin interactif."
+  ], docs: [] },
   { date: "2026-10-17", titre: "Relecture des cartes BFT", items: [
     "LEO B CBB : type corrigé (coulissant), codes AUX 3 et clignotant précisés, ajout du menu simplifié avec les presets, des notes sur le sens d'ouverture, des fusibles et du montage vantaux opposés.",
     "MERAK : bornier SAFE 2 corrigé (borne 73, pont 70-73, plus de FAULT), puissances par modèle, vantaux opposés, presets, signalement des points où la notice se contredit ou que seule l'ancienne édition mentionne."
@@ -684,6 +687,20 @@ const MARQUES = [
       { code: "RST", type: "afficheur", titre: "Retour aux valeurs usine en cours", action: "Procédure de rétablissement : valider par OK dans les 3 secondes. Efface aussi toutes les radiocommandes." },
       { code: "35.40", type: "afficheur", titre: "Nombre : seuil obstacle / force du moteur", action: "Affichage possible pendant la manœuvre sur LEO B CBB 3 230 L02 : seuil d'obstacle et force instantanée du moteur (voir Fig. 1 de la notice)." }
     ],
+    afficheur: {
+      intro: "Afficheur 4 caractères à 7 segments avec 3 touches (+, −, OK). Contrairement aux cartes Roger, la notice ne donne pas de signification segment par segment : l'afficheur sert aux menus, aux diagnostics d'entrées et aux codes d'erreur. Les codes d'erreur et de diagnostic sont dans l'onglet Codes.",
+      ecrans: [],
+      reperes: {},
+      regles: [],
+      autres: [
+        { titre: "Touches", texte: "+ monter · − descendre · OK confirmer / allumer l'afficheur. Pour sortir d'un menu : appuyer sur + et − ensemble. Un mot de passe (usine 1234) est demandé si le niveau de protection est de 1 à 4 ; après 10 essais faux l'afficheur indique BLOC pendant 3 minutes." },
+        { titre: "Menus affichés (OK pour entrer)", texte: "PARAM (paramètres, tableau A) · LOGIC (logiques, tableau B) · RADIO (tableau C) · DEFAULT (retour usine) · LANGUE (itA, FrA, dEu, EnG, ESP) · AUTOSET (autoconfiguration, LEO B CBB 3 230 L02 uniquement) · STAT (statistiques) · PASSWORD (mot de passe). Une pression sur OK à partir de l'afficheur éteint donne accès au menu simplifié (langue, dIr, PrESEt, AutoSEt, mémorisation radio)." },
+        { titre: "Menu STAT", texte: "Version du logiciel · nombre de manœuvres (en centaines) · nombre de radiocommandes mémorisées · liste des 30 dernières erreurs. Chaque erreur s'affiche sous la forme 01.33 : 2 premiers chiffres = rang (01 = la plus récente), 2 derniers = code de l'erreur." },
+        { titre: "Pendant l'utilisation", texte: "« 35.40 » : seuil d'obstacle (avant le point) et force instantanée du moteur (après), sur LEO B CBB 3 230 L02 seulement. « SEt » : la carte attend une manœuvre complète d'ouverture-fermeture sans interruption, la détection d'obstacle n'est pas active. « .... .... .... » : autoconfiguration en cours (1 à 3 manœuvres), ne pas toucher aux commandes ; à la fin, ok ou ko. « StrE, Str I, oPEn, cLS, PEd, t IME, StoP, Phot, PhoP, PhcL, bAr, bAr 2, SwC, SwO » : entrée activée (diagnostic, voir Codes)." },
+        { titre: "Mémorisation radio", texte: "Menu simplifié, MEN TELEC : touche cachée de l'émetteur, relâcher, touche à mémoriser, puis ok 01 s'affiche et F in à la fin. Menu RADIO : AdJ StArt, AdJ 2ch, EFFAcEr 64 (efface toute la mémoire), cod rH (code récepteur), uk (W LINK)." },
+        { titre: "Retour usine", texte: "RST s'affiche : confirmer par OK dans les 3 secondes (procédure Fig. H : hors tension, entrée STOP ouverte, appui sur − et OK, remise sous tension). Efface toutes les radiocommandes et rétablit les valeurs d'usine : refaire l'autoconfiguration." }
+      ]
+    },
     parametres: {
       intro: "Notice D812161. Trois menus : PARAM (valeurs chiffrées, tableau A), LOGIC (réglages à choix, tableau B) et RADIO (tableau C). Les forces et le mode encodeur ne concernent que le LEO B CBB 3 230 L02 pour l'autoconfiguration. Valeur usine = « usine ».",
       navigation: [
