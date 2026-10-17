@@ -13,6 +13,10 @@ const DATA_VERSION = "2026-10-17";
 /* Journal des modifications — ajouter une entrée en haut à chaque mise à jour.
    docs : nom des notices ajoutées (affichées dans Réglages). */
 const CHANGELOG = [
+  { date: "2026-10-18", titre: "Nouveau design de l'accueil et des codes", items: [
+    "Accueil : on choisit d'abord le type d'automatisme (portail coulissant, battant, barrière levante), puis la carte. L'accès par marque reste disponible.",
+    "Codes : triés par gravité (erreurs à corriger, symptômes, codes de l'afficheur, diagnostic des entrées). Touchez un code pour voir ce qu'il faut faire ; le premier est déjà ouvert."
+  ], docs: [] },
   { date: "2026-10-17", titre: "Écrans des BFT LEO B CBB et MERAK", items: [
     "Onglet Écran de la BFT LEO B CBB : touches, menus, statistiques, messages affichés (SEt, 35.40, BLOC, RST…). La notice ne décrit pas les segments un par un, il n'y a donc pas de dessin interactif.",
     "Même onglet Écran pour la BFT MERAK : touches, menus, point de basse consommation, lettres C et O, messages affichés."
