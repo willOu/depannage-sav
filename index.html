@@ -52,7 +52,7 @@ h2{font-size:13px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted
 .boardhead p{margin:4px 0 0;color:var(--muted);font-size:14px}
 .src{font-size:12.5px;color:var(--muted);margin-top:8px}
 .tabs{display:flex;gap:6px;margin:14px 0 10px;position:sticky;top:var(--hh,112px);z-index:3;background:var(--bg);padding:6px 0}
-.tabs button{flex:1;border:1px solid var(--line);background:var(--card);border-radius:10px;height:44px;font-weight:600;font-size:14.5px}
+.tabs button{flex:1 1 auto;min-width:0;border:1px solid var(--line);background:var(--card);border-radius:10px;height:44px;font-weight:600;font-size:13.5px;padding:0 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tabs button[aria-selected="true"]{background:var(--brand);color:#fff;border-color:var(--brand)}
 .filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
 .filters button{border:1px solid var(--line);background:var(--chip);border-radius:999px;padding:6px 12px;font-size:13.5px}
@@ -88,6 +88,18 @@ ul.plain{margin:0;padding-left:18px}
 ul.plain li{margin:4px 0}
 .empty{color:var(--muted);text-align:center;padding:30px 10px}
 .foot{color:var(--muted);font-size:12px;text-align:center;margin-top:28px}
+
+.panels{display:flex;flex-wrap:wrap;gap:10px;margin:6px 0 4px}
+.panel{flex:1 1 160px;background:#111;border-radius:12px;padding:8px 6px 4px;border:1px solid var(--line)}
+.panel h4{margin:0 0 4px 4px;font-size:11.5px;text-transform:uppercase;letter-spacing:.6px;color:#bbb;font-weight:700}
+.panel svg{width:100%;height:auto;display:block}
+.seg{cursor:pointer}
+.seg.off{fill:#2a2a2a}
+.seg.sel{stroke:#fff;stroke-width:3}
+.seglbl{font:700 9px system-ui,sans-serif;fill:#fff;pointer-events:none;text-anchor:middle;dominant-baseline:central}
+.dplbl{font:700 10px system-ui,sans-serif;fill:#ddd;text-anchor:middle}
+.g-commande{fill:#1f6fd0}.g-securite{fill:#e07b00}.g-led{fill:#2ea043}
+.chipg{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
 mark{background:#ffe08a;color:#1d1a19;border-radius:3px;padding:0 1px}
 </style>
 </head>
@@ -111,7 +123,7 @@ mark{background:#ffe08a;color:#1d1a19;border-radius:3px;padding:0 1px}
 <script>
 const $ = s => document.querySelector(s);
 const app = $("#app");
-const TYPES = { afficheur:"Afficheur", flash:"Clignotant", led:"LED", diag:"Diagnostic", erreur:"Erreur", symptome:"Symptôme" };
+const TYPES = { afficheur:"Afficheur", flash:"Clignotant", led:"LED", diag:"Diagnostic", erreur:"Erreur", symptome:"Symptôme", test:"Mode TEST" };
 const TERM = { alim:"Alimentation", no:"Commande NO", nf:"Sécurité / NF", sortie:"Sortie", moteur:"Moteur / usine", bus:"Bus", autre:"Autre" };
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const norm = s => String(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[·\-_/]/g," ").replace(/\s+/g," ").trim();
@@ -175,7 +187,7 @@ function viewBoard(id, tab){
 
   let h = `<div class="boardhead" style="--c:${m.couleur}"><h3>${esc(c.nom)}</h3><p>${esc(c.modeles)}</p><p>${esc(c.type)}</p><div class="src">Source : ${esc(c.source)}</div></div>
   <div class="tabs" role="tablist">
-    ${[["codes","Codes"],["bornier","Bornier"],["appr","Apprentissage"]].map(([k,l]) => `<button role="tab" aria-selected="${tab===k}" onclick="go('#/c/${id}/${k}')">${l}</button>`).join("")}
+    ${[["codes","Codes"],["bornier","Bornier"],["aff","Afficheur"],["appr","Apprentissage"]].map(([k,l]) => `<button role="tab" aria-selected="${tab===k}" onclick="go('#/c/${id}/${k}')">${l}</button>`).join("")}
   </div><div id="pane"></div>`;
   app.innerHTML = h;
   const pane = $("#pane");
@@ -216,6 +228,30 @@ function viewBoard(id, tab){
       d.innerHTML = `<b>${esc(x.n)} · ${esc(x.label)}</b><br>${esc(x.desc)}`; d.hidden = false;
     });
   }
+
+  if (tab === "aff"){
+    const a = c.afficheur;
+    if (!a){
+      pane.innerHTML = `<div class="empty">Schéma de l'afficheur pas encore ajouté pour cette carte.<br>Il faut la page de la notice qui montre l'écran, ou une photo de la carte sous tension.</div>`;
+    } else {
+      const GN = { commande:"Commande", securite:"Sécurité", led:"Voyant" };
+      let p = `<p class="note">${esc(a.intro)}</p><div class="panels">` + a.ecrans.map((e, ei) => `<div class="panel"><h4>${esc(e.nom)}</h4>${drawScreen(e, a.reperes, ei)}</div>`).join("") + `</div>
+        <div class="detail" id="segd" hidden></div>
+        <div class="legend"><span><i class="chipg g-commande" style="background:#1f6fd0"></i>Commande</span><span><i class="chipg" style="background:#e07b00"></i>Sécurité</span><span><i class="chipg" style="background:#2ea043"></i>Voyant</span><span>Touchez un segment</span></div>
+        <div class="note"><ul class="plain">${a.regles.map(r=>`<li>${esc(r)}</li>`).join("")}</ul></div>
+        <h2>Signification des segments</h2><table>` + Object.entries(a.reperes).map(([k, r]) =>
+          `<tr style="--tc:${GC[r.g]}"><td>${esc(k)}</td><td><b>${esc(r.nom)}</b> · au repos : ${esc(r.repos)}<br>${esc(r.detail)}</td></tr>`).join("") + `</table>`;
+      if (a.autres) p += a.autres.map(o => `<h2>${esc(o.titre)}</h2><div class="note">${esc(o.texte)}</div>`).join("");
+      pane.innerHTML = p;
+      pane.querySelectorAll(".seg[data-k]").forEach(el => el.onclick = () => {
+        const k = el.dataset.k, r = a.reperes[k], d = $("#segd");
+        pane.querySelectorAll(".seg.sel").forEach(x => x.classList.remove("sel"));
+        el.classList.add("sel");
+        d.style.setProperty("--tc", GC[r.g]);
+        d.innerHTML = `<b>${esc(k)} · ${esc(r.nom)}</b> <span class="p">${GN[r.g]}</span><br>Au repos : <b>${esc(r.repos)}</b><br>${esc(r.detail)}`; d.hidden = false;
+      });
+    }
+  }
   if (tab === "appr"){
     const a = c.apprentissage;
     pane.innerHTML = `<h2>Avant de commencer</h2><div class="note"><ul class="plain">${a.avant.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>
@@ -233,6 +269,39 @@ function highlight(s, q){
   let out = esc(s);
   words.forEach(w => { const re = new RegExp("(" + w.replace(/[.*+?^${}()|[\]\\]/g,"\\$&") + ")", "ig"); out = out.replace(re, "<mark>$1</mark>"); });
   return out;
+}
+
+
+/* ---------- afficheur 7 segments ---------- */
+const GC = { commande:"#1f6fd0", securite:"#e07b00", led:"#2ea043" };
+const SEGS = {
+  a:"10,2 50,2 56,8 50,14 10,14 4,8", d:"10,88 50,88 56,94 50,100 10,100 4,94", g:"10,45 50,45 56,51 50,57 10,57 4,51",
+  f:"2,10 8,4 14,10 14,43 8,49 2,43", e:"2,59 8,53 14,59 14,92 8,98 2,92",
+  b:"46,10 52,4 58,10 58,43 52,49 46,43", c:"46,59 52,53 58,59 58,92 52,98 46,92"
+};
+const SEGC = { a:[30,8], d:[30,94], g:[30,51], f:[8,26,1], e:[8,76,1], b:[52,26,1], c:[52,76,1] };
+function drawScreen(e, rep, ei){
+  const W = 84, H = 100;
+  let svg = `<svg viewBox="-6 -4 ${e.digits.length*W + 6} ${H + 22}" role="img" aria-label="${esc(e.nom)}">`;
+  e.digits.forEach((dg, i) => {
+    const x = i*W;
+    svg += `<g transform="translate(${x},0) skewX(-5)">`;
+    Object.entries(SEGS).forEach(([k, pts]) => {
+      const lab = dg.seg[k];
+      if (lab){
+        const r = rep[lab] || {g:"securite"};
+        svg += `<polygon class="seg g-${r.g}" data-k="${esc(lab)}" points="${pts}"/>`;
+        const [cx, cy, v] = SEGC[k];
+        svg += `<text class="seglbl" x="${cx}" y="${cy}"${v?` transform="rotate(-90 ${cx} ${cy})"`:""}>${esc(lab)}</text>`;
+      } else svg += `<polygon class="seg off" points="${pts}"/>`;
+    });
+    svg += `</g>`;
+    if (dg.dp){
+      const r = rep[dg.dp] || {g:"led"};
+      svg += `<circle class="seg g-${r.g}" data-k="${esc(dg.dp)}" cx="${x+68}" cy="94" r="7"/><text class="dplbl" x="${x+68}" y="${H+16}">${esc(dg.dp)}</text>`;
+    } else svg += `<circle class="seg off" cx="${x+68}" cy="94" r="7"/>`;
+  });
+  return svg + `</svg>`;
 }
 
 /* ---------- recherche ---------- */

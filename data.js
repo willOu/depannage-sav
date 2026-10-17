@@ -418,89 +418,162 @@ const MARQUES = [
   {
     id: "roger-b70-1dc",
     nom: "B70/1DC",
-    modeles: "Brushless BH30/600 · BH30/800 · BH30/500/HS",
-    type: "Coulissant brushless 24 V — afficheur, touches PROG / TEST",
-    source: "Notice Roger IS117 Rev.07 (22/06/2016), firmware 1.40 — vérifier la version affichée à la mise sous tension",
+    modeles: "Brushless BH30/603 · /604 · /803 · /804 · BH30 HS · BM30/400 · BM30/300/HS · BH30/804/R",
+    type: "Coulissant brushless 24 V — afficheur 4 chiffres, touches UP / DOWN / + / − / PROG / TEST",
+    source: "Notice Roger IS117 Rev.30, firmware P3.00 (version affichée à la mise sous tension)",
     codes: [
-      { code: "OF St", type: "afficheur", titre: "Tension secteur en défaut / initialisation échouée", action: "Couper le secteur, attendre 10 s, remettre sous tension. Si ça persiste : remplacer la carte." },
-      { code: "Pr Ot", type: "afficheur", titre: "Surintensité dans l'onduleur", action: "Appuyer 2 fois sur TEST ou donner 3 commandes de suite." },
-      { code: "dA tA", type: "afficheur", titre: "Valeurs de course incorrectes / moteur non connecté", action: "Refaire l'apprentissage de la course. Vérifier le câble moteur." },
-      { code: "FE", type: "afficheur", titre: "Les deux fins de course actifs", action: "Vérifier les connexions des fins de course et l'absence de corps étranger dans les blocs." },
-      { code: "xx EE", type: "afficheur", titre: "Erreur de paramètre de configuration", action: "Le paramètre affiché a une valeur incorrecte : la corriger et enregistrer." },
-      { code: "Ene", type: "afficheur", titre: "Encodeur non connecté", action: "Vérifier la connexion de l'encodeur. Si ça persiste : remplacer l'encodeur." },
-      { code: "enE", type: "afficheur", titre: "Défaut grave encodeur", action: "TEST. Si le code revient : couper 5 s puis rallumer. Si ça persiste : remplacer l'encodeur." },
-      { code: "EnE", type: "afficheur", titre: "Erreur de calcul encodeur", action: "Refaire l'apprentissage de la course." },
-      { code: "btLO", type: "afficheur", titre: "Batteries à plat", action: "Attendre le retour du secteur. En mode batterie, la carte n'accepte plus de commande." },
-      { code: "StoP", type: "afficheur", titre: "« StoP » clignote : déblocage ouvert", action: "Refermer le levier de déblocage et tourner la clé en position fermée. Vérifier le contact de déblocage (SB)." },
-      { code: "no PH", type: "afficheur", titre: "Calibrage moteur échoué", action: "Refaire l'apprentissage. Vérifier le câble encodeur-moteur, le levier de déblocage, et que le moteur tourne librement." },
-      { code: "AP PE", type: "afficheur", titre: "Erreur d'acquisition", action: "TEST appuyé par erreur, sécurité en alarme ou chute de tension : TEST pour effacer, contrôler les sécurités et la tension secteur, refaire l'apprentissage." },
-      { code: "AP PL", type: "afficheur", titre: "Erreur de longueur de course", action: "Portail en position fermée (fin de course FC actif), vérifier le câble des fins de course, refaire l'apprentissage (au besoin après retour aux réglages usine)." },
-      { code: "FA", type: "afficheur", titre: "Fin de course ouverture atteint", action: "Information (mode TEST)." },
-      { code: "FC", type: "afficheur", titre: "Fin de course fermeture atteint", action: "Information (mode TEST). Si l'état affiché ne correspond pas à la réalité : vérifier le paramètre de position du moteur." },
-      { code: "Sb", type: "afficheur", titre: "Levier de déblocage ouvert (mode TEST)", action: "Refermer le levier, clé en position fermée, vérifier le contact de déblocage." },
-      { code: "POWER éteinte", type: "led", titre: "LED POWER éteinte", action: "Pas de secteur ou fusibles grillés : contrôler le câble, remplacer les fusibles hors tension." },
-      { code: "POWER lente", type: "led", titre: "LED POWER clignote lentement", action: "Veille après 30 min sans action : appuyer sur une touche pour réveiller." }
+      { code: "P3.00", type: "afficheur", titre: "Version du firmware", action: "Affichée quelques secondes à la mise sous tension. Ensuite : état des commandes et sécurités (onglet Afficheur)." },
+      { code: "dAtA", type: "afficheur", titre: "Erreur de saisie de données de course", action: "Carte neuve ou course non apprise : faire l'apprentissage. Sinon : vérifier le réglage des fins de course, appuyer sur TEST et contrôler les sécurités en alarme, refaire l'apprentissage. Peut aussi venir d'un étalonnage échoué : bien attendre que PHAS clignote avant de refermer la poignée de déverrouillage." },
+      { code: "OFSt", type: "afficheur", titre: "Anomalie de tension d'alimentation / initialisation échouée", action: "Couper l'alimentation, attendre 10 s, remettre. Si ça persiste : remplacer la centrale. TEST masque temporairement l'erreur pour consulter les paramètres." },
+      { code: "PrOt", type: "afficheur", titre: "Surintensité dans l'onduleur", action: "Appuyer deux fois sur TEST ou donner 3 commandes de suite." },
+      { code: "Mot", type: "afficheur", titre: "Moteur non raccordé", action: "Vérifier le câble moteur (bornier X-Y-Z)." },
+      { code: "FE", type: "afficheur", titre: "Les deux fins de course sont actifs", action: "Vérifier le raccordement des fins de course ou la présence d'objets dans le verrouillage fin de course. Avec fins de course magnétiques : le fusible F2 (accessoires) est peut-être grillé." },
+      { code: "xx EE", type: "afficheur", titre: "Erreur de paramètre (ex. 15EE, 21EE)", action: "Le paramètre indiqué a une valeur incorrecte : la corriger et enregistrer." },
+      { code: "EnE1", type: "afficheur", titre: "Encodeur non branché", action: "Vérifier le raccordement de l'encodeur. Si ça persiste : remplacer l'encodeur." },
+      { code: "EnE3", type: "afficheur", titre: "Grave dysfonctionnement de l'encodeur", action: "TEST. Si l'erreur revient : éteindre la centrale 5 s puis rallumer. Si ça persiste : remplacer l'encodeur." },
+      { code: "EnE5", type: "afficheur", titre: "Dysfonctionnement encodeur / alimentation insuffisante / batteries", action: "TEST ; si ça persiste, remplacer l'encodeur. Saleté, humidité ou insectes : couper la tension et nettoyer carte et encodeur. En fonctionnement sur batteries : batteries presque déchargées." },
+      { code: "EnE8", type: "afficheur", titre: "Erreur de calcul de l'encodeur", action: "Refaire l'apprentissage de la course." },
+      { code: "tEMP", type: "afficheur", titre: "Protection thermique de l'onduleur", action: "Le fonctionnement reprend tout seul dans les 2 minutes." },
+      { code: "SEnS", type: "afficheur", titre: "Anomalie de la commande du moteur", action: "Si ça persiste : remplacer la centrale." },
+      { code: "btLO", type: "afficheur", titre: "Batteries déchargées", action: "Attendre le retour du secteur." },
+      { code: "bAtt", type: "afficheur", titre: "Fonctionnement sur batteries (BH30 + B71/BC)", action: "Coupure secteur : la centrale tourne sur batteries jusqu'au retour du réseau ou jusqu'au seuil bas (btLO)." },
+      { code: "COM1", type: "afficheur", titre: "Communication RS485 MASTER / SLAVE absente", action: "Vérifier les bornes COM-LNA-LNB, le paramètre A0 et la présence du kit batteries sur les deux centrales." },
+      { code: "COM2", type: "afficheur", titre: "Deux centrales MASTER détectées", action: "Vérifier le paramètre A0." },
+      { code: "COM3", type: "afficheur", titre: "Erreur de transfert des paramètres MASTER / SLAVE", action: "Vérifier le branchement COM-LNA-LNB." },
+      { code: "COM4", type: "afficheur", titre: "Firmwares MASTER / SLAVE incompatibles", action: "Vérifier le paramètre n7 : les deux centrales doivent avoir la même version de communication RS485. Sinon : assistance Roger." },
+      { code: "StoP", type: "afficheur", titre: "« StoP » clignotant : déblocage ouvert", action: "Refermer la poignée de déverrouillage et tourner la clé en position fermée. Vérifier le contact de déverrouillage (SB)." },
+      { code: "noPH", type: "afficheur", titre: "Anomalie commande moteur / réglage moteur échoué", action: "Vérifier le câble encodeur-moteur, couper et rétablir l'alimentation, refaire l'apprentissage. Vérifier que la poignée de déverrouillage était bien ouverte, que le moteur tourne librement et que la tension secteur est correcte. Si ça persiste : assistance." },
+      { code: "APPE", type: "afficheur", titre: "Erreur d'apprentissage", action: "TEST appuyé par erreur, sécurité en alarme, chute de tension ou paramètres 30 / 31 mal réglés : TEST pour annuler, contrôler les sécurités, la tension secteur et 30 / 31 selon le poids et la vitesse du vantail, puis refaire l'apprentissage." },
+      { code: "APPL", type: "afficheur", titre: "Erreur de longueur de course", action: "Portail en fermeture complète (fin de course FC actif) et refaire la procédure. Vérifier le câblage des fins de course. Si la course est inférieure au minimum : l'augmenter. Au besoin : retour aux réglages usine puis apprentissage." },
+      { code: "APPM", type: "afficheur", titre: "Longueur de course maximale dépassée", action: "Réduire la course ; sinon contacter l'assistance Roger." },
+      { code: "SELF", type: "afficheur", titre: "BH30/804/R : portail déplacé à la main", action: "Uniquement BH30/804/R : vantail bougé sans déblocage, sans secteur ni batterie. Avec B71/BC : vérifier les fils rouge (+) sur borne 5 et noir (−) sur borne 4 de POWER IN." },
+      { code: "SELF ALIM", type: "afficheur", titre: "Branchement du chargeur de batterie inversé", action: "Inverser les fils (+) et (−) sur POWER IN. TEST masque l'erreur temporairement." },
+      { code: "noLP", type: "afficheur", titre: "Mode « low power » non activé", action: "B70/MODLP endommagé ou contact de relais bloqué : contrôler le récepteur H93/RX2LP/I et le câblage avec le B70/MODLP." },
+      { code: "notr", type: "afficheur", titre: "Transformateur éteint par erreur par le B70/MODLP", action: "Même contrôle que noLP (H93/RX2LP/I, câblage, B70/MODLP)." },
+      { code: "StbY", type: "afficheur", titre: "Passage en veille « low power »", action: "Normal : la centrale passe en veille (afficheur éteint, sorties SC, LAM et COR coupées). Une commande ou une touche la réveille." },
+      { code: "00", type: "test", titre: "TEST : aucune sécurité en alarme", action: "Aucune sécurité en alarme et aucun fin de course actif." },
+      { code: "Sb", type: "test", titre: "TEST : poignée de déverrouillage ouverte", action: "Refermer la poignée, clé en position fermée, vérifier le contact de déverrouillage." },
+      { code: "15", type: "test", titre: "TEST : contact STOP ouvert", action: "Installer un bouton STOP (NF) ou ponter ST (15) avec COM (14)." },
+      { code: "13", type: "test", titre: "TEST : bord sensible COS1 ouvert", action: "Vérifier le raccordement. Bord absent : régler 73 00 ou ponter COS1 (13) avec COM." },
+      { code: "12", type: "test", titre: "TEST : bord sensible COS2 ouvert", action: "Vérifier le raccordement. Bord absent : régler 74 00 ou ponter COS2 (12) avec COM." },
+      { code: "11", type: "test", titre: "TEST : photocellule FT1 ouverte", action: "Vérifier la cellule et le câblage. Absente : régler 50 00 et 51 00 ou ponter FT1 (11) avec COM (28)." },
+      { code: "10", type: "test", titre: "TEST : photocellule FT2 ouverte", action: "Vérifier la cellule et le câblage. Absente : régler 53 00 et 54 00 ou ponter FT2 (10) avec COM (28)." },
+      { code: "FA", type: "test", titre: "TEST : fin de course d'ouverture actif", action: "Normal si le portail est ouvert. Indication fausse : vérifier le paramètre 71 (position du moteur), ou le câblage si le fin de course est absent." },
+      { code: "FC", type: "test", titre: "TEST : fin de course de fermeture actif", action: "Normal si le portail est fermé. Indication fausse : vérifier le paramètre 71, ou le câblage si le fin de course est absent." },
+      { code: "nC", type: "test", titre: "TEST : pas de communication MASTER / SLAVE", action: "A0 différent de 00 (RS485 activée) et aucune communication : voir la gestion MASTER / SLAVE." },
+      { code: "PP · CH · AP · PE · Or", type: "test", titre: "TEST : commande active sans action", action: "Contact NO défectueux ou bouton mal raccordé : vérifier le contact correspondant avec COM (21). ORO ne doit jamais être ponté s'il n'est pas utilisé." },
+      { code: "POWER éteinte", type: "led", titre: "LED POWER éteinte", action: "Pas d'alimentation ou fusible grillé : vérifier le câble, remplacer le fusible hors tension." },
+      { code: "POWER clignote", type: "led", titre: "LED POWER clignote, afficheur éteint", action: "Veille après 30 min d'inactivité (L1 00) : appuyer sur une touche." }
     ],
-    bornier: {
-      groupes: [
-        { nom: "Sorties", bornes: [
-          { n: "6 · 7", label: "COR", desc: "Éclairage de courtoisie, contact libre : 230 V 100 W / 24 V 40 W", t: "sortie" },
-          { n: "8 · 9", label: "+SC / COM", desc: "Voyant portail ouvert 24 V DC 3 W — ou alimentation TX pour test photocellules / économie batterie (selon paramètre)", t: "sortie" },
-          { n: "29 · 28", label: "LAM", desc: "Clignotant 24 V DC (25 W max sur BH30/800 et 500/HS, 13 W sur 600)", t: "sortie" }
+    afficheur: {
+      intro: "En fonctionnement normal, l'afficheur ne montre pas des chiffres mais l'état des entrées : certains segments correspondent chacun à une commande ou à une sécurité.",
+      ecrans: [
+        { nom: "État des commandes", digits: [
+          { seg: { a: "AP", g: "PP", d: "CH" }, dp: "POWER" },
+          { seg: { a: "PED", d: "ORO" }, dp: null }
         ]},
-        { nom: "Sécurités (contacts NF)", bornes: [
-          { n: "10 · 28", label: "FT2", desc: "Photocellules FT2. Inutilisé → ponter 10-28 ou désactiver par paramètre", t: "nf" },
-          { n: "11 · 28", label: "FT1", desc: "Photocellules FT1. Inutilisé → ponter 11-28 ou désactiver par paramètre", t: "nf" },
-          { n: "12 · 14", label: "COS2", desc: "Bord sensible 2, NF ou 8,2 kΩ", t: "nf" },
-          { n: "13 · 14", label: "COS1", desc: "Bord sensible 1, NF ou 8,2 kΩ", t: "nf" },
-          { n: "15 · 14", label: "ST", desc: "STOP, NF — ponter si inutilisé", t: "nf" }
-        ]},
-        { nom: "Commandes (contacts NO, commun 21)", bornes: [
-          { n: "22", label: "ORO", desc: "Horloge : ouvre et maintient ouvert. Ne pas ponter si inutilisé", t: "no" },
-          { n: "23", label: "AP", desc: "Ouverture", t: "no" },
-          { n: "24", label: "CH", desc: "Fermeture", t: "no" },
-          { n: "25", label: "PP", desc: "Pas à pas", t: "no" },
-          { n: "26", label: "PED", desc: "Ouverture partielle (50 % par défaut)", t: "no" }
-        ]},
-        { nom: "Alimentation / antenne", bornes: [
-          { n: "27 · 28", label: "+24 V", desc: "Alimentation accessoires", t: "alim" },
-          { n: "20 · 19", label: "ANT", desc: "Antenne, câble RG58 10 m max, sans raccord", t: "autre" },
-          { n: "L · N", label: "Secteur", desc: "230 V AC ±10 % — mesurer : en dessous, le brushless peut mal fonctionner", t: "alim" }
-        ]},
-        { nom: "Connecteurs usine", bornes: [
-          { n: "X Y Z", label: "Moteur", desc: "Brushless, câblé usine. Si débranché : refaire l'apprentissage", t: "moteur" },
-          { n: "ENC", label: "Encodeur", desc: "Toujours couper le secteur avant de le débrancher", t: "moteur" },
-          { n: "FC", label: "Fins de course", desc: "Mécaniques ou magnétiques, contacts NF", t: "moteur" },
-          { n: "SB", label: "Déblocage", desc: "Contact NF du levier de déblocage", t: "moteur" }
+        { nom: "État des sécurités", digits: [
+          { seg: { a: "FT1", g: "COS1", d: "COS2" }, dp: "SB" },
+          { seg: { a: "FT2", e: "FA", c: "FC" }, dp: "STOP" }
         ]}
       ],
-      fusibles: "F1 15 A (circuit moteur) · F2 2 A (accessoires) · F3 T1 A ligne (T2 A sur BH30/500/HS/115V)",
+      reperes: {
+        AP:    { g: "commande", nom: "Ouverture", repos: "Éteint", detail: "S'allume à la réception d'une commande d'ouverture (borne 23)." },
+        PP:    { g: "commande", nom: "Pas-à-pas", repos: "Éteint", detail: "S'allume à la réception d'une commande pas-à-pas (borne 25 ou radio PR1)." },
+        CH:    { g: "commande", nom: "Fermeture", repos: "Éteint", detail: "S'allume à la réception d'une commande de fermeture (borne 24)." },
+        PED:   { g: "commande", nom: "Ouverture partielle", repos: "Éteint", detail: "S'allume à la réception d'une commande piéton (borne 26 ou radio PR2)." },
+        ORO:   { g: "commande", nom: "Horloge", repos: "Éteint", detail: "Allumé tant que le contact horloge (borne 22) est fermé." },
+        POWER: { g: "led", nom: "Alimentation", repos: "Allumé", detail: "Carte alimentée. Clignote en veille (afficheur éteint). Éteint : pas de tension ou fusible grillé." },
+        FT1:   { g: "securite", nom: "Photocellules FT1", repos: "Allumé", detail: "Éteint = faisceau coupé ou non raccordé (bornes 11-28). Clignotant = désactivé par paramètre." },
+        FT2:   { g: "securite", nom: "Photocellules FT2", repos: "Allumé", detail: "Éteint = faisceau coupé ou non raccordé (bornes 10-28). Clignotant = désactivé par paramètre." },
+        COS1:  { g: "securite", nom: "Bord sensible COS1", repos: "Allumé", detail: "Éteint = bord actionné ou non raccordé (bornes 13-14). Clignotant = désactivé (73 00, réglage usine)." },
+        COS2:  { g: "securite", nom: "Bord sensible COS2", repos: "Allumé", detail: "Éteint = bord actionné ou non raccordé (bornes 12-14). Clignotant = désactivé (74 00, réglage usine)." },
+        FA:    { g: "securite", nom: "Fin de course d'ouverture", repos: "Allumé", detail: "S'éteint quand le portail est sur le fin de course d'ouverture." },
+        FC:    { g: "securite", nom: "Fin de course de fermeture", repos: "Allumé", detail: "S'éteint quand le portail est sur le fin de course de fermeture." },
+        SB:    { g: "securite", nom: "Poignée de déverrouillage", repos: "Allumé", detail: "Éteint = poignée de déverrouillage ouverte." },
+        STOP:  { g: "securite", nom: "STOP", repos: "Allumé", detail: "Éteint = contact STOP ouvert (bornes 15-14)." }
+      },
+      regles: [
+        "Commandes : segments normalement ÉTEINTS, ils s'allument quand la commande arrive.",
+        "Sécurités : segments normalement ALLUMÉS. Éteint = en alarme ou non raccordé. Clignotant = désactivé par son paramètre.",
+        "Les segments sans nom ne servent pas dans ce mode."
+      ],
+      autres: [
+        { titre: "Mode paramètres", texte: "UP / DOWN font défiler : les 2 chiffres de gauche = numéro du paramètre, les 2 de droite = sa valeur. + / − pour modifier ; la valeur clignote, puis l'afficheur clignote vite quand elle est enregistrée. Modification possible seulement moteur à l'arrêt." },
+        { titre: "Mode TEST (touche TEST, moteur à l'arrêt)", texte: "À gauche pendant 5 s : la commande reçue (AP, CH, PP, PE, Or). À droite : le numéro de la borne de la sécurité en alarme, qui clignote (15 STOP, 13 COS1, 12 COS2, 11 FT1, 10 FT2, Sb déblocage). Portail en fin de course : FA ou FC. Flash et voyant portail ouvert s'allument 1 s à chaque commande ou sécurité. Si plusieurs sécurités sont en alarme, la suivante s'affiche quand la première est réglée. TEST pour sortir (sinon retour seul après 10 s)." },
+        { titre: "Mode INFO (TEST 5 s, moteur à l'arrêt)", texte: "Défile avec + / − : P3.00 version · Cnt position du moteur en tours · Lun longueur de course · rPM vitesse · AMP courant moteur · bUS bon état de l'alimentation (28.5 à 230 V, 25.5 à 207 V, 31.6 à 253 V) · CMP courant de compensation · ASC seuil anti-écrasement (AMP doit rester inférieur) · tIn temps de détection d'obstacle (≥ 0,3 s) · UP position connue (UP …) ou en récupération (UP 1.) · OC état (OP, CL, -O, -C) · UF sous-tension (U) ou surintensité (H) · nPtE interventions thermiques. Quitter : TEST quelques secondes." },
+        { titre: "Veille (stand-by)", texte: "Après 30 min sans action, l'afficheur s'éteint et seule la LED POWER clignote. Une touche ou une commande le rallume." },
+        { titre: "Récupération de position", texte: "Après une coupure ou un déblocage en position intermédiaire : manœuvre lente, clignotant 3 s allumé / 1,5 s éteint. Ne rien commander avant qu'un fin de course soit atteint." }
+      ]
+    },
+    bornier: {
+      groupes: [
+        { nom: "Puissance (câblé usine)", bornes: [
+          { n: "L · N", label: "Secteur", desc: "230 V ±10 % 50/60 Hz (115 V sur B70/1DC/115), fusible 5x20 T2A. Mesurer : en dehors de cette plage, le brushless fonctionne mal", t: "alim" },
+          { n: "POWER IN 5+ / 4−", label: "Alim carte", desc: "Arrivée du transformateur ou du chargeur B71/BC (BH30). Attention à la polarité avec le chargeur", t: "alim" },
+          { n: "X · Y · Z", label: "Moteur", desc: "Moteur brushless. Si les fils ont été débranchés : refaire l'apprentissage", t: "moteur" }
+        ]},
+        { nom: "Sorties", bornes: [
+          { n: "6 · 7", label: "COR", desc: "Contact libre : éclairage de courtoisie 230 V 100 W / 24 V 40 W (fusible conseillé), ou signalisation selon le paramètre 20", t: "sortie" },
+          { n: "8 · 9", label: "+SC · COM", desc: "Voyant portail ouvert 24 V 3 W (paramètre A8). Ou alimentation TX pour test photocellules (A8 02) / économie batteries (A8 03 ou 04) : plus de voyant possible dans ce cas", t: "sortie" },
+          { n: "29 · 28", label: "LAM", desc: "Clignotant 24 V DC, intermittence 50 %. Préclignotement : A5, mode : 78", t: "sortie" }
+        ]},
+        { nom: "Sécurités NF", bornes: [
+          { n: "10 · 28", label: "FT2", desc: "Photocellules FT2. Usine : 53 00, 54 00 (désactivée en ouverture et fermeture), 55 01. Absente : ponter ou 53 00 + 54 00", t: "nf" },
+          { n: "11 · 28", label: "FT1", desc: "Photocellules FT1. Usine : 50 00 (ignorée en ouverture), 51 02 (inversion en fermeture), 52 01. Absente : ponter ou 50 00 + 51 00", t: "nf" },
+          { n: "12 · 14", label: "COS2", desc: "Bord sensible 2, NF ou 8,2 kΩ. Désactivé d'usine (74 00)", t: "nf" },
+          { n: "13 · 14", label: "COS1", desc: "Bord sensible 1, NF ou 8,2 kΩ. Désactivé d'usine (73 00)", t: "nf" },
+          { n: "15 · 14", label: "ST", desc: "STOP NF — shunté d'usine", t: "nf" }
+        ]},
+        { nom: "Commandes NO (commun 21)", bornes: [
+          { n: "22", label: "ORO", desc: "Horloge (paramètre 80). Ne jamais ponter si inutilisée", t: "no" },
+          { n: "23", label: "AP", desc: "Ouverture. Maintenue : pas de fermeture automatique", t: "no" },
+          { n: "24", label: "CH", desc: "Fermeture", t: "no" },
+          { n: "25", label: "PP", desc: "Pas-à-pas (paramètre 84)", t: "no" },
+          { n: "26", label: "PED", desc: "Ouverture partielle, 50 % d'usine", t: "no" }
+        ]},
+        { nom: "Alimentation, bus, antenne", bornes: [
+          { n: "27 · 28", label: "+24 V", desc: "Alimentation accessoires (7 ou 10 W max selon le modèle)", t: "alim" },
+          { n: "16 · 17 · 18", label: "COM LNA LNB", desc: "Liaison RS485 MASTER / SLAVE (vantaux opposés), câble 3 x 0,5 mm², 30 m max", t: "bus" },
+          { n: "20 · 19", label: "ANT", desc: "Antenne : câble RG58, 10 m max, sans raccord", t: "autre" }
+        ]},
+        { nom: "Connecteurs (câblés usine)", bornes: [
+          { n: "ENC", label: "Encodeur", desc: "Débrancher / rebrancher uniquement hors tension. Si remplacé : refaire l'apprentissage", t: "moteur" },
+          { n: "FC", label: "Fins de course", desc: "Mécaniques ou magnétiques (NC). Après tout réglage : refaire l'apprentissage", t: "moteur" },
+          { n: "SB", label: "Déverrouillage", desc: "Contact NC de la poignée de déverrouillage", t: "moteur" },
+          { n: "RECEIVER", label: "Récepteur", desc: "H93/RX2LP/I : PR1 pas-à-pas (param. 76), PR2 partielle (param. 77). Ne pas remplacer par un autre récepteur si le B70/MODLP est utilisé", t: "autre" },
+          { n: "WIFI", label: "B74/BCONNECT", desc: "Module Wi-Fi (activer avec L0 01, low power désactivé L1 00)", t: "autre" }
+        ]}
+      ],
+      fusibles: "F1 15 A (ATO257) circuit moteur · F2 2 A (ATO257) accessoires · F3 T2A (5x20) primaire transformateur",
       notes: [
-        "Photocellules conseillées : séries R90/F4ES, G90/F4ES ou T90/F4S.",
-        "Récepteur embrochable (H93/RX…) : PR1 = pas à pas, PR2 = ouverture partielle par défaut.",
-        "Si +SC (8) sert au test photocellules ou à l'économie batterie, on ne peut plus y brancher le voyant."
+        "Sécurités absentes : shunter sur COM ou les désactiver par paramètres 50, 51, 53, 54, 73, 74.",
+        "Photocellules conseillées : séries F4ES ou F4S.",
+        "Câbles : photocellules RX 4 x 0,5 mm², TX 2 x 0,5 mm² (20 m max) ; clignotant FIFTHY/24 2 x 1 mm² (10 m max)."
       ]
     },
     apprentissage: {
       avant: [
-        "Régler le paramètre de position du moteur (gauche / droite, vu de l'intérieur) et le modèle de moteur (BH30/600, /800, /500/HS).",
-        "Homme mort désactivé (A7 = 00).",
-        "Portail en position fermée.",
-        "TEST : contrôler commandes et sécurités ; ponter ou désactiver les sécurités absentes."
+        "A1 — modèle : 01 BH30/603-604 · 02 BH30/803-804 · 03 BH30 HS (503/504/603/604) · 04 BM30/400 · 05 BM30/300/HS · 06 BH30/804/R.",
+        "71 — position : 71 00 ouverture à gauche, 71 01 ouverture à droite (vue de l'intérieur).",
+        "Fins de course réglés pour que le portail s'arrête un peu avant la butée mécanique.",
+        "Homme présent désactivé : A7 00. Portail en position fermée.",
+        "TEST : contrôler commandes et sécurités ; shunter ou désactiver celles qui ne sont pas installées (50, 51, 53, 54, 73, 74).",
+        "Si TEST affiche FC : prêt. S'il affiche dAtA : TEST 1 clic puis apprentissage. S'il affiche un n° de borne : régler la sécurité d'abord."
       ],
       etapes: [
-        "Maintenir PROG 4 s : « AP P… » s'affiche.",
-        "Ouvrir le levier de déblocage : « PH AS » s'affiche, la carte calibre le moteur.",
-        "Quand le calibrage est réussi, le message de fin clignote.",
-        "Refermer le levier de déblocage : l'acquisition démarre.",
-        "« FOtO » (si photocellules actives) : s'écarter du faisceau dans les 5 s.",
-        "« AUto » : ouverture lente jusqu'au fin de course d'ouverture (court arrêt, « AUto » clignote), puis fermeture jusqu'au fin de course de fermeture.",
-        "Réussi : l'afficheur revient à l'état des commandes et sécurités."
+        "Maintenir PROG 4 s : AP P- s'affiche.",
+        "Ouvrir la poignée de déverrouillage : après quelques secondes PH AS s'affiche, la centrale règle le moteur.",
+        "Attendre que PH AS clignote (réglage réussi).",
+        "Refermer la poignée de déverrouillage : l'apprentissage démarre.",
+        "FOtO s'affiche (si une photocellule est active) : s'écarter du faisceau dans les 5 s.",
+        "Auto : ouverture à faible vitesse jusqu'au fin de course d'ouverture, court arrêt, Auto clignote.",
+        "Fermeture jusqu'au fin de course de fermeture. Réussi : retour à l'état des commandes et sécurités."
       ],
       apres: [
-        "Erreurs possibles : no PH, AP PE, AP PL → voir l'onglet Codes et refaire l'acquisition.",
-        "Mode INFO : maintenir TEST 5 s moteur à l'arrêt (version, position, courant, seuil d'obstacle…).",
-        "Après coupure ou déblocage en position intermédiaire : récupération de position lente, clignotant 3 s allumé / 1,5 s éteint ; ne rien commander avant un fin de course."
+        "Erreurs : noPH (réglage moteur échoué), APPE (TEST ou sécurité), APPL (longueur) → voir l'onglet Codes et recommencer.",
+        "Garder au moins 3 cm entre le point d'arrêt et la butée mécanique ; sinon déplacer le fin de course et refaire l'apprentissage.",
+        "Contrôle final : StoP doit clignoter quand on ouvre la poignée de déverrouillage."
       ]
     }
   }
