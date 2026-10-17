@@ -1,0 +1,16 @@
+{
+  "name": "Dépannage SAV — Espacs Automatisme",
+  "short_name": "Dépannage SAV",
+  "description": "Codes erreur, borniers et apprentissage par carte (Came, Nice, FAAC, BFT, Roger), consultables hors ligne.",
+  "lang": "fr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0f0e0e",
+  "theme_color": "#9B2424",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
