@@ -13,8 +13,9 @@ const DATA_VERSION = "2026-10-17";
 /* Journal des modifications — ajouter une entrée en haut à chaque mise à jour.
    docs : nom des notices ajoutées (affichées dans Réglages). */
 const CHANGELOG = [
-  { date: "2026-10-17", titre: "Écran de la LEO B CBB", items: [
-    "Onglet Écran de la BFT LEO B CBB : touches, menus, statistiques, messages affichés (SEt, 35.40, BLOC, RST…). La notice ne décrit pas les segments un par un, il n'y a donc pas de dessin interactif."
+  { date: "2026-10-17", titre: "Écrans des BFT LEO B CBB et MERAK", items: [
+    "Onglet Écran de la BFT LEO B CBB : touches, menus, statistiques, messages affichés (SEt, 35.40, BLOC, RST…). La notice ne décrit pas les segments un par un, il n'y a donc pas de dessin interactif.",
+    "Même onglet Écran pour la BFT MERAK : touches, menus, point de basse consommation, lettres C et O, messages affichés."
   ], docs: [] },
   { date: "2026-10-17", titre: "Relecture des cartes BFT", items: [
     "LEO B CBB : type corrigé (coulissant), codes AUX 3 et clignotant précisés, ajout du menu simplifié avec les presets, des notes sur le sens d'ouverture, des fusibles et du montage vantaux opposés.",
@@ -415,6 +416,21 @@ const MARQUES = [
       { code: "KO", type: "afficheur", titre: "Autoset interrompu", action: "Appui simultané sur + et − pendant l'autoset : relancer." },
       { code: "BLOC", type: "afficheur", titre: "Accès bloqué", action: "10 mots de passe faux consécutifs : attendre 3 minutes. Mot de passe par défaut : 1234." }
     ],
+    afficheur: {
+      intro: "Afficheur 4 caractères à 7 segments avec 3 touches (+, −, OK). La notice ne donne pas de signification segment par segment : l'afficheur sert aux menus, aux diagnostics d'entrées et aux codes d'erreur (onglet Codes). Deux signes particuliers : le point et les lettres C / O.",
+      ecrans: [],
+      reperes: {},
+      regles: [],
+      autres: [
+        { titre: "Touches", texte: "+ monter · − descendre · OK confirmer / allumer l'afficheur. + et − ensemble : sortir (ESC). Afficheur éteint : + (moins de 2 s) = OPEN / STOP, − (moins de 2 s) = CLOSE / STOP. Un mot de passe (usine 1234) est demandé si le niveau de protection est de 1 à 4 ; après 10 essais faux : BLOC pendant 3 minutes." },
+        { titre: "Menus", texte: "OK une fois : menu simplifié (langue, dir, preset, autoset, radio). OK deux fois : menu avancé : PARAM, LOGIC, RADIO, DEFAULT, LANGUE, AUTOSET, STAT, PASSWORD. Langues : itA, FrA, dEu, EnG, ESP." },
+        { titre: "Point au dernier chiffre", texte: "Un point allumé après le dernier chiffre indique le mode basse consommation (PSAVE 1) : 10 s après l'arrêt du moteur, les bornes 50-51 ne sont plus alimentées. Pour régler des accessoires (alignement des photocellules) ou si un accessoire exige une alimentation continue (récepteur radio, bord actif) : mettre PSAVE à 0." },
+        { titre: "Lettres C et O", texte: "Un « C » seul à l'écran : entrée de fin de course fermeture (SWC) activée, portail fermé. Un « O » seul : fin de course ouverture (SWO) activée, portail ouvert. Rien d'affiché : portail à mi-course." },
+        { titre: "Pendant l'utilisation", texte: "« 35.40 » : force instantanée du moteur / force réglée par l'autoset (figure de la notice). « SET » : la carte attend une manœuvre complète d'ouverture-fermeture sans interruption, détection d'obstacle inactive. « .... .... .... » : autoset en cours (1 à 3 manœuvres), ne pas toucher aux commandes ; à la fin, ok ou KO. « STRE, STRI, OPEN, CLS, PED, TIME, STOP, PHOT, PHOP, PHCL, BAR, BARO, BARC » : entrée activée (diagnostic, voir Codes)." },
+        { titre: "Menu STAT", texte: "Version du logiciel, nombre de manœuvres (en centaines), nombre de radiocommandes, 30 dernières erreurs. Chaque erreur s'affiche sous la forme 01.33 : 2 premiers chiffres = rang (01 = la plus récente), 2 derniers = code." },
+        { titre: "Retour usine", texte: "rSt s'affiche : confirmer par OK (YES / ok). Procédure : secteur coupé, entrée STOP ouverte (pont 70-71 retiré), maintenir − et OK, remettre sous tension. Efface aussi toutes les radiocommandes : refaire un autoset." }
+      ]
+    },
     parametres: {
       intro: "Notice D814459. Trois menus : PARAM (valeurs chiffrées), LOGIC (réglages à choix) et RADIO. Valeur usine = « usine ». Après modification d'un paramètre de course ou de vitesse, refaire un autoset.",
       navigation: [
