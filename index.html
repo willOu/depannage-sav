@@ -408,7 +408,9 @@ route();
 /* ---------- hors ligne ---------- */
 if ("serviceWorker" in navigator){
   addEventListener("load", () => {
-    navigator.serviceWorker.register("sw.js").then(reg => {
+    const hadCtrl = !!navigator.serviceWorker.controller; let reloaded = false;
+    navigator.serviceWorker.addEventListener("controllerchange", () => { if (hadCtrl && !reloaded){ reloaded = true; location.reload(); } });
+    navigator.serviceWorker.register("sw.js", { updateViaCache: "none" }).then(reg => {
       reg.addEventListener("updatefound", () => {
         const w = reg.installing;
         w && w.addEventListener("statechange", () => {
