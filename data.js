@@ -13,6 +13,10 @@ const DATA_VERSION = "2026-10-17";
 /* Journal des modifications — ajouter une entrée en haut à chaque mise à jour.
    docs : nom des notices ajoutées (affichées dans Réglages). */
 const CHANGELOG = [
+  { date: "2026-10-17", titre: "Relecture des cartes BFT", items: [
+    "LEO B CBB : type corrigé (coulissant), codes AUX 3 et clignotant précisés, ajout du menu simplifié avec les presets, des notes sur le sens d'ouverture, des fusibles et du montage vantaux opposés.",
+    "MERAK : bornier SAFE 2 corrigé (borne 73, pont 70-73, plus de FAULT), puissances par modèle, vantaux opposés, presets, signalement des points où la notice se contredit ou que seule l'ancienne édition mentionne."
+  ], docs: [] },
   { date: "2026-10-17", titre: "Recherche par modèle", items: [
     "On peut chercher un modèle d'automatisme (ex. Ares 1000, AYRON, BIONIK, RB400, BX708) ou un type (coulissant, battant, barrière) : la carte correspondante s'ouvre.",
     "La saisie sans espace fonctionne aussi (ex. bta400, rb400)."
@@ -377,16 +381,14 @@ const MARQUES = [
       { code: "PHOT", type: "diag", titre: "Photocellule PHOT activée", action: "Faisceau coupé ou pont 70-72 retiré." },
       { code: "PHOP", type: "diag", titre: "Photocellule ouverture activée", action: "Faisceau coupé." },
       { code: "PHCL", type: "diag", titre: "Photocellule fermeture activée", action: "Faisceau coupé." },
-      { code: "BAR", type: "diag", titre: "Bord sensible activé", action: "Bord actionné ou pont 70-74 retiré." },
-      { code: "BAR 2", type: "diag", titre: "Bord sur moteur slave", action: "Vantaux opposés : bord du moteur slave." },
-      { code: "SWC", type: "diag", titre: "Fin de course fermeture", action: "Diagnostic fin de course." },
-      { code: "SWO", type: "diag", titre: "Fin de course ouverture", action: "Diagnostic fin de course." },
+      { code: "BAR", type: "diag", titre: "Bord sensible activé", action: "Bord actionné ou pont 70-73 retiré (SAFE 2 en BAR par défaut)." },
+      { code: "BAR 2", type: "diag", titre: "Bord sur moteur slave", action: "Vantaux opposés : bord du moteur slave. Code non retrouvé dans la notice D814459 (repris de l'ancienne D811980), à confirmer." },
       { code: "SET", type: "diag", titre: "Attente d'une manœuvre complète", action: "La carte attend une ouverture-fermeture complète sans arrêt pour apprendre le couple. Détection d'obstacle INACTIVE pendant ce temps." },
-      { code: "ER01", type: "erreur", titre: "Test photocellules échoué", action: "Vérifier le branchement des photocellules et la configuration (SAFE 1/2, FAULT)." },
+      { code: "ER01", type: "erreur", titre: "Test photocellules échoué", action: "Vérifier le branchement des photocellules et la configuration des entrées de sécurité (SAFE 1/2)." },
       { code: "ER02", type: "erreur", titre: "Test bord échoué", action: "Vérifier le branchement du bord et la configuration." },
       { code: "ER03", type: "erreur", titre: "Test photocellules ouverture échoué", action: "Vérifier branchement et paramètres / logiques." },
       { code: "ER04", type: "erreur", titre: "Test photocellules fermeture échoué", action: "Vérifier branchement et paramètres / logiques." },
-      { code: "ER05", type: "erreur", titre: "Test bord moteur slave échoué", action: "Vantaux opposés : vérifier le bord et sa configuration." },
+      { code: "ER05", type: "erreur", titre: "Test bord moteur slave échoué", action: "Vantaux opposés : vérifier le bord et sa configuration. Code non retrouvé dans la notice D814459 (repris de l'ancienne D811980), à confirmer." },
       { code: "ER06", type: "erreur", titre: "Test bord 8K2 échoué", action: "Vérifier le bord résistif 8,2 kΩ et sa configuration." },
       { code: "ER1x", type: "erreur", titre: "Erreur test matériel de la carte", action: "Vérifier les connexions moteur. Si ça persiste : problème carte, assistance technique." },
       { code: "ER3x", type: "erreur", titre: "Inversion sur obstacle (ampérostop)", action: "Rechercher un obstacle ou point dur sur la course." },
@@ -403,7 +405,7 @@ const MARQUES = [
       { code: "ERF3", type: "erreur", titre: "Configuration des logiques incorrecte (entrées SAFE, type de moteur)", action: "Vérifier la bonne configuration des logiques SAFE et du type de moteur." },
       { code: "ERF4", type: "erreur", titre: "Surcharge sur la sortie d'alimentation des auxiliaires", action: "Vérifier le raccordement de l'alimentation des auxiliaires et leur consommation totale (24 V, 0,5 A max)." },
       { code: "ERF9", type: "erreur", titre: "Surcharge sur la sortie serrure électrique", action: "Vérifier les branchements de la serrure et qu'elle est adaptée." },
-      { code: "BARO · BARC", type: "diag", titre: "Bord activé uniquement à l'ouverture / à la fermeture", action: "Entrée BAR avec inversion activée seulement en ouverture (BARO) ou en fermeture (BARC) : bord actionné, ou pont retiré / FAULT associé en défaut." },
+      { code: "BARO · BARC", type: "diag", titre: "Bord activé uniquement à l'ouverture / à la fermeture", action: "Entrée BAR avec inversion activée seulement en ouverture (BARO) ou en fermeture (BARC) : bord actionné, ou pont 70-73 retiré." },
       { code: "rLS", type: "diag", titre: "Déblocage mécanique du moteur activé (Ares Veloce BT B 500 / 1000)", action: "Moteur débloqué : le rebloquer, vérifier le contact de déblocage." },
       { code: "C · O", type: "diag", titre: "Fin de course fermeture (C) / ouverture (O) actif", action: "Un « C » ou un « O » seul à l'écran indique l'activation de l'entrée de fin de course (SWC / SWO) : portail fermé = C, ouvert = O. Rien d'affiché = portail à mi-course." },
       { code: "Point (.)", type: "afficheur", titre: "Point au dernier chiffre : mode basse consommation actif", action: "Normal : après 10 s moteur à l'arrêt, les bornes 50-51 ne sont plus alimentées (PSAVE 1). Pour régler des accessoires (alignement photocellules) ou si un accessoire exige une alimentation continue (récepteur radio, bord actif) : PSAVE 0." },
@@ -450,7 +452,7 @@ const MARQUES = [
           { code: "ForcE PrESSion Suc", def: "100", titre: "Force du vantail sous pression en fin de course de fermeture (%)", valeurs: [["0–100", "Force exercée par le vantail pendant la pression sur le fin de course de fermeture (logique PrESS Suc)."]] }
         ]},
         { nom: "Logiques : fermeture et mouvement", items: [
-          { code: "tcA", def: "0", titre: "Fermeture automatique", valeurs: [["0", "Logique non activée."], ["1", "Fermeture automatique activée (temps réglé par le paramètre tcA)."]] },
+          { code: "tcA (logique)", def: "0", titre: "Fermeture automatique", valeurs: [["0", "Logique non activée."], ["1", "Fermeture automatique activée (temps réglé par le paramètre tcA)."]] },
           { code: "P SAuE", def: "1", titre: "Activation du Power Down (basse consommation)", valeurs: [
             ["0", "Power Down désactivé : accessoires toujours alimentés. Consommation en attente supérieure à 0,5 W."],
             ["1", "Power Down activé : bornes 50-51 coupées 10 s après l'arrêt du moteur (un point s'affiche à l'écran)."]],
@@ -516,10 +518,10 @@ const MARQUES = [
             ["12", "BAR CL : bord, inversion activée seulement à la fermeture ; à l'ouverture, arrêt."],
             ["13", "BAR CL TEST : bord vérifié, inversion seulement à la fermeture."],
             ["14", "BAR CL 8k2 : bord 8k2, inversion seulement à la fermeture."],
-            ["15", "Entrée désactivée (à utiliser en l'absence de carte d'extension)."]],
+            ["15", "Non disponible sur SAFE 2 (valeur réservée à SAFE 10-13)."]],
             note: "Inversion de 2 s au contact du bord. Bords de type D non vérifiés : entretien obligatoire au moins tous les 6 mois (EN 12453)." },
           { code: "10 SAFE · 11 SAFE · 12 SAFE · 13 SAFE", def: "15", titre: "Entrées de sécurité SAFE 10 à 13 (carte d'extension, bornes 77 à 80)", valeurs: [
-            ["0–15", "Mêmes valeurs que SAFE 2. 15 = désactivée (à laisser si pas de carte d'extension)."]],
+            ["0–15", "Mêmes valeurs que SAFE 2, plus 15 = désactivée (à laisser si pas de carte d'extension). Les valeurs 8, 11 et 14 (bords 8k2) ne sont pas activables sur SAFE 11 et SAFE 13."]],
             note: "Uniquement avec carte d'extension." },
           { code: "1 ic", def: "0", titre: "Entrée de commande IC 1 (borne 61)", valeurs: [
             ["0", "START E : start externe (gestion du feu)."], ["1", "START I : start interne (gestion du feu)."],
@@ -564,7 +566,7 @@ const MARQUES = [
             ["1", "MAÎTRE standard : envoie des commandes d'activation (START, OPEN, CLOSE, PED, STOP) à d'autres cartes."],
             ["2", "ESCLAVE vantaux opposés sur réseau local (sans module intelligent)."],
             ["3", "MAÎTRE vantaux opposés sur réseau local (sans module intelligent)."]],
-            note: "Voir fig. E de la notice et le paragraphe modules U-Link." },
+            note: "Vantaux opposés (fig. L) : maître = mode série 3, UL ink 1 = 1, adresse 0, 1 SAFE = 1, 2 SAFE = 7 ; esclave = mode série 2, UL ink 1 = 1, 2 SAFE identique au maître. Module B EBA RS485 LINK requis (DIP 1 à 4) ; autoset à faire séparément sur chaque vantail avant de régler les vantaux opposés." },
           { code: "AdrESSE", def: "0", titre: "Adresse sur le réseau BFT", valeurs: [["0–119", "Adresse de la carte dans une connexion de réseau BFT local."]] },
           { code: "FEu PrE", def: "0", titre: "Clignotement préalable du feu", valeurs: [["0", "Clignotement préalable exclu."], ["1", "Lumières rouges clignotantes 3 s au début de la manœuvre."]] },
           { code: "FEu rouGE", def: "0", titre: "Feu rouge fixe", valeurs: [["0", "Lumières rouges éteintes portail fermé."], ["1", "Lumières rouges allumées portail fermé."]] }
@@ -575,7 +577,7 @@ const MARQUES = [
             ["AdJ 2 · 3 · 4", "Ajouter touche 2ch / 3ch / 4ch (même principe)."],
             ["EFFAcEr touT", "Supprimer la liste : efface TOUTES les radiocommandes de la mémoire du récepteur."],
             ["EFFAcEr", "Éliminer une radiocommande (si replay désactivé) : écrire sa position ou appuyer sur sa touche."]],
-            note: "Raccourcis : + plus de 5 s = ajout 1er canal ; − plus de 5 s = ajout 2e canal ; + et − plus de 5 s = suppression des émetteurs." },
+            note: "Raccourcis : + = ajout 1er canal ; − = ajout 2e canal (≥ 2 s selon la p. 49, plus de 5 s selon la figure p. 4) ; + et − plus de 5 s = suppression des émetteurs." },
           { code: "dEFAuLt", def: "—", titre: "Retour aux valeurs usine", valeurs: [["OK", "Rétablit la centrale aux valeurs préréglées. Faire ensuite un nouvel autoset. Efface aussi toutes les radiocommandes."]],
             note: "Autre méthode : secteur coupé, contact STOP ouvert (pont 70-71 retiré), maintenir − et OK, remettre sous tension : rSt, valider par OK dans les 3 s." },
           { code: "LAnGuE", def: "—", titre: "Langue de l'afficheur", valeurs: [["itA · FrA · dEu · EnG · ESP", "Italien, français, allemand, anglais, espagnol."]] },
@@ -591,7 +593,7 @@ const MARQUES = [
         ]},
         { nom: "Sorties AUX", bornes: [
           { n: "20 · 21", label: "AUX 1", desc: "Contact alimenté 24 V NO, 1 A max. Défaut : clignotant (logique 1AUX)", t: "sortie" },
-          { n: "26 · 27", label: "AUX 2", desc: "Contact libre NO, 24 V 1 A max. Défaut : 2e canal radio (logique 2AUX)", t: "sortie" }
+          { n: "26 · 27", label: "AUX 2", desc: "Contact libre NO, 24 V 1 A max. Notice p. 52 : défaut 2e canal radio ; paramètres p. 58 : 2AUX = 0 (canal radio monostable), commandé par 3ch en usine", t: "sortie" }
         ]},
         { nom: "Alimentation accessoires", bornes: [
           { n: "50", label: "24 V −", desc: "Alimentation accessoires", t: "alim" },
@@ -606,21 +608,19 @@ const MARQUES = [
         { nom: "Sécurités", bornes: [
           { n: "70", label: "COM", desc: "Commun STOP / SAFE 1 / SAFE 2", t: "autre" },
           { n: "71", label: "STOP", desc: "NF. Inutilisé → laisser le pont usine 70-71", t: "nf" },
-          { n: "72", label: "SAFE 1", desc: "NF configurable. Défaut : PHOT. Inutilisé → pont usine 70-72", t: "nf" },
-          { n: "73", label: "FAULT 1", desc: "Entrée de test des sécurités sur SAFE 1", t: "autre" },
-          { n: "74", label: "SAFE 2", desc: "NF configurable. Défaut : BAR. Inutilisé → pont usine 70-74", t: "nf" },
-          { n: "75", label: "FAULT 2", desc: "Entrée de test des sécurités sur SAFE 2", t: "autre" }
+          { n: "72", label: "SAFE 1", desc: "NF configurable (la notice écrit N.O. p. 52, les schémas montrent NF). Défaut : PHOT. Inutilisé → pont usine 70-72", t: "nf" },
+          { n: "73", label: "SAFE 2", desc: "NF configurable (la notice écrit N.O. p. 52, les schémas montrent NF). Défaut : BAR. Inutilisé → pont usine 70-73", t: "nf" }
         ]},
         { nom: "Antenne", bornes: [
           { n: "Y · #", label: "Antenne", desc: "Antenne accordée 433 MHz, câble RG58 (# = blindage)", t: "autre" }
         ]}
       ],
-      fusibles: "F1 0,63 A T (220-230 V) / 1,6 A T (120 V) · F3 1,25 A T. Consommation en attente 0,43 W. Alimentation accessoires 24 V ≤ 0,5 A",
+      fusibles: "F1 0,63 A T (220-230 V) / 1,6 A T (120 V) · F3 1,25 A T (valeurs de l'ancienne notice D811980, non reprises dans D814459). Consommation en attente 0,43 W. Alimentation accessoires 24 V ≤ 0,5 A",
       notes: [
-        "Ponts précâblés d'usine : 70-71, 70-72, 70-74 — les retirer seulement si la borne est utilisée.",
+        "Ponts précâblés d'usine : 70-71, 70-72, 70-73 — les retirer seulement si la borne est utilisée. Ne pas relier la borne 60 (COM IC) à la borne 70 (COM sécurités).",
         "Changement de sens : ne pas intervertir les étriers de fin de course, utiliser la logique d'inversion de direction (dir).",
-        "Afficheur éteint : + (moins de 2 s) = OPEN / STOP, − (moins de 2 s) = CLOSE / STOP. + plus de 5 s = ajout du 1er canal radio, − plus de 5 s = 2e canal.",
-        "Modèles couverts : Deimos Ultra BT A / BT B 400-600 (80 à 100 W), Ares Ultra BT B 1000-1500 et Ares Veloce BT B 500-1000 (130 à 160 W).",
+        "Afficheur éteint : + (moins de 2 s) = OPEN / STOP, − (moins de 2 s) = CLOSE / STOP. + = ajout du 1er canal radio, − = 2e canal (≥ 2 s selon la p. 49, plus de 5 s selon la figure p. 4 : la notice se contredit). + et − plus de 5 s = suppression des émetteurs.",
+        "Puissances : Deimos 400 = 80 W, Deimos 600 = 100 W, Ares Ultra 1000 = 130 W, Ares Ultra 1500 = 160 W, Ares Veloce 500 et 1000 = 160 W. La notice D814459 ne cite que des BT B pour les modèles (BT A = nom de la notice).",
         "Carte d'extension (option) : ajoute SAFE 10 à 13, IC 10 et 11, AUX 10 et serrure électrique (bornes 22-23, 28-29, 77-80, 64-65). Sécurités NF de type D (EN 12453) non vérifiées : entretien obligatoire au moins tous les 6 mois.",
         "Bornes d'entrées de sécurité configurables : SAFE 1 = 72, SAFE 2 = 73 (logiques 1SAFE / 2SAFE, usine PHOT / BAR)."
       ]
@@ -628,7 +628,7 @@ const MARQUES = [
     apprentissage: {
       avant: [
         "Faire l'autoset avec le moteur froid (pas après une série de manœuvres).",
-        "Menu simplifié : régler la langue, dir (gch / drt selon le côté moteur) et éventuellement le preset (ar, sr, ac, sc, ind)."
+        "Menu simplifié : régler la langue, dir (0 = ouverture à droite, 1 = ouverture à gauche, fig. E) et éventuellement le preset : rAU / rSAU (résidentiel auto / semi-auto), cAU / cSAU (collectif auto / semi-auto), indU (homme présent). Presets : rAU et cAU = tcA 1 + pas à pas 1 ; cAU et cSAU ajoutent préalarme 3 et verrouillage impulsions ouverture 1 ; indU = homme mort 1. Séquence conseillée : 1) autoset, 2) radiocommandes, 3) réglages."
       ],
       etapes: [
         "Aller dans le menu AUTOSET et appuyer sur OK.",
@@ -652,7 +652,7 @@ const MARQUES = [
     id: "bft-leo-b-cbb",
     nom: "LEO B CBB",
     modeles: "LEO B CBB 3 230 L02 · L04 (230 V) · LEO B CBB 3 120 F02 · F04 (120 V)",
-    type: "Portail battant / coulissant — afficheur 4 caractères, touches + / − / OK",
+    type: "Portail coulissant — afficheur 4 caractères, touches + / − / OK",
     source: "Notice BFT D812161 00100_04 (LEO B CBB)",
     codes: [
       { code: "StrE", type: "diag", titre: "Entrée Start externe activée", action: "Diagnostic d'entrée (START E)." },
@@ -676,7 +676,7 @@ const MARQUES = [
       { code: "Er04", type: "erreur", titre: "Essai photocellules fermeture échoué", action: "Vérifier la connexion des photocellules et la configuration des paramètres / logiques." },
       { code: "Er05", type: "erreur", titre: "Essai linteau sur moteur slave échoué", action: "Connexion vantaux opposés : vérifier le linteau et la configuration des paramètres / logiques." },
       { code: "Er06", type: "erreur", titre: "Essai linteau 8k2 échoué", action: "Vérifier le linteau résistif 8,2 kΩ et la configuration des paramètres / logiques." },
-      { code: "Er1x", type: "erreur", titre: "Erreur essai matériel de la carte", action: "Vérifier les connexions sur la carte (moteur). Si le problème persiste : s'adresser au SAV (x = 0 à 9, A à F)." },
+      { code: "Er1x", type: "erreur", titre: "Erreur essai matériel de la carte", action: "Vérifier les connexions sur le moteur. Problème matériel sur la carte : s'adresser au SAV (x = 0 à 9, A à F)." },
       { code: "Er3x", type: "erreur", titre: "Inversion pour obstacle (ampérostop)", action: "Vérifier les obstacles éventuels le long du parcours." },
       { code: "Er5x", type: "erreur", titre: "Erreur de communication avec dispositifs à distance", action: "Vérifier la connexion sur les dispositifs accessoires et/ou les cartes d'expansion connectés via série." },
       { code: "Er7x", type: "erreur", titre: "Erreur interne de contrôle / supervision du système", action: "Éteindre et rallumer la carte. Si le problème persiste : contacter le service après-vente." },
@@ -694,6 +694,19 @@ const MARQUES = [
         "Attention : toute erreur de configuration de la sensibilité peut causer des dommages aux personnes, animaux et biens."
       ],
       groupes: [
+        { nom: "Menu simplifié (un seul appui sur OK)", items: [
+          { code: "LAnGuAGE", def: "—", titre: "Langue", valeurs: [["itA · FrA · dEu · EnG · ESP", "Italien, français, allemand, anglais, espagnol."]] },
+          { code: "dIr", def: "drt", titre: "Sens d'ouverture", valeurs: [["drt", "Ouverture à droite (équivaut à inu.SEnS.ouv = 0)."], ["Gch", "Ouverture à gauche (équivaut à inu.SEnS.ouv = 1)."]] },
+          { code: "PrESEt", def: "—", titre: "Préréglage de fonctionnement", valeurs: [
+            ["Ar", "Automatique, résidentiel : tcA = 1, pas à pas = 1."],
+            ["Sr", "Semi-automatique, résidentiel : tcA = 0, pas à pas = 0."],
+            ["Ac", "Automatique, collectif : tcA = 1, pas à pas = 1, préalarme = 1, verrouillage impulsions ouverture = 1."],
+            ["Sc", "Semi-automatique, collectif : tcA = 0, pas à pas = 0, préalarme = 1, verrouillage impulsions ouverture = 1."],
+            ["ind", "Homme présent (HoMME Mort = 1)."]],
+            note: "Pour tous les presets : tcA (temps) 40 s, évacuation sémaphore 40 s, ouverture partielle 20 %, encodeur 2, programmation radio 1. Temps de travail, ralentissements et forces sont réglés par l'autoconfiguration (L02). Les autres logiques (SAFE, IC, AUX 3, EXP, mode série…) restent inchangées." },
+          { code: "AutoSEt", def: "—", titre: "Autoconfiguration (menu simplifié, L02 uniquement)", valeurs: [["ok", "1 à 3 manœuvres : ouverture automatique puis fermeture automatique."], ["ko", "Abandon."]] },
+          { code: "MEN TELEC", def: "—", titre: "Mémorisation d'une radiocommande", valeurs: [["Touche cachée", "Appuyer sur la touche cachée de l'émetteur, la relâcher, puis appuyer sur la touche à mémoriser : ok 01 s'affiche."]] }
+        ]},
         { nom: "Tableau A : temps et espaces", items: [
           { code: "ttrAv ouv", def: "300", titre: "Temps de travail à l'ouverture (s)", valeurs: [["5–300", "Temps maximum de travail des moteurs à l'ouverture. Réglé légèrement au-dessus du temps de la manœuvre complète ; modifié par l'autoconfiguration qui l'adapte au temps de travail détecté."]] },
           { code: "ttrAv FEr", def: "300", titre: "Temps de travail à la fermeture (s)", valeurs: [["5–300", "Idem à la fermeture."]] },
@@ -720,7 +733,7 @@ const MARQUES = [
             ["2", "Logique à 2 pas : à chaque impulsion, le mouvement est inversé."]],
             note: "Tableau 2 / 3 / 4 pas : fermé → ouvre ; en fermeture → ouvre (2 et 3 pas) ou stop (4 pas) ; ouvert → ferme ; en ouverture → ferme (2 pas) ou stop + TCA (3 et 4 pas) ; après stop → ouvre." },
           { code: "EncodEur", def: "2", titre: "Encodeur (actif uniquement sur LEO B CBB 3 230 L02)", valeurs: [
-            ["1", "Encodeur utilisé comme capteur de position pour acquérir les cotes de ralentissement. Pas de détection d'obstacle : réglage manuel des forces ouverture / fermeture / ralentissement."],
+            ["1", "Encodeur utilisé comme capteur de position pour acquérir les cotes de ralentissement ; détection portail coincé. Forces (ouverture, fermeture, ralentissements) à régler manuellement."],
             ["2", "Fonctionnement automatique avec encodeur : ralentissement et détection d'obstacle. Autoconfiguration possible ; régler la sensibilité par les paramètres Force."]],
             note: "Vérifier que la force d'impact mesurée respecte la norme EN 12453. Toute erreur de configuration de la sensibilité peut causer des dommages aux personnes, animaux et biens." },
           { code: "PrEAL", def: "0", titre: "Préalarme", valeurs: [["0", "Le clignotant s'allume au démarrage du ou des moteurs."], ["1", "Le clignotant s'allume environ 3 s avant le démarrage."]] },
@@ -728,7 +741,7 @@ const MARQUES = [
             ["0", "Fonctionnement à impulsions."],
             ["1", "Homme présent : IC 1 (61) = OPEN UP, IC 2 (62) = CLOSE UP. La manœuvre continue tant que la touche est enfoncée. Dispositifs de sécurité NON actifs."],
             ["2", "Homme présent Urgence : impulsions ; si la carte échoue 3 fois de suite aux essais de sécurité (photocellule ou linteau, Er0x), passe en homme présent jusqu'au relâchement. Sécurités NON actives."]] },
-          { code: "inu.SEnS.ouv", def: "0", titre: "Inversion du sens de l'ouverture", valeurs: [["0", "Fonctionnement standard (Fig. G réf. 1)."], ["1", "Le sens d'ouverture est inversé par rapport au standard (Fig. G réf. 2)."]] }
+          { code: "inu.SEnS.ouv", def: "0", titre: "Inversion du sens de l'ouverture", valeurs: [["0", "Fonctionnement standard (Fig. G réf. 1 : dIr = drt, ouverture à droite)."], ["1", "Sens d'ouverture inversé (Fig. G réf. 2 : dIr = Gch, ouverture à gauche)."]], note: "Pour changer le sens, ne pas inverser le branchement d'origine des bornes 42-43 : utiliser cette logique (ou dIr du menu simplifié)." }
         ]},
         { nom: "Tableau B : blocages d'impulsions", items: [
           { code: "bL. imP.ouv", def: "0", titre: "Verrouillage impulsions à l'ouverture", valeurs: [["0", "L'impulsion de Start E, Start I, Ped agit pendant l'ouverture."], ["1", "N'agit pas pendant l'ouverture."]] },
@@ -737,14 +750,14 @@ const MARQUES = [
         ]},
         { nom: "Tableau B : entrées de sécurité SAFE", items: [
           { code: "SAFE 1", def: "0", titre: "Entrée de sécurité SAFE 1 (borne 72)", valeurs: [
-            ["0", "Phot, photocellule."], ["1", "Phot test, photocellule vérifiée."], ["2", "Phot op, photocellule active seulement à l'ouverture."],
-            ["3", "Phot op test, vérifiée, active seulement à l'ouverture."], ["4", "Phot cl, photocellule active seulement à la fermeture."],
-            ["5", "Phot cl test, vérifiée, active seulement à la fermeture."], ["6", "Bar, linteau sensible."], ["7", "Bar test, linteau sensible vérifié."], ["8", "Bar 8k2."]] },
+            ["0", "Phot, photocellule non vérifiée : en cas d'obscurcissement, active à l'ouverture et à la fermeture ; inverse seulement quand la photocellule est libérée."], ["1", "Phot test, photocellule vérifiée (vérification au début de la manœuvre) ; en fermeture, inverse seulement après dégagement."], ["2", "Phot op, active seulement à l'ouverture, non vérifiée."],
+            ["3", "Phot op test, vérifiée, active seulement à l'ouverture."], ["4", "Phot cl, active seulement à la fermeture, non vérifiée ; en fermeture, inverse immédiatement."],
+            ["5", "Phot cl test, vérifiée, active seulement à la fermeture ; inverse immédiatement."], ["6", "Bar, linteau sensible non vérifié : inverse le mouvement 2 s."], ["7", "Bar test, linteau sensible vérifié : inverse 2 s."], ["8", "Bar 8k2 : linteau résistif 8,2 kΩ, inverse 2 s (pas actif sur SAFE 3)."]] },
           { code: "SAFE 2", def: "6", titre: "Entrée de sécurité SAFE 2 (borne 74)", valeurs: [["0–8", "Mêmes options que SAFE 1 (0 Phot … 6 Bar … 8 Bar 8k2). Usine : 6 = Bar."]] },
           { code: "SAFE 3", def: "2", titre: "Entrée de sécurité SAFE 3 (borne 77)", valeurs: [["0–7", "Mêmes options 0 à 7 que SAFE 1 (8 = Bar 8k2 non actif sur SAFE 3). Usine : 2 = Phot op."]] }
         ]},
         { nom: "Tableau B : entrées de commande IC", items: [
-          { code: "IC 1", def: "0", titre: "Entrée de commande IC 1 (borne 61)", valeurs: [["0", "Start E."], ["1", "Start I."], ["2", "Open."], ["3", "Close."], ["4", "Ped."], ["5", "Timer."], ["6", "Timer piéton."]] },
+          { code: "IC 1", def: "0", titre: "Entrée de commande IC 1 (borne 61)", valeurs: [["0", "Start E : suit la logique Mouvt PAS A PAS ; démarrage externe pour la gestion du sémaphore."], ["1", "Start I : suit la logique pas à pas ; démarrage interne pour le sémaphore."], ["2", "Open : ouvre ; si l'entrée reste fermée, les vantaux restent ouverts jusqu'à l'ouverture du contact, puis fermeture automatique après TCA."], ["3", "Close : ferme."], ["4", "Ped : ouverture piétonne partielle (suit la logique pas à pas)."], ["5", "Timer : comme Open, fermeture garantie même après une panne de courant."], ["6", "Timer piéton : ouverture piétonne ; fermeture garantie même après une panne de courant."]] },
           { code: "IC 2", def: "4", titre: "Entrée de commande IC 2 (borne 62)", valeurs: [["0–6", "Mêmes options que IC 1. Usine : 4 = Ped."]] },
           { code: "IC 3", def: "2", titre: "Entrée de commande IC 3 (borne 64)", valeurs: [["0–6", "Mêmes options que IC 1. Usine : 2 = Open."]] },
           { code: "IC 4", def: "3", titre: "Entrée de commande IC 4 (borne 65)", valeurs: [["0–6", "Mêmes options que IC 1. Usine : 3 = Close."]] }
@@ -753,9 +766,9 @@ const MARQUES = [
           { code: "AUX 3", def: "0", titre: "Sortie AUX 3 (bornes 26-27)", valeurs: [
             ["0", "2e canal radio (contact fermé 1 s)."], ["1", "SCA : voyant portail ouvert."], ["2", "Lumière de courtoisie (90 s après la dernière manœuvre)."],
             ["3", "Lumière de zone (pendant la manœuvre)."], ["4", "Lumières d'escalier (1 s après le début de la manœuvre)."],
-            ["5", "Alarme portail ouvert (si le vantail reste ouvert plus de 2 × TCA)."], ["6", "Clignotant."], ["7", "Serrure électrique à décliq."], ["8", "Serrure électrique à aimant (fermée quand le portail est fermé)."],
-            ["9", "Entretien."], ["10", "Clignotant et Entretien (4 contacts de 10 s fermé / 10 s ouvert, ou 5 s)."]],
-            note: "La notice indique ce paramètre comme actif uniquement sur LEO B CBB 3 120 F02 dans le tableau B, mais « pas actif sur LEO B CBB 3 120 F02 » dans la description du bornier : contradiction dans la notice, à vérifier sur la carte." },
+            ["5", "Alarme portail ouvert (si le vantail reste ouvert plus de 2 × TCA)."], ["6", "Clignotant."], ["7", "Serrure électrique à décliq (contact fermé 2 s à chaque ouverture)."], ["8", "Serrure électrique à aimant (fermée quand le portail est fermé)."],
+            ["9", "Entretien."], ["10", "Clignotant et Entretien : contact fermé pendant la manœuvre des vantaux ; si le seuil Entretien est atteint, en fin de manœuvre portail fermé : 4 fois contact fermé 10 s / ouvert 5 s."]],
+            note: "Non actif sur LEO B CBB 3 120 F02 (la sortie sert de signal acoustique). Le tableau B de la notice porte par erreur « actif uniquement sur 120 F02 »." },
           { code: "codE FIxE", def: "0", titre: "Code fixe", valeurs: [["0", "Récepteur en code rolling : les clones à code fixe ne sont pas acceptés."], ["1", "Récepteur en code fixe : les clones à code fixe sont acceptés."]] }
         ]},
         { nom: "Tableau B : protection, réseau et expansion", items: [
@@ -768,7 +781,7 @@ const MARQUES = [
           { code: "ModE SEriE", def: "0", titre: "Mode série (réseau BFT)", valeurs: [
             ["0", "SLAVE standard : reçoit commandes / diagnostics."], ["1", "MASTER standard : envoie les commandes (START, OPEN, CLOSE, PED, STOP) à d'autres cartes."],
             ["2", "ESCLAVE vantaux opposés (réseau local, sans module intelligent)."], ["3", "MAÎTRE vantaux opposés (réseau local, sans module intelligent)."]],
-            note: "Vantaux opposés : sur la carte configurée en Slave, l'entrée Linteau (Linteau / Linteau Essai / Linteau 8k2) ne peut être configurée que sur SAFE 2. Uniquement sur la barre." },
+            note: "Vantaux opposés (Fig. F) : Master = mode série 3, SAFE 1 = 1, SAFE 2 = 7, SAFE 3 = 1 ; Slave = mode série 2, SAFE 2 = 7 ; adresse 0 sur les deux cartes ; liaison par module B EBA 201 R01, 250 m maximum. Sur la carte configurée en Slave, l'entrée Linteau (Linteau / Linteau Essai / Linteau 8k2) ne peut être configurée que sur SAFE 2. Uniquement sur la barre." },
           { code: "AdrESSE", def: "0", titre: "Adresse sur le réseau BFT", valeurs: [["0–119", "Adresse de la carte dans une connexion de réseau BFT local."]] },
           { code: "EXP I1", def: "1", titre: "Entrée EXPI1 de la carte d'expansion entrées/sorties 1-2", valeurs: [
             ["0–6", "Commandes : 0 Start E, 1 Start I, 2 Open, 3 Close, 4 Ped, 5 Timer, 6 Timer piéton."],
@@ -796,9 +809,9 @@ const MARQUES = [
     bornier: {
       groupes: [
         { nom: "Puissance", bornes: [
-          { n: "L · N · GND", label: "Secteur", desc: "230 V (120 V pour les versions F02 / F04) + terre. Câble 5 × 1,5 mm² triphasé ou 3 × 1,5 mm² monophasé minimum (H05 VV-F)", t: "alim" },
-          { n: "20 · 21", label: "Clignotant", desc: "Lampe 230 V", t: "sortie" },
-          { n: "26 · 27", label: "AUX 3 / signal acoustique", desc: "Contact libre NO 24 V~ 0,5 A. Configurable par AUX 3 (non actif sur LEO B CBB 3 120 F02)", t: "sortie" }
+          { n: "L · N · GND", label: "Secteur", desc: "230 V (120 V pour les versions F02 / F04) + terre. Câble 3 × 1,5 mm² minimum (monophasé, type H05 VV-F)", t: "alim" },
+          { n: "20 · 21", label: "Clignotant", desc: "Clignotant 230 V max 40 W (L02 / L04) · 120 V max 40 W (F02 / F04)", t: "sortie" },
+          { n: "26 · 27", label: "AUX 3 / signal acoustique", desc: "Contact libre NO 24 V~ 0,5 A (le tableau bornier de la notice indique 1 A), configurable par AUX 3. Sur F02 : sortie alarme sonore 24 Vdc (Fig. B2), AUX 3 non actif", t: "sortie" }
         ]},
         { nom: "Commandes", bornes: [
           { n: "10", label: "MARCHE + COND", desc: "Moteur (commun marche + condensateur)", t: "moteur" },
@@ -813,13 +826,13 @@ const MARQUES = [
           { n: "65", label: "IC 4", desc: "NO configurable. Défaut : CLOSE", t: "no" }
         ]},
         { nom: "Fins de course", bornes: [
-          { n: "41", label: "+ REF SWE", desc: "Référence d'alimentation des fins de course", t: "alim" },
+          { n: "41", label: "+ REF SWE", desc: "Commun des fins de course", t: "alim" },
           { n: "42", label: "SWC", desc: "Fin de course fermeture", t: "nf" },
           { n: "43", label: "SWO", desc: "Fin de course ouverture", t: "nf" }
         ]},
         { nom: "Alimentation accessoires", bornes: [
-          { n: "50 · 51", label: "24 V~", desc: "Alimentation des accessoires, 24 V~ 1 A max", t: "alim" },
-          { n: "52", label: "24 V Safe +", desc: "Alimentation des émetteurs vérifiés (photocellules, bords)", t: "alim" }
+          { n: "50 · 51", label: "24 V− / 24 V+", desc: "50 = 24 V−, 51 = 24 V+ : alimentation des accessoires (données techniques : 24 V~ 1 A max)", t: "alim" },
+          { n: "52", label: "24 V Safe +", desc: "Alimentation des émetteurs vérifiés (photocellules, bords) — sortie active seulement pendant le cycle de manœuvre", t: "alim" }
         ]},
         { nom: "Sécurités", bornes: [
           { n: "70", label: "COM", desc: "Commun entrées STOP, SAFE 1 et SAFE 2", t: "autre" },
@@ -836,7 +849,7 @@ const MARQUES = [
           { n: "Y · #", label: "Antenne", desc: "Antenne accordée 433 MHz, câble coaxial RG58 (# = blindage). Des masses métalliques près de l'antenne perturbent la réception : la déplacer dans un endroit dégagé.", t: "autre" }
         ]}
       ],
-      fusibles: "Fusibles : voir Fig. B de la notice (non détaillés dans le texte FR)",
+      fusibles: "Fig. B de la notice : F1 315 mAT (230 V) / 630 mAT (120 V) · F2 6,3 AF (230 V) / 10 AF (120 V)",
       notes: [
         "Barrettes (ponts) précâblées d'usine : 70-71, 70-72, 70-74 et 76-77. Les retirer seulement quand la borne est utilisée.",
         "Moteur 750 W maximum. Accessoires 24 V~ 1 A. Jusqu'à 63 émetteurs mémorisables.",
@@ -851,7 +864,7 @@ const MARQUES = [
       avant: [
         "Contrôler la mécanique, les fins de course et les dispositifs de sécurité avant l'autoconfiguration.",
         "AUTOSET disponible uniquement sur LEO B CBB 3 230 L02 (avec encodeur). Sur les autres modèles : régler les temps et forces à la main.",
-        "Régler le sens (inversion du sens d'ouverture) et vérifier que la logique encodeur = 2."
+        "Encodeur = 2 (valeur usine) requis pour l'autoconfiguration. Régler le sens d'ouverture avant (dIr du menu simplifié), sans inverser les bornes 42-43."
       ],
       etapes: [
         "Lancer l'opération d'autoconfiguration dans le menu AUTOSET (OK).",
