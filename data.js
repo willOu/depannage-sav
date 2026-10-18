@@ -15,6 +15,10 @@ const DATA_VERSION = "2026-10-18";
 /* Journal des modifications — ajouter une entrée en haut à chaque mise à jour.
    docs : nom des notices ajoutées (affichées dans Réglages). */
 const CHANGELOG = [
+  { v: "1.27", date: "2026-10-18", titre: "Ligne de version sous la recherche, Réglages plus courts", items: [
+    "La ligne « Version · données du · mode hors ligne » est maintenant sous la barre de recherche, sur toutes les pages (touchez-la pour ouvrir les Réglages).",
+    "Réglages : « Documentations intégrées » n'affiche que 5 fiches, avec un bouton « Charger plus » pour voir le reste."
+  ], docs: [] },
   { v: "1.26", date: "2026-10-18", titre: "Motorisations : V2 FORTECO 2500 et Startéco 4-2M réversible", items: [
     "V2 FORTECO 2500-I / 2500-I-M (armoire PD20, rangée sous AFCA / ABLE V2) : erreurs Err1 à Err12 avec la marche à suivre, LED et afficheur, tous les paramètres (dir, vEL, FrEn, SEn.A, Strt, Fot1/2, CoS1/2…), bornier M1-M12, auto-apprentissage, déblocage et fins de course magnétiques.",
     "Startéco 4-2M réversible (moteur 800 kg à électrofrein) : fiche dédiée avec bornier 42-52 et frein sur l'option 1, déblocage du frein, grande / petite vitesse et couples, 59 paramètres, historique des défauts, entrées réaffectables.",
