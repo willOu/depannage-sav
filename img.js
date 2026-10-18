@@ -22,6 +22,35 @@
       S("afca-c4-p09", "Barre palpeuse et cellules PE12", 9, "Cellules PB18 (barre palpeuse) et PE12 sans ampli, réglage de sensibilité."),
       S("afca-c4-p11", "Commandes externes", 11, "Récepteur WALLY 2, détecteur de boucle LDP1, boucle magnétique avec ZPD11 sur les entrées 18 à 23.")
     ],
+    "came-zl90": [
+      S("came-zl90-p15", "Branchements électriques", 15, "Liste des bornes (alimentation, accessoires, clignotant, moteurs M1 / M2 avec encodeur, boutons, stop, antenne). Pas de dessin de carte dans cette notice.")
+    ],
+    "came-zbx241": [
+      S("came-zbx241-p09", "Carte ZBX241 : composants, batteries, fins de course", 9, "Description technique de la carte, branchement des batteries d'urgence (carte BN1) et des fins de course selon le moteur."),
+      S("came-zbx241-p11", "Branchements électriques", 11, "Tableau des bornes avec symboles : alimentation 230 V, moteur, clignotant, boutons, contacts de sécurité, fins de course, antenne, polarité des photocellules.")
+    ],
+    "came-zbx10": [
+      S("came-zbx10-p11", "Branchements électriques et test des sécurités", 11, "Liste des bornes (moteur 230 V, encodeur, fins de course, clignotant) et raccordement du test de contrôle des photocellules DOC / DIR.")
+    ],
+    "came-za3": [
+      S("came-za3-p11", "Branchements électriques", 11, "Liste des bornes : alimentation, moteurs, clignotant, serrure, lampe cycle, boutons, contacts de sécurité, antenne.")
+    ],
+    "came-za4": [
+      S("came-za4-p11", "Branchements électriques", 11, "Liste des bornes de la carte ZA4 (alimentation, moteur, accessoires, boutons, sécurités, antenne).")
+    ],
+    "came-za5": [
+      S("came-za5-p11", "Branchements électriques", 11, "Liste des bornes de la carte ZA5 (alimentation, moteurs, accessoires, boutons, sécurités, antenne).")
+    ],
+    "came-zl92": [
+      S("came-zl92-p11", "Branchements électriques", 11, "Dessin de la carte avec lecteur, capteur transpondeur et sélecteur à clavier, plus la liste des bornes."),
+      S("came-zl92-p12", "Test de contrôle des photocellules", 12, "Raccordement des photocellules DOC / DELTA et DIR / DELTA S avec test de fonctionnement.")
+    ],
+    "came-88003-0184": [
+      S("came-88003-0184-p09", "Description des composants de la carte", 9, "Dessin de la carte numéroté (borniers moteur, fins de course, sécurités, commandes, antenne, connecteurs) avec légende.")
+    ],
+    "came-za3p": [
+      S("came-za3p-p13", "Description des composants de la carte", 13, "Dessin de la carte numéroté (borniers, trimmers TL / TFA, dip-switchs, fusibles) avec légende."),
+    ],
     "v2-lumos-m": [
       S("v2-lumos-p03", "Fixation du feu", 3, "Fig. 1 : sur plan horizontal avec la base A. Fig. 2 : sur paroi verticale avec la pièce B. Position verticale uniquement.")
     ]

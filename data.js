@@ -15,6 +15,10 @@ const DATA_VERSION = "2026-10-18";
 /* Journal des modifications — ajouter une entrée en haut à chaque mise à jour.
    docs : nom des notices ajoutées (affichées dans Réglages). */
 const CHANGELOG = [
+  { v: "1.20", date: "2026-10-18", titre: "Schéma : cartes Came", items: [
+    "Onglet « Schéma » ajouté sur 9 cartes Came (ZL90, ZL92, ZBX10, ZBX241, ZA3, ZA3P, ZA4, ZA5 et la carte 88003-0184) : pages de branchements et de description des composants de la notice.",
+    "Les cartes Came sans vrai schéma dans leur notice (fiches de rechange ZM3E, ZM3ES, ZLJ24, ZN7, ZBX6) n'ont pas l'onglet."
+  ], docs: [] },
   { v: "1.19", date: "2026-10-18", titre: "Schéma : retour arrière", items: [
     "La visionneuse d'image se ferme avec le bouton Retour du téléphone (ou le geste retour), avec ✕, ou en touchant le fond noir."
   ], docs: [] },
