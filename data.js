@@ -319,13 +319,13 @@ const MARQUES = [
         "code": "3 clignot.",
         "type": "flash",
         "titre": "Détection d'obstacles",
-        "action": "Pendant le mouvement, le portail a rencontré une friction plus forte : en chercher la cause avant de toucher au réglage."
+        "action": "Pendant le mouvement, le portail a rencontré une friction plus forte : en vérifier la cause."
       },
       {
         "code": "4 clignot.",
         "type": "flash",
         "titre": "Entrée STOP",
-        "action": "L'entrée STOP est intervenue au départ ou pendant le mouvement : en vérifier la cause (arrêt, bord sensible, câblage)."
+        "action": "L'entrée STOP est intervenue au départ ou pendant le mouvement : en vérifier la cause."
       },
       {
         "code": "5 clignot.",
@@ -356,6 +356,12 @@ const MARQUES = [
         "type": "flash",
         "titre": "Demande de maintenance (81 à 100 % de la limite)",
         "action": "Au début de la manœuvre, le clignotant reste allumé 2 s puis clignote normalement. Faire la maintenance puis remettre le compteur de manœuvres à zéro (onglet Paramètres)."
+      },
+      {
+        "code": "Voyant maint.",
+        "type": "led",
+        "titre": "Voyant de maintenance sur S.C.A. (si 2·L4 = L7)",
+        "action": "Moins de 80 % de la limite : allumé 2 s au début de l'ouverture. Entre 81 et 100 % : il clignote pendant toute la manœuvre. Au-delà de 100 % : il clignote en permanence. Faire la maintenance puis remettre le compteur de manœuvres à zéro (onglet Paramètres). Le clignotant reste normal (0,5 s allumé, 0,5 s éteint) sous 80 %."
       },
       {
         "code": "Flash 2 s ×2",
@@ -403,7 +409,7 @@ const MARQUES = [
         "code": "P.P. allumée",
         "type": "led",
         "titre": "LED P.P. / OPEN / CLOSE allumée",
-        "action": "L'entrée correspondante est active. C'est normal si le dispositif branché sur cette entrée est vraiment actif ; sinon chercher la commande qui reste enfoncée. Éteinte = entrée non active."
+        "action": "Intervention de l'entrée correspondante : c'est normal si le dispositif branché sur cette entrée est effectivement actif. Éteinte = entrée non active."
       },
       {
         "code": "L1+L2",
@@ -484,7 +490,7 @@ const MARQUES = [
         },
         {
           "titre": "LED L1…L8 en marche normale",
-          "texte": "L1 allumée : fermeture automatique active. L2 : refermeture après passage devant la photocellule. L3 : ferme toujours. L4 : ralentissement. L5 : démarrage. L6 : préclignotement. L7 : « fermeture » devient ouverture partielle. L8 : RUN configuré en Slave (éteinte = Master). Éteinte = fonction non active. (Dans la notice, la LED L4 est aussi appelée « stand-by » dans le tableau 23 et la LED L5 « démarrage ».)"
+          "texte": "L1 allumée : fermeture automatique active. L2 : refermeture après passage devant la photocellule. L3 : ferme toujours. L4 : ralentissement. L5 : démarrage. L6 : préclignotement. L7 : « fermeture » devient ouverture partielle. L8 : RUN configuré en Slave (éteinte = Master). Éteinte = fonction non active. (Dans le tableau 23 de la notice, la LED L4 est appelée « stand-by » au lieu de « ralentissement ».)"
         },
         {
           "titre": "LED qui clignotent en marche normale",
@@ -496,7 +502,7 @@ const MARQUES = [
         },
         {
           "titre": "Historique des anomalies",
-          "texte": "Pour voir les anomalies des 8 dernières manœuvres : Stop/Set 3 s, aller sur L8, maintenir Stop/Set. La LED de chaque manœuvre avec anomalie s'allume (L1 = la plus récente, L8 = la huitième). Avec ▲ ou ▼ on choisit la manœuvre : la LED fait alors autant de clignotements que le clignotant après cette anomalie."
+          "texte": "Pour voir les anomalies des 8 dernières manœuvres : Stop/Set 3 s, aller sur L8, maintenir Stop/Set. La LED de chaque manœuvre avec anomalie s'allume (L1 = la plus récente, L8 = la huitième). Pour choisir la manœuvre, la notice dit « presser les touches ▲ et ▼ » (sans préciser si c'est l'une ou l'autre) : la LED fait alors autant de clignotements que le clignotant après cette anomalie."
         }
       ]
     },
@@ -534,11 +540,11 @@ const MARQUES = [
               "valeurs": [
                 [
                   "ON",
-                  "Garde le portail ouvert le temps du passage : l'intervention d'une « Photo » provoque toujours une refermeture avec une pause de 5 s, quelle que soit la valeur programmée. Avec la fermeture automatique active, la manœuvre s'arrête juste après libération des photocellules et la refermeture démarre 5 s plus tard. Désactivée dans les manœuvres interrompues par un Stop."
+                  "Garde le portail ouvert le temps du passage : l'intervention d'une « Photo » provoque toujours une refermeture avec une pause de 5 s, quelle que soit la valeur programmée. Si la fermeture automatique (L1) est inactive, le portail va toujours en ouverture totale (même si la photocellule est libérée avant) et la libération de la photocellule provoque la refermeture au bout de 5 s. Si elle est active, la manœuvre s'arrête juste après libération des photocellules et la refermeture démarre 5 s plus tard. Fonction toujours désactivée dans les manœuvres interrompues par une commande de Stop."
                 ],
                 [
                   "OFF",
-                  "Sans la fermeture automatique, le portail va toujours en ouverture totale et la libération de la photocellule provoque la refermeture au bout de 5 s. Avec elle, la pause programmée s'applique (ou pas de refermeture si la fermeture automatique est inactive)."
+                  "Le temps de pause est celui qui est programmé ; pas de refermeture automatique si la fermeture automatique (L1) est inactive."
                 ]
               ]
             },
@@ -975,7 +981,7 @@ const MARQUES = [
             {
               "n": "24 V accessoires",
               "label": "24 Vcc, 100 mA",
-              "desc": "Pour alimenter un lecteur de proximité ou l'éclairage d'un sélecteur à clé : prélever 24 Vcc (−30 / +50 %), 100 mA maximum, sur les blocs STOP et P.P. comme sur la fig. 27 (− côté STOP, + côté P.P.).",
+              "desc": "Pour alimenter un lecteur de proximité ou l'éclairage d'un sélecteur à clé : prélever 24 Vcc (−30 / +50 %), 100 mA maximum, comme sur la fig. 27 : « − » sur la 2e borne du bloc STOP (celle qui touche le bloc P.P.), « + » sur la 1re borne du bloc P.P.",
               "t": "alim"
             }
           ]
@@ -986,13 +992,13 @@ const MARQUES = [
             {
               "n": "FLASH",
               "label": "Clignotant",
-              "desc": "Clignotant type LUCYB ou similaire, ampoule 12 V 21 W maximum. Câble 2 × 0,5 mm², 20 m. L'antenne est incorporée au LUCY B.",
+              "desc": "Clignotant type LUCYB ou similaire, ampoule 12 V 21 W maximum (le tableau p. 76 parle de « 2 clignotants LUCYB », la section 3.6 d'une seule ampoule). Câble 2 × 0,5 mm², 20 m. L'antenne est incorporée au LUCY B.",
               "t": "sortie"
             },
             {
               "n": "S.C.A.",
               "label": "Voyant portail ouvert",
-              "desc": "Voyant 24 V 4 W maximum, fonction réglable (2e niveau, L4) : voyant portail ouvert, fermé, ouvert, sorties radio 2 à 4, maintenance, serrure électrique.",
+              "desc": "Voyant 24 V 4 W maximum, fonction réglable (2e niveau, L4) : L1 voyant portail ouvert, L2 active si fermé, L3 active si ouvert, L4 à L6 sorties radio 2 à 4, L7 voyant de maintenance, L8 serrure électrique.",
               "t": "sortie"
             },
             {
@@ -1073,10 +1079,10 @@ const MARQUES = [
         "Après tout ajout ou retrait de dispositif sur BlueBUS ou STOP : refaire la reconnaissance des dispositifs (onglet Apprentissage), puis refaire l'essai de l'automatisme.",
         "STOP : 2 dispositifs à résistance 8,2 kΩ peuvent aller en parallèle ; au-delà de 2, tous en cascade avec une seule résistance terminale de 8,2 kΩ. Plusieurs NO se montent en parallèle, plusieurs NF en série. NO et NF peuvent être combinés en parallèle en mettant 8,2 kΩ en série avec le NF.",
         "Photocellules BlueBUS : mêmes cavaliers sur TX et RX, une adresse par paire. Adresses : PHOTO (extérieure h = 50, intervention en fermeture) · PHOTO II (extérieure h = 100, fermeture) · PHOTO 1 (intérieure h = 50, fermeture) · PHOTO 1 II (intérieure h = 100, fermeture) · PHOTO 2 (extérieure, intervention en ouverture) · PHOTO 2 II (intérieure, ouverture) · PHOTO 3 (une seule paire pour tout l'automatisme).",
-        "Câbles (tableau 5) : alimentation 3 × 1,5 mm² 30 m · clignotant 2 × 0,5 mm² 20 m · antenne RG58 20 m · photocellules 2 × 0,5 mm² 30 m (50 m en 2 × 1 mm²) · sélecteur à clé 2 câbles 2 × 0,5 mm² (ou 1 câble 4 × 0,5) 50 m · bords mobiles 2 × 0,5 mm². Au-delà de 30 m d'alimentation : section plus grande (3 × 2,5 mm²) et mise à la terre près de l'automatisme.",
-        "Deux RUN sur des parties mobiles opposées (Master / Slave) : liaison par BlueBUS entre les deux RUN avec respect de la polarité (fig. 26). Tous les dispositifs, récepteur radio compris, se branchent sur le Master. Sur le Slave on peut brancher un clignotant, un voyant S.C.A. et un bord sensible (STOP) spécifiques, et un P.P. qui ouvre seulement la partie Slave ; OPEN et CLOSE du Slave ne servent pas.",
+        "Câbles (tableau 5) : alimentation 3 × 1,5 mm² 30 m · clignotant 2 × 0,5 mm² 20 m · antenne RG58 20 m · photocellules 2 × 0,5 mm² 30 m (50 m en 2 × 1 mm²) · sélecteur à clé 2 câbles 2 × 0,5 mm² (ou 1 câble 4 × 0,5) 50 m · connexion entre les deux bords mobiles 2 × 0,5 mm² 20 m · connexion des bords mobiles 2 × 0,5 mm² 30 m. Au-delà de 30 m d'alimentation : section plus grande (3 × 2,5 mm²) et mise à la terre près de l'automatisme.",
+        "Deux RUN sur des parties mobiles opposées (Master / Slave), dans cet ordre : installer les 2 moteurs (fig. 25) · relier les deux RUN par BlueBUS en respectant la polarité (fig. 26) · choisir le sens d'ouverture de chacun · alimenter les 2 moteurs · activer « mode Slave » sur le Slave (1er niveau, L8) · reconnaissance des dispositifs sur le Slave, puis sur le Master · reconnaissance de la longueur sur le Master seulement. Le choix du Master dépend de la commodité des connexions. Tous les dispositifs, récepteur radio compris, se branchent sur le Master. Sur le Slave on peut brancher un clignotant, un voyant S.C.A. et un bord sensible (STOP) spécifiques, et un P.P. qui ouvre en totalité seulement la partie commandée par le Slave ; OPEN et CLOSE du Slave ne servent pas.",
         "Caractéristiques : couple maximum au démarrage 40 Nm (RUN1800) ou 50 Nm (RUN2500) ; couple nominal 20 ou 30 Nm ; vitesse 0,17 m/s à vide en 50 Hz (0,20 m/s en /V1 60 Hz), 0,14 m/s au couple nominal ; tablier jusqu'à 15 m / 1 800 kg (RUN1800) ou 18 m / 2 500 kg (RUN2500) ; pignon 18 dents module 4 ; IP 44 ; −20 à +50 °C ; poids 24,5 kg ; puissance au démarrage 700 W (RUN1800) ou 870 W (RUN2500).",
-        "Limites : la force pour déplacer le tablier doit rester sous la moitié du couple nominal. La logique limite les manœuvres selon l'effort, la durée et la température (jusqu'à 42 cycles/heure pour un tablier de moins de 6 m ; réduction selon le poids)."
+        "Limites : la force pour mettre le tablier en mouvement doit rester sous la moitié du couple maximum et la force pour le maintenir en mouvement sous la moitié du couple nominal (la section 2.1 ne parle que du couple nominal). La logique limite les manœuvres selon l'effort, la durée et la température (jusqu'à 42 cycles/heure pour un tablier de moins de 6 m ; réduction selon le poids)."
       ]
     },
     "apprentissage": {
