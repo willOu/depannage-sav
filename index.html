@@ -311,7 +311,7 @@ function viewHome(){
   h += `<button class="dbtn" onclick="go('#/d')">Diagnostic guidé : trouver la panne en quelques questions<small><b>EN TEST</b> · peut contenir des erreurs ou mal fonctionner</small></button>`; /* DIAG */
   h += `<button class="dbtn" onclick="go('#/a')">Accessoires : gyrophares, radio, photocellules…<small>${ACCESSOIRES.length} fiche${ACCESSOIRES.length>1?"s":""} · rubrique en construction</small></button>`; /* ACC */
   h += `<h2>Ou par marque</h2><div class="bchips">` + MARQUES.map(m =>
-    `<button class="bchip logo" aria-label="${esc(m.nom)}" onclick="go('#/m/${m.id}')"><img src="icons/marques/${m.id}.png" alt="${esc(m.nom)}" height="${m.id==="afca"?52:m.id==="casit"?36:28}"></button>`).join("") + `</div>`;
+    m.sanslogo ? `<button class="bchip" style="--c:${m.couleur}" onclick="go('#/m/${m.id}')"><i></i>${esc(m.nom)}</button>` : `<button class="bchip logo" aria-label="${esc(m.nom)}" onclick="go('#/m/${m.id}')"><img src="icons/marques/${m.id}.png" alt="${esc(m.nom)}" height="${m.id==="afca"?52:m.id==="casit"?36:28}"></button>`).join("") + `</div>`;
   if (recents.length){
     h += `<h2>Dernières consultées</h2><div class="list">` + recents.map(rowBoard).join("") + `</div>`;
   }

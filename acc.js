@@ -5,6 +5,90 @@
 (function () {
   const ACCESSOIRES = [
     {
+      "id": "faac-c720-c721",
+      "nom": "C720 / C721",
+      "marque": "FAAC",
+      "couleur": "#c4161c",
+      "categorie": "Motoréducteur coulissant (opérateur seul)",
+      "modeles": "FAAC C720 (portails jusqu'à 400 kg) et C721 (jusqu'à 800 kg) — opérateurs électromécaniques 230 V~ 50 Hz ou 115 V~ 60 Hz, pignon Z28 module 4, fin de course magnétique sur la platine",
+      "source": "Notice FAAC 732568 Rev. E (C720-C721), français, traduction de la notice originale, 13 p. avec guide de l'usager",
+      "resume": "Opérateur de portail coulissant à blocage mécanique direct sur le moteur (pas d'électroserrure nécessaire) et déverrouillage manuel. La notice ne décrit pas la platine : le branchement, la programmation et les codes sont dans la notice de la platine livrée avec l'opérateur.",
+      "specs": [
+        [
+          "Alimentation",
+          "230 V~ 50 Hz, ou 115 V~ 60 Hz (version 115 V)"
+        ],
+        [
+          "Puissance absorbée maxi",
+          "C720 : 170 W · C721 : 290 W"
+        ],
+        [
+          "Poussée sur le pignon",
+          "C720 : 320 N · C721 : 530 N"
+        ],
+        [
+          "Couple maxi",
+          "C720 : 18 Nm · C721 : 30 Nm"
+        ],
+        [
+          "Pignon",
+          "Z28 module 4 (matériaux différents selon le modèle)"
+        ],
+        [
+          "Poids maxi du battant",
+          "C720 : 400 kg · C721 : 800 kg"
+        ],
+        [
+          "Longueur maxi recommandée du portail",
+          "15 m"
+        ],
+        [
+          "Vitesse du portail",
+          "8 à 18 m/min"
+        ],
+        [
+          "Fin de course",
+          "Magnétique (capteur sur la platine, aimants sur la crémaillère)"
+        ],
+        [
+          "Embrayage",
+          "Électronique"
+        ],
+        [
+          "Température de fonctionnement",
+          "−20 à +55 °C"
+        ],
+        [
+          "Poids du motoréducteur",
+          "C720 : 6 kg · C721 : 10 kg"
+        ],
+        [
+          "Protection",
+          "IP44"
+        ],
+        [
+          "Fréquence d'utilisation",
+          "Domestique (tableau p. 3) ; « fréquence moyenne de transit » dans le guide de l'usager (p. 11)"
+        ]
+      ],
+      "installation": [
+        "Vérifications préalables : structure adaptée, roues proportionnées au poids, guide supérieur et butées mécaniques de fin de course, voie de coulissement linéaire et horizontale, manœuvre manuelle facile sur toute la course, prise de terre efficace, pas de conduite ni de câble dans la zone de la fondation.",
+        "Plaque de fondation : positionnement différent pour fermeture à droite ou à gauche (pièce marquée orientée vers le portail), scellée de niveau avec une ou plusieurs gaines pour les câbles. Laisser sortir les câbles d'au moins 30 cm.",
+        "Fixer le motoréducteur sur la plaque avec les écrous et rondelles fournis ; régler hauteur et distance au portail (cotes de la fig. 10) ; le portail ne doit pas toucher le support du pignon pendant sa manœuvre.",
+        "Crémaillère (acier à souder, acier à visser ou nylon à visser) : ne jamais souder les éléments entre eux ni aux entretoises ; vérifier qu'aucun élément ne sort du pignon pendant la course. Abaisser le motoréducteur de 1,5 à 2 mm une fois la crémaillère posée. Pas de graisse ni de lubrifiant entre le pignon et la crémaillère.",
+        "Mise à la terre : brancher le câble de terre comme à la fig. 17. Séparer les câbles d'alimentation des câbles de commande et de sécurité.",
+        "Fins de course : le capteur magnétique est sur la platine ; l'arrêt se fait quand l'aimant polarisé fixé sur le haut de la crémaillère l'active. Assembler les deux aimants (fig. 19). Laisser environ 40 mm après les butées mécaniques. Positionner les aimants avec l'automatisme en mode manuel puis alimenté, selon la notice de la platine.",
+        "Essai : vérification fonctionnelle de tous les accessoires et sécurités, pose des bouchons de vis (flèche vers le portail) et du carter (2 vis latérales), remise du guide de l'usager."
+      ],
+      "notes": [
+        "Déverrouillage : tourner la clé de déverrouillage dans le sens horaire, le levier s'écarte du corps de l'opérateur, l'abaisser à fond jusqu'à la butée mécanique, puis manœuvrer à la main. Verrouillage : lever le levier à fond, tourner la clé dans le sens anti-horaire. Éviter toute impulsion avant de remettre le verrouillage ; avant de rétablir le fonctionnement normal après un fonctionnement manuel, couper l'alimentation électrique de l'installation (guide de l'usager, p. 11). Abaisser le levier agit aussi sur un micro-interrupteur de sécurité qui force l'automatisme en STOP.",
+        "Entretien conseillé tous les 6 mois : fonctionnement de l'installation, efficacité des sécurités (dont la force de poussée) et du déverrouillage. Réparation : centres agréés.",
+        "Accessoires : kit batterie (logement dans l'opérateur, branché sur le connecteur de la platine) et module radio (fig. 25).",
+        "L'électronique de commande est fixée sur un support sous un couvercle transparent, avec les poussoirs de programmation accessibles sans retirer le couvercle. La notice ne nomme pas la platine : voir la notice livrée avec elle.",
+        "La notice ne contient ni code d'erreur ni tableau de paramètres pour cet opérateur."
+      ]
+    },
+    {
       id: "v2-lumos-m",
       nom: "LUMOS-M",
       marque: "AFCA",

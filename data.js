@@ -15,6 +15,17 @@ const DATA_VERSION = "2026-10-18";
 /* Journal des modifications — ajouter une entrée en haut à chaque mise à jour.
    docs : nom des notices ajoutées (affichées dans Réglages). */
 const CHANGELOG = [
+  { v: "1.28", date: "2026-10-18", titre: "Lot 1 : FAAC 455D / E024S, Robus RB600-1000, Doitrand LF82", items: [
+    "FAAC 455 D (platine battants) : segments d'entrées de l'afficheur, programmation de base et avancée (LO, PA, F1, F2, cd, tL, bo, c5, r5, od, F5, PF, EL, SP, Ph, Ad, A5, nC), bornier, apprentissage avec ou sans fins de course et Gatecoder, logiques A / E / S / EP.",
+    "FAAC E024S : LED LD4 à LD8 et LED BUS, dip-switches moteur / force, 7 logiques, 8 paramètres de 2e niveau avec valeurs d'usine, bornier, SETUP automatique et manuel, mémorisation des accessoires BUS et des radiocommandes.",
+    "Nice ROBUS RB600 / RB1000 / RB500HS : fiche dédiée avec tous les réglages L1…L8 et leurs valeurs d'usine, codes du clignotant, LED, historique des anomalies, mode Slave.",
+    "Nouvelle marque Doitrand : armoire LF82 (portails DBM), menus de paramétrage et de maintenance, bornier, plans de câblage.",
+    "FAAC 780D : onglet Schéma (implantation de la platine et bornier J1).",
+    "Accessoires : motoréducteur FAAC C720 / C721.",
+    "Doutes de lecture signalés dans les fiches : valeur d'usine de F2 sur la 455 D (coupée à l'impression), libellé « Y » des fonctions avancées 455 D."
+  ], docs: [
+    "FAAC platine 455 D", "FAAC E024S (732642 Rev. E)", "FAAC 746 ER / 780 D (Rev. B)", "FAAC C720-C721 (732568 Rev. E)", "Nice Robus 600R10 / 1000R10 / 500HSR10 (IDV0620A00FR)", "Doitrand LF82 (DBM)"
+  ] },
   { v: "1.27", date: "2026-10-18", titre: "Ligne de version sous la recherche, Réglages plus courts", items: [
     "La ligne « Version · données du · mode hors ligne » est maintenant sous la barre de recherche, sur toutes les pages (touchez-la pour ouvrir les Réglages).",
     "Réglages : « Documentations intégrées » n'affiche que 5 fiches, avec un bouton « Charger plus » pour voir le reste."
@@ -6733,7 +6744,7 @@ const MARQUES = [
   {
     id: "nice-rba3",
     nom: "RBA3 (Robus)",
-    modeles: "Robus RB400 · RB250HS (depuis 04/2018). RB600 / RB1000 utilisent la même logique RBA3 (notice IDV0620A01FR, non recoupée ici).",
+    modeles: "Robus RB400 · RB250HS (depuis 04/2018). RB600 / RB1000 / RB500HS : voir la fiche « ROBUS RB600 / RB1000 / RB500HS » (notice IDV0620A00FR, mêmes tableaux L1…L8 avec les valeurs d'usine).",
     type: "Coulissant 230 V — BlueBUS, 8 LED L1…L8",
     source: "Notice Nice IDV0629A01FR (31/01/2019)",
     codes: [
@@ -7620,7 +7631,761 @@ const MARQUES = [
         "Après tout ajout ou retrait de dispositif : refaire la reconnaissance des dispositifs (▲ + Stop/Set), les LED L1…L8 se rallument ensuite selon l'état des fonctions."
       ]
     }
-  }
+  },
+          {
+        "id": "nice-robus-r10",
+        "nom": "ROBUS RB600 / RB1000 / RB500HS",
+        "modeles": "RB600 · RB600P · RB1000 · RB1000P · RB500HS · RB500HS/V1 (120 V) — notice « R10 ». Même logique à 8 LED que la fiche RBA3 (RB400 / RB250HS).",
+        "type": "Coulissant 230 V (120 V en /V1) — logique intégrée, BlueBUS, 8 LED L1…L8, 3 touches",
+        "source": "Notice Nice IDV0620A00FR (Robus 600R10 / 1000R10 / 500HSR10), version française, 36 p. L'ancienne notice ISTRB2 Rev. 0 (Robus 600 / 1000) donne les mêmes tableaux L1…L8 mais nomme la sortie « S.C.A. » (au lieu d'OGI) et l'entrée « P.P. » (au lieu de Sbs).",
+        "codes": [
+          {
+            "code": "1 clignot.",
+            "type": "flash",
+            "titre": "Erreur BlueBUS",
+            "action": "Au début de la manœuvre, les dispositifs BlueBUS ne correspondent pas à ceux mémorisés lors de la reconnaissance. Chercher un dispositif en panne et le remplacer. Si on a ajouté ou retiré un dispositif, refaire la reconnaissance (onglet Apprentissage)."
+          },
+          {
+            "code": "2 clignot.",
+            "type": "flash",
+            "titre": "Photocellule",
+            "action": "Au début de la manœuvre, une ou plusieurs photocellules refusent le départ : chercher un obstacle ou un défaut d'alignement. Pendant le mouvement, il est normal qu'un obstacle soit présent."
+          },
+          {
+            "code": "3 clignot.",
+            "type": "flash",
+            "titre": "Limiteur « Force moteur »",
+            "action": "Pendant le mouvement, le portail a rencontré une friction plus forte : chercher la cause (point dur, rail, roues, crémaillère) avant de toucher au réglage de force."
+          },
+          {
+            "code": "4 clignot.",
+            "type": "flash",
+            "titre": "Entrée STOP",
+            "action": "L'entrée STOP est intervenue au départ ou pendant le mouvement : en chercher la cause (bord sensible, arrêt d'urgence)."
+          },
+          {
+            "code": "5 clignot.",
+            "type": "flash",
+            "titre": "Paramètres internes de la logique",
+            "action": "Attendre au moins 30 s puis redonner une commande. Si l'état persiste : panne grave, carte à remplacer."
+          },
+          {
+            "code": "6 clignot.",
+            "type": "flash",
+            "titre": "Trop de manœuvres par heure",
+            "action": "La limite maximale de manœuvres par heure est dépassée : attendre quelques minutes qu'elle redescende."
+          },
+          {
+            "code": "7 clignot.",
+            "type": "flash",
+            "titre": "Circuits électriques internes",
+            "action": "Couper toutes les alimentations quelques secondes puis redonner une commande. Si l'état persiste : panne grave, carte à remplacer."
+          },
+          {
+            "code": "8 clignot.",
+            "type": "flash",
+            "titre": "Une commande est déjà présente",
+            "action": "Une commande reste active et empêche les autres (par exemple une horloge sur l'entrée OPEN) : regarder quelle LED Sbs / OPEN / CLOSE est allumée et chercher le contact collé."
+          },
+          {
+            "code": "9 clignot.",
+            "type": "flash",
+            "titre": "Automatisme verrouillé",
+            "action": "L'automatisme a été verrouillé par une commande « verrouiller automatisme » : envoyer la commande « déverrouiller automatisme »."
+          },
+          {
+            "code": "BLUEBUS éteinte",
+            "type": "led",
+            "titre": "LED BLUEBUS éteinte",
+            "action": "Anomalie : vérifier que la tension arrive et que les fusibles (1,6 AT) ne sont pas fondus. S'ils le sont, chercher la cause avant de les remplacer par des fusibles de même valeur."
+          },
+          {
+            "code": "BLUEBUS fixe",
+            "type": "led",
+            "titre": "LED BLUEBUS allumée fixe",
+            "action": "Anomalie grave : couper la logique quelques secondes. Si l'état persiste, carte à remplacer."
+          },
+          {
+            "code": "BLUEBUS 1/s",
+            "type": "led",
+            "titre": "1 clignotement par seconde",
+            "action": "Fonctionnement normal de la logique."
+          },
+          {
+            "code": "BLUEBUS ×2",
+            "type": "led",
+            "titre": "2 clignotements rapides",
+            "action": "Normal : une entrée vient de changer d'état (OPEN, STOP, photocellule, émetteur radio)."
+          },
+          {
+            "code": "BLUEBUS série",
+            "type": "led",
+            "titre": "Série de clignotements + pause d'1 s",
+            "action": "Même signalisation que le clignotant : voir les codes 1 à 9 clignotements."
+          },
+          {
+            "code": "STOP éteinte",
+            "type": "led",
+            "titre": "LED STOP éteinte",
+            "action": "Entrée STOP intervenue : vérifier les dispositifs branchés sur STOP. Au repos elle doit être allumée."
+          },
+          {
+            "code": "Sbs allumée",
+            "type": "led",
+            "titre": "LED Sbs allumée",
+            "action": "Normal seulement si le dispositif branché sur Sbs est réellement actif. Au repos elle est éteinte."
+          },
+          {
+            "code": "OPEN allumée",
+            "type": "led",
+            "titre": "LED OPEN allumée",
+            "action": "Normal seulement si le dispositif branché sur OPEN est réellement actif. Au repos elle est éteinte."
+          },
+          {
+            "code": "CLOSE allumée",
+            "type": "led",
+            "titre": "LED CLOSE allumée",
+            "action": "Normal seulement si le dispositif branché sur CLOSE est réellement actif. Au repos elle est éteinte."
+          },
+          {
+            "code": "AUX IN éteinte",
+            "type": "led",
+            "titre": "LED AUX_IN éteinte",
+            "action": "Contact de l'entrée AUX_IN ouvert : vérifier le dispositif branché. Au repos elle doit être allumée."
+          },
+          {
+            "code": "L1+L2",
+            "type": "led",
+            "titre": "L1 et L2 clignotent ensemble",
+            "action": "Reconnaissance des dispositifs à faire (onglet Apprentissage)."
+          },
+          {
+            "code": "L3+L4",
+            "type": "led",
+            "titre": "L3 et L4 clignotent ensemble",
+            "action": "Reconnaissance de la longueur du vantail à faire (onglet Apprentissage)."
+          },
+          {
+            "code": "L1…L8 fixes",
+            "type": "led",
+            "titre": "LED L1…L8 en fonctionnement normal",
+            "action": "Chaque LED indique l'état de la fonction ON-OFF correspondante : L1 allumée = fermeture automatique active, L2 = fermeture immédiate après photocellule, L3 = ferme toujours, L4 = stand-by, L5 = démarrage (sans accélération progressive), L6 = préclignotement, L7 = CLOSE devient ouverture partielle, L8 allumée = ROBUS configuré en Slave (éteinte = Master)."
+          },
+          {
+            "code": "Avis maintenance",
+            "type": "flash",
+            "titre": "Avis de maintenance",
+            "action": "Clignotant — moins de 80 % de la limite programmée : normal. Entre 81 et 100 % : il reste allumé 2 s au début de la manœuvre. Au-delà de 100 % : allumé 2 s au début et à la fin. Voyant OGI (s'il est programmé en « voyant maintenance ») : moins de 80 % allumé 2 s au début de l'ouverture ; entre 81 et 100 % il clignote pendant toute la manœuvre ; au-delà de 100 % il clignote toujours."
+          },
+          {
+            "code": "Radio",
+            "type": "symptome",
+            "titre": "Émetteur sans effet, LED émetteur éteinte",
+            "action": "Piles de l'émetteur usées : les remplacer."
+          },
+          {
+            "code": "Radio 2",
+            "type": "symptome",
+            "titre": "Émetteur sans effet, LED émetteur allumée",
+            "action": "Vérifier que l'émetteur est bien mémorisé dans le récepteur radio et que ROBUS est alimenté par le secteur. Si la commande arrive par radio, la LED BLUEBUS doit faire 2 clignotements rapides ; si elle arrive sur Sbs, la LED Sbs doit s'allumer."
+          },
+          {
+            "code": "Aucune manœuvre",
+            "type": "symptome",
+            "titre": "Aucune manœuvre, LED BLUEBUS ne clignote pas",
+            "action": "Vérifier que les fusibles ne sont pas fondus ; en chercher la cause puis les remplacer par des fusibles de même valeur et mêmes caractéristiques."
+          },
+          {
+            "code": "Clignotant éteint",
+            "type": "symptome",
+            "titre": "Aucune manœuvre et clignotant éteint",
+            "action": "Vérifier que la commande est bien reçue (LED Sbs allumée, ou 2 clignotements rapides de BLUEBUS en radio)."
+          },
+          {
+            "code": "Inversion",
+            "type": "symptome",
+            "titre": "La manœuvre démarre puis s'inverse",
+            "action": "La force sélectionnée est peut-être trop basse pour ce portail : chercher un obstacle ou un point dur, puis augmenter « Force moteur » (2e niveau, L5)."
+          },
+          {
+            "code": "Clignotant HS",
+            "type": "symptome",
+            "titre": "Manœuvre normale mais le clignotant ne fonctionne pas",
+            "action": "Vérifier qu'une tension arrive à la borne FLASH pendant la manœuvre (intermittente : environ 10-30 V DC, valeur peu significative). Si elle arrive : remplacer l'ampoule par une identique. Sinon : surcharge possible sur la sortie FLASH, chercher un court-circuit sur le câble."
+          },
+          {
+            "code": "OGI HS",
+            "type": "symptome",
+            "titre": "Manœuvre normale mais le voyant OGI ne fonctionne pas",
+            "action": "Vérifier d'abord la fonction programmée pour la sortie OGI (2e niveau, L4). Quand le voyant devrait être allumé, vérifier qu'environ 24 V arrivent à la borne OGI : si oui, remplacer le voyant par un identique ; sinon, chercher un court-circuit sur la sortie."
+          },
+          {
+            "code": "Historique",
+            "type": "diag",
+            "titre": "Liste des 8 dernières anomalies",
+            "action": "Stop/Set 3 s, aller sur L8, maintenir Stop/Set : les LED L1 (manœuvre la plus récente) à L8 (huitième) allumées indiquent une manœuvre avec anomalie. ▲ / ▼ pour choisir une manœuvre : sa LED refait le nombre de clignotements du code correspondant."
+          }
+        ],
+        "parametres": {
+          "intro": "Deux niveaux de réglage, sur les LED L1…L8. 1er niveau : 8 fonctions ON-OFF (LED allumée = active ; toutes sur OFF en usine). 2e niveau : 8 paramètres à 8 valeurs chacun (valeurs d'usine relevées sur le fond gris du tableau 7 de la notice). Maximum 10 s entre deux appuis, sinon la procédure se termine en mémorisant ce qui a été fait.",
+          "navigation": [
+            "1er niveau : maintenir Stop/Set environ 3 s, relâcher quand L1 clignote. ▲ / ▼ pour déplacer le clignotement sur la LED voulue. Stop/Set une fois pour changer l'état (clignotement bref = OFF, long = ON). Attendre 10 s pour sortir.",
+            "2e niveau : maintenir Stop/Set environ 3 s, relâcher quand L1 clignote. ▲ / ▼ pour aller sur la LED d'entrée du paramètre. Maintenir Stop/Set (pendant toute la suite), attendre environ 3 s : la LED du niveau actuel s'allume. ▲ / ▼ pour aller sur la nouvelle valeur, relâcher Stop/Set. Attendre 10 s pour sortir.",
+            "Contradiction dans la notice : le tableau des touches (7.1) dit que Stop/Set « pendant plus de 5 secondes » fait entrer en programmation, alors que tous les tableaux de procédure disent environ 3 secondes. Les deux ont l'air de fonctionner ; sinon, tenir 5 s.",
+            "Compteur de manœuvres : entrer en programmation, aller sur L7, maintenir Stop/Set (environ 3 s, la LED du niveau s'allume), puis appuyer brièvement sur ▲ et ▼ ensemble. La LED du niveau clignote : chaque clignotement vaut 10 % de la limite (4 clignotements avec L6 = 10 000 manœuvres : 40 % atteint, soit entre 4 000 et 4 999). Aucun clignotement : moins de 10 %.",
+            "Remise à zéro après maintenance : même chemin jusqu'à la LED du niveau (sur L7), puis maintenir ▲ et ▼ ensemble au moins 5 s. La LED fait une série de clignotements rapides pour confirmer. Relâcher Stop/Set."
+          ],
+          "groupes": [
+            {
+              "nom": "1er niveau — fonctions ON-OFF (toutes sur OFF en usine)",
+              "items": [
+                {
+                  "code": "L1",
+                  "def": "OFF",
+                  "titre": "Fermeture automatique",
+                  "valeurs": [
+                    [
+                      "ON",
+                      "Fermeture automatique après le temps de pause (2e niveau, L1 ; 30 s en usine)."
+                    ],
+                    [
+                      "OFF",
+                      "Fonctionnement semi-automatique."
+                    ]
+                  ]
+                },
+                {
+                  "code": "L2",
+                  "def": "OFF",
+                  "titre": "Fermeture immédiate après passage devant photocellule",
+                  "valeurs": [
+                    [
+                      "ON",
+                      "Garde le portail ouvert le temps du passage : l'intervention d'une photocellule provoque toujours une refermeture avec une pause de 5 s, quelle que soit la pause programmée. Fermeture automatique inactive : le portail va toujours en ouverture totale puis referme 5 s après libération. Fermeture automatique active : l'ouverture s'arrête juste après libération des photocellules et la refermeture démarre 5 s plus tard. Toujours désactivée dans les manœuvres interrompues par un Stop."
+                    ],
+                    [
+                      "OFF",
+                      "Pause programmée, ou pas de refermeture si L1 est OFF."
+                    ]
+                  ]
+                },
+                {
+                  "code": "L3",
+                  "def": "OFF",
+                  "titre": "Ferme toujours",
+                  "valeurs": [
+                    [
+                      "ON",
+                      "Au retour de l'alimentation, si le portail est détecté ouvert, la logique le ferme (5 s de préclignotement avant)."
+                    ],
+                    [
+                      "OFF",
+                      "Le portail reste arrêté au retour de l'alimentation."
+                    ]
+                  ]
+                },
+                {
+                  "code": "L4",
+                  "def": "OFF",
+                  "titre": "Stand-by",
+                  "valeurs": [
+                    [
+                      "ON",
+                      "1 minute après la fin de la manœuvre, la logique coupe la sortie BLUEBUS (donc les dispositifs) et toutes les LED sauf BLUEBUS, qui clignote plus lentement. Une commande rétablit le plein fonctionnement. Utile sur batterie tampon."
+                    ],
+                    [
+                      "OFF",
+                      "Pas de réduction de consommation."
+                    ]
+                  ]
+                },
+                {
+                  "code": "L5",
+                  "def": "OFF",
+                  "titre": "Démarrage",
+                  "valeurs": [
+                    [
+                      "ON",
+                      "Supprime l'accélération progressive : force de démarrage maximale, utile avec une friction statique forte (neige, givre)."
+                    ],
+                    [
+                      "OFF",
+                      "Démarrage avec accélération progressive."
+                    ]
+                  ]
+                },
+                {
+                  "code": "L6",
+                  "def": "OFF",
+                  "titre": "Préclignotement",
+                  "valeurs": [
+                    [
+                      "ON",
+                      "3 s de clignotant avant le début de la manœuvre."
+                    ],
+                    [
+                      "OFF",
+                      "Le clignotant s'allume en même temps que la manœuvre."
+                    ]
+                  ]
+                },
+                {
+                  "code": "L7",
+                  "def": "OFF",
+                  "titre": "« Fermeture » devient « Ouverture partielle »",
+                  "valeurs": [
+                    [
+                      "ON",
+                      "L'entrée CLOSE commande une ouverture partielle (mesure : 2e niveau, L6)."
+                    ],
+                    [
+                      "OFF",
+                      "L'entrée CLOSE commande la fermeture."
+                    ]
+                  ]
+                },
+                {
+                  "code": "L8",
+                  "def": "OFF",
+                  "titre": "Mode Slave (esclave)",
+                  "valeurs": [
+                    [
+                      "ON",
+                      "ROBUS devient Slave : synchronise 2 moteurs sur deux vantaux coulissants opposés (voir Apprentissage)."
+                    ],
+                    [
+                      "OFF",
+                      "ROBUS est Master (réglage usine)."
+                    ]
+                  ],
+                  "note": "Sur un Slave, seuls Stand-by, Démarrage, Mode Slave, Vitesse moteur, Sortie OGI, Force moteur et Liste des erreurs sont indépendants du Master. Les entrées Open, Close et Aux_In du Slave ne servent pas ; Sbs du Slave ouvre seulement la partie Slave."
+                }
+              ]
+            },
+            {
+              "nom": "2e niveau — paramètres réglables (LED d'entrée L1…L8)",
+              "items": [
+                {
+                  "code": "L1",
+                  "def": "L3 (30 s)",
+                  "titre": "Temps de pause",
+                  "valeurs": [
+                    [
+                      "L1",
+                      "5 s"
+                    ],
+                    [
+                      "L2",
+                      "15 s"
+                    ],
+                    [
+                      "L3",
+                      "30 s (usine)"
+                    ],
+                    [
+                      "L4",
+                      "45 s"
+                    ],
+                    [
+                      "L5",
+                      "60 s"
+                    ],
+                    [
+                      "L6",
+                      "80 s"
+                    ],
+                    [
+                      "L7",
+                      "120 s"
+                    ],
+                    [
+                      "L8",
+                      "180 s"
+                    ]
+                  ],
+                  "note": "Sans effet si la fermeture automatique (1er niveau, L1) est inactive."
+                },
+                {
+                  "code": "L2",
+                  "def": "L2",
+                  "titre": "Fonction pas à pas (entrée Sbs / 1re commande radio)",
+                  "valeurs": [
+                    [
+                      "L1",
+                      "Ouverture – stop – fermeture – stop"
+                    ],
+                    [
+                      "L2",
+                      "Ouverture – stop – fermeture – ouverture (usine)"
+                    ],
+                    [
+                      "L3",
+                      "Ouverture – fermeture – ouverture – fermeture"
+                    ],
+                    [
+                      "L4",
+                      "Fonctionnement collectif"
+                    ],
+                    [
+                      "L5",
+                      "Fonctionnement collectif 2 (plus de 2 s provoque un stop)"
+                    ],
+                    [
+                      "L6",
+                      "Pas à pas 2 (moins de 2 s provoque une ouverture partielle)"
+                    ],
+                    [
+                      "L7",
+                      "Homme mort"
+                    ],
+                    [
+                      "L8",
+                      "Ouverture en semi-automatique, fermeture en homme mort"
+                    ]
+                  ],
+                  "note": "Une commande Sbs de plus de 2 s provoque toujours une ouverture (« Ouvre toujours »), sauf si Sbs est réglé en « Fermeture » : utile avec une horloge."
+                },
+                {
+                  "code": "L3",
+                  "def": "L4 (rapide) · RB500HS : L5",
+                  "titre": "Vitesse moteur",
+                  "valeurs": [
+                    [
+                      "L1",
+                      "Très lente"
+                    ],
+                    [
+                      "L2",
+                      "Lente"
+                    ],
+                    [
+                      "L3",
+                      "Moyenne"
+                    ],
+                    [
+                      "L4",
+                      "Rapide (usine)"
+                    ],
+                    [
+                      "L5",
+                      "Très rapide (usine du RB500HS)"
+                    ],
+                    [
+                      "L6",
+                      "Super rapide"
+                    ],
+                    [
+                      "L7",
+                      "Ouverture rapide, fermeture lente"
+                    ],
+                    [
+                      "L8",
+                      "Ouverture super rapide, fermeture rapide"
+                    ]
+                  ]
+                },
+                {
+                  "code": "L4",
+                  "def": "L1",
+                  "titre": "Sortie OGI",
+                  "valeurs": [
+                    [
+                      "L1",
+                      "Voyant portail ouvert (usine)"
+                    ],
+                    [
+                      "L2",
+                      "Active si le portail est fermé"
+                    ],
+                    [
+                      "L3",
+                      "Active si le portail est ouvert"
+                    ],
+                    [
+                      "L4",
+                      "Active avec la sortie radio n° 2"
+                    ],
+                    [
+                      "L5",
+                      "Active avec la sortie radio n° 3"
+                    ],
+                    [
+                      "L6",
+                      "Active avec la sortie radio n° 4"
+                    ],
+                    [
+                      "L7",
+                      "Voyant maintenance"
+                    ],
+                    [
+                      "L8",
+                      "Serrure électrique"
+                    ]
+                  ],
+                  "note": "Sortie active = 24 V (−30 % / +50 %), 4 W maxi."
+                },
+                {
+                  "code": "L5",
+                  "def": "L5",
+                  "titre": "Force moteur",
+                  "valeurs": [
+                    [
+                      "L1",
+                      "Portail extrêmement léger"
+                    ],
+                    [
+                      "L2",
+                      "Portail très léger"
+                    ],
+                    [
+                      "L3",
+                      "Portail léger"
+                    ],
+                    [
+                      "L4",
+                      "Portail moyen"
+                    ],
+                    [
+                      "L5",
+                      "Portail moyen-lourd (usine)"
+                    ],
+                    [
+                      "L6",
+                      "Portail lourd"
+                    ],
+                    [
+                      "L7",
+                      "Portail très lourd"
+                    ],
+                    [
+                      "L8",
+                      "Portail extrêmement lourd"
+                    ]
+                  ],
+                  "note": "Le contrôle de force mesure aussi la température ambiante et augmente la force par grand froid. Ne pas monter la force pour compenser un point dur. Après chaque réglage servant à réduire la force d'impact, refaire la mesure de force (EN 12453)."
+                },
+                {
+                  "code": "L6",
+                  "def": "L2 (1 m)",
+                  "titre": "Ouverture partielle",
+                  "valeurs": [
+                    [
+                      "L1",
+                      "0,5 m"
+                    ],
+                    [
+                      "L2",
+                      "1 m (usine)"
+                    ],
+                    [
+                      "L3",
+                      "1,5 m"
+                    ],
+                    [
+                      "L4",
+                      "2 m"
+                    ],
+                    [
+                      "L5",
+                      "2,5 m"
+                    ],
+                    [
+                      "L6",
+                      "3 m"
+                    ],
+                    [
+                      "L7",
+                      "3,4 m"
+                    ],
+                    [
+                      "L8",
+                      "4 m"
+                    ]
+                  ],
+                  "note": "Se commande avec la 2e sortie radio ou avec CLOSE si 1er niveau L7 est ON."
+                },
+                {
+                  "code": "L7",
+                  "def": "L1 (automatique)",
+                  "titre": "Avis de maintenance",
+                  "valeurs": [
+                    [
+                      "L1",
+                      "Automatique selon la charge de travail (usine)"
+                    ],
+                    [
+                      "L2",
+                      "1 000 manœuvres"
+                    ],
+                    [
+                      "L3",
+                      "2 000"
+                    ],
+                    [
+                      "L4",
+                      "4 000"
+                    ],
+                    [
+                      "L5",
+                      "7 000"
+                    ],
+                    [
+                      "L6",
+                      "10 000"
+                    ],
+                    [
+                      "L7",
+                      "15 000"
+                    ],
+                    [
+                      "L8",
+                      "20 000"
+                    ]
+                  ],
+                  "note": "Signalisation par le clignotant ou par OGI programmé en voyant maintenance."
+                },
+                {
+                  "code": "L8",
+                  "def": "—",
+                  "titre": "Liste des anomalies (lecture seule)",
+                  "valeurs": [
+                    [
+                      "L1…L8",
+                      "Résultat de la 1re (la plus récente) à la 8e manœuvre : voir Codes › Historique"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "bornier": {
+          "groupes": [
+            {
+              "nom": "Sorties",
+              "bornes": [
+                {
+                  "n": "FLASH",
+                  "label": "Clignotant",
+                  "desc": "Clignotant Nice : 2 clignotants à LED ELDC, ou 2 lampes 12 V 21 W maxi. 0,5 s allumé / 0,5 s éteint pendant la manœuvre.",
+                  "t": "sortie"
+                },
+                {
+                  "n": "OGI",
+                  "label": "Voyant",
+                  "desc": "Ampoule 24 V 4 W maxi (fonction réglable, 2e niveau L4). Peut aussi commander de petits relais.",
+                  "t": "sortie"
+                },
+                {
+                  "n": "BLUEBUS",
+                  "label": "BlueBUS",
+                  "desc": "2 fils sans polarité, alimentation et communication ; 15 unités BlueBUS maxi. Photocellules, dispositifs de sécurité, boutons, voyants.",
+                  "t": "bus"
+                }
+              ]
+            },
+            {
+              "nom": "Entrées",
+              "bornes": [
+                {
+                  "n": "STOP",
+                  "label": "STOP",
+                  "desc": "NO, NF ou résistance constante 8,2 kΩ, type reconnu automatiquement. Stop immédiat suivi d'une courte inversion. Seule la résistance 8,2 kΩ donne la catégorie 3 (EN 954-1).",
+                  "t": "nf"
+                },
+                {
+                  "n": "SBS",
+                  "label": "Pas à pas",
+                  "desc": "Contact NO.",
+                  "t": "no"
+                },
+                {
+                  "n": "OPEN",
+                  "label": "Ouverture",
+                  "desc": "Contact NO.",
+                  "t": "no"
+                },
+                {
+                  "n": "CLOSE",
+                  "label": "Fermeture",
+                  "desc": "Contact NO (peut devenir ouverture partielle : 1er niveau L7).",
+                  "t": "no"
+                },
+                {
+                  "n": "AUX IN",
+                  "label": "Entrée auxiliaire",
+                  "desc": "Contact NF, commande ALT par défaut (modifiable avec Oview).",
+                  "t": "nf"
+                },
+                {
+                  "n": "AERIAL",
+                  "label": "Antenne",
+                  "desc": "Câble RG58 (52 Ω), antenne radio.",
+                  "t": "autre"
+                }
+              ]
+            },
+            {
+              "nom": "Alimentation accessoires",
+              "bornes": [
+                {
+                  "n": "GND · 24V",
+                  "label": "24 V",
+                  "desc": "24 V DC (−30 % / +50 %), 100 mA maxi, près des bornes STOP / SBS : pour un lecteur de proximité ou l'éclairage d'un sélecteur à clé.",
+                  "t": "alim"
+                }
+              ]
+            },
+            {
+              "nom": "Connecteurs",
+              "bornes": [
+                {
+                  "n": "SM",
+                  "label": "Récepteur radio",
+                  "desc": "Récepteur SMXI ou OXI. Sorties : n° 1 pas à pas, n° 2 ouverture partielle, n° 3 ouverture, n° 4 fermeture.",
+                  "t": "bus"
+                },
+                {
+                  "n": "IBT4N",
+                  "label": "Programmateur Oview",
+                  "desc": "Interface IBT4N, câble BusT4 à 4 fils, jusqu'à environ 100 m ; 16 logiques maxi en réseau. Couper l'alimentation avant de brancher l'interface.",
+                  "t": "bus"
+                }
+              ]
+            }
+          ],
+          "fusibles": "1,6 AT. Alimentation 230 V~ (+10 % −15 %) 50/60 Hz ; /V1 : 120 V~ 50/60 Hz. Puissance 515 W (RB600) · 450 W (RB1000) · 460 W (RB500HS). Limite : RB600 600 kg / 8 m, RB1000 1 000 kg / 12 m, RB500HS 500 kg / 8 m. IP44.",
+          "notes": [
+            "Après tout ajout ou retrait de dispositif sur BlueBUS ou sur STOP : refaire la reconnaissance des dispositifs.",
+            "Photocellules BlueBUS : mêmes cavaliers sur TX et RX, une adresse par paire. PHOTO / PHOTO II : intervention en fermeture (h = 50 / h = 100) ; PHOTO 1 / PHOTO 1 II idem ; PHOTO 2 / PHOTO 2 II : intervention en ouverture (extérieure / intérieure) ; PHOTO 3 : cellule unique couvrant tout l'automatisme.",
+            "Plusieurs dispositifs sur STOP : NO en parallèle, NF en parallèle, 2 résistances 8,2 kΩ en parallèle (au-delà de 2 : en cascade avec une seule résistance terminale de 8,2 kΩ). NO + NF possible avec une résistance 8,2 kΩ en série sur le contact NF.",
+            "Deux ROBUS Master / Slave : liaison par BLUEBUS avec respect de la polarité entre les deux logiques (les autres dispositifs restent sans polarité).",
+            "Incohérences de la notice : l'absorption du RB500HS est donnée à 2,2 A dans le tableau 1 et à 2,5 A au chapitre 12 ; celle du RB500HS/V1 (120 V) à 4,2 A (tableau 1) et 4,8 A (chapitre 12). Le chapitre 12 cite aussi RB600/V1 (4,8 A) et RB1000/V1 (4,4 A)."
+          ]
+        },
+        "apprentissage": {
+          "avant": [
+            "Débrayer, amener le vantail à mi-course, rembrayer.",
+            "Mettre sous tension : la LED BLUEBUS doit clignoter 1 fois par seconde, les LED des photocellules clignotent aussi, clignotant et OGI éteints. Sinon couper et contrôler branchements, alignement des photocellules et fusible.",
+            "Pattes de fin de course : jusqu'au clic, puis 2 cm minimum de plus (versions inductives RB600P / RB1000P : 3 à 8 mm)."
+          ],
+          "etapes": [
+            "Reconnaissance des dispositifs : maintenir ▲ (Open) + Stop/Set.",
+            "Relâcher quand L1 et L2 clignotent très vite (environ 3 s). Attendre quelques secondes.",
+            "Fin : LED STOP allumée, L1 et L2 éteintes ; L3 et L4 se mettent à clignoter.",
+            "Reconnaissance de la longueur : maintenir Stop/Set + ▼ (Close).",
+            "Relâcher quand la manœuvre démarre (environ 3 s). Ce doit être une ouverture ; sinon appuyer sur Stop/Set et revoir le sens d'installation (fig. 5 et 6), puis recommencer.",
+            "Laisser finir l'ouverture puis la fermeture.",
+            "RB500HS uniquement, apprentissage de longueur « mode 2 » : au lieu de relâcher Stop/Set + ▼ au bout de 3 s, les maintenir plus de 8 s ; le clignotement de L3 et L4 devient très rapide, on peut alors relâcher. Ralentissement fixé à 10 cm et vitesse à 100 % (super rapide) en ouverture et fermeture. La notice dit que ce mode s'active « pendant la reconnaissance des dispositifs » alors que la touche citée est celle de la reconnaissance de longueur : formulation incohérente de la notice."
+          ],
+          "apres": [
+            "Contrôle : ralentissement 70 à 50 cm avant la fin de course, arrêt à 2-3 cm de la butée mécanique, sans variation de vitesse. Clignotant régulier, voyant OGI lent à l'ouverture et rapide à la fermeture.",
+            "Reconnaissance d'autres dispositifs (ajout / retrait) : ▲ + Stop/Set, relâcher quand L1 et L2 clignotent vite. Refaire ensuite l'essai de l'automatisme.",
+            "Maintenance : au plus tous les 6 mois ou 20 000 manœuvres.",
+            "Mode Slave : installer les 2 moteurs, choisir le sens d'ouverture de chacun, alimenter ; sur le Slave activer « Mode Slave » (L8), reconnaître les dispositifs sur le Slave puis sur le Master, enfin reconnaître la longueur sur le Master."
+          ]
+        }
+      }
   ]
 },
 /* ------------------------------------------------------------------ */
@@ -7702,7 +8467,1077 @@ const MARQUES = [
         "Le ralentissement ne s'applique qu'après une course complète d'un fin de course à l'autre (Sr = Y pour rouler lentement après coupure)."
       ]
     }
-  }
+  },
+          {
+        "id": "faac-455d",
+        "nom": "455 D",
+        "modeles": "Platine électronique FAAC 455 D — battants 1 ou 2 vantaux, moteurs 230 V jusqu'à 800 W (opérateurs électromécaniques ou oléodynamiques, force réglable sur 50 niveaux)",
+        "type": "Battant 230 V — afficheur 2 chiffres, touches F + −, fins de course et Gatecoder en option",
+        "source": "Notice FAAC « Platine électronique 455 D » (déclaration CE du 01/01/2001), français, 11 p. — logiques A / E / S / EP / B / C",
+        "codes": [
+          {
+            "code": "OP_A",
+            "type": "diag",
+            "titre": "Segment de l'entrée OPEN A",
+            "action": "Allumé = commande OPEN A activée (contact fermé). Éteint au repos. Hors programmation, l'afficheur sert de témoin d'entrées : un segment par entrée."
+          },
+          {
+            "code": "OP_B",
+            "type": "diag",
+            "titre": "Segment de l'entrée OPEN B",
+            "action": "Allumé = commande OPEN B activée. Éteint au repos."
+          },
+          {
+            "code": "STOP",
+            "type": "diag",
+            "titre": "Segment de l'entrée STOP",
+            "action": "Allumé = commande inactive (contact NF fermé). S'il est éteint au repos : STOP ouvert ou entrée non pontée (borne STP à relier au « − » si aucun dispositif)."
+          },
+          {
+            "code": "FSWCL",
+            "type": "diag",
+            "titre": "Segment des sécurités en fermeture",
+            "action": "Allumé = sécurités désengagées. Éteint = sécurités engagées (photocellule coupée) ou entrée non pontée (CL FSW à relier à −TX FSW s'il n'y a pas de photocellule)."
+          },
+          {
+            "code": "FSWOP",
+            "type": "diag",
+            "titre": "Segment des sécurités en ouverture",
+            "action": "Allumé = sécurités désengagées. Éteint = sécurités engagées ou entrée non pontée (OP FSW à relier à −TX FSW)."
+          },
+          {
+            "code": "FCA1 · FCA2",
+            "type": "diag",
+            "titre": "Fins de course d'ouverture (si utilisés)",
+            "action": "Allumé = fin de course libre. Éteint = fin de course engagé. Les fins de course non connectés doivent être pontés. Portail fermé (notice, en gras) : FCA1 et FCA2 allumés, FCC1 et FCC2 éteints (si utilisés) — un FCC éteint au repos est normal."
+          },
+          {
+            "code": "FCC1 · FCC2",
+            "type": "diag",
+            "titre": "Fins de course de fermeture (si utilisés)",
+            "action": "Allumé = fin de course libre. Éteint = fin de course engagé."
+          },
+          {
+            "code": "Afficheur clignote",
+            "type": "symptome",
+            "titre": "L'afficheur clignote",
+            "action": "Apprentissage des temps en cours : donner les impulsions OPEN A demandées (voir Apprentissage). Il cesse de clignoter à la fin de la procédure."
+          },
+          {
+            "code": "Pré-clignotement 8 s",
+            "type": "symptome",
+            "titre": "Pré-clignotement de 8 s à chaque OPEN",
+            "action": "C'est la « demande d'assistance » : la fonction A5 est active et le compteur de cycles nC est arrivé à zéro. Prévoir l'entretien ; remettre nC à une nouvelle valeur."
+          },
+          {
+            "code": "Portail bloqué",
+            "type": "symptome",
+            "titre": "Le portail ne démarre pas",
+            "action": "Regarder les segments d'entrées : STOP éteint bloque tout mouvement ; FSWCL éteint ne bloque que la fermeture (portail ouvert) et FSWOP éteint que l'ouverture (portail fermé). Avec FAIL SAFE (F5 actif), une photocellule qui échoue au test empêche tout mouvement."
+          },
+          {
+            "code": "Sens inversé",
+            "type": "symptome",
+            "titre": "La 1re impulsion OPEN A commande une fermeture",
+            "action": "Couper le courant et inverser sur le bornier de la 455 D les phases du moteur concerné (câbles marron et noir)."
+          }
+        ],
+        "parametres": {
+          "intro": "Deux menus : programmation de BASE (touche F) et AVANCÉE (F + +). Valeurs d'usine relevées sur les pages de la notice. Entrée en base : F maintenue montre le nom de la fonction, relâchée montre sa valeur, modifiable avec + et −. F de nouveau : fonction suivante. À la dernière fonction (« In »), F fait sortir.",
+          "navigation": [
+            "Base : appuyer sur F et le maintenir (nom de la fonction), relâcher (valeur), + / − pour modifier, F pour passer à la suivante, jusqu'à « In » (sortie).",
+            "Avancée : appuyer sur F et, en la maintenant, sur + ; relâcher + (nom de la 1re fonction), relâcher F (valeur). Même navigation. Sortie à « In ».",
+            "Contrôle du sens et de la force (chap. 6.2) : couper, débloquer, amener le portail à mi-course, rebloquer, remettre sous tension, OPEN A doit ouvrir. Avec des opérateurs oléodynamiques, régler la force au maximum (50)."
+          ],
+          "groupes": [
+            {
+              "nom": "Programmation de BASE",
+              "items": [
+                {
+                  "code": "LO",
+                  "def": "E",
+                  "titre": "Logique de fonctionnement",
+                  "valeurs": [
+                    [
+                      "A",
+                      "Automatique"
+                    ],
+                    [
+                      "E",
+                      "Semi-automatique (usine)"
+                    ],
+                    [
+                      "S",
+                      "Automatique « Sécurité »"
+                    ],
+                    [
+                      "EP",
+                      "Semi-automatique « pas à pas »"
+                    ],
+                    [
+                      "b",
+                      "Semi-automatique « B » : OPEN A ouvre, OPEN B ferme"
+                    ],
+                    [
+                      "C",
+                      "Homme mort : commandes maintenues"
+                    ]
+                  ],
+                  "note": "Comportement par logique, d'après les tableaux 3/a à 3/f. Action de OPEN A — A : portail fermé, ouvre puis referme après la pause ; en pause, recharge la pause ; en fermeture, rouvre ; en ouverture, sans effet. S : comme A à la fermeture, mais en pause ou en ouverture referme tout de suite ; en fermeture rouvre. E : ouvre ; ouvert, referme tout de suite ; en fermeture, rouvre ; en ouverture, bloque. EP : ouvre ; ouvert, referme ; en fermeture ou ouverture, bloque ; bloqué, repart en sens inverse. B et C : voir les tableaux 3/e et 3/f de la notice. STOP : portail fermé, aucun effet et OPEN est inhibé (cause fréquente de « le portail ne s'ouvre pas ») ; en mouvement, bloque le fonctionnement. Les sécurités d'ouverture (FSWOP) portail fermé : même inhibition de OPEN. OPEN B n'ouvre que le vantail dégagé (M1) dans les logiques A, S, E, EP."
+                },
+                {
+                  "code": "PA",
+                  "def": "0",
+                  "titre": "Temps de pause",
+                  "valeurs": [
+                    [
+                      "0 à 59",
+                      "Secondes, par pas de 1 s"
+                    ],
+                    [
+                      "1.0 à 4.1",
+                      "Minutes et dizaines de secondes, par pas de 10 s (ex. 2.5 = 2 min 50 s)"
+                    ]
+                  ],
+                  "note": "N'a d'effet que si une logique à fermeture automatique est choisie (A, S). Maximum 4,1 (soit 4 min 10 s) ; la fiche technique dit « de 0 à 4 mn »."
+                },
+                {
+                  "code": "F1",
+                  "def": "25",
+                  "titre": "Force du vantail 1 (moteur M1)",
+                  "valeurs": [
+                    [
+                      "1",
+                      "Force minimale"
+                    ],
+                    [
+                      "50",
+                      "Force maximale (oléodynamique)"
+                    ]
+                  ]
+                },
+                {
+                  "code": "F2",
+                  "def": "5 ? (voir note)",
+                  "titre": "Force du vantail 2 (moteur M2)",
+                  "valeurs": [
+                    [
+                      "1",
+                      "Force minimale"
+                    ],
+                    [
+                      "50",
+                      "Force maximale (oléodynamique)"
+                    ]
+                  ],
+                  "note": "Valeur d'usine douteuse : sur l'image de la notice, la valeur par défaut de F2 est coupée au bord de la page et on ne lit que « 5 » (probablement 25 comme F1, à vérifier avant de s'y fier)."
+                },
+                {
+                  "code": "cd",
+                  "def": "0",
+                  "titre": "Retard du vantail 1 en fermeture",
+                  "valeurs": [
+                    [
+                      "0 à 4.1",
+                      "Secondes puis minutes, même échelle que la pause. Retarde le départ en fermeture du vantail 1 par rapport au vantail 2."
+                    ]
+                  ]
+                },
+                {
+                  "code": "tL",
+                  "def": "—",
+                  "titre": "Apprentissage des temps",
+                  "valeurs": [
+                    [
+                      "+ ≈ 1 s",
+                      "Apprentissage simple (automatique)"
+                    ],
+                    [
+                      "+ > 3 s",
+                      "Apprentissage complet (points de ralentissement et d'arrêt choisis à la main)"
+                    ]
+                  ],
+                  "note": "Voir l'onglet Apprentissage."
+                },
+                {
+                  "code": "In",
+                  "def": "—",
+                  "titre": "Sortie de la programmation",
+                  "valeurs": [
+                    [
+                      "F",
+                      "Retour à l'affichage de l'état des entrées"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "nom": "Programmation AVANCÉE (F + +)",
+              "items": [
+                {
+                  "code": "bo",
+                  "def": "no",
+                  "titre": "Couple maximal au démarrage",
+                  "valeurs": [
+                    [
+                      "Y",
+                      "Actif (la notice montre le symbole de l'afficheur, proche d'un « Y ») : les moteurs travaillent au couple maximal (réglage de couple ignoré) à l'instant initial. Utile pour vantaux lourds."
+                    ],
+                    [
+                      "no",
+                      "Exclu"
+                    ]
+                  ]
+                },
+                {
+                  "code": "c5",
+                  "def": "no",
+                  "titre": "Coup final en fermeture",
+                  "valeurs": [
+                    [
+                      "Y",
+                      "Actif (la notice montre le symbole de l'afficheur, proche d'un « Y ») : moteurs activés 1 s à pleine vitesse pour faciliter l'enclenchement de l'électroserrure."
+                    ],
+                    [
+                      "no",
+                      "Exclu"
+                    ]
+                  ]
+                },
+                {
+                  "code": "r5",
+                  "def": "no",
+                  "titre": "Coup d'inversion",
+                  "valeurs": [
+                    [
+                      "Y",
+                      "Actif (la notice montre le symbole de l'afficheur, proche d'un « Y ») : portail fermé, avant l'ouverture, les moteurs poussent en fermeture pendant 2 s pour faciliter le déclenchement de l'électroserrure."
+                    ],
+                    [
+                      "no",
+                      "Exclu"
+                    ]
+                  ]
+                },
+                {
+                  "code": "od",
+                  "def": "no",
+                  "titre": "Retard du vantail 2 en ouverture (2 s)",
+                  "valeurs": [
+                    [
+                      "Y",
+                      "Actif (la notice montre le symbole de l'afficheur, proche d'un « Y ») : départ retardé du vantail 2 pour éviter les interférences entre vantaux."
+                    ],
+                    [
+                      "no",
+                      "Exclu"
+                    ]
+                  ]
+                },
+                {
+                  "code": "F5",
+                  "def": "no",
+                  "titre": "Fail safe",
+                  "valeurs": [
+                    [
+                      "Y",
+                      "Actif (la notice montre le symbole de l'afficheur, proche d'un « Y ») : test des photocellules avant chaque mouvement ; si le test échoue, le portail ne bouge pas. Demande les émetteurs alimentés par −TX FSW."
+                    ],
+                    [
+                      "no",
+                      "Exclu"
+                    ]
+                  ]
+                },
+                {
+                  "code": "PF",
+                  "def": "no",
+                  "titre": "Pré-clignotement (5 s)",
+                  "valeurs": [
+                    [
+                      "Y",
+                      "Actif (la notice montre le symbole de l'afficheur, proche d'un « Y ») : lampe clignotante 5 s avant le début du mouvement."
+                    ],
+                    [
+                      "no",
+                      "Exclu"
+                    ]
+                  ]
+                },
+                {
+                  "code": "EL",
+                  "def": "no",
+                  "titre": "Électroserrure sur le vantail 2",
+                  "valeurs": [
+                    [
+                      "Y",
+                      "Actif (la notice montre le symbole de l'afficheur, proche d'un « Y ») : l'électroserrure se trouve sur le vantail 2 au lieu du vantail 1."
+                    ],
+                    [
+                      "no",
+                      "Exclu"
+                    ]
+                  ]
+                },
+                {
+                  "code": "SP",
+                  "def": "0",
+                  "titre": "Lampe-témoin (W.L.)",
+                  "valeurs": [
+                    [
+                      "0",
+                      "Lampe-témoin standard : allumée en ouverture et en pause, clignote en fermeture, éteinte portail fermé"
+                    ],
+                    [
+                      "1 à 59",
+                      "Sortie temporisée (secondes, pas de 1 s) pour un éclairage de courtoisie, par un relais"
+                    ],
+                    [
+                      "1.0 à 4.1",
+                      "Sortie temporisée (minutes / dizaines de secondes, pas de 10 s)"
+                    ]
+                  ]
+                },
+                {
+                  "code": "Ph",
+                  "def": "no",
+                  "titre": "Les photocellules de fermeture intervertissent au désengagement",
+                  "valeurs": [
+                    [
+                      "Y",
+                      "Actif (la notice montre le symbole de l'afficheur, proche d'un « Y ») : les photocellules de fermeture bloquent le mouvement et l'inversent au désengagement."
+                    ],
+                    [
+                      "no",
+                      "Exclu : elles inversent immédiatement (usine)"
+                    ]
+                  ]
+                },
+                {
+                  "code": "Ad",
+                  "def": "no",
+                  "titre": "Fonction A.D.M.A.P.",
+                  "valeurs": [
+                    [
+                      "Y",
+                      "Actif (la notice montre le symbole de l'afficheur, proche d'un « Y ») : fonctionnement des sécurités conforme à la norme française NFP 25/362."
+                    ],
+                    [
+                      "no",
+                      "Exclu"
+                    ]
+                  ]
+                },
+                {
+                  "code": "A5",
+                  "def": "no",
+                  "titre": "Demande d'assistance",
+                  "valeurs": [
+                    [
+                      "Y",
+                      "Actif (la notice montre le symbole de l'afficheur, proche d'un « Y ») : à la fin du compte à rebours de nC, pré-clignotement de 8 s à chaque impulsion d'Open (demande d'intervention)."
+                    ],
+                    [
+                      "no",
+                      "Exclu"
+                    ]
+                  ]
+                },
+                {
+                  "code": "nC",
+                  "def": "0",
+                  "titre": "Programmation cycles (milliers)",
+                  "valeurs": [
+                    [
+                      "0 à 99",
+                      "Compte à rebours des cycles, en milliers. La valeur affichée se met à jour au fil des cycles ; sert à suivre l'usage de la platine ou à la demande d'assistance (A5)."
+                    ]
+                  ]
+                },
+                {
+                  "code": "In",
+                  "def": "—",
+                  "titre": "Sortie de la programmation",
+                  "valeurs": [
+                    [
+                      "F",
+                      "Retour à l'affichage de l'état des entrées"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "bornier": {
+          "groupes": [
+            {
+              "nom": "J3 — alimentation 230 V~",
+              "bornes": [
+                {
+                  "n": "PE",
+                  "label": "Terre",
+                  "desc": "Relier la platine au conducteur de terre de l'installation (obligatoire) ; prévoir un disjoncteur magnétothermique différentiel en amont.",
+                  "t": "alim"
+                },
+                {
+                  "n": "N",
+                  "label": "Neutre",
+                  "desc": "230 V~ (+6 % −10 %) 50 Hz.",
+                  "t": "alim"
+                },
+                {
+                  "n": "L",
+                  "label": "Phase",
+                  "desc": "230 V~ 50 Hz.",
+                  "t": "alim"
+                }
+              ]
+            },
+            {
+              "nom": "J4 — moteurs et feu clignotant",
+              "bornes": [
+                {
+                  "n": "M1 : COM · OP · CL",
+                  "label": "Moteur 1",
+                  "desc": "Vantail 1 (seul vantail en application à 1 vantail). Condensateurs fournis avec les opérateurs.",
+                  "t": "moteur"
+                },
+                {
+                  "n": "M2 : COM · OP · CL",
+                  "label": "Moteur 2",
+                  "desc": "Vantail 2. Inutilisé en application à un vantail.",
+                  "t": "moteur"
+                },
+                {
+                  "n": "LAMP",
+                  "label": "Feu clignotant",
+                  "desc": "Sortie 230 V~ max 60 W.",
+                  "t": "sortie"
+                }
+              ]
+            },
+            {
+              "nom": "J1 — commandes et accessoires (bornes 9 à 19)",
+              "bornes": [
+                {
+                  "n": "OPEN A",
+                  "label": "Ouverture totale",
+                  "desc": "Contact NO ; plusieurs contacts en parallèle.",
+                  "t": "no"
+                },
+                {
+                  "n": "OPEN B",
+                  "label": "Ouverture partielle / fermeture",
+                  "desc": "Contact NO : ouvre le vantail dégagé (M1). Dans les logiques B et C, commande toujours la fermeture des deux vantaux.",
+                  "t": "no"
+                },
+                {
+                  "n": "STP",
+                  "label": "STOP",
+                  "desc": "Contact NF ; plusieurs en série. Aucun dispositif : ponter STP et −.",
+                  "t": "nf"
+                },
+                {
+                  "n": "CL FSW",
+                  "label": "Sécurités fermeture",
+                  "desc": "Contact NF, n'intervient jamais à l'ouverture. Aucun dispositif : ponter CL et −TX FSW.",
+                  "t": "nf"
+                },
+                {
+                  "n": "OP FSW",
+                  "label": "Sécurités ouverture",
+                  "desc": "Contact NF, n'intervient jamais à la fermeture. Aucun dispositif : ponter OP et −TX FSW.",
+                  "t": "nf"
+                },
+                {
+                  "n": "− · − · −",
+                  "label": "Négatif accessoires",
+                  "desc": "Négatif d'alimentation des accessoires et commun des contacts.",
+                  "t": "alim"
+                },
+                {
+                  "n": "+ · + (+24V)",
+                  "label": "24 V DC accessoires",
+                  "desc": "500 mA maxi pour l'ensemble des accessoires.",
+                  "t": "alim"
+                },
+                {
+                  "n": "−TX FSW",
+                  "label": "Négatif des émetteurs photocellules",
+                  "desc": "Pour la fonction FAIL SAFE (F5) : la platine teste les photocellules avant chaque cycle.",
+                  "t": "sortie"
+                }
+              ]
+            },
+            {
+              "nom": "J5 — lampe-témoin et électroserrure",
+              "bornes": [
+                {
+                  "n": "W.L.",
+                  "label": "Lampe-témoin",
+                  "desc": "Entre cette borne et +24 V : lampe 24 V DC 3 W maxi.",
+                  "t": "sortie"
+                },
+                {
+                  "n": "LOCK",
+                  "label": "Électroserrure",
+                  "desc": "Entre cette borne et +24 V : électroserrure 12 V~ (charge maxi 15 VA).",
+                  "t": "sortie"
+                }
+              ]
+            },
+            {
+              "nom": "J6 — fins de course et Gatecoder (bornes 22 à 25)",
+              "bornes": [
+                {
+                  "n": "FCA1",
+                  "label": "Fin de course d'ouverture, vantail 1",
+                  "desc": "Arrêt ou début de ralentissement selon la programmation. Non connecté : ponter (si aucun fin de course, pas de pontage).",
+                  "t": "nf"
+                },
+                {
+                  "n": "FCC1",
+                  "label": "Fin de course de fermeture, vantail 1",
+                  "desc": "Idem.",
+                  "t": "nf"
+                },
+                {
+                  "n": "FCA2",
+                  "label": "Fin de course d'ouverture, vantail 2",
+                  "desc": "Idem.",
+                  "t": "nf"
+                },
+                {
+                  "n": "FCC2",
+                  "label": "Fin de course de fermeture, vantail 2",
+                  "desc": "Idem.",
+                  "t": "nf"
+                }
+              ]
+            },
+            {
+              "nom": "Connecteur J2",
+              "bornes": [
+                {
+                  "n": "J2",
+                  "label": "Minidec / Decoder / récepteur RP",
+                  "desc": "Embrochage rapide, composants vers l'intérieur de la platine, hors tension. Pas deux accessoires (Plus 433 / 868, Digicard, Digikey) en parallèle sur le même decoder.",
+                  "t": "bus"
+                }
+              ]
+            }
+          ],
+          "fusibles": "F1 = F 5 A (moteurs et primaire du transformateur) · F2 = T 800 mA (basse tension et accessoires). Alimentation 230 V~ 50 Hz, puissance absorbée 10 W, moteurs 800 W maxi, accessoires 0,5 A, −20 à +55 °C.",
+          "notes": [
+            "Pour une seule paire de photocellules en fermeture et une en ouverture / fermeture, FAAC préconise le schéma de la fig. 4 (trois paires : fermeture, ouverture / fermeture, ouverture — obstacles fixes en ouverture) ou de la fig. 5 (deux paires : une en fermeture, une en ouverture / fermeture — sans obstacle fixe). Plusieurs dispositifs de même fonction : en série (NF).",
+            "Positions des bornes 9 à 21 et 22 à 25 lues sur les figures 1, 2 et 18 de la notice (la numérotation des bornes de J4 n'est pas lisible) : vérifier sur la sérigraphie de la platine.",
+            "Fusibles : la fig. 1 indique F1 et F2 ; les valeurs viennent du tableau « Composants » de la notice."
+          ]
+        },
+        "apprentissage": {
+          "avant": [
+            "Attention : pendant l'apprentissage, les sécurités sont désengagées. Personne dans la zone de mouvement des vantaux.",
+            "Vérifier le sens de rotation (chap. 6.2) et régler la force (F1 / F2) avant.",
+            "Vantaux fermés, entrer en programmation de BASE et aller sur la fonction tL."
+          ],
+          "etapes": [
+            "Sans fins de course ni Gatecoder, apprentissage SIMPLE : appuyer ≈ 1 s sur +. L'afficheur clignote et les vantaux s'ouvrent. À l'arrivée sur la butée d'ouverture, donner une impulsion OPEN A (clé ou radio) : les vantaux s'arrêtent, l'afficheur cesse de clignoter.",
+            "Sans fins de course ni Gatecoder, apprentissage COMPLET : appuyer plus de 3 s sur +. Le vantail 1 s'ouvre ; chaque impulsion OPEN A donne : 1re ralentissement ouverture V1 · 2e arrêt V1 et départ V2 · 3e ralentissement ouverture V2 · 4e arrêt V2 et départ fermeture V2 · 5e ralentissement fermeture V2 · 6e arrêt V2 et départ fermeture V1 · 7e ralentissement fermeture V1 · 8e arrêt fermeture V1.",
+            "Avec fins de course, apprentissage simple : idem, les moteurs s'arrêtent seuls sur les fins de course d'ouverture, puis une impulsion OPEN A termine le cycle.",
+            "Avec fins de course, apprentissage complet : les vantaux ralentissent aux fins de course. Impulsions OPEN A : 1re arrêt ouverture V1 et départ V2 · 2e arrêt ouverture V2 et début de fermeture V2 · 3e arrêt fermeture V2 et départ fermeture V1 · 4e arrêt fermeture V1.",
+            "Avec Gatecoder : simple = ralentissement fixe, arrêt automatique à la butée ; complet = 7 impulsions OPEN A (ralentissements et départs), arrêt automatique sur chaque butée. Avec Gatecoder + fins de course : même procédure que les fins de course, le Gatecoder ne sert que de détecteur d'obstacle.",
+            "Pour supprimer un ralentissement : sans fins de course (6.3.1), donner 2 impulsions OPEN A consécutives dans la seconde, une fois sur la butée ; avec fins de course (6.3.2), donner une seule impulsion OPEN A dans la seconde suivant l'engagement du fin de course. Avec des fins de course absents, le ralentissement correspondant se commence par une impulsion OPEN A. Vérification du sens (6.2, points 8 et 9) : contrôler l'arrêt par STOP, puis débloquer, fermer et rebloquer.",
+            "Un seul vantail : exécuter toute la séquence ; à la fin de l'ouverture, donner 5 impulsions OPEN A jusqu'à ce que le vantail commence à se fermer, puis reprendre la procédure normale."
+          ],
+          "apres": [
+            "L'impulsion de ralentissement doit être donnée avec une certaine avance sur la butée, sinon le vantail la touche à pleine vitesse et la platine y voit un obstacle.",
+            "Essai de l'automatisme : vérifier surtout la force et l'intervention des dispositifs de sécurité."
+          ]
+        }
+      },
+      {
+        "id": "faac-e024s",
+        "nom": "E024S",
+        "modeles": "Armoire FAAC E024S (version 230 V ou 115 V) — battants 1 ou 2 vantaux ; moteurs 391, 418, 412 / 413 / 415 / 390 / 770, hydrauliques S450H / S700H / S800H (avec encodeur Safecoder) ; version « E024S sur 391 » dans l'opérateur",
+        "type": "Battant 230 V (115 V) — BUS photocellules, 7 logiques, LED LD4 à LD8, touches SETUP / SPEED / LOGIC",
+        "source": "Notice FAAC 732642 Rev. E (armoire E024S), français, 16 p.",
+        "codes": [
+          {
+            "code": "LD4 + LD5 lentes",
+            "type": "led",
+            "titre": "LD4 et LD5 clignotent lentement",
+            "action": "Aucun SETUP n'a jamais été fait (ou le type de moteur DS3 / DS4 a été changé après un SETUP) : lancer un SETUP automatique ou manuel avant toute manœuvre."
+          },
+          {
+            "code": "LD4 + LD5 fixes",
+            "type": "led",
+            "titre": "LD4 et LD5 allumées fixes",
+            "action": "Le bouton SETUP est maintenu : relâcher pour lancer le SETUP. Pendant le SETUP les deux LED clignotent ensemble ; en fin de procédure correcte elles s'éteignent."
+          },
+          {
+            "code": "LD4 + LD5 clignotent",
+            "type": "led",
+            "titre": "LD4 et LD5 clignotent après un SETUP",
+            "action": "Le SETUP s'est mal terminé : la platine demande un nouveau SETUP. Recommencer en dégageant les butées et en contrôlant moteurs, sens et sécurités."
+          },
+          {
+            "code": "LD7",
+            "type": "led",
+            "titre": "LED LD7 : logique sélectionnée",
+            "action": "Nombre de clignotements = logique : 1 A · 2 E (usine) · 3 AP · 4 EP · 5 A1 · 6 b · 7 c. En menu de 2e niveau, LD7 indique l'état (ON / OFF) de la valeur du menu ; c'est LD8 qui indique le numéro du menu."
+          },
+          {
+            "code": "LD8",
+            "type": "led",
+            "titre": "LED LD8 : vitesse",
+            "action": "Allumée = GRANDE vitesse. Éteinte = vitesse RÉDUITE. En menu de 2e niveau elle clignote autant de fois que le numéro du menu."
+          },
+          {
+            "code": "STOP",
+            "type": "diag",
+            "titre": "LED STOP",
+            "action": "Allumée = commande inactive (contact NF fermé). Éteinte = commande STOP active, ou entrée STOP ouverte (aucun dispositif : la notice ne donne pas de pontage, vérifier les bornes 2-3 de J5)."
+          },
+          {
+            "code": "OPEN A",
+            "type": "diag",
+            "titre": "LED OPEN A",
+            "action": "Allumée = commande active (contact fermé). Éteinte au repos."
+          },
+          {
+            "code": "OPEN B",
+            "type": "diag",
+            "titre": "LED OPEN B",
+            "action": "Allumée = commande active. Éteinte au repos."
+          },
+          {
+            "code": "BUS fixe",
+            "type": "led",
+            "titre": "LED BUS allumée fixe",
+            "action": "Fonctionnement régulier (allumée même sans photocellules)."
+          },
+          {
+            "code": "BUS lente",
+            "type": "led",
+            "titre": "LED BUS, flash toutes les 0,5 s",
+            "action": "Au moins une entrée engagée : photocellule engagée ou mal alignée, ou entrées Open A, Open B ou Stop engagées."
+          },
+          {
+            "code": "BUS 2,5 s",
+            "type": "led",
+            "titre": "LED BUS éteinte avec un flash toutes les 2,5 s",
+            "action": "Ligne BUS en court-circuit."
+          },
+          {
+            "code": "BUS rapide",
+            "type": "led",
+            "titre": "LED BUS, flash toutes les 0,2 s",
+            "action": "Erreur détectée pendant la mémorisation BUS : répéter la procédure. Si l'erreur se reproduit, vérifier qu'il n'y a pas plusieurs accessoires avec la même adresse."
+          },
+          {
+            "code": "DL1 encodeur",
+            "type": "led",
+            "titre": "Encodeur S700H / S800H, LED DL1",
+            "action": "Allumée : alimentation et BUS communiquant avec la platine. Clignote : alimentation présente mais BUS non communiquant. Éteinte : alimentation et BUS absents. DL1 doit toujours être allumée."
+          },
+          {
+            "code": "DL2 encodeur",
+            "type": "led",
+            "titre": "Encodeur S700H / S800H, LED DL2",
+            "action": "Allumée = encodeur du vantail 1 ; éteinte = vantail 2. Si les DL2 des deux encodeurs sont dans le même état, la connexion est erronée : pendant l'apprentissage des accessoires BUS les DL1 des deux encodeurs clignoteront ; inverser la polarité du BUS sur l'un des deux encodeurs."
+          },
+          {
+            "code": "DL3 encodeur",
+            "type": "led",
+            "titre": "Encodeur S700H / S800H, LED DL3",
+            "action": "Clignote régulièrement pendant le mouvement du vantail (lecture des impulsions). À l'arrêt elle peut être allumée ou éteinte ; un papillotement accentué dans certaines positions d'arrêt n'est pas une anomalie."
+          },
+          {
+            "code": "F1",
+            "type": "symptome",
+            "titre": "Plus d'alimentation des accessoires",
+            "action": "Le fusible autorégénérateur F1 ouvre le circuit des accessoires au-delà de 500 mA et se rétablit seul au bout de 5 s : chercher le court-circuit ou la surcharge."
+          },
+          {
+            "code": "Vantaux inversés",
+            "type": "symptome",
+            "titre": "Les vantaux se ferment au lieu de s'ouvrir au SETUP",
+            "action": "Inverser les câbles d'alimentation des moteurs."
+          },
+          {
+            "code": "Dip inversés (391)",
+            "type": "symptome",
+            "titre": "Platine E024S pour moteur 391 : dips inversés",
+            "action": "Sur la platine E024S pour 391, la disposition des dip-switches DS est inversée par rapport au tableau 2 de la notice : en tenir compte en choisissant moteur et force."
+          },
+          {
+            "code": "Setup hydraulique",
+            "type": "symptome",
+            "titre": "Setup en moteur hydraulique (DS3 et DS4 ON)",
+            "action": "Notice : le point d'arrêt doit être donné exclusivement par la commande OPEN avec l'encodeur SAFECODER ; l'opérateur (EncS700 ou EncS450) est reconnu automatiquement pendant le SETUP."
+          }
+        ],
+        "parametres": {
+          "intro": "Trois réglages : dip-switches DS1 (moteur et force), touche LOGIC (logique), touche SPEED (vitesse), plus un menu de 2e niveau sur 8 paramètres. Valeurs d'usine en gras dans la notice, relevées sur les pages.",
+          "navigation": [
+            "Logique : appuyer plusieurs fois sur SW3 LOGIC ; la LED LD7 clignote autant de fois que le numéro de la logique.",
+            "Vitesse : SW2 SPEED à tout moment ; LD8 allumée = grande vitesse, éteinte = réduite.",
+            "2e niveau : maintenir SW2 SPEED plus de 2,5 s. Les 2 LED SETUP deviennent fixes. SPEED fait défiler le menu (appuyer autant de fois que le numéro du paramètre ; le menu est repéré par le nombre de clignotements de LD8). LOGIC saisit la valeur. Quitter en maintenant SPEED 2,5 s.",
+            "Retour aux paramètres d'usine : mettre la platine sous tension en maintenant SETUP ; les deux LED SETUP s'allument en alternance, la platine remet les paramètres à zéro, tout mouvement est inhibé tant que SETUP est maintenu. À la relâche, LD4 et LD5 clignotent : refaire un SETUP."
+          ],
+          "groupes": [
+            {
+              "nom": "Dip-switches DS1",
+              "items": [
+                {
+                  "code": "DS3 · DS4",
+                  "def": "OFF · OFF",
+                  "titre": "Type d'opérateur",
+                  "valeurs": [
+                    [
+                      "DS4 OFF · DS3 OFF",
+                      "Moteur 391 (usine)"
+                    ],
+                    [
+                      "DS4 ON · DS3 OFF",
+                      "Moteur 418"
+                    ],
+                    [
+                      "DS4 OFF · DS3 ON",
+                      "Moteurs 412 / 413 / 415 / 390 / 770"
+                    ],
+                    [
+                      "DS4 ON · DS3 ON",
+                      "Moteur hydraulique S450H / S700H / S800H (encodeur reconnu au SETUP)"
+                    ]
+                  ],
+                  "note": "Choisir le moteur avant le SETUP. Un changement de DS3 / DS4 après un SETUP impose un nouveau SETUP (LD4 / LD5 clignotent). Sur la E024S pour 391, la disposition des dip-switches est inversée."
+                },
+                {
+                  "code": "DS1 · DS2",
+                  "def": "OFF · OFF",
+                  "titre": "Force",
+                  "valeurs": [
+                    [
+                      "DS2 OFF · DS1 OFF",
+                      "Force basse (usine)"
+                    ],
+                    [
+                      "DS2 ON · DS1 OFF",
+                      "Force moyenne basse"
+                    ],
+                    [
+                      "DS2 OFF · DS1 ON",
+                      "Force moyenne haute"
+                    ],
+                    [
+                      "DS2 ON · DS1 ON",
+                      "Force haute"
+                    ]
+                  ],
+                  "note": "Dans le tableau de la notice, les colonnes sont DS4 DS3 DS2 DS1."
+                }
+              ]
+            },
+            {
+              "nom": "Logique (touche SW3 LOGIC)",
+              "items": [
+                {
+                  "code": "LD7",
+                  "def": "E (2 clignotements)",
+                  "titre": "Logique de fonctionnement",
+                  "valeurs": [
+                    [
+                      "1 · A",
+                      "Logique A (automatique)"
+                    ],
+                    [
+                      "2 · E",
+                      "Semi-automatique (usine)"
+                    ],
+                    [
+                      "3 · AP",
+                      "Automatique pas à pas"
+                    ],
+                    [
+                      "4 · EP",
+                      "Semi-automatique pas à pas"
+                    ],
+                    [
+                      "5 · A1",
+                      "Automatique 1"
+                    ],
+                    [
+                      "6 · b",
+                      "Semi-automatique « b »"
+                    ],
+                    [
+                      "7 · c",
+                      "Homme mort"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "nom": "2e niveau (SPEED > 2,5 s)",
+              "items": [
+                {
+                  "code": "1",
+                  "def": "OFF",
+                  "titre": "Anti-vent",
+                  "valeurs": [
+                    [
+                      "ON",
+                      "Sensibilité obstacle faible : le portail fonctionne aussi avec des rafales de vent"
+                    ],
+                    [
+                      "OFF",
+                      "Sensibilité obstacle élevée (usine)"
+                    ]
+                  ],
+                  "note": "Le temps de recherche d'obstacle est de 5 s ; la fonction commande l'inversion du mouvement."
+                },
+                {
+                  "code": "2",
+                  "def": "OFF",
+                  "titre": "Coup d'inversion",
+                  "valeurs": [
+                    [
+                      "ON",
+                      "Portail fermé, avant l'ouverture, les moteurs poussent en fermeture environ 3 s pour faciliter le déclenchement de l'électroserrure"
+                    ],
+                    [
+                      "OFF",
+                      "Désactivé (usine)"
+                    ]
+                  ]
+                },
+                {
+                  "code": "3",
+                  "def": "OFF",
+                  "titre": "Soft-touch",
+                  "valeurs": [
+                    [
+                      "ON",
+                      "Après avoir touché la butée en fermeture, les vantaux reculent puis se posent doucement (aide à respecter la courbe d'impact)"
+                    ],
+                    [
+                      "OFF",
+                      "Désactivé (usine)"
+                    ]
+                  ]
+                },
+                {
+                  "code": "4",
+                  "def": "OFF",
+                  "titre": "Préclignotement",
+                  "valeurs": [
+                    [
+                      "ON",
+                      "Environ 3 s avant chaque mouvement"
+                    ],
+                    [
+                      "OFF",
+                      "Désactivé (usine)"
+                    ]
+                  ]
+                },
+                {
+                  "code": "5",
+                  "def": "ON (2 s)",
+                  "titre": "Retard du battant en ouverture",
+                  "valeurs": [
+                    [
+                      "ON",
+                      "Le vantail 2 démarre 2 s après le vantail 1 (usine)"
+                    ],
+                    [
+                      "OFF",
+                      "Désactivé"
+                    ]
+                  ]
+                },
+                {
+                  "code": "6",
+                  "def": "5 s",
+                  "titre": "Retard du vantail en fermeture",
+                  "valeurs": [
+                    [
+                      "ON",
+                      "Maintenir LOGIC pendant tout le temps voulu (0 à 4,25 min)"
+                    ],
+                    [
+                      "OFF",
+                      "Aucune pression : valeur d'usine 5 s"
+                    ]
+                  ],
+                  "note": "Retarde le vantail 1 par rapport au vantail 2 en fermeture."
+                },
+                {
+                  "code": "7",
+                  "def": "30 s",
+                  "titre": "Temps de pause",
+                  "valeurs": [
+                    [
+                      "ON",
+                      "Maintenir LOGIC pendant tout le temps voulu (0 à 4,25 min)"
+                    ],
+                    [
+                      "OFF",
+                      "Aucune pression : valeur d'usine 30 s"
+                    ]
+                  ],
+                  "note": "En logique A : temps avant la refermeture. Le tableau technique de la notice (p. 6) annonce « 10 min maxi » ; le menu 7 (p. 8) donne 0 à 4,25 min."
+                },
+                {
+                  "code": "8",
+                  "def": "OFF",
+                  "titre": "Espace de recherche de la butée",
+                  "valeurs": [
+                    [
+                      "OFF",
+                      "Élevée (battant court), usine"
+                    ],
+                    [
+                      "ON",
+                      "Faible (battant long)"
+                    ]
+                  ],
+                  "note": "Fonction active uniquement avec SAFECODER présent."
+                }
+              ]
+            }
+          ]
+        },
+        "bornier": {
+          "groupes": [
+            {
+              "nom": "J5 — commandes (bornes 1 à 5)",
+              "bornes": [
+                {
+                  "n": "1 · +24V",
+                  "label": "Alimentation accessoires",
+                  "desc": "24 V DC, 250 mA maxi (le BUS dispose de 400 mA à part).",
+                  "t": "alim"
+                },
+                {
+                  "n": "2 · GND",
+                  "label": "Négatif",
+                  "desc": "Négatif commun.",
+                  "t": "alim"
+                },
+                {
+                  "n": "3 · STOP",
+                  "label": "STOP",
+                  "desc": "Contact NF qui bloque l'automatisme.",
+                  "t": "nf"
+                },
+                {
+                  "n": "4 · OPEN B",
+                  "label": "Ouverture partielle",
+                  "desc": "Contact NO (voir logiques de fonctionnement).",
+                  "t": "no"
+                },
+                {
+                  "n": "5 · OPEN A",
+                  "label": "Ouverture totale",
+                  "desc": "Contact NO.",
+                  "t": "no"
+                }
+              ]
+            },
+            {
+              "nom": "Autres bornes",
+              "bornes": [
+                {
+                  "n": "J10 · BUS (rouge)",
+                  "label": "Photocellules BUS",
+                  "desc": "2 fils sans polarité (sauf encodeurs S700H / S800H, où la polarité fixe le vantail). Jusqu'à 16 paires : 6 ouverture, 7 fermeture, 2 ouverture / fermeture, 1 comme impulsion OPEN. 400 mA maxi sur BUS.",
+                  "t": "bus"
+                },
+                {
+                  "n": "J2 · SERVICE LIGHT (gris)",
+                  "label": "Lumière de service",
+                  "desc": "Contact de commande d'une bobine de relais 24 V DC / 100 mA maxi (la fig. 1A indique 3 W). Active pendant tout le mouvement et 90 s après (fixe).",
+                  "t": "sortie"
+                },
+                {
+                  "n": "J3 · LAMP (orange)",
+                  "label": "Lampe clignotante",
+                  "desc": "24 V DC / 15 W.",
+                  "t": "sortie"
+                },
+                {
+                  "n": "J4 · LOCK (bleu clair)",
+                  "label": "Électroserrure",
+                  "desc": "12 V~ ou 24 V DC, à installer sur le vantail 1.",
+                  "t": "sortie"
+                },
+                {
+                  "n": "J7 · MOT1",
+                  "label": "Moteur 1",
+                  "desc": "Vantail 1 = celui qui s'ouvre le premier. Câble 2 × 2,5 mm² (AWG 12) minimum, 20 m maxi.",
+                  "t": "moteur"
+                },
+                {
+                  "n": "J8 · MOT2",
+                  "label": "Moteur 2",
+                  "desc": "Vantail 2.",
+                  "t": "moteur"
+                },
+                {
+                  "n": "J1 · POWER",
+                  "label": "Alimentation",
+                  "desc": "230 V~ 50 Hz ou 115 V~ 60 Hz selon la version achetée.",
+                  "t": "alim"
+                },
+                {
+                  "n": "J11 · BATTERY",
+                  "label": "Kit batterie",
+                  "desc": "Kit batterie tampon en option ; à brancher sur J11.",
+                  "t": "alim"
+                },
+                {
+                  "n": "J9",
+                  "label": "Module radio XF",
+                  "desc": "XF433 ou XF868 : DS, SLH (250 codes), LC / RC. Un seul type de codification à la fois.",
+                  "t": "bus"
+                }
+              ]
+            }
+          ],
+          "fusibles": "F1 = autorégénérateur (accessoires, coupe au-delà de 500 mA, se rétablit en 5 s) · F2 = T 2 A 250 V~ ou T 4 A 120 V~ (tableau p. 6) ; la fig. E (p. 3) indique 2,5 A – 250 V (230 V) et 4 A – 120 V (115 V) : lire le marquage du porte-fusible. Puissance absorbée 4 W, moteurs 150 W × 2, −20 à +55 °C, time-out 5 min.",
+          "notes": [
+            "Photocellules BUS : même adresse sur l'émetteur et le récepteur, pas deux paires avec la même adresse. Paires 1 à 6 (Dip1-4) = B, C en ouverture ; 7 à 13 = D en fermeture ; 14 et 15 = A ouverture et fermeture ; 16 = « / » dans le tableau 3 (impulsion OPEN) (adresses dans la notice, tableau 3). Incohérence de numérotation : le tableau des encodeurs porte aussi le numéro « Tabl. 3 ».",
+            "Mémorisation des accessoires BUS : hors tension, brancher sur J10, remettre sous tension (secteur d'abord puis batterie), attendre la LED BUS, appuyer brièvement sur SETUP (la LED BUS clignote une fois), puis donner une impulsion OPEN A : le portail bouge et la mémorisation est faite. Sans accessoire BUS, laisser J10 libre.",
+            "Anti-écrasement : par contrôle de l'absorption ampérométrique ou, avec les encodeurs, par l'encodeur ; en cas d'obstacle le sens de marche s'inverse."
+          ]
+        },
+        "apprentissage": {
+          "avant": [
+            "Choisir le moteur avec DS3 / DS4 et la force avec DS1 / DS2 avant le SETUP.",
+            "Avant toute manœuvre il faut faire un SETUP : à la première mise sous tension LD4 et LD5 clignotent lentement.",
+            "Si, une fois le SETUP lancé, les vantaux se ferment au lieu de s'ouvrir : inverser les câbles d'alimentation des moteurs."
+          ],
+          "etapes": [
+            "SETUP automatique : appuyer sur SETUP jusqu'à ce que LD4 et LD5 soient allumées fixes, puis relâcher.",
+            "Les vantaux démarrent l'un après l'autre en ouverture jusqu'à la butée, se ferment l'un après l'autre jusqu'à la butée de fermeture, puis repartent automatiquement depuis la position fermée et « se ferment en position ouverte » (phrase telle quelle dans la notice, incohérente : à vérifier sur l'installation). Les ralentissements, retards de vantail et temps de pause (30 s en logique A) sont préétablis.",
+            "Fin correcte : LD4 et LD5 s'éteignent. Sinon elles clignotent et la platine redemande un SETUP.",
+            "SETUP manuel : appuyer sur SETUP jusqu'à ce que LD4 et LD5 soient fixes, maintenir jusqu'à ce que l'automatisme parte seul. Impulsions OPEN : 1re ralentissement en ouverture du vantail 1 et recherche de la butée (si une impulsion OPEN est donnée, elle fixe le point d'arrêt) · 2e idem pour le vantail 2 ; le calcul du temps de pause démarre alors tout seul · 3e saisie du temps de pause et départ en fermeture du vantail 2 · 4e ralentissement en fermeture du vantail 2 et recherche de butée · 5e ralentissement en fermeture du vantail 1 et recherche de butée.",
+            "Pour supprimer les ralentissements : donner 2 impulsions OPEN consécutives, ou laisser le vantail chercher la butée.",
+            "Les ralentissements, retards et pause du SETUP manuel peuvent être modifiés sans refaire le SETUP par le menu de 2e niveau."
+          ],
+          "apres": [
+            "Radiocommandes DS : 2 codes maxi (un OPEN A, un OPEN B). Choisir la combinaison des 12 dip, maintenir LOGIC (OPEN A) ou SPEED (OPEN B) + SETUP, relâcher, appuyer sur la touche de l'émetteur dans les 5 s.",
+            "Radiocommandes SLH / SLH LR : 250 codes. P1 + P2 sur l'émetteur, relâcher, dans les 5 s maintenir la touche choisie ; maintenir LOGIC ou SPEED + SETUP ; la LED de la platine reste fixe 1 s ; relâcher ; appuyer 2 fois sur la touche mémorisée (le portail ouvre : dégager la zone).",
+            "Radiocommandes RC / LC (module 433 MHz) : 250 codes. LOGIC ou SPEED + SETUP, relâcher, dans les 5 s appuyer sur la touche de la télécommande ; recommence 5 s pour en ajouter. Ajout à distance avec une télécommande déjà mémorisée : P1 + P2 jusqu'au clignotement lent des deux LED, puis suivre les étapes de la notice (§ 8.3.1).",
+            "Effacement de TOUS les codes (OPEN A et OPEN B, irréversible) : maintenir LOGIC ou SPEED puis SETUP 10 s ; la LED clignote 5 s puis plus vite 5 s, les deux LED restent fixes 2 s puis s'éteignent."
+          ]
+        }
+      }
   ]
 },
 /* ------------------------------------------------------------------ */
@@ -24415,6 +26250,470 @@ const MARQUES = [
         ]
       }
     }
+  ]
+},
+/* ------------------------------------------------------------------ */
+{
+  id: "doitrand", nom: "Doitrand", couleur: "#1d4e89", sanslogo: true,
+  cartes: [
+          {
+        "id": "doitrand-lf82",
+        "nom": "LF82 (DBM)",
+        "modeles": "Armoire LF82 pour portails DBM : 1 porte coulissante, 1 porte basculante, 1 ou 2 portes battantes — variateur de vitesse Telemecanique (plans de raccordement)",
+        "type": "Portail DBM (porte coulissante, basculante ou battantes) — afficheur 8 caractères, 6 touches, graphcet",
+        "source": "Notice Doitrand « Portail DBM armoire LF82 » : plans de raccordement du 18/05/2005 au 21/11/2005 et description des modes (11 p.)",
+        "codes": [
+          {
+            "code": "PORTAIL ?",
+            "type": "afficheur",
+            "titre": "Premier démarrage : type de portail non réglé",
+            "action": "La zone mémoire des paramètres est vierge : la carte prend les valeurs par défaut sauf le type de portail (0). Tant qu'il n'est pas réglé (1 coulissante, 2 basculante, 3 deux battantes, 4 une battante), l'application ne démarre pas. Appuyer sur « M/A » jusqu'à « RESET… » (environ 3 s), puis, sans relâcher, sur PLUS (paramétrage) ou MOINS (maintenance)."
+          },
+          {
+            "code": "RESET…",
+            "type": "afficheur",
+            "titre": "Redémarrage de la carte",
+            "action": "Affiché quand on maintient la touche R (ou M/A) environ 3 s. La touche n'agit que dans l'étape d'attente d'une commande d'ouverture (mode application), sur les en-têtes PARAM 1 / PARAM 2 (paramétrage) ou sur l'en-tête MAINT (maintenance)."
+          },
+          {
+            "code": "PARAM 1",
+            "type": "afficheur",
+            "titre": "Paramètres de niveau 1",
+            "action": "Entrée : touches R + PLUS à la mise sous tension. UP / DOWN font défiler, PLUS / MOINS modifient. R maintenue environ 3 s sur l'en-tête valide et sauvegarde en flash, puis la carte redémarre."
+          },
+          {
+            "code": "PARAM 2",
+            "type": "afficheur",
+            "titre": "Paramètres de niveau 2",
+            "action": "Depuis PARAM 1, UP + DOWN environ 3 s. Même chose pour revenir à PARAM 1."
+          },
+          {
+            "code": "MAINT",
+            "type": "afficheur",
+            "titre": "Mode tests et maintenance",
+            "action": "Entrée : R + MOINS à la mise sous tension. Toutes les sorties sont au repos. Menu : ENTREES, SORTIES, TEST CEL, TEST AFF, CLAVIER, VER x.x (version du logiciel). Les graphcets de fonctionnement ne tournent pas dans ce mode."
+          },
+          {
+            "code": "VAL 3 s",
+            "type": "afficheur",
+            "titre": "Visualisation des entrées / sorties en fonctionnement",
+            "action": "En mode application, VAL maintenue environ 3 s affiche l'état des entrées et sorties ; un nouvel appui de 3 s revient à l'affichage des étapes du graphcet."
+          },
+          {
+            "code": "SECUMA",
+            "type": "diag",
+            "titre": "Entrée : cellules latérales et sécurités manivelle",
+            "action": "Chiffre de droite : état de l'entrée (0 / 1). Une étoile sur le 7e digit signale une entrée non valide dans la configuration courante."
+          },
+          {
+            "code": "CELINT",
+            "type": "diag",
+            "titre": "Entrée : cellule intérieure (barrage)",
+            "action": "État 0 / 1."
+          },
+          {
+            "code": "CELEXT",
+            "type": "diag",
+            "titre": "Entrée : cellule extérieure (barrage)",
+            "action": "État 0 / 1."
+          },
+          {
+            "code": "PALBAS",
+            "type": "diag",
+            "titre": "Entrée : palpeur bas",
+            "action": "État 0 / 1."
+          },
+          {
+            "code": "CELTAB",
+            "type": "diag",
+            "titre": "Entrée : cellules de sécurité champs / tabliers",
+            "action": "État 0 / 1."
+          },
+          {
+            "code": "FDCOM1 · FDCFM1",
+            "type": "diag",
+            "titre": "Fins de course ouverture / fermeture du moteur M1",
+            "action": "État 0 / 1."
+          },
+          {
+            "code": "FDCOM2 · FDCFM2",
+            "type": "diag",
+            "titre": "Fins de course ouverture / fermeture du moteur M2",
+            "action": "État 0 / 1 (étoile si M2 non utilisé)."
+          },
+          {
+            "code": "DEVFR",
+            "type": "diag",
+            "titre": "Entrée : déverrouillage frein",
+            "action": "État 0 / 1."
+          },
+          {
+            "code": "SUP",
+            "type": "diag",
+            "titre": "Entrée supplémentaire",
+            "action": "État 0 / 1."
+          },
+          {
+            "code": "CDEOUV",
+            "type": "diag",
+            "titre": "Entrée : commande d'ouverture",
+            "action": "État 0 / 1."
+          },
+          {
+            "code": "CAPT1 · CAPT2",
+            "type": "diag",
+            "titre": "Capteurs de rotation des moteurs M1 / M2",
+            "action": "État 0 / 1. Le paramètre « détection de rotation des moteurs » les utilise."
+          },
+          {
+            "code": "TEST CEL",
+            "type": "test",
+            "titre": "Test des cellules",
+            "action": "Commande la sortie test et lit l'entrée correspondante : TSECUM, TCELIN, TCELEX, TPALBA, TCELTA. Le chiffre de droite donne le résultat : 0 = mauvais, 1 = bon."
+          },
+          {
+            "code": "SORTIES",
+            "type": "test",
+            "titre": "Commande des sorties",
+            "action": "OUVM1, FERM1, OUVM2, FERM2 (moteurs), FREIN, MINUT (minuterie), ALARME, FO (feu orange clignotant), EZ (éclairage zone + commande relais). UP / DOWN : sortie suivante / précédente ; PLUS commande la sortie, MOINS l'arrête ; VAL retourne au menu. Étoile : sortie non valide dans la configuration."
+          },
+          {
+            "code": "TEST AFF",
+            "type": "test",
+            "titre": "Test de l'afficheur",
+            "action": "VAL exécute un chenillard sur les 14 segments et le point décimal des 8 caractères."
+          },
+          {
+            "code": "Marche forcée",
+            "type": "test",
+            "titre": "Marche forcée au clavier",
+            "action": "Flèche montante maintenue : ouvre. Flèche descendante maintenue : ferme. Sans test des cellules ni contrôle des capteurs de rotation, couple à 100 %. Acceptée seulement moteurs à l'arrêt ; à l'arrêt, retour en début de graphcet. Deux battants : décalage utilisé s'il est configuré."
+          }
+        ],
+        "parametres": {
+          "intro": "Deux niveaux. Les paramètres affichés dépendent du type de portail et sont sauvegardés séparément pour chaque type. Valeurs par défaut données dans l'ordre : 1 porte coulissante / 1 porte basculante / 1 ou 2 portes battantes.",
+          "navigation": [
+            "Niveau 1 : R + PLUS à la mise sous tension (PARAM 1). UP / DOWN : paramètre suivant ; PLUS / MOINS : modifier.",
+            "Niveau 2 : depuis PARAM 1, UP + DOWN environ 3 s (PARAM 2). Idem pour revenir.",
+            "Validation : maintenir R environ 3 s sur l'en-tête (PARAM 1 ou PARAM 2). La carte sauvegarde en flash puis redémarre.",
+            "Contradictions de la notice : elle annonce « 4 modes » mais n'en décrit que 3 (application, paramétrage, tests et maintenance), et elle nomme tantôt « R » tantôt « M/A » la touche de redémarrage."
+          ],
+          "groupes": [
+            {
+              "nom": "Niveau 1",
+              "items": [
+                {
+                  "code": "TYPE CV",
+                  "def": "0 (à régler)",
+                  "titre": "Type de portail",
+                  "valeurs": [
+                    [
+                      "1",
+                      "Une porte coulissante"
+                    ],
+                    [
+                      "2",
+                      "Une porte basculante"
+                    ],
+                    [
+                      "3",
+                      "Deux portes battantes"
+                    ],
+                    [
+                      "4",
+                      "Une porte battante"
+                    ]
+                  ],
+                  "note": "Sans ce réglage l'application ne démarre pas (message PORTAIL ?). Les libellés affichés dans les menus sont CV, DBM ou BT."
+                },
+                {
+                  "code": "PREAVIS1",
+                  "def": "1 / 1 / 1",
+                  "titre": "Préavis d'ouverture (3 s)",
+                  "valeurs": [
+                    [
+                      "0",
+                      "Sans préavis"
+                    ],
+                    [
+                      "1",
+                      "Avec préavis de 3 s"
+                    ]
+                  ]
+                },
+                {
+                  "code": "DECOUV 1",
+                  "def": "— / — / 1",
+                  "titre": "Décalage à l'ouverture (5 s)",
+                  "valeurs": [
+                    [
+                      "0",
+                      "Sans décalage"
+                    ],
+                    [
+                      "1",
+                      "Avec décalage de 5 s"
+                    ]
+                  ],
+                  "note": "Non valide sur une porte coulissante ou basculante."
+                },
+                {
+                  "code": "T.M1",
+                  "def": "60 / 30 / 25",
+                  "titre": "Temps de fonctionnement du moteur M1 (s)",
+                  "valeurs": [
+                    [
+                      "5 à 255",
+                      "Secondes"
+                    ]
+                  ]
+                },
+                {
+                  "code": "T.M2",
+                  "def": "— / — / 25",
+                  "titre": "Temps de fonctionnement du moteur M2 (s)",
+                  "valeurs": [
+                    [
+                      "5 à 255",
+                      "Secondes"
+                    ]
+                  ],
+                  "note": "Non valide pour un seul battant."
+                },
+                {
+                  "code": "DECFER",
+                  "def": "— / — / 10",
+                  "titre": "Temps de décalage à la fermeture (s)",
+                  "valeurs": [
+                    [
+                      "5 à 20",
+                      "Secondes"
+                    ]
+                  ]
+                },
+                {
+                  "code": "T.FER",
+                  "def": "6 / 6 / 6",
+                  "titre": "Temps de refermeture (s)",
+                  "valeurs": [
+                    [
+                      "0 à 30",
+                      "Secondes"
+                    ]
+                  ]
+                },
+                {
+                  "code": "(détection rotation)",
+                  "def": "1 / 0 / 1",
+                  "titre": "Détection de la rotation des moteurs",
+                  "valeurs": [
+                    [
+                      "0",
+                      "Sans"
+                    ],
+                    [
+                      "1",
+                      "Avec (capteurs CAPT1 / CAPT2)"
+                    ]
+                  ],
+                  "note": "Ce paramètre figure dans la liste de la notice mais pas dans la liste des menus affichés : son libellé à l'écran n'est pas donné."
+                },
+                {
+                  "code": "MODE",
+                  "def": "SEQ / SEQ / SEQ",
+                  "titre": "Mode de fonctionnement",
+                  "valeurs": [
+                    [
+                      "SEQ",
+                      "Séquentiel : fermeture après une impulsion sur la commande d'ouverture"
+                    ],
+                    [
+                      "AUT",
+                      "Automatique : fermeture après temporisation"
+                    ]
+                  ]
+                },
+                {
+                  "code": "T_PART",
+                  "def": "10 / 10 / —",
+                  "titre": "Temps d'ouverture partielle (s)",
+                  "valeurs": [
+                    [
+                      "1 à 100",
+                      "Secondes"
+                    ]
+                  ],
+                  "note": "Non valide pour les battants."
+                }
+              ]
+            },
+            {
+              "nom": "Niveau 2",
+              "items": [
+                {
+                  "code": "C.M1",
+                  "def": "8 % / 10 % / 5 %",
+                  "titre": "Couple du moteur M1",
+                  "valeurs": [
+                    [
+                      "1 à 10 %",
+                      "Pourcentage"
+                    ]
+                  ]
+                },
+                {
+                  "code": "C.M2",
+                  "def": "— / — / 5 %",
+                  "titre": "Couple du moteur M2",
+                  "valeurs": [
+                    [
+                      "1 à 10 %",
+                      "Pourcentage"
+                    ]
+                  ],
+                  "note": "Non valide pour un seul battant."
+                }
+              ]
+            }
+          ]
+        },
+        "bornier": {
+          "groupes": [
+            {
+              "nom": "JA et J1 — alimentation et feux",
+              "bornes": [
+                {
+                  "n": "JA 1 · 2 · 3",
+                  "label": "Alimentation 220 V",
+                  "desc": "Phase, Terre, Neutre (50 Hz). Fusibles F1 = 500 mA, F2 = 4 A.",
+                  "t": "alim"
+                },
+                {
+                  "n": "J1 1 · 2",
+                  "label": "Feu clignotant",
+                  "desc": "220 V, 15 W.",
+                  "t": "sortie"
+                },
+                {
+                  "n": "J1 3 · 4",
+                  "label": "Feu blanc",
+                  "desc": "220 V, 15 W.",
+                  "t": "sortie"
+                }
+              ]
+            },
+            {
+              "nom": "J2 — contacts secs",
+              "bornes": [
+                {
+                  "n": "J2 1 · 2 · 3",
+                  "label": "Alarme",
+                  "desc": "Contact sec NC · commun · NO.",
+                  "t": "sortie"
+                },
+                {
+                  "n": "J2 4 · 5 · 6",
+                  "label": "Minuterie",
+                  "desc": "Contact sec NC · commun · NO.",
+                  "t": "sortie"
+                }
+              ]
+            },
+            {
+              "nom": "J3 — cellules",
+              "bornes": [
+                {
+                  "n": "J3 5 à 8",
+                  "label": "Cellule intérieure",
+                  "desc": "Plan de la 5e page de la notice (non numéroté, voir l'onglet Schéma) : cellules Carlo Gavazzi.",
+                  "t": "nf"
+                },
+                {
+                  "n": "J3 9 à 12",
+                  "label": "Cellule extérieure",
+                  "desc": "Idem (plan de la 5e page). Le plan 2-1 montre un amplificateur Carlo Gavazzi MPF3-912RSL raccordé sur J3 (bornes 10-11-12) : c'est lui qui précise de monter les cellules alternées.",
+                  "t": "nf"
+                }
+              ]
+            },
+            {
+              "nom": "J4 — palpeur, cellules champs, antenne",
+              "bornes": [
+                {
+                  "n": "J4 1 à 4",
+                  "label": "Palpeur bas",
+                  "desc": "Plan 3-1 (fils blanc, marron, noir, bleu).",
+                  "t": "nf"
+                },
+                {
+                  "n": "J4 5 à 8",
+                  "label": "Cellules champs",
+                  "desc": "Plan 4-1 : cellules latérales.",
+                  "t": "nf"
+                },
+                {
+                  "n": "J4 11 · 12",
+                  "label": "Antenne",
+                  "desc": "11 = blindage, 12 = point central.",
+                  "t": "autre"
+                }
+              ]
+            },
+            {
+              "nom": "J5 — fins de course",
+              "bornes": [
+                {
+                  "n": "J5 4 · 5 · 6",
+                  "label": "Fin de course",
+                  "desc": "4 = ouverture, 5 = commun, 6 = fermeture.",
+                  "t": "nf"
+                }
+              ]
+            },
+            {
+              "nom": "J6 — commande et alimentations",
+              "bornes": [
+                {
+                  "n": "J6 1 · 2",
+                  "label": "Commande d'ouverture",
+                  "desc": "Contact E (bouton / clé).",
+                  "t": "no"
+                },
+                {
+                  "n": "J6 5 · 6",
+                  "label": "Alim. 24 V AC",
+                  "desc": "500 mA.",
+                  "t": "alim"
+                },
+                {
+                  "n": "J6 7 · 8",
+                  "label": "Alim. 24 V DC",
+                  "desc": "500 mA.",
+                  "t": "alim"
+                }
+              ]
+            }
+          ],
+          "fusibles": "F1 = 500 mA · F2 = 4 A (carte LF82). Moteur(s) : alimentés par le variateur de vitesse Telemecanique (voir la note et le plan du variateur).",
+          "notes": [
+            "Plan 1-1 (21/11/2005) : les positions des repères (palpeur, cellules, antenne, fins de course) sont lues sur le plan ; les bornes J1 5 à 12 et les autres bornes ne sont pas légendées : consulter l'onglet Schéma.",
+            "Variateur Telemecanique (plan du 21/11/2005) : U, V, W vont au bornier moteur ; DO va au relais R1 (borne 1) ; +15 va au relais (borne 5) et aussi au connecteur J9 ; li1 et li2 vont au connecteur J9 (d'après le dessin : J9 5 = li1, 6 = +15, 7 = li2, lecture du dessin à confirmer sur la carte) ; les bornes 11 et 12 du relais vont à J3. Le plan 1-1 montre aussi un contact « Secu manivelle » relié à ce relais (vers les bornes « +15 V » et « DO » du variateur)."
+          ]
+        },
+        "apprentissage": {
+          "avant": [
+            "Pas d'apprentissage : les temps sont réglés à la main (T.M1, T.M2, T.FER…).",
+            "Premier démarrage : si l'afficheur donne PORTAIL ?, régler d'abord le type de portail (PARAM 1 › TYPE CV)."
+          ],
+          "etapes": [
+            "Mode séquentiel : le portail se ferme sur impulsion de la commande d'ouverture. Mode automatique : il se ferme après temporisation (paramètre MODE).",
+            "Marche forcée possible au clavier (flèches haut / bas maintenues) sans test des cellules : à réserver au dépannage."
+          ],
+          "apres": [
+            "Les paramètres sont conservés pour chaque type de portail : changer de type ne perd pas les réglages des autres types."
+          ]
+        }
+      }
   ]
 }
 ];

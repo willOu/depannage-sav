@@ -62,6 +62,26 @@
       S("afca-c4r-p06", "Implantation de la platine", 6, "Fusibles F1 F2 F3, connecteurs REC1 H1 H2 H3, boutons BP1 à BP3, potentiomètre P1."),
       S("afca-c4r-p07", "Raccordement des accessoires", 7, "Bornier complet 1 à 41, propriétés des bornes, cellules, barres palpeuses, commandes.")
     ],
+    "faac-780d": [
+      S("faac-780d-p40", "Platine 780D : composants et bornier J1", 40, "Implantation de la platine (afficheur, touches F / + / −, connecteurs J1 à J8, fusibles F1 / F2), caractéristiques et liste des bornes de J1.")
+    ],
+    "faac-455d": [
+      S("faac-455d-p24", "Platine 455 D : implantation et connexions", 24, "Vue de la platine (afficheur, touches, J1 à J6, F1 / F2), caractéristiques, connexions moteurs, clignotant, accessoires et fins de course."),
+      S("faac-455d-p25", "Photocellules et dispositifs de sécurité", 25, "Schémas de raccordement des photocellules et sécurités en ouverture / fermeture (fig. 3 à 7).")
+    ],
+    "faac-e024s": [
+      S("faac-e024s-p04", "E024S : implantation et connexions", 4, "Vue de la platine : touches SW1 à SW3, LED LD4 à LD8, dip DS1, connecteurs J1 à J11, câblage moteurs."),
+      S("faac-e024s-p06", "Caractéristiques et description des bornes", 6, "Tableau technique, liste des composants et description des borniers J5, J10, J2, J3, J4, J7, J8.")
+    ],
+    "nice-robus-r10": [
+      S("nice-robus-r10-p10", "Types de câbles et description des branchements", 10, "Tableaux des câbles électriques (longueurs maxi) et description des bornes FLASH, OGI, BLUEBUS, STOP, Sbs, OPEN, CLOSE, AUX_IN, AERIAL."),
+      S("nice-robus-r10-p11", "Schéma des branchements (fig. 7)", 11, "Implantation de la logique : bornes, LED, touches L1…L8, fusible 1,6 AT, récepteur radio et sélecteur.")
+    ],
+    "doitrand-lf82": [
+      S("doitrand-lf82-p1", "Carte LF82 : bornier et raccordements", 1, "Plan 1-1 (21/11/2005) : alimentation, feux, contacts secs, cellules, palpeur, antenne, fins de course, commande d'ouverture, alimentations 24 V."),
+      S("doitrand-lf82-p5", "Raccordement des cellules intérieure et extérieure", 5, "Plan du 27/05/2005 : bornier J3, cellules Carlo Gavazzi."),
+      S("doitrand-lf82-p6", "Câblage du variateur Telemecanique", 6, "Plan du 21/11/2005 : alimentation, variateur, bornier moteur, relais 12 V et carte LF82.")
+    ],
     "afca-starteco4-contacteurs": [
       S("afca-c4-p03", "Alimentation de la carte", 3, "Alimentation 400 V tri ou 230 V, moteur sur U V W, condensateur, pont de sélection de tension."),
       S("afca-c4-p05", "Raccordement de la platine", 5, "Bornier complet avec les entrées IN1 à IN11 et la liste des bornes."),
