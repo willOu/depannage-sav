@@ -20,7 +20,7 @@ const CHANGELOG = [
     "Nouvelle marque La Barrière Automatique : LBA 6 / 6R / 63PK / 7 / 7R / 74 (automate Siemens LOGO + variateur Unidrive), LBA 4 (platine ENPC001652, dip-switches SW1), LBA 12 (lisse 3 à 12 m) et carte ONE-C (logiques capteurs inductifs et capteur angulaire, Modbus, codes moteur 106 / 107).",
     "Pour chaque fiche : pannes et remèdes de la notice, paramètres du variateur (00.003, 00.011, 00.022…) et de l'automate avec leurs valeurs d'usine, bornier façade et interne, réglage des capteurs, butées et compensation, ouverture manuelle, sauvegarde SD.",
     "Onglet Schéma : schémas de câblage ELKA (alimentation, sorties, moteur BLDC, boucles, entrées, relais), schémas LBA 4 / 6 / 7 et tableau SW1.",
-    "Valeurs d'usine non fournies par la notice (variateur LBA, sensibilités ELKA P601 à P603) : affichées « — ». Incohérences relevées dans les notices signalées en note (coquille « MO 64 », bornes 42 / 44, plages P2 de la LBA 4)."
+    "Valeurs d'usine non fournies par la notice (variateur LBA, sensibilités ELKA P601 à P603) : affichées « — ». Incohérences relevées dans les notices signalées en note (coquille « MO 64 », P401, P536, bornes 42 / 44, plages P2 de la LBA 4)."
   ], docs: [
     "ELKA P 2500 – P 5000 (parties 1 et 2, V2.0)", "ELKA T 3000 – T 3500 (parties 1 et 2)", "La Barrière Automatique LBA 4 / 6 / 7 (2017)", "La Barrière Automatique LBA 12", "ONE-C (COAT015196-C, indice I, et ancienne notice)", "Siemens LOGO (carte tourniquet)"
   ] },
@@ -30965,7 +30965,7 @@ const MARQUES = [
           "code": "eR07",
           "type": "erreur",
           "titre": "Test des cellules en échec",
-          "action": "Une erreur est survenue pendant la première phase du test (l'émetteur est coupé et le récepteur ne signale pas d'obstacle dans les 2,5 s) : cellule défectueuse. Contrôler les cellules, la commande de leur alimentation (relais multifonction réglé sur « test des cellules ») et les résistances de 1 kΩ en parallèle des contacts."
+          "action": "Une erreur est survenue pendant la première phase du test (l'émetteur est coupé et le récepteur ne signale pas d'obstacle dans les 2,5 s) : cellule défectueuse. Contrôler les cellules (voir P544 pour le principe du test)."
         },
         {
           "code": "eR08",
@@ -31181,13 +31181,13 @@ const MARQUES = [
           "code": "Barrière sans réaction",
           "type": "symptome",
           "titre": "À la mise en service, rien ne bouge",
-          "action": "Contrôler que le commutateur de service est sur RUN (en SERVICE, seuls le joystick et la manœuvre manuelle fonctionnent : radio, BUS, boucles et commandes externes sont ignorés). Contrôler les LED Vp, Bm., BTS (et NAE) allumées. Les entrées LS (23-24), lisse dégondée (25-26), BTZ2 (41-42), BTS (43-44) doivent porter un contact à ouverture ou un pont, et la SLZ (21-22) une résistance de 8,2 kΩ."
+          "action": "Contrôler que le commutateur de service est sur RUN (en SERVICE, seul le joystick fonctionne : radio, BUS, boucles et commandes externes sont ignorés). Contrôler les LED Vp, Bm., BTS (et NAE) allumées. Les entrées LS (23-24), lisse dégondée (25-26), BTZ2 (41-42), BTS (43-44) doivent porter un contact à ouverture ou un pont, et la SLZ (21-22) une résistance de 8,2 kΩ."
         },
         {
           "code": "Ne ferme pas",
           "type": "symptome",
           "titre": "La barrière ne se ferme pas",
-          "action": "Les sécurités bloquent la fermeture : SLZ activée, cellules (LS ouvert), boucle de sécurité occupée, BTZ1A / BTZ1B maintenu fermé en position fermée (verrouillage), commande d'ouverture BTA1 / BTA2 maintenue. Regarder les LED correspondantes. Vérifier aussi P543 / P545 selon la réaction voulue."
+          "action": "Les sécurités bloquent la fermeture : SLZ activée, cellules (LS ouvert), boucle de sécurité occupée, commande d'ouverture BTA1 / BTA2 maintenue. Regarder les LED correspondantes. Vérifier aussi P543 / P545 selon la réaction voulue."
         },
         {
           "code": "S'ouvre seule après coupure",
@@ -31445,11 +31445,11 @@ const MARQUES = [
                 "titre": "Intervalle de maintenance",
                 "valeurs": [
                   [
-                    "1000 à 9 999 000",
-                    "À régler en milliers de mouvements (valeur × 1000)"
+                    "1000 à 9999000",
+                    "Valeur à multiplier par 1000"
                   ]
                 ],
-                "note": "La logique a aussi un compteur d'heures de service lisible par le BUS."
+                "note": "La notice écrit « 1000 à 9999000 multiplié par 1000 » ce qui est incohérent avec la valeur d'usine 250 : plage ambiguë dans la notice. La logique a aussi un compteur d'heures de service lisible par le BUS."
               },
               {
                 "code": "P402",
@@ -31606,7 +31606,7 @@ const MARQUES = [
                   ],
                   [
                     "34",
-                    "Avertisseur sonore UL 325 : actif 5 min après une coupure de force à l'ouverture / fermeture ou une détection LS / SLZ à la fermeture"
+                    "Avertisseur sonore UL 325 : actif 5 min après une coupure de force (précédée d'une détection d'obstacle : augmentation de force à l'ouverture ou à la fermeture, ou LS / SLZ à la fermeture)"
                   ]
                 ],
                 "note": "Même liste de modes pour P502 à P506 et P560 à P567. Les relais sont indépendants : plusieurs peuvent avoir la même fonction. Contact libre de potentiel, 24 V / 1 A."
@@ -32065,7 +32065,8 @@ const MARQUES = [
                     "2",
                     "Clignotement"
                   ]
-                ]
+                ],
+                "note": "Le tableau 14 de la notice donne « en service » pour P536 alors que le tableau des réglages d'usine donne 0 : valeur du tableau d'usine affichée."
               }
             ]
           },
@@ -32283,7 +32284,7 @@ const MARQUES = [
             "items": [
               {
                 "code": "DIP 1 · 2 · 3",
-                "def": "OFF",
+                "def": "—",
                 "titre": "Fréquence des boucles A · B · C",
                 "valeurs": [
                   [
@@ -32696,7 +32697,7 @@ const MARQUES = [
               {
                 "n": "Secteur",
                 "label": "Alimentation 100-240 V, 50-60 Hz",
-                "desc": "Câble d'alimentation vers l'interrupteur marche / arrêt et la borne de terre ; fixer le câble avec les éclisses prévues. La logique est alimentée en 24 V DC par un bloc à découpage (courant absorbé max. 1,4 A à 230 V). Prévoir sectionneur / disjoncteur verrouillable, 2 pôles.",
+                "desc": "Câble d'alimentation vers l'interrupteur principal et la borne de terre ; fixer le câble avec les serre-câbles prévus. La logique est alimentée en 24 V DC par un bloc à découpage (RSP320-24).",
                 "t": "alim"
               },
               {
@@ -32858,7 +32859,7 @@ const MARQUES = [
         "notes": [
           "Longueur maximale du câble pour BT, BTS, BTA1, BTA2, BTZ1A, BTZ2, LS, SLZ : 30 m ; au-delà de 20 m, prévoir des modules parafoudre.",
           "Après installation de tous les éléments, doivent briller : Vp (tension de service), BTZ2, BTS et Bm.",
-          "Une platine d'extension de 8 relais multifonctions supplémentaires (Multi7 à Multi14) existe en option (voir son manuel). Maintenir la barrière alimentée : contrôler le facteur de service 100 %, IP 54, température -30 à +50 °C."
+          "Une platine d'extension de 8 relais multifonctions supplémentaires (Multi7 à Multi14) existe en option (voir son manuel)."
         ]
       },
       "apprentissage": {
@@ -32931,7 +32932,7 @@ const MARQUES = [
           "code": "eR07",
           "type": "erreur",
           "titre": "Test des cellules en échec",
-          "action": "Une erreur est survenue pendant la première phase du test (l'émetteur est coupé et le récepteur ne signale pas d'obstacle dans les 2,5 s) : cellule défectueuse. Contrôler les cellules, la commande de leur alimentation (relais multifonction réglé sur « test des cellules ») et les résistances de 1 kΩ en parallèle des contacts."
+          "action": "Une erreur est survenue pendant la première phase du test (l'émetteur est coupé et le récepteur ne signale pas d'obstacle dans les 2,5 s) : cellule défectueuse. Contrôler les cellules (voir P544 pour le principe du test)."
         },
         {
           "code": "eR08",
@@ -33147,13 +33148,13 @@ const MARQUES = [
           "code": "Barrière sans réaction",
           "type": "symptome",
           "titre": "À la mise en service, rien ne bouge",
-          "action": "Contrôler que le commutateur de service est sur RUN (en SERVICE, seuls le joystick et la manœuvre manuelle fonctionnent : radio, BUS, boucles et commandes externes sont ignorés). Contrôler les LED Vp, Bm., BTS (et NAE) allumées. Les entrées LS (23-24), lisse dégondée (25-26), BTZ2 (41-42), BTS (43-44) doivent porter un contact à ouverture ou un pont, et la SLZ (21-22) une résistance de 8,2 kΩ."
+          "action": "Contrôler que le commutateur de service est sur RUN (en SERVICE, seul le joystick fonctionne : radio, BUS, boucles et commandes externes sont ignorés). Contrôler les LED Vp, Bm., BTS (et NAE) allumées. Les entrées LS (23-24), lisse dégondée (25-26), BTZ2 (41-42), BTS (43-44) doivent porter un contact à ouverture ou un pont, et la SLZ (21-22) une résistance de 8,2 kΩ."
         },
         {
           "code": "Ne ferme pas",
           "type": "symptome",
           "titre": "La barrière ne se ferme pas",
-          "action": "Les sécurités bloquent la fermeture : SLZ activée, cellules (LS ouvert), boucle de sécurité occupée, BTZ1A / BTZ1B maintenu fermé en position fermée (verrouillage), commande d'ouverture BTA1 / BTA2 maintenue. Regarder les LED correspondantes. Vérifier aussi P543 / P545 selon la réaction voulue."
+          "action": "Les sécurités bloquent la fermeture : SLZ activée, cellules (LS ouvert), boucle de sécurité occupée, commande d'ouverture BTA1 / BTA2 maintenue. Regarder les LED correspondantes. Vérifier aussi P543 / P545 selon la réaction voulue."
         },
         {
           "code": "S'ouvre seule après coupure",
@@ -33407,11 +33408,11 @@ const MARQUES = [
                 "titre": "Intervalle de maintenance",
                 "valeurs": [
                   [
-                    "1000 à 9 999 000",
-                    "À régler en milliers de mouvements (valeur × 1000)"
+                    "1000 à 9999000",
+                    "Valeur à multiplier par 1000"
                   ]
                 ],
-                "note": "La logique a aussi un compteur d'heures de service lisible par le BUS."
+                "note": "La notice écrit « 1000 à 9999000 multiplié par 1000 » ce qui est incohérent avec la valeur d'usine 250 : plage ambiguë dans la notice. La logique a aussi un compteur d'heures de service lisible par le BUS."
               },
               {
                 "code": "P402",
@@ -33568,7 +33569,7 @@ const MARQUES = [
                   ],
                   [
                     "34",
-                    "Avertisseur sonore UL 325 : actif 5 min après une coupure de force à l'ouverture / fermeture ou une détection LS / SLZ à la fermeture"
+                    "Avertisseur sonore UL 325 : actif 5 min après une coupure de force (précédée d'une détection d'obstacle : augmentation de force à l'ouverture ou à la fermeture, ou LS / SLZ à la fermeture)"
                   ]
                 ],
                 "note": "Même liste de modes pour P502 à P506 et P560 à P567. Les relais sont indépendants : plusieurs peuvent avoir la même fonction. Contact libre de potentiel, 24 V / 1 A."
@@ -34027,7 +34028,8 @@ const MARQUES = [
                     "2",
                     "Clignotement"
                   ]
-                ]
+                ],
+                "note": "Le tableau 14 de la notice donne « en service » pour P536 alors que le tableau des réglages d'usine donne 0 : valeur du tableau d'usine affichée."
               }
             ]
           },
@@ -34233,7 +34235,7 @@ const MARQUES = [
             "items": [
               {
                 "code": "DIP 1 · 2 · 3",
-                "def": "OFF",
+                "def": "—",
                 "titre": "Fréquence des boucles A · B · C",
                 "valeurs": [
                   [
@@ -34646,7 +34648,7 @@ const MARQUES = [
               {
                 "n": "Secteur",
                 "label": "Alimentation 100-240 V, 50-60 Hz",
-                "desc": "Câble d'alimentation vers l'interrupteur marche / arrêt et la borne de terre ; fixer le câble avec les éclisses prévues. La logique est alimentée en 24 V DC par un bloc à découpage (courant absorbé max. 1,4 A à 230 V). Prévoir sectionneur / disjoncteur verrouillable, 2 pôles.",
+                "desc": "Câble d'alimentation vers l'interrupteur principal et la borne de terre ; fixer le câble avec les serre-câbles prévus. La logique est alimentée en 24 V DC par un bloc à découpage (RSP320-24).",
                 "t": "alim"
               },
               {
@@ -34806,7 +34808,6 @@ const MARQUES = [
           }
         ],
         "notes": [
-          "Longueur maximale du câble pour BT, BTS, BTA1, BTA2, BTZ1A, BTZ2, LS, SLZ : 30 m ; au-delà de 20 m, prévoir des modules parafoudre.",
           "Après installation de tous les éléments, doivent briller : Vp (tension de service), BTZ2, BTS et Bm.",
           "Une platine d'extension de 8 relais multifonctions supplémentaires (Multi7 à Multi14) existe en option (voir son manuel). Consommation maxi 210 W (T 3000) / 180 W (T 3500) ; vitesse standard 0,9 s / 1,3 s, rapide 0,6 s / 0,9 s."
         ]
@@ -35294,7 +35295,8 @@ const MARQUES = [
         "notes": [
           "Les commandes d'ouverture et de fermeture sont des contacts secs NO sous forme d'impulsions. Les boucles magnétiques se raccordent directement sur leurs détecteurs (connecteurs repérés S sécurité, O ouverture, P présence), sans passer par le bornier.",
           "Alimenter la barrière dès l'installation pour éviter la condensation à l'intérieur.",
-          "Notice : le dépannage cite « un shunt entre les bornes 42 et 44 » sans cellule IR, alors que le bornier façade s'arrête à 29 : se reporter au schéma (borniers 002BN) et au câblage réel."
+          "Notice : le dépannage cite « un shunt entre les bornes 42 et 44 » sans cellule IR, alors que le bornier façade s'arrête à 29 : se reporter au schéma (borniers 002BN) et au câblage réel.",
+          "La notice « Siemens LOGO » fournie sous le nom « carte tourniquet » décrit en réalité l'automate de ces barrières (mêmes écrans, programme PROG007180) : les paramètres ci-dessus en sont tirés."
         ]
       },
       "apprentissage": {
@@ -35642,7 +35644,7 @@ const MARQUES = [
         ],
         "fusibles": "F1 : 1 A temporisé HPC (haut pouvoir de coupure, 1500 A mini), protège le primaire du transformateur et la sortie chauffage. F2 : 2 A temporisé, protège la sortie 24 Vdc.",
         "notes": [
-          "Les bornes de la LBA 4 ne suivent pas la numérotation façade des LBA 6 / 7 : suivre le tableau ci-dessus et le schéma de la page 59 de la notice. Les bornes n'apparaissant pas ici (11, 17 et suivantes) ne sont pas décrites dans la notice.",
+          "Les bornes de la LBA 4 ne suivent pas la numérotation façade des LBA 6 / 7. Le texte de la notice ne décrit que les paires ci-dessus ; le schéma de la page 59 (onglet Schéma) repère d'autres bornes (dont 01-02 arrêt d'urgence, 17-18, 19-20 et 21 à 23 moteur) : s'y reporter.",
           "Le bornier de la notice §8 est celui des LBA 6 / 7 ; la LBA 4 a une numérotation propre (3-4 ouverture, 15-16 alimentation 24 Vdc)."
         ]
       },
@@ -35674,26 +35676,98 @@ const MARQUES = [
         {
           "code": "inh",
           "type": "diag",
-          "titre": "Variateur prêt, entraînement inhibé",
-          "action": "Indication affichée quand le variateur est prêt et que les paramètres ne sont ni modifiés ni affichés : « inh », « rdy » ou la valeur du paramètre du mode État."
+          "titre": "Variateur verrouillé",
+          "action": "Le variateur est verrouillé et ne peut pas être mis en marche : signal de déverrouillage non appliqué à la borne de déverrouillage ou Pr 06.015 réglé sur 0. Autres conditions possibles reportées dans « Validation des conditions » (06.010). Sortie du variateur désactivée."
         },
         {
           "code": "rdy",
           "type": "diag",
-          "titre": "Variateur prêt",
-          "action": "Idem : variateur prêt, en attente d'ordre de marche."
+          "titre": "Variateur prêt pour la mise en marche",
+          "action": "Le déverrouillage est actif mais l'onduleur n'est pas actif parce que le signal de marche final n'est pas actif. Sortie désactivée."
         },
         {
-          "code": "Mise en sécurité",
+          "code": "Arrêt",
           "type": "diag",
-          "titre": "Variateur déclenché (Er.xxx)",
-          "action": "En mise en sécurité, l'afficheur indique que le variateur a déclenché et affiche le code (ex. « Er. OU »). Les codes ne sont pas listés dans cette notice."
+          "titre": "Variateur arrêté / maintien à vitesse nulle",
+          "action": "Sortie du variateur activée."
         },
         {
-          "code": "Alarme",
+          "code": "S.Loss",
           "type": "diag",
-          "titre": "Alarme variateur (clignotement)",
-          "action": "En condition d'alarme, l'afficheur clignote en alternant la valeur du paramètre du mode État et l'alarme (ex. « d.OU.Ld »). Codes non listés dans la notice."
+          "titre": "Perte d'alimentation détectée",
+          "action": "Sortie du variateur activée."
+        },
+        {
+          "code": "dc inj",
+          "type": "diag",
+          "titre": "Freinage par injection de courant DC",
+          "action": "Sortie du variateur activée."
+        },
+        {
+          "code": "Er",
+          "type": "diag",
+          "titre": "Mise en sécurité du variateur",
+          "action": "Le variateur a déclenché une sécurité et ne contrôle plus le moteur ; le code de mise en sécurité (Er.xxx) s'affiche. Les codes individuels ne sont pas listés dans cette notice."
+        },
+        {
+          "code": "UV",
+          "type": "diag",
+          "titre": "Sous-tension",
+          "action": "Le variateur est en état de sous-tension, en mode basse ou haute tension."
+        },
+        {
+          "code": "br.res",
+          "type": "diag",
+          "titre": "Alarme : surcharge de la résistance de freinage",
+          "action": "L'accumulateur thermique de la résistance de freinage (10.039) a atteint 75,0 % de la valeur de mise en sécurité."
+        },
+        {
+          "code": "OV.Ld",
+          "type": "diag",
+          "titre": "Alarme : surcharge du moteur",
+          "action": "L'accumulateur de protection du moteur (04.019) a atteint 75,0 % de la valeur de mise en sécurité et la charge est supérieure à 100 %."
+        },
+        {
+          "code": "d.OV.Ld",
+          "type": "diag",
+          "titre": "Alarme : surchauffe du variateur",
+          "action": "Le pourcentage du niveau de mise en sécurité thermique du variateur (07.036) est supérieur à 90 %."
+        },
+        {
+          "code": "tuning",
+          "type": "diag",
+          "titre": "Alarme : autocalibrage en cours",
+          "action": "L'autocalibrage a été initialisé et est en cours."
+        },
+        {
+          "code": "LS",
+          "type": "diag",
+          "titre": "Alarme : contact de fin de course activé",
+          "action": "Un contact de fin de course est activé et provoque l'arrêt du moteur."
+        },
+        {
+          "code": "Opt.AI",
+          "type": "diag",
+          "titre": "Alarme de l'emplacement de l'option",
+          "action": "—"
+        },
+        {
+          "code": "Lo.AC",
+          "type": "diag",
+          "titre": "Alarme : mode basse tension",
+          "action": "Voir Alarme AC bas (10.107)."
+        },
+        {
+          "code": "I.AC.Lt",
+          "type": "diag",
+          "titre": "Alarme : limite de courant activée",
+          "action": "Voir Limite de courant activée (10.009)."
+        },
+        {
+          "code": "Alarme (clignotement)",
+          "type": "diag",
+          "titre": "Affichage d'une alarme",
+          "action": "En condition d'alarme, l'afficheur clignote en alternant la valeur du paramètre du mode État et l'alarme."
         },
         {
           "code": "Autocalibrage",
@@ -35974,7 +36048,7 @@ const MARQUES = [
         ],
         "notes": [
           "La notice LBA 12 ne contient pas de schéma de bornier (renvoi à un schéma électrique non fourni dans le PDF) : le câblage des bornes n'est donc pas détaillé ici.",
-          "La notice ne liste pas les codes d'erreur du variateur : se reporter à la documentation du variateur."
+          "Les codes individuels de mise en sécurité (Er.xxx) ne sont pas listés dans la notice : se reporter à la documentation du variateur."
         ]
       },
       "apprentissage": {
@@ -36068,7 +36142,7 @@ const MARQUES = [
           "code": "Moteur en défaut · code 107",
           "type": "erreur",
           "titre": "Surchauffe du module IGBT",
-          "action": "Laisser refroidir ; vérifier l'environnement et la charge."
+          "action": "Description de la notice."
         },
         {
           "code": "Moteur en défaut · autre code",
