@@ -132,6 +132,114 @@ const DIAG = [
         ["Non", R("Fonction de la sortie", "La sortie n'est pas activée.", ["Vérifier la fonction programmée pour cette sortie (clignotant, lampe cycle, accueil) dans la fiche.", "Contrôler le fusible des accessoires.", "Sinon, sortie de carte défectueuse."], [FICHES])]
       ])],
       ["Le voyant portail ouvert", R("Voyant de signalisation", "Sortie voyant.", ["Vérifier la fonction programmée pour cette sortie dans la fiche (voyant fixe, clignotant, serrure).", "Contrôler la puissance de la lampe (24 V, quelques watts) et son câblage."], [FICHES])]
+    ]) },
+  /* ---------- Barrières levantes : réponses tirées des notices ELKA, LBA et ONE-C ---------- */
+  { id: "b-ouvre", groupe: "b", titre: "La barrière ne s'ouvre pas", sous: "ELKA, LBA, ONE-C",
+    arbre: Q("Quelle commande équipe la barrière ?", [
+      ["ELKA (logique MO 24, afficheur 4 chiffres)", Q("L'afficheur montre-t-il un code eR.. ?", [
+        ["Oui, un code eR..", R("Code d'erreur de la logique MO 24", "La logique signale elle-même sa panne.", [
+          "Relever le code et l'ouvrir dans l'onglet Codes de la fiche ELKA.",
+          "Exemples de la notice : eR15 = tension 24 V hors plage ou accu déchargé ; eR14 = partie puissance trop chaude (attendre le refroidissement) ; eR16 = lisse manœuvrée à la main sur plus de 50 % (PROG, coupure secteur ou remise de la lisse en place pour effacer)."
+        ], [["Fiche ELKA P 2500 – P 5000 : codes", "#/c/elka-p2500-5000/codes"], ["Fiche ELKA T 3000 – T 3500 : codes", "#/c/elka-t3000-3500/codes"]])],
+        ["Non, rien d'affiché ou pas de réaction", R("Logique à l'arrêt ou commande non reçue", "Pas de code : vérifier le mode de service, l'alimentation et les entrées.", [
+          "Commutateur de service sur RUN : en SERVICE, radio, BUS, boucles et commandes externes sont ignorés (seul le joystick agit).",
+          "LED Vp (jaune) allumée ? Sinon contrôler l'alimentation (interrupteur principal, bloc 24 V).",
+          "LED BTS allumée ? BTS (43-44) est un contact à ouverture : sans bouton STOP, un pont est obligatoire.",
+          "Donner l'ordre et regarder la LED de l'entrée (BTA1, BTA2, BT*, RADIO) : si elle ne s'allume pas, le défaut est sur la commande ou son câblage.",
+          "En position fermée, BTZ1A / BTZ1B maintenu fermé empêche l'ouverture (verrouillage)."
+        ], [["Fiche ELKA P : bornier", "#/c/elka-p2500-5000/bornier"], ["Fiche ELKA T : bornier", "#/c/elka-t3000-3500/bornier"]])]
+      ])],
+      ["LBA 6 / 7 ou LBA 12 (automate Siemens LOGO)", R("Commande non reçue, variateur en défaut ou mécanique", "Tableau « Pannes et réglages fréquents » de la notice LBA 4/6/7. La notice LBA 12 n'a pas de tableau de pannes, mais utilise le même automate et le même principe de manivelle.", [
+        "Regarder l'état des entrées de l'automate (flèches gauche / droite depuis l'écran date et heure) : la commande d'ouverture arrive-t-elle ?",
+        "Vérifier le câblage de la commande d'ouverture (ou de la boucle d'ouverture libre).",
+        "Un message s'affiche sur le variateur ? Le lire dans l'onglet Codes de la fiche (FAN.F, It.Ac, O.Ld1…).",
+        "Manivelle bien remise à sa place sur le côté de la platine : son contacteur coupe l'alimentation de la carte.",
+        "Impossible d'ouvrir même hors tension : réducteur cassé, contacter le SAV LBA (remplacement de l'ensemble motoréducteur)."
+      ], [["Fiche LBA 6 / 7 : codes", "#/c/lba-67/codes"], ["Fiche LBA 12 : codes", "#/c/lba-12/codes"]])],
+      ["LBA 4 (platine ENPC001652)", R("Contrôle par les LED de la platine", "Notice LBA 4, §9.7 et §12.3.", [
+        "LED Cde1 : elle doit s'allumer à l'ordre d'ouverture (contact 3-4 ou radio). Sinon, défaut sur la commande ou son câblage.",
+        "LED Tension électronique éteinte : contrôler l'alimentation 230 V et le fusible F1 (1 A temporisé HPC).",
+        "LED Alarme allumée : temps de manœuvre trop long (anti-patinage), transformateur en surcharge ou sécurité active plus de 2 minutes.",
+        "Message sur le variateur : voir l'onglet Codes. Vérifier aussi que la manivelle est remise en place."
+      ], [["Fiche LBA 4 : codes et LED", "#/c/lba-4/codes"]])],
+      ["Carte ONE-C (écran 4 lignes)", R("Lire le message de la dernière ligne", "Messages d'état et de mise en sécurité de la notice ONE-C.", [
+        "« MANIVELLE ABSENTE » : remettre la manivelle dans son logement (le moteur est coupé).",
+        "« Temps de manœuvre dépassé » : le pilotage moteur est coupé, un reset de la barrière est nécessaire (temps réglé par T_manoeuvre, 30 s par défaut).",
+        "« Moteur en défaut », code 106 : moteur débranché, court-circuit sur les phases ou mauvaise configuration du moteur. Code 107 : surchauffe du module IGBT. Autre code : SAV.",
+        "Rien de particulier : ENTER maintenu 2 s affiche les entrées ; l'entrée I1 (ouverture) doit passer à 1 à l'ordre. Commande locale : touche ▲."
+      ], [["Fiche ONE-C : codes", "#/c/lba-one-c/codes"]])],
+      ["Autre armoire", R("Utiliser le diagnostic général", "Les étapes d'alimentation, de commande et de sécurités sont les mêmes que pour un portail.", [
+        "Suivre « Le portail ne s'ouvre pas » et ouvrir la fiche de l'armoire (par exemple DEA NET230N type 03 barrière)."
+      ], [["Diagnostic : ne s'ouvre pas", "#/d/ouvre"], FICHES])]
+    ]) },
+  { id: "b-ferme", groupe: "b", titre: "La barrière ne se ferme pas", sous: "Ou reste ouverte sans refermer seule",
+    arbre: Q("Quelle commande équipe la barrière ?", [
+      ["ELKA (logique MO 24)", Q("Elle ne se ferme pas du tout, ou elle ne se referme pas seule ?", [
+        ["Pas du tout, même sur ordre", R("Une sécurité ou une commande bloque la fermeture", "La MO 24 ne ferme pas tant qu'une sécurité signale ou qu'un ordre d'ouverture est maintenu.", [
+          "LED SLZ (rouge) allumée : tranche de sécurité activée (21-22, résistance 8,2 kΩ).",
+          "LED LS allumée : contact des cellules ouvert (obstacle, alignement, câblage).",
+          "LED IL-A / IL-B / IL-C allumée : boucle occupée ; si elle clignote, erreur de boucle (voir eR04 à eR06).",
+          "LED BTA1 ou BTA2 allumée en permanence : commande d'ouverture maintenue.",
+          "Code eR07 ou eR08 : test des cellules ou de la tranche de sécurité en échec."
+        ], [["Fiche ELKA P : codes", "#/c/elka-p2500-5000/codes"], ["Fiche ELKA T : codes", "#/c/elka-t3000-3500/codes"]])],
+        ["Elle ne se referme pas seule", R("Fermeture automatique non réglée", "Paramètres de la notice MO 24.", [
+          "P301 = 0,0 s : fermeture automatique désactivée. Régler une durée de maintien à l'ouverture.",
+          "Après un STOP, la fermeture automatique reste bloquée jusqu'à la commande suivante.",
+          "Fermeture par les cellules : P543 = 1. Par les boucles : « fermer à la libération » P703 / P713 / P723 = 1."
+        ], [["Fiche ELKA P : paramètres", "#/c/elka-p2500-5000/param"], ["Fiche ELKA T : paramètres", "#/c/elka-t3000-3500/param"]])]
+      ])],
+      ["LBA 4 / 6 / 7 / 12", Q("Elle ne se ferme pas du tout, ou elle ne se referme pas seule ?", [
+        ["Pas du tout, même sur ordre", R("Commande, ouverture active ou sécurité", "Tableau « Pannes et réglages fréquents » de la notice LBA.", [
+          "Vérifier que la commande de fermeture arrive à l'automate (état des entrées) et son câblage.",
+          "Une commande d'ouverture active (maintenue) empêche la fermeture : la désactiver.",
+          "Une sécurité est active (boucle de sécurité, cellule IR, ultrason) : retirer le véhicule ou l'objet, vérifier l'orientation des cellules.",
+          "Sans cellule IR ni ultrason, un shunt doit être en place sur l'entrée de sécurité (la notice cite les bornes 42 et 44 : vérifier sur le schéma).",
+          "Variateur en défaut : lire son message. Réducteur cassé ou manivelle mal rangée : voir « ne s'ouvre pas »."
+        ], [["Fiche LBA 6 / 7 : codes", "#/c/lba-67/codes"], ["Fiche LBA 4 : codes", "#/c/lba-4/codes"], ["Fiche LBA 12 : codes", "#/c/lba-12/codes"]])],
+        ["Elle ne se referme pas seule", R("Fermetures automatiques non validées", "Bornier façade LBA 6 / 7 (LBA 12 : shunts FAP / FAT).", [
+          "Mode automatique : shunt entre 5 et 6 (sans shunt = manuel, aucune fermeture automatique).",
+          "Fermeture après passage : shunt entre 7 et 8. Fermeture après temporisation : shunt entre 9 et 10 (T. Ferm auto, 15 s par défaut).",
+          "LBA 4 : programme choisi sur SW1 (FAAP) et temporisation P2, puis RESET pour valider."
+        ], [["Fiche LBA 6 / 7 : bornier", "#/c/lba-67/bornier"], ["Fiche LBA 4 : paramètres SW1", "#/c/lba-4/param"]])]
+      ])],
+      ["Carte ONE-C", R("Message d'état ou fermetures automatiques", "Messages et paramètres de la notice ONE-C.", [
+        "« DETECTION BOUCLE » ou « DETECTION CELLULE » : un véhicule ou un obstacle est détecté, la fermeture est impossible.",
+        "« BARRIERE DEGONDEE » : fermeture impossible si le regondage automatique est activé.",
+        "« BARRIERE OUVERTE 15S » qui reste à 15 s : un ordre d'ouverture et / ou une sécurité est actif.",
+        "Pas de fermeture automatique : FAT et FAP à TRUE, et mode automatique sur I7 (1 = auto)."
+      ], [["Fiche ONE-C : codes", "#/c/lba-one-c/codes"], ["Fiche ONE-C : paramètres", "#/c/lba-one-c/param"]])],
+      ["Autre armoire", R("Utiliser le diagnostic général", "Les étapes de commande et de sécurités sont les mêmes que pour un portail.", [
+        "Suivre « Le portail ne se ferme pas » et ouvrir la fiche de l'armoire."
+      ], [["Diagnostic : ne se ferme pas", "#/d/ferme"], FICHES])]
+    ]) },
+  { id: "b-lisse", groupe: "b", titre: "Lisse mal positionnée ou dégondée", sous: "Horizontale, équilibre, relevage, lisse tombée",
+    arbre: Q("Que constatez-vous ?", [
+      ["Elle n'atteint pas l'horizontale", Q("Quelle barrière ?", [
+        ["LBA 4 / 6 / 7 / 12 (irréversibles)", R("Fin de fermeture en petite vitesse trop courte", "Notices LBA 4/6/7 et LBA 12.", [
+          "Augmenter 00.022 du variateur (toujours une valeur négative, ex. −2,0 s) : c'est ce temps de petite vitesse qui amène la lisse à l'horizontale.",
+          "Le capteur de fermeture doit couper environ 10 cm avant l'horizontale ; s'il est trop bas sur son équerre, le remonter légèrement (LBA 4/6/7).",
+          "Vérifier que la butée de fermeture n'est pas trop haute par rapport au reposoir ou à la béquille (ou l'inverse)."
+        ], [["Fiche LBA 6 / 7 : paramètres", "#/c/lba-67/param"], ["Fiche LBA 12 : paramètres", "#/c/lba-12/param"]])],
+        ["LBA 6R / 63PK / 7R / 74 (réversibles)", R("Compensation ou maintien de couple", "Notice LBA 4/6/7, §12.3.", [
+          "Compensation trop forte : la diminuer (hors tension, écrou de la tige du ressort).",
+          "Retarder légèrement le maintien de couple : augmenter 00.022 du variateur."
+        ], [["Fiche LBA 6 / 7", "#/c/lba-67/param"]])],
+        ["ELKA", R("Équilibre et fin de course", "Notice ELKA, partie Installation.", [
+          "Contrôler l'équilibre : lisse déverrouillée et placée à 45°, elle doit rester en place. Corriger la tension des ressorts (en position OUVERT).",
+          "Si un ressort est cassé, changer tous les ressorts.",
+          "Vérifier P570 (modèle) après un échange de logique."
+        ], [["Fiche ELKA P : apprentissage", "#/c/elka-p2500-5000/appr"]])]
+      ])],
+      ["Elle ne se relève pas sur coupure de courant", R("Relevage automatique (réversibles) ou détection de panne réseau", "Notices LBA et ELKA.", [
+        "LBA réversibles (6R / 63PK / 7R / 74) : compensation pas assez forte, l'augmenter (hors tension). Le relevage doit rester lent ; il peut être limité par la longueur de la lisse et ses accessoires.",
+        "LBA irréversibles (4 / 6 / 7 / 12) : pas de relevage automatique, lever à la manivelle (clé 405, sens horaire pour lever).",
+        "ELKA : l'ouverture sur coupure suppose P103 = 1 et le module ANAE (LED NAE allumée) ; la barrière s'ouvre alors par ses ressorts (« Poff »)."
+      ], [["Fiche LBA 6 / 7", "#/c/lba-67/appr"], ["Fiche ELKA P : paramètres", "#/c/elka-p2500-5000/param"]])],
+      ["Lisse dégondée ou tombée", R("Contact de dégondage", "Notices ELKA et ONE-C.", [
+        "ELKA : code eR01, contact lisse dégondée (25-26) ouvert. Remettre la lisse, contrôler le contact. P548 décide si la barrière stoppe (1) ou continue (0).",
+        "ONE-C : message « BARRIERE DEGONDEE », entrée I8 (NC) ; regondage automatique possible sur LBA 63PG (paramètre Regondage_auto).",
+        "LBA 6 / 7 : report « lisse tombée » sur 19-20 (option, NC)."
+      ], [["Fiche ELKA P : codes", "#/c/elka-p2500-5000/codes"], ["Fiche ONE-C : codes", "#/c/lba-one-c/codes"]])]
     ]) }
 ];
 
@@ -150,9 +258,11 @@ const TEST = `<div class="dtest"><b>Fonction en test.</b> Ces conseils sont gén
 function viewDiag(sid, pathStr) {
   setHead("Diagnostic guidé (test)", true);
   if (!sid) {
-    let h = TEST + `<div class="q">Quel est le problème ?</div><div class="list">` + DIAG.map(t =>
+    let h = TEST + `<div class="q">Quel est le problème ?</div><h2>Portail</h2><div class="list">` + DIAG.filter(t => !t.groupe).map(t =>
       `<button class="row" onclick="go('#/d/${t.id}')"><b>${esc(t.titre)}</b><br><span class="muted">${esc(t.sous)}</span></button>`).join("") + `</div>
-      <p class="note">Aide établie à partir des pratiques courantes, pas d'une notice. Pour les valeurs précises, ouvrir la fiche de la carte.</p>`;
+      <h2>Barrière levante</h2><div class="list">` + DIAG.filter(t => t.groupe === "b").map(t =>
+      `<button class="row" onclick="go('#/d/${t.id}')"><b>${esc(t.titre)}</b><br><span class="muted">${esc(t.sous)}</span></button>`).join("") + `</div>
+      <p class="note">Portails : aide établie à partir des pratiques courantes, pas d'une notice. Barrières : réponses tirées des notices ELKA, La Barrière Automatique et ONE-C. Pour les valeurs précises, ouvrir la fiche de la carte.</p>`;
     app.innerHTML = h; return;
   }
   const path = pathStr ? pathStr.split("-").map(Number) : [];

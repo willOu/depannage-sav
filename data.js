@@ -15,6 +15,10 @@ const DATA_VERSION = "2026-10-18";
 /* Journal des modifications — ajouter une entrée en haut à chaque mise à jour.
    docs : nom des notices ajoutées (affichées dans Réglages). */
 const CHANGELOG = [
+  { v: "1.31", date: "2026-10-18", titre: "Assistance fabricant et diagnostic des barrières", items: [
+    "Assistance fabricant : sur chaque page de marque et dans l'en-tête de chaque fiche, les numéros de téléphone relevés dans les notices (appel en un clic), avec la notice d'origine. Ils peuvent avoir changé depuis l'édition de la notice : à vérifier. Pas de numéro dans les notices ELKA et Doitrand.",
+    "Diagnostic guidé : nouvelle rubrique « Barrière levante » (ne s'ouvre pas, ne se ferme pas, lisse mal positionnée ou dégondée) pour ELKA MO 24, LBA 4 / 6 / 7 / 12 et carte ONE-C, avec des réponses tirées des tableaux de pannes et des messages des notices et des liens directs vers l'onglet utile de la fiche."
+  ], docs: [] },
   { v: "1.30", date: "2026-10-18", titre: "Lot 3 : barrières ELKA (MO 24) et La Barrière Automatique", items: [
     "Nouvelle marque ELKA : barrières P 2500 à P 5000 et T 3000 à T 3500 avec la logique MO 24 (afficheur 4 chiffres et joystick) : codes eR01 à eR16, messages (lrn1, send, Poff, SYNC, eep, re-0 / re-1), LED, menus P101 à P802 avec valeurs d'usine, relais multifonctions, feux, boucles A / B / C et logiques de direction, bornier, apprentissage.",
     "Nouvelle marque La Barrière Automatique : LBA 6 / 6R / 63PK / 7 / 7R / 74 (automate Siemens LOGO + variateur Unidrive), LBA 4 (platine ENPC001652, dip-switches SW1), LBA 12 (lisse 3 à 12 m) et carte ONE-C (logiques capteurs inductifs et capteur angulaire, Modbus, codes moteur 106 / 107).",
@@ -37430,3 +37434,42 @@ const MARQUES = [
   ]
 }
 ];
+
+/* Assistance fabricant : numéros RELEVÉS DANS LES NOTICES fournies (jamais devinés).
+   Ils peuvent avoir changé depuis l'édition de la notice : à vérifier.
+   Pour ajouter ou corriger : { nom, tel (chiffres, +indicatif), src }.
+   Marque absente ou liste vide = aucun numéro dans les notices. */
+const HOTLINES = {
+  came: [
+    { nom: "CAME France — Nanterre", tel: "+33146130500", src: "notice Came 319LR36 v2.0 (03/2012)" },
+    { nom: "CAME Automatismes — Marseille", tel: "+33491606905", src: "notice Came 319LR36 v2.0 (03/2012)" }
+  ],
+  nice: [
+    { nom: "Nice France — Buchelay", tel: "+33130339595", src: "notice Nice ROBUS 600/1000 (2004)" },
+    { nom: "Nice Rhône-Alpes — Décines-Charpieu", tel: "+33478265653", src: "notice Nice ROBUS 600/1000 (2004)" }
+  ],
+  faac: [
+    { nom: "FAAC France — Saint-Priest (Lyon)", tel: "+33472218700", src: "notices FAAC E024S et C720-C721" },
+    { nom: "FAAC France — agence Paris (Massy)", tel: "+33169191620", src: "notices FAAC E024S et C720-C721" }
+  ],
+  bft: [
+    { nom: "BFT S.p.A. — Schio (Italie, siège)", tel: "+390445696511", src: "notice BFT LEO B CBB (pas de numéro de BFT France dans les notices)" }
+  ],
+  roger: [
+    { nom: "Roger Technology — Mogliano Veneto (Italie)", tel: "+390415937023", src: "notices Roger B70 / CTRL / EDGE1" }
+  ],
+  afca: [
+    { nom: "AFCA - V2 SAS — Genas", tel: "+33472791030", src: "notice V2 LUMOS-M (2016)" }
+  ],
+  casit: [
+    { nom: "CASIT s.a.s. — Caselette (Italie)", tel: "+390119688230", src: "notices CASIT EQ2000, KEQ013, KEQS08" }
+  ],
+  dea: [
+    { nom: "DEA System — Piovene Rocchette (Italie)", tel: "+390445550789", src: "notices DEA NET230N / NET24N (R12)" }
+  ],
+  lba: [
+    { nom: "La Barrière Automatique — SAV (Limonest)", tel: "+33478860286", src: "notices LBA 4/6/7 (2017) et LBA 12 : « service après-vente »" }
+  ],
+  elka: [],
+  doitrand: []
+};
