@@ -7,7 +7,7 @@
   const SYN = {
     automatique: ["auto", "tca", "tfa"], fermeture: ["ferm", "fermer", "refermeture"], fermer: ["fermeture"], ouvrir: ["ouverture"], ouvre: ["ouverture"],
     photocellule: ["cellule", "photo", "cx", "cy"], cellule: ["photocellule", "cx", "cy"], clignotant: ["flash", "lampe", "feu"], lampe: ["clignotant", "cycle"],
-    couple: ["force", "sensibilite"], force: ["couple", "sensibilite"], sensibilite: ["force", "couple", "obstacle"], obstacle: ["sensibilite", "force"],
+    couple: ["force", "sensibilite"], force: ["couple", "sensibilite"], sensibilite: ["couple", "obstacle"], obstacle: ["sensibilite"],
     radio: ["emetteur", "telecommande", "canal"], emetteur: ["radio", "telecommande"], telecommande: ["radio", "emetteur"], badge: ["transpondeur", "utilisateur"],
     serrure: ["electro", "verrou"], pieton: ["pietonne", "partielle"], pietons: ["pietonne", "partielle"], partielle: ["pietonne", "partielle"],
     vitesse: ["speed"], ralentissement: ["ralenti", "ral", "slow"], ralentir: ["ralentissement", "ralenti"], pause: ["tca", "tfa", "attente", "temps"], attente: ["pause", "temps"],
@@ -25,16 +25,18 @@
     // marques
     raw.forEach((w, i) => MARQUES.forEach(m => { if (norm(m.nom) === w || m.id === w) { brands.push(m.id); used.add(i); } }));
     // cartes : un mot, ou deux mots accolés (zbx 241)
+    const tokCount = {};
+    const tokensOf = c => { const k = new Set(); norm(c.nom).split(" ").forEach(t => t.length >= 3 && k.add(t)); norm(c.modeles || "").split(" ").forEach(t => { if (t.length >= 3 && /\d/.test(t) && /[a-z]/.test(t)) k.add(t); }); return k; };
+    BOARDS.forEach(({ c }) => tokensOf(c).forEach(t => tokCount[t] = (tokCount[t] || 0) + 1));
     BOARDS.forEach(({ m, c }) => {
       const keys = new Set([compact(c.nom)]);
-      norm(c.nom).split(" ").forEach(t => t.length >= 3 && keys.add(t));
-      norm(c.modeles || "").split(" ").forEach(t => { if (t.length >= 3 && /\d/.test(t) && /[a-z]/.test(t)) keys.add(t); });
+      tokensOf(c).forEach(t => { if (tokCount[t] === 1) keys.add(t); });
       raw.forEach((w, i) => {
         if (w.length >= 3 && keys.has(w)) { boards.push(c.id); used.add(i); }
         if (i + 1 < raw.length && keys.has(w + raw[i + 1])) { boards.push(c.id); used.add(i); used.add(i + 1); }
       });
     });
-    const topic = raw.filter((w, i) => !used.has(i) && !STOP.has(w) && w.length > 1).map(sing);
+    const topic = raw.filter((w, i) => !used.has(i) && !STOP.has(w) && w.length > 1 && !/^\d+$/.test(w) && w !== "deux").map(sing);
     return { brands, boards: [...new Set(boards)], topic };
   }
   const alts = w => [w].concat(SYN[w] || [], SYN[w + "s"] || []);
