@@ -52,8 +52,8 @@ h2{font-size:13px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted
 .boardhead h3{margin:0;font-size:22px}
 .boardhead p{margin:4px 0 0;color:var(--muted);font-size:14px}
 .src{font-size:12.5px;color:var(--muted);margin-top:8px}
-.tabs{display:flex;gap:4px;margin:14px 0 10px;position:sticky;top:var(--hh,112px);z-index:3;background:var(--bg);padding:6px 0}
-.tabs button{flex:1 1 auto;min-width:0;border:1px solid var(--line);background:var(--card);border-radius:10px;height:44px;font-weight:600;font-size:13px;padding:0 5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tabs{display:flex;overflow-x:auto;scrollbar-width:none;gap:4px;margin:14px 0 10px;position:sticky;top:var(--hh,112px);z-index:3;background:var(--bg);padding:6px 0}
+.tabs button{flex:1 0 auto;min-width:0;border:1px solid var(--line);background:var(--card);border-radius:10px;height:44px;font-weight:600;font-size:13px;padding:0 8px;white-space:nowrap}
 .pfind{width:100%;height:44px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font-size:16px;padding:0 12px;margin:4px 0 6px}
 .set{border:1px solid var(--line);border-radius:12px;background:var(--card);margin:6px 0;overflow:hidden}
 .set .row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;min-height:48px;border-top:1px solid var(--line)}
@@ -218,6 +218,17 @@ html{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 .offl{display:flex;align-items:center;gap:8px;font-size:13px;border:1px solid var(--line,#8884);border-radius:10px;padding:8px 12px;margin:10px 0}
 .offl i{width:9px;height:9px;border-radius:50%;background:#999;flex:none}
 .offl.ok i{background:#2e9d4f}.offl.wait i{background:#e07b00}
+.sch{margin:12px 0;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;cursor:zoom-in}
+.sch img{display:block;width:100%;height:auto;background:#fff}
+.sch figcaption{padding:10px 12px;font-size:14px}
+.sch .p{color:var(--muted);font-size:12.5px}
+.schv{position:fixed;inset:0;z-index:50;background:#000;display:flex;flex-direction:column}
+.schv[hidden]{display:none}
+.schb{display:flex;align-items:center;gap:6px;padding:8px;background:#111;color:#fff}
+.schb span{flex:1;text-align:center;font-weight:600}
+.schb button{min-width:44px;height:44px;border:1px solid #555;border-radius:10px;background:#222;color:#fff;font-size:20px}
+.schc{flex:1;overflow:auto;touch-action:pan-x pan-y pinch-zoom;background:#fff}
+.schc img{display:block;width:100%;height:auto}
 </style>
 </head>
 <body>
@@ -238,6 +249,7 @@ html{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 <main id="app"></main>
 <script src="diag.js"></script> <!-- DIAG -->
 <script src="ask.js"></script> <!-- ASK -->
+<script src="img.js"></script> <!-- SCH -->
 <script src="acc.js"></script> <!-- ACC -->
 
 <script src="data.js"></script>
@@ -335,11 +347,12 @@ function viewBoard(id, tab){
 
   let h = `<div class="boardhead" style="--c:${m.couleur}"><h3>${esc(c.nom)}</h3><p>${esc(c.modeles)}</p><p>${esc(c.type)}</p><div class="src">Source : ${esc(c.source)}</div></div>
   <div class="tabs" role="tablist">
-    ${[["codes","Codes"],["bornier","Bornier"],["aff","Écran"],["param","Paramètres"],["appr","Apprent."]].map(([k,l]) => `<button role="tab" aria-selected="${tab===k}" onclick="go('#/c/${id}/${k}')">${l}</button>`).join("")}
+    ${[["codes","Codes"],["bornier","Bornier"],["aff","Écran"],["param","Paramètres"],["appr","Apprent."]].concat(window.hasSchema && hasSchema(id) ? [["sch","Schéma"]] : []).map(([k,l]) => `<button role="tab" aria-selected="${tab===k}" onclick="go('#/c/${id}/${k}')">${l}</button>`).join("")}
   </div><div id="pane"></div>`;
   app.innerHTML = h;
   const pane = $("#pane");
 
+  if (tab === "sch"){ pane.innerHTML = schemaPane(id); return; } /* SCH */
   if (tab === "codes"){
     const SEV = [["erreur","Erreurs · à corriger","er"],["symptome","Symptômes","sy"],["afficheur","Codes de l'afficheur","af"],["flash","Clignotant","af"],["led","Voyants (LED)","af"],["diag","Entrées activées · diagnostic","di"],["test","Mode TEST","te"]];
     let first = true, p = "";
