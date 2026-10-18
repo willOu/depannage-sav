@@ -238,6 +238,7 @@ html{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 <main id="app"></main>
 <script src="diag.js"></script> <!-- DIAG -->
 <script src="ask.js"></script> <!-- ASK -->
+<script src="acc.js"></script> <!-- ACC -->
 
 <script src="data.js"></script>
 <script>
@@ -291,6 +292,7 @@ function viewHome(){
   let h = `<div class="q">Quel automatisme avez-vous devant vous ?</div><div class="gen">` + GENRES.filter(g => nb(g[0])).map(g =>
     `<button onclick="go('#/g/${g[0]}')">${g[3]}${g[1]}<small>${nb(g[0])} carte${nb(g[0])>1?"s":""}</small></button>`).join("") + `</div>`;
   h += `<button class="dbtn" onclick="go('#/d')">Diagnostic guidé : trouver la panne en quelques questions<small><b>EN TEST</b> · peut contenir des erreurs ou mal fonctionner</small></button>`; /* DIAG */
+  h += `<button class="dbtn" onclick="go('#/a')">Accessoires : gyrophares, radio, photocellules…<small>${ACCESSOIRES.length} fiche${ACCESSOIRES.length>1?"s":""} · rubrique en construction</small></button>`; /* ACC */
   h += `<div class="offl wait" id="offl" onclick="go('#/reglages')" style="cursor:pointer"><i></i><span>Version <b>${APP_V}</b> · données du <b>${fdate(DATA_VERSION)}</b> · <span id="offs">vérification du mode hors ligne…</span></span></div>`; /* STATUT */
   h += `<h2>Ou par marque</h2><div class="bchips">` + MARQUES.map(m =>
     `<button class="bchip logo" aria-label="${esc(m.nom)}" onclick="go('#/m/${m.id}')"><img src="icons/marques/${m.id}.png" alt="${esc(m.nom)}" height="${m.id==="afca"?52:28}"></button>`).join("") + `</div>`;
@@ -506,6 +508,7 @@ function viewSearch(q){
   });
   codes.sort((a, b) => b.exact - a.exact);
   let h = "";
+  try { const al = window.accList ? accList(q) : ""; if (al) h += `<h2>Accessoires</h2><div class="list">${al}</div>`; } catch (e) {} /* ACC */
   try { if (window.askAnswer && words.length >= 2) h += askAnswer(q); } catch (e) {} /* ASK */
   if (boards.length) h += `<h2>Cartes</h2><div class="list">${boards.map(rowBoard).join("")}</div>`;
   if (codes.length) h += `<h2>Codes et signalisations (${codes.length})</h2><div class="list">` + codes.slice(0, 60).map(r =>
@@ -562,6 +565,7 @@ function route(){
   if (p[0] === "m") return viewBrand(p[1]);
   if (p[0] === "g") return viewGenre(p[1]);
   if (p[0] === "c") return viewBoard(p[1], p[2]);
+  if (p[0] === "a") return p[1] ? viewAcc(p[1], p[2]) : viewAccList(); /* ACC */
   if (p[0] === "d") return viewDiag(p[1], p[2]); /* DIAG */
   if (p[0] === "reglages") return viewSettings();
   if (p[0] === "s"){ const q = decodeURIComponent(p.slice(1).join("/")); if ($("#q").value !== q) $("#q").value = q; return viewSearch(q); }

@@ -15,6 +15,12 @@ const DATA_VERSION = "2026-10-18";
 /* Journal des modifications — ajouter une entrée en haut à chaque mise à jour.
    docs : nom des notices ajoutées (affichées dans Réglages). */
 const CHANGELOG = [
+  { v: "1.16", date: "2026-10-18", titre: "Rubrique Accessoires (en construction)", items: [
+    "Nouveau bouton « Accessoires » sur l'accueil : gyrophares, radio, photocellules, claviers… avec des onglets adaptés (infos, raccordement, installation, notes).",
+    "Première fiche : feu clignotant à LED V2 LUMOS-M (24 à 300 V), trouvable aussi par la recherche (« gyrophare », « lumos »)."
+  ], docs: [
+    "Notice V2 LUMOS-M (IL 438)"
+  ] },
   { v: "1.15", date: "2026-10-18", titre: "AFCA : nouvelle marque, 3 armoires Startéco", items: [
     "Nouvelle marque AFCA avec 3 cartes : Startéco 3 (contacteurs, V1.6), Startéco 3 deux moteurs (V4.1) et Startéco 4 (afficheur LCD, 47 paramètres).",
     "Startéco 3 : afficheur 7 segments (codes Po, Att, AU, Fdcnd, dEF C1…), 20 switchs, temporisations, autotests et diagnostic des entrées.",
