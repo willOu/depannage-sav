@@ -7,11 +7,12 @@
     {
       id: "v2-lumos-m",
       nom: "LUMOS-M",
-      marque: "V2",
-      couleur: "#c4161c",
+      marque: "AFCA",
+      alias: "ABLE V2",
+      couleur: "#2a7a4b",
       categorie: "Feu clignotant",
       modeles: "Feu clignotant à LED multi-tension, antenne intégrée — 24 à 300 V DC, 24 à 230 V AC 50/60 Hz",
-      source: "Notice V2 IL 438 (édition 20/09/2016), pages FR",
+      source: "Notice V2 S.p.A. IL 438 (édition 20/09/2016), pages FR — V2 est rangé avec AFCA / ABLE",
       resume: "Feu de signalisation à LED pour portails, portes de garage et barrières levantes. Intermittence automatique : aucun réglage. Installation uniquement en position verticale.",
       specs: [
         ["Alimentation", "24 à 300 V DC · 24 à 230 V AC 50/60 Hz"],
@@ -52,7 +53,7 @@
 
   window.accList = function (q) {
     const words = norm(q || "").split(" ").filter(Boolean);
-    return ACCESSOIRES.filter(a => { const t = norm(`${a.marque} ${a.nom} ${a.categorie} ${a.modeles} ${a.resume} gyrophare clignotant feu`); return words.every(w => t.includes(w)); }).map(rowAcc).join("");
+    return ACCESSOIRES.filter(a => { const t = norm(`${a.marque} ${a.alias || ""} ${a.nom} ${a.categorie} ${a.modeles} ${a.resume} gyrophare clignotant feu`); return words.every(w => t.includes(w)); }).map(rowAcc).join("");
   };
 
   window.viewAccList = function () {

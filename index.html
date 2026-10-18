@@ -493,7 +493,7 @@ function viewSearch(q){
   const codes = [], terms = [], boards = [], params = [];
   BOARDS.forEach(({m, c}) => {
     const ctx = `<span class="badge" style="--c:${m.couleur}">${esc(m.nom)}</span>${esc(c.nom)}`;
-    const bt = norm(`${m.nom} ${c.nom} ${c.modeles} ${c.type} ${c.alias || ""}`), bc = bt.replace(/ /g, "");
+    const bt = norm(`${m.nom} ${m.alias || ""} ${c.nom} ${c.modeles} ${c.type} ${c.alias || ""}`), bc = bt.replace(/ /g, "");
     if (words.every(w => bt.includes(w) || bc.includes(w)) || bc.includes(norm(q).replace(/ /g, ""))) boards.push({m, c});
     c.codes.forEach(x => {
       const exact = norm(x.code) === norm(q);

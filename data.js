@@ -15,6 +15,9 @@ const DATA_VERSION = "2026-10-18";
 /* Journal des modifications — ajouter une entrée en haut à chaque mise à jour.
    docs : nom des notices ajoutées (affichées dans Réglages). */
 const CHANGELOG = [
+  { v: "1.17", date: "2026-10-18", titre: "AFCA / ABLE / V2 regroupés", items: [
+    "Le feu LUMOS-M (notice V2) est rangé sous la marque AFCA ; chercher « V2 » ou « ABLE » retrouve les cartes AFCA et l'accessoire."
+  ], docs: [] },
   { v: "1.16", date: "2026-10-18", titre: "Rubrique Accessoires (en construction)", items: [
     "Nouveau bouton « Accessoires » sur l'accueil : gyrophares, radio, photocellules, claviers… avec des onglets adaptés (infos, raccordement, installation, notes).",
     "Première fiche : feu clignotant à LED V2 LUMOS-M (24 à 300 V), trouvable aussi par la recherche (« gyrophare », « lumos »)."
@@ -13589,7 +13592,7 @@ const MARQUES = [
 },
 /* ------------------------------------------------------------------ */
 {
-  id: "afca", nom: "AFCA", couleur: "#2a7a4b",
+  id: "afca", nom: "AFCA", alias: "ABLE V2", couleur: "#2a7a4b",
   cartes: [
     {
       "id": "afca-starteco3-contacteurs",

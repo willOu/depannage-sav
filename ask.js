@@ -23,7 +23,7 @@
     const raw = norm(q).split(" ").filter(Boolean);
     const brands = [], boards = [], used = new Set();
     // marques
-    raw.forEach((w, i) => MARQUES.forEach(m => { if (norm(m.nom) === w || m.id === w) { brands.push(m.id); used.add(i); } }));
+    raw.forEach((w, i) => MARQUES.forEach(m => { if (norm(m.nom) === w || m.id === w || (m.alias && norm(m.alias).split(" ").includes(w))) { brands.push(m.id); used.add(i); } }));
     // cartes : un mot, ou deux mots accolés (zbx 241)
     const tokCount = {};
     const tokensOf = c => { const k = new Set(); norm(c.nom).split(" ").forEach(t => t.length >= 3 && k.add(t)); norm(c.modeles || "").split(" ").forEach(t => { if (t.length >= 3 && /\d/.test(t) && /[a-z]/.test(t)) k.add(t); }); return k; };
