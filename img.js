@@ -52,6 +52,16 @@
       S("afca-c3m-p04", "Raccordement de la platine", 4, "Bornier complet, fins de course des deux moteurs (24-26 et 27-29), cellules et barres palpeuses."),
       S("afca-c3m-p06", "Autotest des sécurités", 6, "Raccordement des cellules et amplificateurs avec autotest.")
     ],
+    "v2-forteco2500": [
+      S("v2-forteco-p66", "Raccordements électriques PD20", 66, "Bornier L N, B1-B2 clignotant, B3-B4 courtoisie, M1 à M12 (START, START P., STOP, photocellules, barres palpeuses, 24 V~), A1-A2 antenne, connecteurs ADI et récepteur."),
+      S("v2-forteco-p68", "Panneau de contrôle (afficheur)", 68, "Signification des segments, flèches et points de l'afficheur et des touches.")
+    ],
+    "afca-starteco4-2m-revers": [
+      S("afca-c4r-p03", "Moteur et électrofrein", 3, "Bornes 42-44 alimentation, moteur 1 (45-48) et moteur 2 (49-52), condensateur, frein sur l'option 1 (12-13), déblocage."),
+      S("afca-c4r-p05", "Fins de course inductifs", 5, "Fins de course NPN 12 V sur 24-26, inversion des fils 25-26 selon le sens d'ouverture."),
+      S("afca-c4r-p06", "Implantation de la platine", 6, "Fusibles F1 F2 F3, connecteurs REC1 H1 H2 H3, boutons BP1 à BP3, potentiomètre P1."),
+      S("afca-c4r-p07", "Raccordement des accessoires", 7, "Bornier complet 1 à 41, propriétés des bornes, cellules, barres palpeuses, commandes.")
+    ],
     "afca-starteco4-contacteurs": [
       S("afca-c4-p03", "Alimentation de la carte", 3, "Alimentation 400 V tri ou 230 V, moteur sur U V W, condensateur, pont de sélection de tension."),
       S("afca-c4-p05", "Raccordement de la platine", 5, "Bornier complet avec les entrées IN1 à IN11 et la liste des bornes."),

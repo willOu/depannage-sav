@@ -10,11 +10,19 @@
    (la première entrée donne le numéro affiché partout : accueil, en-tête, Réglages).
    ===================================================================== */
 
-const DATA_VERSION = "1.24";
+const DATA_VERSION = "2026-10-18";
 
 /* Journal des modifications — ajouter une entrée en haut à chaque mise à jour.
    docs : nom des notices ajoutées (affichées dans Réglages). */
 const CHANGELOG = [
+  { v: "1.26", date: "2026-10-18", titre: "Motorisations : V2 FORTECO 2500 et Startéco 4-2M réversible", items: [
+    "V2 FORTECO 2500-I / 2500-I-M (armoire PD20, rangée sous AFCA / ABLE V2) : erreurs Err1 à Err12 avec la marche à suivre, LED et afficheur, tous les paramètres (dir, vEL, FrEn, SEn.A, Strt, Fot1/2, CoS1/2…), bornier M1-M12, auto-apprentissage, déblocage et fins de course magnétiques.",
+    "Startéco 4-2M réversible (moteur 800 kg à électrofrein) : fiche dédiée avec bornier 42-52 et frein sur l'option 1, déblocage du frein, grande / petite vitesse et couples, 59 paramètres, historique des défauts, entrées réaffectables.",
+    "Onglet Schéma : raccordement et afficheur du PD20, alimentation / moteurs / fins de course / platine / accessoires de la Startéco 4-2M.",
+    "Incohérences des notices signalées dans les fiches (SEn.v, numérotation des paramètres 4-2M, temps de déblocage du frein)."
+  ], docs: [
+    "V2 FORTECO 2500 (ZIS327, 14.11.2018)", "AFCA Startéco 4-2M réversible (Doc 19.1.a indice 170, 22/06/17)"
+  ] },
   { v: "1.25", date: "2026-10-18", titre: "Accessoires : radio de bords sensibles et détecteur de véhicule", items: [
     "Nouvelles fiches Accessoires : BBC Bircher RFGate 2.2.A / 2.2.NG et XRF-1 (transmission radio de profils sensibles), OPTEX OVS-02GT (détecteur de véhicule, boucle virtuelle).",
     "Chaque fiche : caractéristiques, raccordement, installation, notes de mise en service et dépannage, et onglet Schéma."
@@ -17036,7 +17044,1923 @@ const MARQUES = [
           "Rotation moteur inversée : menu USINE > « Rotation Mot Ouv » sur Inverse (pas besoin de changer le câblage)."
         ]
       }
-    }
+    },
+          {
+        "id": "v2-forteco2500",
+        "nom": "FORTECO 2500 (PD20)",
+        "modeles": "V2 FORTECO 2500-I et 2500-I-M — moteur coulissant 230 V jusqu'à 2 500 kg, armoire PD20 à variateur intégré, afficheur 4 digits, fins de course magnétiques",
+        "type": "Portail coulissant 2 500 kg — armoire PD20, afficheur et 3 touches, auto-apprentissage, détecteur d'obstacle ampèremétrique",
+        "source": "Manuel V2 FORTECO 2500 (ZIS327, 14.11.2018) — partie française, p. 53-78",
+        "codes": [
+          {
+            "code": "MAINS",
+            "type": "led",
+            "titre": "LED secteur",
+            "action": "Éteinte : la platine n'est pas alimentée. Couper au tableau et débrocher le bornier d'alimentation, vérifier qu'il n'y a pas de coupure secteur en amont, contrôler le fusible F1 (8 A) : le remplacer par un fusible de même valeur."
+          },
+          {
+            "code": "OVERLOAD",
+            "type": "led",
+            "titre": "LED surcharge sortie 24 V",
+            "action": "Allumée : surcharge sur la sortie 24 V. Retirer le bornier extractible M1 à M12 (la LED doit s'éteindre), éliminer la cause, ré-embrocher et vérifier que la LED ne se rallume pas."
+          },
+          {
+            "code": "Flèches de droite",
+            "type": "afficheur",
+            "titre": "État du portail",
+            "action": "Flèche du haut = ouverture en cours (clignote : ouverture causée par un dispositif de sûreté, barre palpeuse ou détecteur d'obstacle). Flèche centrale = repos (clignote : décompte de la fermeture automatique). Flèche du bas = fermeture en cours (clignote : fermeture causée par un dispositif de sûreté)."
+          },
+          {
+            "code": "Flèches de gauche",
+            "type": "afficheur",
+            "titre": "État des entrées START / START P.",
+            "action": "Les flèches s'allument quand l'entrée correspondante se ferme."
+          },
+          {
+            "code": "Segments haut / bas",
+            "type": "afficheur",
+            "titre": "État des contacts (panneau de contrôle)",
+            "action": "Segment vertical du haut allumé : contact fermé. Segment du bas allumé : contact ouvert. Entrées affichées : START, START P., STOP, PHOTO 1, PHOTO 2, EDGE 1, EDGE 2, fins de course SX / DX. Les points entre les chiffres indiquent l'appui sur les touches."
+          },
+          {
+            "code": "Segment haut (ADI)",
+            "type": "afficheur",
+            "titre": "Alarme photocellule d'un module ADI",
+            "action": "Le portail s'arrête ; à la fin de l'alarme il repart en ouverture."
+          },
+          {
+            "code": "Segment bas (ADI)",
+            "type": "afficheur",
+            "titre": "Alarme barre palpeuse d'un module ADI",
+            "action": "Le portail inverse le mouvement pendant 3 secondes."
+          },
+          {
+            "code": "Deux segments clignotent (ADI)",
+            "type": "afficheur",
+            "titre": "Alarme STOP d'un module ADI",
+            "action": "Le portail s'arrête et ne peut pas repartir tant que l'alarme persiste."
+          },
+          {
+            "code": "8.8.8.8 puis Pr x.x",
+            "type": "afficheur",
+            "titre": "Test de l'afficheur à la mise sous tension",
+            "action": "1,5 s tous segments allumés, puis 1,5 s la version du logiciel (exemple Pr 1.0), puis le panneau de contrôle."
+          },
+          {
+            "code": "Err1",
+            "type": "erreur",
+            "titre": "Sauvegarde des données impossible",
+            "action": "Apparaît à la sortie de programmation. La notice indique que ce défaut n'est pas réparable par l'installateur : retourner l'armoire à V2 S.p.A."
+          },
+          {
+            "code": "Err2",
+            "type": "erreur",
+            "titre": "Anomalie de la carte inverter",
+            "action": "Affiché à un ordre de start, le portail ne s'ouvre pas. Si le moteur a servi intensivement, le driver a pu surchauffer : attendre qu'il refroidisse et réessayer."
+          },
+          {
+            "code": "Err3",
+            "type": "erreur",
+            "titre": "Test des photocellules échoué",
+            "action": "1. Vérifier qu'aucun obstacle n'a coupé le faisceau au moment du start. 2. Les cellules activées dans Fot1 et Fot2 sont-elles réellement installées ? 3. Avec des cellules de type 2, Fot2 doit être sur « CFCh » (la notice écrit aussi « CF.Ch »). 4. Cellules alimentées et fonctionnelles : en coupant le faisceau on doit entendre le relais."
+          },
+          {
+            "code": "Err4",
+            "type": "erreur",
+            "titre": "Fin de course / moteur débloqué",
+            "action": "Le portail ne bouge pas (ou s'ouvre partiellement). Cas listés : 1. ordre START avec le moteur débloqué. 2. Problème de fin de course pendant l'auto-apprentissage : vérifier le sens des aimants (s'ils sont inversés, les démonter et les inverser) ; s'ils sont corrects, le capteur de fin de course est endommagé ou le câble coupé : remplacer le capteur ou la partie de câblage. 3. Si l'erreur persiste en fonctionnement normal, envoyer l'armoire à V2 pour réparation."
+          },
+          {
+            "code": "Err5",
+            "type": "erreur",
+            "titre": "Test des barres palpeuses échoué",
+            "action": "Vérifier que le paramètre Co.tE est bien configuré et que les barres palpeuses activées par menu sont réellement installées."
+          },
+          {
+            "code": "Err6",
+            "type": "erreur",
+            "titre": "Communication avec la carte inverter",
+            "action": "Le moteur s'arrête pendant la manœuvre. Si le problème persiste, l'armoire doit être envoyée à V2 S.p.A. pour réparation."
+          },
+          {
+            "code": "Err7",
+            "type": "erreur",
+            "titre": "Anomalie des encodeurs",
+            "action": "Encodeur en panne ou branchement interrompu."
+          },
+          {
+            "code": "Err8",
+            "type": "erreur",
+            "titre": "Auto-apprentissage refusé ou interrompu",
+            "action": "Deux cas : 1. La commande est refusée : la configuration n'est pas compatible. Il faut Strt = StAn et l'interface ADI désactivée (i.Adi = no). 2. La procédure est interrompue : un dispositif de sécurité s'est déclenché."
+          },
+          {
+            "code": "Err9",
+            "type": "erreur",
+            "titre": "Programmation verrouillée",
+            "action": "La programmation a été bloquée avec la clé de verrouillage CL1+ (cod. 161213). Pour modifier, insérer dans le connecteur ADI la même clé que celle utilisée pour le blocage."
+          },
+          {
+            "code": "Er 10",
+            "type": "erreur",
+            "titre": "Test des modules ADI échoué",
+            "action": "Affiché à un ordre de démarrage, le portail ne s'ouvre pas. La notice n'indique pas d'autre remède."
+          },
+          {
+            "code": "Er 12",
+            "type": "erreur",
+            "titre": "Protection thermique du moteur",
+            "action": "Le portail ne bouge pas ou s'ouvre partiellement. Le système repart normalement après refroidissement du moteur (la notice écrit « Er I2 » à l'écran)."
+          },
+          {
+            "code": "Préavis prolongé",
+            "type": "symptome",
+            "titre": "Le clignotant s'allume mais le portail ne part pas tout de suite",
+            "action": "Le compteur de cycles réglé dans le menu SErv est arrivé à zéro : l'installation demande un entretien (5 s de préavis supplémentaires avant chaque départ en ouverture, jusqu'à ce que l'installateur accède au menu SErv)."
+          },
+          {
+            "code": "Fermeture ralentie",
+            "type": "symptome",
+            "titre": "Mouvement ralenti à la fermeture",
+            "action": "Cas où l'encodeur du moteur doit être réaligné : le portail ferme à vitesse réduite jusqu'au fin de course de fermeture puis reprend normalement. Possible après une coupure de courant portail ouvert ou à cause d'un dysfonctionnement du portail."
+          },
+          {
+            "code": "StAn + Start",
+            "type": "symptome",
+            "titre": "Start en mode homme mort d'urgence : la grille alterne",
+            "action": "Si Strt = StAn, la commande Start (bornes ou radio) ouvre et ferme alternativement : ce n'est pas le fonctionnement homme mort normal."
+          }
+        ],
+        "parametres": {
+          "intro": "Menu -PrG : liste de paramètres (dir, P.APP, t.PrE…) puis FinE pour mémoriser. Sans appui pendant 1 minute, l'armoire sort et les modifications ne sont pas enregistrées. Valeurs usine = colonne DEFAULT de la notice.",
+          "navigation": [
+            "Hors menu : touche ▲ (h) = START, touche ▼ (i) = START piéton.",
+            "Maintenir OK : défile les menus -PrG, -Cnt, -APP, -Inv, -dEF, puis relâcher OK sur celui désiré (OK maintenu 2 s environ par menu).",
+            "▼ : paramètre suivant ; ▲ : paramètre précédent ; OK : afficher la valeur et la modifier ; valider avec OK. Maintenir ▲ ou ▼ fait défiler vite jusqu'à FinE.",
+            "Pour mémoriser : aller au dernier paramètre FinE, OK, choisir Si, OK.",
+            "Régler un temps à 0 désactive la fonction (affichage « no »)."
+          ],
+          "groupes": [
+            {
+              "nom": "Sens, piéton, préavis",
+              "items": [
+                {
+                  "code": "dir",
+                  "def": "dX",
+                  "titre": "Sens d'ouverture (vu de l'intérieur)",
+                  "valeurs": [
+                    [
+                      "dX",
+                      "Le portail ouvre vers la droite"
+                    ],
+                    [
+                      "SX",
+                      "Le portail ouvre vers la gauche"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P.APP",
+                  "def": "25",
+                  "titre": "Ouverture partielle",
+                  "valeurs": [
+                    [
+                      "0 – 100",
+                      "Pourcentage de course en ouverture avec Start piéton. À 0, un timer sur START P. n'ouvre pas mais empêche la fermeture automatique pendant les horaires"
+                    ]
+                  ]
+                },
+                {
+                  "code": "t.PrE",
+                  "def": "1.0\"",
+                  "titre": "Temps de préavis",
+                  "valeurs": [
+                    [
+                      "0.5\" – 1'00",
+                      "Clignotant activé avant chaque mouvement"
+                    ],
+                    [
+                      "no",
+                      "Désactivé"
+                    ]
+                  ]
+                },
+                {
+                  "code": "t.PCh",
+                  "def": "no",
+                  "titre": "Préavis différent pour la fermeture",
+                  "valeurs": [
+                    [
+                      "0.5\" – 1'00",
+                      "Préavis spécifique avant la fermeture"
+                    ],
+                    [
+                      "no",
+                      "Égal à t.PrE"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "nom": "Vitesse, rampe, frein, détection d'obstacle",
+              "items": [
+                {
+                  "code": "vEL",
+                  "def": "18.0",
+                  "titre": "Vitesse en fonctionnement normal (cm/s)",
+                  "valeurs": [
+                    [
+                      "3.5 – 35.0",
+                      "Ne pas dépasser la vitesse maximum du graphique de la notice, fonction du poids du vantail"
+                    ]
+                  ]
+                },
+                {
+                  "code": "vEL.r",
+                  "def": "6.0",
+                  "titre": "Vitesse pendant le ralentissement (cm/s)",
+                  "valeurs": [
+                    [
+                      "3.5 – 35.0",
+                      "La valeur maximale configurable est la valeur de vEL"
+                    ]
+                  ]
+                },
+                {
+                  "code": "rAM",
+                  "def": "4",
+                  "titre": "Rampe de démarrage",
+                  "valeurs": [
+                    [
+                      "0 – 6",
+                      "Plus la valeur est haute, plus la rampe de puissance est longue"
+                    ]
+                  ]
+                },
+                {
+                  "code": "FrEn",
+                  "def": "5",
+                  "titre": "Fonction frein",
+                  "valeurs": [
+                    [
+                      "1 – 10",
+                      "Puissance de freinage proportionnelle à la valeur. Chaque freinage donne un choc mécanique : régler la valeur minimale qui donne une distance d'arrêt correcte"
+                    ],
+                    [
+                      "0",
+                      "Fonction désactivée"
+                    ]
+                  ],
+                  "note": "La notice donne la plage 1-10 et une ligne « 0 = désactivée » avec le défaut 5."
+                },
+                {
+                  "code": "SEn.A",
+                  "def": "0.0A",
+                  "titre": "Capteur d'obstacle ampèremétrique",
+                  "valeurs": [
+                    [
+                      "0.0A – 5.0A",
+                      "Si le courant du moteur dépasse la valeur, l'armoire se met en sécurité : arrêt puis inversion 3 s. Un Start reprend dans la direction précédente"
+                    ],
+                    [
+                      "0.0A",
+                      "Fonction désactivée"
+                    ]
+                  ]
+                },
+                {
+                  "code": "SEn.v",
+                  "def": "3",
+                  "titre": "Sensibilité / vitesse du capteur",
+                  "valeurs": [
+                    [
+                      "0 – 7",
+                      "Le texte de la notice reprend « vitesse pendant le ralentissement » et la description de l'inversion 3 s du capteur d'obstacles"
+                    ]
+                  ],
+                  "note": "Libellé identique à vEL.r dans la notice : le rôle exact de SEn.v n'est pas clair, ne pas s'en servir sans confirmer chez V2."
+                },
+                {
+                  "code": "rA.AP",
+                  "def": "15",
+                  "titre": "Ralentissement en ouverture (% de course)",
+                  "valeurs": [
+                    [
+                      "0 – 100",
+                      "Part de la course faite à vitesse réduite en fin d'ouverture"
+                    ]
+                  ]
+                },
+                {
+                  "code": "rA.Ch",
+                  "def": "15",
+                  "titre": "Ralentissement en fermeture (% de course)",
+                  "valeurs": [
+                    [
+                      "0 – 100",
+                      "Part de la course faite à vitesse réduite en fin de fermeture"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "nom": "Comportement des commandes",
+              "items": [
+                {
+                  "code": "St.AP",
+                  "def": "PAUS",
+                  "titre": "Start en ouverture",
+                  "valeurs": [
+                    [
+                      "PAUS",
+                      "Le portail s'arrête et entre en pause"
+                    ],
+                    [
+                      "ChiU",
+                      "Il commence à se fermer"
+                    ],
+                    [
+                      "no",
+                      "Il continue à s'ouvrir (commande ignorée)"
+                    ]
+                  ]
+                },
+                {
+                  "code": "St.Ch",
+                  "def": "StoP",
+                  "titre": "Start en fermeture",
+                  "valeurs": [
+                    [
+                      "StoP",
+                      "Il s'arrête, cycle terminé"
+                    ],
+                    [
+                      "APEr",
+                      "Il se ré-ouvre"
+                    ]
+                  ]
+                },
+                {
+                  "code": "St.PA",
+                  "def": "ChiU",
+                  "titre": "Start en pause",
+                  "valeurs": [
+                    [
+                      "ChiU",
+                      "Il se referme"
+                    ],
+                    [
+                      "no",
+                      "Commande ignorée"
+                    ],
+                    [
+                      "PAUS",
+                      "Le temps de pause est rechargé (Ch.AU)"
+                    ]
+                  ]
+                },
+                {
+                  "code": "SP.AP",
+                  "def": "PAUS",
+                  "titre": "Start piéton pendant l'ouverture partielle",
+                  "valeurs": [
+                    [
+                      "PAUS",
+                      "Arrêt et pause"
+                    ],
+                    [
+                      "ChiU",
+                      "Il se referme"
+                    ],
+                    [
+                      "no",
+                      "Il continue à s'ouvrir"
+                    ]
+                  ],
+                  "note": "Un Start reçu pendant l'ouverture partielle provoque l'ouverture totale ; un Start piéton est toujours ignoré pendant une ouverture totale."
+                },
+                {
+                  "code": "Strt",
+                  "def": "StAn",
+                  "titre": "Fonctionnement des entrées START et START P.",
+                  "valeurs": [
+                    [
+                      "StAn",
+                      "Standard : START = ouverture totale, START P. = piéton"
+                    ],
+                    [
+                      "no",
+                      "Entrées sur bornes désactivées (fonctionnent selon StAn)"
+                    ],
+                    [
+                      "AP.Ch",
+                      "Ouvre / Ferme : START ouvre, START P. ferme (impulsion)"
+                    ],
+                    [
+                      "PrES",
+                      "Homme mort : START ouvre, START P. ferme, pression maintenue"
+                    ],
+                    [
+                      "oroL",
+                      "Horloge : pour minuterie ou détecteur à commande maintenue ; le portail reste ouvert tant que le contact est maintenu, puis pause et fermeture (fermeture automatique obligatoire)"
+                    ]
+                  ]
+                },
+                {
+                  "code": "StoP",
+                  "def": "no",
+                  "titre": "Entrée STOP",
+                  "valeurs": [
+                    [
+                      "no",
+                      "Désactivée"
+                    ],
+                    [
+                      "ProS",
+                      "Au Start suivant, reprend dans la direction initiale"
+                    ],
+                    [
+                      "invE",
+                      "Au Start suivant, reprend dans la direction opposée"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "nom": "Fermeture automatique, lumière, clignotant",
+              "items": [
+                {
+                  "code": "Ch.AU",
+                  "def": "no",
+                  "titre": "Fermeture automatique",
+                  "valeurs": [
+                    [
+                      "no",
+                      "Désactivée"
+                    ],
+                    [
+                      "0.5\" – 20.0'",
+                      "Temps de pause avant refermeture"
+                    ]
+                  ]
+                },
+                {
+                  "code": "Ch.tr",
+                  "def": "no",
+                  "titre": "Fermeture après le passage",
+                  "valeurs": [
+                    [
+                      "no",
+                      "Désactivée"
+                    ],
+                    [
+                      "0.5\" – 20.0'",
+                      "Chaque intervention photocellule pendant la pause (ou l'ouverture) recharge ce temps comme temps de pause"
+                    ]
+                  ]
+                },
+                {
+                  "code": "PA.tr",
+                  "def": "no",
+                  "titre": "Pause après le passage",
+                  "valeurs": [
+                    [
+                      "Si",
+                      "Le portail s'arrête après le passage devant les photocellules ; en automatique, le temps de pause est Ch.tr"
+                    ],
+                    [
+                      "no",
+                      "Désactivée"
+                    ]
+                  ]
+                },
+                {
+                  "code": "LUCi",
+                  "def": "t.LUC",
+                  "titre": "Lumière de courtoisie (sortie B3-B4)",
+                  "valeurs": [
+                    [
+                      "t.LUC",
+                      "Temporisée de 0 à 20' (1'00 par défaut)"
+                    ],
+                    [
+                      "no",
+                      "Désactivée"
+                    ],
+                    [
+                      "CiCL",
+                      "Allumée pendant tout le cycle"
+                    ]
+                  ]
+                },
+                {
+                  "code": "AUS",
+                  "def": "Mon",
+                  "titre": "Canal auxiliaire (B3-B4 par canal 4 de l'émetteur)",
+                  "valeurs": [
+                    [
+                      "t iM",
+                      "Temporisé de 0 à 20'"
+                    ],
+                    [
+                      "biSt",
+                      "Bistable"
+                    ],
+                    [
+                      "Mon",
+                      "Monostable"
+                    ]
+                  ]
+                },
+                {
+                  "code": "LP.PA",
+                  "def": "no",
+                  "titre": "Clignotant en pause",
+                  "valeurs": [
+                    [
+                      "no",
+                      "Désactivé"
+                    ],
+                    [
+                      "Si",
+                      "Le clignotant fonctionne aussi pendant la pause (portail ouvert, fermeture automatique active)"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "nom": "Sécurités",
+              "items": [
+                {
+                  "code": "Fot1",
+                  "def": "no",
+                  "titre": "Entrée photocellule 1 (active en ouverture et fermeture)",
+                  "valeurs": [
+                    [
+                      "no",
+                      "Entrée désactivée"
+                    ],
+                    [
+                      "AP.Ch",
+                      "Entrée activée"
+                    ]
+                  ]
+                },
+                {
+                  "code": "Fot2",
+                  "def": "CFCh",
+                  "titre": "Entrée photocellule 2 (inactive en ouverture)",
+                  "valeurs": [
+                    [
+                      "CFCh",
+                      "Inversion en fermeture et empêche l'ouverture à l'arrêt"
+                    ],
+                    [
+                      "Ch",
+                      "Inversion en fermeture seulement (désactiver alors le test photocellules)"
+                    ],
+                    [
+                      "no",
+                      "Entrée désactivée"
+                    ]
+                  ]
+                },
+                {
+                  "code": "Ft.tE",
+                  "def": "no",
+                  "titre": "Test de fonctionnement des photocellules",
+                  "valeurs": [
+                    [
+                      "no",
+                      "Désactivé"
+                    ],
+                    [
+                      "Si",
+                      "Test avant chaque cycle (moins d'1 s). En cas d'anomalie le portail reste à l'arrêt et le clignotant s'allume 5 s"
+                    ]
+                  ]
+                },
+                {
+                  "code": "CoS1",
+                  "def": "no",
+                  "titre": "Barre palpeuse 1 (fixe)",
+                  "valeurs": [
+                    [
+                      "no",
+                      "Désactivée"
+                    ],
+                    [
+                      "APCh",
+                      "Active en ouverture et fermeture"
+                    ],
+                    [
+                      "AP",
+                      "Active en ouverture, inactive en fermeture"
+                    ]
+                  ]
+                },
+                {
+                  "code": "CoS2",
+                  "def": "no",
+                  "titre": "Barre palpeuse 2 (mobile)",
+                  "valeurs": [
+                    [
+                      "no",
+                      "Désactivée"
+                    ],
+                    [
+                      "APCh",
+                      "Active en ouverture et fermeture"
+                    ],
+                    [
+                      "Ch",
+                      "Active en fermeture, inactive en ouverture"
+                    ]
+                  ]
+                },
+                {
+                  "code": "Co.tE",
+                  "def": "no",
+                  "titre": "Test des barres palpeuses",
+                  "valeurs": [
+                    [
+                      "no",
+                      "Test désactivé"
+                    ],
+                    [
+                      "rESi",
+                      "Barres résistives"
+                    ],
+                    [
+                      "Foto",
+                      "Barres optiques"
+                    ]
+                  ]
+                },
+                {
+                  "code": "i.Adi",
+                  "def": "no",
+                  "titre": "Interface ADI",
+                  "valeurs": [
+                    [
+                      "no",
+                      "Interface désactivée : signalisations ignorées"
+                    ],
+                    [
+                      "Si",
+                      "Activée ; OK ouvre le menu de configuration du module (propre au dispositif). Sans module : une série de tirets"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "nom": "Fin de programmation",
+              "items": [
+                {
+                  "code": "FinE",
+                  "def": "no",
+                  "titre": "Fin de programmation",
+                  "valeurs": [
+                    [
+                      "no",
+                      "Ne pas sortir"
+                    ],
+                    [
+                      "Si",
+                      "Modifications terminées : mémorise et quitte"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "bornier": {
+          "groupes": [
+            {
+              "nom": "Alimentation et sorties",
+              "bornes": [
+                {
+                  "n": "L · N",
+                  "label": "Alimentation 230 V 50 Hz",
+                  "desc": "Par interrupteur magnétothermique différentiel. Relier le moteur à la terre avec la cosse fournie (symbole terre).",
+                  "t": "alim"
+                },
+                {
+                  "n": "B1 · B2",
+                  "label": "Clignotant 230 V",
+                  "desc": "40 W maxi, avec clignoteur intégré.",
+                  "t": "sortie"
+                },
+                {
+                  "n": "B3 · B4",
+                  "label": "Lumière de courtoisie",
+                  "desc": "Contact sec NO libre de potentiel. Pilotable par le canal 4 du récepteur (paramètres LUCi / AUS).",
+                  "t": "sortie"
+                },
+                {
+                  "n": "A1 · A2",
+                  "label": "Antenne",
+                  "desc": "A2 = âme centrale, A1 = blindage. Antenne conseillée ANS433 (portée limitée avec couvercle aluminium).",
+                  "t": "autre"
+                }
+              ]
+            },
+            {
+              "nom": "Commandes et sécurités (bornier M1 à M12)",
+              "bornes": [
+                {
+                  "n": "M1",
+                  "label": "START",
+                  "desc": "Commande d'ouverture, contact NO, commun M4. Avec détecteur à commande maintenue : Strt = oroL.",
+                  "t": "no"
+                },
+                {
+                  "n": "M2",
+                  "label": "START P.",
+                  "desc": "Ouverture piéton, contact NO, commun M4.",
+                  "t": "no"
+                },
+                {
+                  "n": "M3",
+                  "label": "STOP",
+                  "desc": "Contact NF, commun M4.",
+                  "t": "nf"
+                },
+                {
+                  "n": "M4",
+                  "label": "Commun (−)",
+                  "desc": "Commun des commandes START, START P., STOP.",
+                  "t": "autre"
+                },
+                {
+                  "n": "M5",
+                  "label": "Photocellules type 1",
+                  "desc": "Contact NF, commun M9. Plusieurs paires du même type : sorties en série.",
+                  "t": "nf"
+                },
+                {
+                  "n": "M6",
+                  "label": "Photocellules type 2",
+                  "desc": "Contact NF, commun M9.",
+                  "t": "nf"
+                },
+                {
+                  "n": "M7",
+                  "label": "Barres palpeuses type 1",
+                  "desc": "NF ou caoutchouc 8,2 kΩ, commun M9.",
+                  "t": "nf"
+                },
+                {
+                  "n": "M8",
+                  "label": "Barres palpeuses type 2",
+                  "desc": "NF ou caoutchouc 8,2 kΩ, commun M9. Plusieurs barres NF en série ; plusieurs barres 8,2 kΩ en chaîne avec la résistance seulement sur la dernière.",
+                  "t": "nf"
+                },
+                {
+                  "n": "M9",
+                  "label": "Commun accessoires (−)",
+                  "desc": "Commun des contacts photocellules et barres palpeuses.",
+                  "t": "autre"
+                },
+                {
+                  "n": "M10",
+                  "label": "24 V~ accessoires",
+                  "desc": "Alimentation des cellules réceptrices (M10-M11). 10 W maxi pour tous les accessoires, protégé par fusible électronique (LED OVERLOAD).",
+                  "t": "sortie"
+                },
+                {
+                  "n": "M11",
+                  "label": "Commun alimentation (−)",
+                  "desc": "Commun d'alimentation des accessoires.",
+                  "t": "autre"
+                },
+                {
+                  "n": "M12",
+                  "label": "24 V~ avec test",
+                  "desc": "Alimentation des cellules émettrices ou barres optiques (M11-M12) pour le test de fonctionnement. Obligatoire pour cellules reflex avec test.",
+                  "t": "sortie"
+                }
+              ]
+            },
+            {
+              "nom": "Connecteurs de la platine",
+              "bornes": [
+                {
+                  "n": "RECEIVER",
+                  "label": "Récepteur embrochable MRx",
+                  "desc": "4 canaux : 1 START, 2 START piéton, 3 STOP, 4 lumière de courtoisie. Attention au sens d'insertion.",
+                  "t": "bus"
+                },
+                {
+                  "n": "ADI",
+                  "label": "Interface ADI",
+                  "desc": "Modules optionnels V2 (barres palpeuses radio WES-ADI, CL1+ de verrouillage…). Activer avec i.Adi.",
+                  "t": "bus"
+                }
+              ]
+            }
+          ],
+          "fusibles": "F1 = 8 A (platine). Accessoires 24 V~ : 10 W maxi. Moteur 230 V 50 Hz 650 W, 0,5 A à vide, 3,7 A à pleine charge, 2 500 kg, poussée 1 660 N, pignon M4 Z18, IP44.",
+          "notes": [
+            "Contacts de commande toujours de type NO ; STOP et sécurités NF ; entrées de sécurité non utilisées : désactiver dans le menu (inutile de les ponter).",
+            "FORTECO 2500-I : 19 kg ; 2500-I-M : 21 kg (mêmes caractéristiques). Fréquence d'utilisation 50 %, -20 / +55 °C.",
+            "Fins de course magnétiques : aimant BLEU = fin de course de droite (DX), ROUGE = gauche (SX), selon la position du capteur par rapport au moteur, pas selon le sens d'ouverture. Aimants à la hauteur du capteur à l'ouverture et à la fermeture maximales ; butées mécaniques obligatoires.",
+            "Câbles : alimentation 3G1,5 mm² (≤ 20 m) ou 3G2,5 mm² (20-30 m) ; photocellules TX 2×0,5, RX 4×0,5 ; clignotant 2×1,5 ; antenne RG174.",
+            "Déblocage : ouvrir la protection de la serrure J, clé K tournée à droite pour accéder au déblocage, clé L à droite jusqu'à l'arrêt. Rétablir : portail fermé, clé L à gauche, clé K à gauche, remettre le couvercle J.",
+            "Crémaillère à 1-2 mm au-dessus du pignon, sur toute la longueur ; moteur de niveau et parallèle, au moins 5 mm entre le portail et le moteur."
+          ]
+        },
+        "apprentissage": {
+          "avant": [
+            "Butées mécaniques installées correctement ; moteur verrouillé.",
+            "Interface ADI désactivée (i.Adi = no) et Strt = StAn : sinon Err8.",
+            "Configuration rapide (notice chap. 7) : recharger les valeurs usine (menu -dEF, voir ci-dessous), régler dir, StoP, Fot1, Fot2, CoS1, CoS2 selon le sens du portail et les sécurités posées, puis lancer l'auto-apprentissage."
+          ],
+          "etapes": [
+            "Valeurs usine : maintenir OK jusqu'à -dEF, relâcher (ESC), ▼ jusqu'à dEF, OK (no), ▼ (Si), OK : tout est réinitialisé et l'armoire quitte la programmation. Cela efface tous les réglages personnalisés.",
+            "Auto-apprentissage : maintenir OK jusqu'à -APP, relâcher (ESC), ▼ pour t.LAv, OK pour démarrer.",
+            "Le portail ferme jusqu'à la butée ou au fin de course, ouvre jusqu'à la butée ou au fin de course d'ouverture, puis ferme à nouveau. Pendant cette phase le moteur se déplace à vitesse réduite ; les forces nécessaires sont mémorisées pour le capteur d'obstacles.",
+            "Si le capteur ampèremétrique est activé (SEn.A), l'écran propose une valeur de seuil (par exemple 5.5A) : modifiable avec ▲ / ▼, OK pour confirmer, puis l'écran affiche SEn.A. Sans action pendant 20 s, l'armoire quitte sans enregistrer le seuil.",
+            "Maintenir ▼ jusqu'à FinE, OK, choisir Si, OK pour sortir en mémorisant. Si l'armoire sort par temporisation (1 min), le détecteur retrouve sa valeur précédente ; les positions de fin de course restent mémorisées."
+          ],
+          "apres": [
+            "Menu -Cnt : tot affiche le total de cycles (▲ / ▼ alternent milliers / unités) ; SErv règle le compteur de cycles avant entretien (1re pression : arrondi aux 1 000, puis +1 000 ou −100 par pression). À zéro : 5 s de préavis supplémentaires avant chaque départ jusqu'à l'accès au menu SErv ; si aucun nouveau nombre n'est programmé, la fonction est désactivée.",
+            "Menu -Inv : test de la carte inverter. OK maintenu, relâcher : rEAd, puis la version firmware de la carte inverter s'affiche si elle fonctionne. Si rEAd reste affiché, la carte est en défaut : contacter V2. Les menus de diagnostic atteints avec ▲ / ▼ ne se consultent que sur indication de V2.",
+            "Homme mort d'urgence (installation, entretien, défaut cellules / barres / fins de course / encodeur) : 3 commandes START d'au moins 1 s séparées d'au moins 1 s, la 4e commande déplace le portail tant qu'elle est maintenue ; la fonction s'éteint après 10 s d'inactivité.",
+            "Entretien conseillé tous les six mois (notice chap. 16). Essai selon EN 12445 / EN 12453."
+          ]
+        }
+      },
+      {
+        "id": "afca-starteco4-2m-revers",
+        "nom": "Startéco 4-2M réversible",
+        "modeles": "Motorisation réversible REVERS 3i / Startéco 4-2M — portail coulissant intensif ≤ 800 kg, moteur 230 V 175 W avec électrofrein, fins de course inductifs, platine Startéco 4 à grande / petite vitesse et couples réglables",
+        "type": "Portail coulissant intensif 800 kg — afficheur LCD à menus, électrofrein à appel de courant, variateur",
+        "source": "Notice AFCA Startéco 4-2M réversible (Doc 19.1.a indice 170, ROK, 22/06/17, 35 p.)",
+        "codes": [
+          {
+            "code": "Attente commande",
+            "type": "afficheur",
+            "titre": "Écran de veille",
+            "action": "Position de la porte, nombre de cycles, étape du cycle en texte clair. L'afficheur s'éteint 2 min après la fermeture : appuyer sur un bouton ou donner un ordre."
+          },
+          {
+            "code": "S0.1234 · C.1234 · Sf.1234",
+            "type": "afficheur",
+            "titre": "Sécurités activées",
+            "action": "S0 = sécurités d'ouverture 1 à 4, C = cellules 1 à 4, Sf = barres palpeuses de fermeture 1 à 4, « Stop actif » = sécurité stop."
+          },
+          {
+            "code": "Mot de passe incorrect",
+            "type": "afficheur",
+            "titre": "Mot de passe refusé",
+            "action": "Retour à l'écran d'accueil des menus. Mot de passe usine : 0000 (modifiable dans le menu USINE)."
+          },
+          {
+            "code": "ARRET D'URGENCE ACTIF – Défaut FU1",
+            "type": "erreur",
+            "titre": "Arrêt d'urgence ou fusible F1",
+            "action": "L'arrêt d'urgence (bornes 1-2) est enclenché, ou le fusible F1 est défectueux : les sorties 12 et 24 V sont coupées. À noter : l'ouverture du contact d'arrêt d'urgence débloque aussi le frein moteur."
+          },
+          {
+            "code": "DEFAUT FDC",
+            "type": "erreur",
+            "titre": "Fin de course absent ou les deux détectés",
+            "action": "Absence de fin de course ou détection des deux en même temps : vérifier le raccordement ou les désactiver dans le menu PARAMETRAGE. Menu USINE : « Bloquant » = seule une coupure ou l'arrêt d'urgence réarme ; « Non bloquant » = un nouvel ordre relance un cycle."
+          },
+          {
+            "code": "Historique : DEF autotest C1 à C4 · SF1 à SF4",
+            "type": "diag",
+            "titre": "Défaut d'autotest d'une sécurité",
+            "action": "Une sécurité programmée « Autotest » est restée fermée pendant les 500 ms de test : la carte arrête le cycle comme sur STOP et indique la sécurité fautive (principe de l'autotest, notice p. 7)."
+          },
+          {
+            "code": "Historique : SF1 à SF4 · SO1 à SO4 · C1 à C4 active +5mn",
+            "type": "diag",
+            "titre": "Sécurité active depuis plus de 5 minutes",
+            "action": "Libellé de l'historique : l'entrée de sécurité est restée active plus de 5 minutes."
+          },
+          {
+            "code": "Historique : FDCO / FDCF non détecté · FDC ouv et ferm actifs",
+            "type": "diag",
+            "titre": "Défauts de fin de course",
+            "action": "Fin de course non détecté, ou les deux actifs. La notice (p. 30) indique : vérifier le raccordement de ceux-ci ou les désactiver dans le menu PARAMETRAGE."
+          },
+          {
+            "code": "Historique : Présence AU · Stop +5mn · Sécu portillon +5mn · Mot de passe +5mn · DEF superviseur",
+            "type": "diag",
+            "titre": "Autres défauts mémorisés",
+            "action": "Menu USINE > Historique défauts : les 10 derniers défauts, le dernier d'abord. La notice ne donne que ces libellés."
+          },
+          {
+            "code": "Frein collé",
+            "type": "symptome",
+            "titre": "Portail impossible à manœuvrer à la main",
+            "action": "Moteur réversible bloqué par l'électrofrein à appel de courant. Trois solutions : couper l'alimentation ; ouvrir l'arrêt d'urgence (1-2) ; sans alimentation coupée, maintenir un ordre pendant X secondes (paramètre 31, 0 à 10 s selon le texte) pour couper l'alimentation du frein pendant Y secondes (paramètre 32, 0 à 240 s selon le texte). Possible si une sécurité empêche le départ, si le stop est actionné ou si un défaut de fin de course a bloqué l'armoire."
+          },
+          {
+            "code": "Le moteur ne démarre pas / frein non alimenté",
+            "type": "symptome",
+            "titre": "Contrôle du frein",
+            "action": "Le frein étant à appel de courant, l'Option 1 doit être programmée sur « Frein » et le contact sur NF. Avec un second moteur face à face : frein du moteur 2 sur Option 2, programmée « frein » et NF."
+          }
+        ],
+        "parametres": {
+          "intro": "Menu PARAMETRAGE : 59 paramètres selon la notice (mot de passe 0000). Les paramètres optionnels n'apparaissent que si leur fonction est activée. La numérotation de la notice est incohérente d'une page à l'autre (voir notes) : se fier aux libellés affichés. Valeurs usine : tableau de la notice ; les contradictions avec le texte sont signalées en note.",
+          "navigation": [
+            "Carte au repos : VALID donne accès aux menus ; + / − pour choisir UTILISATION, PARAMETRAGE, MANOEUVRES, DIAGNOSTIC, INPUTS, MENU USINE, HORLOGE, APPRENTISSAGE, INFO CARTE ; VALID pour entrer.",
+            "Dans un menu : VALID choisit le paramètre et valide ; + / − défilent et changent la valeur. Maintenir VALID 3 s : sortir en mémorisant.",
+            "Mot de passe (PARAMETRAGE, INPUTS, MENU USINE, APPRENTISSAGE) : curseur sur le chiffre, +/− pour la valeur, VALID pour passer au suivant."
+          ],
+          "groupes": [
+            {
+              "nom": "Fonctionnement, temps",
+              "items": [
+                {
+                  "code": "1",
+                  "def": "Semi auto 2bp",
+                  "titre": "Mode de fonctionnement",
+                  "valeurs": [
+                    [
+                      "Semi auto 2bp",
+                      "OUV ouvre, FERM ferme"
+                    ],
+                    [
+                      "Auto réarm",
+                      "Fermeture auto après la pause ; tempo relancée par OUV ou un passage cellule"
+                    ],
+                    [
+                      "Auto blocage",
+                      "Fermeture auto ; si passage devant la cellule 1, referme tout de suite après l'ouverture"
+                    ],
+                    [
+                      "Séquentiel 1bp",
+                      "OUV : ouvre, arrête, ferme ; OUV pendant la fermeture = réouverture"
+                    ],
+                    [
+                      "Mixte",
+                      "Ouverture par impulsion, fermeture en homme mort sur FERM"
+                    ],
+                    [
+                      "Maintenue",
+                      "Homme mort 2 BP : ouverture et fermeture par pression maintenue"
+                    ]
+                  ],
+                  "note": "Contradiction notice : le tableau (p. 13) donne « Auto réarm. » comme valeur usine, le texte du paramètre 1 (p. 19) « Semi automatique 2BP (par défaut) »."
+                },
+                {
+                  "code": "2",
+                  "def": "Attente",
+                  "titre": "Mise sous tension",
+                  "valeurs": [
+                    [
+                      "Attente",
+                      "Attend un ordre après coupure ou arrêt d'urgence"
+                    ],
+                    [
+                      "Fermeture",
+                      "Lance une fermeture"
+                    ]
+                  ]
+                },
+                {
+                  "code": "3",
+                  "def": "5 s",
+                  "titre": "Temps de pause (refermeture auto)",
+                  "valeurs": [
+                    [
+                      "Non · 1 > 360 s",
+                      "Visible en mode automatique"
+                    ]
+                  ]
+                },
+                {
+                  "code": "4 · 5",
+                  "def": "Non · 1 mn",
+                  "titre": "Haut trafic et temps de pause haut trafic",
+                  "valeurs": [
+                    [
+                      "Oui / Non",
+                      "Après 5 passages devant C1 avant l'ouverture totale, la pause passe à la valeur du paramètre 5 (1 à 5 min)"
+                    ]
+                  ]
+                },
+                {
+                  "code": "6",
+                  "def": "Non",
+                  "titre": "Fin de course",
+                  "valeurs": [
+                    [
+                      "Oui",
+                      "Arrêt aux fins de course ; il faut quand même régler les temps GV + PV"
+                    ],
+                    [
+                      "Non",
+                      "Le moteur travaille selon les temps GV + PV réglés (additionnés)"
+                    ]
+                  ],
+                  "note": "Contradiction notice : le tableau donne « non » comme valeur usine, la capture d'écran du même tableau affiche « Oui ». La motorisation est livrée avec des fins de course inductifs."
+                },
+                {
+                  "code": "7",
+                  "def": "1",
+                  "titre": "Nombre de moteurs",
+                  "valeurs": [
+                    [
+                      "1",
+                      "Les deux sorties moteur sont alimentées ensemble, même tension : le moteur peut être sur la sortie 1 ou 2"
+                    ],
+                    [
+                      "2",
+                      "Deux moteurs : affiche les paramètres du moteur 2"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "nom": "Vitesses, couples, ralentissement",
+              "items": [
+                {
+                  "code": "8 · 9",
+                  "def": "10 s · 3 s",
+                  "titre": "Moteur 1 : temps grande vitesse (GV) / petite vitesse (PV)",
+                  "valeurs": [
+                    [
+                      "1 > 360 s",
+                      "Les deux temps s'additionnent ; régler pour que le vantail arrive sur la butée en petite vitesse"
+                    ]
+                  ]
+                },
+                {
+                  "code": "Couples M1",
+                  "def": "100 % · 85 %",
+                  "titre": "Moteur 1 : couple GV / couple PV",
+                  "valeurs": [
+                    [
+                      "40 > 100 %",
+                      "Indépendants l'un de l'autre. Sur vérin hydraulique : type de ralentissement sur 1 et couple de 60 à 80 %"
+                    ]
+                  ]
+                },
+                {
+                  "code": "Ralentissement M1",
+                  "def": "2",
+                  "titre": "Moteur 1 : type de ralentissement",
+                  "valeurs": [
+                    [
+                      "1",
+                      "Moins prononcé : à privilégier si le moteur cale au ralentissement"
+                    ],
+                    [
+                      "2",
+                      "Plus prononcé : accostage doux mais perte de couple ; augmenter le couple PV si besoin"
+                    ]
+                  ]
+                },
+                {
+                  "code": "M2",
+                  "def": "10 s · 3 s · 100 % · 85 % · 2",
+                  "titre": "Moteur 2 : mêmes réglages (GV, PV, couples, ralentissement)",
+                  "valeurs": [
+                    [
+                      "Visible seulement en mode 2 moteurs",
+                      "Mêmes plages que le moteur 1"
+                    ]
+                  ]
+                },
+                {
+                  "code": "20",
+                  "def": "2 s",
+                  "titre": "Décalage du moteur 2 à l'ouverture",
+                  "valeurs": [
+                    [
+                      "1 > 60 s",
+                      "Visible en 2 moteurs"
+                    ]
+                  ]
+                },
+                {
+                  "code": "21",
+                  "def": "2 s",
+                  "titre": "Retard du moteur 1 à la fermeture",
+                  "valeurs": [
+                    [
+                      "1 > 60 s",
+                      "Visible en 2 moteurs"
+                    ]
+                  ]
+                },
+                {
+                  "code": "22",
+                  "def": "2 s",
+                  "titre": "Temps de fonctionnement supplémentaire",
+                  "valeurs": [
+                    [
+                      "0 > 240 s",
+                      "Après une inversion sur sécurité, compense l'inertie du portail ; sans fin de course : ajouté après une inversion sur sécurité ; avec fin de course : ajouté quand le fin de course n'est pas atteint ; effectué en petite vitesse"
+                    ]
+                  ]
+                },
+                {
+                  "code": "23",
+                  "def": "0",
+                  "titre": "Coup de bélier",
+                  "valeurs": [
+                    [
+                      "0 > 5 s",
+                      "Alimente le moteur en fermeture avant l'ouverture pour décharger le pêne de la serrure. Uniquement en mode 2 moteurs sans fin de course"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "nom": "Piéton, préavis, éclairage",
+              "items": [
+                {
+                  "code": "24",
+                  "def": "Non",
+                  "titre": "Ouverture piéton",
+                  "valeurs": [
+                    [
+                      "Non",
+                      "Désactivée"
+                    ],
+                    [
+                      "FDC piéton",
+                      "Arrêt par un fin de course piéton (entrée à affecter)"
+                    ],
+                    [
+                      "0,1 > 360 s",
+                      "Durée de l'ouverture partielle"
+                    ]
+                  ],
+                  "note": "Commandes d'ouverture partielle prises en compte porte fermée seulement. Il faut affecter une entrée « commande piéton » dans INPUTS."
+                },
+                {
+                  "code": "25",
+                  "def": "5 s",
+                  "titre": "Temps de pause piéton",
+                  "valeurs": [
+                    [
+                      "0 > 360 s",
+                      "Valable en mode automatique"
+                    ]
+                  ],
+                  "note": "Plage : tableau 1 à 360 s, texte 0 à 360 s."
+                },
+                {
+                  "code": "26 · 27",
+                  "def": "2 s · 2 s",
+                  "titre": "Préavis ouverture / fermeture",
+                  "valeurs": [
+                    [
+                      "1 > 60 s",
+                      "Tableau : 1 à 60 s ; texte : 0 à 360 s"
+                    ]
+                  ]
+                },
+                {
+                  "code": "28",
+                  "def": "Non",
+                  "titre": "Éclairage de zone pendant la pause",
+                  "valeurs": [
+                    [
+                      "Non",
+                      "S'éteint"
+                    ],
+                    [
+                      "Permanent",
+                      "Reste allumé porte ouverte"
+                    ],
+                    [
+                      "Temporisé",
+                      "Durée du paramètre suivant"
+                    ]
+                  ]
+                },
+                {
+                  "code": "29",
+                  "def": "0 s",
+                  "titre": "Temps éclairage pendant la pause",
+                  "valeurs": [
+                    [
+                      "1 > 360 s",
+                      "Visible si 28 = temporisé"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "nom": "Frein",
+              "items": [
+                {
+                  "code": "30",
+                  "def": "0,5 s",
+                  "titre": "Temps de décalage du frein",
+                  "valeurs": [
+                    [
+                      "0,1 > 5,0 s",
+                      "Avance ou retard du contact frein"
+                    ]
+                  ]
+                },
+                {
+                  "code": "31",
+                  "def": "200",
+                  "titre": "Temps d'action sur la commande pour débloquer le frein (X)",
+                  "valeurs": [
+                    [
+                      "0 > 360",
+                      "Tableau : 0 à 360 ; texte de la page 2 : 0 à 10 s"
+                    ]
+                  ]
+                },
+                {
+                  "code": "32",
+                  "def": "3",
+                  "titre": "Temps de déblocage du frein par la commande (Y)",
+                  "valeurs": [
+                    [
+                      "1 > 10",
+                      "Page 2 : jusqu'à 240 s"
+                    ]
+                  ]
+                },
+                {
+                  "code": "33",
+                  "def": "Non",
+                  "titre": "Frein pendant les inversions de mouvement",
+                  "valeurs": [
+                    [
+                      "Non",
+                      "Frein non activé avant une inversion"
+                    ],
+                    [
+                      "Oui",
+                      "Frein activé avant une inversion"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "nom": "Sécurités",
+              "items": [
+                {
+                  "code": "34 à 37",
+                  "def": "SF1 Oui ; autres Non",
+                  "titre": "Palpeurs de fermeture SF1 à SF4",
+                  "valeurs": [
+                    [
+                      "Non",
+                      "Désactivé (inutile de ponter)"
+                    ],
+                    [
+                      "Oui",
+                      "Pris en compte en fermeture"
+                    ],
+                    [
+                      "Autotest",
+                      "Pris en compte et testé avant chaque départ en fermeture"
+                    ]
+                  ],
+                  "note": "SF2 à SF4 invisibles si non affectés par INPUTS."
+                },
+                {
+                  "code": "38 à 41",
+                  "def": "Non",
+                  "titre": "Sécurités d'ouverture SO1 à SO4",
+                  "valeurs": [
+                    [
+                      "Non",
+                      "Désactivé"
+                    ],
+                    [
+                      "Oui",
+                      "Pris en compte"
+                    ],
+                    [
+                      "Autotest",
+                      "Testé avant chaque départ en ouverture"
+                    ]
+                  ]
+                },
+                {
+                  "code": "42",
+                  "def": "Non affecté",
+                  "titre": "Sécu ouverture et fermeture (SOF)",
+                  "valeurs": [
+                    [
+                      "Non",
+                      "Désactivée"
+                    ],
+                    [
+                      "Oui",
+                      "Prise en compte"
+                    ],
+                    [
+                      "Autotest",
+                      "Testée avant chaque départ"
+                    ]
+                  ],
+                  "note": "Visible si l'entrée « Sécu Ouv&Ferm » est affectée par INPUTS et si le paramètre 43 est sur « Stop OUV Inv.FERM »."
+                },
+                {
+                  "code": "43",
+                  "def": "Inversion totale",
+                  "titre": "Action sur sécurité (ouverture et palpeur)",
+                  "valeurs": [
+                    [
+                      "Inversion totale",
+                      "Mouvement inversé totalement"
+                    ],
+                    [
+                      "Inversion 3s",
+                      "Inversé 3 s puis reprise ; à la 3e inversion le cycle s'arrête"
+                    ],
+                    [
+                      "Stop OUV Inv.FERM",
+                      "Arrêt en ouverture, inversion totale en fermeture"
+                    ]
+                  ]
+                },
+                {
+                  "code": "44",
+                  "def": "0,5 s",
+                  "titre": "Temps avant inversion de mouvement",
+                  "valeurs": [
+                    [
+                      "0,1 > 2,0 s",
+                      "Sur SF et SO, pas sur cellule (tableau : 0,0 à 2,0 s)"
+                    ]
+                  ]
+                },
+                {
+                  "code": "45 à 48",
+                  "def": "C1 Oui ; autres Non",
+                  "titre": "Cellules C1 à C4",
+                  "valeurs": [
+                    [
+                      "Non",
+                      "Désactivée"
+                    ],
+                    [
+                      "Oui",
+                      "Prise en compte"
+                    ],
+                    [
+                      "Autotest",
+                      "Prise en compte et testée avant chaque départ en fermeture"
+                    ]
+                  ]
+                },
+                {
+                  "code": "49 à 52",
+                  "def": "Réouverture sur cellule",
+                  "titre": "Action sur cellule C1 à C4",
+                  "valeurs": [
+                    [
+                      "Réouverture sur cellule",
+                      "Inversion totale"
+                    ],
+                    [
+                      "Arrêt du mouvement",
+                      "Arrêt puis reprise dans le sens initial une fois la cellule libérée"
+                    ]
+                  ]
+                },
+                {
+                  "code": "53",
+                  "def": "Normal",
+                  "titre": "C1 en ADMAP",
+                  "valeurs": [
+                    [
+                      "Normal",
+                      "Fonctionnement normal"
+                    ],
+                    [
+                      "Admap",
+                      "Si C1 est activée à l'ordre d'ouverture, la porte ne part que quand elle est libre"
+                    ]
+                  ]
+                },
+                {
+                  "code": "54",
+                  "def": "0,4 s",
+                  "titre": "Temps d'autotest des sécurités",
+                  "valeurs": [
+                    [
+                      "0,1 > 2,0 s",
+                      "Durée de vérification de l'ouverture du signal de sortie pendant l'autotest"
+                    ]
+                  ]
+                },
+                {
+                  "code": "55",
+                  "def": "Non",
+                  "titre": "BP STOP",
+                  "valeurs": [
+                    [
+                      "Non",
+                      "Entrée STOP ignorée (inutile de la ponter)"
+                    ],
+                    [
+                      "Oui",
+                      "Entrée STOP prise en compte"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "nom": "Contacts option 1 et 2, relayage",
+              "items": [
+                {
+                  "code": "57",
+                  "def": "Fr. synchro",
+                  "titre": "Option 1 (bornes 12-13)",
+                  "valeurs": [
+                    [
+                      "Fr. synchro",
+                      "Frein synchronisé : activé avec le moteur"
+                    ],
+                    [
+                      "Rtrd.Fr .Ouv",
+                      "Frein retardé à l'ouverture (+ temps du param. 30)"
+                    ],
+                    [
+                      "Rtrd.Fr .Ouv .Ferm",
+                      "Frein retardé à l'ouverture et à la fermeture"
+                    ],
+                    [
+                      "Rtrd.Fr .Ouv .Av.Ferm",
+                      "Retardé à l'ouverture, avancé à la fermeture"
+                    ],
+                    [
+                      "Relayage R1 / R2",
+                      "Piloté par le canal 4 du récepteur ou une entrée affectée"
+                    ],
+                    [
+                      "Éclairage",
+                      "Actif pendant la manœuvre et le préavis"
+                    ],
+                    [
+                      "Ouverture · Fermeture",
+                      "Actif pendant la phase correspondante"
+                    ],
+                    [
+                      "Porte ouverte · Porte fermée",
+                      "Actif sur le fin de course (ou fin de tempo sans fin de course)"
+                    ],
+                    [
+                      "Sécurité",
+                      "Actif tant qu'une sécurité est détectée"
+                    ],
+                    [
+                      "Gâche / Ventouse",
+                      "Actif 2 s avant l'ouverture et 1 s après le départ moteur"
+                    ],
+                    [
+                      "Vanne",
+                      "Actif quand la porte n'est pas fermée ou ferme"
+                    ],
+                    [
+                      "Feux oranges · Éclairage de zone",
+                      "Avec la sortie clignotante ou l'éclairage de zone"
+                    ],
+                    [
+                      "Mode Manu Actif",
+                      "Indique l'homme mort actif"
+                    ],
+                    [
+                      "Alarme",
+                      "Cité dans le tableau, non décrit dans le texte"
+                    ]
+                  ],
+                  "note": "Contradiction notice : le tableau (p. 17) donne « Rtrd. Fr. Ouv. Frem. » comme valeur usine de l'option 1, le texte (p. 23) et l'écran « Fr. synchro »."
+                },
+                {
+                  "code": "58",
+                  "def": "NF",
+                  "titre": "Option 1 : NO / NF",
+                  "valeurs": [
+                    [
+                      "NO",
+                      "Ouvert au repos"
+                    ],
+                    [
+                      "NF",
+                      "Fermé au repos"
+                    ]
+                  ],
+                  "note": "Pour le frein à appel de courant : option 1 = Frein, contact NF."
+                },
+                {
+                  "code": "59",
+                  "def": "Sécurité",
+                  "titre": "Option 2 (bornes 14-15)",
+                  "valeurs": [
+                    [
+                      "Mêmes fonctions que l'option 1",
+                      "Frein du moteur 2 si deux moteurs face à face"
+                    ]
+                  ]
+                },
+                {
+                  "code": "60",
+                  "def": "NO",
+                  "titre": "Option 2 : NO / NF",
+                  "valeurs": [
+                    [
+                      "NO · NF",
+                      "Ouvert / fermé au repos"
+                    ]
+                  ],
+                  "note": "Les deux contacts option sont ouverts hors tension ou arrêt d'urgence actionné."
+                },
+                {
+                  "code": "61 · 63",
+                  "def": "Monostable",
+                  "titre": "Fonction relayage R1 / R2",
+                  "valeurs": [
+                    [
+                      "Monostable · Bistable · Tempo travail · Tempo repos",
+                      "Fonction du relais"
+                    ]
+                  ]
+                },
+                {
+                  "code": "62 · 64",
+                  "def": "1 s",
+                  "titre": "Temporisation R1 / R2",
+                  "valeurs": [
+                    [
+                      "1 > 60 s",
+                      "Selon la tempo choisie"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "nom": "MENU USINE",
+              "items": [
+                {
+                  "code": "Langue",
+                  "def": "Français",
+                  "titre": "Langue de l'afficheur",
+                  "valeurs": [
+                    [
+                      "—",
+                      "Texte des menus"
+                    ]
+                  ]
+                },
+                {
+                  "code": "Traitement FDC",
+                  "def": "Bloquant",
+                  "titre": "Défaut de fin de course",
+                  "valeurs": [
+                    [
+                      "Bloquant",
+                      "La carte se bloque : coupure ou arrêt d'urgence pour réarmer"
+                    ],
+                    [
+                      "Non bloquant",
+                      "Un nouvel ordre relance un cycle"
+                    ]
+                  ]
+                },
+                {
+                  "code": "Mot de passe",
+                  "def": "0000",
+                  "titre": "Modifier le mot de passe",
+                  "valeurs": [
+                    [
+                      "Oui",
+                      "Saisir et confirmer le nouveau"
+                    ]
+                  ]
+                },
+                {
+                  "code": "Reset",
+                  "def": "—",
+                  "titre": "Reset EEPROM / cycles / défauts",
+                  "valeurs": [
+                    [
+                      "Oui",
+                      "Réinitialise la carte aux valeurs usine (EEPROM), ou remet à zéro le compteur de cycles, ou efface les défauts"
+                    ]
+                  ]
+                },
+                {
+                  "code": "Historique défauts",
+                  "def": "—",
+                  "titre": "10 derniers défauts",
+                  "valeurs": [
+                    [
+                      "VALID puis +/−",
+                      "Défile les défauts, le dernier d'abord"
+                    ]
+                  ],
+                  "note": "Un réglage du menu USINE est signalé « Ne pas modifier, laisser sur Autre »."
+                }
+              ]
+            },
+            {
+              "nom": "HORLOGE intégrée",
+              "items": [
+                {
+                  "code": "Zone",
+                  "def": "Europe",
+                  "titre": "Heure été / hiver",
+                  "valeurs": [
+                    [
+                      "Europe",
+                      "Gestion automatique"
+                    ],
+                    [
+                      "Invalide",
+                      "Pas de gestion"
+                    ]
+                  ]
+                },
+                {
+                  "code": "Date / heure",
+                  "def": "—",
+                  "titre": "Régler date et heure",
+                  "valeurs": [
+                    [
+                      "Oui",
+                      "Modifier date, heure et jour"
+                    ]
+                  ]
+                },
+                {
+                  "code": "Mode",
+                  "def": "—",
+                  "titre": "Type de fonctionnement",
+                  "valeurs": [
+                    [
+                      "Horloge",
+                      "Ouverture et fermeture automatiques aux heures programmées"
+                    ],
+                    [
+                      "Horloge & Ouv",
+                      "Plage 8 h-14 h : la 1re commande ouvre, fermeture seulement à 14 h"
+                    ]
+                  ],
+                  "note": "Le paramètre 1 doit être en mode automatique (Auto réarm. ou Auto blocage). L'horloge ne gère pas les jours fériés."
+                },
+                {
+                  "code": "Plages",
+                  "def": "—",
+                  "titre": "3 plages par jour (P1 à P3)",
+                  "valeurs": [
+                    [
+                      "Heures",
+                      "Off pour supprimer : aller sur les 2 premiers chiffres, 00, puis − (ou 23 puis +)"
+                    ],
+                    [
+                      "Type commande",
+                      "Ouverture totale ou partielle, valable pour toutes les plages"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "bornier": {
+          "groupes": [
+            {
+              "nom": "Alimentation, moteurs, frein",
+              "bornes": [
+                {
+                  "n": "42 · 43 · 44",
+                  "label": "Alimentation 230 V",
+                  "desc": "42 = terre, 43-44 = 230 V. Protéger par différentiel 30 mA + disjoncteur.",
+                  "t": "alim"
+                },
+                {
+                  "n": "45 · 46 · 47 · 48",
+                  "label": "Moteur 1",
+                  "desc": "45 terre, 46 commun, 47 ouverture, 48 fermeture, condensateur 5 µF entre 47 et 48. Câblé en usine pour ouverture de gauche à droite (vue intérieure) : si l'ouverture est de l'autre côté, inverser les fils 47-48 ET ceux des fins de course (25-26).",
+                  "t": "moteur"
+                },
+                {
+                  "n": "49 · 50 · 51 · 52",
+                  "label": "Moteur 2",
+                  "desc": "49 terre, 50 commun, 51 ouverture, 52 fermeture, avec son condensateur.",
+                  "t": "moteur"
+                },
+                {
+                  "n": "12 · 13 (Option 1)",
+                  "label": "Électrofrein 200 Vcc",
+                  "desc": "Frein à appel de courant : programmer Option 1 = Frein (fr. synchro) et contact NF. Alimenté par un pont redresseur depuis X1.",
+                  "t": "sortie"
+                },
+                {
+                  "n": "14 · 15 (Option 2)",
+                  "label": "Frein du moteur 2",
+                  "desc": "Seulement pour deux moteurs face à face : Option 2 = frein, contact NF.",
+                  "t": "sortie"
+                },
+                {
+                  "n": "16 · 17",
+                  "label": "Éclairage de zone",
+                  "desc": "Contact sec.",
+                  "t": "sortie"
+                }
+              ]
+            },
+            {
+              "nom": "Bornier supérieur — alimentations, commandes, fins de course",
+              "bornes": [
+                {
+                  "n": "1 · 2",
+                  "label": "Arrêt d'urgence",
+                  "desc": "Coupe le circuit 24 V. Ouvrir ce contact débloque le frein. Ponter si inutilisé ; ne pas le raccorder avec les autres sécurités.",
+                  "t": "nf"
+                },
+                {
+                  "n": "3 · 4",
+                  "label": "Sortie 0 V~",
+                  "desc": "Alimentation accessoires.",
+                  "t": "sortie"
+                },
+                {
+                  "n": "5 · 6",
+                  "label": "Sortie 24 V~",
+                  "desc": "Alimentation accessoires (30 VA au total sur 24 V et 12 V, dont 12 VA sur 12 V TX/RX).",
+                  "t": "sortie"
+                },
+                {
+                  "n": "7 · 8",
+                  "label": "Sortie autotest",
+                  "desc": "24 V~ coupé 500 ms avant le départ (J1 sur 24 V) ou contact sec NO fermé 500 ms (J1 sur contact sec).",
+                  "t": "sortie"
+                },
+                {
+                  "n": "9 · 10 · 11",
+                  "label": "Feux clignotants 24 V",
+                  "desc": "9 = 0 V, 10 = feu 1, 11 = feu 2, 15 W maxi par feu.",
+                  "t": "sortie"
+                },
+                {
+                  "n": "18",
+                  "label": "Commun des commandes",
+                  "desc": "COM des entrées 19 à 23.",
+                  "t": "autre"
+                },
+                {
+                  "n": "19",
+                  "label": "OUV (IN1)",
+                  "desc": "Ouverture automatique (impulsion).",
+                  "t": "no"
+                },
+                {
+                  "n": "20",
+                  "label": "FERM (IN2)",
+                  "desc": "Fermeture (impulsion).",
+                  "t": "no"
+                },
+                {
+                  "n": "21",
+                  "label": "STOP (IN3)",
+                  "desc": "Contact NF. Activer le BP STOP dans le menu (param. 55).",
+                  "t": "nf"
+                },
+                {
+                  "n": "22",
+                  "label": "OUV F / OUV P (IN4)",
+                  "desc": "Ouverture forcée (homme mort), réaffectable (piéton).",
+                  "t": "no"
+                },
+                {
+                  "n": "23",
+                  "label": "FERM F (IN5)",
+                  "desc": "Fermeture forcée (homme mort).",
+                  "t": "no"
+                },
+                {
+                  "n": "24 · 25 · 26",
+                  "label": "Fins de course moteur 1",
+                  "desc": "24 commun, 25 ouverture, 26 fermeture. Fins de course inductifs NPN 12 V (marron +, bleu −, noir signal).",
+                  "t": "no"
+                },
+                {
+                  "n": "27 · 28 · 29",
+                  "label": "Fins de course moteur 2",
+                  "desc": "27 commun, 28 ouverture (IN8), 29 fermeture (IN9), seulement avec deux moteurs.",
+                  "t": "no"
+                }
+              ]
+            },
+            {
+              "nom": "Bornier inférieur — cellules et barres palpeuses",
+              "bornes": [
+                {
+                  "n": "30 · 31 (R1 · R2)",
+                  "label": "Réglage sensibilité barre palpeuse AFCA",
+                  "desc": "Sensibilité n°1 et n°2 pour cellule PB18.",
+                  "t": "autre"
+                },
+                {
+                  "n": "32 · 33",
+                  "label": "TX test 12 V=",
+                  "desc": "0 V et 12 V= pour la cellule émettrice (barre AFCA ou barrage NPN 12 V), coupée 500 ms pour l'autotest.",
+                  "t": "sortie"
+                },
+                {
+                  "n": "34 · 35",
+                  "label": "RX 12 V=",
+                  "desc": "0 V et 12 V= pour la cellule réceptrice.",
+                  "t": "sortie"
+                },
+                {
+                  "n": "36 · 37 · 38",
+                  "label": "Cellules C1 · C2",
+                  "desc": "36 commun, 37 = C1 (IN10), 38 = C2 (IN11). Contacts NF.",
+                  "t": "nf"
+                },
+                {
+                  "n": "39 · 40 · 41",
+                  "label": "Barres palpeuses",
+                  "desc": "39 commun, 40 = SO1 ouverture (IN12), 41 = SF1 fermeture (IN13).",
+                  "t": "nf"
+                }
+              ]
+            },
+            {
+              "nom": "Connecteurs de la carte",
+              "bornes": [
+                {
+                  "n": "53 · 54 (ANT)",
+                  "label": "Antenne",
+                  "desc": "Entrée antenne du récepteur.",
+                  "t": "autre"
+                },
+                {
+                  "n": "REC1",
+                  "label": "Récepteur MR2-U embrochable",
+                  "desc": "433 / 868 MHz, 1 008 codes. Canal 1 ouverture totale, 2 ouverture partielle, 3 stop, 4 relayage R1 (option 1).",
+                  "t": "bus"
+                },
+                {
+                  "n": "H1 · H2 · H3",
+                  "label": "Connecteurs",
+                  "desc": "H3 = connecteur pour BP clavier déporté ; H1 / H2 : « non utilisé » selon la notice.",
+                  "t": "bus"
+                }
+              ]
+            }
+          ],
+          "fusibles": "F1 1,25 A rapide (circuit 24 V) · F2 0,25 A retardé (alimentation générale) · F3 10 A (protection moteurs). Charge maxi 750 W par moteur ; 24 V et 12 V : 30 VA dont 12 VA en 12 V TX/RX ; -20 / +60 °C ; platine L175×H190×P60 mm ; contraste afficheur par P1 (réglé en usine).",
+          "notes": [
+            "Moteur : 230 V 175 W, condensateur 5 µF, 32 tr/min, IP44, pignon acier module 4 / 18 dents, 800 kg maxi, caisson inox brut ou acier peint. Fins de course inductifs réglables, 12 Vcc, détection à 15 mm ; cote A du plan du caisson réglable de 15 à 57 mm.",
+            "Entrées de sécurité non utilisées : les ponter ou les désactiver en programmation. L'arrêt d'urgence ne se raccorde pas avec les autres sécurités.",
+            "Autotest : une sécurité programmée « Autotest » est testée avant chaque départ (cellules 1-2 et palpeur de fermeture avant la fermeture, sécurité d'ouverture avant l'ouverture).",
+            "Numérotation de la notice incohérente : texte « paramètre 14 » pour le retard du frein alors que le tableau le donne en 30 ; « 8-9 / 17-18 » et « 12-13 / 17-18 » pour les temps et couples ; page 2 (X = 0 à 10 s, Y = 0 à 240 s) contre tableau (31 = 0 à 360, 32 = 1 à 10).",
+            "Entrées par défaut : IN1 (19) ouverture, IN2 (20) fermeture, IN3 (21) stop, IN4 (22) ouverture forcée, IN5 (23) fermeture forcée, IN6 (25) / IN7 (26) fins de course moteur 1, IN8 (28) / IN9 (29) moteur 2, IN10 (37) C1, IN11 (38) C2, IN12 (40) SO1, IN13 (41) SF1. Radio : IN14 ouv. totale, IN15 piéton, IN16 stop, IN17 relayage R1. Clavier : IN18 ouv., IN19 fermeture / piéton, IN20 stop, IN21 auto / manu.",
+            "Menu INPUTS (mot de passe) : chaque entrée peut être réaffectée : Cde ouverture, ouv. ext., ouv. forcée, piéton, fermeture, fermeture forcée, horloge, horloge et ouv., relayage R1 / R2, Stop, clavier, Sas manuelle, Fdc ouv / ferm / piéton, Fdc PV variateur, Cellules 1 à 4, Sécu ferm 1 à 4, Sécu ouv 1 à 4, Sécu ouv & ferm, Sécu portillon. Menu info carte : consulter les entrées réaffectées.",
+            "Sécu portillon : aucun mouvement tant que le contact est ouvert, même en homme mort. Sas manuelle : porte non ouvrable tant que le contact est ouvert ; la commande est mémorisée.",
+            "Coup de bélier : le texte de la notice écrit « paramètre 6 sur 2 » et « paramètre 7 sur non », numéros inversés par rapport à son tableau (6 = fin de course, 7 = nombre de moteurs).",
+            "Menu MANOEUVRES : marche forcée par + (ouverture) et − (fermeture) sans sécurités ; fins de course, options et éclairages restent actifs. Menu DIAGNOSTIC : état en temps réel des entrées (sécurités en logique inversée : contact ouvert = active).",
+            "Clavier sensitif auto / manu (option) : perçage Ø 23 mm en façade, nappe 500 mm ; adhésif non repositionnable. Mode manu : OUV / FERM en marche forcée, OUV EXT toujours en auto.",
+            "Récepteur MR2-U : programmation avec BP1 (nombre d'appuis = canal, L1 clignote), émission dans les 7 s ; ajout à distance avec un émetteur mémorisé (boutons 1 et 2 pendant 8 s puis nouveaux émetteurs dans les 5 s, 3 s par émetteur) ; sortie auto après 10 s ; effacement complet : couper l'alimentation (suite de la procédure à la page 34 de la notice)."
+          ]
+        },
+        "apprentissage": {
+          "avant": [
+            "Tout le câblage hors tension : moteur (42-52), fins de course (24-26), frein sur option 1 (programmer Frein + NF).",
+            "Régler d'abord le paramétrage : nombre de moteurs, fin de course Oui / Non, temps GV / PV, couples, sécurités.",
+            "Sens d'ouverture inversé : inverser les fils 47-48 et ceux des fins de course (25-26)."
+          ],
+          "etapes": [
+            "Menu APPRENTISSAGE : valider pour passer les quatre zéros du mot de passe.",
+            "1. Choisir « réglage ouv total » avec VALID. 2. Fermer totalement le portail en maintenant − .",
+            "3. Moteur 1, GV ouverture : maintenir + jusqu'au point de ralentissement voulu, relâcher, VALID.",
+            "4. Moteur 1, PV ouverture : maintenir + jusqu'à l'ouverture voulue, relâcher, VALID.",
+            "5. Moteur 2, GV ouverture : maintenir + jusqu'au point de ralentissement voulu, relâcher, VALID. 6. Moteur 2, PV ouverture : maintenir + jusqu'à l'ouverture voulue, relâcher, VALID (2 moteurs).",
+            "7. À l'écran « Mémoriser », valider avec VALID pour enregistrer les réglages (puis + pour revenir à Retour)."
+          ],
+          "apres": [
+            "Vérifier le frein : le portail doit se bloquer à l'arrêt et se débloquer par coupure secteur, arrêt d'urgence ou commande maintenue (paramètres 31 / 32).",
+            "Essai des sécurités (autotest, cellules, palpeurs) et de la radio.",
+            "Menu USINE : consulter l'historique des défauts après essai."
+          ]
+        }
+      }
   ]
 },
 /* ------------------------------------------------------------------ */
