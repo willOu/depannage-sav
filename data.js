@@ -15,6 +15,12 @@ const DATA_VERSION = "1.24";
 /* Journal des modifications — ajouter une entrée en haut à chaque mise à jour.
    docs : nom des notices ajoutées (affichées dans Réglages). */
 const CHANGELOG = [
+  { v: "1.25", date: "2026-10-18", titre: "Accessoires : radio de bords sensibles et détecteur de véhicule", items: [
+    "Nouvelles fiches Accessoires : BBC Bircher RFGate 2.2.A / 2.2.NG et XRF-1 (transmission radio de profils sensibles), OPTEX OVS-02GT (détecteur de véhicule, boucle virtuelle).",
+    "Chaque fiche : caractéristiques, raccordement, installation, notes de mise en service et dépannage, et onglet Schéma."
+  ], docs: [
+    "BBC Bircher RFGate 2.2 (341033C, 01/19)", "BBC Bircher XRF-1 (410610C, 07/20)", "OPTEX OVS-02 (notice FR)"
+  ] },
   { v: "1.24", date: "2026-10-18", titre: "CASIT : nouvelle marque, 7 armoires", items: [
     "Nouvelle marque CASIT avec 7 cartes : EQ2000, EQ2006, EQ2009 (2 moteurs, battants), EQ212 (1 moteur, encoder), KEQ013 (afficheur, horloge), KEQ405 (monophasé / triphasé) et KEQS08 (radio intégrée).",
     "Chaque carte : LED et symptômes, bornier complet, dip / trimmers / menus avec valeurs, procédures d'apprentissage et de mémorisation radio.",

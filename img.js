@@ -28,6 +28,18 @@
       S("casit-keqs08-p4", "Implantation de la carte", 4, "Position des dip A / B, trimmers FORZA / V.RALL / BLOCK, boutons CODICI / TEMPI / P, JP1, cavalier AC/DC."),
       S("casit-keqs08-p8", "Raccordement des cellules 24 V", 8, "Cellules 24 V AC et 24 V DC, avec et sans test.")
     ],
+    "bircher-rfgate": [
+      S("bircher-rfgate-p2", "Dip, émetteur et câblage du récepteur", 2, "Dip de l'émetteur selon le détecteur, passage NC / NO, bornier du récepteur (VCC, COM, OUT, SOUT, TST) et dip 1 à 5 du récepteur."),
+      S("bircher-rfgate-p3", "Mise en service et états", 3, "Étapes de mise en service, appairage des émetteurs, tableau des états de contact.")
+    ],
+    "bircher-xrf1": [
+      S("bircher-xrf1-p2", "Câblage et appairage", 2, "Dip de l'émetteur, pile CR2450N, bornier du récepteur (1-2 alimentation, 3-6 sorties, 7-8 test) et appairage."),
+      S("bircher-xrf1-p3", "États, dépannage et caractéristiques", 3, "Effacement des appairages, test, tableau de la sortie d'état et des LED, avertissements pile et erreur.")
+    ],
+    "optex-ovs02gt": [
+      S("optex-ovs02-p5", "Voyant et bornier", 5, "Tableau des couleurs du voyant, bornier 1 (alimentation et sortie 1) et bornier 2 (sortie 2 et entrée), bouton reset d'usine."),
+      S("optex-ovs02-p37", "Spécifications et zone de détection", 37, "Tableau des spécifications du OVS-02GT et diagramme de zone de détection (portée 1 m, 3 m, 8 m).")
+    ],
     "afca-starteco3-contacteurs": [
       S("afca-c3-p03", "Vue générale de la carte", 3, "Position des fusibles F1 / F2, boutons P1-P3, switchs, LEDs, cavalier J1, potentiomètres R1 / R2 et bornes d'alimentation."),
       S("afca-c3-p04", "Raccordement de la platine", 4, "Tous les borniers : arrêt d'urgence, sorties 24 V, clignotants, options, commandes, fins de course, cellules et barres palpeuses, avec la liste des bornes."),
