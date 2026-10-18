@@ -13,6 +13,12 @@ const DATA_VERSION = "2026-10-17";
 /* Journal des modifications — ajouter une entrée en haut à chaque mise à jour.
    docs : nom des notices ajoutées (affichées dans Réglages). */
 const CHANGELOG = [
+  { date: "2026-10-18", titre: "Roger B70/1DCHP (BG30, 36 V)", items: [
+    "Nouvelle carte Roger B70/1DCHP pour les moteurs BG30 (1600, 2200, High Speed, réversible 1400/R) : codes, bornier (nouvelle numérotation), écran, 63 paramètres, apprentissage.",
+    "Nouveautés du firmware P3.10, limiteur de tension B72/CL, mode INFO et batteries B71/BCHP."
+  ], docs: [
+    "Notice Roger IS142 Rev.23, B70/1DCHP firmware P3.10"
+  ] },
   { date: "2026-10-18", titre: "Nouveau design de l'accueil et des codes", items: [
     "Accueil : on choisit d'abord le type d'automatisme (portail coulissant, battant, barrière levante), puis la carte. L'accès par marque reste disponible.",
     "Codes : triés par gravité (erreurs à corriger, symptômes, codes de l'afficheur, diagnostic des entrées). Touchez un code pour voir ce qu'il faut faire ; le premier est déjà ouvert."
@@ -1348,6 +1354,2032 @@ const MARQUES = [
         "Erreurs : noPH (réglage moteur échoué), APPE (TEST ou sécurité), APPL (longueur) → voir l'onglet Codes et recommencer.",
         "Garder au moins 3 cm entre le point d'arrêt et la butée mécanique ; sinon déplacer le fin de course et refaire l'apprentissage.",
         "Contrôle final : StoP doit clignoter quand on ouvre la poignée de déverrouillage."
+      ]
+    }
+  },
+  {
+    "id": "roger-b70-1dchp",
+    "nom": "B70/1DCHP",
+    "modeles": "Coulissant brushless 36 V BG30 : /1600 · /1603 · /1604 · /2200 · /2203 · /2204 · /1003/HS · /1004/HS · /803/HS · /804/HS · /1504/HS · /1804/HS · /1404/R (versions 115 V : /115)",
+    "type": "Coulissant brushless 36 V — afficheur 4 chiffres, touches UP / DOWN / + / − / PROG / TEST",
+    "source": "Notice Roger IS142 Rev.23 (02/09/2026), B70/1DCHP, firmware P3.10",
+    "codes": [
+      {
+        "code": "P3.10",
+        "type": "afficheur",
+        "titre": "Version du firmware",
+        "action": "Affichée quelques secondes à la mise sous tension. Ensuite : état des commandes et sécurités (onglet Écran). Carte neuve ou de rechange : l'écran affiche dAtA et demande l'apprentissage de la course."
+      },
+      {
+        "code": "FUSE",
+        "type": "afficheur",
+        "titre": "Fusible F1 grillé",
+        "action": "Remplacer le fusible, de préférence en l'extrayant et en le réinsérant uniquement hors tension secteur. Si la centrale fonctionne sur batteries, le message n'est pas visible."
+      },
+      {
+        "code": "dAtA",
+        "type": "afficheur",
+        "titre": "Erreur de saisie de données de course",
+        "action": "Carte neuve ou course non apprise : faire l'apprentissage. Sinon : vérifier le réglage des fins de course, appuyer sur TEST et contrôler les sécurités en alarme, refaire l'apprentissage. Peut aussi venir d'un étalonnage échoué : bien attendre que PHAS clignote avant de refermer la poignée de déverrouillage."
+      },
+      {
+        "code": "OFSt",
+        "type": "afficheur",
+        "titre": "Anomalie de tension d'alimentation / initialisation échouée",
+        "action": "Couper l'alimentation, attendre 10 s, remettre. Si ça persiste : remplacer la centrale. TEST masque temporairement l'erreur pour consulter les paramètres."
+      },
+      {
+        "code": "PrOt",
+        "type": "afficheur",
+        "titre": "Surintensité dans l'onduleur",
+        "action": "Appuyer deux fois sur TEST ou donner 3 commandes de suite."
+      },
+      {
+        "code": "SEC0",
+        "type": "afficheur",
+        "titre": "Mauvais raccordement SEC1 / SEC2 du transformateur",
+        "action": "Échanger la connexion entre SEC1 et SEC2."
+      },
+      {
+        "code": "Mot",
+        "type": "afficheur",
+        "titre": "Moteur non raccordé",
+        "action": "Vérifier le câble moteur (bornier X-Y-Z)."
+      },
+      {
+        "code": "FE",
+        "type": "afficheur",
+        "titre": "Les deux fins de course sont actifs",
+        "action": "Vérifier le raccordement des fins de course ou la présence d'objets dans le verrouillage fin de course. Avec des fins de course magnétiques : le fusible F3 de protection de l'alimentation des accessoires est peut-être grillé, le remplacer."
+      },
+      {
+        "code": "xx EE",
+        "type": "afficheur",
+        "titre": "Erreur de paramètre (ex. 15EE, 21EE)",
+        "action": "Le paramètre indiqué a une valeur incorrecte : la corriger et enregistrer."
+      },
+      {
+        "code": "EnE1",
+        "type": "afficheur",
+        "titre": "Encodeur non branché",
+        "action": "Vérifier le raccordement de l'encodeur. Si ça persiste : remplacer l'encodeur."
+      },
+      {
+        "code": "EnE3",
+        "type": "afficheur",
+        "titre": "Grave dysfonctionnement de l'encodeur",
+        "action": "TEST. Si l'erreur revient : éteindre la centrale 5 s puis rallumer. Si ça persiste : remplacer l'encodeur."
+      },
+      {
+        "code": "EnE5",
+        "type": "afficheur",
+        "titre": "Dysfonctionnement encodeur / alimentation insuffisante / batteries",
+        "action": "TEST ; si ça persiste, remplacer l'encodeur. Saleté, humidité ou insectes : couper la tension et nettoyer carte et encodeur. En fonctionnement sur batteries : batteries presque déchargées."
+      },
+      {
+        "code": "EnE8",
+        "type": "afficheur",
+        "titre": "Erreur de calcul de l'encodeur",
+        "action": "Refaire l'apprentissage de la course."
+      },
+      {
+        "code": "tEMP",
+        "type": "afficheur",
+        "titre": "Protection thermique de l'onduleur",
+        "action": "Le fonctionnement reprend tout seul dans les 2 minutes."
+      },
+      {
+        "code": "btLO",
+        "type": "afficheur",
+        "titre": "Batteries déchargées (btLO)",
+        "action": "Attendre le retour de la tension secteur. La centrale n'accepte plus de commande."
+      },
+      {
+        "code": "bNod",
+        "type": "afficheur",
+        "titre": "Type de batterie mal sélectionné",
+        "action": "Modifier la valeur du paramètre 87."
+      },
+      {
+        "code": "HbUS",
+        "type": "afficheur",
+        "titre": "Tension secteur trop élevée",
+        "action": "Vérifier la tension du réseau et la tension du BUS (mode INFO, valeur bUS). Contacter le service après-vente. Un appui sur TEST fait disparaître le message 7 s après la dernière action sur les touches."
+      },
+      {
+        "code": "bAtt",
+        "type": "afficheur",
+        "titre": "Fonctionnement sur batteries (kit B71/BCHP)",
+        "action": "Coupure secteur : la centrale tourne sur batteries et le clignotant s'active par intermittence, jusqu'au retour du réseau ou jusqu'au seuil de sécurité (btLO). Le seuil se règle avec le paramètre 85."
+      },
+      {
+        "code": "COM1",
+        "type": "afficheur",
+        "titre": "Communication RS485 MASTER / SLAVE absente",
+        "action": "Vérifier les bornes COM-LNA-LNB, le paramètre A0 et la présence du kit batteries sur les deux centrales."
+      },
+      {
+        "code": "COM2",
+        "type": "afficheur",
+        "titre": "Deux centrales MASTER détectées",
+        "action": "Vérifier le paramètre A0."
+      },
+      {
+        "code": "COM3",
+        "type": "afficheur",
+        "titre": "Erreur de transfert des paramètres MASTER / SLAVE",
+        "action": "Vérifier le branchement COM-LNA-LNB."
+      },
+      {
+        "code": "COM4",
+        "type": "afficheur",
+        "titre": "Firmwares MASTER / SLAVE incompatibles",
+        "action": "Vérifier le paramètre n7 : les deux centrales doivent avoir la même version de communication RS485. Sinon : assistance Roger."
+      },
+      {
+        "code": "StoP",
+        "type": "afficheur",
+        "titre": "« StoP » clignotant : déblocage ouvert",
+        "action": "Refermer la poignée de déverrouillage et tourner la clé en position fermée. Vérifier le raccordement au contact de déverrouillage (SB)."
+      },
+      {
+        "code": "noPH",
+        "type": "afficheur",
+        "titre": "Anomalie commande moteur / réglage moteur échoué",
+        "action": "Vérifier le câble encodeur-moteur, couper et rétablir l'alimentation, refaire l'apprentissage. Vérifier que la poignée de déverrouillage était bien ouverte, que le moteur tourne librement et que la tension secteur est correcte. Si ça persiste : assistance."
+      },
+      {
+        "code": "APPE",
+        "type": "afficheur",
+        "titre": "Erreur d'apprentissage",
+        "action": "TEST appuyé par erreur, sécurité en alarme, chute de tension ou paramètres 30 / 31 mal réglés : TEST pour annuler, contrôler les sécurités, la tension secteur et 30 / 31 selon le poids et la vitesse du vantail, puis refaire l'apprentissage."
+      },
+      {
+        "code": "APPL",
+        "type": "afficheur",
+        "titre": "Erreur de longueur de course",
+        "action": "Portail en fermeture complète (fin de course FC actif) et refaire la procédure. Vérifier le câblage des fins de course. Si la course est inférieure au minimum : l'augmenter. Au besoin : retour aux réglages usine puis apprentissage."
+      },
+      {
+        "code": "APPM",
+        "type": "afficheur",
+        "titre": "Longueur de course maximale dépassée",
+        "action": "Réduire la course ; sinon contacter l'assistance Roger."
+      },
+      {
+        "code": "noLP",
+        "type": "afficheur",
+        "titre": "Mode « low power » non activé",
+        "action": "B70/MODLP endommagé ou contact de relais bloqué : contrôler le récepteur H93/RX2LP/I et le câblage avec le B70/MODLP."
+      },
+      {
+        "code": "SELF",
+        "type": "afficheur",
+        "titre": "BG30/1400/R réversible : moteur manipulé à la main sans alimentation",
+        "action": "Sur le moteur réversible, l'écran s'allume et affiche SELF quand on déplace le portail à la main sans secteur. Manipuler le portail à la main avec modération. Si la force de freinage ne suffit pas et que le portail bouge de plus de 3 cm, une récupération de position démarre."
+      },
+      {
+        "code": "notr",
+        "type": "afficheur",
+        "titre": "Transformateur éteint par erreur par le B70/MODLP",
+        "action": "Même contrôle que noLP (H93/RX2LP/I, câblage, B70/MODLP)."
+      },
+      {
+        "code": "StbY",
+        "type": "afficheur",
+        "titre": "Passage en veille « low power »",
+        "action": "Normal : la centrale passe en veille (afficheur éteint, sorties SC, LAM et COR coupées). Une commande ou une touche la réveille."
+      },
+      {
+        "code": "00",
+        "type": "test",
+        "titre": "TEST : aucune sécurité en alarme",
+        "action": "Aucune sécurité en alarme et aucun fin de course actif."
+      },
+      {
+        "code": "Sb",
+        "type": "test",
+        "titre": "TEST : poignée de déverrouillage ouverte",
+        "action": "Refermer la poignée, clé en position fermée, vérifier le raccordement au contact de déverrouillage. Sans interrupteur, ponter le contact."
+      },
+      {
+        "code": "17",
+        "type": "test",
+        "titre": "TEST : contact STOP ouvert",
+        "action": "Installer un bouton STOP (NF) ou ponter ST (17) avec COM (16)."
+      },
+      {
+        "code": "15",
+        "type": "test",
+        "titre": "TEST : bord sensible COS1 ouvert",
+        "action": "Vérifier le raccordement. Bord absent : régler 73 00 ou ponter COS1 (15) avec COM (16)."
+      },
+      {
+        "code": "14",
+        "type": "test",
+        "titre": "TEST : bord sensible COS2 ouvert",
+        "action": "Vérifier le raccordement. Bord absent : régler 74 00 ou ponter COS2 (14) avec COM (16)."
+      },
+      {
+        "code": "13",
+        "type": "test",
+        "titre": "TEST : photocellule FT1 ouverte",
+        "action": "Vérifier la cellule et le câblage. Absente : régler 50 00 et 51 00 ou ponter FT1 (13) avec COM (30)."
+      },
+      {
+        "code": "12",
+        "type": "test",
+        "titre": "TEST : photocellule FT2 ouverte",
+        "action": "Vérifier la cellule et le câblage. Absente : régler 53 00 et 54 00 ou ponter FT2 (12) avec COM (30)."
+      },
+      {
+        "code": "FE (TEST)",
+        "type": "test",
+        "titre": "TEST : les deux fins de course raccordés ou activés",
+        "action": "Les deux fins de course sont actifs ou non raccordés : vérifier les raccordements et le réglage des fins de course."
+      },
+      {
+        "code": "FA",
+        "type": "test",
+        "titre": "TEST : fin de course d'ouverture actif",
+        "action": "Normal si le portail est ouvert. Indication fausse : vérifier le paramètre 71 (position du moteur), ou le câblage si le fin de course est absent."
+      },
+      {
+        "code": "FC",
+        "type": "test",
+        "titre": "TEST : fin de course de fermeture actif",
+        "action": "Normal si le portail est fermé. Indication fausse : vérifier le paramètre 71, ou le câblage si le fin de course est absent."
+      },
+      {
+        "code": "nC",
+        "type": "test",
+        "titre": "TEST : pas de communication MASTER / SLAVE",
+        "action": "A0 différent de 00 (RS485 activée) et aucune communication : voir la gestion MASTER / SLAVE."
+      },
+      {
+        "code": "PP · CH · AP · PE · Or",
+        "type": "test",
+        "titre": "TEST : commande active sans action",
+        "action": "Contact NO défectueux ou bouton mal raccordé : vérifier le contact correspondant avec COM (23) : PP 27, CH 26, AP 25, PED 28, ORO 24. ORO ne doit jamais être shunté s'il n'est pas utilisé."
+      },
+      {
+        "code": "POWER éteinte",
+        "type": "led",
+        "titre": "LED POWER éteinte",
+        "action": "Absence d'alimentation : vérifier le câble. Ou fusible grillé : le remplacer, de préférence hors tension secteur. Si F3 grille de nouveau alors que la centrale commande un moteur High Speed : débrancher le B72/CL (ou le chargeur B71/BCHP HW 02) du connecteur chargeur de batterie et revérifier ; s'il revient, remplacer l'appareil endommagé."
+      },
+      {
+        "code": "POWER clignote",
+        "type": "led",
+        "titre": "LED POWER clignote, afficheur éteint",
+        "action": "Veille après 30 min d'inactivité (L1 00) : appuyer sur une touche."
+      },
+      {
+        "code": "Radio faible",
+        "type": "symptome",
+        "titre": "La radiocommande a peu de portée ou ne fonctionne pas avec l'automatisme en mouvement",
+        "action": "Structures métalliques ou béton armé qui gênent l'émission : installer l'antenne à l'extérieur. Vérifier aussi les piles de l'émetteur."
+      },
+      {
+        "code": "Clignotant HS",
+        "type": "symptome",
+        "titre": "Le flash clignotant ne fonctionne pas",
+        "action": "Ampoule ou LED grillée, ou fils débranchés : vérifier le circuit à LED et les fils (bornes 31-30)."
+      },
+      {
+        "code": "Voyant HS",
+        "type": "symptome",
+        "titre": "Le voyant portail ouvert ne marche pas",
+        "action": "Ampoule grillée ou fils débranchés : vérifier l'ampoule et les fils (bornes 10-11). Utilisable seulement si le low power est désactivé (L1 00)."
+      },
+      {
+        "code": "Mauvaise course",
+        "type": "symptome",
+        "titre": "Le portail n'effectue pas la manœuvre souhaitée",
+        "action": "Configuration incorrecte du paramètre 71 : sélectionner la position d'installation du moteur."
+      },
+      {
+        "code": "Ne s'ouvre pas",
+        "type": "symptome",
+        "titre": "Le portail ne s'ouvre pas ou ne se ferme pas",
+        "action": "Consulter les codes de l'écran (dAtA, OFSt, Mot, FE, EnE…, noPH). Sans code : TEST pour voir la sécurité en alarme (ST 17, COS1 15, COS2 14, FT1 13, FT2 12, Sb déblocage)."
+      }
+    ],
+    "afficheur": {
+      "intro": "En fonctionnement normal, l'afficheur ne montre pas des chiffres mais l'état des entrées : certains segments correspondent chacun à une commande ou à une sécurité.",
+      "ecrans": [
+        {
+          "nom": "État des commandes",
+          "digits": [
+            {
+              "seg": {
+                "a": "AP",
+                "g": "PP",
+                "d": "CH"
+              },
+              "dp": "POWER"
+            },
+            {
+              "seg": {
+                "a": "PED",
+                "d": "ORO"
+              },
+              "dp": null
+            }
+          ]
+        },
+        {
+          "nom": "État des sécurités",
+          "digits": [
+            {
+              "seg": {
+                "a": "FT1",
+                "g": "COS1",
+                "d": "COS2"
+              },
+              "dp": "SB"
+            },
+            {
+              "seg": {
+                "a": "FT2",
+                "e": "FA",
+                "c": "FC"
+              },
+              "dp": "STOP"
+            }
+          ]
+        }
+      ],
+      "reperes": {
+        "AP": {
+          "g": "commande",
+          "nom": "Ouverture",
+          "repos": "Éteint",
+          "detail": "S'allume à la réception d'une commande d'ouverture (borne 25)."
+        },
+        "PP": {
+          "g": "commande",
+          "nom": "Pas-à-pas",
+          "repos": "Éteint",
+          "detail": "S'allume à la réception d'une commande pas-à-pas (borne 27 ou radio PR1)."
+        },
+        "CH": {
+          "g": "commande",
+          "nom": "Fermeture",
+          "repos": "Éteint",
+          "detail": "S'allume à la réception d'une commande de fermeture (borne 26)."
+        },
+        "PED": {
+          "g": "commande",
+          "nom": "Ouverture partielle",
+          "repos": "Éteint",
+          "detail": "S'allume à la réception d'une commande piéton (borne 28 ou radio PR2)."
+        },
+        "ORO": {
+          "g": "commande",
+          "nom": "Horloge",
+          "repos": "Éteint",
+          "detail": "Allumé tant que le contact horloge (borne 24) est fermé."
+        },
+        "POWER": {
+          "g": "led",
+          "nom": "Alimentation",
+          "repos": "Allumé",
+          "detail": "Carte alimentée. Clignote en veille (afficheur éteint). Éteint : pas de tension ou fusible grillé."
+        },
+        "FT1": {
+          "g": "securite",
+          "nom": "Photocellules FT1",
+          "repos": "Allumé",
+          "detail": "Éteint = faisceau coupé ou non raccordé (bornes 13-30). Clignotant = désactivé par paramètre."
+        },
+        "FT2": {
+          "g": "securite",
+          "nom": "Photocellules FT2",
+          "repos": "Allumé",
+          "detail": "Éteint = faisceau coupé ou non raccordé (bornes 12-30). Clignotant = désactivé par paramètre."
+        },
+        "COS1": {
+          "g": "securite",
+          "nom": "Bord sensible COS1",
+          "repos": "Allumé",
+          "detail": "Éteint = bord actionné ou non raccordé (bornes 15-16). Clignotant = désactivé (73 00, réglage usine)."
+        },
+        "COS2": {
+          "g": "securite",
+          "nom": "Bord sensible COS2",
+          "repos": "Allumé",
+          "detail": "Éteint = bord actionné ou non raccordé (bornes 14-16). Clignotant = désactivé (74 00, réglage usine)."
+        },
+        "FA": {
+          "g": "securite",
+          "nom": "Fin de course d'ouverture",
+          "repos": "Allumé",
+          "detail": "S'éteint quand le portail est sur le fin de course d'ouverture."
+        },
+        "FC": {
+          "g": "securite",
+          "nom": "Fin de course de fermeture",
+          "repos": "Allumé",
+          "detail": "S'éteint quand le portail est sur le fin de course de fermeture."
+        },
+        "SB": {
+          "g": "securite",
+          "nom": "Poignée de déverrouillage",
+          "repos": "Allumé",
+          "detail": "Éteint = poignée de déverrouillage ouverte."
+        },
+        "STOP": {
+          "g": "securite",
+          "nom": "STOP",
+          "repos": "Allumé",
+          "detail": "Éteint = contact STOP ouvert (bornes 17-16)."
+        }
+      },
+      "regles": [
+        "Commandes : segments normalement ÉTEINTS, ils s'allument quand la commande arrive.",
+        "Sécurités : segments normalement ALLUMÉS. Éteint = en alarme ou non raccordé. Clignotant = désactivé par son paramètre.",
+        "Les segments sans nom ne servent pas dans ce mode."
+      ],
+      "autres": [
+        {
+          "titre": "Mode paramètres",
+          "texte": "UP / DOWN font défiler : les 2 chiffres de gauche = numéro du paramètre, les 2 de droite = sa valeur. + / − pour modifier ; la valeur clignote, puis l'afficheur clignote vite quand elle est enregistrée. Modification possible seulement moteur à l'arrêt."
+        },
+        {
+          "titre": "Mode TEST (touche TEST, moteur à l'arrêt)",
+          "texte": "À gauche pendant 5 s : la commande reçue, seulement si elle est active (AP, CH, PP, PE, Or). À droite : le numéro de la borne de la sécurité en alarme, qui clignote (17 STOP, 15 COS1, 14 COS2, 13 FT1, 12 FT2, Sb déblocage ; FE les deux fins de course). Portail en fin de course : FA ou FC. Flash et voyant portail ouvert s'allument 1 s à chaque commande ou sécurité. Si plusieurs sécurités sont en alarme, la suivante s'affiche quand la première est réglée. TEST pour sortir (sinon retour automatique après 10 s). En MASTER / SLAVE, une sécurité active sur la centrale distante s'affiche avec les points décimaux allumés."
+        },
+        {
+          "titre": "Mode INFO (TEST 5 s, moteur à l'arrêt)",
+          "texte": "Défile avec + / − : P3.10 version · Cnt position du moteur en tours par rapport à la longueur totale · Lun longueur de course programmée · rPM vitesse · AMP courant moteur (001.1 = 1,1 A) · bUS bon état de l'installation (230 V : 37.6 · 207 V : 33.6 · 253 V : 41.6) · CMP courant de compensation · ASC seuil de courant de l'anti-écrasement (AMP doit rester inférieur) · tIn temps de détection d'obstacle (doit rester supérieur à 0,3 s) · UP position connue (UP ..) ou en récupération (UP 1.) · OC état (OC OP ouverture, OC CL fermeture, OC -O ouvert à l'arrêt, OC -C fermé à l'arrêt) · UF sous-tension (U) ou surintensité (H) · nPtE interventions de la protection thermique · ErrL erreurs RS485 · ErrC erreurs de protocole (LNA / LNB / COM). Quitter : TEST quelques secondes."
+        },
+        {
+          "titre": "Veille (stand-by)",
+          "texte": "Deux cas. 1) L'afficheur seul s'éteint après 30 min d'inactivité, la LED POWER clignote (possible si le low power L1 est à 00). 2) Mode « low power » (L1 01 à 04, avec le B70/MODLP) : la consommation descend à 0,5 W ou moins, le transformateur n'est plus alimenté, les accessoires non plus (photocellules, récepteur externe). L'afficheur indique StbY puis s'éteint 1,5 s après. Réveil : commande du bornier (AP, CH, PP, PE, OR), commande radio ou touche PROG / TEST. Pour les automatismes High Speed et réversibles, le low power est désactivé automatiquement (L1 n'est plus affiché)."
+        },
+        {
+          "titre": "Récupération de position",
+          "texte": "Après une coupure ou un déblocage en position intermédiaire : manœuvre lente, clignotant 3 s allumé / 1,5 s éteint. Ne rien commander avant qu'un fin de course soit atteint."
+        },
+        {
+          "titre": "B74/BCONNECT (WIFI)",
+          "texte": "Activer avec L0 01 (low power désactivé, L1 00). Écran : ASCC = assistance à distance activée ; L-ES = mode urgence résidentiel actif ; L-EM = mode urgence condominium actif. TEST fait disparaître le message 10 s."
+        },
+        {
+          "titre": "Nouveautés P3.10 (selon la notice)",
+          "texte": "Meilleure gestion du freinage lors d'une inversion due au bord sensible ou aux photocellules · protection électronique du variateur renforcée · amélioration de la gestion du limiteur de tension B72/CL, notamment l'activation automatique (par L1) pour les automatismes High Speed et réversibles · signalisation par le relais SC améliorée quand le paramètre A8 = 02 ou que le déverrouillage empêche le démarrage · inversion accélérée à l'activation de la bande sensible."
+        }
+      ]
+    },
+    "parametres": {
+      "intro": "Firmware P3.10. Valeur en usine = « usine ». Les paramètres se lisent à tout moment mais ne se modifient que moteur arrêté. Les réglages High Speed (HS) et réversible (R) sont signalés dans chaque paramètre.",
+      "navigation": [
+        "UP ▲ / DOWN ▼ : paramètre suivant / précédent.",
+        "+ / − : modifier la valeur (elle clignote). Maintenir pour défiler vite.",
+        "Enregistrer : attendre quelques secondes ou passer à un autre paramètre avec UP/DOWN. L'écran clignote vite = valeur enregistrée.",
+        "Si un mot de passe est actif (CP 01), les valeurs sont visibles mais non modifiables : saisir P1–P4 d'abord."
+      ],
+      "groupes": [
+        {
+          "nom": "Configuration générale",
+          "items": [
+            {
+              "code": "A0",
+              "def": "00",
+              "titre": "Communication RS485 MASTER / SLAVE",
+              "valeurs": [
+                [
+                  "00",
+                  "Standard (centrale seule)."
+                ],
+                [
+                  "01",
+                  "MASTER."
+                ],
+                [
+                  "02",
+                  "SLAVE avec copie des paramètres du MASTER. A0 non modifié ; 50 à 55 réglés pour désactiver les photocellules du SLAVE ; 71 opposé au MASTER."
+                ],
+                [
+                  "03",
+                  "SLAVE avec paramètres indépendants."
+                ]
+              ],
+              "note": "Paramètres modifiables à la main sur le SLAVE (les deux automatismes peuvent avoir des caractéristiques différentes) : 11, 12, 20, 30, 31, 33, 34, 40, 41, 42, 50 à 55, 71, 73, 74. Avec A0 02, le SLAVE copie la MASTER sauf A0, 50 à 55 (désactivation des photocellules du côté SLAVE si elles sont toutes raccordées à la MASTER) et 71 (valeur opposée à celle de la MASTER)."
+            },
+            {
+              "code": "A1",
+              "def": "selon moteur",
+              "titre": "Modèle d'automatisme",
+              "valeurs": [
+                [
+                  "01",
+                  "BG30/1600 : irréversible, vantail 1600 kg max."
+                ],
+                [
+                  "02",
+                  "BG30/2200 : irréversible, vantail 2200 kg max."
+                ],
+                [
+                  "03",
+                  "BG30/1000/HS : irréversible High Speed, vantail 1000 kg max."
+                ],
+                [
+                  "04",
+                  "BG30/1400/R : réversible (moteur débrayable à la main), vantail 1400 kg max."
+                ],
+                [
+                  "05",
+                  "BG30/1800/HS : irréversible High Speed, vantail 1800 kg max."
+                ],
+                [
+                  "06",
+                  "BG30/1504/HS : irréversible High Speed, vantail 1500 kg max."
+                ],
+                [
+                  "07",
+                  "BG30/804/HS : irréversible High Speed, vantail 800 kg max (la notice écrit 1500 kg à la p. 131 et 800 kg aux pp. 127 et 141)."
+                ]
+              ],
+              "note": "Réglé en usine par Roger pour le moteur. Si la valeur est changée, toutes les caractéristiques High Speed ou réversible sont perdues et le moteur ne fonctionne plus correctement. Après un retour aux valeurs usine, à ressaisir à la main. Choisir 03 à 07 désactive le mode low power : L1 n'est plus affiché. Un mauvais réglage provoque des erreurs de fonctionnement."
+            },
+            {
+              "code": "71",
+              "def": "01",
+              "titre": "Position du moteur (vue de l'intérieur)",
+              "valeurs": [
+                [
+                  "00",
+                  "Moteur installé à gauche (vue de l'intérieur)."
+                ],
+                [
+                  "01",
+                  "Moteur installé à droite."
+                ]
+              ],
+              "note": "À ressaisir à la main après un retour aux valeurs usine."
+            },
+            {
+              "code": "70",
+              "def": "00",
+              "titre": "Longueur maximale de la course",
+              "valeurs": [
+                [
+                  "00",
+                  "Longueur maximale 20 m."
+                ],
+                [
+                  "01",
+                  "Longueur maximale 25 m."
+                ]
+              ],
+              "note": "Pour les applications certifiées avec un portail standard de moins de 20 m, utiliser 00."
+            },
+            {
+              "code": "60",
+              "def": "01",
+              "titre": "Type de fin de course",
+              "valeurs": [
+                [
+                  "00",
+                  "Micro-interrupteurs (contact sec)."
+                ],
+                [
+                  "01",
+                  "Magnétiques (capteurs à effet Hall)."
+                ]
+              ],
+              "note": "Un bon choix permet de surveiller les contacts même en veille (par ex. déplacement manuel après déverrouillage)."
+            },
+            {
+              "code": "65",
+              "def": "05",
+              "titre": "Espace d'arrêt du moteur",
+              "valeurs": [
+                [
+                  "01–05",
+                  "01 = freinage rapide, arrêt court … 05 = freinage doux, arrêt plus long."
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "nom": "Logique de fonctionnement",
+          "items": [
+            {
+              "code": "A2",
+              "def": "00",
+              "titre": "Refermeture après pause (depuis portail complètement ouvert)",
+              "valeurs": [
+                [
+                  "00",
+                  "Désactivée."
+                ],
+                [
+                  "01–15",
+                  "Nombre de tentatives de refermeture après passage dans la photocellule."
+                ],
+                [
+                  "99",
+                  "Tentatives illimitées."
+                ]
+              ]
+            },
+            {
+              "code": "A3",
+              "def": "00",
+              "titre": "Refermeture après coupure secteur (black-out)",
+              "valeurs": [
+                [
+                  "00",
+                  "Désactivée."
+                ],
+                [
+                  "01",
+                  "Au retour du courant, ferme après 5 s de préclignotement, en mode récupération de position."
+                ]
+              ]
+            },
+            {
+              "code": "A4",
+              "def": "00",
+              "titre": "Mode de la commande pas-à-pas (PP)",
+              "valeurs": [
+                [
+                  "00",
+                  "Ouvre – stop – ferme – stop."
+                ],
+                [
+                  "01",
+                  "Copropriété, temporisation renouvelée (PP ignoré pendant l'ouverture)."
+                ],
+                [
+                  "02",
+                  "Copropriété, temporisation non renouvelée (PP ignoré pendant l'ouverture)."
+                ],
+                [
+                  "03",
+                  "Ouvre – ferme – ouvre – ferme."
+                ],
+                [
+                  "04",
+                  "Ouvre – ferme – stop – ouvre."
+                ]
+              ],
+              "note": "En 01 / 02 avec A2 00, la copropriété force une tentative de refermeture (comme A2 01)."
+            },
+            {
+              "code": "A5",
+              "def": "00",
+              "titre": "Préclignotement",
+              "valeurs": [
+                [
+                  "00",
+                  "Désactivé."
+                ],
+                [
+                  "01–10",
+                  "Préclignotement de 1 à 10 s avant chaque manœuvre."
+                ],
+                [
+                  "99",
+                  "5 s avant la fermeture seulement."
+                ]
+              ]
+            },
+            {
+              "code": "A6",
+              "def": "00",
+              "titre": "Copropriété sur l'ouverture partielle (PED)",
+              "valeurs": [
+                [
+                  "00",
+                  "PED en pas-à-pas."
+                ],
+                [
+                  "01",
+                  "PED ignoré pendant l'ouverture."
+                ]
+              ]
+            },
+            {
+              "code": "A7",
+              "def": "00",
+              "titre": "Homme présent",
+              "valeurs": [
+                [
+                  "00",
+                  "Désactivé."
+                ],
+                [
+                  "01",
+                  "Activé : maintenir AP / CH pendant la manœuvre."
+                ]
+              ]
+            },
+            {
+              "code": "A8",
+              "def": "00",
+              "titre": "Voyant portail ouvert / test photocellules / battery saving",
+              "valeurs": [
+                [
+                  "00",
+                  "Voyant : éteint portail fermé, allumé fixe pendant les manœuvres et portail ouvert."
+                ],
+                [
+                  "01",
+                  "Voyant : clignote lent en ouverture, fixe ouvert, clignote vite en fermeture, s'éteint 2 fois toutes les 15 s si arrêté à mi-course."
+                ],
+                [
+                  "02",
+                  "Sortie SC utilisée pour le test des photocellules."
+                ],
+                [
+                  "03",
+                  "Sortie SC utilisée pour le battery saving."
+                ],
+                [
+                  "04",
+                  "Battery saving + test photocellules."
+                ]
+              ],
+              "note": "Voyant utilisable seulement si L1 00."
+            },
+            {
+              "code": "15",
+              "def": "50",
+              "titre": "Ouverture partielle",
+              "valeurs": [
+                [
+                  "10–99",
+                  "Pourcentage de la course totale."
+                ]
+              ]
+            },
+            {
+              "code": "16",
+              "def": "10",
+              "titre": "Fermeture auto après ouverture partielle",
+              "valeurs": [
+                [
+                  "00–90",
+                  "0 à 90 s."
+                ],
+                [
+                  "92–99",
+                  "2 à 9 min."
+                ]
+              ]
+            },
+            {
+              "code": "21",
+              "def": "30",
+              "titre": "Temps de fermeture automatique",
+              "valeurs": [
+                [
+                  "00–90",
+                  "0 à 90 s."
+                ],
+                [
+                  "92–99",
+                  "2 à 9 min."
+                ]
+              ],
+              "note": "L'intervention des photocellules relance le décompte."
+            },
+            {
+              "code": "22",
+              "def": "00",
+              "titre": "Ouverture avec exclusion de la fermeture auto",
+              "valeurs": [
+                [
+                  "00",
+                  "Désactivée."
+                ],
+                [
+                  "01",
+                  "AP ouvre sans fermeture auto ; l'AP suivant ferme."
+                ],
+                [
+                  "02",
+                  "Idem avec PP."
+                ],
+                [
+                  "03",
+                  "Idem avec PED."
+                ]
+              ]
+            },
+            {
+              "code": "80",
+              "def": "00",
+              "titre": "Contact horloge",
+              "valeurs": [
+                [
+                  "00",
+                  "Horloge active : le portail s'ouvre et reste ouvert, toute commande est ignorée. Fin d'horloge : il se ferme."
+                ],
+                [
+                  "01",
+                  "Horloge active : s'ouvre et reste ouvert, les commandes sont acceptées. Revenu complètement ouvert, la fonction horloge reprend."
+                ]
+              ]
+            },
+            {
+              "code": "81",
+              "def": "00",
+              "titre": "Fermeture / ouverture garantie",
+              "valeurs": [
+                [
+                  "00",
+                  "Désactivée (82 non affiché)."
+                ],
+                [
+                  "01",
+                  "Fermeture garantie : après le temps 82, préclignotement 5 s (indépendant de A5) puis fermeture."
+                ],
+                [
+                  "02",
+                  "Fermeture et ouverture : arrêté après PP → ferme après 82 ; arrêté par obstacle en fermeture → ferme après 82 ; arrêté par obstacle en ouverture → s'ouvre après 82."
+                ]
+              ],
+              "note": "Ne s'active pas si : commande d'arrêt reçue ; bord sensible détecte un obstacle dans le même sens ; tentatives A2 épuisées ; position perdue (récupération de position)."
+            },
+            {
+              "code": "82",
+              "def": "03",
+              "titre": "Temps avant fermeture / ouverture garantie",
+              "valeurs": [
+                [
+                  "02–90",
+                  "2 à 90 s de pause."
+                ],
+                [
+                  "92–99",
+                  "2 à 9 min de pause."
+                ]
+              ],
+              "note": "Visible seulement si 81 01."
+            }
+          ]
+        },
+        {
+          "nom": "Course : vitesse, ralentissement, accélération",
+          "items": [
+            {
+              "code": "11",
+              "def": "04",
+              "titre": "Ralentissement en ouverture (et fermeture pour BG30/1600 et BG30/2200)",
+              "valeurs": [
+                [
+                  "01–05",
+                  "01 = ralentit près du fin de course … 05 = ralentit bien avant."
+                ]
+              ],
+              "note": "High Speed et réversible : 12 règle la fermeture séparément."
+            },
+            {
+              "code": "12",
+              "def": "04",
+              "titre": "Ralentissement en fermeture (High Speed et réversible)",
+              "valeurs": [
+                [
+                  "01–05",
+                  "01 = ralentit près du fin de course … 05 = ralentit bien avant."
+                ]
+              ]
+            },
+            {
+              "code": "13",
+              "def": "02",
+              "titre": "Espace d'approche à vitesse constante, ouverture",
+              "valeurs": [
+                [
+                  "01–40",
+                  "01 = les 3 derniers cm … 02 = 6 cm … 40 = 120 cm. Exemple : 100 cm ≈ valeur 35. Vitesse réglée par 42."
+                ]
+              ]
+            },
+            {
+              "code": "14",
+              "def": "02",
+              "titre": "Espace d'approche à vitesse constante, fermeture",
+              "valeurs": [
+                [
+                  "01–40",
+                  "01 = les 3 derniers cm … 02 = 6 cm … 40 = 120 cm. Vitesse réglée par 42."
+                ]
+              ]
+            },
+            {
+              "code": "33",
+              "def": "04",
+              "titre": "Accélération au départ, ouverture (et fermeture pour BG30/1600 et BG30/2200)",
+              "valeurs": [
+                [
+                  "01–05",
+                  "01 = démarrage rapide … 05 = démarrage lent et progressif."
+                ]
+              ]
+            },
+            {
+              "code": "34",
+              "def": "04",
+              "titre": "Accélération au départ, fermeture (High Speed et réversible)",
+              "valeurs": [
+                [
+                  "01–05",
+                  "01 = démarrage rapide … 05 = démarrage lent et progressif."
+                ]
+              ]
+            },
+            {
+              "code": "40",
+              "def": "08",
+              "titre": "Vitesse en ouverture (et fermeture pour BG30/1600 et BG30/2200)",
+              "valeurs": [
+                [
+                  "01–10",
+                  "01 = 6 m/min … 10 = vitesse maximale."
+                ]
+              ],
+              "note": "Le réglage de la vitesse est réparti automatiquement en 10 niveaux égaux selon le modèle de moteur installé."
+            },
+            {
+              "code": "41",
+              "def": "08",
+              "titre": "Vitesse en fermeture (High Speed et réversible)",
+              "valeurs": [
+                [
+                  "01–10",
+                  "01 = 6 m/min … 10 = vitesse maximale."
+                ]
+              ],
+              "note": "Même répartition en 10 niveaux selon le modèle."
+            },
+            {
+              "code": "42",
+              "def": "03",
+              "titre": "Vitesse d'approche constante en fin de manœuvre",
+              "valeurs": [
+                [
+                  "01–10",
+                  "01 = 2 m/min, 02 = 2,5 m/min, 03 = 3 m/min, 04 = 3,5 m/min, 05 = 4 m/min (la notice ne détaille pas les valeurs 06 à 10)."
+                ]
+              ],
+              "note": "Après le ralentissement, le portail continue à vitesse constante jusqu'au fin de course. L'espace est réglé par 13 et 14."
+            },
+            {
+              "code": "36",
+              "def": "00",
+              "titre": "Couple max d'aide au démarrage (boost)",
+              "valeurs": [
+                [
+                  "00",
+                  "Désactivé."
+                ],
+                [
+                  "01",
+                  "Seulement à l'ouverture, y compris en récupération de position (en fermeture seulement si position connue et portail à plus de 2 m de la fermeture)."
+                ],
+                [
+                  "02",
+                  "À chaque démarrage."
+                ]
+              ],
+              "note": "Couple maxi pendant 5 s ou environ 65 cm. Sur les High Speed, l'accélération est fixe : 2 s à chaque démarrage, indépendamment de 36."
+            }
+          ]
+        },
+        {
+          "nom": "Couple et détection d'obstacle",
+          "items": [
+            {
+              "code": "30",
+              "def": "05",
+              "titre": "Couple moteur",
+              "valeurs": [
+                [
+                  "01",
+                  "−35 %."
+                ],
+                [
+                  "02",
+                  "−25 %."
+                ],
+                [
+                  "03",
+                  "−16 %."
+                ],
+                [
+                  "04",
+                  "−8 %."
+                ],
+                [
+                  "05",
+                  "Réglage usine."
+                ],
+                [
+                  "06",
+                  "+8 %."
+                ],
+                [
+                  "07",
+                  "+16 %."
+                ],
+                [
+                  "08",
+                  "+25 %."
+                ],
+                [
+                  "09",
+                  "+35 %."
+                ]
+              ],
+              "note": "Moins de couple = détection plus sensible. En dessous de 03 : installations légères uniquement."
+            },
+            {
+              "code": "31",
+              "def": "15",
+              "titre": "Sensibilité à la force d'impact (anti-écrasement)",
+              "valeurs": [
+                [
+                  "01–10",
+                  "Couple faible (seulement si le niveau moyen ne convient pas)."
+                ],
+                [
+                  "11–16",
+                  "Couple moyen, conseillé."
+                ],
+                [
+                  "17",
+                  "Couple 70 %, 1 s."
+                ],
+                [
+                  "18",
+                  "Couple 80 %, 2 s."
+                ],
+                [
+                  "19",
+                  "Couple maxi, 3 s."
+                ],
+                [
+                  "20",
+                  "Couple maxi, 5 s."
+                ]
+              ],
+              "note": "17 à 20 : bord sensible obligatoire. Réaction trop lente → baisser 31. Force trop élevée → baisser 30."
+            },
+            {
+              "code": "37",
+              "def": "01",
+              "titre": "Couple pendant la récupération de position",
+              "valeurs": [
+                [
+                  "00",
+                  "Uniquement selon 30 / 31."
+                ],
+                [
+                  "01",
+                  "30 / 31 + courant maxi relevé à l'apprentissage."
+                ],
+                [
+                  "02",
+                  "70 %, 1 s."
+                ],
+                [
+                  "03",
+                  "80 %, 2 s."
+                ],
+                [
+                  "04",
+                  "100 %, 3 s."
+                ],
+                [
+                  "05",
+                  "100 %, 5 s."
+                ]
+              ]
+            },
+            {
+              "code": "27",
+              "def": "03",
+              "titre": "Temps d'inversion après bord sensible / détection d'obstacle",
+              "valeurs": [
+                [
+                  "00–60",
+                  "0 à 60 s."
+                ]
+              ]
+            },
+            {
+              "code": "49",
+              "def": "01",
+              "titre": "Tentatives de refermeture après bord sensible / obstacle",
+              "valeurs": [
+                [
+                  "00",
+                  "Aucune."
+                ],
+                [
+                  "01–03",
+                  "1 à 3 tentatives (≤ A2 ; seulement si portail complètement ouvert)."
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "nom": "Sécurités : photocellules et bords",
+          "items": [
+            {
+              "code": "50",
+              "def": "00",
+              "titre": "FT1 en ouverture",
+              "valeurs": [
+                [
+                  "00",
+                  "Désactivée."
+                ],
+                [
+                  "01",
+                  "ARRÊT jusqu'à la commande suivante."
+                ],
+                [
+                  "02",
+                  "INVERSION IMMÉDIATE."
+                ],
+                [
+                  "03",
+                  "STOP TEMPORAIRE : reprend l'ouverture une fois dégagée."
+                ],
+                [
+                  "04",
+                  "INVERSION RETARDÉE : s'arrête, ferme une fois dégagée."
+                ]
+              ]
+            },
+            {
+              "code": "51",
+              "def": "02",
+              "titre": "FT1 en fermeture",
+              "valeurs": [
+                [
+                  "00",
+                  "Désactivée."
+                ],
+                [
+                  "01",
+                  "ARRÊT."
+                ],
+                [
+                  "02",
+                  "INVERSION IMMÉDIATE."
+                ],
+                [
+                  "03",
+                  "STOP TEMPORAIRE : reprend la fermeture une fois dégagée."
+                ],
+                [
+                  "04",
+                  "INVERSION RETARDÉE : s'arrête, ouvre une fois dégagée."
+                ]
+              ]
+            },
+            {
+              "code": "52",
+              "def": "01",
+              "titre": "FT1 avec portail fermé",
+              "valeurs": [
+                [
+                  "00",
+                  "Ouverture impossible si occultée."
+                ],
+                [
+                  "01",
+                  "Ouvre sur commande même occultée."
+                ],
+                [
+                  "02",
+                  "Occultée = commande d'ouverture (seulement si L1 00)."
+                ]
+              ],
+              "note": "Non visible si A8 02, 03 ou 04."
+            },
+            {
+              "code": "53",
+              "def": "00",
+              "titre": "FT2 en ouverture",
+              "valeurs": [
+                [
+                  "00",
+                  "Désactivée."
+                ],
+                [
+                  "01",
+                  "ARRÊT jusqu'à la commande suivante."
+                ],
+                [
+                  "02",
+                  "INVERSION IMMÉDIATE."
+                ],
+                [
+                  "03",
+                  "STOP TEMPORAIRE : reprend l'ouverture une fois dégagée."
+                ],
+                [
+                  "04",
+                  "INVERSION RETARDÉE : s'arrête, ferme une fois dégagée."
+                ]
+              ]
+            },
+            {
+              "code": "54",
+              "def": "00",
+              "titre": "FT2 en fermeture",
+              "valeurs": [
+                [
+                  "00",
+                  "Désactivée."
+                ],
+                [
+                  "01",
+                  "ARRÊT."
+                ],
+                [
+                  "02",
+                  "INVERSION IMMÉDIATE."
+                ],
+                [
+                  "03",
+                  "STOP TEMPORAIRE : reprend la fermeture une fois dégagée."
+                ],
+                [
+                  "04",
+                  "INVERSION RETARDÉE : s'arrête, ouvre une fois dégagée."
+                ]
+              ]
+            },
+            {
+              "code": "55",
+              "def": "01",
+              "titre": "FT2 avec portail fermé",
+              "valeurs": [
+                [
+                  "00",
+                  "Ouverture impossible si occultée."
+                ],
+                [
+                  "01",
+                  "Ouvre sur commande même occultée."
+                ],
+                [
+                  "02",
+                  "Occultée = commande d'ouverture."
+                ]
+              ],
+              "note": "Non visible si A8 02, 03 ou 04."
+            },
+            {
+              "code": "56",
+              "def": "00",
+              "titre": "Fermeture 6 s après passage dans une photocellule",
+              "valeurs": [
+                [
+                  "00",
+                  "Désactivée."
+                ],
+                [
+                  "01",
+                  "Sur FT1."
+                ],
+                [
+                  "02",
+                  "Sur FT2."
+                ]
+              ],
+              "note": "Non visible si A8 03 ou 04 ; non géré en stand-by."
+            },
+            {
+              "code": "73",
+              "def": "00",
+              "titre": "Bord sensible COS1",
+              "valeurs": [
+                [
+                  "00",
+                  "Non installé."
+                ],
+                [
+                  "01",
+                  "Contact NF, inverse uniquement en ouverture."
+                ],
+                [
+                  "02",
+                  "Résistif 8k2, inverse uniquement en ouverture."
+                ],
+                [
+                  "03",
+                  "Contact NF, inverse toujours."
+                ],
+                [
+                  "04",
+                  "Résistif 8k2, inverse toujours."
+                ],
+                [
+                  "12",
+                  "Deux bords 8k2 en parallèle (4k1), inverse seulement en ouverture."
+                ],
+                [
+                  "14",
+                  "Deux bords 8k2 en parallèle (4k1), inverse toujours."
+                ]
+              ]
+            },
+            {
+              "code": "74",
+              "def": "00",
+              "titre": "Bord sensible COS2",
+              "valeurs": [
+                [
+                  "00",
+                  "Non installé."
+                ],
+                [
+                  "01",
+                  "Contact NF, inverse uniquement en fermeture."
+                ],
+                [
+                  "02",
+                  "Résistif 8k2, inverse uniquement en fermeture."
+                ],
+                [
+                  "03",
+                  "Contact NF, inverse toujours."
+                ],
+                [
+                  "04",
+                  "Résistif 8k2, inverse toujours."
+                ],
+                [
+                  "12",
+                  "Deux bords 8k2 en parallèle (4k1), inverse seulement en ouverture."
+                ],
+                [
+                  "14",
+                  "Deux bords 8k2 en parallèle (4k1), inverse toujours."
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "nom": "Radio, sorties et éclairage",
+          "items": [
+            {
+              "code": "76",
+              "def": "00",
+              "titre": "1er canal radio (PR1)",
+              "valeurs": [
+                [
+                  "00",
+                  "PAS (pas-à-pas)."
+                ],
+                [
+                  "01",
+                  "OUVERTURE PARTIELLE."
+                ],
+                [
+                  "02",
+                  "OUVERTURE."
+                ],
+                [
+                  "03",
+                  "FERMETURE."
+                ],
+                [
+                  "04",
+                  "ARRÊT."
+                ],
+                [
+                  "05",
+                  "Lumière de courtoisie (sortie COR) tant que la télécommande est active ; 79 ignoré."
+                ],
+                [
+                  "06",
+                  "Lumière de courtoisie pas-à-pas : allume / éteint ; 79 ignoré."
+                ],
+                [
+                  "07",
+                  "PAS avec confirmation de sécurité."
+                ],
+                [
+                  "08",
+                  "OUVERTURE PARTIELLE avec confirmation."
+                ],
+                [
+                  "09",
+                  "OUVERTURE avec confirmation."
+                ],
+                [
+                  "10",
+                  "FERMETURE avec confirmation."
+                ]
+              ],
+              "note": "Confirmation : la touche doit être confirmée dans les 2 s par une 2e touche (ex. 76 07 et 77 01 : CHA puis CHB → ouverture partielle). Évite les manœuvres involontaires."
+            },
+            {
+              "code": "77",
+              "def": "01",
+              "titre": "2e canal radio (PR2)",
+              "valeurs": [
+                [
+                  "00–10",
+                  "Mêmes valeurs que 76."
+                ]
+              ]
+            },
+            {
+              "code": "78",
+              "def": "00",
+              "titre": "Clignotant",
+              "valeurs": [
+                [
+                  "00",
+                  "Intermittence gérée par le clignotant lui-même."
+                ],
+                [
+                  "01",
+                  "Intermittence lente."
+                ],
+                [
+                  "02",
+                  "Lente en ouverture, rapide en fermeture."
+                ]
+              ]
+            },
+            {
+              "code": "20",
+              "def": "00",
+              "titre": "Mode de la sortie COR",
+              "valeurs": [
+                [
+                  "00",
+                  "Lumière de courtoisie standard, gérée par 79."
+                ],
+                [
+                  "01",
+                  "Fermée si centrale OK, ouverte en alarme."
+                ],
+                [
+                  "02",
+                  "Fermée sur secteur ou batterie chargée ; ouverte si anomalie batterie (seuil 85 ou alarme btLO)."
+                ],
+                [
+                  "03",
+                  "Fermée sans anomalie 1 ni 2 ; ouverte si l'une des deux."
+                ],
+                [
+                  "04",
+                  "Fermée si portail pas complètement ouvert ; ouverte quand complètement ouvert."
+                ],
+                [
+                  "05",
+                  "Fermée si portail pas complètement fermé ; ouverte quand complètement fermé."
+                ]
+              ],
+              "note": "Utilisable seulement si L1 00."
+            },
+            {
+              "code": "79",
+              "def": "60",
+              "titre": "Lumière de courtoisie",
+              "valeurs": [
+                [
+                  "00",
+                  "Désactivée."
+                ],
+                [
+                  "01",
+                  "Impulsion au début de chaque manœuvre."
+                ],
+                [
+                  "02",
+                  "Allumée pendant toute la manœuvre."
+                ],
+                [
+                  "03–90",
+                  "Reste allumée 3 à 90 s après la manœuvre."
+                ],
+                [
+                  "92–99",
+                  "Reste allumée 2 à 9 min après la manœuvre."
+                ]
+              ],
+              "note": "Non visible si 20 différent de 00."
+            }
+          ]
+        },
+        {
+          "nom": "Batterie et veille",
+          "items": [
+            {
+              "code": "85",
+              "def": "03",
+              "titre": "Gestion du fonctionnement sur batterie",
+              "valeurs": [
+                [
+                  "00",
+                  "Accepte les commandes jusqu'à épuisement de la batterie. À la tension minimum, btLO s'affiche (20 V avec chargeur B71/BCHP ; 23,7 V avec chargeur externe B71/PBX) ; la centrale n'accepte plus de commande."
+                ],
+                [
+                  "01",
+                  "Seuil minimum : 22 V (batterie 2×12 V) ; 36,4 V (batterie 3×12 V)."
+                ],
+                [
+                  "02",
+                  "Seuil intermédiaire : 23 V (2×12 V) ; 36,8 V (3×12 V)."
+                ],
+                [
+                  "03",
+                  "Seuil maximum : 24 V (2×12 V) ; 37,2 V (3×12 V)."
+                ]
+              ],
+              "note": "Quand une valeur autre que 00 est réglée, une commande s'active au niveau de tension de la batterie ; le comportement se règle avec 86 et la signalisation par la sortie COR (20)."
+            },
+            {
+              "code": "86",
+              "def": "00",
+              "titre": "Limitations sur batterie (au seuil 85, pendant plus de 30 s)",
+              "valeurs": [
+                [
+                  "00",
+                  "Aucune limitation (signalisation possible via COR)."
+                ],
+                [
+                  "01",
+                  "N'accepte que l'ouverture et ne referme plus."
+                ],
+                [
+                  "02",
+                  "Préclignote 5 s, ouvre et n'accepte plus que l'ouverture."
+                ],
+                [
+                  "03",
+                  "N'accepte que la fermeture (même si ORO est actif et 80 01)."
+                ],
+                [
+                  "04",
+                  "Préclignote 5 s, ferme et n'accepte plus que l'ouverture."
+                ]
+              ],
+              "note": "Visible seulement si 85 différent de 00."
+            },
+            {
+              "code": "87",
+              "def": "00",
+              "titre": "Type de batterie et réduction de consommation",
+              "valeurs": [
+                [
+                  "00",
+                  "Batterie 24 V (2×12 V) avec B71/BCHP : accélérations, décélérations et vitesse réduites pour prolonger la batterie."
+                ],
+                [
+                  "01",
+                  "Batterie 36 V (3×12 V) avec chargeur externe B71/PBX : accélérations / décélérations / vitesse réduites."
+                ],
+                [
+                  "02",
+                  "Batterie 36 V (3×12 V) avec chargeur externe B71/PBX : aucune réduction, consommation maximale."
+                ]
+              ],
+              "note": "Réglage inapproprié = en l'absence de secteur, blocage des fonctions et message btLO (réglage 01 ou 02 avec batterie 2×12 V), ou signalisation bNod."
+            },
+            {
+              "code": "L1",
+              "def": "04",
+              "titre": "Veille « low power »",
+              "valeurs": [
+                [
+                  "00",
+                  "Désactivée."
+                ],
+                [
+                  "01",
+                  "Veille après 5 min d'inactivité."
+                ],
+                [
+                  "02",
+                  "Après 10 min."
+                ],
+                [
+                  "03",
+                  "Après 15 min."
+                ],
+                [
+                  "04",
+                  "Après 20 min."
+                ]
+              ],
+              "note": "Pas de veille portail ouvert en attente de refermeture (A2, 21), ni pendant le décompte de la fermeture garantie (81, 82), ni pendant 88, ni tant que la sortie COR est active, ni quand un accessoire est branché sur l'afficheur. Sur les High Speed et réversibles, le low power est désactivé automatiquement : L1 n'est pas visible. Pour activer le stand-by sans attendre : appuyer sur UP, DOWN, + et − ensemble ; l'écran affiche StbY."
+            }
+          ]
+        },
+        {
+          "nom": "Communication, test et maintenance",
+          "items": [
+            {
+              "code": "L0",
+              "def": "00",
+              "titre": "Communication série",
+              "valeurs": [
+                [
+                  "00",
+                  "Désactivée."
+                ],
+                [
+                  "01",
+                  "Module B74/BCONNECT."
+                ],
+                [
+                  "02",
+                  "Carte de débogage (usage interne)."
+                ]
+              ]
+            },
+            {
+              "code": "89",
+              "def": "00",
+              "titre": "Gestion des paramètres du SLAVE via B74/BCONNECT sur le MASTER",
+              "valeurs": [
+                [
+                  "00",
+                  "Désactivée."
+                ],
+                [
+                  "01",
+                  "Le MASTER permet de voir et modifier les paramètres du SLAVE et de sauvegarder ceux du SLAVE sur B-CONNECT."
+                ]
+              ],
+              "note": "Remettre 00 une fois terminé."
+            },
+            {
+              "code": "88",
+              "def": "00",
+              "titre": "Manœuvres cycliques (modes de test uniquement)",
+              "valeurs": [
+                [
+                  "00",
+                  "Désactivées."
+                ],
+                [
+                  "01–90",
+                  "Ouverture toutes les 1 à 90 s."
+                ],
+                [
+                  "91–99",
+                  "Ouverture toutes les 1 à 9 min."
+                ]
+              ],
+              "note": "Régler aussi A2 et 21. Le cycle complet (ouverture-pause-fermeture) est toujours mené à terme avant le suivant."
+            },
+            {
+              "code": "FA",
+              "def": "00",
+              "titre": "Retour aux valeurs usine",
+              "valeurs": [
+                [
+                  "Procédure",
+                  "Afficher FA 00, maintenir + et − 4 s : rES- clignote, valeurs usine restaurées."
+                ],
+                [
+                  "Au démarrage",
+                  "Maintenir ▲ et ▼ 4 s à la mise sous tension, avant l'affichage de la version firmware."
+                ]
+              ],
+              "note": "Impossible si un mot de passe est actif : le débloquer avec P1–P4 (CP 00 s'affiche). La restauration élimine toute sélection précédente, sauf A0, A1, 60, 71, 86, 87, 89, L0 et L1 : vérifier que tous les paramètres sont adaptés à l'installation."
+            },
+            {
+              "code": "n0–n7",
+              "def": "lecture",
+              "titre": "Identification de la carte",
+              "valeurs": [
+                [
+                  "n0",
+                  "Version matérielle."
+                ],
+                [
+                  "n1",
+                  "Année de production."
+                ],
+                [
+                  "n2",
+                  "Semaine de production."
+                ],
+                [
+                  "n3 n4 n5",
+                  "Numéro de série."
+                ],
+                [
+                  "n6",
+                  "Version firmware."
+                ],
+                [
+                  "n7",
+                  "Version communication MASTER/SLAVE RS485."
+                ]
+              ]
+            },
+            {
+              "code": "oП–o1",
+              "def": "lecture",
+              "titre": "Compteur de manœuvres",
+              "valeurs": [
+                [
+                  "oП o0 o1",
+                  "Lire à la suite × 100. Ex. 01 23 45 → 1 234 500 manœuvres."
+                ]
+              ]
+            },
+            {
+              "code": "h0–h1",
+              "def": "lecture",
+              "titre": "Heures de manœuvre",
+              "valeurs": [
+                [
+                  "h0 h1",
+                  "Ex. 01 23 → 123 heures."
+                ]
+              ]
+            },
+            {
+              "code": "d0–d1",
+              "def": "lecture",
+              "titre": "Jours sous tension",
+              "valeurs": [
+                [
+                  "d0 d1",
+                  "Ex. 01 23 → 123 jours."
+                ]
+              ]
+            },
+            {
+              "code": "P1–P4",
+              "def": "00",
+              "titre": "Mot de passe",
+              "valeurs": [
+                [
+                  "Activer",
+                  "Saisir P1, P2, P3, P4 ; afficher CP ; maintenir + et − 4 s (l'écran clignote) ; couper puis remettre le courant et vérifier CP 01."
+                ],
+                [
+                  "Débloquer",
+                  "Saisir le mot de passe, vérifier CP 00. Se réactive après 30 min sans appui ou à la remise sous tension."
+                ],
+                [
+                  "Supprimer",
+                  "Débloquer (CP 00), mettre P1 à P4 à 00, afficher CP, maintenir + et − 4 s, couper puis remettre le courant."
+                ]
+              ],
+              "note": "Mot de passe perdu : contacter l'assistance Roger."
+            },
+            {
+              "code": "CP",
+              "def": "00",
+              "titre": "État du mot de passe",
+              "valeurs": [
+                [
+                  "00",
+                  "Protection désactivée."
+                ],
+                [
+                  "01",
+                  "Protection activée."
+                ]
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "bornier": {
+      "groupes": [
+        {
+          "nom": "Puissance (câblé usine)",
+          "bornes": [
+            {
+              "n": "N · terre · L",
+              "label": "Secteur",
+              "desc": "230 V~ ±10 % 50/60 Hz (115 V~ ±10 % sur B70/1DCHP/115), fusible 5x20 T2A. Câble H07RN-F 3G1,5 : L marron, N bleu, terre jaune/vert. En dehors de la plage de tension, le brushless ne fonctionne pas correctement.",
+              "t": "alim"
+            },
+            {
+              "n": "SEC2 · SEC1",
+              "label": "Transformateur",
+              "desc": "Secondaire : SEC1 = 26 V~ alimentation du moteur ; SEC2 = 19 V~ logique et périphériques. Câblé en usine.",
+              "t": "alim"
+            },
+            {
+              "n": "X · Y · Z",
+              "label": "Moteur",
+              "desc": "Moteur ROGER Brushless. High Speed (BG30) : ajouter le B72/BRAKE/2 (fig. 13). Si les fils ont été débranchés, refaire l'apprentissage de la course.",
+              "t": "moteur"
+            },
+            {
+              "n": "BATTERY − / +",
+              "label": "Batteries",
+              "desc": "Kit batteries B71/BCHP : 2 × 12 V 4,5 Ah, type AGM seulement (voir B71/BCHP).",
+              "t": "alim"
+            }
+          ]
+        },
+        {
+          "nom": "Sorties",
+          "bornes": [
+            {
+              "n": "8 · 9",
+              "label": "COR",
+              "desc": "Contact libre : éclairage de courtoisie 230 V~ 100 W / 24 V 40 W (prévoir un fusible), ou signalisation (contact fermé / ouvert selon le paramètre 20 : anomalie, batterie, portail ouvert ou fermé).",
+              "t": "sortie"
+            },
+            {
+              "n": "10 · 11",
+              "label": "+SC · COM",
+              "desc": "Voyant portail ouvert 24 V 3 W (A8). Ou alimentation des TX pour le test des photocellules (A8 02) / économie de batterie (A8 03 ou 04) : plus de voyant dans ce cas.",
+              "t": "sortie"
+            },
+            {
+              "n": "31 · 30",
+              "label": "LAM",
+              "desc": "Clignotant 24 V, intermittence 50 %. Préclignotement : A5, mode : 78.",
+              "t": "sortie"
+            }
+          ]
+        },
+        {
+          "nom": "Sécurités NF",
+          "bornes": [
+            {
+              "n": "12 · 30",
+              "label": "FT2",
+              "desc": "Photocellules FT2. Usine : 53 00, 54 00 (désactivée), 55 01. Absente : ponter 12-30 ou 53 00 + 54 00. Séries F4ES ou F4S conseillées.",
+              "t": "nf"
+            },
+            {
+              "n": "13 · 30",
+              "label": "FT1",
+              "desc": "Photocellules FT1. Usine : 50 00, 51 02 (inversion en fermeture), 52 01. Absente : ponter 13-30 ou 50 00 + 51 00. Séries F4ES ou F4S conseillées.",
+              "t": "nf"
+            },
+            {
+              "n": "14 · 16",
+              "label": "COS2",
+              "desc": "Bord sensible 2, NF ou 8,2 kΩ. Désactivé d'usine (74 00). Absent : ponter 14-16 ou 74 00.",
+              "t": "nf"
+            },
+            {
+              "n": "15 · 16",
+              "label": "COS1",
+              "desc": "Bord sensible 1, NF ou 8,2 kΩ. Désactivé d'usine (73 00). Absent : ponter 15-16 ou 73 00.",
+              "t": "nf"
+            },
+            {
+              "n": "17 · 16",
+              "label": "ST",
+              "desc": "STOP NF — shunté d'usine. L'ouverture du contact arrête le mouvement.",
+              "t": "nf"
+            }
+          ]
+        },
+        {
+          "nom": "Commandes NO (commun 23)",
+          "bornes": [
+            {
+              "n": "24",
+              "label": "ORO",
+              "desc": "Horloge (paramètre 80). Ne jamais ponter si inutilisée.",
+              "t": "no"
+            },
+            {
+              "n": "25",
+              "label": "AP",
+              "desc": "Ouverture. Maintenue : pas de fermeture automatique, le décompte reprend au relâchement.",
+              "t": "no"
+            },
+            {
+              "n": "26",
+              "label": "CH",
+              "desc": "Fermeture.",
+              "t": "no"
+            },
+            {
+              "n": "27",
+              "label": "PP",
+              "desc": "Pas-à-pas (fonctionnement réglé par le paramètre A4).",
+              "t": "no"
+            },
+            {
+              "n": "28",
+              "label": "PED",
+              "desc": "Ouverture partielle, 50 % d'usine (paramètre 15).",
+              "t": "no"
+            }
+          ]
+        },
+        {
+          "nom": "Alimentation, bus, antenne",
+          "bornes": [
+            {
+              "n": "29 · 30",
+              "label": "+24 V · COM",
+              "desc": "Alimentation des accessoires extérieurs (puissance max : voir caractéristiques). Pour les BG30 High Speed : alimentation du B72/BRAKE/2.",
+              "t": "alim"
+            },
+            {
+              "n": "18 · 19 · 20",
+              "label": "COM LNA LNB",
+              "desc": "Liaison RS485 MASTER / SLAVE (vantaux opposés), câble 3 x 0,5 mm², 30 m max. L'alignement n'est pas possible avec l'homme présent actif (A7 01).",
+              "t": "bus"
+            },
+            {
+              "n": "22 · 21",
+              "label": "ANT",
+              "desc": "Antenne : câble RG58 50 Ω, 10 m max, sans raccord.",
+              "t": "autre"
+            }
+          ]
+        },
+        {
+          "nom": "Connecteurs (câblés usine)",
+          "bornes": [
+            {
+              "n": "ENC",
+              "label": "Encodeur",
+              "desc": "Débrancher / rebrancher uniquement hors tension. Si remplacé : refaire l'apprentissage.",
+              "t": "moteur"
+            },
+            {
+              "n": "FC",
+              "label": "Fins de course",
+              "desc": "Contacts NC, mécaniques (fig. 14) ou magnétiques (fig. 15). Régler pour que le portail s'arrête un peu avant la butée. Refaire l'apprentissage après chaque modification.",
+              "t": "moteur"
+            },
+            {
+              "n": "SB",
+              "label": "Déverrouillage",
+              "desc": "Contact NC de la poignée de déverrouillage : si on lève la poignée, le portail s'arrête et ignore les commandes. Si le portail est en position intermédiaire à la refermeture, une récupération de position démarre.",
+              "t": "moteur"
+            },
+            {
+              "n": "RECEIVER",
+              "label": "Récepteur",
+              "desc": "H93/RX2LP/I : PR1 pas-à-pas (paramètre 76), PR2 partielle (paramètre 77). Boutons PR1 et PR2 accessibles sur la carte. Relié au B70/MODLP en 3 fils. Ne pas remplacer par un autre récepteur.",
+              "t": "autre"
+            },
+            {
+              "n": "WIFI",
+              "label": "B74/BCONNECT",
+              "desc": "Module IP Wi-Fi (activer avec L0 01, low power désactivé L1 00).",
+              "t": "autre"
+            }
+          ]
+        }
+      ],
+      "fusibles": "F1 20 A (ATO257) circuit de puissance des moteurs · F2 T2A (ATO257) primaire du transformateur · F3 3 A (5x20) alimentation des accessoires",
+      "notes": [
+        "Sécurités absentes : shunter sur COM (30 pour FT1 / FT2, 16 pour COS1 / COS2 / ST) ou les désactiver par les paramètres 50, 51, 53, 54, 73, 74. La carte ne se déplace pas avec une sécurité ouverte.",
+        "Puissance absorbée nominale : BG30/1603-1604 185 W · 2203-2204 150 W · 1003-1004/HS 180 W · 1404/R 160 W · 1804/HS 150 W · 1504/HS 155 W · 803-804/HS 185 W. Puissance de démarrage de 470 W à 650 W selon le modèle.",
+        "Puissances max : clignotant 25 W, courtoisie 100 W (230 V~) / 40 W (24 V), voyant portail ouvert 3 W, accessoires 20 W. Température de fonctionnement −20 à +55 °C.",
+        "Câbles : clignotant FIFTHY/24 2 x 1 mm² (10 m max) ; lumière de courtoisie 2 x 1 mm² (20 m max) ; antenne RG58 (10 m max).",
+        "Limiteur de tension B72/CL : obligatoire sur les BG30/804/HS, 1004/HS, 1504/HS, 1804/HS et 1404/R achetés avant novembre 2023. Il absorbe l'énergie de freinage brusque (STOP, bord sensible, inversion) quand le paramètre 85 est réglé. Si la LED CLAMP reste allumée en permanence, il est endommagé : le remplacer. Ne pas l'enlever, sauf avec le chargeur B71/BCHP HW 02 qui le remplace.",
+        "Déblocage mécanique : le message StoP clignote à l'écran. À la refermeture, si le portail n'est pas complètement ouvert ou fermé, la carte lance une récupération de position (manœuvre lente) à la première commande."
+      ]
+    },
+    "apprentissage": {
+      "avant": [
+        "A1 — modèle : 01 BG30/1600 · 02 BG30/2200 · 03 BG30/1000/HS · 04 BG30/1400/R (réversible) · 05 BG30/1800/HS · 06 BG30/1504/HS · 07 BG30/804/HS. Réglé en usine : à ressaisir à la main après un retour aux valeurs usine.",
+        "71 — position : 71 00 moteur à gauche, 71 01 moteur à droite (vue de l'intérieur).",
+        "Fins de course réglés pour que le portail s'arrête un peu avant la butée mécanique.",
+        "Homme présent désactivé : A7 00. Portail en position fermée.",
+        "TEST : contrôler commandes et sécurités ; shunter ou désactiver celles qui ne sont pas installées (50, 51, 53, 54, 73, 74).",
+        "Si TEST affiche FC : prêt. S'il affiche dAtA : TEST 1 clic puis apprentissage. S'il affiche un n° de borne : régler la sécurité d'abord."
+      ],
+      "etapes": [
+        "Maintenir PROG 4 s : AP P- s'affiche.",
+        "Ouvrir la poignée de déverrouillage : après quelques secondes PH AS s'affiche, la centrale règle le moteur.",
+        "Attendre que PH AS clignote (réglage réussi).",
+        "Refermer la poignée de déverrouillage : l'apprentissage démarre.",
+        "FOtO s'affiche (si une photocellule est active) : s'écarter du faisceau dans les 5 s.",
+        "Auto : ouverture à faible vitesse jusqu'au fin de course d'ouverture, court arrêt, Auto clignote.",
+        "Fermeture jusqu'au fin de course de fermeture. Réussi : retour à l'état des commandes et sécurités."
+      ],
+      "apres": [
+        "Erreurs : noPH (réglage moteur échoué), APPE (TEST ou sécurité), APPL (longueur) → voir l'onglet Codes et recommencer.",
+        "Garder au moins 3 cm entre le point d'arrêt et la butée mécanique ; sinon déplacer le fin de course et refaire l'apprentissage.",
+        "Contrôle final : StoP doit clignoter quand on ouvre la poignée de déverrouillage.",
+        "Essai (notice, ch. 21) : vérifier la course et les ralentissements, les forces d'impact (EN 12453 et EN 12445), l'intervention des sécurités, la reprise après coupure du secteur et des batteries (portail en position intermédiaire), et le réglage des fins de course.",
+        "Moteur réversible BG30/1400/R : après une coupure ou un déplacement à la main de plus de 3 cm, la centrale lance une récupération de position à la première commande."
       ]
     }
   },
