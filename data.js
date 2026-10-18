@@ -13,6 +13,10 @@ const DATA_VERSION = "2026-10-18";
 /* Journal des modifications — ajouter une entrée en haut à chaque mise à jour.
    docs : nom des notices ajoutées (affichées dans Réglages). */
 const CHANGELOG = [
+  { date: "2026-10-18", titre: "Diagnostic guidé (en test)", items: [
+    "Nouveau bouton sur l'accueil : un arbre de panne en 3 à 5 questions (le portail ne s'ouvre pas, ne se ferme pas, s'arrête en cours, émetteur sans effet, clignotant ou voyant en panne).",
+    "Fonction en test : les conseils sont généraux, ils peuvent être incomplets ou comporter des erreurs. La fiche de la carte et la notice du fabricant font foi."
+  ], docs: [] },
   { date: "2026-10-18", titre: "Came : 14 nouvelles cartes", items: [
     "Nouvelles cartes à afficheur : ZM3E, ZM3ES (400 V triphasé), ZLJ24, avec menu FONCTIONS, ENCODEUR, RÉGLAGE TEMPS, bornier complet et branchements.",
     "Nouvelles cartes à fonctions F : ZN7 (coulissant 24 V avec encodeur, fonctions F, U, A, H) et ZL92 (moteurs 24 V).",

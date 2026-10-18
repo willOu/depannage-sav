@@ -1,5 +1,5 @@
 /* Diagnostic guidé « arbre de panne » — module de TEST, séparé du reste de l'appli.
-   Pour le retirer : réglage « Diagnostic guidé » sur Non, ou supprimer diag.js + les 3 repères « DIAG » de index.html. */
+   Pour le retirer : supprimer diag.js et les repères « DIAG » de index.html (ou revenir au commit 5861fe1). */
 (function(){
 const R = (titre, cause, actions, liens) => ({ r: { titre, cause, actions, liens: liens || [] } });
 const Q = (q, o, aide) => ({ q, o, aide });
@@ -146,19 +146,20 @@ function diagNode(sid, path) {
   return { t, n, trail };
 }
 
+const TEST = `<div class="dtest"><b>Fonction en test.</b> Ces conseils sont généraux et peuvent être incomplets, inadaptés à votre matériel ou comporter des erreurs. Ne vous y fiez pas seuls : contrôlez avec la fiche de la carte et la notice du fabricant.</div>`;
 function viewDiag(sid, pathStr) {
-  setHead("Diagnostic guidé", true);
+  setHead("Diagnostic guidé (test)", true);
   if (!sid) {
-    let h = `<div class="q">Quel est le problème ?</div><div class="list">` + DIAG.map(t =>
+    let h = TEST + `<div class="q">Quel est le problème ?</div><div class="list">` + DIAG.map(t =>
       `<button class="row" onclick="go('#/d/${t.id}')"><b>${esc(t.titre)}</b><br><span class="muted">${esc(t.sous)}</span></button>`).join("") + `</div>
-      <p class="note"><b>Test.</b> Aide générale en quelques questions, établie à partir des pratiques courantes. Elle n'est pas tirée d'une notice : pour les valeurs précises, ouvrir la fiche de la carte.</p>`;
+      <p class="note">Aide établie à partir des pratiques courantes, pas d'une notice. Pour les valeurs précises, ouvrir la fiche de la carte.</p>`;
     app.innerHTML = h; return;
   }
   const path = pathStr ? pathStr.split("-").map(Number) : [];
   const r = diagNode(sid, path);
   if (!r) { go("#/d"); return; }
   const base = "#/d/" + sid;
-  let h = `<div class="q">${esc(r.t.titre)}</div>`;
+  let h = TEST + `<div class="q">${esc(r.t.titre)}</div>`;
   if (r.trail.length) h += `<div class="dtrail">` + r.trail.map((s, i) =>
     `<div class="dstep"><span>${esc(s.q)}</span><b>${esc(s.a)}</b><a href="${base}${i ? "/" + path.slice(0, i).join("-") : ""}">Modifier</a></div>`).join("") + `</div>`;
   if (r.n.r) {
@@ -167,7 +168,7 @@ function viewDiag(sid, pathStr) {
       <div class="dk">À faire</div><ol class="steps">${x.actions.map(a => `<li>${esc(a)}</li>`).join("")}</ol></div>`;
     h += `<div class="dlinks">` + x.liens.map(l => `<button class="row" onclick="go('${l[1]}')">${esc(l[0])}</button>`).join("") +
       `<button class="row" onclick="go('#/d/${sid}')">Recommencer</button><button class="row" onclick="go('#/d')">Autre problème</button></div>
-      <p class="note">Aide générale. En cas de doute, la notice de la carte fait foi. Couper l'alimentation avant toute intervention sur la carte.</p>`;
+      <p class="note">Fonction en test : en cas de doute, la notice de la carte fait foi. Couper l'alimentation avant toute intervention sur la carte.</p>`;
   } else {
     h += `<div class="dq"><h2>${esc(r.n.q)}</h2>` + r.n.o.map((o, i) =>
       `<button class="row" onclick="go('${base}/${path.concat(i).join("-")}')">${esc(o[0])}</button>`).join("") + `</div>`;
