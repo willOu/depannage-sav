@@ -51,6 +51,9 @@
     "came-za3p": [
       S("came-za3p-p13", "Description des composants de la carte", 13, "Dessin de la carte numéroté (borniers, trimmers TL / TFA, dip-switchs, fusibles) avec légende."),
     ],
+    "nice-run": [
+      S("nice-run-p61", "Connexions électriques et installation des dispositifs", 61, "Raccordement du clignotant LUCYB (S.C.A.), des photocellules MOFB (TX / RX), du sélecteur à clé MOSE et des commandes ouverture / fermeture (fig. 14 à 16), avec la liste des bornes.")
+    ],
     "v2-lumos-m": [
       S("v2-lumos-p03", "Fixation du feu", 3, "Fig. 1 : sur plan horizontal avec la base A. Fig. 2 : sur paroi verticale avec la pièce B. Position verticale uniquement.")
     ]
