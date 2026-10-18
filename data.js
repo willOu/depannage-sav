@@ -13,6 +13,10 @@ const DATA_VERSION = "2026-10-18";
 /* Journal des modifications — ajouter une entrée en haut à chaque mise à jour.
    docs : nom des notices ajoutées (affichées dans Réglages). */
 const CHANGELOG = [
+  { date: "2026-10-18", titre: "Accueil : état des données et recherche par question", items: [
+    "Accueil : bandeau « Données à jour du … » avec l'état du mode hors ligne (actif ou en préparation).",
+    "Recherche : une phrase comme « comment mettre la fermeture automatique sur ZL90 » renvoie vers le bon paramètre, la bonne borne ou le bon code. Recherche par mots-clés (en test) : la notice fait foi."
+  ], docs: [] },
   { date: "2026-10-18", titre: "Diagnostic guidé (en test)", items: [
     "Nouveau bouton sur l'accueil : un arbre de panne en 3 à 5 questions (le portail ne s'ouvre pas, ne se ferme pas, s'arrête en cours, émetteur sans effet, clignotant ou voyant en panne).",
     "Fonction en test : les conseils sont généraux, ils peuvent être incomplets ou comporter des erreurs. La fiche de la carte et la notice du fabricant font foi."
