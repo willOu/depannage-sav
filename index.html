@@ -161,6 +161,39 @@ ul.plain li{margin:4px 0}
 .g-commande{fill:#1f6fd0}.g-securite{fill:#e07b00}.g-led{fill:#2ea043}
 .chipg{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
 mark{background:#ffe08a;color:#1d1a19;border-radius:3px;padding:0 1px}
+
+/* Adaptation automatique : petits téléphones, grands téléphones, tablettes, paysage, encoche */
+header{padding-left:max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right))}
+main{padding-left:max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right))}
+html{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+@media (max-width:359px){
+  .top h1{font-size:15px}.tabs button{font-size:12px;padding:0 3px}.gen button{font-size:13px}
+  main{padding-left:max(10px,env(safe-area-inset-left));padding-right:max(10px,env(safe-area-inset-right))}
+}
+@media (pointer:coarse){
+  .iconbtn{min-width:44px;height:44px}.seg2 button{height:42px}.cr summary{min-height:56px}
+}
+@media (min-width:700px){
+  html,body{font-size:17px}
+  main{max-width:960px;padding-top:18px}
+  header{padding-left:max(16px,calc((100vw - 960px)/2));padding-right:max(16px,calc((100vw - 960px)/2))}
+  header .search{margin-top:12px}.search input{height:50px}
+  .tabs button{font-size:15px;height:48px}
+  .gen button{padding:20px 10px 16px;font-size:16px}.gen button small{font-size:13px}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
+  .list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;align-items:start}
+  .cr .pill{font-size:17px}.cr .rt{font-size:16px}
+}
+@media (min-width:1100px){
+  main{max-width:1180px}
+  header{padding-left:max(16px,calc((100vw - 1180px)/2));padding-right:max(16px,calc((100vw - 1180px)/2))}
+  .list{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media (orientation:landscape) and (max-height:500px){
+  header{padding-top:calc(env(safe-area-inset-top) + 6px);padding-bottom:6px}
+  .search{margin-top:6px}.search input{height:40px}.search svg{top:11px}.status{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
 <body>
