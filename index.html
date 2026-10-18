@@ -133,6 +133,8 @@ ul.plain li{margin:4px 0}
 .bchips{display:flex;flex-wrap:wrap;gap:8px}
 .bchip{display:flex;align-items:center;gap:8px;min-height:44px;padding:0 16px 0 12px;border-radius:22px;background:var(--card);border:1px solid var(--line);font-size:15px;font-weight:600;cursor:pointer}
 .bchip i{width:12px;height:12px;border-radius:3px;display:block;background:var(--c)}
+.bchip.logo{background:#fff;padding:6px 16px;border-color:var(--line)}
+.bchip.logo img{display:block;height:28px;width:auto}
 .sec{font-size:13px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;margin:16px 2px 8px;display:flex;align-items:center;gap:8px;color:var(--sv)}
 .sec i{width:10px;height:10px;border-radius:50%;background:var(--sv);display:block}
 .sec span{color:var(--muted);font-weight:600}
@@ -263,7 +265,7 @@ function viewHome(){
   let h = `<div class="q">Quel automatisme avez-vous devant vous ?</div><div class="gen">` + GENRES.filter(g => nb(g[0])).map(g =>
     `<button onclick="go('#/g/${g[0]}')">${g[3]}${g[1]}<small>${nb(g[0])} carte${nb(g[0])>1?"s":""}</small></button>`).join("") + `</div>`;
   h += `<h2>Ou par marque</h2><div class="bchips">` + MARQUES.map(m =>
-    `<button class="bchip" style="--c:${m.couleur}" onclick="go('#/m/${m.id}')"><i></i>${esc(m.nom)}</button>`).join("") + `</div>`;
+    `<button class="bchip logo" aria-label="${esc(m.nom)}" onclick="go('#/m/${m.id}')"><img src="icons/marques/${m.id}.png" alt="${esc(m.nom)}" height="28"></button>`).join("") + `</div>`;
   if (recents.length){
     h += `<h2>Dernières consultées</h2><div class="list">` + recents.map(rowBoard).join("") + `</div>`;
   }
