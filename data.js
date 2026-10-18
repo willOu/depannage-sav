@@ -6,6 +6,8 @@
    terrain de base (pas mot pour mot dans la notice).
    Pour ajouter une carte : copier un bloc { id, nom, ... } et l'adapter,
    puis augmenter DATA_VERSION (sinon les téléphones gardent l'ancienne).
+   VERSION DE L'APPLI : chaque nouveauté ajoute une entrée en tête du CHANGELOG avec v: "1.N+1"
+   (la première entrée donne le numéro affiché partout : accueil, en-tête, Réglages).
    ===================================================================== */
 
 const DATA_VERSION = "2026-10-18";
@@ -13,15 +15,19 @@ const DATA_VERSION = "2026-10-18";
 /* Journal des modifications — ajouter une entrée en haut à chaque mise à jour.
    docs : nom des notices ajoutées (affichées dans Réglages). */
 const CHANGELOG = [
-  { date: "2026-10-18", titre: "Accueil : état des données et recherche par question", items: [
+  { v: "1.14", date: "2026-10-18", titre: "Numéro de version de l'appli", items: [
+    "L'appli a maintenant un numéro de version (v1.14), affiché dans l'en-tête, sur l'accueil et dans Réglages.",
+    "Chaque nouveauté de l'historique porte son numéro ; toucher le bandeau de l'accueil ouvre Réglages et l'historique."
+  ], docs: [] },
+  { v: "1.13", date: "2026-10-18", titre: "Accueil : état des données et recherche par question", items: [
     "Accueil : bandeau « Données à jour du … » avec l'état du mode hors ligne (actif ou en préparation).",
     "Recherche : une phrase comme « comment mettre la fermeture automatique sur ZL90 » renvoie vers le bon paramètre, la bonne borne ou le bon code. Recherche par mots-clés (en test) : la notice fait foi."
   ], docs: [] },
-  { date: "2026-10-18", titre: "Diagnostic guidé (en test)", items: [
+  { v: "1.12", date: "2026-10-18", titre: "Diagnostic guidé (en test)", items: [
     "Nouveau bouton sur l'accueil : un arbre de panne en 3 à 5 questions (le portail ne s'ouvre pas, ne se ferme pas, s'arrête en cours, émetteur sans effet, clignotant ou voyant en panne).",
     "Fonction en test : les conseils sont généraux, ils peuvent être incomplets ou comporter des erreurs. La fiche de la carte et la notice du fabricant font foi."
   ], docs: [] },
-  { date: "2026-10-18", titre: "Came : 14 nouvelles cartes", items: [
+  { v: "1.11", date: "2026-10-18", titre: "Came : 14 nouvelles cartes", items: [
     "Nouvelles cartes à afficheur : ZM3E, ZM3ES (400 V triphasé), ZLJ24, avec menu FONCTIONS, ENCODEUR, RÉGLAGE TEMPS, bornier complet et branchements.",
     "Nouvelles cartes à fonctions F : ZN7 (coulissant 24 V avec encodeur, fonctions F, U, A, H) et ZL92 (moteurs 24 V).",
     "Nouvelles cartes à dip-switch : ZBX6, ZBX241 (avec batteries BN1), ZL90 (calibrage automatique, serrure et coup de bélier), ZBX10, ZA3, ZA4, ZA5.",
@@ -31,35 +37,35 @@ const CHANGELOG = [
     "Notice Came 319LR17 (ZBX241 + BN1)", "Notice Came 319LR07 (ZL90)", "Notice Came 319LR36 (ZL92)", "Notice Came 319LR21 (ZBX10)",
     "Notice Came 319LR23 (ZA3)", "Notice Came 319LR24 (ZA4)", "Notice Came 319LR25 (ZA5)", "Notice Came FA02020M4A (ZA3P, 88003-0183)", "Notice Came FA02006M4A (88003-0184)"
   ] },
-  { date: "2026-10-18", titre: "Nice RUN (RUN1800 / RUN2500)", items: [
+  { v: "1.10", date: "2026-10-18", titre: "Nice RUN (RUN1800 / RUN2500)", items: [
     "Nouvelle carte Nice RUN (RUN1800, RUN1800P, RUN2500, RUN2500P, versions /V1 120 V) : codes du clignotant et des LED, symptômes, bornier, fonctions ON-OFF et paramètres des 2 niveaux, reconnaissance et fins de course.",
     "Onglet Écran : rôle des LED L1…L8 et des LED des bornes, lecture de l'historique des anomalies."
   ], docs: [
     "Notice Nice IS0307A01MMD (RUN)"
   ] },
-  { date: "2026-10-18", titre: "Roger B70/1DCHP (BG30, 36 V)", items: [
+  { v: "1.9", date: "2026-10-18", titre: "Roger B70/1DCHP (BG30, 36 V)", items: [
     "Nouvelle carte Roger B70/1DCHP pour les moteurs BG30 (1600, 2200, High Speed, réversible 1400/R) : codes, bornier (nouvelle numérotation), écran, 63 paramètres, apprentissage.",
     "Nouveautés du firmware P3.10, limiteur de tension B72/CL, mode INFO et batteries B71/BCHP."
   ], docs: [
     "Notice Roger IS142 Rev.23, B70/1DCHP firmware P3.10"
   ] },
-  { date: "2026-10-18", titre: "Nouveau design de l'accueil et des codes", items: [
+  { v: "1.8", date: "2026-10-18", titre: "Nouveau design de l'accueil et des codes", items: [
     "Accueil : on choisit d'abord le type d'automatisme (portail coulissant, battant, barrière levante), puis la carte. L'accès par marque reste disponible.",
     "Codes : triés par gravité (erreurs à corriger, symptômes, codes de l'afficheur, diagnostic des entrées). Touchez un code pour voir ce qu'il faut faire ; le premier est déjà ouvert."
   ], docs: [] },
-  { date: "2026-10-17", titre: "Écrans des BFT LEO B CBB et MERAK", items: [
+  { v: "1.7", date: "2026-10-17", titre: "Écrans des BFT LEO B CBB et MERAK", items: [
     "Onglet Écran de la BFT LEO B CBB : touches, menus, statistiques, messages affichés (SEt, 35.40, BLOC, RST…). La notice ne décrit pas les segments un par un, il n'y a donc pas de dessin interactif.",
     "Même onglet Écran pour la BFT MERAK : touches, menus, point de basse consommation, lettres C et O, messages affichés."
   ], docs: [] },
-  { date: "2026-10-17", titre: "Relecture des cartes BFT", items: [
+  { v: "1.6", date: "2026-10-17", titre: "Relecture des cartes BFT", items: [
     "LEO B CBB : type corrigé (coulissant), codes AUX 3 et clignotant précisés, ajout du menu simplifié avec les presets, des notes sur le sens d'ouverture, des fusibles et du montage vantaux opposés.",
     "MERAK : bornier SAFE 2 corrigé (borne 73, pont 70-73, plus de FAULT), puissances par modèle, vantaux opposés, presets, signalement des points où la notice se contredit ou que seule l'ancienne édition mentionne."
   ], docs: [] },
-  { date: "2026-10-17", titre: "Recherche par modèle", items: [
+  { v: "1.5", date: "2026-10-17", titre: "Recherche par modèle", items: [
     "On peut chercher un modèle d'automatisme (ex. Ares 1000, AYRON, BIONIK, RB400, BX708) ou un type (coulissant, battant, barrière) : la carte correspondante s'ouvre.",
     "La saisie sans espace fonctionne aussi (ex. bta400, rb400)."
   ], docs: [] },
-  { date: "2026-10-17", titre: "BFT LEO B CBB et MERAK BT A à jour", items: [
+  { v: "1.4", date: "2026-10-17", titre: "BFT LEO B CBB et MERAK BT A à jour", items: [
     "Nouvelle carte BFT LEO B CBB (3 230 L02 / L04, 3 120 F02 / F04) : codes, bornier, paramètres (tableaux A, B, C) et autoconfiguration.",
     "BFT MERAK : mise à jour avec la notice D814459 (MERAK BT A) : nouveaux codes d'erreur, 9 groupes de paramètres, bornier AUX 1 / AUX 2, notes d'apprentissage.",
     "Roger B70/2ML, EDGE1, CTRL : corrections après relecture indépendante des notices (mise en veille, OFSt, symptômes, paramètres esclave)."
@@ -67,7 +73,7 @@ const CHANGELOG = [
     "Notice BFT D812161 00100_04, LEO B CBB",
     "Notice BFT D814459 0AR00_09, MERAK BT A"
   ] },
-  { date: "2026-10-17", titre: "Trois nouvelles cartes Roger", items: [
+  { v: "1.3", date: "2026-10-17", titre: "Trois nouvelles cartes Roger", items: [
     "Roger B70/2ML (portail battant AYRON, BE20, MONOS4) : codes, bornier, écran, 68 paramètres, apprentissage.",
     "Roger EDGE1 (portail battant 36 V : BR20, BR21, BH23, SMARTY, BE20, MONOS4) : codes, bornier, écran, 77 paramètres, apprentissage.",
     "Roger CTRL (barrières BIONIK BI/004HP, BI/004, BI/006, BI/008) : codes, bornier, écran, paramètres (dont accès parkings et lumières RGB), apprentissage simple et MASTER/SLAVE."
@@ -76,7 +82,7 @@ const CHANGELOG = [
     "Notice Roger IS160 Rev.26, EDGE1 firmware P5.10",
     "Notice Roger IS88 Rev.28, CTRL firmware P4.35"
   ] },
-  { date: "2026-10-17", titre: "Onglet Paramètres et menu Réglages", items: [
+  { v: "1.2", date: "2026-10-17", titre: "Onglet Paramètres et menu Réglages", items: [
     "Nouvel onglet Paramètres : tous les paramètres de programmation de la carte, avec valeur usine, valeurs possibles et recherche.",
     "Roger B70/1DC : 62 paramètres (A0 à CP, y compris High Speed et réversible).",
     "Les paramètres sortent aussi dans la recherche générale.",
@@ -84,11 +90,11 @@ const CHANGELOG = [
     "Mise à jour automatique dès l'ouverture quand il y a du réseau.",
     "Les trois carrés de couleur en haut à gauche ramènent à l'accueil."
   ], docs: [] },
-  { date: "2026-10-17", titre: "Roger B70/1DC firmware P3.00 et onglet Écran", items: [
+  { v: "1.1", date: "2026-10-17", titre: "Roger B70/1DC firmware P3.00 et onglet Écran", items: [
     "Fiche Roger B70/1DC refaite à partir de la notice P3.00 : 42 codes, bornier, apprentissage.",
     "Nouvel onglet Écran : dessin de l'afficheur et signification de chaque segment (touchez un segment)."
   ], docs: ["Notice Roger IS117 Rev.30, firmware P3.00"] },
-  { date: "2026-10-17", titre: "Première version", items: [
+  { v: "1.0", date: "2026-10-17", titre: "Première version", items: [
     "Codes erreur, bornier et apprentissage pour Came, Nice, FAAC, BFT et Roger, consultables hors ligne."
   ], docs: [
     "Notice Came FA02214-FR (03/2025)",

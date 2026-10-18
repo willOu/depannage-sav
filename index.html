@@ -265,10 +265,11 @@ applyTheme(store.get("theme", "dark"));
 function setTheme(t){ applyTheme(t); store.set("theme", t); if (location.hash === "#/reglages") viewSettings(); }
 $("#theme").onclick = () => setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
 
+const APP_V = CHANGELOG[0].v;
 const fdate = d => d.split("-").reverse().join("/");
 /* statut réseau */
 function status(){
-  $("#status").textContent = (navigator.onLine ? "En ligne" : "Hors ligne — toutes les fiches restent disponibles") + " · données du " + DATA_VERSION.split("-").reverse().join("/");
+  $("#status").textContent = (navigator.onLine ? "En ligne" : "Hors ligne — toutes les fiches restent disponibles") + " · v" + APP_V + " · données du " + DATA_VERSION.split("-").reverse().join("/");
 }
 addEventListener("online", status); addEventListener("offline", status); status();
 
@@ -290,7 +291,7 @@ function viewHome(){
   let h = `<div class="q">Quel automatisme avez-vous devant vous ?</div><div class="gen">` + GENRES.filter(g => nb(g[0])).map(g =>
     `<button onclick="go('#/g/${g[0]}')">${g[3]}${g[1]}<small>${nb(g[0])} carte${nb(g[0])>1?"s":""}</small></button>`).join("") + `</div>`;
   h += `<button class="dbtn" onclick="go('#/d')">Diagnostic guidé : trouver la panne en quelques questions<small><b>EN TEST</b> · peut contenir des erreurs ou mal fonctionner</small></button>`; /* DIAG */
-  h += `<div class="offl wait" id="offl"><i></i><span>Données à jour du <b>${fdate(DATA_VERSION)}</b> · <span id="offs">vérification du mode hors ligne…</span></span></div>`; /* STATUT */
+  h += `<div class="offl wait" id="offl" onclick="go('#/reglages')" style="cursor:pointer"><i></i><span>Version <b>${APP_V}</b> · données du <b>${fdate(DATA_VERSION)}</b> · <span id="offs">vérification du mode hors ligne…</span></span></div>`; /* STATUT */
   h += `<h2>Ou par marque</h2><div class="bchips">` + MARQUES.map(m =>
     `<button class="bchip logo" aria-label="${esc(m.nom)}" onclick="go('#/m/${m.id}')"><img src="icons/marques/${m.id}.png" alt="${esc(m.nom)}" height="28"></button>`).join("") + `</div>`;
   if (recents.length){
@@ -529,10 +530,10 @@ function viewSettings(){
     return `<div class="dk" onclick="go('#/c/${c.id}')" style="cursor:pointer"><div class="n"><span class="badge" style="--c:${m.couleur}">${esc(m.nom)}</span>${esc(c.nom)}</div>
       <div class="s">${esc(c.source)}</div><div class="tb">${has.map(([l, ok]) => `<span class="${ok?"ok":""}">${ok?"✓ ":""}${l}</span>`).join("")}</div></div>`;
   }).join("") + `</div>`;
-  h += `<h2>Nouveautés</h2><div class="set">` + CHANGELOG.map(e => `<div class="cl"><div class="d">${fdate(e.date)}</div><h4>${esc(e.titre)}</h4>
+  h += `<h2>Nouveautés</h2><div class="set">` + CHANGELOG.map(e => `<div class="cl"><div class="d">v${esc(e.v)} · ${fdate(e.date)}</div><h4>${esc(e.titre)}</h4>
       <ul>${e.items.map(i => `<li>${esc(i)}</li>`).join("")}</ul>
       ${e.docs && e.docs.length ? `<div class="docs"><b>Documentation ajoutée :</b>${e.docs.map(d => `<div class="doc">${esc(d)}</div>`).join("")}</div>` : ""}</div>`).join("") + `</div>`;
-  h += `<h2>Version</h2><div class="set"><div class="row"><span>Données</span><span class="mono">${fdate(DATA_VERSION)}</span></div>
+  h += `<h2>Version</h2><div class="set"><div class="row"><span>Version de l'appli</span><span class="mono">v${APP_V}</span></div><div class="row"><span>Données</span><span class="mono">${fdate(DATA_VERSION)}</span></div>
       <div class="row"><span>Hors ligne</span><span class="mono" id="swv">…</span></div></div>
       <p class="note">En cas de doute, la notice livrée avec le matériel fait foi.</p>`;
   app.innerHTML = h;
