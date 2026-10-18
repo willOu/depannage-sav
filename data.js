@@ -8,11 +8,17 @@
    puis augmenter DATA_VERSION (sinon les téléphones gardent l'ancienne).
    ===================================================================== */
 
-const DATA_VERSION = "2026-10-17";
+const DATA_VERSION = "2026-10-18";
 
 /* Journal des modifications — ajouter une entrée en haut à chaque mise à jour.
    docs : nom des notices ajoutées (affichées dans Réglages). */
 const CHANGELOG = [
+  { date: "2026-10-18", titre: "Nice RUN (RUN1800 / RUN2500)", items: [
+    "Nouvelle carte Nice RUN (RUN1800, RUN1800P, RUN2500, RUN2500P, versions /V1 120 V) : codes du clignotant et des LED, symptômes, bornier, fonctions ON-OFF et paramètres des 2 niveaux, reconnaissance et fins de course.",
+    "Onglet Écran : rôle des LED L1…L8 et des LED des bornes, lecture de l'historique des anomalies."
+  ], docs: [
+    "Notice Nice IS0307A01MMD (RUN)"
+  ] },
   { date: "2026-10-18", titre: "Roger B70/1DCHP (BG30, 36 V)", items: [
     "Nouvelle carte Roger B70/1DCHP pour les moteurs BG30 (1600, 2200, High Speed, réversible 1400/R) : codes, bornier (nouvelle numérotation), écran, 63 paramètres, apprentissage.",
     "Nouveautés du firmware P3.10, limiteur de tension B72/CL, mode INFO et batteries B71/BCHP."
@@ -287,6 +293,817 @@ const MARQUES = [
         "Contrôle : ralentissement 70 à 50 cm avant la fin de course, arrêt à 2-3 cm de la butée mécanique.",
         "Historique des 8 dernières manœuvres : Stop/Set 3 s, aller sur L8, maintenir Stop/Set ; la LED de chaque manœuvre en défaut reprend le nombre de clignotements du code.",
         "Programmation : Stop/Set 3 s, ▲/▼ pour choisir la LED, Stop/Set pour basculer (1er niveau) ou maintenu + ▲/▼ (2e niveau). Pas plus de 10 s entre deux appuis."
+      ]
+    }
+  },
+  {
+    "id": "nice-run",
+    "nom": "RUN (RUN1800 / RUN2500)",
+    "modeles": "RUN1800 · RUN1800P · RUN1800/V1 (120 V 60 Hz) · RUN2500 · RUN2500P · RUN2500/V1. Le P désigne la version à fin de course de proximité inductif, les autres ont un fin de course électromécanique.",
+    "type": "Portail coulissant 230 V (120 V en /V1) — logique intégrée, BlueBUS, 8 LED L1…L8",
+    "source": "Notice Nice IS0307A01MMD (RUN1800 / RUN1800P / RUN2500 / RUN2500P), version française",
+    "codes": [
+      {
+        "code": "1 clignot.",
+        "type": "flash",
+        "titre": "Erreur BlueBUS",
+        "action": "Au début de la manœuvre, les dispositifs BlueBUS ne correspondent pas à ceux mémorisés. Chercher le dispositif en panne et le remplacer. Si on a ajouté ou retiré un dispositif, refaire la reconnaissance (onglet Apprentissage)."
+      },
+      {
+        "code": "2 clignot.",
+        "type": "flash",
+        "titre": "Photocellule",
+        "action": "Au début de la manœuvre, une ou plusieurs photocellules refusent le départ : chercher un obstacle sur le faisceau. Pendant le mouvement, il est normal qu'un obstacle soit présent."
+      },
+      {
+        "code": "3 clignot.",
+        "type": "flash",
+        "titre": "Détection d'obstacles",
+        "action": "Pendant le mouvement, le portail a rencontré une friction plus forte : en chercher la cause avant de toucher au réglage."
+      },
+      {
+        "code": "4 clignot.",
+        "type": "flash",
+        "titre": "Entrée STOP",
+        "action": "L'entrée STOP est intervenue au départ ou pendant le mouvement : en vérifier la cause (arrêt, bord sensible, câblage)."
+      },
+      {
+        "code": "5 clignot.",
+        "type": "flash",
+        "titre": "Paramètres internes de la logique",
+        "action": "Attendre au moins 30 s puis redonner une commande. Si ça persiste : panne, carte à remplacer. (Le texte français de la notice répète ici, par erreur, l'action du STOP ; la version anglaise donne celle-ci.)"
+      },
+      {
+        "code": "6 clignot.",
+        "type": "flash",
+        "titre": "Trop de manœuvres par heure",
+        "action": "La limite maximale de manœuvres par heure est dépassée : attendre quelques minutes que le limiteur repasse sous la limite."
+      },
+      {
+        "code": "7 clignot.",
+        "type": "flash",
+        "titre": "Circuits électriques internes",
+        "action": "Couper toutes les alimentations quelques secondes puis redonner une commande. Si ça persiste : panne grave, carte à remplacer."
+      },
+      {
+        "code": "8 clignot.",
+        "type": "flash",
+        "titre": "Une commande est déjà présente",
+        "action": "Une commande reste active et empêche les autres (par exemple une horloge sur l'entrée ouverture) : vérifier laquelle."
+      },
+      {
+        "code": "Flash 2 s",
+        "type": "flash",
+        "titre": "Demande de maintenance (81 à 100 % de la limite)",
+        "action": "Au début de la manœuvre, le clignotant reste allumé 2 s puis clignote normalement. Faire la maintenance puis remettre le compteur de manœuvres à zéro (onglet Paramètres)."
+      },
+      {
+        "code": "Flash 2 s ×2",
+        "type": "flash",
+        "titre": "Maintenance dépassée (plus de 100 % de la limite)",
+        "action": "Le clignotant reste allumé 2 s au début et à la fin de la manœuvre. Faire la maintenance et remettre le compteur à zéro."
+      },
+      {
+        "code": "BLUEBUS éteinte",
+        "type": "led",
+        "titre": "LED BLUEBUS éteinte",
+        "action": "Anomalie : vérifier l'alimentation et si les fusibles sont intervenus. Si oui, chercher la cause avant de les remplacer par des fusibles de mêmes caractéristiques."
+      },
+      {
+        "code": "BLUEBUS fixe",
+        "type": "led",
+        "titre": "LED BLUEBUS allumée fixe",
+        "action": "Anomalie grave : éteindre la logique quelques secondes. Si ça persiste, panne et carte à remplacer."
+      },
+      {
+        "code": "BLUEBUS 1/s",
+        "type": "led",
+        "titre": "1 clignotement par seconde",
+        "action": "Fonctionnement normal de la logique."
+      },
+      {
+        "code": "BLUEBUS ×2",
+        "type": "led",
+        "titre": "2 clignotements rapides",
+        "action": "Normal quand une entrée change d'état : PP, STOP, OPEN, CLOSE, intervention des photocellules ou émetteur radio utilisé."
+      },
+      {
+        "code": "BLUEBUS série",
+        "type": "led",
+        "titre": "Série de clignotements séparés par une pause d'1 s",
+        "action": "Même signalisation que le clignotant : voir les codes « 1 à 8 clignot. »."
+      },
+      {
+        "code": "STOP éteinte",
+        "type": "led",
+        "titre": "LED STOP éteinte",
+        "action": "L'entrée STOP est intervenue : vérifier les dispositifs branchés sur STOP. Au repos la LED est allumée."
+      },
+      {
+        "code": "P.P. allumée",
+        "type": "led",
+        "titre": "LED P.P. / OPEN / CLOSE allumée",
+        "action": "L'entrée correspondante est active. C'est normal si le dispositif branché sur cette entrée est vraiment actif ; sinon chercher la commande qui reste enfoncée. Éteinte = entrée non active."
+      },
+      {
+        "code": "L1+L2",
+        "type": "led",
+        "titre": "L1 et L2 clignotent ensemble",
+        "action": "La reconnaissance des dispositifs BlueBUS et STOP est à faire (onglet Apprentissage)."
+      },
+      {
+        "code": "L3+L4",
+        "type": "led",
+        "titre": "L3 et L4 clignotent ensemble",
+        "action": "La reconnaissance de la longueur du tablier est à faire (onglet Apprentissage)."
+      },
+      {
+        "code": "Radio",
+        "type": "symptome",
+        "titre": "L'émetteur ne commande pas, sa LED ne s'allume pas",
+        "action": "Vérifier si les piles de l'émetteur sont déchargées et les remplacer si besoin."
+      },
+      {
+        "code": "Radio",
+        "type": "symptome",
+        "titre": "L'émetteur ne commande pas, mais sa LED s'allume",
+        "action": "Vérifier que l'émetteur est correctement mémorisé dans le récepteur radio."
+      },
+      {
+        "code": "Aucune manœuvre",
+        "type": "symptome",
+        "titre": "Rien ne bouge et la LED BLUEBUS ne clignote pas",
+        "action": "Vérifier que RUN est alimenté en secteur et que les fusibles ne sont pas interrompus. Si c'est le cas, chercher la cause avant de les remplacer par d'autres de même valeur et mêmes caractéristiques."
+      },
+      {
+        "code": "Aucune manœuvre",
+        "type": "symptome",
+        "titre": "Rien ne bouge et le clignotant est éteint",
+        "action": "Vérifier que la commande est bien reçue : avec l'entrée PP, la LED « PP » doit s'allumer ; avec l'émetteur radio, la LED BLUEBUS doit faire 2 clignotements rapides."
+      },
+      {
+        "code": "Aucune manœuvre",
+        "type": "symptome",
+        "titre": "Rien ne bouge et le clignotant émet quelques clignotements",
+        "action": "Compter les clignotements et se reporter aux codes « 1 à 8 clignot. »."
+      },
+      {
+        "code": "Inversion",
+        "type": "symptome",
+        "titre": "La manœuvre démarre puis s'inverse aussitôt",
+        "action": "La sensibilité de détection des obstacles est peut-être trop élevée pour ce portail. Chercher d'abord un obstacle, sinon choisir une sensibilité plus basse (2e niveau, L3)."
+      },
+      {
+        "code": "Clignotant",
+        "type": "symptome",
+        "titre": "Le portail manœuvre normalement mais le clignotant ne fonctionne pas",
+        "action": "Pendant la manœuvre, mesurer la tension à la borne FLASH (elle est intermittente, environ 10 à 30 Vcc, la valeur n'est pas significative). Si elle arrive : remplacer l'ampoule par une identique. Si elle n'arrive pas : surcharge possible sur la sortie FLASH, chercher un court-circuit sur le câble."
+      },
+      {
+        "code": "Voyant S.C.A.",
+        "type": "symptome",
+        "titre": "Le portail manœuvre normalement mais le voyant S.C.A. ne fonctionne pas",
+        "action": "Vérifier la fonction programmée pour la sortie S.C.A. (2e niveau, L4). Si le voyant doit être allumé, vérifier qu'environ 24 Vcc arrivent à la borne S.C.A. : si oui, remplacer le voyant par un identique ; sinon, surcharge possible, chercher un court-circuit sur le câble."
+      },
+      {
+        "code": "Sécurités HS",
+        "type": "symptome",
+        "titre": "Un dispositif de sécurité est en panne : comment manœuvrer quand même ?",
+        "action": "Donner la commande : si les sécurités refusent, le clignotant fait quelques clignotements et la manœuvre ne part pas. Dans les 3 s, donner de nouveau la commande et la maintenir : au bout d'environ 2 s le portail bouge en « action maintenue », il s'arrête dès qu'on relâche. À réparer au plus tôt."
+      }
+    ],
+    "afficheur": {
+      "intro": "RUN n'a pas d'afficheur à segments : la logique a 8 LED (L1…L8), 3 touches et 5 LED d'état sur les bornes. Les LED L1…L8 montrent l'état des fonctions ON-OFF en marche normale et servent aux réglages.",
+      "ecrans": [],
+      "reperes": {},
+      "regles": [],
+      "autres": [
+        {
+          "titre": "Touches",
+          "texte": "Open ▲ : commande l'ouverture, ou monte vers le haut dans la programmation. Stop/Set : arrête la manœuvre ; maintenu, entre en programmation et valide. Close ▼ : commande la fermeture, ou descend dans la programmation. La notice annonce « plus de 5 s » pour entrer en programmation à la section 7.1, mais ses procédures disent environ 3 s (tableaux 8 et 10)."
+        },
+        {
+          "titre": "LED L1…L8 en marche normale",
+          "texte": "L1 allumée : fermeture automatique active. L2 : refermeture après passage devant la photocellule. L3 : ferme toujours. L4 : ralentissement. L5 : démarrage. L6 : préclignotement. L7 : « fermeture » devient ouverture partielle. L8 : RUN configuré en Slave (éteinte = Master). Éteinte = fonction non active. (Dans la notice, la LED L4 est aussi appelée « stand-by » dans le tableau 23 et la LED L5 « démarrage ».)"
+        },
+        {
+          "titre": "LED qui clignotent en marche normale",
+          "texte": "L1 + L2 ensemble : reconnaissance des dispositifs à faire. L3 + L4 ensemble : reconnaissance de la longueur du tablier à faire. Une seule LED qui clignote : programmation en cours."
+        },
+        {
+          "titre": "LED sur les bornes",
+          "texte": "BLUEBUS : 1 clignotement par seconde = tout est normal ; 2 rapides = changement d'état d'une entrée ; éteinte ou allumée fixe = anomalie. STOP : allumée au repos, éteinte = entrée STOP intervenue. P.P., OPEN, CLOSE : allumées quand l'entrée correspondante est activée."
+        },
+        {
+          "titre": "Historique des anomalies",
+          "texte": "Pour voir les anomalies des 8 dernières manœuvres : Stop/Set 3 s, aller sur L8, maintenir Stop/Set. La LED de chaque manœuvre avec anomalie s'allume (L1 = la plus récente, L8 = la huitième). Avec ▲ ou ▼ on choisit la manœuvre : la LED fait alors autant de clignotements que le clignotant après cette anomalie."
+        }
+      ]
+    },
+    "parametres": {
+      "intro": "Deux niveaux de réglage, sur les LED L1…L8. 1er niveau : 8 fonctions ON-OFF (LED allumée = active, tout est sur OFF en usine). 2e niveau : 8 paramètres à 8 valeurs chacun. Maximum 10 s entre deux appuis, sinon la procédure se termine en mémorisant ce qui a été fait.",
+      "navigation": [
+        "1er niveau : maintenir Stop/Set environ 3 s, relâcher quand L1 clignote. ▲ / ▼ pour aller sur la LED de la fonction. Stop/Set une fois pour changer l'état (clignotement bref = OFF, long = ON). Attendre 10 s pour sortir.",
+        "2e niveau : maintenir Stop/Set environ 3 s, relâcher quand L1 clignote. ▲ / ▼ pour aller sur la LED d'entrée du paramètre. Maintenir Stop/Set (pendant toute la suite), attendre environ 3 s : la LED du niveau actuel s'allume. ▲ / ▼ pour aller sur la nouvelle valeur, relâcher Stop/Set. Attendre 10 s pour sortir.",
+        "Vérifier le compteur de manœuvres : entrer en programmation, aller sur L7, maintenir Stop/Set (environ 3 s, la LED du niveau s'allume), puis appuyer brièvement sur ▲ et ▼ ensemble. La LED du niveau clignote : chaque clignotement vaut 10 % de la limite (par exemple 4 clignotements avec L5 = 10 000 manœuvres : 40 % atteint, soit entre 4 000 et 4 999). Aucun clignotement : moins de 10 %.",
+        "Remise à zéro du compteur après maintenance : même chemin jusqu'à la LED du niveau (sur L7), puis maintenir ▲ et ▼ ensemble au moins 5 s. La LED fait une série de clignotements rapides pour confirmer. Relâcher Stop/Set."
+      ],
+      "groupes": [
+        {
+          "nom": "1er niveau — fonctions ON-OFF (toutes sur OFF en usine)",
+          "items": [
+            {
+              "code": "L1",
+              "def": "OFF",
+              "titre": "Fermeture automatique",
+              "valeurs": [
+                [
+                  "ON",
+                  "Fermeture automatique du portail après le temps de pause (30 s en usine, réglable avec le paramètre L1 du 2e niveau)."
+                ],
+                [
+                  "OFF",
+                  "Fonctionnement semi-automatique."
+                ]
+              ]
+            },
+            {
+              "code": "L2",
+              "def": "OFF",
+              "titre": "Refermeture après passage devant la photocellule",
+              "valeurs": [
+                [
+                  "ON",
+                  "Garde le portail ouvert le temps du passage : l'intervention d'une « Photo » provoque toujours une refermeture avec une pause de 5 s, quelle que soit la valeur programmée. Avec la fermeture automatique active, la manœuvre s'arrête juste après libération des photocellules et la refermeture démarre 5 s plus tard. Désactivée dans les manœuvres interrompues par un Stop."
+                ],
+                [
+                  "OFF",
+                  "Sans la fermeture automatique, le portail va toujours en ouverture totale et la libération de la photocellule provoque la refermeture au bout de 5 s. Avec elle, la pause programmée s'applique (ou pas de refermeture si la fermeture automatique est inactive)."
+                ]
+              ]
+            },
+            {
+              "code": "L3",
+              "def": "OFF",
+              "titre": "Ferme toujours",
+              "valeurs": [
+                [
+                  "ON",
+                  "Si, au retour de l'alimentation, la logique détecte le portail ouvert, elle provoque une fermeture précédée de 5 s de préclignotement."
+                ],
+                [
+                  "OFF",
+                  "Au retour de l'alimentation, le portail reste immobile."
+                ]
+              ]
+            },
+            {
+              "code": "L4",
+              "def": "OFF",
+              "titre": "Ralentissement",
+              "valeurs": [
+                [
+                  "ON",
+                  "Phase de ralentissement en fin d'ouverture et de fermeture, à environ 60 % de la vitesse nominale. Attention : le moteur ne développe alors que la moitié du couple nominal, à éviter sur les portails lourds ou qui demandent beaucoup de couple."
+                ],
+                [
+                  "OFF",
+                  "Vitesse constante pendant toute la manœuvre."
+                ]
+              ]
+            },
+            {
+              "code": "L5",
+              "def": "OFF",
+              "titre": "Démarrage",
+              "valeurs": [
+                [
+                  "ON",
+                  "L'accélération progressive du début de chaque manœuvre est désactivée : force de démarrage maximale, utile en cas de frictions statiques élevées (neige, givre)."
+                ],
+                [
+                  "OFF",
+                  "La manœuvre démarre avec une accélération progressive."
+                ]
+              ]
+            },
+            {
+              "code": "L6",
+              "def": "OFF",
+              "titre": "Préclignotement",
+              "valeurs": [
+                [
+                  "ON",
+                  "Pause de 3 s entre l'allumage du clignotant et le début de la manœuvre."
+                ],
+                [
+                  "OFF",
+                  "Le clignotant s'allume en même temps que le début de la manœuvre."
+                ]
+              ]
+            },
+            {
+              "code": "L7",
+              "def": "OFF",
+              "titre": "« Fermeture » devient ouverture partielle",
+              "valeurs": [
+                [
+                  "ON",
+                  "Toutes les commandes de « fermeture » (entrée CLOSE ou commande radio « fermeture ») activent une ouverture partielle, d'une longueur réglée avec le paramètre L6 du 2e niveau."
+                ],
+                [
+                  "OFF",
+                  "L'entrée CLOSE commande la fermeture."
+                ]
+              ]
+            },
+            {
+              "code": "L8",
+              "def": "OFF",
+              "titre": "Mode Slave (esclave)",
+              "valeurs": [
+                [
+                  "ON",
+                  "RUN devient Slave : il synchronise 2 moteurs sur des parties mobiles opposées. Les autres réglages du Slave sont ignorés, sauf Stand-by, Démarrage, Mode Slave et, au 2e niveau, sensibilité d'obstacles, sortie S.C.A., contrôle de force et liste des anomalies."
+                ],
+                [
+                  "OFF",
+                  "RUN est Master (réglage d'usine)."
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "nom": "2e niveau — paramètres réglables (LED d'entrée L1…L8, 8 valeurs chacun)",
+          "items": [
+            {
+              "code": "2·L1",
+              "def": "L3 · 30 s",
+              "titre": "Temps de pause",
+              "valeurs": [
+                [
+                  "L1",
+                  "5 s"
+                ],
+                [
+                  "L2",
+                  "15 s"
+                ],
+                [
+                  "L3",
+                  "30 s (usine)"
+                ],
+                [
+                  "L4",
+                  "45 s"
+                ],
+                [
+                  "L5",
+                  "60 s"
+                ],
+                [
+                  "L6",
+                  "80 s"
+                ],
+                [
+                  "L7",
+                  "120 s"
+                ],
+                [
+                  "L8",
+                  "180 s"
+                ]
+              ],
+              "note": "Temps avant la refermeture automatique. N'a d'effet que si la fermeture automatique (1er niveau, L1) est active."
+            },
+            {
+              "code": "2·L2",
+              "def": "L2",
+              "titre": "Fonction P.P.",
+              "valeurs": [
+                [
+                  "L1",
+                  "Ouverture – stop – fermeture – stop"
+                ],
+                [
+                  "L2",
+                  "Ouverture – stop – fermeture – ouverture (usine)"
+                ],
+                [
+                  "L3",
+                  "Ouverture – fermeture – ouverture – fermeture"
+                ],
+                [
+                  "L4",
+                  "Fonctionnement collectif"
+                ],
+                [
+                  "L5",
+                  "Fonctionnement collectif 2 (plus de 2 s = arrêt)"
+                ],
+                [
+                  "L6",
+                  "Pas à pas 2 (moins de 2 s = ouverture partielle)"
+                ],
+                [
+                  "L7",
+                  "Commande « par action maintenue »"
+                ],
+                [
+                  "L8",
+                  "Ouverture en semi-automatique, fermeture par action maintenue"
+                ]
+              ],
+              "note": "Séquence des commandes associées à l'entrée P.P. et à la première commande radio. Une commande P.P. de plus de 2 s provoque toujours une ouverture (fonction « ouvre toujours », utile avec une horloge), sauf en fonctionnement collectif."
+            },
+            {
+              "code": "2·L3",
+              "def": "L4",
+              "titre": "Sensibilité de détection des obstacles",
+              "valeurs": [
+                [
+                  "L1",
+                  "Extrêmement élevée (portails légers)"
+                ],
+                [
+                  "L2",
+                  "Très élevée"
+                ],
+                [
+                  "L3",
+                  "Élevée"
+                ],
+                [
+                  "L4",
+                  "Moyenne (usine)"
+                ],
+                [
+                  "L5",
+                  "Moyenne à basse"
+                ],
+                [
+                  "L6",
+                  "Basse"
+                ],
+                [
+                  "L7",
+                  "Très basse"
+                ],
+                [
+                  "L8",
+                  "Extrêmement basse (portails lourds)"
+                ]
+              ],
+              "note": "Elle dépend aussi de la force du moteur (2·L5) : régler la force d'abord, la sensibilité ensuite. Si elle sert à réduire la force d'impact, refaire la mesure selon EN 12445 après chaque réglage."
+            },
+            {
+              "code": "2·L4",
+              "def": "L1",
+              "titre": "Sortie S.C.A.",
+              "valeurs": [
+                [
+                  "L1",
+                  "Voyant « portail ouvert » (usine)"
+                ],
+                [
+                  "L2",
+                  "Active si le tablier est fermé"
+                ],
+                [
+                  "L3",
+                  "Active si le tablier est ouvert"
+                ],
+                [
+                  "L4",
+                  "Active avec la sortie radio n° 2"
+                ],
+                [
+                  "L5",
+                  "Active avec la sortie radio n° 3"
+                ],
+                [
+                  "L6",
+                  "Active avec la sortie radio n° 4"
+                ],
+                [
+                  "L7",
+                  "Voyant de maintenance"
+                ],
+                [
+                  "L8",
+                  "Serrure électrique"
+                ]
+              ],
+              "note": "Quand elle est active, la sortie fournit 24 V (−30 / +50 %), 4 W maximum."
+            },
+            {
+              "code": "2·L5",
+              "def": "L8",
+              "titre": "Contrôle de la force du moteur",
+              "valeurs": [
+                [
+                  "L1",
+                  "Fixe à 40 %"
+                ],
+                [
+                  "L2",
+                  "Fixe à 50 %"
+                ],
+                [
+                  "L3",
+                  "Fixe à 60 %"
+                ],
+                [
+                  "L4",
+                  "Fixe à 80 %"
+                ],
+                [
+                  "L5",
+                  "Fixe à 100 %"
+                ],
+                [
+                  "L6",
+                  "Semi-automatique 1 : 40 à 100 %"
+                ],
+                [
+                  "L7",
+                  "Semi-automatique 2 : 60 à 100 %"
+                ],
+                [
+                  "L8",
+                  "Automatique : 0 à 100 % (usine)"
+                ]
+              ],
+              "note": "Règle la force après le démarrage pour l'adapter au poids du portail ; elle augmente aussi automatiquement par grand froid. Semi-automatique : réglage automatique en gardant un minimum de force garanti. Ne pas compenser des frictions anormales avec une force élevée : cela peut compromettre la sécurité ou abîmer le portail."
+            },
+            {
+              "code": "2·L6",
+              "def": "L2",
+              "titre": "Ouverture partielle",
+              "valeurs": [
+                [
+                  "L1",
+                  "0,5 m"
+                ],
+                [
+                  "L2",
+                  "1 m (usine)"
+                ],
+                [
+                  "L3",
+                  "1,5 m"
+                ],
+                [
+                  "L4",
+                  "2 m"
+                ],
+                [
+                  "L5",
+                  "2,5 m"
+                ],
+                [
+                  "L6",
+                  "3 m"
+                ],
+                [
+                  "L7",
+                  "3,4 m"
+                ],
+                [
+                  "L8",
+                  "4 m"
+                ]
+              ],
+              "note": "Se commande avec la 2e commande radio, ou avec « fermeture » si le 1er niveau L7 est actif."
+            },
+            {
+              "code": "2·L7",
+              "def": "L1 · auto",
+              "titre": "Avis de maintenance",
+              "valeurs": [
+                [
+                  "L1",
+                  "Automatique, selon la charge de travail des manœuvres (usine)"
+                ],
+                [
+                  "L2",
+                  "2 000 manœuvres"
+                ],
+                [
+                  "L3",
+                  "4 000"
+                ],
+                [
+                  "L4",
+                  "7 000"
+                ],
+                [
+                  "L5",
+                  "10 000"
+                ],
+                [
+                  "L6",
+                  "15 000"
+                ],
+                [
+                  "L7",
+                  "20 000"
+                ],
+                [
+                  "L8",
+                  "30 000"
+                ]
+              ],
+              "note": "Nombre de manœuvres avant la demande de maintenance (signalée par le clignotant, ou par le voyant sur S.C.A. s'il est réglé en « voyant maintenance »). Le niveau automatique tient compte de l'effort et de la durée des manœuvres. Maintenance conseillée au plus tard tous les 6 mois ou 20 000 manœuvres."
+            },
+            {
+              "code": "2·L8",
+              "def": "lecture",
+              "titre": "Liste des anomalies",
+              "valeurs": [
+                [
+                  "L1",
+                  "Résultat de la manœuvre la plus récente"
+                ],
+                [
+                  "L2",
+                  "2e manœuvre"
+                ],
+                [
+                  "L3",
+                  "3e manœuvre"
+                ],
+                [
+                  "L4",
+                  "4e manœuvre"
+                ],
+                [
+                  "L5",
+                  "5e manœuvre"
+                ],
+                [
+                  "L6",
+                  "6e manœuvre"
+                ],
+                [
+                  "L7",
+                  "7e manœuvre"
+                ],
+                [
+                  "L8",
+                  "8e manœuvre"
+                ]
+              ],
+              "note": "Lecture seule : permet de voir le type d'anomalie des 8 dernières manœuvres (voir l'onglet Écran)."
+            }
+          ]
+        }
+      ]
+    },
+    "bornier": {
+      "groupes": [
+        {
+          "nom": "Alimentation",
+          "bornes": [
+            {
+              "n": "L · terre · N",
+              "label": "Secteur",
+              "desc": "230-250 V ±10 % 50/60 Hz (version /V1 : 120 V +10 % −15 % 60 Hz). Câble 3 × 1,5 mm², 30 m maximum, seul dans le petit passage de câble. Mise à la terre obligatoire (classe 1). Protéger par un disjoncteur magnétothermique avec différentiel et prévoir un sectionneur (3,5 mm entre contacts).",
+              "t": "alim"
+            },
+            {
+              "n": "24 V accessoires",
+              "label": "24 Vcc, 100 mA",
+              "desc": "Pour alimenter un lecteur de proximité ou l'éclairage d'un sélecteur à clé : prélever 24 Vcc (−30 / +50 %), 100 mA maximum, sur les blocs STOP et P.P. comme sur la fig. 27 (− côté STOP, + côté P.P.).",
+              "t": "alim"
+            }
+          ]
+        },
+        {
+          "nom": "Sorties",
+          "bornes": [
+            {
+              "n": "FLASH",
+              "label": "Clignotant",
+              "desc": "Clignotant type LUCYB ou similaire, ampoule 12 V 21 W maximum. Câble 2 × 0,5 mm², 20 m. L'antenne est incorporée au LUCY B.",
+              "t": "sortie"
+            },
+            {
+              "n": "S.C.A.",
+              "label": "Voyant portail ouvert",
+              "desc": "Voyant 24 V 4 W maximum, fonction réglable (2e niveau, L4) : voyant portail ouvert, fermé, ouvert, sorties radio 2 à 4, maintenance, serrure électrique.",
+              "t": "sortie"
+            },
+            {
+              "n": "BLUEBUS",
+              "label": "BlueBUS",
+              "desc": "2 fils sans polarité (alimentation et signaux) pour photocellules, boutons, voyants et dispositifs compatibles, 15 unités BlueBUS au maximum. 30 m, jusqu'à 50 m avec un câble 2 × 1 mm². Chaque dispositif a une adresse (cavaliers).",
+              "t": "bus"
+            }
+          ]
+        },
+        {
+          "nom": "Entrées",
+          "bornes": [
+            {
+              "n": "STOP",
+              "label": "STOP",
+              "desc": "Arrêt immédiat suivi d'une brève inversion. Contact NO, NF ou résistance constante 8,2 kΩ, type reconnu à la reconnaissance des dispositifs. Seule la résistance 8,2 kΩ garantit la catégorie 3 (EN 954-1).",
+              "t": "nf"
+            },
+            {
+              "n": "P.P.",
+              "label": "Pas à pas",
+              "desc": "Contact normalement ouvert ; la fermeture commande P.P. Sa séquence se règle avec 2·L2.",
+              "t": "no"
+            },
+            {
+              "n": "OPEN",
+              "label": "Ouverture",
+              "desc": "Contact normalement ouvert : commande l'ouverture uniquement.",
+              "t": "no"
+            },
+            {
+              "n": "CLOSE",
+              "label": "Fermeture",
+              "desc": "Contact normalement ouvert : commande la fermeture uniquement (ou l'ouverture partielle si le 1er niveau L7 est actif).",
+              "t": "no"
+            },
+            {
+              "n": "ANTENNE",
+              "label": "Antenne radio",
+              "desc": "Entrée 52 Ω pour câble RG58 ou analogue, 20 m maximum (moins de 5 m conseillé).",
+              "t": "autre"
+            }
+          ]
+        },
+        {
+          "nom": "Connecteurs et sélecteur",
+          "bornes": [
+            {
+              "n": "Sélecteur de sens",
+              "label": "Sens d'ouverture",
+              "desc": "Si le tablier s'ouvre vers la gauche, mettre le sélecteur à gauche (fig. 17) ; vers la droite, le mettre à droite (fig. 18).",
+              "t": "autre"
+            },
+            {
+              "n": "SM",
+              "label": "Récepteur radio",
+              "desc": "Connecteur pour récepteur SMXI, SMXIS ou ONEXI (433,92 MHz, rolling code), à embrocher hors tension. Sorties SMXI / SMXIS : n° 1 = P.P., n° 2 = ouverture partielle, n° 3 = ouverture, n° 4 = fermeture.",
+              "t": "bus"
+            },
+            {
+              "n": "BusT4",
+              "label": "Programmateur Oview",
+              "desc": "Connecteur pour l'unité de programmation à distance Oview (jusqu'à 100 m de câble, 4 conducteurs). Couper la membrane pour y accéder. Permet aussi la mise à jour du micrologiciel et, entre autres, d'activer le chauffage du moteur.",
+              "t": "bus"
+            },
+            {
+              "n": "Bords sensibles",
+              "label": "Bords mobiles",
+              "desc": "Sur un tablier coulissant, un bord mobile se connecte avec un dispositif qui accepte le tablier en mouvement, par exemple le photodétecteur FT210B (limitation de force type C et détecteur de présence type D, EN 12453). Émetteur alimenté par batterie, jusqu'à 15 ans.",
+              "t": "autre"
+            }
+          ]
+        }
+      ],
+      "fusibles": "F1 et F2 (fig. 28) — la notice ne donne pas leurs valeurs : si l'un a sauté, chercher la cause puis le remplacer par un fusible de même valeur et mêmes caractéristiques",
+      "notes": [
+        "Après tout ajout ou retrait de dispositif sur BlueBUS ou STOP : refaire la reconnaissance des dispositifs (onglet Apprentissage), puis refaire l'essai de l'automatisme.",
+        "STOP : 2 dispositifs à résistance 8,2 kΩ peuvent aller en parallèle ; au-delà de 2, tous en cascade avec une seule résistance terminale de 8,2 kΩ. Plusieurs NO se montent en parallèle, plusieurs NF en série. NO et NF peuvent être combinés en parallèle en mettant 8,2 kΩ en série avec le NF.",
+        "Photocellules BlueBUS : mêmes cavaliers sur TX et RX, une adresse par paire. Adresses : PHOTO (extérieure h = 50, intervention en fermeture) · PHOTO II (extérieure h = 100, fermeture) · PHOTO 1 (intérieure h = 50, fermeture) · PHOTO 1 II (intérieure h = 100, fermeture) · PHOTO 2 (extérieure, intervention en ouverture) · PHOTO 2 II (intérieure, ouverture) · PHOTO 3 (une seule paire pour tout l'automatisme).",
+        "Câbles (tableau 5) : alimentation 3 × 1,5 mm² 30 m · clignotant 2 × 0,5 mm² 20 m · antenne RG58 20 m · photocellules 2 × 0,5 mm² 30 m (50 m en 2 × 1 mm²) · sélecteur à clé 2 câbles 2 × 0,5 mm² (ou 1 câble 4 × 0,5) 50 m · bords mobiles 2 × 0,5 mm². Au-delà de 30 m d'alimentation : section plus grande (3 × 2,5 mm²) et mise à la terre près de l'automatisme.",
+        "Deux RUN sur des parties mobiles opposées (Master / Slave) : liaison par BlueBUS entre les deux RUN avec respect de la polarité (fig. 26). Tous les dispositifs, récepteur radio compris, se branchent sur le Master. Sur le Slave on peut brancher un clignotant, un voyant S.C.A. et un bord sensible (STOP) spécifiques, et un P.P. qui ouvre seulement la partie Slave ; OPEN et CLOSE du Slave ne servent pas.",
+        "Caractéristiques : couple maximum au démarrage 40 Nm (RUN1800) ou 50 Nm (RUN2500) ; couple nominal 20 ou 30 Nm ; vitesse 0,17 m/s à vide en 50 Hz (0,20 m/s en /V1 60 Hz), 0,14 m/s au couple nominal ; tablier jusqu'à 15 m / 1 800 kg (RUN1800) ou 18 m / 2 500 kg (RUN2500) ; pignon 18 dents module 4 ; IP 44 ; −20 à +50 °C ; poids 24,5 kg ; puissance au démarrage 700 W (RUN1800) ou 870 W (RUN2500).",
+        "Limites : la force pour déplacer le tablier doit rester sous la moitié du couple nominal. La logique limite les manœuvres selon l'effort, la durée et la température (jusqu'à 42 cycles/heure pour un tablier de moins de 6 m ; réduction selon le poids)."
+      ]
+    },
+    "apprentissage": {
+      "avant": [
+        "Mettre le tablier à mi-course environ pour qu'il puisse bouger dans les deux sens.",
+        "Choisir le sens d'ouverture avec le sélecteur de la logique (fig. 17 gauche, fig. 18 droite).",
+        "Fin de course électromécanique (RUN1800, RUN2500) : ouvrir le portail à la main en s'arrêtant à 2-3 cm au moins de la butée, faire glisser la patte sur la crémaillère dans le sens d'ouverture jusqu'à l'intervention du fin de course, puis avancer d'au moins 2 cm et bloquer avec les goujons. Même opération en fermeture.",
+        "Fin de course inductif (RUN1800P, RUN2500P) : faire glisser la patte jusqu'à l'extinction de la LED correspondante, puis avancer d'au moins 2 cm et bloquer. Distance entre la patte et le capteur : 3 à 8 mm.",
+        "Jeu de 1 à 2 mm entre pignon et crémaillère sur toute la longueur, désalignement de 5 mm au maximum.",
+        "Mettre sous tension : la LED BLUEBUS doit clignoter 1 fois par seconde, les LED des photocellules clignotent aussi (TX et RX), clignotant et voyant S.C.A. éteints. Sinon, couper aussitôt l'alimentation et revoir les connexions."
+      ],
+      "etapes": [
+        "Reconnaissance des dispositifs : maintenir ▲ (Open) et Stop/Set. Avant cette étape, L1 et L2 clignotent pour la réclamer.",
+        "Relâcher quand L1 et L2 clignotent très vite (environ 3 s) et attendre quelques secondes.",
+        "Fin : la LED STOP reste allumée, L1 et L2 s'éteignent, puis L3 et L4 se mettent éventuellement à clignoter.",
+        "Reconnaissance de la longueur du tablier : maintenir ▼ (Close) et Stop/Set.",
+        "Relâcher quand la manœuvre démarre (environ 3 s). Ce doit être une ouverture : sinon appuyer sur Stop et revoir le sélecteur de sens, puis recommencer.",
+        "Laisser finir l'ouverture jusqu'au fin de course d'ouverture ; la fermeture commence juste après, attendre qu'elle se termine."
+      ],
+      "apres": [
+        "Contrôle avec Open, puis Close : manœuvre régulière sans changement de vitesse ; ralentissement 70 à 50 cm avant le fin de course, arrêt à 2-3 cm de la butée mécanique.",
+        "Pendant la manœuvre le clignotant clignote toutes les 0,5 s ; le voyant S.C.A. s'il est présent clignote lentement en ouverture et vite en fermeture.",
+        "Chaque fois qu'un dispositif de sécurité intervient, la LED BLUEBUS fait 2 clignotements rapides.",
+        "Essai (EN 12445) : débrayer et vérifier que le tablier se manœuvre à la main avec au plus 390 N (environ 40 kg), rebloquer, puis tester un par un tous les dispositifs de sécurité.",
+        "Débrayage : faire coulisser le cache de la serrure, introduire la clé et la tourner dans le sens des aiguilles d'une montre, tirer la poignée de débrayage, puis déplacer le tablier à la main. Possible uniquement tablier à l'arrêt. Pour bloquer : même chose en sens inverse.",
+        "Maintenance : au plus tard tous les 6 mois ou 20 000 manœuvres. Après maintenance, remettre le compteur de manœuvres à zéro (onglet Paramètres).",
+        "Après tout ajout ou retrait de dispositif : refaire la reconnaissance des dispositifs (▲ + Stop/Set), les LED L1…L8 se rallument ensuite selon l'état des fonctions."
       ]
     }
   }
