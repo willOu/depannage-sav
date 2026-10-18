@@ -10,11 +10,19 @@
    (la première entrée donne le numéro affiché partout : accueil, en-tête, Réglages).
    ===================================================================== */
 
-const DATA_VERSION = "2026-10-18";
+const DATA_VERSION = "1.24";
 
 /* Journal des modifications — ajouter une entrée en haut à chaque mise à jour.
    docs : nom des notices ajoutées (affichées dans Réglages). */
 const CHANGELOG = [
+  { v: "1.24", date: "2026-10-18", titre: "CASIT : nouvelle marque, 7 armoires", items: [
+    "Nouvelle marque CASIT avec 7 cartes : EQ2000, EQ2006, EQ2009 (2 moteurs, battants), EQ212 (1 moteur, encoder), KEQ013 (afficheur, horloge), KEQ405 (monophasé / triphasé) et KEQS08 (radio intégrée).",
+    "Chaque carte : LED et symptômes, bornier complet, dip / trimmers / menus avec valeurs, procédures d'apprentissage et de mémorisation radio.",
+    "Onglet Schéma : pages de câblage et implantation des cartes (EQ2000, EQ2006, EQ2009, EQ212, KEQ013, KEQ405, KEQS08).",
+    "Contradictions des notices signalées dans les fiches (EQ2009 S3 dip 9 / 10, KEQ013 entrées inutilisées et S 08, KEQ405 LED DL4, KEQS08 dip rolling…)."
+  ], docs: [
+    "CASIT EQ2000 (Rev. 02), EQ2006 R1.4 (Rev. 00), EQ2009 R1.0 (Rev. 00), EQ212 R1.7 / R1.8 (Rev. 04)", "CASIT KEQ013 (Rev. 06), KEQ405 (Rev. 00), KEQS08-R (250319)"
+  ] },
   { v: "1.23", date: "2026-10-18", titre: "Schéma ZA3P : notice FA01883", items: [
     "Quatre pages de la notice Came FA01883 (ZA3P, édition antérieure) ajoutées à l'onglet Schéma de la ZA3P : carte, branchements, commandes et sécurités dessinés."
   ], docs: [] },
@@ -17020,6 +17028,5456 @@ const MARQUES = [
           "Menu INFO CARTE : version du programme (ex. 1.07), N° de série, durée de fonctionnement.",
           "Reset EEPROM (menu USINE) : remet tous les paramètres à leurs valeurs par défaut.",
           "Rotation moteur inversée : menu USINE > « Rotation Mot Ouv » sur Inverse (pas besoin de changer le câblage)."
+        ]
+      }
+    }
+  ]
+},
+/* ------------------------------------------------------------------ */
+{
+  id: "casit", nom: "CASIT", couleur: "#8a1c1c",
+  cartes: [
+    {
+      "id": "casit-eq2000",
+      "nom": "EQ2000",
+      "modeles": "EQ2000 / R4 / R5 / R6 / R7.3 — 2 moteurs monophasés 230 V, 350 W maxi chacun",
+      "type": "Portail battant, 2 moteurs 230 V — 20 mini-dip (S1 + S2), 8 trimmers, 3 cavaliers",
+      "source": "Notice CASIT EQ2000 (Rev. 02 du 05/04/2004, 4 p., français)",
+      "codes": [
+        {
+          "code": "L1",
+          "type": "led",
+          "titre": "Phase d'alimentation présente",
+          "action": "Allumée : la carte est alimentée."
+        },
+        {
+          "code": "L2 · L3",
+          "type": "led",
+          "titre": "Barres palpeuses COSTA 1 / COSTA 2",
+          "action": "Allumée : barre palpeuse activée. Bornes 14-15 (COSTA 1, ouverture) et 14-16 (COSTA 2, fermeture)."
+        },
+        {
+          "code": "L4 · L5",
+          "type": "led",
+          "titre": "Photocellules FOTO 1 / FOTO 2",
+          "action": "Allumée : photocellule obscurcie. Bornes 17-18 (FOTO 1) et 17-19 (FOTO 2)."
+        },
+        {
+          "code": "L6 · L7",
+          "type": "led",
+          "titre": "Fins de course moteur 1 (FCA 1 ouvre, FCC 1 ferme)",
+          "action": "Allumée : fin de course activé. Bornes 20-22 et 21-22."
+        },
+        {
+          "code": "L8 · L9",
+          "type": "led",
+          "titre": "Fins de course moteur 2 (FCA 2 ouvre, FCC 2 ferme)",
+          "action": "Allumée : fin de course activé. Bornes 22-23 et 22-24."
+        },
+        {
+          "code": "L10",
+          "type": "led",
+          "titre": "Entrée STOP active",
+          "action": "Contact NF des bornes 25-28 ouvert."
+        },
+        {
+          "code": "L11 · L12 · L13",
+          "type": "led",
+          "titre": "Impulsions radio / START / piétons",
+          "action": "L11 impulsion du récepteur radio, L12 bouton START (26-28), L13 passage piétons (27-28)."
+        },
+        {
+          "code": "Portail fermé, START sans effet",
+          "type": "symptome",
+          "titre": "Le portail ne s'ouvre pas avec FOTO 1 obscurcie",
+          "action": "Normal : à portail fermé et FOTO 1 activée, le portail n'ouvre pas. Avec FOTO 2 : il ouvre (J2 fermé) ou n'ouvre pas (J2 ouvert, il faut libérer FOTO 2)."
+        },
+        {
+          "code": "Rien ne bouge",
+          "type": "symptome",
+          "titre": "Aucun mouvement après un ordre",
+          "action": "Vérifier les LED : L10 (STOP ouvert), L4 / L5 (photocellules), L2 / L3 (barres palpeuses), puis les fins de course (L6 à L9)."
+        },
+        {
+          "code": "Test photocellule",
+          "type": "diag",
+          "titre": "Défaut du test photocellule",
+          "action": "Avec le test activé (S2 DIP 7 / DIP 8), si le contact du récepteur reste fermé (court-circuit) la carte passe en stop. Alimenter l'émetteur de la cellule sur 32-33 (24 V)."
+        }
+      ],
+      "bornier": {
+        "groupes": [
+          {
+            "nom": "Bornier M1 — alimentation, clignotant, moteurs",
+            "bornes": [
+              {
+                "n": "1 · 2",
+                "label": "Alimentation 230 V",
+                "desc": "1 = neutre, 2 = phase",
+                "t": "alim"
+              },
+              {
+                "n": "3 · 4",
+                "label": "Clignotant 230 V",
+                "desc": "40 W maxi (avec électronique si S1 DIP 8 sur OFF)",
+                "t": "sortie"
+              },
+              {
+                "n": "5 · 6 · 7",
+                "label": "Moteur M1",
+                "desc": "230 V 350 W maxi. 5 = ouvre, 6 = commun, 7 = ferme. Vantail retardé en fermeture, avec électro-serrure ou piéton",
+                "t": "moteur"
+              },
+              {
+                "n": "8 · 9 · 10",
+                "label": "Moteur M2",
+                "desc": "230 V 350 W maxi. 8 = ouvre, 9 = commun, 10 = ferme. Vantail retardé en ouverture",
+                "t": "moteur"
+              },
+              {
+                "n": "11 · 12",
+                "label": "Éclairage de zone",
+                "desc": "Contact sec NO, 230 V 4 A, actif 3 minutes",
+                "t": "sortie"
+              }
+            ]
+          },
+          {
+            "nom": "Bornier M2 — sécurités, fins de course, commandes",
+            "bornes": [
+              {
+                "n": "13 · 14",
+                "label": "Sortie 12 V DC",
+                "desc": "13 = +, 14 = −",
+                "t": "sortie"
+              },
+              {
+                "n": "14 · 15",
+                "label": "Barre palpeuse COSTA 1",
+                "desc": "Contact NF. En ouverture : arrêt (un START rouvre). En fermeture : réouverture environ 2 s",
+                "t": "nf"
+              },
+              {
+                "n": "14 · 16",
+                "label": "Barre palpeuse COSTA 2",
+                "desc": "Contact NF. En fermeture : arrêt (un START rouvre). En ouverture : refermeture environ 2 s",
+                "t": "nf"
+              },
+              {
+                "n": "17 · 18",
+                "label": "Photocellule FOTO 1",
+                "desc": "Contact NF, active à l'ouverture et à la fermeture",
+                "t": "nf"
+              },
+              {
+                "n": "17 · 19",
+                "label": "Photocellule FOTO 2",
+                "desc": "Contact NF, active seulement à la fermeture",
+                "t": "nf"
+              },
+              {
+                "n": "20 · 22",
+                "label": "Fin de course ouverture FCA 1",
+                "desc": "Moteur M1, contact NF",
+                "t": "nf"
+              },
+              {
+                "n": "21 · 22",
+                "label": "Fin de course fermeture FCC 1",
+                "desc": "Moteur M1, contact NF",
+                "t": "nf"
+              },
+              {
+                "n": "22 · 23",
+                "label": "Fin de course ouverture FCA 2",
+                "desc": "Moteur M2, contact NF",
+                "t": "nf"
+              },
+              {
+                "n": "22 · 24",
+                "label": "Fin de course fermeture FCC 2",
+                "desc": "Moteur M2, contact NF",
+                "t": "nf"
+              },
+              {
+                "n": "25 · 28",
+                "label": "STOP",
+                "desc": "Contact NF. Une impulsion après le stop repart dans le sens inverse",
+                "t": "nf"
+              },
+              {
+                "n": "26 · 28",
+                "label": "START",
+                "desc": "Contact NO, sans potentiel (ne pas brancher directement un interphone : passer par un relais). Peut recevoir une horloge",
+                "t": "no"
+              },
+              {
+                "n": "27 · 28",
+                "label": "Passage piétons",
+                "desc": "Contact NO, sans potentiel (même remarque)",
+                "t": "no"
+              }
+            ]
+          },
+          {
+            "nom": "Sorties et accessoires",
+            "bornes": [
+              {
+                "n": "29 · 30",
+                "label": "Témoin portail 24 V",
+                "desc": "Éteint = fermé, allumé = ouvert",
+                "t": "sortie"
+              },
+              {
+                "n": "30 · 31",
+                "label": "Électro-serrure",
+                "desc": "12 V AC, 15 A maxi (valeur de la notice)",
+                "t": "sortie"
+              },
+              {
+                "n": "32 · 33",
+                "label": "24 V pour émetteurs de photocellules",
+                "desc": "33 = 0 V. À utiliser seulement avec la fonction test photocellule (S2 DIP 7 / DIP 8)",
+                "t": "sortie"
+              },
+              {
+                "n": "33 · 34",
+                "label": "Sortie 24 V",
+                "desc": "33 = 0 V (libellé italien « USCITA 24V »)",
+                "t": "sortie"
+              },
+              {
+                "n": "35 · 36",
+                "label": "2e canal radio",
+                "desc": "Contact de sortie du récepteur radio",
+                "t": "sortie"
+              }
+            ]
+          }
+        ],
+        "fusibles": "Non indiqués dans la notice. Transformateur L.25 : primaire 220-380 V ; secondaire 1 = 0-12 V 0,35 A (logique), secondaire 2 = 12-0-24 V 0,9 A (accessoires). Relais moteur 10 A 250 V AC (cos φ = 1) ou 5 A (cos φ = 0,4).",
+        "notes": [
+          "Moteurs : 350 W maxi par moteur. La notice interdit ralentissement, démarrage et réglage de puissance (S1 DIP 2, 3, 4 ; P5, P6) avec un moteur de plus de 350 W ; S1 DIP 5 est prévu pour les relais externes sur moteurs monophasés > 350 W.",
+          "Antenne et 2e canal : l'antenne est sur la borne M4 (version R3), contact 2e canal radio sur le cavalier J1 (directement sur le piéton).",
+          "Versions : R5 : en automatique, avec le portail ouvert en attente, une impulsion « marche » ne le ferme pas (il se ferme après le temps d'attente). R6 : supprime le coup à la fermeture d'un battant déjà fermé pendant que le battant piéton se ferme.",
+          "Le texte de la notice appelle tantôt M2 tantôt M3 le bornier qui porte le START (26-28) : suivre les numéros de bornes."
+        ]
+      },
+      "parametres": {
+        "intro": "Deux blocs de 10 mini-dip (S1 et S2), 8 trimmers (P1 à P8) et 3 cavaliers (J1 à J3). Valeurs d'usine non indiquées dans la notice (colonne usine : —).",
+        "navigation": [
+          "Pour que la carte prenne en compte un nouveau programme, il faut la remettre à zéro : modifier les dip puis couper et remettre l'alimentation, et faire un cycle complet pour mémoriser les fonctions (autre possibilité : modifier les dip puis faire un cycle complet).",
+          "Les temps de travail se règlent aux trimmers : 5 s supplémentaires de « compensation » s'ajoutent à la fin de la manœuvre. Revérifier le fonctionnement après réglage."
+        ],
+        "groupes": [
+          {
+            "nom": "Mini-dip S1",
+            "items": [
+              {
+                "code": "S1 · DIP 1",
+                "def": "—",
+                "titre": "Décalage du vantail M2 à l'ouverture",
+                "valeurs": [
+                  [
+                    "ON",
+                    "M2 démarre 3,5 s après M1 à l'ouverture"
+                  ],
+                  [
+                    "OFF",
+                    "Pas de décalage"
+                  ]
+                ]
+              },
+              {
+                "code": "S1 · DIP 2",
+                "def": "—",
+                "titre": "Ralentissement des moteurs",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Ralentissement 7 s avant l'arrêt, après le réglage des temps de travail"
+                  ],
+                  [
+                    "OFF",
+                    "Pas de ralentissement"
+                  ]
+                ],
+                "note": "Ne pas utiliser avec un moteur de plus de 350 W."
+              },
+              {
+                "code": "S1 · DIP 3",
+                "def": "—",
+                "titre": "Redémarrage en fermeture",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Redémarrage 2 s après le ralentissement, pour faciliter l'enclenchement de l'électro-serrure"
+                  ],
+                  [
+                    "OFF",
+                    "Pas de redémarrage"
+                  ]
+                ],
+                "note": "Ne pas utiliser avec un moteur de plus de 350 W."
+              },
+              {
+                "code": "S1 · DIP 4",
+                "def": "—",
+                "titre": "Démarrage des moteurs",
+                "valeurs": [
+                  [
+                    "ON",
+                    "À chaque impulsion, puissance maximale 1,5 s ou 3 s (S2 DIP 10), puis puissance réglée par P5 / P6"
+                  ],
+                  [
+                    "OFF",
+                    "Pas de démarrage à pleine puissance"
+                  ]
+                ],
+                "note": "Ne pas utiliser avec un moteur de plus de 350 W."
+              },
+              {
+                "code": "S1 · DIP 5",
+                "def": "—",
+                "titre": "Relais externes (moteurs > 350 W)",
+                "valeurs": [
+                  [
+                    "ON",
+                    "À utiliser seulement avec des relais 230 V sur les sorties moteur et des moteurs monophasés > 350 W"
+                  ],
+                  [
+                    "OFF",
+                    "Utilisation standard (puissance réglée par P5 / P6)"
+                  ]
+                ]
+              },
+              {
+                "code": "S1 · DIP 6",
+                "def": "—",
+                "titre": "Coup de bélier",
+                "valeurs": [
+                  [
+                    "ON",
+                    "À l'ouverture, les moteurs poussent quelques secondes en fermeture pour dégager l'électro-serrure, puis ouvrent"
+                  ],
+                  [
+                    "OFF",
+                    "Pas de coup de bélier"
+                  ]
+                ]
+              },
+              {
+                "code": "S1 · DIP 7",
+                "def": "—",
+                "titre": "Durée du préclignotement",
+                "valeurs": [
+                  [
+                    "ON",
+                    "1 s"
+                  ],
+                  [
+                    "OFF",
+                    "4 s"
+                  ]
+                ]
+              },
+              {
+                "code": "S1 · DIP 8",
+                "def": "—",
+                "titre": "Type de clignotant",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Contact clignotant intermittent par la carte (clignotant sans électronique) : lent à l'ouverture, fixe en pause, rapide à la fermeture"
+                  ],
+                  [
+                    "OFF",
+                    "Clignotant 230 V avec électronique, 40 W maxi"
+                  ]
+                ]
+              },
+              {
+                "code": "S1 · DIP 9",
+                "def": "—",
+                "titre": "Homme mort",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Fonctionnement homme mort (boutons maintenus)"
+                  ],
+                  [
+                    "OFF",
+                    "Fonctionnement par impulsion"
+                  ]
+                ]
+              },
+              {
+                "code": "S1 · DIP 10",
+                "def": "—",
+                "titre": "Pas-à-pas ou semi-automatique",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Semi-automatique : à l'ouverture, les autres impulsions de START sont ignorées (utilisable avec une horloge)"
+                  ],
+                  [
+                    "OFF",
+                    "Pas-à-pas : ouvre, stop, ferme, ouvre"
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "nom": "Mini-dip S2",
+            "items": [
+              {
+                "code": "S2 · DIP 1",
+                "def": "—",
+                "titre": "Refermeture automatique",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Refermeture après la pause (P4, 4 minutes maxi)"
+                  ],
+                  [
+                    "OFF",
+                    "Pas de refermeture automatique"
+                  ]
+                ]
+              },
+              {
+                "code": "S2 · DIP 2",
+                "def": "—",
+                "titre": "Refermeture automatique du battant piéton",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Refermeture après la pause piéton (P8, 4 minutes maxi)"
+                  ],
+                  [
+                    "OFF",
+                    "Pas de refermeture automatique piéton"
+                  ]
+                ]
+              },
+              {
+                "code": "S2 · DIP 3",
+                "def": "—",
+                "titre": "Entrées START / piétons",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Contacts START et passage piétons"
+                  ],
+                  [
+                    "OFF",
+                    "Contacts séparés : ouvre (START) et ferme (piétons)"
+                  ]
+                ]
+              },
+              {
+                "code": "S2 · DIP 4",
+                "def": "—",
+                "titre": "Canal 1 du récepteur radio (RX1)",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Même fonction que START : une impulsion radio active la fonction programmée sur START"
+                  ],
+                  [
+                    "OFF",
+                    "RX1 fonctionne en pas-à-pas (START peut avoir un autre fonctionnement)"
+                  ]
+                ]
+              },
+              {
+                "code": "S2 · DIP 5",
+                "def": "—",
+                "titre": "Refermeture automatique après ouverture par RX1",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Activée"
+                  ],
+                  [
+                    "OFF",
+                    "Non activée"
+                  ]
+                ]
+              },
+              {
+                "code": "S2 · DIP 6",
+                "def": "—",
+                "titre": "Moteurs rapides",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Les moteurs partent tout de suite après l'impulsion (barrières, portes rapides)"
+                  ],
+                  [
+                    "OFF",
+                    "Moteurs standard : départ environ 1 s après l'impulsion"
+                  ]
+                ]
+              },
+              {
+                "code": "S2 · DIP 7",
+                "def": "—",
+                "titre": "Test photocellule FOTO 1",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Activé : l'émetteur de FOTO 1 coupe son alimentation à chaque impulsion pour tester le récepteur"
+                  ],
+                  [
+                    "OFF",
+                    "Pas de test"
+                  ]
+                ],
+                "note": "Sinon la carte passe en stop (contact du récepteur en court-circuit)."
+              },
+              {
+                "code": "S2 · DIP 8",
+                "def": "—",
+                "titre": "Test photocellule FOTO 2",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Activé"
+                  ],
+                  [
+                    "OFF",
+                    "Pas de test"
+                  ]
+                ]
+              },
+              {
+                "code": "S2 · DIP 9",
+                "def": "—",
+                "titre": "Temps de travail des moteurs",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Temps commun aux 2 moteurs (réglage P1 ; piéton sur les 2 moteurs)"
+                  ],
+                  [
+                    "OFF",
+                    "Temps indépendants (réglage P1 et P2 ; piéton sur 1 moteur)"
+                  ]
+                ]
+              },
+              {
+                "code": "S2 · DIP 10",
+                "def": "—",
+                "titre": "Durée de démarrage (avec S1 DIP 4)",
+                "valeurs": [
+                  [
+                    "ON",
+                    "3 s à pleine puissance"
+                  ],
+                  [
+                    "OFF",
+                    "1,5 s à pleine puissance"
+                  ]
+                ],
+                "note": "Ne pas utiliser avec un moteur de plus de 350 W."
+              }
+            ]
+          },
+          {
+            "nom": "Trimmers et cavaliers",
+            "items": [
+              {
+                "code": "P1",
+                "def": "—",
+                "titre": "Temps de travail du moteur M1",
+                "valeurs": [
+                  [
+                    "max. 1,5 min",
+                    "Battant avec électro-serrure"
+                  ]
+                ],
+                "note": "Le moteur tourne encore 5 s après la fin de la manœuvre (temps de compensation)."
+              },
+              {
+                "code": "P2",
+                "def": "—",
+                "titre": "Temps de travail du moteur M2",
+                "valeurs": [
+                  [
+                    "max. 1,5 min",
+                    "Réglage indépendant (S2 DIP 9 sur OFF)"
+                  ]
+                ]
+              },
+              {
+                "code": "P3",
+                "def": "—",
+                "titre": "Temps d'ouverture piéton (M1)",
+                "valeurs": [
+                  [
+                    "max. 1,5 min",
+                    "Ouverture partielle du portail"
+                  ]
+                ]
+              },
+              {
+                "code": "P4",
+                "def": "—",
+                "titre": "Temps de pause avant refermeture automatique",
+                "valeurs": [
+                  [
+                    "max. 4 min",
+                    "Avec S2 DIP 1 sur ON"
+                  ]
+                ]
+              },
+              {
+                "code": "P5",
+                "def": "—",
+                "titre": "Puissance du moteur M1",
+                "valeurs": [
+                  [
+                    "−  …  +",
+                    "Ne pas utiliser avec un moteur > 350 W"
+                  ]
+                ]
+              },
+              {
+                "code": "P6",
+                "def": "—",
+                "titre": "Puissance du moteur M2",
+                "valeurs": [
+                  [
+                    "−  …  +",
+                    "Ne pas utiliser avec un moteur > 350 W"
+                  ]
+                ]
+              },
+              {
+                "code": "P7",
+                "def": "—",
+                "titre": "Décalage du battant à la fermeture (M1)",
+                "valeurs": [
+                  [
+                    "max. 1 min",
+                    "Retard du premier battant à la fermeture"
+                  ]
+                ]
+              },
+              {
+                "code": "P8",
+                "def": "—",
+                "titre": "Pause piéton avant refermeture piéton",
+                "valeurs": [
+                  [
+                    "max. 4 min",
+                    "Avec S2 DIP 2 sur ON"
+                  ]
+                ]
+              },
+              {
+                "code": "J1",
+                "def": "—",
+                "titre": "Récepteur radio embrochable",
+                "valeurs": [
+                  [
+                    "Dernier pin (n° 10)",
+                    "2e canal radio"
+                  ]
+                ]
+              },
+              {
+                "code": "J2",
+                "def": "—",
+                "titre": "Comportement de FOTO 2",
+                "valeurs": [
+                  [
+                    "Fermé",
+                    "Fonctionnement standard : à portail fermé et FOTO 2 obscurcie, le portail ouvre"
+                  ],
+                  [
+                    "Ouvert",
+                    "À portail fermé et FOTO 2 obscurcie, le portail n'ouvre pas (libérer FOTO 2)"
+                  ]
+                ]
+              },
+              {
+                "code": "J3",
+                "def": "—",
+                "titre": "Comportement de FOTO 1 pendant l'ouverture et la pause",
+                "valeurs": [
+                  [
+                    "Fermé",
+                    "Le portail se referme 2 s après l'activation de FOTO 1"
+                  ],
+                  [
+                    "Ouvert",
+                    "Fonctionnement standard"
+                  ]
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "apprentissage": {
+        "avant": [
+          "La notice EQ2000 ne décrit pas de procédure d'apprentissage dédiée : les temps de travail se règlent aux trimmers P1 à P8 (carte à mini-dip, sans afficheur).",
+          "Choisir d'abord le mode de fonctionnement avec S1 et S2 (pas-à-pas, semi-automatique, automatique, homme mort, piétons, coup de bélier, horloge, ralentissement, démarrage, test photocellule)."
+        ],
+        "etapes": [
+          "Régler les dip puis couper et remettre l'alimentation (ou faire un cycle complet) pour que la carte mémorise les fonctions.",
+          "Régler P1 (et P2 si temps indépendants) pour couvrir toute la course, en tenant compte des 5 s de compensation.",
+          "Régler les puissances P5 / P6, puis la pause P4 et le temps piéton P3 si utilisés."
+        ],
+        "apres": [
+          "Horloge : brancher un contact NO sur START (26-28). Tant que le contact est fermé le portail reste ouvert, puis se referme après la pause. Réglages : S1 DIP 9 OFF, DIP 10 ON, S2 DIP 1 ON, DIP 3 ON.",
+          "Piétons : ouverture partielle (P3, 1,5 min maxi) ; à la fermeture piétons les photocellules rouvrent le portail ; le temps de fermeture est le temps total de travail."
+        ]
+      }
+    },
+    {
+      "id": "casit-eq2006",
+      "nom": "EQ2006",
+      "modeles": "EQ2006 R1.4 — 2 moteurs monophasés 230 V (2 × 500 W) ; versions /T1M et /T2M triphasées 400 V",
+      "type": "Portail battant, 2 moteurs 230 V — 3 blocs de dip (S1, S2, S3), apprentissage par poussoirs PS1 / PS2 / PS3, détection d'obstacle",
+      "source": "Notice CASIT EQ2006 R1.4 (Rev. 00 du 24/04/2007, 14 p., français)",
+      "codes": [
+        {
+          "code": "L1",
+          "type": "led",
+          "titre": "Ligne d'alimentation",
+          "action": "Allumée : carte alimentée."
+        },
+        {
+          "code": "L2 / L3",
+          "type": "led",
+          "titre": "Barre palpeuse 1 / barre palpeuse 2",
+          "action": "Allumée à l'intervention. Clignotante : triac TH1 (L2, moteur 1) ou TH2 (L3, moteur 2) en avarie."
+        },
+        {
+          "code": "L4 / L5",
+          "type": "led",
+          "titre": "Cellule 1 / cellule 2",
+          "action": "Allumée à l'intervention de la cellule."
+        },
+        {
+          "code": "L6 · L7 · L8 · L9",
+          "type": "led",
+          "titre": "Fins de course FCO 1, FCF 1, FCO 2, FCF 2",
+          "action": "Allumée à l'intervention du fin de course (ouvre / ferme, moteur 1 / moteur 2)."
+        },
+        {
+          "code": "L10",
+          "type": "led",
+          "titre": "STOP",
+          "action": "Allumée pendant la commande de stop."
+        },
+        {
+          "code": "L11 · L12 · L13",
+          "type": "led",
+          "titre": "RX1 / START / PIÉTONS",
+          "action": "Allumées pendant la commande correspondante (radio, bouton START, bouton piétons)."
+        },
+        {
+          "code": "L14 (REV 1)",
+          "type": "led",
+          "titre": "Inversion moteur 1",
+          "action": "Rouge bref : intervention de l'inversion (détection d'obstacle) sur le moteur 1. Vert fixe : dernières secondes de la course (l'inversion arrête sans inverser)."
+        },
+        {
+          "code": "L15 (REV 2)",
+          "type": "led",
+          "titre": "Inversion moteur 2",
+          "action": "Rouge bref : intervention de l'inversion sur le moteur 2. Vert fixe : dernières secondes de la course."
+        },
+        {
+          "code": "L16 (SET)",
+          "type": "led",
+          "titre": "Microprocesseur",
+          "action": "Clignotements verts continus pendant le travail : fonctionnement régulier du microprocesseur."
+        },
+        {
+          "code": "L2 ou L3 clignote",
+          "type": "diag",
+          "titre": "Triac moteur en avarie",
+          "action": "La notice indique seulement « triac en avarie », sans procédure de dépannage."
+        },
+        {
+          "code": "Portail ne s'ouvre pas",
+          "type": "symptome",
+          "titre": "Aucune réaction à un ordre",
+          "action": "Contrôler l'interrupteur général, un STOP sur l'entrée 25 (ponter si inutilisé), les fusibles, le câble moteur, les photocellules (pontage 17-18 / 17-19 si absentes), les barres palpeuses (pontage 14-15 / 14-16), le pontage 37-38 et les fins de course (20, 21, 23, 24). Contact NC utilisé à la place d'un NO sur 26 ?"
+        },
+        {
+          "code": "Marche dans un seul sens",
+          "type": "symptome",
+          "titre": "Ouverture ou fermeture seulement",
+          "action": "Vérifier les pontages (37-38, fins de course, barres palpeuses)."
+        },
+        {
+          "code": "Radio sans effet",
+          "type": "symptome",
+          "titre": "Commandes filaires OK mais pas les radiocommandes",
+          "action": "Changer la pile de l'émetteur, refaire la mémorisation."
+        },
+        {
+          "code": "Fin de course actif, moteur ne s'arrête pas",
+          "type": "symptome",
+          "titre": "Le moteur continue",
+          "action": "Fins de course ouverture / fermeture inversés, ou contact NO utilisé à la place d'un NC."
+        },
+        {
+          "code": "Démarre puis s'arrête",
+          "type": "symptome",
+          "titre": "Le portail repart puis s'arrête",
+          "action": "Vérifier l'alignement et graisser ; augmenter le seuil d'inversion (trimmers P2 / P3 dans le sens horaire), puis la force P1 et refaire la programmation."
+        },
+        {
+          "code": "Moteur tourne, portail immobile",
+          "type": "symptome",
+          "titre": "Le moteur démarre mais le portail ne bouge pas",
+          "action": "Obstacle devant le vantail, charnières bloquées, étrier d'ancrage du moteur décroché : dégager, graisser, fixer l'étrier."
+        }
+      ],
+      "bornier": {
+        "groupes": [
+          {
+            "nom": "Alimentation, clignotant, moteurs",
+            "bornes": [
+              {
+                "n": "1 · 2",
+                "label": "Alimentation 230 V",
+                "desc": "Obligatoire : neutre sur 1, phase sur 2",
+                "t": "alim"
+              },
+              {
+                "n": "G (terre)",
+                "label": "Terre",
+                "desc": "3 bornes fixes avec symbole de terre pour la ligne et les moteurs",
+                "t": "alim"
+              },
+              {
+                "n": "3 · 4",
+                "label": "Clignotant 230 V",
+                "desc": "Sortie clignotant",
+                "t": "sortie"
+              },
+              {
+                "n": "5 · 6 · 7",
+                "label": "Moteur M1",
+                "desc": "Retardé en fermeture, piéton. 5 = ouverture, 6 = commun, 7 = fermeture",
+                "t": "moteur"
+              },
+              {
+                "n": "8 · 9 · 10",
+                "label": "Moteur M2",
+                "desc": "Retardé en ouverture. 8 = ouverture, 9 = commun, 10 = fermeture",
+                "t": "moteur"
+              },
+              {
+                "n": "11 · 12",
+                "label": "Lumière de courtoisie",
+                "desc": "Contact propre (voir S3 DIP 8)",
+                "t": "sortie"
+              }
+            ]
+          },
+          {
+            "nom": "Sécurités et fins de course",
+            "bornes": [
+              {
+                "n": "13 · 14",
+                "label": "Sortie 12 V DC",
+                "desc": "0,2 A maxi",
+                "t": "sortie"
+              },
+              {
+                "n": "14 · 15",
+                "label": "Barre palpeuse 1",
+                "desc": "Contact NF. Ouverture : arrêt ; fermeture : inversion 2 s (type A, S3 DIP 3 sur OFF). Type B : toujours inversion 2 s",
+                "t": "nf"
+              },
+              {
+                "n": "14 · 16",
+                "label": "Barre palpeuse 2 / réarmement",
+                "desc": "Contact NF (arrêt à l'ouverture, inversion 2 s à la fermeture en type A). En type B : entrée NO de réarmement",
+                "t": "nf"
+              },
+              {
+                "n": "17 · 18",
+                "label": "Cellule 1",
+                "desc": "Contact NF, active dans les deux sens. Fonctionnement : S2 DIP 5",
+                "t": "nf"
+              },
+              {
+                "n": "17 · 19",
+                "label": "Cellule 2",
+                "desc": "Contact NF, active seulement à la fermeture. Fonctionnement : S2 DIP 6",
+                "t": "nf"
+              },
+              {
+                "n": "20 · 22",
+                "label": "Fin de course ouverture M1",
+                "desc": "Contact NF",
+                "t": "nf"
+              },
+              {
+                "n": "21 · 22",
+                "label": "Fin de course fermeture M1",
+                "desc": "Contact NF",
+                "t": "nf"
+              },
+              {
+                "n": "22 · 23",
+                "label": "Fin de course ouverture M2",
+                "desc": "Contact NF",
+                "t": "nf"
+              },
+              {
+                "n": "22 · 24",
+                "label": "Fin de course fermeture M2",
+                "desc": "Contact NF",
+                "t": "nf"
+              },
+              {
+                "n": "25 · 28",
+                "label": "STOP",
+                "desc": "Contact NF : arrête le portail",
+                "t": "nf"
+              },
+              {
+                "n": "37 · 38",
+                "label": "Contact NF de sécurité",
+                "desc": "L'ouverture du contact coupe l'alimentation des bobines des relais (sorties désactivées)",
+                "t": "nf"
+              }
+            ]
+          },
+          {
+            "nom": "Commandes",
+            "bornes": [
+              {
+                "n": "26 · 28",
+                "label": "START ou OUVRE",
+                "desc": "Contact NO. START si S1 DIP 3 sur ON, OUVRE si sur OFF",
+                "t": "no"
+              },
+              {
+                "n": "27 · 28",
+                "label": "PIÉTONS ou FERME",
+                "desc": "Contact NO. PIÉTONS si S1 DIP 3 sur ON, FERME si sur OFF",
+                "t": "no"
+              }
+            ]
+          },
+          {
+            "nom": "Accessoires, radio",
+            "bornes": [
+              {
+                "n": "29 · 30",
+                "label": "Témoin 24 V AC",
+                "desc": "Éteint portail fermé, allumé portail ouvert",
+                "t": "sortie"
+              },
+              {
+                "n": "30 · 31",
+                "label": "Électro-serrure",
+                "desc": "12 V AC, 1 A maxi",
+                "t": "sortie"
+              },
+              {
+                "n": "32 · 33",
+                "label": "24 V AC pour émetteur de cellule",
+                "desc": "À utiliser quand la fonction « test cellule » est activée",
+                "t": "sortie"
+              },
+              {
+                "n": "33 · 34",
+                "label": "Sortie 24 V AC",
+                "desc": "Accessoires. Alimentation accessoires 24 V DC 500 mA au total (32-33-34 et 29-30)",
+                "t": "sortie"
+              },
+              {
+                "n": "35 · 36",
+                "label": "Antenne",
+                "desc": "Câble d'antenne sur 36, masse sur 35",
+                "t": "autre"
+              },
+              {
+                "n": "39 · 40",
+                "label": "2e canal radio",
+                "desc": "Contact propre du récepteur sur J1 RX",
+                "t": "sortie"
+              }
+            ]
+          }
+        ],
+        "fusibles": "Non indiqués dans la notice. Relais moteur 10 A, triac 16 A ; sortie moteur 2 × 500 W (350 W maxi avec ralentissement, démarrage et inversion).",
+        "notes": [
+          "Toute entrée N.F. non utilisée doit être court-circuitée sur le commun des entrées (notice).",
+          "Moteurs de plus de 350 W : ne pas utiliser ralentissement, démarrage ni inversion ; avec relais ou télérupteurs sur la sortie moteurs, régler la poussée P1 et P4 à la limite.",
+          "Version /T1M (1 moteur) ou /T2M (2 moteurs) triphasé 400 V, 750 W maxi : voir la notice EQ2006. Enlever les condensateurs C5 et C4, mettre P1 et P4 au maximum, S1 DIP 8 OFF, S2 DIP 9 OFF, S3 DIP 4 et DIP 5 sur ON (inversion exclue), ne pas régler le ralentissement. Plans de câblage Q1026 A00 (/T1M) et Q1027 A00 (/T2M) cités par la notice, non joints. Écart de la notice : le réglage S2 DIP 9 OFF (« 1 moteur ») est donné aussi pour la /T2M à 2 moteurs ; le chapitre obstacle cite P1 / P2 pour les forces, le chapitre trimmers P1 / P4 (suivi ici).",
+          "Fiche de gestion clignotants EQLAMP (accessoire sur demande) : branchée par câble 6 pôles sur J2, active avec S3 DIP 3 sur ON (mode type B) : clignotants séparés ouverture (M2), pause (M4), fermeture (M3) et alarme (M5), alimentés en 230 V sur M1 (N / F) ou 12 V DC.",
+          "Mode type B : l'intervention de la barre palpeuse 1 inverse 2 s, arrête le portail et active le clignotant d'alarme (M5). START et PIÉTONS sont alors ignorés : il faut réarmer avec un poussoir NO sur l'entrée 14-16.",
+          "Écart de la notice : le tableau de dépannage parle de l'entrée « 18 19 » pour les photocellules alors que le bornier donne 17-18 et 17-19."
+        ]
+      },
+      "parametres": {
+        "intro": "Trois blocs de mini-dip (S1, S2, S3), six trimmers (P1 à P6) et les poussoirs PS1 / PS2 / PS3 du menu de programmation (S2 DIP 10). Valeurs d'usine des dip non indiquées (colonne usine : —) ; les temps par défaut sont listés dans les notes.",
+        "navigation": [
+          "Temps par défaut de la carte : travail 50 s sur les 2 moteurs, ouverture piéton 10 s, décalage des vantaux 3 s à l'ouverture et 5 s à la fermeture, pause 8 s, pause piéton 8 s. Pour éliminer le retard des vantaux : S1 DIP 5 sur ON.",
+          "Les trimmers : P1 force M1, P4 force M2, P2 / P5 sensibilité d'obstacle en travail (M1 / M2), P3 / P6 sensibilité d'obstacle en ralentissement (M1 / M2). Tourner vers « − » (sens horaire) : sensibilité plus faible (poussée plus forte) ; vers « + » : plus sensible."
+        ],
+        "groupes": [
+          {
+            "nom": "Mini-dip S1",
+            "items": [
+              {
+                "code": "S1 · DIP 1",
+                "def": "—",
+                "titre": "Refermeture automatique après START",
+                "valeurs": [
+                  [
+                    "ON",
+                    "À la fin de la pause, après une ouverture commandée par START"
+                  ],
+                  [
+                    "OFF",
+                    "Pas de refermeture automatique"
+                  ]
+                ]
+              },
+              {
+                "code": "S1 · DIP 2",
+                "def": "—",
+                "titre": "Refermeture automatique après piéton",
+                "valeurs": [
+                  [
+                    "ON",
+                    "À la fin de la pause piéton"
+                  ],
+                  [
+                    "OFF",
+                    "Exclue"
+                  ]
+                ]
+              },
+              {
+                "code": "S1 · DIP 3",
+                "def": "—",
+                "titre": "Contacts de commande",
+                "valeurs": [
+                  [
+                    "ON",
+                    "START (26-28) et PIÉTON (27-28)"
+                  ],
+                  [
+                    "OFF",
+                    "OUVRE et FERME séparés"
+                  ]
+                ]
+              },
+              {
+                "code": "S1 · DIP 4",
+                "def": "—",
+                "titre": "Contact radio RX1",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Fonctionne comme le START de la borne"
+                  ],
+                  [
+                    "OFF",
+                    "Fonctionne en homme mort"
+                  ]
+                ]
+              },
+              {
+                "code": "S1 · DIP 5",
+                "def": "—",
+                "titre": "Temps de travail des moteurs",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Temps unifié pour les deux moteurs sur M1"
+                  ],
+                  [
+                    "OFF",
+                    "Temps séparés et indépendants"
+                  ]
+                ]
+              },
+              {
+                "code": "S1 · DIP 6",
+                "def": "—",
+                "titre": "Démarrage des moteurs",
+                "valeurs": [
+                  [
+                    "ON",
+                    "3 s"
+                  ],
+                  [
+                    "OFF",
+                    "1,5 s"
+                  ]
+                ]
+              },
+              {
+                "code": "S1 · DIP 7",
+                "def": "—",
+                "titre": "Refermeture automatique après ouverture par RX1",
+                "valeurs": [
+                  [
+                    "ON",
+                    "À la fin de la pause"
+                  ],
+                  [
+                    "OFF",
+                    "Exclue"
+                  ]
+                ]
+              },
+              {
+                "code": "S1 · DIP 8",
+                "def": "—",
+                "titre": "Départ des moteurs",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Rapide"
+                  ],
+                  [
+                    "OFF",
+                    "Standard"
+                  ]
+                ]
+              },
+              {
+                "code": "S1 · DIP 9",
+                "def": "—",
+                "titre": "Vitesse en ralentissement",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Haute"
+                  ],
+                  [
+                    "OFF",
+                    "Basse"
+                  ]
+                ],
+                "note": "À choisir avant la mémorisation de la course : un changement ultérieur oblige à refaire l'apprentissage."
+              },
+              {
+                "code": "S1 · DIP 10",
+                "def": "—",
+                "titre": "Coup de bélier",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Activé : à chaque START, le portail fermé pousse en fermeture pour dégager l'électro-serrure puis ouvre"
+                  ],
+                  [
+                    "OFF",
+                    "Non activé"
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "nom": "Mini-dip S2",
+            "items": [
+              {
+                "code": "S2 · DIP 1",
+                "def": "—",
+                "titre": "Homme mort ou impulsion",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Homme mort"
+                  ],
+                  [
+                    "OFF",
+                    "Impulsion"
+                  ]
+                ]
+              },
+              {
+                "code": "S2 · DIP 2",
+                "def": "—",
+                "titre": "Semi-automatique ou pas-à-pas",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Semi-automatique : pas de START accepté pendant l'ouverture (fonction horloge possible)"
+                  ],
+                  [
+                    "OFF",
+                    "Pas-à-pas : ouvre, stop, ferme, ouvre"
+                  ]
+                ]
+              },
+              {
+                "code": "S2 · DIP 3",
+                "def": "—",
+                "titre": "Pleine puissance à la fermeture",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Pleine puissance dans les 2 dernières secondes"
+                  ],
+                  [
+                    "OFF",
+                    "Non"
+                  ]
+                ]
+              },
+              {
+                "code": "S2 · DIP 4",
+                "def": "—",
+                "titre": "Démarrage des moteurs",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Activé"
+                  ],
+                  [
+                    "OFF",
+                    "Non activé"
+                  ]
+                ]
+              },
+              {
+                "code": "S2 · DIP 5",
+                "def": "—",
+                "titre": "Cellule 1",
+                "valeurs": [
+                  [
+                    "ON",
+                    "À l'ouverture et en pause, une intervention de la cellule 1 referme 2 s après"
+                  ],
+                  [
+                    "OFF",
+                    "Fonctionnement standard"
+                  ]
+                ]
+              },
+              {
+                "code": "S2 · DIP 6",
+                "def": "—",
+                "titre": "Cellule 2 à portail fermé",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Le START ouvre si la cellule 2 est obstruée"
+                  ],
+                  [
+                    "OFF",
+                    "Le START n'ouvre pas si la cellule 2 est obstruée"
+                  ]
+                ]
+              },
+              {
+                "code": "S2 · DIP 7",
+                "def": "—",
+                "titre": "Préalarme du clignotant",
+                "valeurs": [
+                  [
+                    "ON",
+                    "1 s"
+                  ],
+                  [
+                    "OFF",
+                    "4 s"
+                  ]
+                ]
+              },
+              {
+                "code": "S2 · DIP 8",
+                "def": "—",
+                "titre": "Sortie clignotant",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Intermittente"
+                  ],
+                  [
+                    "OFF",
+                    "Fixe"
+                  ]
+                ]
+              },
+              {
+                "code": "S2 · DIP 9",
+                "def": "—",
+                "titre": "Nombre de moteurs",
+                "valeurs": [
+                  [
+                    "ON",
+                    "2 moteurs (battant 2 vantaux)"
+                  ],
+                  [
+                    "OFF",
+                    "1 moteur sur M1 (coulissant ou 1 vantail)"
+                  ]
+                ]
+              },
+              {
+                "code": "S2 · DIP 10",
+                "def": "—",
+                "titre": "Menu de programmation",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Accès au menu de programmation (apprentissage)"
+                  ],
+                  [
+                    "OFF",
+                    "Carte en condition de travail"
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "nom": "Mini-dip S3",
+            "items": [
+              {
+                "code": "S3 · DIP 1",
+                "def": "—",
+                "titre": "Test des cellules sur cellule 1",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Activé"
+                  ],
+                  [
+                    "OFF",
+                    "Non activé"
+                  ]
+                ]
+              },
+              {
+                "code": "S3 · DIP 2",
+                "def": "—",
+                "titre": "Test des cellules sur cellule 2",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Activé"
+                  ],
+                  [
+                    "OFF",
+                    "Non activé"
+                  ]
+                ]
+              },
+              {
+                "code": "S3 · DIP 3",
+                "def": "—",
+                "titre": "Type de fonctionnement des barres palpeuses",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Type B : fiche LAMP et réarmement"
+                  ],
+                  [
+                    "OFF",
+                    "Type A (standard)"
+                  ]
+                ]
+              },
+              {
+                "code": "S3 · DIP 4",
+                "def": "—",
+                "titre": "Détection d'obstacle moteur 1 (inversion)",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Non activée"
+                  ],
+                  [
+                    "OFF",
+                    "Activée"
+                  ]
+                ]
+              },
+              {
+                "code": "S3 · DIP 5",
+                "def": "—",
+                "titre": "Détection d'obstacle moteur 2 (inversion)",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Non activée (à laisser sur ON avec un seul moteur)"
+                  ],
+                  [
+                    "OFF",
+                    "Activée"
+                  ]
+                ]
+              },
+              {
+                "code": "S3 · DIP 6",
+                "def": "—",
+                "titre": "Plage de force du trimmer P3 en ralentissement (M1)",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Plage de force haute"
+                  ],
+                  [
+                    "OFF",
+                    "Plage de force basse"
+                  ]
+                ]
+              },
+              {
+                "code": "S3 · DIP 7",
+                "def": "—",
+                "titre": "Plage de force du trimmer P6 en ralentissement (M2)",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Plage de force haute"
+                  ],
+                  [
+                    "OFF",
+                    "Plage de force basse"
+                  ]
+                ]
+              },
+              {
+                "code": "S3 · DIP 8",
+                "def": "—",
+                "titre": "Lumière de courtoisie",
+                "valeurs": [
+                  [
+                    "ON",
+                    "S'éteint immédiatement à la fin de la fermeture"
+                  ],
+                  [
+                    "OFF",
+                    "S'éteint 3 minutes après la fermeture"
+                  ]
+                ]
+              },
+              {
+                "code": "S3 · DIP 9 · 10",
+                "def": "—",
+                "titre": "Non utilisés",
+                "valeurs": [
+                  [
+                    "ON / OFF",
+                    "Sans fonction"
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "nom": "Trimmers",
+            "items": [
+              {
+                "code": "P1",
+                "def": "—",
+                "titre": "Force du moteur 1",
+                "valeurs": [
+                  [
+                    "−  …  +",
+                    "Poussée du moteur 1"
+                  ]
+                ]
+              },
+              {
+                "code": "P4",
+                "def": "—",
+                "titre": "Force du moteur 2",
+                "valeurs": [
+                  [
+                    "−  …  +",
+                    "Poussée du moteur 2"
+                  ]
+                ]
+              },
+              {
+                "code": "P2",
+                "def": "—",
+                "titre": "Sensibilité d'obstacle moteur 1 (en travail)",
+                "valeurs": [
+                  [
+                    "−  …  +",
+                    "Inversion pendant la course à vitesse normale"
+                  ]
+                ]
+              },
+              {
+                "code": "P5",
+                "def": "—",
+                "titre": "Sensibilité d'obstacle moteur 2 (en travail)",
+                "valeurs": [
+                  [
+                    "−  …  +",
+                    "Inversion pendant la course à vitesse normale"
+                  ]
+                ]
+              },
+              {
+                "code": "P3",
+                "def": "—",
+                "titre": "Sensibilité d'obstacle moteur 1 (ralentissement)",
+                "valeurs": [
+                  [
+                    "−  …  +",
+                    "Au maximum : exclut la détection en ralentissement"
+                  ]
+                ]
+              },
+              {
+                "code": "P6",
+                "def": "—",
+                "titre": "Sensibilité d'obstacle moteur 2 (ralentissement)",
+                "valeurs": [
+                  [
+                    "−  …  +",
+                    "Au maximum : exclut la détection en ralentissement"
+                  ]
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "apprentissage": {
+        "avant": [
+          "Couper l'alimentation de la carte avant de choisir : S1 DIP 9 (vitesse de ralentissement : ON haute, OFF basse), S2 DIP 9 (ON = 2 moteurs, OFF = 1 moteur), puis S2 DIP 10 sur ON pour entrer dans le menu. Remettre sous tension : la LED REV 1 s'allume en rouge fixe (menu « temps de travail »).",
+          "Les boutons PS1 (START) et PS2 (piétons) peuvent être doublés par des boutons extérieurs NO sur 26-28 (PS1) et 27-28 (PS2). L'apprentissage ne se fait pas par la radiocommande.",
+          "Le ralentissement doit être décidé avant l'apprentissage ; la détection d'obstacle n'est pas active pendant la mémorisation.",
+          "Coup de bélier pendant l'apprentissage : appuyer sur PS2 portail fermé pour obtenir la poussée en fermeture sur M1 et débloquer l'électro-serrure (seulement avec le fin de course de fermeture électrique ponté ou non activé), puis lancer la mémorisation avec PS1."
+        ],
+        "etapes": [
+          "Un moteur (M1) : si le portail n'est pas fermé, maintenir PS2 jusqu'à la fermeture complète. Maintenir PS1 : le portail s'ouvre ; relâcher PS1 règle la durée d'ouverture piéton (ou impulsion brève sur PS1 pour sauter).",
+          "Maintenir PS1 pour mémoriser le temps total d'ouverture. Pour avoir un ralentissement, relâcher PS1 à l'endroit où le ralentissement doit commencer puis maintenir de nouveau PS1 jusqu'à la fin de course d'ouverture (FCO 1). Pour une course entière à vitesse normale, maintenir PS1 jusqu'à la fin.",
+          "Même principe pour la fermeture avec PS1 (fin de course FCF 1).",
+          "Impulsion brève sur PS2 : la LED REV 1 clignote (confirmation). PS1 pour recommencer, ou une impulsion brève sur PS2 pour confirmer : les 3 LED restent vertes 2 s, le temps de travail est mémorisé et la carte revient au menu initial (REV 1 rouge fixe).",
+          "Deux moteurs (M1 + M2) : si besoin fermer le portail avec PS2 (M2 puis M1). Maintenir PS1 pour avancer M1 jusqu'au point de décalage à l'ouverture (impulsion brève pour pas de décalage), mémoriser l'ouverture piéton, puis le temps d'ouverture (et ralentissement) de M1, puis de M2.",
+          "Fermeture : décalage de M2 à la fermeture (impulsion brève si aucun), temps de fermeture de M2 (et ralentissement) puis de M1. Confirmer avec PS2 comme pour un moteur.",
+          "Temps de pause : PS3 pour entrer dans « temps de pause du travail ». Maintenir PS1 pendant la durée voulue (la LED SET clignote en rouge chaque seconde), PS2 pour valider, PS2 encore pour confirmer (REV 2 clignote puis 3 LED vertes). Même principe pour la pause piéton (PS3 de nouveau ; REV 1 et REV 2 clignotent)."
+        ],
+        "apres": [
+          "À la fin de la programmation, remettre S2 DIP 10 sur OFF (carte en condition de travail) et remettre sous tension.",
+          "Détection d'obstacle : S3 DIP 4 / DIP 5 sur OFF pour l'activer. En ouverture : arrêt et inversion 2 s. En fermeture : arrêt et réouverture complète ; si l'obstacle revient, arrêt et inversion 2 s. Régler d'abord la force P1 / P4 à un niveau acceptable, puis les sensibilités.",
+          "Mot de passe : la notice cite la possibilité d'un mot de passe pour empêcher l'accès au menu et aux changements de dip et trimmers, sans en donner la procédure."
+        ]
+      }
+    },
+    {
+      "id": "casit-eq2009",
+      "nom": "EQ2009",
+      "modeles": "EQ2009 R1.0 — 2 moteurs monophasés 230 V avec encoder (2 × 500 W)",
+      "type": "Portail battant, 2 moteurs 230 V avec ou sans encoder — 4 blocs de dip (S1 à S4), apprentissage par poussoirs PS1 / PS2 / PS3",
+      "source": "Notice CASIT EQ2009 R1.0 (Rev. 00 du 03/02/2010, 14 p., français)",
+      "codes": [
+        {
+          "code": "L1",
+          "type": "led",
+          "titre": "Ligne d'alimentation",
+          "action": "Allumée : carte alimentée."
+        },
+        {
+          "code": "L2 / L3",
+          "type": "led",
+          "titre": "Barre palpeuse 1 / barre palpeuse 2",
+          "action": "Allumée à l'intervention. Clignotante : triac TH1 (L2, moteur 1) ou TH2 (L3, moteur 2) en avarie."
+        },
+        {
+          "code": "L4 / L5",
+          "type": "led",
+          "titre": "Cellule 1 / cellule 2",
+          "action": "Allumée à l'intervention de la cellule."
+        },
+        {
+          "code": "L6 · L7 · L8 · L9",
+          "type": "led",
+          "titre": "Fins de course FCO 1, FCF 1, FCO 2, FCF 2",
+          "action": "Allumée à l'intervention du fin de course (ouvre / ferme, moteur 1 / moteur 2)."
+        },
+        {
+          "code": "L10",
+          "type": "led",
+          "titre": "STOP",
+          "action": "Allumée pendant la fonction stop."
+        },
+        {
+          "code": "L11 · L12 · L13",
+          "type": "led",
+          "titre": "RX1 / START / PIÉTONS",
+          "action": "L11 s'allume pendant la fonction « homme mort » ; L12 pendant START ; L13 pendant piétons."
+        },
+        {
+          "code": "L14 (REV 1)",
+          "type": "led",
+          "titre": "Inversion moteur 1",
+          "action": "Rouge bref : inversion sur le moteur 1. Vert fixe : dernières secondes de la course."
+        },
+        {
+          "code": "L15 (REV 2)",
+          "type": "led",
+          "titre": "Inversion moteur 2",
+          "action": "Rouge bref : inversion sur le moteur 2. Vert fixe : dernières secondes de la course."
+        },
+        {
+          "code": "L16 (SET)",
+          "type": "led",
+          "titre": "Microprocesseur",
+          "action": "Clignotements verts continus pendant le travail : fonctionnement régulier."
+        },
+        {
+          "code": "L2 ou L3 clignote",
+          "type": "diag",
+          "titre": "Triac moteur en avarie",
+          "action": "Enlever le courant de la carte quelques secondes puis le remettre (notice)."
+        },
+        {
+          "code": "Portail ne s'ouvre pas",
+          "type": "symptome",
+          "titre": "Aucune réaction à un ordre",
+          "action": "Contrôler l'interrupteur général, un STOP sur l'entrée 25 (ponter si inutilisé), les fusibles, le câble moteur, les photocellules (pontage 17-18 / 17-19), les barres palpeuses (pontage 14-15 / 14-16), le pontage 37-38 et les fins de course (20, 21, 23, 24). Un NC utilisé à la place d'un NO sur 26 ?"
+        },
+        {
+          "code": "Marche dans un seul sens",
+          "type": "symptome",
+          "titre": "Ouverture ou fermeture seulement",
+          "action": "Pontages manquants (37-38, fins de course, barres palpeuses)."
+        },
+        {
+          "code": "Radio sans effet",
+          "type": "symptome",
+          "titre": "Commandes filaires OK mais pas les radiocommandes",
+          "action": "Changer la pile, refaire la mémorisation de l'émetteur."
+        },
+        {
+          "code": "Fin de course actif, moteur ne s'arrête pas",
+          "type": "symptome",
+          "titre": "Le moteur continue",
+          "action": "Fins de course ouverture / fermeture inversés, ou contact NO au lieu de NC."
+        },
+        {
+          "code": "Démarre puis s'arrête",
+          "type": "symptome",
+          "titre": "Le portail repart puis s'arrête",
+          "action": "Vérifier l'alignement, graisser ; augmenter le seuil d'inversion (P2 / P3 sens horaire), puis la force P1 et refaire la programmation."
+        },
+        {
+          "code": "Moteur tourne, portail immobile",
+          "type": "symptome",
+          "titre": "Le moteur démarre mais le portail ne bouge pas",
+          "action": "Obstacle, charnières bloquées ou étrier d'ancrage décroché."
+        }
+      ],
+      "bornier": {
+        "groupes": [
+          {
+            "nom": "Alimentation, clignotant, moteurs",
+            "bornes": [
+              {
+                "n": "1 · 2",
+                "label": "Alimentation 230 V",
+                "desc": "Obligatoire : neutre sur 1, phase sur 2",
+                "t": "alim"
+              },
+              {
+                "n": "G (terre)",
+                "label": "Terre",
+                "desc": "3 bornes fixes avec symbole de terre pour la ligne et les moteurs",
+                "t": "alim"
+              },
+              {
+                "n": "3 · 4",
+                "label": "Clignotant 230 V",
+                "desc": "Sortie clignotant",
+                "t": "sortie"
+              },
+              {
+                "n": "5 · 6 · 7",
+                "label": "Moteur M1",
+                "desc": "Retardé en fermeture, piéton. 5 = ouverture, 6 = commun, 7 = fermeture",
+                "t": "moteur"
+              },
+              {
+                "n": "8 · 9 · 10",
+                "label": "Moteur M2",
+                "desc": "Retardé en ouverture. 8 = ouverture, 9 = commun, 10 = fermeture",
+                "t": "moteur"
+              },
+              {
+                "n": "11 · 12",
+                "label": "Lumière de courtoisie",
+                "desc": "Contact propre (voir S3 DIP 8)",
+                "t": "sortie"
+              }
+            ]
+          },
+          {
+            "nom": "Sans encoder : sécurités",
+            "bornes": [
+              {
+                "n": "13 · 14",
+                "label": "Sortie 12 V DC",
+                "desc": "200 mA maxi",
+                "t": "sortie"
+              },
+              {
+                "n": "14 · 15",
+                "label": "Barre palpeuse 1",
+                "desc": "Contact NF. Ouverture : arrêt ; fermeture : inversion 2 s (type A). Type B : toujours inversion 2 s",
+                "t": "nf"
+              },
+              {
+                "n": "14 · 16",
+                "label": "Barre palpeuse 2 / réarmement",
+                "desc": "Contact NF (type A) ou entrée NO de réarmement (type B)",
+                "t": "nf"
+              },
+              {
+                "n": "17 · 18",
+                "label": "Cellule 1",
+                "desc": "Contact NF, active dans les deux sens. Fonctionnement : S2 DIP 5",
+                "t": "nf"
+              },
+              {
+                "n": "17 · 19",
+                "label": "Cellule 2",
+                "desc": "Contact NF, active seulement à la fermeture. Fonctionnement : S2 DIP 6",
+                "t": "nf"
+              }
+            ]
+          },
+          {
+            "nom": "Avec encoder (à la place des barres palpeuses)",
+            "bornes": [
+              {
+                "n": "13",
+                "label": "Alimentation encoder +",
+                "desc": "Fil marron",
+                "t": "alim"
+              },
+              {
+                "n": "14",
+                "label": "Alimentation encoder −",
+                "desc": "Fil bleu",
+                "t": "alim"
+              },
+              {
+                "n": "15",
+                "label": "Signal du capteur encoder moteur 1",
+                "desc": "Les entrées barre palpeuse sont alors dédiées à la lecture de l'encoder",
+                "t": "autre"
+              },
+              {
+                "n": "16",
+                "label": "Signal du capteur encoder moteur 2",
+                "desc": "Idem",
+                "t": "autre"
+              },
+              {
+                "n": "17 · 18",
+                "label": "Photo 1",
+                "desc": "Contact NF. Fonctionnement : S3 DIP 9",
+                "t": "nf"
+              },
+              {
+                "n": "17 · 19",
+                "label": "Photo 2",
+                "desc": "Contact NF. Fonctionnement : S3 DIP 10",
+                "t": "nf"
+              }
+            ]
+          },
+          {
+            "nom": "Fins de course, commandes",
+            "bornes": [
+              {
+                "n": "20 · 22",
+                "label": "Fin de course ouverture M1",
+                "desc": "Contact NF. À brancher sur la carte, pas sur la phase du moteur",
+                "t": "nf"
+              },
+              {
+                "n": "21 · 22",
+                "label": "Fin de course fermeture M1",
+                "desc": "Contact NF",
+                "t": "nf"
+              },
+              {
+                "n": "22 · 23",
+                "label": "Fin de course ouverture M2",
+                "desc": "Contact NF",
+                "t": "nf"
+              },
+              {
+                "n": "22 · 24",
+                "label": "Fin de course fermeture M2",
+                "desc": "Contact NF",
+                "t": "nf"
+              },
+              {
+                "n": "25 · 28",
+                "label": "STOP",
+                "desc": "Contact NF : arrête le portail",
+                "t": "nf"
+              },
+              {
+                "n": "26 · 28",
+                "label": "START ou OUVRE",
+                "desc": "Contact NO. START (S1 DIP 3 sur ON) ou OUVRE (sur OFF)",
+                "t": "no"
+              },
+              {
+                "n": "27 · 28",
+                "label": "PIÉTONS ou FERME",
+                "desc": "Contact NO. PIÉTONS (S1 DIP 3 sur ON) ou FERME (sur OFF)",
+                "t": "no"
+              },
+              {
+                "n": "42 · 33",
+                "label": "Manœuvre d'urgence",
+                "desc": "Contact NO (voir notes)",
+                "t": "no"
+              },
+              {
+                "n": "41 · 35",
+                "label": "Contact extérieur RX1",
+                "desc": "Contact NO extérieur de RX1, masse sur 35 (selon la notice)",
+                "t": "no"
+              }
+            ]
+          },
+          {
+            "nom": "Accessoires, radio",
+            "bornes": [
+              {
+                "n": "29 · 30",
+                "label": "Témoin 24 V AC",
+                "desc": "Éteint portail fermé, allumé portail ouvert",
+                "t": "sortie"
+              },
+              {
+                "n": "30 · 31",
+                "label": "Électro-serrure",
+                "desc": "12 V AC, 1 A maxi",
+                "t": "sortie"
+              },
+              {
+                "n": "32 · 33",
+                "label": "24 V AC pour émetteur de cellule",
+                "desc": "À utiliser quand la fonction « test cellule » est activée",
+                "t": "sortie"
+              },
+              {
+                "n": "33 · 34",
+                "label": "Sortie 24 V AC",
+                "desc": "Accessoires. 24 V 500 mA au total (32-33-34 et 29-30)",
+                "t": "sortie"
+              },
+              {
+                "n": "35 · 36",
+                "label": "Antenne",
+                "desc": "Câble d'antenne sur 36, masse sur 35",
+                "t": "autre"
+              },
+              {
+                "n": "37 · 38",
+                "label": "Contact NF de sécurité",
+                "desc": "L'ouverture du contact coupe l'alimentation des bobines des relais",
+                "t": "nf"
+              },
+              {
+                "n": "39 · 40",
+                "label": "2e canal radio",
+                "desc": "Contact propre du récepteur sur J1 RX",
+                "t": "sortie"
+              }
+            ]
+          }
+        ],
+        "fusibles": "Non indiqués dans la notice. Relais moteur 10 A, triac 16 A ; boîtier standard 255 × 200 × 105 mm, IP54.",
+        "notes": [
+          "Toute entrée N.F. non utilisée doit être court-circuitée sur le commun des entrées (notice).",
+          "Moteurs de plus de 350 W : ne pas utiliser ralentissement, démarrage ni inversion ; avec relais ou télérupteurs, régler P1 et P4 au maximum.",
+          "Deux moteurs sur un seul battant (porte basculante, battant lourd) : brancher un moteur sur M4 et l'autre sur M5, S1 DIP 5 sur ON (temps unifié sur M1), programmer comme pour un moteur.",
+          "Les numéros 13 à 18 du bornier changent de rôle selon que l'on utilise des moteurs sans ou avec encoder (deux tableaux de la notice, repris ci-dessus).",
+          "Manœuvre d'urgence (contact NO 42-33) : appui maintenu, au bout de 2 s les moteurs ouvrent en homme mort ; un second appui les fait fermer de la même façon. Cellules, barres palpeuses, embrayage électronique, détection ampèremétrique et encoder sont inactifs ; fins de course, clignotant et ralentissement restent actifs. Utiliser seulement avec vue complète sur le portail.",
+          "Mode type B et fiche EQLAMP : mêmes principes que l'EQ2006 (S3 DIP 3 sur ON) ; la notice précise de ne pas utiliser la fiche avec des moteurs à encoder.",
+          "Écart de la notice : le chapitre détection d'obstacle cite P1 / P2 pour les forces des moteurs 1 / 2, le chapitre trimmers donne P1 et P4 (suivi ici).",
+          "Écart de la notice : le tableau S3 DIP 9 / DIP 10 annote les deux lignes « PHOTO 2, pour moteur avec encoder seul » alors que les bornes 17-18 (PHOTO 1) renvoient à S3 DIP 9 et 17-19 (PHOTO 2) à S3 DIP 10.",
+          "Écart de la notice : P6 est donné tantôt pour la vitesse de ralentissement (chapitres 4 et 10), tantôt pour la sensibilité d'obstacle en ralentissement (P3 dans la liste des trimmers)."
+        ]
+      },
+      "parametres": {
+        "intro": "Quatre blocs de mini-dip (S1 à S4), six trimmers (P1 à P6) et les poussoirs PS1 / PS2 / PS3. Valeurs d'usine des dip non indiquées (colonne usine : —). Temps par défaut : travail 50 s, piéton 10 s, décalage 3 s (ouverture) et 5 s (fermeture), pauses 8 s.",
+        "navigation": [
+          "S4 DIP 1 et 2 sélectionnent le type de moteur avant la programmation ; S4 DIP 3 indique s'il y a des fins de course.",
+          "Pour supprimer le décalage ou n'utiliser qu'un moteur : S1 DIP 5 sur ON (valable pour les temps par défaut). Écart de la notice : le tableau du dip donne « un seul moteur : à laisser sur OFF ».",
+          "Temps de compensation : environ 6 s à la fin du temps de travail sans ralentissement, 12 s avec ralentissement."
+        ],
+        "groupes": [
+          {
+            "nom": "Mini-dip S1",
+            "items": [
+              {
+                "code": "S1 · DIP 1",
+                "def": "—",
+                "titre": "Refermeture automatique après START",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Après le temps de pause (commande START activée)"
+                  ],
+                  [
+                    "OFF",
+                    "Désactivée"
+                  ]
+                ]
+              },
+              {
+                "code": "S1 · DIP 2",
+                "def": "—",
+                "titre": "Refermeture automatique après piéton",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Activée après le temps de pause piéton"
+                  ],
+                  [
+                    "OFF",
+                    "Désactivée"
+                  ]
+                ]
+              },
+              {
+                "code": "S1 · DIP 3",
+                "def": "—",
+                "titre": "Contacts de commande",
+                "valeurs": [
+                  [
+                    "ON",
+                    "START et PIÉTON"
+                  ],
+                  [
+                    "OFF",
+                    "OUVRE et FERME séparés"
+                  ]
+                ]
+              },
+              {
+                "code": "S1 · DIP 4",
+                "def": "—",
+                "titre": "Contact radio RX1",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Fonctionne comme START"
+                  ],
+                  [
+                    "OFF",
+                    "Fonctionne en homme mort"
+                  ]
+                ]
+              },
+              {
+                "code": "S1 · DIP 5",
+                "def": "—",
+                "titre": "Temps de travail des moteurs",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Identique pour les deux moteurs sur M1 (un seul moteur : à laisser sur OFF selon la notice)"
+                  ],
+                  [
+                    "OFF",
+                    "Séparé et indépendant"
+                  ]
+                ]
+              },
+              {
+                "code": "S1 · DIP 6",
+                "def": "—",
+                "titre": "Moteurs après activation du fin de course FERME",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Ils fonctionnent encore 3 s"
+                  ],
+                  [
+                    "OFF",
+                    "Ils fonctionnent seulement jusqu'à l'activation du fin de course"
+                  ]
+                ]
+              },
+              {
+                "code": "S1 · DIP 7",
+                "def": "—",
+                "titre": "Refermeture automatique après commande RX1",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Activée après le temps de pause"
+                  ],
+                  [
+                    "OFF",
+                    "Désactivée"
+                  ]
+                ]
+              },
+              {
+                "code": "S1 · DIP 8",
+                "def": "—",
+                "titre": "Force / départ des moteurs",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Force augmentée, les moteurs partent tout de suite (barrières, portes rapides)"
+                  ],
+                  [
+                    "OFF",
+                    "Force standard, départ après environ 1 s"
+                  ]
+                ]
+              },
+              {
+                "code": "S1 · DIP 9",
+                "def": "—",
+                "titre": "Seuil d'intervention de l'encoder",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Haut"
+                  ],
+                  [
+                    "OFF",
+                    "Bas"
+                  ]
+                ]
+              },
+              {
+                "code": "S1 · DIP 10",
+                "def": "—",
+                "titre": "Coup de bélier",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Activé"
+                  ],
+                  [
+                    "OFF",
+                    "Désactivé"
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "nom": "Mini-dip S2",
+            "items": [
+              {
+                "code": "S2 · DIP 1",
+                "def": "—",
+                "titre": "Homme mort ou impulsion",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Homme mort"
+                  ],
+                  [
+                    "OFF",
+                    "Impulsion"
+                  ]
+                ]
+              },
+              {
+                "code": "S2 · DIP 2",
+                "def": "—",
+                "titre": "Semi-automatique ou pas-à-pas",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Semi-automatique : pas de START à l'ouverture (fonction horloge)"
+                  ],
+                  [
+                    "OFF",
+                    "Pas-à-pas : ouvre, stop, ferme, ouvre"
+                  ]
+                ]
+              },
+              {
+                "code": "S2 · DIP 3",
+                "def": "—",
+                "titre": "Pleine puissance à la fermeture",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Activée dans les 2 dernières secondes"
+                  ],
+                  [
+                    "OFF",
+                    "Désactivée"
+                  ]
+                ]
+              },
+              {
+                "code": "S2 · DIP 4",
+                "def": "—",
+                "titre": "Force",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Activée"
+                  ],
+                  [
+                    "OFF",
+                    "Désactivée"
+                  ]
+                ]
+              },
+              {
+                "code": "S2 · DIP 5",
+                "def": "—",
+                "titre": "Photo 1 (moteurs sans encoder)",
+                "valeurs": [
+                  [
+                    "ON",
+                    "À l'ouverture et en pause, une intervention referme 2 s après"
+                  ],
+                  [
+                    "OFF",
+                    "Standard : à portail fermé et cellule obscurcie, ne s'ouvre pas ; en mouvement, arrêt puis réouverture dès que la cellule est libérée (l'électro-serrure s'active aussi)"
+                  ]
+                ]
+              },
+              {
+                "code": "S2 · DIP 6",
+                "def": "—",
+                "titre": "Cellule 2 à portail fermé",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Le START ouvre si la cellule 2 est obstruée"
+                  ],
+                  [
+                    "OFF",
+                    "Le START n'ouvre pas"
+                  ]
+                ]
+              },
+              {
+                "code": "S2 · DIP 7",
+                "def": "—",
+                "titre": "Préalarme du clignotant",
+                "valeurs": [
+                  [
+                    "ON",
+                    "1 s"
+                  ],
+                  [
+                    "OFF",
+                    "4 s"
+                  ]
+                ]
+              },
+              {
+                "code": "S2 · DIP 8",
+                "def": "—",
+                "titre": "Sortie clignotant",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Intermittente (lente à l'ouverture, fixe en pause, rapide à la fermeture)"
+                  ],
+                  [
+                    "OFF",
+                    "Fixe"
+                  ]
+                ]
+              },
+              {
+                "code": "S2 · DIP 9",
+                "def": "—",
+                "titre": "Nombre de moteurs",
+                "valeurs": [
+                  [
+                    "ON",
+                    "2 moteurs (2 vantaux)"
+                  ],
+                  [
+                    "OFF",
+                    "1 moteur sur M1 (coulissant ou 1 vantail)"
+                  ]
+                ]
+              },
+              {
+                "code": "S2 · DIP 10",
+                "def": "—",
+                "titre": "Menu de programmation",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Accès au menu de programmation"
+                  ],
+                  [
+                    "OFF",
+                    "Carte en condition de travail"
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "nom": "Mini-dip S3",
+            "items": [
+              {
+                "code": "S3 · DIP 1",
+                "def": "—",
+                "titre": "Test des cellules sur cellule 1",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Activé"
+                  ],
+                  [
+                    "OFF",
+                    "Désactivé"
+                  ]
+                ]
+              },
+              {
+                "code": "S3 · DIP 2",
+                "def": "—",
+                "titre": "Test des cellules sur cellule 2",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Activé"
+                  ],
+                  [
+                    "OFF",
+                    "Désactivé"
+                  ]
+                ]
+              },
+              {
+                "code": "S3 · DIP 3",
+                "def": "—",
+                "titre": "Type de fonctionnement des barres palpeuses",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Type B (fiche LAMP, réarmement)"
+                  ],
+                  [
+                    "OFF",
+                    "Type A (standard)"
+                  ]
+                ]
+              },
+              {
+                "code": "S3 · DIP 4",
+                "def": "—",
+                "titre": "Détection d'obstacle (reverser ampèremétrique) sur les deux moteurs",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Exclue"
+                  ],
+                  [
+                    "OFF",
+                    "Active"
+                  ]
+                ]
+              },
+              {
+                "code": "S3 · DIP 5",
+                "def": "—",
+                "titre": "Plage de force de la détection en ralentissement (deux moteurs)",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Plage de force haute"
+                  ],
+                  [
+                    "OFF",
+                    "Plage de force basse"
+                  ]
+                ]
+              },
+              {
+                "code": "S3 · DIP 6 · 7",
+                "def": "—",
+                "titre": "Non utilisés",
+                "valeurs": [
+                  [
+                    "−",
+                    "Sans fonction"
+                  ]
+                ]
+              },
+              {
+                "code": "S3 · DIP 8",
+                "def": "—",
+                "titre": "Lumière de courtoisie",
+                "valeurs": [
+                  [
+                    "ON",
+                    "S'éteint immédiatement à la fin de la fermeture"
+                  ],
+                  [
+                    "OFF",
+                    "S'éteint 3 minutes après la fin de la fermeture"
+                  ]
+                ]
+              },
+              {
+                "code": "S3 · DIP 9",
+                "def": "—",
+                "titre": "Photo 1 avec encoder (bornes 17-18)",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Pendant l'ouverture ou la fermeture : arrêt puis réouverture complète quand l'obstacle est ôté"
+                  ],
+                  [
+                    "OFF",
+                    "En fermeture : arrêt et inversion ; pas de fonction à l'ouverture"
+                  ]
+                ],
+                "note": "Voir la note sur l'écart d'annotation (PHOTO 1 / PHOTO 2)."
+              },
+              {
+                "code": "S3 · DIP 10",
+                "def": "—",
+                "titre": "Photo 2 avec encoder (bornes 17-19)",
+                "valeurs": [
+                  [
+                    "ON",
+                    "À l'ouverture et à la fermeture : arrêt, inversion 2 s, puis refermeture après 1 minute"
+                  ],
+                  [
+                    "OFF",
+                    "À l'ouverture : arrêt, inversion 2 s, refermeture après 1 minute ; pas de fonction à la fermeture"
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "nom": "Mini-dip S4 — type de moteurs",
+            "items": [
+              {
+                "code": "S4 · DIP 1 · 2",
+                "def": "—",
+                "titre": "Moteurs sans / avec encoder",
+                "valeurs": [
+                  [
+                    "OFF · OFF",
+                    "Moteurs standard sans encoder"
+                  ],
+                  [
+                    "ON · OFF",
+                    "Encoder 4 pôles"
+                  ],
+                  [
+                    "OFF · ON",
+                    "Encoder 6 pôles"
+                  ],
+                  [
+                    "ON · ON",
+                    "Encoder 8 pôles"
+                  ]
+                ]
+              },
+              {
+                "code": "S4 · DIP 3",
+                "def": "—",
+                "titre": "Moteurs sans / avec fin de course",
+                "valeurs": [
+                  [
+                    "ON",
+                    "À utiliser avec moteurs avec fin de course : l'activation de l'encoder renverse le mouvement jusqu'au fin de course de fermeture"
+                  ],
+                  [
+                    "OFF",
+                    "À utiliser avec moteurs sans fin de course : dans les 7 dernières secondes de la manœuvre, l'activation de l'encoder / reverse arrête le portail sans inversion"
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "nom": "Trimmers",
+            "items": [
+              {
+                "code": "P1",
+                "def": "—",
+                "titre": "Force (couple) du moteur 1",
+                "valeurs": [
+                  [
+                    "−  …  +",
+                    "Réglage de la poussée"
+                  ]
+                ]
+              },
+              {
+                "code": "P4",
+                "def": "—",
+                "titre": "Force (couple) du moteur 2",
+                "valeurs": [
+                  [
+                    "−  …  +",
+                    "Réglage de la poussée"
+                  ]
+                ]
+              },
+              {
+                "code": "P2",
+                "def": "—",
+                "titre": "Sensibilité d'obstacle moteur 1 (travail)",
+                "valeurs": [
+                  [
+                    "−  …  +",
+                    "Temps d'intervention plus court vers « − », plus long vers « + » (selon la notice)"
+                  ]
+                ]
+              },
+              {
+                "code": "P5",
+                "def": "—",
+                "titre": "Sensibilité d'obstacle moteur 2 (travail)",
+                "valeurs": [
+                  [
+                    "−  …  +",
+                    "Même réglage pour le moteur 2"
+                  ]
+                ]
+              },
+              {
+                "code": "P3",
+                "def": "—",
+                "titre": "Sensibilité d'obstacle en ralentissement (2 moteurs)",
+                "valeurs": [
+                  [
+                    "−  …  +",
+                    "Au maximum : exclut la détection en ralentissement"
+                  ]
+                ]
+              },
+              {
+                "code": "P6",
+                "def": "—",
+                "titre": "Vitesse de ralentissement (2 moteurs)",
+                "valeurs": [
+                  [
+                    "−  …  +",
+                    "Réglage de la vitesse en fin de course"
+                  ]
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "apprentissage": {
+        "avant": [
+          "Choisir S4 DIP 1-2-3 (type de moteur, fins de course), S2 DIP 9 (ON = 2 moteurs, OFF = 1 moteur), et la vitesse de ralentissement (P6) avant la mémorisation : la changer ensuite oblige à refaire la procédure.",
+          "Couper le courant puis mettre S2 DIP 10 sur ON. Remettre sous tension : la LED REV 1 rouge fixe indique le menu « temps de travail ».",
+          "PS3 choisit le temps de pause (travail ou piéton), PS1 et PS2 calculent et confirment les valeurs. PS1 et PS2 peuvent être doublés par des boutons NO sur 26-28 et 27-28. L'apprentissage ne se fait pas par la radiocommande.",
+          "Coup de bélier : portail fermé, appuyer sur PS2 (poussée en fermeture sur M1 et déblocage de l'électro-serrure, seulement si le fin de course électrique de fermeture est ponté ou désactivé), puis PS1 pour mémoriser."
+        ],
+        "etapes": [
+          "Un moteur (8.1) : si le portail n'est pas fermé, maintenir PS2 jusqu'à la fermeture. Ouverture piéton : maintenir PS1 puis relâcher (impulsion brève pour sauter).",
+          "Temps de travail en ouverture : maintenir PS1. Pour un ralentissement, relâcher PS1 au point souhaité puis maintenir PS1 jusqu'à la fin de l'ouverture ; pour une course entière à vitesse normale, maintenir PS1 jusqu'au bout.",
+          "Même principe pour la fermeture. Confirmer par une impulsion brève sur PS2 (REV 1 clignote), puis PS2 encore : les 3 LED vertes pendant 2 s indiquent la mémorisation.",
+          "Deux moteurs (8.2) : procédure en deux temps comme sur l'EQ2006 (décalage à l'ouverture, ouverture piéton, ouverture M1 puis M2, décalage à la fermeture, fermeture M2 puis M1).",
+          "Temps de pause (8.3 / 8.4) : PS3 pour choisir travail ou piéton ; maintenir PS1 pendant la durée voulue, PS2 pour valider et confirmer."
+        ],
+        "apres": [
+          "À la fin, remettre S2 DIP 10 sur OFF et remettre sous tension.",
+          "Détection d'obstacle (S3 DIP 4 sur OFF) : en ouverture arrêt et inversion 2 s ; en fermeture arrêt et réouverture complète. Réglage : P2 / P5 en travail, P3 en ralentissement. L'encoder (sensibilité fixe) lit la variation de vitesse, le reverse la consommation de courant ; les deux peuvent fonctionner ensemble ou séparément.",
+          "Avec encoder : après détection, en fermeture inversion complète puis refermeture après 1 minute (anticipable par un START) ; en ouverture inversion 2 s puis refermeture après 1 minute."
+        ]
+      }
+    },
+    {
+      "id": "casit-eq212",
+      "nom": "EQ212",
+      "modeles": "EQ212 R1.7 / R1.8 — 1 moteur monophasé 230 V avec encoder (300 W)",
+      "type": "Portail coulissant ou battant 1 moteur 230 V avec ou sans encoder — 10 dip, 5 trimmers, 4 cavaliers",
+      "source": "Notice CASIT EQ212 R1.7 / R1.8 (Rev. 04 du 16/03/2011, partie française p. 9-12)",
+      "codes": [
+        {
+          "code": "L1 (LINEA)",
+          "type": "led",
+          "titre": "Alimentation",
+          "action": "Verte allumée : tension secteur présente."
+        },
+        {
+          "code": "L2 (FCA)",
+          "type": "led",
+          "titre": "Fin de course ouverture",
+          "action": "Rouge allumée : fin de course ouvre activé."
+        },
+        {
+          "code": "L3 (FCC)",
+          "type": "led",
+          "titre": "Fin de course fermeture",
+          "action": "Rouge allumée : fin de course ferme activé."
+        },
+        {
+          "code": "L4 (STOP)",
+          "type": "led",
+          "titre": "Stop actif",
+          "action": "Jaune allumée : entrée STOP ouverte."
+        },
+        {
+          "code": "L5 (FOTO 1)",
+          "type": "led",
+          "titre": "Cellule 1 obscurcie",
+          "action": "Jaune allumée : cellule 1 obscurcie."
+        },
+        {
+          "code": "L6 (STR)",
+          "type": "led",
+          "titre": "START actif",
+          "action": "Rouge allumée : START (ou OUVRE) actif."
+        },
+        {
+          "code": "L7 (PED)",
+          "type": "led",
+          "titre": "Piéton actif",
+          "action": "Rouge allumée : piéton (ou FERME) actif."
+        },
+        {
+          "code": "L8 (OST)",
+          "type": "led",
+          "titre": "Reverse (détection d'obstacle)",
+          "action": "Rouge. Indique l'intervention du reverse. Doit s'allumer fixe dans les 2,5 dernières secondes de la course, avant l'arrivée en butée mécanique : sert à régler le temps de travail P2 (R1.7)."
+        },
+        {
+          "code": "L9 (FOTO 2)",
+          "type": "led",
+          "titre": "Cellule 2 obscurcie",
+          "action": "Jaune allumée : cellule 2 obscurcie (R1.8)."
+        },
+        {
+          "code": "L8 pas fixe en fin de course",
+          "type": "diag",
+          "titre": "Temps de travail mal réglé",
+          "action": "Régler P2 jusqu'à ce que L8 s'allume fixe dans les 2,5 dernières secondes ; sinon ralentissement et temps de compensation ne fonctionnent pas correctement."
+        },
+        {
+          "code": "Obstacle détecté, fermeture",
+          "type": "symptome",
+          "titre": "Reverse ou encoder en fermeture",
+          "action": "Réouverture complète. Si l'obstacle revient à la fermeture suivante : arrêt puis inversion 2 s. Avec encoder : inversion complète, refermeture après 1 minute (START pour anticiper)."
+        },
+        {
+          "code": "Obstacle détecté, ouverture",
+          "type": "symptome",
+          "titre": "Reverse ou encoder en ouverture",
+          "action": "Arrêt puis fermeture pendant 2 s ; avec encoder : inversion 2 s puis refermeture après 1 minute."
+        },
+        {
+          "code": "Cellule ou STOP en panne",
+          "type": "symptome",
+          "titre": "Manœuvre d'urgence",
+          "action": "START + PIÉTON (15-16) maintenus 4 s : le moteur ouvre en homme présent ; deuxième appui : ferme. Cellules, barre palpeuse, embrayage électronique, reverse et encoder inactifs ; fins de course, clignotant et ralentissement final actifs."
+        }
+      ],
+      "bornier": {
+        "groupes": [
+          {
+            "nom": "Alimentation, moteur, clignotant",
+            "bornes": [
+              {
+                "n": "1 · 2",
+                "label": "Alimentation 230 V",
+                "desc": "Obligatoire : phase sur 1, neutre sur 2",
+                "t": "alim"
+              },
+              {
+                "n": "G (terre)",
+                "label": "Terre",
+                "desc": "2 bornes fixes avec symbole de terre pour la ligne et le moteur",
+                "t": "alim"
+              },
+              {
+                "n": "3 · 4 · 5",
+                "label": "Moteur M1",
+                "desc": "300 W maxi. 3 = ouverture (condensateur), 4 = commun, 5 = fermeture (condensateur)",
+                "t": "moteur"
+              },
+              {
+                "n": "6 · 7",
+                "label": "Clignotant 230 V",
+                "desc": "40 W maxi, activé par la sélection du dip 4, à l'ouverture et à la fermeture",
+                "t": "sortie"
+              },
+              {
+                "n": "8 · 9",
+                "label": "Lumière de courtoisie",
+                "desc": "Contact sec NO, 230 V 4 A. Activé au début de chaque manœuvre, s'éteint après 3 minutes",
+                "t": "sortie"
+              }
+            ]
+          },
+          {
+            "nom": "Commandes et sécurités (sans encoder)",
+            "bornes": [
+              {
+                "n": "10",
+                "label": "Commun fins de course",
+                "desc": "Entrée commune des fins de course",
+                "t": "autre"
+              },
+              {
+                "n": "11",
+                "label": "Fin de course ferme",
+                "desc": "Entrée N.F.",
+                "t": "nf"
+              },
+              {
+                "n": "12",
+                "label": "Fin de course ouvre",
+                "desc": "Entrée N.F.",
+                "t": "nf"
+              },
+              {
+                "n": "13",
+                "label": "Cellule 1",
+                "desc": "Entrée N.F. Sans encoder : active seulement à la fermeture (arrêt et réouverture)",
+                "t": "nf"
+              },
+              {
+                "n": "14",
+                "label": "STOP",
+                "desc": "Entrée N.F. Après un stop, un autre ordre redémarre le moteur dans le sens inverse",
+                "t": "nf"
+              },
+              {
+                "n": "15",
+                "label": "START",
+                "desc": "Entrée N.O.",
+                "t": "no"
+              },
+              {
+                "n": "16",
+                "label": "Piéton ou FERME",
+                "desc": "Selon le dip 7",
+                "t": "no"
+              },
+              {
+                "n": "17",
+                "label": "Commun des entrées",
+                "desc": "Commun pour 13-14-15-16",
+                "t": "autre"
+              },
+              {
+                "n": "25 · 26",
+                "label": "Cellule 2 (sécurité)",
+                "desc": "Entrée N.F., fonction selon le dip 3. Moteurs sans encoder seulement",
+                "t": "nf"
+              }
+            ]
+          },
+          {
+            "nom": "Avec encoder",
+            "bornes": [
+              {
+                "n": "21",
+                "label": "Alimentation encoder +",
+                "desc": "Fil marron",
+                "t": "alim"
+              },
+              {
+                "n": "25",
+                "label": "Signal du capteur encoder",
+                "desc": "Fil noir",
+                "t": "autre"
+              },
+              {
+                "n": "26",
+                "label": "Alimentation encoder −",
+                "desc": "Fil bleu",
+                "t": "alim"
+              }
+            ]
+          },
+          {
+            "nom": "Accessoires, radio",
+            "bornes": [
+              {
+                "n": "18 · 19",
+                "label": "Électro-serrure",
+                "desc": "12 V AC, 15 W maxi (valeur de la notice), 4 s à l'ouverture",
+                "t": "sortie"
+              },
+              {
+                "n": "19 · 20",
+                "label": "Alimentation 24 V AC",
+                "desc": "Pour récepteur radio et cellules, 350 mA maxi (transformateur 2e secondaire 12-0-12 V)",
+                "t": "sortie"
+              },
+              {
+                "n": "21 · 22",
+                "label": "Contact de sécurité N.F.",
+                "desc": "L'ouverture du contact coupe l'alimentation des bobines des relais",
+                "t": "nf"
+              },
+              {
+                "n": "23 · 24",
+                "label": "2e canal radio",
+                "desc": "Sortie à contact sec. Piéton par radio : relier M6 23-24 à M2 16-17",
+                "t": "sortie"
+              },
+              {
+                "n": "26 · 27",
+                "label": "Antenne",
+                "desc": "Masse de la gaine sur 26 (selon la notice), âme sur 27",
+                "t": "autre"
+              }
+            ]
+          }
+        ],
+        "fusibles": "Fusible de ligne F1 5 A ; fusible 12 / 24 V électronique à réarmement automatique. Relais moteur 5 A 250 V AC (cos φ = 1) ou 3 A (cos φ = 0,4). Transformateur : primaire 220 V, secondaire 1 = 12 V 300 mA (logique), secondaire 2 = 12-0-12 V 350 mA (accessoires).",
+        "notes": [
+          "Toute entrée N.F. non utilisée doit être court-circuitée sur le commun des entrées (notice).",
+          "Boîtier standard 200 × 150 × 150 mm, IP 54. Température -5 / +60 °C.",
+          "Fonction piéton : ouverture partielle d'environ 10 s, puis fonctionnement choisi par les dip ; pendant la fermeture piéton, les cellules rouvrent le portail environ 10 s. Écarts de la notice : le texte donne le temps de fermeture « identique au temps de travail P1 » (P1 est la force) et « DIP 2 OFF = refermeture automatique » (le tableau donne DIP 2 ON).",
+          "Écart de la notice : les bornes 21 et 26 servent à la fois au contact de sécurité 21-22 / à l'antenne 26-27 et à l'alimentation de l'encoder (21 et 26) ; le tableau des bornes précise que le câblage encoder remplace l'entrée cellule 2 (25-26). Suivre le schéma d'origine de la carte.",
+          "Écart de la notice : la ligne de la borne 13 renvoie au « réglage DIP 4 » pour les moteurs avec encoder ; le tableau des dip donne la fonction de la cellule 1 au dip 4.",
+          "Horloge : sur l'entrée START. Dip 1 ON, dip 2 ON et dip 3 OFF (sans encoder) ou dip 4 ON (avec encoder). Quand l'horloge ouvre le contact et après le temps de pause, le portail se referme."
+        ]
+      },
+      "parametres": {
+        "intro": "Dix dip, cinq trimmers (P1 à P5) et quatre cavaliers (J1 à J4). Valeurs d'usine non indiquées dans la notice (—). Pour qu'un nouveau programme soit pris en compte : couper l'alimentation quelques secondes puis la remettre, ou faire un cycle complet d'ouverture-fermeture jusqu'aux fins de course (la carte exécute encore l'ancien programme pendant ce cycle).",
+        "navigation": [
+          "Ordre de réglage : régler la force (P1) puis affiner le temps de travail (P2) jusqu'à ce que la LED L8 s'allume fixe pendant les 2,5 dernières secondes de la course.",
+          "Temps de compensation en fin de temps de travail : environ 5 s sans ralentissement, 10 s avec ralentissement."
+        ],
+        "groupes": [
+          {
+            "nom": "Dip",
+            "items": [
+              {
+                "code": "DIP 1",
+                "def": "—",
+                "titre": "Semi-automatique ou pas-à-pas",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Semi-automatique : les START ne sont pas pris en compte à l'ouverture (utilisé pour la fonction horloge)"
+                  ],
+                  [
+                    "OFF",
+                    "Pas-à-pas : ouvre, stop, ferme, ouvre"
+                  ]
+                ]
+              },
+              {
+                "code": "DIP 2",
+                "def": "—",
+                "titre": "Refermeture automatique",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Refermeture automatique après le temps de pause"
+                  ],
+                  [
+                    "OFF",
+                    "Pas de refermeture automatique (il faut une impulsion pour fermer)"
+                  ]
+                ]
+              },
+              {
+                "code": "DIP 3",
+                "def": "—",
+                "titre": "Cellule 2 (moteurs sans encoder)",
+                "valeurs": [
+                  [
+                    "ON",
+                    "En ouverture et en fermeture : arrêt et inversion 2 s"
+                  ],
+                  [
+                    "OFF",
+                    "En ouverture et en fermeture : arrêt et réouverture quand l'obstacle est enlevé (fonction portail accordéon)"
+                  ]
+                ]
+              },
+              {
+                "code": "DIP 3 (avec encoder)",
+                "def": "—",
+                "titre": "Fonction encoder",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Arrête et inverse le mouvement jusqu'à l'intervention des fins de course"
+                  ],
+                  [
+                    "OFF",
+                    "Dans les 5 dernières secondes de la course : arrête sans inversion"
+                  ]
+                ]
+              },
+              {
+                "code": "DIP 4",
+                "def": "—",
+                "titre": "Clignotant d'alerte (sans encoder)",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Préclignotement 1 s"
+                  ],
+                  [
+                    "OFF",
+                    "Préclignotement 4 s"
+                  ]
+                ]
+              },
+              {
+                "code": "DIP 4 (avec encoder)",
+                "def": "—",
+                "titre": "Cellule 1 et préclignotement",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Cellule 1 : en ouverture et fermeture, arrêt et réouverture après obstacle (portail accordéon) ; préclignotement 1 s"
+                  ],
+                  [
+                    "OFF",
+                    "Cellule 1 active seulement à la fermeture : arrêt et réouverture"
+                  ]
+                ],
+                "note": "La notice classe les deux entrées de DIP 4 sous « que moteurs sans / avec encoder » : suivre la lecture du tableau de la carte."
+              },
+              {
+                "code": "DIP 5",
+                "def": "—",
+                "titre": "Coup de bélier / serrure",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Coup de bélier : à chaque START, le portail fermé part en fermeture 3 s pour libérer la serrure, puis ouvre (serrure alimentée environ 4 s)"
+                  ],
+                  [
+                    "OFF",
+                    "Pas de coup de bélier : serrure normale alimentée environ 4 s à chaque START"
+                  ]
+                ]
+              },
+              {
+                "code": "DIP 6",
+                "def": "—",
+                "titre": "Homme mort ou impulsion",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Homme mort (bouton enfoncé)"
+                  ],
+                  [
+                    "OFF",
+                    "Impulsion"
+                  ]
+                ]
+              },
+              {
+                "code": "DIP 7",
+                "def": "—",
+                "titre": "Entrées de commande",
+                "valeurs": [
+                  [
+                    "ON",
+                    "START et PIÉTON"
+                  ],
+                  [
+                    "OFF",
+                    "OUVRE et FERME (le contact piéton sert de contact ferme)"
+                  ]
+                ]
+              },
+              {
+                "code": "DIP 8",
+                "def": "—",
+                "titre": "Ralentissement",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Actif sur les 5 dernières secondes de la course ; intensité réglée par P5"
+                  ],
+                  [
+                    "OFF",
+                    "Pas de ralentissement"
+                  ]
+                ]
+              },
+              {
+                "code": "DIP 9",
+                "def": "—",
+                "titre": "Type de moteur",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Moteurs avec encoder"
+                  ],
+                  [
+                    "OFF",
+                    "Moteurs sans encoder (standard)"
+                  ]
+                ]
+              },
+              {
+                "code": "DIP 10",
+                "def": "—",
+                "titre": "Moteur après le fin de course ferme",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Le moteur continue 3 s après l'activation du fin de course ferme"
+                  ],
+                  [
+                    "OFF",
+                    "Le moteur s'arrête à l'activation du fin de course ferme"
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "nom": "Trimmers",
+            "items": [
+              {
+                "code": "P1",
+                "def": "—",
+                "titre": "Force de poussée",
+                "valeurs": [
+                  [
+                    "110 V … 230 V",
+                    "Réglage de la tension de poussée (min. 110 V, max. 230 V)"
+                  ]
+                ]
+              },
+              {
+                "code": "P2",
+                "def": "—",
+                "titre": "Temps de travail",
+                "valeurs": [
+                  [
+                    "0 … 90 s",
+                    "Régler pour que L8 soit fixe dans les 2,5 dernières secondes"
+                  ]
+                ]
+              },
+              {
+                "code": "P3",
+                "def": "—",
+                "titre": "Temps de pause",
+                "valeurs": [
+                  [
+                    "0 … 125 s",
+                    "Avant refermeture automatique"
+                  ]
+                ]
+              },
+              {
+                "code": "P4",
+                "def": "—",
+                "titre": "Sensibilité du reverse",
+                "valeurs": [
+                  [
+                    "−  …  +",
+                    "Vers « + » : force supérieure. Actif seulement avec J4 ouvert"
+                  ]
+                ]
+              },
+              {
+                "code": "P5",
+                "def": "—",
+                "titre": "Vitesse de ralentissement",
+                "valeurs": [
+                  [
+                    "−  …  +",
+                    "Avec le dip 8 sur ON"
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "nom": "Cavaliers",
+            "items": [
+              {
+                "code": "J1",
+                "def": "—",
+                "titre": "Récepteur radio",
+                "valeurs": [
+                  [
+                    "Embrochable",
+                    "Borne pour récepteur radio embrochable 12 V DC"
+                  ]
+                ]
+              },
+              {
+                "code": "J2",
+                "def": "—",
+                "titre": "Démarrage du moteur",
+                "valeurs": [
+                  [
+                    "Fermé (1)",
+                    "À chaque START : tension maximale 2,5 s, puis tension réglée par P1"
+                  ],
+                  [
+                    "Ouvert (0)",
+                    "Pas de démarrage"
+                  ]
+                ]
+              },
+              {
+                "code": "J3",
+                "def": "—",
+                "titre": "Puissance maximale en fermeture",
+                "valeurs": [
+                  [
+                    "Fermé (1)",
+                    "Puissance maximale dans les 2 dernières secondes (aide au couplage de la serrure)"
+                  ],
+                  [
+                    "Ouvert (0)",
+                    "Exclue"
+                  ]
+                ]
+              },
+              {
+                "code": "J4",
+                "def": "—",
+                "titre": "Reverse (détection ampèremétrique)",
+                "valeurs": [
+                  [
+                    "Fermé (1)",
+                    "Reverse exclu"
+                  ],
+                  [
+                    "Ouvert (0)",
+                    "Reverse actif (jamais actif en ralentissement)"
+                  ]
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "apprentissage": {
+        "avant": [
+          "La notice EQ212 ne décrit pas de procédure d'apprentissage : le temps de travail se règle au trimmer P2, la pause au trimmer P3.",
+          "Choisir d'abord le type de moteur (dip 9), le ralentissement (dip 8) et les fonctions de commande."
+        ],
+        "etapes": [
+          "Régler la force de poussée avec P1 à la valeur voulue.",
+          "Affiner le temps de travail avec P2 : la LED L8 (OST) doit s'allumer fixe pendant les 2,5 dernières secondes de la course.",
+          "Régler la pause (P3), puis le reverse (P4) et la vitesse de ralentissement (P5) si utilisés."
+        ],
+        "apres": [
+          "Reverse : intervention à l'ouverture = arrêt puis fermeture 2 s ; à la fermeture = réouverture complète. Aux 2,5 dernières secondes de la course, l'intervention arrête le portail, ouvert ou fermé.",
+          "Reverse et encoder peuvent fonctionner ensemble ou séparément ; la sensibilité de l'encoder est fixe."
+        ]
+      }
+    },
+    {
+      "id": "casit-keq013",
+      "nom": "KEQ013",
+      "modeles": "KEQ013 (firmware 1829) — 1 ou 2 moteurs 230 V (2 × 350 W), radio 433 MHz intégrée",
+      "type": "Portail battant 1 ou 2 moteurs 230 V — afficheur 4 chiffres + 3 poussoirs, horloge hebdomadaire, soft-start, détection d'obstacle",
+      "source": "Notice CASIT KEQ013 Rev. 06 du 09/06/2021 (32 p., français ; certaines pages superposent les rév. 05 et 06)",
+      "codes": [
+        {
+          "code": "ER 01",
+          "type": "erreur",
+          "titre": "TRIAC endommagé",
+          "action": "Connexion moteur non conforme (court-circuit) : triac hors service. Vérifier le câblage et les moteurs."
+        },
+        {
+          "code": "----",
+          "type": "afficheur",
+          "titre": "Attente de code radio / reset mémoire",
+          "action": "Menu C : la carte attend l'appui sur une touche de l'émetteur. Après C 03, maintenir P1 jusqu'à voir ---- (reset de la mémoire codes terminé)."
+        },
+        {
+          "code": "SUcc",
+          "type": "afficheur",
+          "titre": "Mémorisation radio réussie",
+          "action": "Le code de l'émetteur est mémorisé (C 01 START ou C 02 PIÉTON)."
+        },
+        {
+          "code": "cAnc",
+          "type": "afficheur",
+          "titre": "Annulation de code réussie",
+          "action": "Code supprimé (C 04)."
+        },
+        {
+          "code": "tr.AP.",
+          "type": "afficheur",
+          "titre": "Horaire d'ouverture automatique actif",
+          "action": "Alterné avec l'heure : plage horaire d'ouverture automatique en cours (P 01 = 1)."
+        },
+        {
+          "code": "tr.bL.",
+          "type": "afficheur",
+          "titre": "Horaire de blocage actif",
+          "action": "Alterné avec l'heure : plage de blocage en cours (P 02 = 1). Seuls START (borne 17) et PIÉTON (borne 22) fonctionnent."
+        },
+        {
+          "code": "dA-1 … dA-7",
+          "type": "afficheur",
+          "titre": "Jour de la semaine",
+          "action": "1 = lundi … 7 = dimanche (réglage de l'heure ou programmation des horaires)."
+        },
+        {
+          "code": "- - -",
+          "type": "afficheur",
+          "titre": "Horaires pleins",
+          "action": "28 plages d'horaires programmées : plus de plage disponible."
+        },
+        {
+          "code": "4 chiffres au démarrage",
+          "type": "afficheur",
+          "titre": "Version du logiciel",
+          "action": "À la mise sous tension l'écran affiche 4 chiffres : vérifier qu'ils sont identiques à ceux imprimés sur la notice (1829)."
+        },
+        {
+          "code": "LED rouges FCO / FCF / STOP / FOTO",
+          "type": "led",
+          "titre": "Entrées de sécurité",
+          "action": "Normalement toutes allumées (contact fermé sur le commun)."
+        },
+        {
+          "code": "LED vertes START / PIÉTON",
+          "type": "led",
+          "titre": "Entrées de commande",
+          "action": "Normalement éteintes ; s'allument pendant la commande."
+        },
+        {
+          "code": "Test photocellule en défaut",
+          "type": "diag",
+          "titre": "Clignotant 5 s, portail bloqué",
+          "action": "Avec le test activé (S 22 / S 23 / S 24 + S 06), si les cellules ne sont pas libres ou en panne, le clignotant s'allume 5 s et le portail ne s'ouvre pas."
+        },
+        {
+          "code": "Fin de course non branché",
+          "type": "symptome",
+          "titre": "Entrée de fin de course inutilisée",
+          "action": "Mettre à 0 l'entrée correspondante : S 11 (FCO1), S 12 (FCF1), S 13 (FCO2), S 14 (FCF2), S 15 (STOP), S 16 (FOTO A), S 17 (FOTO B). Par défaut elles sont toutes à 1."
+        },
+        {
+          "code": "Maintenance",
+          "type": "diag",
+          "titre": "Compteur et délai d'entretien",
+          "action": "R 14 affiche le nombre de manœuvres en centaines (non réinitialisable). Quand S 29 est atteint, chaque ouverture reçoit 5 s de présignalisation en plus de T 15."
+        }
+      ],
+      "bornier": {
+        "groupes": [
+          {
+            "nom": "Alimentation, clignotant, moteurs",
+            "bornes": [
+              {
+                "n": "1",
+                "label": "Alimentation 230 V neutre",
+                "desc": "Alimentation 230 V 50 Hz",
+                "t": "alim"
+              },
+              {
+                "n": "2",
+                "label": "Non utilisée",
+                "desc": "—",
+                "t": "autre"
+              },
+              {
+                "n": "3",
+                "label": "Alimentation 230 V phase",
+                "desc": "Alimentation 230 V 50 Hz",
+                "t": "alim"
+              },
+              {
+                "n": "4 · 5",
+                "label": "Clignotant 230 V",
+                "desc": "Avec électronique, ou lumière de courtoisie 230 V, 40 W maxi",
+                "t": "sortie"
+              },
+              {
+                "n": "6 · 7 · 8",
+                "label": "Moteur 1",
+                "desc": "350 W maxi. 6 = commun, 7 = ouvre, 8 = ferme",
+                "t": "moteur"
+              },
+              {
+                "n": "9 · 10 · 11",
+                "label": "Moteur 2",
+                "desc": "350 W maxi. 9 = commun, 10 = ouvre, 11 = ferme",
+                "t": "moteur"
+              }
+            ]
+          },
+          {
+            "nom": "Fins de course, sécurités, commandes",
+            "bornes": [
+              {
+                "n": "12",
+                "label": "Fin de course ferme MOT 2 (FCF2)",
+                "desc": "Entrée N.F.",
+                "t": "nf"
+              },
+              {
+                "n": "13",
+                "label": "Fin de course ouvre MOT 2 (FCO2)",
+                "desc": "Entrée N.F.",
+                "t": "nf"
+              },
+              {
+                "n": "14",
+                "label": "Fin de course ferme MOT 1 (FCF1)",
+                "desc": "Entrée N.F.",
+                "t": "nf"
+              },
+              {
+                "n": "15",
+                "label": "Fin de course ouvre MOT 1 (FCO1)",
+                "desc": "Entrée N.F.",
+                "t": "nf"
+              },
+              {
+                "n": "16",
+                "label": "Photocellule A",
+                "desc": "Entrée N.F., seulement en fermeture",
+                "t": "nf"
+              },
+              {
+                "n": "17",
+                "label": "START",
+                "desc": "Entrée pas-à-pas N.O. (horloge possible entre 17 et 22 selon la notice)",
+                "t": "no"
+              },
+              {
+                "n": "21",
+                "label": "STOP",
+                "desc": "Entrée N.F.",
+                "t": "nf"
+              },
+              {
+                "n": "22",
+                "label": "PIÉTON",
+                "desc": "Entrée pas-à-pas N.O.",
+                "t": "no"
+              },
+              {
+                "n": "23",
+                "label": "Photocellule B",
+                "desc": "Entrée N.F., en ouverture et en fermeture",
+                "t": "nf"
+              },
+              {
+                "n": "24",
+                "label": "Commun des entrées",
+                "desc": "Commun pour toutes les entrées (services, sécurités, antenne)",
+                "t": "autre"
+              },
+              {
+                "n": "33 · 34",
+                "label": "Barre palpeuse",
+                "desc": "Arrête et inverse 1,5 s. S 30 : 0 = désactivée, 1 = contact N.F., 2 = résistive 8K2",
+                "t": "nf"
+              }
+            ]
+          },
+          {
+            "nom": "Accessoires, radio",
+            "bornes": [
+              {
+                "n": "18",
+                "label": "Sortie 24 V AC",
+                "desc": "Pour radio, photocellules, etc. 400 mA maxi",
+                "t": "sortie"
+              },
+              {
+                "n": "19",
+                "label": "Commun 12 / 24 V AC",
+                "desc": "À utiliser seulement pour l'alimentation des photocellules",
+                "t": "autre"
+              },
+              {
+                "n": "20",
+                "label": "Électro-serrure 12 V AC",
+                "desc": "50 Hz, 1 A, active seulement à l'ouverture",
+                "t": "sortie"
+              },
+              {
+                "n": "25",
+                "label": "Antenne",
+                "desc": "Entrée antenne (câble de la centrale)",
+                "t": "autre"
+              },
+              {
+                "n": "26 · 27",
+                "label": "Voyant ou clignotant sans électronique",
+                "desc": "Contact voyant ; devient 2e canal radio avec S 25",
+                "t": "sortie"
+              },
+              {
+                "n": "28 · 29",
+                "label": "Contact sec interbloc / test",
+                "desc": "Sortie test des photocellules",
+                "t": "sortie"
+              },
+              {
+                "n": "30",
+                "label": "Sortie 12 V AC",
+                "desc": "1,1 A (électro-serrure comprise), commun borne 19",
+                "t": "sortie"
+              },
+              {
+                "n": "31",
+                "label": "+24 V DC",
+                "desc": "500 mA maxi",
+                "t": "sortie"
+              },
+              {
+                "n": "32",
+                "label": "−24 V DC / commun",
+                "desc": "Commun pour les entrées (services, sécurités)",
+                "t": "autre"
+              }
+            ]
+          }
+        ],
+        "fusibles": "Fusible de ligne F1 5 A ; F2 200 mA. Pile CR2032 pour l'horloge (support BT1).",
+        "notes": [
+          "Alimenter la carte en câble 3 × 1,5 mm² (mise à la terre près de la carte si plus de 30 m) ; moteurs en câble 4 × 1,5 mm² ; autres liaisons 0,5 à 0,75 mm².",
+          "Plusieurs contacts N.F. se branchent en série, plusieurs N.O. en parallèle. Les contacts doivent être secs (sans potentiel).",
+          "Écart de la notice : la page d'introduction demande de ponter sur le commun les entrées N.F. non utilisées, la page 6 demande de ne pas les ponter mais de les mettre à 0 (S 11 à S 17). Suivre la page 6 (révision 06) : mettre à 0 l'entrée inutilisée.",
+          "Écart de la notice : le § 3 situe START « borne 16 » alors que le tableau des bornes donne START en 17 et la photocellule A en 16.",
+          "Écart de la notice : S 08 « contrôle radio » est donné par défaut à 0 au § 7.2 et à 1 dans le tableau récapitulatif.",
+          "Moteur avec frein électromagnétique : S 26 = 1, la sortie électro-serrure débloque le frein pendant tout le fonctionnement du moteur.",
+          "Les communs : borne 19 uniquement pour l'alimentation des photocellules, borne 24 pour le commun des contacts.",
+          "Capacité mémoire radio : 190 codes (type rolling). Émetteurs acceptés : S10, S20, S21, SENDY 433 MHz."
+        ]
+      },
+      "parametres": {
+        "intro": "Menu à six groupes accessible par les poussoirs P1 / P2 / P3 portail fermé : t (temps), L (force et détection), S (logiques), C (émetteurs), R (activation des sorties et apprentissage), P (horloge), E (sortie).",
+        "navigation": [
+          "P1 portail fermé : accès aux réglages. P2 monte, P3 descend pour choisir la lettre du groupe ; P1 confirme. Même principe pour choisir le paramètre.",
+          "Retour au groupe : P2 + P3 ensemble. Sortie et sauvegarde : couper puis remettre l'alimentation, ou attendre 1 minute sans rien faire (autoreset).",
+          "Conseil de la notice : garder les paramètres par défaut puis les modifier ensuite, point par point.",
+          "Reset aux valeurs d'usine : S 18 (annule tous les paramètres programmés). Procédure : au menu, aller sur S, sélectionner S 18 en maintenant P2 puis confirmer par P1."
+        ],
+        "groupes": [
+          {
+            "nom": "T — Temps",
+            "items": [
+              {
+                "code": "T 01 · T 02",
+                "def": "22 s",
+                "titre": "Temps d'ouverture / fermeture MOT 1",
+                "valeurs": [
+                  [
+                    "2 … 127,5 s",
+                    "Réglage du temps de course"
+                  ]
+                ]
+              },
+              {
+                "code": "T 03 · T 04",
+                "def": "22 s",
+                "titre": "Temps d'ouverture / fermeture MOT 2",
+                "valeurs": [
+                  [
+                    "2 … 127,5 s",
+                    "Réglage du temps de course"
+                  ]
+                ]
+              },
+              {
+                "code": "T 05 · T 06",
+                "def": "2 s",
+                "titre": "Position de ralentissement à l'ouverture MOT 1 / MOT 2",
+                "valeurs": [
+                  [
+                    "2 … 127,5 s",
+                    "Secondes avant l'ouverture complète"
+                  ]
+                ]
+              },
+              {
+                "code": "T 07 · T 08",
+                "def": "3 s",
+                "titre": "Position de ralentissement à la fermeture MOT 1 / MOT 2",
+                "valeurs": [
+                  [
+                    "2 … 127,5 s",
+                    "Secondes avant la fermeture complète"
+                  ]
+                ]
+              },
+              {
+                "code": "T 09",
+                "def": "2 s",
+                "titre": "Décalage à l'ouverture",
+                "valeurs": [
+                  [
+                    "2 … 127,5 s",
+                    "Retard de MOT 2 à l'ouverture"
+                  ]
+                ]
+              },
+              {
+                "code": "T 10",
+                "def": "5 s",
+                "titre": "Décalage à la fermeture",
+                "valeurs": [
+                  [
+                    "2 … 127,5 s",
+                    "Retard de MOT 1 à la fermeture"
+                  ]
+                ]
+              },
+              {
+                "code": "T 11",
+                "def": "10 s",
+                "titre": "Temps de pause",
+                "valeurs": [
+                  [
+                    "2 … 127,5 s",
+                    "Si 0 en logique Industriel : pas de refermeture automatique"
+                  ]
+                ]
+              },
+              {
+                "code": "T 12 · T 13",
+                "def": "8 s",
+                "titre": "Ouverture / fermeture piéton MOT 1",
+                "valeurs": [
+                  [
+                    "2 … 127,5 s",
+                    "Course piéton"
+                  ]
+                ]
+              },
+              {
+                "code": "T 14",
+                "def": "10 s",
+                "titre": "Pause piéton",
+                "valeurs": [
+                  [
+                    "2 … 127,5 s",
+                    "Avant refermeture piéton"
+                  ]
+                ]
+              },
+              {
+                "code": "T 15",
+                "def": "1 s",
+                "titre": "Présignalisation portail fermé",
+                "valeurs": [
+                  [
+                    "0 … 10 s",
+                    "Avant l'ouverture"
+                  ]
+                ]
+              },
+              {
+                "code": "T 16",
+                "def": "1 s",
+                "titre": "Présignalisation portail ouvert",
+                "valeurs": [
+                  [
+                    "0 … 10 s",
+                    "Avant la fermeture"
+                  ]
+                ]
+              },
+              {
+                "code": "T 17",
+                "def": "2 s",
+                "titre": "Électro-serrure",
+                "valeurs": [
+                  [
+                    "0 … 10 s",
+                    "Durée d'activation ; remettre S 26 à 0"
+                  ]
+                ]
+              },
+              {
+                "code": "T 18",
+                "def": "120 s",
+                "titre": "Lumière de courtoisie",
+                "valeurs": [
+                  [
+                    "2 … 127,5 s",
+                    "Durée (la notice mentionne aussi 0 à 255 s au § 4.6)"
+                  ]
+                ]
+              },
+              {
+                "code": "T 19",
+                "def": "0 s",
+                "titre": "Coup de bélier",
+                "valeurs": [
+                  [
+                    "0 … 10 s",
+                    "0 = désactivé"
+                  ]
+                ],
+                "note": "Fins de course activés : coup de bélier à l'ouverture sur M1 et M2 ; S 28 ajoute la poussée finale à la fermeture. Fins de course désactivés : coup de bélier + poussée finale 2 s sur M1."
+              },
+              {
+                "code": "T 20 · T 21",
+                "def": "2 s",
+                "titre": "Démarrage MOT 1 / MOT 2",
+                "valeurs": [
+                  [
+                    "0 … 10 s",
+                    "La détection d'obstacle est inactive pendant le démarrage"
+                  ]
+                ]
+              },
+              {
+                "code": "T 22",
+                "def": "0,30 s",
+                "titre": "Retard d'intervention de la détection d'obstacle",
+                "valeurs": [
+                  [
+                    "0,05 … 2 s",
+                    "Réglage fin du retard"
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "nom": "L — Force, vitesse, détection",
+            "items": [
+              {
+                "code": "L 01 · L 03",
+                "def": "70",
+                "titre": "Force MOT 1 / MOT 2",
+                "valeurs": [
+                  [
+                    "1 … 100",
+                    "1 = minimum, 100 = maximum (le § 6.1 écrit 0 à 100, le tableau 1 à 100)"
+                  ]
+                ]
+              },
+              {
+                "code": "L 02 · L 04",
+                "def": "10",
+                "titre": "Vitesse de ralentissement MOT 1 / MOT 2",
+                "valeurs": [
+                  [
+                    "1 … 100",
+                    "100 = OFF (pas de ralentissement)"
+                  ]
+                ]
+              },
+              {
+                "code": "L 05 · L 06",
+                "def": "30",
+                "titre": "Détection d'obstacle ou fin de course MOT 1 / MOT 2",
+                "valeurs": [
+                  [
+                    "0 … 100",
+                    "0 = désactivée ; ne pas augmenter trop la sensibilité"
+                  ]
+                ]
+              },
+              {
+                "code": "L 07 · L 08",
+                "def": "0",
+                "titre": "Détection d'obstacle en ralentissement MOT 1 / MOT 2",
+                "valeurs": [
+                  [
+                    "0 … 100",
+                    "0 = désactivée"
+                  ]
+                ],
+                "note": "Écart de la notice : L 08 est décrit tantôt pour le MOT 1, tantôt pour le MOT 2 selon les pages ; le tableau récapitulatif le donne pour le MOT 2."
+              }
+            ]
+          },
+          {
+            "nom": "S — Logiques",
+            "items": [
+              {
+                "code": "S 01",
+                "def": "1",
+                "titre": "Logique de fonctionnement",
+                "valeurs": [
+                  [
+                    "1",
+                    "Inversion rapide : chaque START inverse ouvre-ferme, refermeture automatique"
+                  ],
+                  [
+                    "2",
+                    "Condominiale : START ouvre ou recharge le temps de pause, refermeture automatique"
+                  ],
+                  [
+                    "3",
+                    "Pas-à-pas : ouvre-stop-ferme-stop, sans refermeture automatique"
+                  ],
+                  [
+                    "4",
+                    "Pas-à-pas avec refermeture automatique"
+                  ],
+                  [
+                    "5",
+                    "Industriel : PIÉTON devient FERME, START ouvre seulement"
+                  ],
+                  [
+                    "6",
+                    "Homme mort : START ouvre, PIÉTON ferme"
+                  ]
+                ]
+              },
+              {
+                "code": "S 02",
+                "def": "0",
+                "titre": "Autocycle (refermeture au retour de l'alimentation)",
+                "valeurs": [
+                  [
+                    "1",
+                    "Activé : cycle ouvre-pause-ferme si le portail était ouvert à la coupure"
+                  ],
+                  [
+                    "0",
+                    "Désactivé"
+                  ]
+                ]
+              },
+              {
+                "code": "S 03",
+                "def": "0",
+                "titre": "Lumière de courtoisie sur le clignotant",
+                "valeurs": [
+                  [
+                    "1",
+                    "Activée"
+                  ],
+                  [
+                    "0",
+                    "Désactivée"
+                  ]
+                ]
+              },
+              {
+                "code": "S 04",
+                "def": "0",
+                "titre": "Relevé de passage",
+                "valeurs": [
+                  [
+                    "1",
+                    "Cellules en ouverture : la pause devient 2 s (si S 19 = 0)"
+                  ],
+                  [
+                    "0",
+                    "Désactivé"
+                  ]
+                ]
+              },
+              {
+                "code": "S 05",
+                "def": "0",
+                "titre": "Clignotant en pause",
+                "valeurs": [
+                  [
+                    "1",
+                    "Activé"
+                  ],
+                  [
+                    "0",
+                    "Désactivé"
+                  ]
+                ]
+              },
+              {
+                "code": "S 06",
+                "def": "0",
+                "titre": "Sortie TEST (interblocage)",
+                "valeurs": [
+                  [
+                    "1",
+                    "Activée"
+                  ],
+                  [
+                    "0",
+                    "Désactivée"
+                  ]
+                ]
+              },
+              {
+                "code": "S 07",
+                "def": "0",
+                "titre": "Voyant fixe 24 V DC",
+                "valeurs": [
+                  [
+                    "1",
+                    "Activé (incompatible avec test cellule ou clignotant)"
+                  ],
+                  [
+                    "0",
+                    "Désactivé"
+                  ]
+                ]
+              },
+              {
+                "code": "S 08",
+                "def": "—",
+                "titre": "Contrôle radio",
+                "valeurs": [
+                  [
+                    "1",
+                    "La carte n'accepte que le même type d'émetteur que le premier mémorisé"
+                  ],
+                  [
+                    "0",
+                    "Elle accepte tous les types (S10, S20, S21, SENDY)"
+                  ]
+                ],
+                "note": "Valeur d'usine contradictoire dans la notice : 0 au § 7.2, 1 dans le tableau récapitulatif (voir note du bornier)."
+              },
+              {
+                "code": "S 09",
+                "def": "0",
+                "titre": "Soft-start",
+                "valeurs": [
+                  [
+                    "1",
+                    "Démarrage progressif à l'ouverture"
+                  ],
+                  [
+                    "0",
+                    "Désactivé"
+                  ]
+                ]
+              },
+              {
+                "code": "S 10",
+                "def": "0",
+                "titre": "Un seul moteur",
+                "valeurs": [
+                  [
+                    "1",
+                    "Un moteur"
+                  ],
+                  [
+                    "0",
+                    "Deux moteurs"
+                  ]
+                ]
+              },
+              {
+                "code": "S 11 · S 12",
+                "def": "1",
+                "titre": "Entrées FCO1 / FCF1",
+                "valeurs": [
+                  [
+                    "1",
+                    "Activée"
+                  ],
+                  [
+                    "0",
+                    "Désactivée (fin de course non utilisé)"
+                  ]
+                ]
+              },
+              {
+                "code": "S 13 · S 14",
+                "def": "1",
+                "titre": "Entrées FCO2 / FCF2",
+                "valeurs": [
+                  [
+                    "1",
+                    "Activée"
+                  ],
+                  [
+                    "0",
+                    "Désactivée (fin de course non utilisé)"
+                  ]
+                ]
+              },
+              {
+                "code": "S 15",
+                "def": "1",
+                "titre": "Entrée STOP",
+                "valeurs": [
+                  [
+                    "1",
+                    "Activée"
+                  ],
+                  [
+                    "0",
+                    "Désactivée (STOP non utilisé)"
+                  ]
+                ]
+              },
+              {
+                "code": "S 16",
+                "def": "1",
+                "titre": "Entrée FOTO A (fermeture)",
+                "valeurs": [
+                  [
+                    "1",
+                    "Activée"
+                  ],
+                  [
+                    "0",
+                    "Désactivée"
+                  ]
+                ]
+              },
+              {
+                "code": "S 17",
+                "def": "1",
+                "titre": "Entrée FOTO B",
+                "valeurs": [
+                  [
+                    "1",
+                    "Activée"
+                  ],
+                  [
+                    "0",
+                    "Désactivée"
+                  ]
+                ]
+              },
+              {
+                "code": "S 18",
+                "def": "—",
+                "titre": "Reset aux paramètres d'usine",
+                "valeurs": [
+                  [
+                    "Appui",
+                    "Annule tous les paramètres programmés"
+                  ]
+                ]
+              },
+              {
+                "code": "S 19",
+                "def": "0",
+                "titre": "Inversion sur relevé de passage (avec S 04 = 1)",
+                "valeurs": [
+                  [
+                    "1",
+                    "Cellules en ouverture : le portail inverse et ferme"
+                  ],
+                  [
+                    "0",
+                    "Désactivée"
+                  ]
+                ]
+              },
+              {
+                "code": "S 20",
+                "def": "1",
+                "titre": "Logique de détection d'obstacle",
+                "valeurs": [
+                  [
+                    "1",
+                    "Considérée comme fin de course"
+                  ],
+                  [
+                    "2",
+                    "Considérée comme STOP"
+                  ],
+                  [
+                    "3",
+                    "STOP après une petite inversion de 2 s"
+                  ]
+                ],
+                "note": "Utiliser 2 et 3 seulement avec des fins de course."
+              },
+              {
+                "code": "S 21",
+                "def": "0",
+                "titre": "Photocellule B (borne 23)",
+                "valeurs": [
+                  [
+                    "0",
+                    "En ouverture et fermeture : arrêt et réouverture après obstacle (portail accordéon)"
+                  ],
+                  [
+                    "1",
+                    "À portail fermé et cellule B obscurcie : ne s'ouvre pas ; en fermeture : arrêt et réouverture quand elle est libre ; en ouverture : inversion 2 s puis réouverture (électro-serrure aussi active)"
+                  ]
+                ]
+              },
+              {
+                "code": "S 22",
+                "def": "0",
+                "titre": "Test sur la photocellule A (fermeture)",
+                "valeurs": [
+                  [
+                    "1",
+                    "Activé"
+                  ],
+                  [
+                    "0",
+                    "Désactivé"
+                  ]
+                ]
+              },
+              {
+                "code": "S 23",
+                "def": "0",
+                "titre": "Test sur la photocellule B",
+                "valeurs": [
+                  [
+                    "1",
+                    "Activé"
+                  ],
+                  [
+                    "0",
+                    "Désactivé"
+                  ]
+                ]
+              },
+              {
+                "code": "S 24",
+                "def": "0",
+                "titre": "Test sur l'entrée STOP",
+                "valeurs": [
+                  [
+                    "1",
+                    "Activé"
+                  ],
+                  [
+                    "0",
+                    "Désactivé"
+                  ]
+                ]
+              },
+              {
+                "code": "S 25",
+                "def": "0",
+                "titre": "2e canal radio sur la sortie voyant",
+                "valeurs": [
+                  [
+                    "1",
+                    "Activé (devient pas-à-pas si S 07 = 1)"
+                  ],
+                  [
+                    "0",
+                    "Désactivé"
+                  ]
+                ]
+              },
+              {
+                "code": "S 26",
+                "def": "0",
+                "titre": "Sortie électro-serrure devient déblocage de frein",
+                "valeurs": [
+                  [
+                    "1",
+                    "Activée"
+                  ],
+                  [
+                    "0",
+                    "Désactivée"
+                  ]
+                ]
+              },
+              {
+                "code": "S 27",
+                "def": "0",
+                "titre": "Recherche fin de course ferme 1",
+                "valeurs": [
+                  [
+                    "1",
+                    "Activée"
+                  ],
+                  [
+                    "0",
+                    "Désactivée"
+                  ]
+                ]
+              },
+              {
+                "code": "S 28",
+                "def": "0",
+                "titre": "Poussée en fermeture MOT 1 à l'activation du fin de course ferme 1",
+                "valeurs": [
+                  [
+                    "1",
+                    "Activée (seulement si les fins de course sont branchés et activés)"
+                  ],
+                  [
+                    "0",
+                    "Désactivée"
+                  ]
+                ]
+              },
+              {
+                "code": "S 29",
+                "def": "—",
+                "titre": "Délai d'entretien",
+                "valeurs": [
+                  [
+                    "Valeur",
+                    "En centaines de manœuvres"
+                  ]
+                ]
+              },
+              {
+                "code": "S 30",
+                "def": "—",
+                "titre": "Barre palpeuse (33-34)",
+                "valeurs": [
+                  [
+                    "0",
+                    "Désactivée"
+                  ],
+                  [
+                    "1",
+                    "Contact N.F."
+                  ],
+                  [
+                    "2",
+                    "Contact 8K2"
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "nom": "C — Émetteurs",
+            "items": [
+              {
+                "code": "C 01",
+                "def": "—",
+                "titre": "Mémoriser un émetteur sur START",
+                "valeurs": [
+                  [
+                    "P1",
+                    "Afficher C 01, P1, l'écran affiche ---- ; appuyer la touche de l'émetteur, SUcc"
+                  ]
+                ]
+              },
+              {
+                "code": "C 02",
+                "def": "—",
+                "titre": "Mémoriser un émetteur sur PIÉTON",
+                "valeurs": [
+                  [
+                    "P1",
+                    "Même procédure, SUcc"
+                  ]
+                ]
+              },
+              {
+                "code": "C 03",
+                "def": "—",
+                "titre": "Reset complet de la mémoire codes",
+                "valeurs": [
+                  [
+                    "P1 maintenu",
+                    "Maintenir P1 jusqu'à ----. À faire avant le premier émetteur, portail fermé"
+                  ]
+                ]
+              },
+              {
+                "code": "C 04",
+                "def": "—",
+                "titre": "Annuler un seul code",
+                "valeurs": [
+                  [
+                    "P1",
+                    "Appuyer la touche de l'émetteur à annuler : cAnc"
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "nom": "P — Horloge",
+            "items": [
+              {
+                "code": "P 01",
+                "def": "0",
+                "titre": "Ouverture sur horaires",
+                "valeurs": [
+                  [
+                    "1",
+                    "Activée"
+                  ],
+                  [
+                    "0",
+                    "Désactivée"
+                  ]
+                ]
+              },
+              {
+                "code": "P 02",
+                "def": "0",
+                "titre": "Blocage sur horaires",
+                "valeurs": [
+                  [
+                    "1",
+                    "Activé (seulement START et PIÉTON fonctionnent)"
+                  ],
+                  [
+                    "0",
+                    "Désactivé"
+                  ]
+                ]
+              },
+              {
+                "code": "P 03 · P 04",
+                "def": "—",
+                "titre": "Programmer les horaires d'ouverture / de blocage",
+                "valeurs": [
+                  [
+                    "P1",
+                    "28 plages hebdomadaires maxi ; l'écran fixe = début de plage, clignotant = fin"
+                  ]
+                ]
+              },
+              {
+                "code": "P 05 · P 06",
+                "def": "—",
+                "titre": "Annuler tous les horaires d'ouverture / de blocage",
+                "valeurs": [
+                  [
+                    "P1",
+                    "Remise à zéro de la programmation"
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "nom": "R — Activation des sorties",
+            "items": [
+              {
+                "code": "R 01",
+                "def": "—",
+                "titre": "Apprentissage des temps moteurs",
+                "valeurs": [
+                  [
+                    "P1",
+                    "Voir l'onglet Apprent."
+                  ]
+                ]
+              },
+              {
+                "code": "R 02 à R 05",
+                "def": "—",
+                "titre": "Tester électro-serrure, clignotant, test, voyant",
+                "valeurs": [
+                  [
+                    "P1 maintenu",
+                    "La sortie reste active jusqu'au relâchement de P1"
+                  ]
+                ]
+              },
+              {
+                "code": "R 06 à R 09",
+                "def": "—",
+                "titre": "Tester le moteur 1",
+                "valeurs": [
+                  [
+                    "R 06 / R 07",
+                    "Ouvre / ferme"
+                  ],
+                  [
+                    "R 08 / R 09",
+                    "Ouvre / ferme avec ralentissement"
+                  ]
+                ]
+              },
+              {
+                "code": "R 10 à R 13",
+                "def": "—",
+                "titre": "Tester le moteur 2",
+                "valeurs": [
+                  [
+                    "R 10 / R 11",
+                    "Ouvre / ferme"
+                  ],
+                  [
+                    "R 12 / R 13",
+                    "Ouvre / ferme avec ralentissement"
+                  ]
+                ]
+              },
+              {
+                "code": "R 14",
+                "def": "—",
+                "titre": "Compteur d'entretien",
+                "valeurs": [
+                  [
+                    "Affichage",
+                    "En centaines de manœuvres (010.0 = 10 000)"
+                  ]
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "apprentissage": {
+        "avant": [
+          "Portail fermé. Vérifier d'abord les accessoires et les moteurs par le menu R, régler les forces, ralentissements et détections d'obstacle (L), puis les positions de ralentissement et les temps. Faire ensuite l'apprentissage automatique des temps.",
+          "Si un dispositif de sécurité (photocellule) intervient pendant l'apprentissage, il faut le refaire.",
+          "Avec fin de course ou détection d'obstacle programmée, la carte apprend les temps automatiquement. Le temps de pause se règle avec T 11 (usine 10 s)."
+        ],
+        "etapes": [
+          "Aller en R 01 avec P1, P2, P3 et appuyer P1 : le premier battant (moteur 1) s'ouvre ; l'écran indique l'apprentissage.",
+          "Attendre l'ouverture complète. Si FCO 1 n'est pas branché, appuyer P1 ; s'il est branché, il programme lui-même : temps d'ouverture MOT 1 mémorisé.",
+          "Avec S 10 actif (un moteur), passer à la fermeture ; sinon le 2e battant s'ouvre : P1 à l'ouverture complète (sauf FCO 2 branché), temps d'ouverture MOT 2 mémorisé.",
+          "Le 2e battant ferme : attendre la fermeture complète, P1 si FCC 2 non branché, temps de fermeture MOT 2 mémorisé.",
+          "Le 1er battant ferme : P1 à la fermeture complète si FCC 1 non branché, temps de fermeture MOT 1 mémorisé. Apprentissage terminé."
+        ],
+        "apres": [
+          "Réglage final : donner un START (bouton ou émetteur), vérifier temps et ralentissements pendant la manœuvre ; une fois le portail fermé, corriger les temps dans T. Faire la même vérification avec la commande PIÉTON.",
+          "Émetteurs : faire C 03 (reset mémoire) avant de mémoriser le premier émetteur. Capacité 190 codes rolling.",
+          "Horloge : régler l'heure et le jour avec P2 / P3 (pile CR2032) ; pas de changement d'heure été/hiver automatique."
+        ]
+      }
+    },
+    {
+      "id": "casit-keq405",
+      "nom": "KEQ405",
+      "modeles": "KEQ405 (EQ405) — 1 moteur monophasé 230 V (650 W) ou triphasé 400 / 230 V (1,1 kW)",
+      "type": "Portail 1 moteur monophasé ou triphasé, sans électro-serrure — 8 dip (SW1), 4 dip (SW2), 3 trimmers, cavaliers W1-W8",
+      "source": "Notice CASIT KEQ405 / EQ405 Rev. 00 du 10/03/2011 (8 p., français)",
+      "codes": [
+        {
+          "code": "DL1",
+          "type": "led",
+          "titre": "DW24B / barre palpeuse",
+          "action": "Jaune allumée : DW24B (contact ouvert : W8 ponté, ou W8 non ponté avec DW24 sur J3 et barre palpeuse activée)."
+        },
+        {
+          "code": "DL2",
+          "type": "led",
+          "titre": "Alimentation",
+          "action": "Verte allumée : carte alimentée ; éteinte : carte sans alimentation."
+        },
+        {
+          "code": "DL3",
+          "type": "led",
+          "titre": "Commande OUVRE",
+          "action": "Rouge allumée tant que le contact OUVRE (7-9 de M1 ou 27-28 de M8) est fermé."
+        },
+        {
+          "code": "DL4",
+          "type": "led",
+          "titre": "Commande FERME",
+          "action": "Rouge allumée tant que le contact FERME (8-9 de M1 ou 28-29 de M8) est fermé (le texte de la notice dit « OUVRE » : voir note)."
+        },
+        {
+          "code": "DL5",
+          "type": "led",
+          "titre": "Dynamique",
+          "action": "Rouge allumée : contact AP/CH (34-35 de M10) fermé."
+        },
+        {
+          "code": "DL6",
+          "type": "led",
+          "titre": "Piétons",
+          "action": "Rouge allumée : contact PIÉTONS (28-30 de M8) fermé."
+        },
+        {
+          "code": "DL7",
+          "type": "led",
+          "titre": "Cycle semi-automatique",
+          "action": "Jaune allumée : semi-automatique (31-32 de M9 N.F.) ; éteinte : automatique (31-32 N.O.)."
+        },
+        {
+          "code": "DL8 · DL9",
+          "type": "led",
+          "titre": "Cellule B (standard) / cellule A (haute)",
+          "action": "Jaune allumée à l'intervention de la cellule (contact 2-3 pour B, 2-4 pour A ouvert)."
+        },
+        {
+          "code": "DL10",
+          "type": "led",
+          "titre": "STOP",
+          "action": "Jaune allumée à l'intervention du poussoir STOP (contact 5-6 de M1 ouvert)."
+        },
+        {
+          "code": "DL11 · DL12",
+          "type": "led",
+          "titre": "Fins de course ouvre / ferme",
+          "action": "Rouge allumée à l'intervention du fin de course (11-12 de M2 pour ouvre, 12-13 pour ferme)."
+        },
+        {
+          "code": "DL13 · DL14",
+          "type": "led",
+          "titre": "Relais FERME / OUVRE",
+          "action": "Rouge allumée : relais correspondant enclenché."
+        },
+        {
+          "code": "Carte sans réaction, LED éteintes",
+          "type": "symptome",
+          "titre": "Rien ne s'allume",
+          "action": "Contact 25-26 de M8 ouvert (il coupe l'alimentation de la carte) : le ponter. Ligne 18 V mal branchée : vérifier le fusible F4 ; court-circuit sur la sortie 24 V : débrancher les accessoires, contrôler les câbles et F4."
+        },
+        {
+          "code": "DL10 allumée, carte bloquée",
+          "type": "symptome",
+          "titre": "Contact STOP ouvert",
+          "action": "Vérifier que le STOP est bien en contact N.F."
+        },
+        {
+          "code": "DL8 / DL9 allumées",
+          "type": "symptome",
+          "titre": "Contact photocellule ouvert",
+          "action": "Vérifier que les entrées sont bien N.F."
+        },
+        {
+          "code": "Ouvre toujours, ne referme pas seul",
+          "type": "symptome",
+          "titre": "Bouton OUVRE enfoncé en permanence",
+          "action": "DL3, DL5 ou DL6 allumée : vérifier toutes les connexions (boutons, récepteur radio…)."
+        },
+        {
+          "code": "Ouvre mal, s'arrête",
+          "type": "symptome",
+          "titre": "Faux contact",
+          "action": "Barre palpeuse, stop, fins de course : vérifier qu'il n'y a pas de faux contacts."
+        },
+        {
+          "code": "Ouvre mais ne ferme pas",
+          "type": "symptome",
+          "titre": "Semi-automatique sélectionné",
+          "action": "Choisir le cycle automatique (DL7 éteinte)."
+        },
+        {
+          "code": "Fins de course sans effet / sens unique",
+          "type": "symptome",
+          "titre": "Mauvais câblage des fins de course",
+          "action": "Câbler correctement le commun des fins de course (12). Si la cellule fait inverser quand le moteur ouvre : inverser deux phases du moteur."
+        },
+        {
+          "code": "Ouverture incomplète",
+          "type": "symptome",
+          "titre": "Temps de travail trop court",
+          "action": "Régler le trimmer P1."
+        },
+        {
+          "code": "Referme tout de suite",
+          "type": "symptome",
+          "titre": "Pause trop courte",
+          "action": "Régler le trimmer P2."
+        },
+        {
+          "code": "Inversion trop rapide",
+          "type": "symptome",
+          "titre": "Temps d'inversion trop court",
+          "action": "Choisir le temps d'inversion avec SW2 dip 3 et 4."
+        },
+        {
+          "code": "Cellule arrête à l'ouverture",
+          "type": "symptome",
+          "titre": "Fonction P.L. activée",
+          "action": "Vérifier SW1 dip 8 (OFF)."
+        },
+        {
+          "code": "Ne ferme pas",
+          "type": "symptome",
+          "titre": "Autotest cellule A ou B en défaut",
+          "action": "Contrôler les cellules (SW1 dip 1 / 2)."
+        },
+        {
+          "code": "Ne s'ouvre pas",
+          "type": "symptome",
+          "titre": "Fonction contre le traînement",
+          "action": "SW1 dip 7 sur ON : portail fermé et cellule obscurcie, l'ouverture est refusée."
+        },
+        {
+          "code": "Autotest en défaut",
+          "type": "diag",
+          "titre": "Clignotant 2 × 2 s ou 3 × 2 s",
+          "action": "Autotest cellule A / B : éclair répété 2 fois de 2 s ; autotest DW24B : éclair répété 3 fois de 2 s. La carte ne bouge pas."
+        }
+      ],
+      "bornier": {
+        "groupes": [
+          {
+            "nom": "M1 — cellules, commandes, 24 V",
+            "bornes": [
+              {
+                "n": "1 · 2",
+                "label": "Lumière de courtoisie 24 V DC",
+                "desc": "3 W maxi",
+                "t": "sortie"
+              },
+              {
+                "n": "2 · 3",
+                "label": "Cellule B (standard)",
+                "desc": "Contact N.F.",
+                "t": "nf"
+              },
+              {
+                "n": "2 · 4",
+                "label": "Cellule A (haute)",
+                "desc": "Contact N.F.",
+                "t": "nf"
+              },
+              {
+                "n": "5 · 6",
+                "label": "STOP électronique",
+                "desc": "Contact N.F.",
+                "t": "nf"
+              },
+              {
+                "n": "7 · 9",
+                "label": "OUVRE",
+                "desc": "Contact N.O.",
+                "t": "no"
+              },
+              {
+                "n": "8 · 9",
+                "label": "FERME",
+                "desc": "Contact N.O.",
+                "t": "no"
+              },
+              {
+                "n": "9 · 10",
+                "label": "Sortie 24 V DC",
+                "desc": "500 mA maxi (10 = +24 V)",
+                "t": "sortie"
+              }
+            ]
+          },
+          {
+            "nom": "M2 à M4 — fins de course, 24 V AC, clignotant",
+            "bornes": [
+              {
+                "n": "11 · 12",
+                "label": "Fin de course ouvre / STOP ouvre",
+                "desc": "Contact N.F., 12 = commun",
+                "t": "nf"
+              },
+              {
+                "n": "12 · 13",
+                "label": "Fin de course ferme / STOP ferme",
+                "desc": "Contact N.F., 12 = commun",
+                "t": "nf"
+              },
+              {
+                "n": "14 · 15",
+                "label": "Sortie 24 V AC",
+                "desc": "0,6 A maxi",
+                "t": "sortie"
+              },
+              {
+                "n": "19 · 20",
+                "label": "Clignotant 230 V",
+                "desc": "30 VA (23 W) maxi",
+                "t": "sortie"
+              }
+            ]
+          },
+          {
+            "nom": "M5 à M7 — alimentation, moteur, radio",
+            "bornes": [
+              {
+                "n": "R · S · T",
+                "label": "Alimentation 400 V triphasé",
+                "desc": "Ou R-S pour 230 V. Masse sur la borne MASSE",
+                "t": "alim"
+              },
+              {
+                "n": "U · V · W",
+                "label": "Moteur",
+                "desc": "400 V triphasé, ou 230 V monophasé (V = commun). Masse moteur",
+                "t": "moteur"
+              },
+              {
+                "n": "21 · 22",
+                "label": "Antenne du récepteur radio",
+                "desc": "Câble d'antenne sur 22, masse sur 21",
+                "t": "autre"
+              },
+              {
+                "n": "23 · 24",
+                "label": "2e canal radio",
+                "desc": "Contact propre du récepteur radio sur J1 RX",
+                "t": "sortie"
+              }
+            ]
+          },
+          {
+            "nom": "M8 à M11 — boutons sur l'armoire, dynamique, tension",
+            "bornes": [
+              {
+                "n": "25 · 26",
+                "label": "STOP",
+                "desc": "Contact N.F. : le contact ouvert coupe l'alimentation de la carte",
+                "t": "nf"
+              },
+              {
+                "n": "27 · 28",
+                "label": "OUVRE",
+                "desc": "Contact N.O., boutons sur l'armoire",
+                "t": "no"
+              },
+              {
+                "n": "28 · 29",
+                "label": "FERME",
+                "desc": "Contact N.O.",
+                "t": "no"
+              },
+              {
+                "n": "28 · 30",
+                "label": "Passage piétons",
+                "desc": "Contact N.O., durée réglable avec P3",
+                "t": "no"
+              },
+              {
+                "n": "31 · 32",
+                "label": "Semi-automatique / automatique",
+                "desc": "N.F. = semi-automatique, N.O. = automatique",
+                "t": "autre"
+              },
+              {
+                "n": "33 · 34",
+                "label": "LUC : exclusion cellule B / DW",
+                "desc": "Contact N.O. de fin de course pour exclure la cellule B (standard) et / ou DW pendant les derniers centimètres de fermeture",
+                "t": "no"
+              },
+              {
+                "n": "34 · 35",
+                "label": "AP/CH dynamique",
+                "desc": "Contact N.O. OUVRE/FERME dynamique ; avec SW1 dip 5 sur ON : pas-à-pas ouvre-stop-ferme-ouvre",
+                "t": "no"
+              },
+              {
+                "n": "36 · 37",
+                "label": "TX24V pour cellules",
+                "desc": "36 = +24 V DC, 37 = 0 V. Seulement pour l'émetteur de cellule ; autres alimentations 24 V : bornes 9-10 de M1",
+                "t": "sortie"
+              },
+              {
+                "n": "16 · 17",
+                "label": "Sélection 230 V",
+                "desc": "Ponter 16-17 pour alimenter la carte en 230 V",
+                "t": "autre"
+              },
+              {
+                "n": "17 · 18",
+                "label": "Sélection 400 V",
+                "desc": "Ponter 17-18 pour alimenter la carte en 400 V (usine CASIT)",
+                "t": "autre"
+              }
+            ]
+          }
+        ],
+        "fusibles": "F1 = F2 = F3 : 5 × 20 T 6,3 A sur le 400 V (alimentation de la carte). F4 : 5 × 20 T 1 A sur le 24 V AC (électronique, sorties 24 V DC / AC). F6 : 5 × 20 T 0,1 A sur le 230 V (transformateur et clignotant 230 V). Relais de puissance RL6 / RL7 : 230 / 400 V, 1,1 kW maxi ; contacteurs 9 A.",
+        "notes": [
+          "Toute entrée N.F. non utilisée doit être court-circuitée sur le commun des entrées (notice).",
+          "Moteur triphasé 400 V 1 100 W maxi, ou monophasé 230 V 650 W maxi. Alimentation accessoires 24 V AC 600 mA. Température -5 / +60 °C ; coffret PVC 240 × 190 × 95 mm.",
+          "Écart de la notice : la phrase « pour alimentation 230 V ponter 16-17 / pour alimentation 230 V ponter 17-18 » répète 230 V deux fois ; la ligne du tableau donne 16-17 pour 230 V et 17-18 pour 400 V.",
+          "Écart de la notice : le § 3.1 écrit « Automatique (31-32 N.F.) » alors que le tableau des bornes et DL7 donnent N.F. = semi-automatique.",
+          "Écart de la notice : la LED DL4 (FERME) est décrite comme « contact OUVRE (8-9 …) » alors que 8-9 est le contact FERME.",
+          "Écart de la notice : le § 3.1 parle d'un dip 5 de SW1 pour l'arrêt du clignotant à l'activation des fins de course, alors que le tableau des dip donne ce comportement au dip 4.",
+          "Cavaliers radio : W3 à W7 pour le type de récepteur radio (sur demande du client). W1 : 1-2 = CH2 en piétons ; 2-3 = CH2 en FERME (usine). W2 : 4-5 = CH1 en dynamique ; 5-6 = CH1 en OUVRE (usine). W8 : ponté = contrôle DW désactivé (usine) ; non ponté = DW activé (DW24B en J3).",
+          "Maintenance : contacteurs 9 A à contrôler périodiquement, révision conseillée tous les 4 ans. 100 000 manœuvres (cos φ = 0,7) ; moitié moins à cos φ = 0,3.",
+          "Après installation : vérifier avec un voltmètre AC l'absence de tension induite sur les entrées (moins de 20-30 V AC entre la masse et le contact du bouton OUVRE) ; séparer les câbles de puissance et de très basse tension."
+        ]
+      },
+      "parametres": {
+        "intro": "Huit dip SW1 (fonctions), quatre dip SW2 (temps de travail et d'inversion), trois trimmers (P1 à P3) et des cavaliers. Par défaut CASIT : SW1 dip 1, 2 et 8 sur OFF ; temps d'inversion 1 s.",
+        "navigation": [
+          "Cycle automatique ou semi-automatique : contact 31-32 de M9 (N.F. = semi-automatique, N.O. = automatique). La LED DL7 le confirme.",
+          "Temps de pause : P2 de 1 à 70 s ; en pontant R11 la pause est réglable jusqu'à 200 s.",
+          "La carte fonctionne avec fins de course N.F. ; leur intervention arrête le moteur et le clignotant."
+        ],
+        "groupes": [
+          {
+            "nom": "SW1 — fonctions",
+            "items": [
+              {
+                "code": "SW1 · DIP 1",
+                "def": "OFF",
+                "titre": "Autotest photocellule A (haute) / blocage pendant l'ouverture",
+                "valeurs": [
+                  [
+                    "ON (dip 6 OFF)",
+                    "Autotest cellule A actif ; si elle ne répond pas, clignotant 2 × 2 s et la carte ne bouge pas (TX sur 36-37)"
+                  ],
+                  [
+                    "ON (dip 6 ON)",
+                    "Cellule A bloque pendant l'ouverture"
+                  ],
+                  [
+                    "OFF",
+                    "Autotest désactivé"
+                  ]
+                ]
+              },
+              {
+                "code": "SW1 · DIP 2",
+                "def": "OFF",
+                "titre": "Autotest photocellule B (standard) / blocage pendant la fermeture",
+                "valeurs": [
+                  [
+                    "ON (dip 6 OFF)",
+                    "Autotest cellule B actif ; défaut : clignotant 2 × 2 s"
+                  ],
+                  [
+                    "ON (dip 6 ON)",
+                    "Cellule B bloque pendant la fermeture"
+                  ],
+                  [
+                    "OFF",
+                    "Autotest désactivé"
+                  ]
+                ]
+              },
+              {
+                "code": "SW1 · DIP 3",
+                "def": "OFF",
+                "titre": "Autotest DW24B",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Activé ; défaut : clignotant 3 × 2 s et la carte ne bouge pas"
+                  ],
+                  [
+                    "OFF",
+                    "Désactivé"
+                  ]
+                ]
+              },
+              {
+                "code": "SW1 · DIP 4",
+                "def": "OFF",
+                "titre": "Préclignotement du clignotant",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Préclignote 3 s avant l'ouverture et la fermeture (STOP l'éteint)"
+                  ],
+                  [
+                    "OFF",
+                    "Clignote quand le moteur fonctionne ; STOP et fins de course l'éteignent, pas les cellules"
+                  ]
+                ]
+              },
+              {
+                "code": "SW1 · DIP 5",
+                "def": "—",
+                "titre": "Bouton dynamique (34-35)",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Pas-à-pas : ouvre-stop-ferme-ouvre"
+                  ],
+                  [
+                    "OFF",
+                    "Une impulsion ouvre, une impulsion ferme"
+                  ]
+                ]
+              },
+              {
+                "code": "SW1 · DIP 6",
+                "def": "—",
+                "titre": "Homme mort",
+                "valeurs": [
+                  [
+                    "ON",
+                    "OUVRE et FERME en homme mort ; piétons désactivé ; dynamique = ouverture par impulsion, fermeture en homme mort (relâché plus de 3 s puis réappui : le portail ouvre)"
+                  ],
+                  [
+                    "OFF",
+                    "Cycle automatique ou semi-automatique"
+                  ]
+                ]
+              },
+              {
+                "code": "SW1 · DIP 7",
+                "def": "—",
+                "titre": "Fonction contre le traînement",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Portail fermé et cellule A et / ou B obscurcie : l'ouverture est refusée"
+                  ],
+                  [
+                    "OFF",
+                    "Le portail s'ouvre même si les cellules sont obscurcies"
+                  ]
+                ]
+              },
+              {
+                "code": "SW1 · DIP 8",
+                "def": "OFF",
+                "titre": "Logique des cellules",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Fonction P.L. : cellules A et B actives à l'ouverture et à la fermeture. B : arrêt, reprise quand libérée ; A : arrêt et inversion 2 s"
+                  ],
+                  [
+                    "OFF",
+                    "Standard : B active seulement en fermeture (arrêt et inversion). A active seulement en ouverture (arrêt et inversion 2 s, puis après 30 s fermeture complète si automatique)"
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "nom": "SW2 — temps de travail et d'inversion",
+            "items": [
+              {
+                "code": "SW2 · DIP 1 · 2",
+                "def": "—",
+                "titre": "Plage du temps de travail (P1)",
+                "valeurs": [
+                  [
+                    "OFF · OFF",
+                    "27 à 50 s"
+                  ],
+                  [
+                    "OFF · ON",
+                    "80 à 150 s"
+                  ],
+                  [
+                    "ON · OFF",
+                    "4 à 30 s"
+                  ],
+                  [
+                    "ON · ON",
+                    "4 à 150 s"
+                  ]
+                ]
+              },
+              {
+                "code": "SW2 · DIP 3 · 4",
+                "def": "OFF · ON",
+                "titre": "Temps d'inversion",
+                "valeurs": [
+                  [
+                    "OFF · OFF",
+                    "0,5 s"
+                  ],
+                  [
+                    "OFF · ON",
+                    "1 s (usine CASIT)"
+                  ],
+                  [
+                    "ON · OFF",
+                    "2 s"
+                  ],
+                  [
+                    "ON · ON",
+                    "4 s"
+                  ]
+                ],
+                "note": "Valable hors des fins de course : le départ du moteur est instantané quand le portail est sur son fin de course."
+              }
+            ]
+          },
+          {
+            "nom": "Trimmers et cavaliers",
+            "items": [
+              {
+                "code": "P1",
+                "def": "—",
+                "titre": "Temps de travail",
+                "valeurs": [
+                  [
+                    "Plage SW2",
+                    "À régler pour couvrir toute la course"
+                  ]
+                ]
+              },
+              {
+                "code": "P2",
+                "def": "—",
+                "titre": "Temps de pause",
+                "valeurs": [
+                  [
+                    "1 … 70 s",
+                    "Jusqu'à 200 s en pontant R11"
+                  ]
+                ]
+              },
+              {
+                "code": "P3",
+                "def": "—",
+                "titre": "Temps de passage piétons",
+                "valeurs": [
+                  [
+                    "2 … 13 s",
+                    "Ouverture partielle (contact 28-30)"
+                  ]
+                ]
+              },
+              {
+                "code": "W1 · W2",
+                "def": "2-3 · 5-6",
+                "titre": "Fonction des canaux radio",
+                "valeurs": [
+                  [
+                    "W1 1-2 / 2-3",
+                    "CH2 en piétons / CH2 en FERME (usine)"
+                  ],
+                  [
+                    "W2 4-5 / 5-6",
+                    "CH1 en dynamique / CH1 en OUVRE (usine)"
+                  ]
+                ]
+              },
+              {
+                "code": "W8",
+                "def": "Ponté",
+                "titre": "Contrôle DW",
+                "valeurs": [
+                  [
+                    "Ponté",
+                    "Désactivé (usine)"
+                  ],
+                  [
+                    "Non ponté",
+                    "Activé (DW24B en position J3)"
+                  ]
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "apprentissage": {
+        "avant": [
+          "La KEQ405 n'a pas d'apprentissage : le temps de travail se règle au trimmer P1 (avec la plage choisie en SW2 dip 1-2), la pause au trimmer P2.",
+          "Régler P1 sur une valeur suffisante pour toute la course du portail."
+        ],
+        "etapes": [
+          "Choisir la plage du temps de travail avec SW2 dip 1 et 2, puis régler P1.",
+          "Choisir le temps d'inversion avec SW2 dip 3 et 4.",
+          "Régler la pause (P2) et le temps piétons (P3). Choisir cycle automatique ou semi-automatique par le contact 31-32."
+        ],
+        "apres": [
+          "Pendant la pause, si un objet passe devant la cellule, la temporisation de pause repart à zéro (de même avec une impulsion d'ouverture).",
+          "Piétons : le portail s'ouvre pour le temps P3 ; pendant la fermeture, la cellule ou le poussoir OUVRE rouvre complètement.",
+          "Manœuvre d'urgence (cellules ou barres palpeuses en panne) : SW1 dip 6 sur ON, dip 1, 2, 3, 4, 5, 7, 8 sur OFF. Fonctionnement en homme mort ; cellules et barres palpeuses inactives, fins de course, boutons et clignotant actifs. L'opérateur doit voir tout le portail."
+        ]
+      }
+    },
+    {
+      "id": "casit-keqs08",
+      "nom": "KEQS08",
+      "modeles": "KEQS08 (KEQS08-R, version radio intégrée) — 1 moteur monophasé 230 V (750 W / 1 HP), encoder possible",
+      "type": "Portail coulissant ou battant 1 vantail, porte basculante, rideau métallique — 10 dip A, 8 dip B, 3 trimmers, boutons CODICI / TEMPI",
+      "source": "Notice CASIT KEQS08-R (réf. 250319 VXX03 FR, 18 p., français)",
+      "codes": [
+        {
+          "code": "L1 clignote chaque seconde",
+          "type": "led",
+          "titre": "Logique active",
+          "action": "Fonctionnement normal : le micro est actif et attend une commande."
+        },
+        {
+          "code": "L1 faiblement allumée",
+          "type": "led",
+          "titre": "Entrée barre palpeuse hors condition standard",
+          "action": "Elle reste faiblement allumée quand l'entrée barre palpeuse n'est pas dans sa condition standard (aussi quand l'entrée PHOTO 2 (borne 21) est utilisée)."
+        },
+        {
+          "code": "LED rouges STOP / FOTO / FCF / FCO",
+          "type": "led",
+          "titre": "Entrées de sécurité",
+          "action": "Normalement allumées (contact fermé sur le commun)."
+        },
+        {
+          "code": "LED vertes START / PIET.",
+          "type": "led",
+          "titre": "Entrées de commande",
+          "action": "Normalement éteintes ; allumées pendant la commande."
+        },
+        {
+          "code": "L2",
+          "type": "led",
+          "titre": "Non utilisée",
+          "action": "—"
+        },
+        {
+          "code": "L1 reste allumée à l'appui d'un émetteur",
+          "type": "symptome",
+          "titre": "Émetteur non compatible",
+          "action": "À l'appui sur CODICI puis sur l'émetteur : si L1 reste allumée, l'émetteur n'est pas compatible."
+        },
+        {
+          "code": "L1 clignote lentement",
+          "type": "symptome",
+          "titre": "Mémoire codes pleine",
+          "action": "La mémoire des codes est pleine."
+        },
+        {
+          "code": "Lampe 5 s, portail bloqué",
+          "type": "diag",
+          "titre": "Test cellules en défaut",
+          "action": "Avec le test activé, si les cellules ne marchent pas correctement la lampe s'allume 5 s et le portail ne bouge pas."
+        }
+      ],
+      "bornier": {
+        "groupes": [
+          {
+            "nom": "Alimentation, lampe, moteur",
+            "bornes": [
+              {
+                "n": "1 · 2",
+                "label": "Alimentation 230 V",
+                "desc": "230 V AC 50 Hz",
+                "t": "alim"
+              },
+              {
+                "n": "3 · 4",
+                "label": "Lampe / lumière de courtoisie 230 V",
+                "desc": "40 W maxi. Avec DIP 4 (A) ON : sous tension du début de l'ouverture à 2 minutes après la fermeture",
+                "t": "sortie"
+              },
+              {
+                "n": "5",
+                "label": "Moteur commun",
+                "desc": "Pôle commun",
+                "t": "moteur"
+              },
+              {
+                "n": "6",
+                "label": "Moteur FERME",
+                "desc": "Pôle fermeture",
+                "t": "moteur"
+              },
+              {
+                "n": "7",
+                "label": "Moteur OUVRE",
+                "desc": "Pôle ouverture",
+                "t": "moteur"
+              }
+            ]
+          },
+          {
+            "nom": "Entrées de services et de sécurité",
+            "bornes": [
+              {
+                "n": "8",
+                "label": "Antenne",
+                "desc": "Entrée antenne",
+                "t": "autre"
+              },
+              {
+                "n": "9 · 10",
+                "label": "Commun",
+                "desc": "Commun de toutes les entrées (services, sécurité, coaxial d'antenne, −12 V DC)",
+                "t": "autre"
+              },
+              {
+                "n": "11",
+                "label": "+12 V DC",
+                "desc": "50 mA maxi",
+                "t": "sortie"
+              },
+              {
+                "n": "12",
+                "label": "STOP",
+                "desc": "Entrée N.F. (DIP 1 B ON si inutilisée)",
+                "t": "nf"
+              },
+              {
+                "n": "13",
+                "label": "Photo 1",
+                "desc": "Cellule seulement en fermeture, N.F. (DIP 2 B ON si inutilisée)",
+                "t": "nf"
+              },
+              {
+                "n": "14",
+                "label": "Fin de course ouvre (FCO)",
+                "desc": "Entrée N.F. (DIP 3 B ON si inutilisée)",
+                "t": "nf"
+              },
+              {
+                "n": "15",
+                "label": "Fin de course ferme (FCF)",
+                "desc": "Entrée N.F. (DIP 4 B ON si inutilisée)",
+                "t": "nf"
+              },
+              {
+                "n": "16",
+                "label": "START",
+                "desc": "Commande bistable N.O., programmation avec DIP 1-2 (A). Horloge possible sur 9-16",
+                "t": "no"
+              },
+              {
+                "n": "17",
+                "label": "Piéton",
+                "desc": "Ouverture partielle N.O., même programmation que START",
+                "t": "no"
+              },
+              {
+                "n": "21",
+                "label": "Photo 2",
+                "desc": "Voir DIP 6 (A) ; DIP 5 B ON si inutilisée",
+                "t": "nf"
+              }
+            ]
+          },
+          {
+            "nom": "Accessoires, serrure, encoder",
+            "bornes": [
+              {
+                "n": "18",
+                "label": "24 V AC",
+                "desc": "Sortie 24 V AC (cavalier AC/DC)",
+                "t": "sortie"
+              },
+              {
+                "n": "19",
+                "label": "+24 V DC / 24 V AC",
+                "desc": "Sortie alimentation accessoires, 300 mA maxi",
+                "t": "sortie"
+              },
+              {
+                "n": "20",
+                "label": "−24 V DC",
+                "desc": "Sortie −24 V DC, commun services et sécurité",
+                "t": "sortie"
+              },
+              {
+                "n": "22 · 23",
+                "label": "Électro-serrure 12 V AC",
+                "desc": "22 = 0 V, 23 = 12 V AC. Serrure 24 V : brancher entre 18 et 22",
+                "t": "sortie"
+              },
+              {
+                "n": "24 · 25",
+                "label": "Contact sec",
+                "desc": "Pour voyant ou test des cellules ou lampe sans carte électronique",
+                "t": "sortie"
+              },
+              {
+                "n": "26",
+                "label": "+5 V encoder",
+                "desc": "Alimentation encoder",
+                "t": "alim"
+              },
+              {
+                "n": "27",
+                "label": "Signal encoder",
+                "desc": "Signal du capteur",
+                "t": "autre"
+              },
+              {
+                "n": "28",
+                "label": "−5 V encoder",
+                "desc": "Alimentation encoder",
+                "t": "alim"
+              }
+            ]
+          }
+        ],
+        "fusibles": "F1 160 mA, F2 4 A (sur la carte).",
+        "notes": [
+          "Caractéristiques : 87 × 150 × 45 mm, 0,6 kg ; moteur 1 HP / 750 W / 4 A ; lampe 40 W ; contact sec 2 A max ; 24 V AC/DC 300 mA ; 12 V DC 50 mA ; 12 V AC 1 A.",
+          "Cavalier AC/DC : sélectionne la sortie 24 V AC ou DC sur les bornes 18-19-20 (mettre sur DC pour les cellules 24 V DC et les fins de course magnétiques).",
+          "Vérification du câblage : pour être sûr que OUVRE ouvre vraiment, interrompre les cellules : si le portail ferme, inverser les fils OUVRE et FERME du moteur. En cas de doute, positionner le portail à mi-course et se tenir prêt à actionner STOP.",
+          "Cellules en série pour plusieurs récepteurs ; contact du récepteur sec et N.F. Cellules 3 fils 24 V DC possibles (§ 2.12).",
+          "Écart de la notice : le § 4 donne « dip 12 (n°3 du dip B) » pour activer le rolling code, alors que le § 3.1 donne au dip B 3 l'exclusion du fin de course ouvre. Voir la procédure de mémoire radio (§ 4.2) avec la touche CODICI.",
+          "Écart de la notice : le texte du § 2.7 renvoie à la page DIP 6 (A) pour PHOTO 2 ; le schéma de câblage de la page 1 liste PHOTO 1 en borne 13 et PHOTO 2 en borne 21, avec « cellules activées seulement en fermeture »."
+        ]
+      },
+      "parametres": {
+        "intro": "Dix dip de programmation (DIP A), huit dip d'exclusion d'entrées et options (DIP B), cavalier JP1 (homme mort), cavalier AC/DC, trois trimmers (FORZA, V.RALL, BLOCK) et trois boutons (CODICI, TEMPI, P). Valeurs d'usine non indiquées dans la notice (—).",
+        "navigation": [
+          "Les dip A 1 et 2 forment 4 logiques de commande (voir le premier item).",
+          "Réglage des trimmers : FORZA de 20 % à 100 % ; V.RALL (vitesse de ralentissement) de MIN à OFF, réglée à 4 pour la plupart des moteurs (≈ 1/3 de la vitesse normale), OFF = ralentissement désactivé ; BLOCK (niveau ampèremétrique) : MIN = force minimale pour arrêter le moteur, OFF = sensibilité désactivée."
+        ],
+        "groupes": [
+          {
+            "nom": "DIP A — commandes",
+            "items": [
+              {
+                "code": "A · DIP 1 · 2",
+                "def": "—",
+                "titre": "Logique de commande",
+                "valeurs": [
+                  [
+                    "1 OFF · 2 OFF",
+                    "Automatique 1 : chaque impulsion inverse ouvre-ferme, refermeture automatique après la pause"
+                  ],
+                  [
+                    "1 ON · 2 OFF",
+                    "Copropriété : aucune commande acceptée en fermeture et en pause, refermeture automatique"
+                  ],
+                  [
+                    "1 OFF · 2 ON",
+                    "Semi-automatique : ouvre-stop-ferme-stop, pas de refermeture automatique"
+                  ],
+                  [
+                    "1 ON · 2 ON",
+                    "Automatique 2 : ouvre-stop-ferme-stop, refermeture automatique à la fin de la pause"
+                  ]
+                ]
+              },
+              {
+                "code": "A · DIP 3",
+                "def": "—",
+                "titre": "Coup de bélier",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Impulsion de fermeture au début et à la fin de la manœuvre pour faciliter la serrure électrique"
+                  ],
+                  [
+                    "OFF",
+                    "Sans"
+                  ]
+                ]
+              },
+              {
+                "code": "A · DIP 4",
+                "def": "—",
+                "titre": "Lumière de courtoisie",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Tension sur les bornes 3-4 du début de l'ouverture jusqu'à 2 minutes après la fermeture"
+                  ],
+                  [
+                    "OFF",
+                    "Lampe de clignotant"
+                  ]
+                ]
+              },
+              {
+                "code": "A · DIP 5",
+                "def": "—",
+                "titre": "Préclignotement",
+                "valeurs": [
+                  [
+                    "ON",
+                    "4 s"
+                  ],
+                  [
+                    "OFF",
+                    "1 s"
+                  ]
+                ]
+              },
+              {
+                "code": "A · DIP 6",
+                "def": "—",
+                "titre": "Photo 2",
+                "valeurs": [
+                  [
+                    "ON",
+                    "En ouverture et en fermeture : arrête et inverse 2 s, refermeture après 1 minute"
+                  ],
+                  [
+                    "OFF",
+                    "En ouverture et en fermeture : arrêt et réouverture dès que l'obstacle est enlevé, refermeture après 1 minute"
+                  ]
+                ]
+              },
+              {
+                "code": "A · DIP 7",
+                "def": "—",
+                "titre": "Moteur actif après FCF",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Le moteur fonctionne 3 s après l'activation du fin de course ferme"
+                  ],
+                  [
+                    "OFF",
+                    "Jusqu'à la fin de l'activation du fin de course ferme"
+                  ]
+                ]
+              },
+              {
+                "code": "A · DIP 8",
+                "def": "—",
+                "titre": "Test des entrées PHOTO, STOP et barre palpeuse",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Test activé"
+                  ],
+                  [
+                    "OFF",
+                    "Pas de test"
+                  ]
+                ],
+                "note": "Pour la procédure de détection des dispositifs sous test, voir l'onglet Apprent."
+              },
+              {
+                "code": "A · DIP 9",
+                "def": "—",
+                "titre": "Détection d'obstacle",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Type (A) : en fermeture inversion jusqu'au FCA, pause 1 minute puis refermeture (START ferme tout de suite) ; en ouverture inversion 2 s puis fermeture complète après 1 minute"
+                  ],
+                  [
+                    "OFF",
+                    "Type (B) : considérée comme fin de course"
+                  ]
+                ]
+              },
+              {
+                "code": "A · DIP 10",
+                "def": "—",
+                "titre": "Temps programmés",
+                "valeurs": [
+                  [
+                    "ON",
+                    "Programmation des temps personnalisée par l'utilisateur"
+                  ],
+                  [
+                    "OFF",
+                    "Mémorisation standard des temps de travail"
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "nom": "DIP B — exclusions et options",
+            "items": [
+              {
+                "code": "B · DIP 1",
+                "def": "—",
+                "titre": "Exclusion de l'entrée STOP",
+                "valeurs": [
+                  [
+                    "ON",
+                    "STOP exclu (12)"
+                  ],
+                  [
+                    "OFF",
+                    "STOP actif"
+                  ]
+                ]
+              },
+              {
+                "code": "B · DIP 2",
+                "def": "—",
+                "titre": "Exclusion de l'entrée PHOTO",
+                "valeurs": [
+                  [
+                    "ON",
+                    "PHOTO exclue (13)"
+                  ],
+                  [
+                    "OFF",
+                    "PHOTO active"
+                  ]
+                ]
+              },
+              {
+                "code": "B · DIP 3",
+                "def": "—",
+                "titre": "Exclusion du fin de course ouvre",
+                "valeurs": [
+                  [
+                    "ON",
+                    "FCO exclu (14)"
+                  ],
+                  [
+                    "OFF",
+                    "FCO actif"
+                  ]
+                ]
+              },
+              {
+                "code": "B · DIP 4",
+                "def": "—",
+                "titre": "Exclusion du fin de course ferme",
+                "valeurs": [
+                  [
+                    "ON",
+                    "FCF exclu (15)"
+                  ],
+                  [
+                    "OFF",
+                    "FCF actif"
+                  ]
+                ]
+              },
+              {
+                "code": "B · DIP 5",
+                "def": "—",
+                "titre": "Exclusion de PHOTO 2",
+                "valeurs": [
+                  [
+                    "ON",
+                    "PHOTO 2 exclue (21)"
+                  ],
+                  [
+                    "OFF",
+                    "PHOTO 2 active"
+                  ]
+                ]
+              },
+              {
+                "code": "B · DIP 6",
+                "def": "—",
+                "titre": "Soft-start",
+                "valeurs": [
+                  [
+                    "ON",
+                    "À l'ouverture, départ progressif contrôlé de la vitesse du moteur"
+                  ],
+                  [
+                    "OFF",
+                    "Sans"
+                  ]
+                ]
+              },
+              {
+                "code": "B · DIP 7",
+                "def": "—",
+                "titre": "Fonctionnement industriel",
+                "valeurs": [
+                  [
+                    "ON",
+                    "START devient OUVRE et PIÉTON devient FERME. Avec A 1 ON et A 2 ON : refermeture automatique ; avec A 1 OFF et A 2 ON : pas de refermeture automatique"
+                  ],
+                  [
+                    "OFF",
+                    "Standard"
+                  ]
+                ]
+              },
+              {
+                "code": "B · DIP 8",
+                "def": "—",
+                "titre": "Non utilisé",
+                "valeurs": [
+                  [
+                    "−",
+                    "Sans fonction"
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "nom": "Trimmers, cavaliers et boutons",
+            "items": [
+              {
+                "code": "FORZA",
+                "def": "—",
+                "titre": "Force du moteur",
+                "valeurs": [
+                  [
+                    "20 % … 100 %",
+                    "Réglage de la poussée"
+                  ]
+                ]
+              },
+              {
+                "code": "V.RALL",
+                "def": "—",
+                "titre": "Vitesse de ralentissement",
+                "valeurs": [
+                  [
+                    "MIN … OFF",
+                    "OFF désactive le ralentissement ; à 4 pour la plupart des moteurs"
+                  ]
+                ]
+              },
+              {
+                "code": "BLOCK",
+                "def": "—",
+                "titre": "Niveau ampèremétrique",
+                "valeurs": [
+                  [
+                    "MIN … OFF",
+                    "OFF désactive la sensibilité"
+                  ]
+                ]
+              },
+              {
+                "code": "JP1",
+                "def": "—",
+                "titre": "Homme mort",
+                "valeurs": [
+                  [
+                    "Fermé",
+                    "START ouvre, PIÉTON ferme ; le moteur s'arrête au relâchement"
+                  ]
+                ]
+              },
+              {
+                "code": "Cavalier AC/DC",
+                "def": "—",
+                "titre": "Type de sortie 24 V (bornes 18-19-20)",
+                "valeurs": [
+                  [
+                    "AC",
+                    "Sortie 24 V AC (cellules AC)"
+                  ],
+                  [
+                    "DC",
+                    "Sortie 24 V DC (cellules DC, fins de course magnétiques)"
+                  ]
+                ]
+              },
+              {
+                "code": "CODICI · TEMPI · P",
+                "def": "—",
+                "titre": "Boutons de la carte",
+                "valeurs": [
+                  [
+                    "CODICI",
+                    "Mémoire des codes radio"
+                  ],
+                  [
+                    "TEMPI",
+                    "Apprentissage des temps de travail"
+                  ],
+                  [
+                    "P",
+                    "Augmenter le temps de pause (selon le schéma de la notice)"
+                  ]
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "apprentissage": {
+        "avant": [
+          "Sans encoder, la vitesse est réglée par les trimmers de vitesse (déjà préréglés) avant la mémorisation.",
+          "Mémorisation des temps (toutes procédures) : choisir le mode semi-automatique (DIP A 1 OFF, DIP A 2 ON, DIP B 7 OFF) et le portail fermé. Après le premier appui sur TEMPI, les commandes START (borne 16) ou un émetteur mémorisé peuvent remplacer TEMPI.",
+          "Effacer d'abord toute la mémoire radio avant de mémoriser le premier émetteur : la notice indique que le récepteur intégré peut mémoriser « seulement 1 code » et impose d'effacer les codes mis en usine lors des tests."
+        ],
+        "etapes": [
+          "Temps standard : DIP A 10 sur OFF. Appuyer TEMPI : le moteur ouvre. À l'ouverture complète (ou appuyer TEMPI si pas de fin de course) puis compter la pause. Appuyer TEMPI : le portail ferme ; attendre la fermeture.",
+          "Ouverture piétonne : appuyer et maintenir TEMPI jusqu'à ce que le moteur ouvre puis relâcher ; TEMPI pour arrêter à l'ouverture piétonne, compter la pause, TEMPI pour fermer, TEMPI pour arrêter (sans FCF).",
+          "Pause seule (rapide) : TEMPI, les LED OUVRE et FERME restent allumées, compter la pause, TEMPI pour fermer.",
+          "Temps avancé : DIP A 10 sur ON ; TEMPI (ou START) pour ouvrir, ralentissement au trimmer V.RALL, TEMPI à l'arrêt voulu, compter la pause, TEMPI pour fermer (ralentissement), TEMPI à l'arrêt (sans fin de course).",
+          "Radio : portail fermé, CODICI (L1 reste allumée) puis touche de l'émetteur pour START ; CODICI deux fois puis touche pour PIÉTON (L1 clignote à la mémorisation). Mémoriser avant de brancher l'antenne (bornes 8-9).",
+          "Effacement des codes : maintenir CODICI jusqu'au clignotement de L1, relâcher, attendre l'effacement. Effacement des temps : CODICI + TEMPI ensemble 10 s jusqu'à l'extinction de L1 (n'efface pas les codes).",
+          "Rolling code : CODICI une fois (L1 allumée), une deuxième fois (L1 clignote), une troisième fois (L1 clignote deux fois) = rolling activé ; le mode code fixe se rétablit en répétant l'opération (un clignotement)."
+        ],
+        "apres": [
+          "Test des cellules / STOP : mettre le dip A 8 sur OFF carte hors tension, alimenter et attendre que le LED clignote régulièrement, mettre le dip A 8 sur ON, ouvrir avec START ou refaire l'apprentissage des temps : la carte détecte les dispositifs sous test, le départ est retardé de quelques instants.",
+          "Capacité radio : la notice annonce 200 télécommandes rolling réf. Bandy, alors que le récepteur intégré « ne peut mémoriser que 1 code » (écart de la notice) ; codes 12 et 14 bits, rolling HCS (partie fixe seulement hors Bandy).",
+          "Les temps de travail et les codes radio sont deux mémoires distinctes."
         ]
       }
     }

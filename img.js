@@ -3,6 +3,31 @@
 (function () {
   const S = (f, t, p, d) => ({ f: "schemas/" + f + ".webp", t, p, d });
   window.SCHEMAS = {
+    "casit-eq2000": [
+      S("casit-eq2000-p6", "Schéma de câblage barres palpeuses et cellules", 6, "Dessin du fascicule technique Espacs (08/01/2006) : barres palpeuses TO / TF sur 14-15 / 14-16, cellules en série sur 17-19 alimentées en 24 V permanent. Le dessin cite une ASO ISK 76, hors notice CASIT.")
+    ],
+    "casit-eq2006": [
+      S("casit-eq2006-p2", "Implantation de la carte et bornier", 2, "Vue de la carte (dip S1 à S3, trimmers, poussoirs PS1-PS3, LED) et tableau des bornes.")
+    ],
+    "casit-eq2009": [
+      S("casit-eq2009-p2", "Implantation de la carte et LED", 2, "Vue de la carte (dip S1 à S4, trimmers P1-P6, poussoirs PS1-PS3, bornes M1 à M15) et tableau des LED.")
+    ],
+    "casit-eq212": [
+      S("casit-eq212-p2", "LED, bornes et implantation", 2, "Page de la notice avec la carte, les LED L1 à L9 et le tableau des bornes.")
+    ],
+    "casit-keq013": [
+      S("casit-keq013-p4", "Schéma de la carte et branchements", 4, "Vue de la carte : bornes 1 à 34, afficheur, poussoirs P1-P3, pile CR2032, état normal des LED."),
+      S("casit-keq013-p17", "Photocellule A : raccordement et test", 17, "Branchement de la photocellule A en fermeture, avec et sans test (bornes 28-29)."),
+      S("casit-keq013-p18", "Photocellule B : raccordement et test", 18, "Branchement de la photocellule B en ouverture et fermeture, avec et sans test.")
+    ],
+    "casit-keq405": [
+      S("casit-keq405-p1", "Implantation de la carte", 1, "Vue de la carte : bornes M1 à M11, SW1 / SW2, trimmers P1-P3, fusibles F1 à F6, LED DL1 à DL14.")
+    ],
+    "casit-keqs08": [
+      S("casit-keqs08-p1", "Schéma de raccordement", 1, "Bornes 1 à 28 avec lampe, moteur, entrées N.F. / N.O., cellules TX / RX, serrure et encoder."),
+      S("casit-keqs08-p4", "Implantation de la carte", 4, "Position des dip A / B, trimmers FORZA / V.RALL / BLOCK, boutons CODICI / TEMPI / P, JP1, cavalier AC/DC."),
+      S("casit-keqs08-p8", "Raccordement des cellules 24 V", 8, "Cellules 24 V AC et 24 V DC, avec et sans test.")
+    ],
     "afca-starteco3-contacteurs": [
       S("afca-c3-p03", "Vue générale de la carte", 3, "Position des fusibles F1 / F2, boutons P1-P3, switchs, LEDs, cavalier J1, potentiomètres R1 / R2 et bornes d'alimentation."),
       S("afca-c3-p04", "Raccordement de la platine", 4, "Tous les borniers : arrêt d'urgence, sorties 24 V, clignotants, options, commandes, fins de course, cellules et barres palpeuses, avec la liste des bornes."),
