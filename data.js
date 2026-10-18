@@ -15,6 +15,9 @@ const DATA_VERSION = "2026-10-18";
 /* Journal des modifications — ajouter une entrée en haut à chaque mise à jour.
    docs : nom des notices ajoutées (affichées dans Réglages). */
 const CHANGELOG = [
+  { v: "1.23", date: "2026-10-18", titre: "Schéma ZA3P : notice FA01883", items: [
+    "Quatre pages de la notice Came FA01883 (ZA3P, édition antérieure) ajoutées à l'onglet Schéma de la ZA3P : carte, branchements, commandes et sécurités dessinés."
+  ], docs: [] },
   { v: "1.22", date: "2026-10-18", titre: "Schéma : Roger et BFT", items: [
     "Onglet « Schéma » sur les 5 cartes Roger (B70/1DC, B70/1DCHP, B70/2ML, EDGE1, CTRL) : installation type avec câbles conseillés, raccordements électriques et tableaux des contacts de la notice.",
     "Onglet « Schéma » sur BFT MERAK et LEO B CBB : tableaux de configuration et de bornier de la notice.",

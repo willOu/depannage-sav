@@ -50,6 +50,10 @@
     ],
     "came-za3p": [
       S("came-za3p-p13", "Description des composants de la carte", 13, "Dessin de la carte numéroté (borniers, trimmers TL / TFA, dip-switchs, fusibles) avec légende."),
+      S("came-za3p-fa01883-p05", "Autre notice (FA01883) : description des parties", 5, "Notice ZA3P d'une édition antérieure (FA01883-FR) : dessin de la carte numéroté. Vérifier que la carte est la même que sur la notice FA02020."),
+      S("came-za3p-fa01883-p07", "Autre notice (FA01883) : branchements électriques", 7, "Alimentation 230 V, transformateur, moteurs M1 / M2 et contacts de fin de course dessinés sur la carte."),
+      S("came-za3p-fa01883-p08", "Autre notice (FA01883) : signalisation et commandes", 8, "Raccordement du clignotant, voyant, lampe de cycle et des boutons de commande (ouverture, fermeture, stop)."),
+      S("came-za3p-fa01883-p09", "Autre notice (FA01883) : dispositifs de sécurité", 9, "Raccordement des photocellules DELTA et DIR / DELTA S, avec ou sans test de contrôle.")
     ],
     "roger-b70-1dc": [
       S("roger-b70-1dc-p126", "Installation type et câbles conseillés", 126, "Dessin de l'installation complète avec repères et tableau des câbles conseillés (section, longueur maxi)."),
