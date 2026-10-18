@@ -13626,7 +13626,7 @@ const MARQUES = [
           "code": "oP / FP",
           "type": "afficheur",
           "titre": "Ouverture piéton / fermeture piéton en cours",
-          "action": "Ouverture partielle (switch 20 sur ON) en cours."
+          "action": "Ouverture / fermeture piéton en cours."
         },
         {
           "code": "Att",
@@ -13716,7 +13716,7 @@ const MARQUES = [
           "code": "Moteur ne part pas",
           "type": "symptome",
           "titre": "La porte ne bouge pas",
-          "action": "Vérifier d'abord l'afficheur (AU, StoP, C1/C2/H/b), puis les LEDs des entrées (diagnostic page 17/18 de la notice), les fusibles et le pontage des sécurités non utilisées."
+          "action": "Vérifier d'abord l'afficheur (AU, StoP, C1/C2/H/b), puis les LEDs des entrées (notice : diagnostic, LEDs, afficheur p. 16, 17, 18), les fusibles et le pontage des sécurités non utilisées."
         },
         {
           "code": "Switchs sans effet",
@@ -13931,9 +13931,9 @@ const MARQUES = [
         "notes": [
           "Les entrées de sécurité non utilisées doivent être pontées. L'arrêt d'urgence ne doit pas être raccordé avec les autres sécurités.",
           "La platine doit toujours être fixée sur une plaque de fond métallique et reliée à la terre. Ne jamais faire passer de fil entre la carte électronique et la plaque de fond.",
-          "Les contacteurs sont remplacés par 3 bornes sur la version contacts secs (Startéco 3 « contacts secs »).",
+          "Les contacteurs sont remplacés par 3 bornes sur la version contacts secs (Startéco 3 « contacts secs ») : en monophasé, alimentation sur L1 et L2 seulement, à l'emplacement du contacteur de gauche.",
           "Notice : la borne 15 y est citée deux fois (sortie option 2 et « ouverture automatique ») : l'ouverture est la borne 19 ; en cas de doute, vérifier avec le schéma de la notice.",
-          "Autotest : J1 sur 24 V AC = l'émetteur est alimenté par la borne 7 (coupée 500 ms avant le départ) ; J1 sur contact sec = commande de test d'un amplificateur par 7-8. Les entrées cellule 1, cellule 2 et sécurité basse sont testées avant la fermeture, la sécurité haute avant l'ouverture.",
+          "Autotest : J1 sur 24 V AC = l'émetteur est alimenté par la borne 7 dans le texte de la notice (p. 5), mais le schéma dit « borne 8 » : vérifier sur site. J1 sur contact sec = commande de test d'un amplificateur par 7-8 (le schéma p. 6 dit au contraire « J1 sur 24 V » et « bornes 3 et 8 sur l'entrée test »). Les entrées cellule 1, cellule 2 et sécurité basse sont testées avant la fermeture ; avant l'ouverture la notice écrit « sécurité basse », probablement « haute » (à vérifier).",
           "Raccordement type cellules PE12 sans ampli : fil noir de la cellule réceptrice sur 37 (barrage n°1) ou 38 (barrage n°2).",
           "Barre palpeuse PB18 : fil noir du récepteur sur 41 (basse) ou 40 (haute). Pour augmenter la sensibilité, fil noir de l'émetteur sur R1 / R2 puis potentiomètre ; ne jamais raccorder deux fils MUTE sur la même borne."
         ]
@@ -14195,7 +14195,7 @@ const MARQUES = [
                 "valeurs": [
                   [
                     "—",
-                    "Intitulé de la notice (tableau p. 9) ; le paragraphe détaillé n'existe pas dans la notice V1.6. Voir le switch 19 et 20."
+                    "Intitulé du tableau p. 8 de la notice ; aucun paragraphe détaillé n'existe dans la notice V1.6."
                   ]
                 ]
               },
@@ -14474,7 +14474,7 @@ const MARQUES = [
           "code": "oP / FP",
           "type": "afficheur",
           "titre": "Ouverture piéton / fermeture piéton en cours",
-          "action": "Ouverture partielle (switch 20 sur ON) en cours."
+          "action": "Ouverture / fermeture piéton en cours."
         },
         {
           "code": "Att",
@@ -14564,7 +14564,7 @@ const MARQUES = [
           "code": "Moteur ne part pas",
           "type": "symptome",
           "titre": "La porte ne bouge pas",
-          "action": "Vérifier d'abord l'afficheur (AU, StoP, C1/C2/H/b), puis les LEDs des entrées (diagnostic page 17/18 de la notice), les fusibles et le pontage des sécurités non utilisées."
+          "action": "Vérifier d'abord l'afficheur (AU, StoP, C1/C2/H/b), puis les LEDs des entrées (notice : diagnostic, LEDs, afficheur p. 18, 19, 20), les fusibles et le pontage des sécurités non utilisées."
         },
         {
           "code": "Switchs sans effet",
@@ -14789,7 +14789,7 @@ const MARQUES = [
         "navigation": [
           "P3 (VALID) pendant 2 s : « Prog » ; P3 de nouveau : paramètre 01 (nombre de moteurs).",
           "P1 / P2 font défiler les paramètres ; P3 : le numéro clignote ; P1 / P2 modifient ; P3 valide ; « End » puis P3 pour sortir.",
-          "Détection d'obstacle : P1 règle la grande vitesse, P2 la petite vitesse. Mettre 0 désactive la détection."
+          "Détection d'obstacle : P1 règle la grande vitesse, P2 la petite. Plage 0,0 à 9,9 dans les tableaux, « 1 à 9 » dans le texte ; 0 désactive la détection."
         ],
         "groupes": [
           {
@@ -15495,7 +15495,7 @@ const MARQUES = [
             "nom": "Autotests (code usine 0000)",
             "items": [
               {
-                "code": "26 · 18 (1 mot.)",
+                "code": "26 (2 mot.) · 18 (1 mot.)",
                 "def": "—",
                 "titre": "Autotest cellule n°1",
                 "valeurs": [
@@ -15510,7 +15510,7 @@ const MARQUES = [
                 ]
               },
               {
-                "code": "27 · 19 (1 mot.)",
+                "code": "27 (2 mot.) · 19 (1 mot.)",
                 "def": "—",
                 "titre": "Autotest cellule n°2",
                 "valeurs": [
@@ -15525,7 +15525,7 @@ const MARQUES = [
                 ]
               },
               {
-                "code": "28 · 20 (1 mot.)",
+                "code": "28 (2 mot.) · 20 (1 mot.)",
                 "def": "—",
                 "titre": "Autotest barre palpeuse ouverture",
                 "valeurs": [
@@ -15540,7 +15540,7 @@ const MARQUES = [
                 ]
               },
               {
-                "code": "29 · 21 (1 mot.)",
+                "code": "29 (2 mot.) · 21 (1 mot.)",
                 "def": "—",
                 "titre": "Autotest barre palpeuse fermeture",
                 "valeurs": [
@@ -15555,7 +15555,7 @@ const MARQUES = [
                 ]
               },
               {
-                "code": "30 · 22 (1 mot.)",
+                "code": "30 (2 mot.) · 22 (1 mot.)",
                 "def": "—",
                 "titre": "Temporisation de l'autotest",
                 "valeurs": [
@@ -15566,7 +15566,7 @@ const MARQUES = [
                 ]
               },
               {
-                "code": "31 · 23 (1 mot.)",
+                "code": "31 (2 mot.) · 23 (1 mot.)",
                 "def": "—",
                 "titre": "Nouveau mot de passe",
                 "valeurs": [
@@ -15611,7 +15611,7 @@ const MARQUES = [
         "etapes": [
           "Raccorder fins de course (24-26 moteur 1, 27-29 moteur 2), commandes et sécurités ; ponter 1-2 et les sécurités non utilisées.",
           "Régler les switchs puis couper / remettre sous tension.",
-          "P3 2 s : paramètre 01 = nombre de moteurs (1 ou 2).",
+          "P3 2 s (« Prog »), P3 de nouveau : paramètre 01 = nombre de moteurs (1 ou 2).",
           "Régler les temps de fonctionnement, la puissance (40 à 100 %), les décalages et la sensibilité d'obstacle par moteur.",
           "Faire un cycle complet (ouverture + fermeture) avant de tester la détection d'obstacle."
         ],
@@ -15681,7 +15681,7 @@ const MARQUES = [
           "code": "Historique : DEF. superviseur",
           "type": "diag",
           "titre": "Défaut superviseur",
-          "action": "Entrée du menu USINE > Historique défauts (10 derniers défauts, avec date et heure)."
+          "action": "Entrée du menu USINE > Historique défauts (10 derniers défauts, avec date et heure). La notice ne donne que les libellés : les pistes ci-dessous sont des déductions."
         },
         {
           "code": "Historique : Présence AU",
@@ -15699,13 +15699,13 @@ const MARQUES = [
           "code": "Historique : C1 à C4 active +5mn",
           "type": "diag",
           "titre": "Cellule 1 / 2 / 3 / 4 active depuis plus de 5 min",
-          "action": "Cellule occultée ou mal alignée."
+          "action": "Piste (déduite) : cellule occultée ou mal alignée."
         },
         {
           "code": "Historique : SF1 à SF4 active +5mn",
           "type": "diag",
           "titre": "Barre palpeuse fermeture active depuis plus de 5 min",
-          "action": "Barre palpeuse écrasée ou mal câblée."
+          "action": "Piste (déduite) : barre palpeuse écrasée ou mal câblée."
         },
         {
           "code": "Historique : SO1 à SO4 active +5mn",
@@ -15759,7 +15759,7 @@ const MARQUES = [
           "code": "Mode manoeuvre",
           "type": "symptome",
           "titre": "Moteur à tester ou fins de course à régler",
-          "action": "MANOEUVRES : pilotage en homme mort (+ ouvre, − ferme), sécurités ignorées, fins de course et sorties toujours actifs. Sortie : maintenir VALID 3 s."
+          "action": "MANOEUVRES : pilotage en homme mort, sécurités ignorées, fins de course et sorties toujours actifs. Sens des boutons : la notice dit « + ouvre, − ferme » (p. 12 et 22) mais « BP1 ouverture, BP2 fermeture » (p. 37) : se fier à l'afficheur (Ouverture forcée / Fermeture forcée). Sortie par VALID (3 s maintenu en règle générale)."
         }
       ],
       "afficheur": {
@@ -15775,7 +15775,7 @@ const MARQUES = [
           },
           {
             "titre": "Menu MANOEUVRES",
-            "texte": "Commande de la porte en marche forcée avec les boutons : + = ouverture forcée, − = fermeture forcée. Les sécurités ne sont pas prises en compte ; les fins de course et les sorties restent actifs. Sert au réglage des fins de course et à manœuvrer en cas de défaut de sécurité."
+            "texte": "Commande de la porte en marche forcée avec les boutons (voir la contradiction + / BP1 notée dans l'onglet Codes). Les sécurités ne sont pas prises en compte ; les fins de course et les sorties restent actifs. Sert au réglage des fins de course et à manœuvrer en cas de défaut de sécurité."
           },
           {
             "titre": "INFO CARTE",
@@ -15819,9 +15819,15 @@ const MARQUES = [
                 "t": "moteur"
               },
               {
+                "n": "45 · 46",
+                "label": "Terre",
+                "desc": "Symboles de terre sur le schéma de la notice (bornier vertical).",
+                "t": "alim"
+              },
+              {
                 "n": "1-2",
                 "label": "Arrêt d'urgence",
-                "desc": "Coupe le circuit 24 V ; ponter 1-2 si inutilisé.",
+                "desc": "Coupe le circuit 24 V ; ponter 1-2 si inutilisé. Avec un fin de course électronique AFME : raccorder obligatoirement la sortie SECU OUT de la carte encodeur sur 1-2 (fils 0,5 mm² mini).",
                 "t": "nf"
               },
               {
@@ -15838,7 +15844,7 @@ const MARQUES = [
               {
                 "n": "7-8",
                 "label": "Autotest 24 V ou contact sec",
-                "desc": "Choix avec J1 : contact sec NO 500 ms avant le départ, ou 24 V AC coupé 500 ms.",
+                "desc": "Choix avec J1 : contact sec NO 500 ms avant le départ, ou 24 V AC coupé 500 ms. Le texte p. 7 parle de la borne 7, les schémas p. 7 et 36 de la borne 8 pour l'émetteur : vérifier sur site.",
                 "t": "sortie"
               },
               {
@@ -15856,13 +15862,13 @@ const MARQUES = [
               {
                 "n": "14-15",
                 "label": "Option 2",
-                "desc": "Contact sec programmable (paramètres 42-43). Défaut : sécurité.",
+                "desc": "Contact sec programmable (paramètres 42-43), 5 A maxi. Défaut : sécurité.",
                 "t": "sortie"
               },
               {
                 "n": "16-17",
                 "label": "Éclairage de zone",
-                "desc": "Contact sec : aucune tension sur ces bornes. Phase sur 16 et neutre sur 17 ; en 400 V tri, le neutre est indispensable.",
+                "desc": "Contact sec : aucune tension sur ces bornes. Phase sur 16, lampe entre la borne 17 et le neutre ; en 400 V tri, le neutre est indispensable.",
                 "t": "sortie"
               },
               {
@@ -15874,7 +15880,7 @@ const MARQUES = [
             ]
           },
           {
-            "nom": "Entrées de commande (contacts NO, affectables par le menu INPUTS)",
+            "nom": "Entrées de commande (affectables par le menu INPUTS)",
             "bornes": [
               {
                 "n": "18",
@@ -15897,7 +15903,7 @@ const MARQUES = [
               {
                 "n": "21",
                 "label": "STOP",
-                "desc": "Stop, contact NF ; entrée désactivée d'origine (paramètre 38).",
+                "desc": "Stop ; entrée désactivée d'origine (paramètre 38). La notice dit « NF » p. 5 et « normalement ouvert » p. 34 : vérifier à l'afficheur (menu DIAGNOSTIC).",
                 "t": "nf"
               },
               {
@@ -16012,7 +16018,7 @@ const MARQUES = [
         ]
       },
       "parametres": {
-        "intro": "Menu PARAMETRAGE : 47 paramètres (mot de passe 0000). Seuls les paramètres principaux sont visibles : les optionnels apparaissent quand leur fonction est activée (par exemple, cellules 2 à 4 seulement si les entrées sont affectées dans INPUTS). Valeurs d'usine reprises des tableaux de la notice.",
+        "intro": "Menu PARAMETRAGE : 47 paramètres selon la notice, numérotés 1 à 38 et 40 à 47 (pas de 39) (mot de passe 0000). Plages divergentes entre le texte et les tableaux de la notice (paramètres 6, 13, 14, 35, 37, 38) : la fiche suit les tableaux. Seuls les paramètres principaux sont visibles : les optionnels apparaissent quand leur fonction est activée (par exemple, cellules 2 à 4 seulement si les entrées sont affectées dans INPUTS). Valeurs d'usine reprises des tableaux de la notice.",
         "navigation": [
           "Carte au repos : VALID donne accès aux menus ; + / − pour choisir (UTILISATION, PARAMETRAGE, MANOEUVRES, DIAGNOSTIC, INPUTS, MENU USINE, HORLOGE, INFO CARTE). VALID pour entrer.",
           "Dans un menu : VALID choisit le paramètre à modifier et valide ; + / − défilent et changent la valeur. Maintenir VALID 3 s : sortir en mémorisant.",
@@ -16300,7 +16306,7 @@ const MARQUES = [
                   ],
                   [
                     "Autotest",
-                    "Prise en compte et testée avant chaque départ"
+                    "Prise en compte et testée avant chaque départ (fermeture pour palpeurs SF et cellules C, ouverture pour sécurités SO) ; contact resté fermé = arrêt comme un STOP"
                   ]
                 ],
                 "note": "Si autotest : accès direct au temps d'autotest."
@@ -16320,7 +16326,7 @@ const MARQUES = [
                   ],
                   [
                     "Autotest",
-                    "Prise en compte et testée avant chaque départ"
+                    "Prise en compte et testée avant chaque départ (fermeture pour palpeurs SF et cellules C, ouverture pour sécurités SO) ; contact resté fermé = arrêt comme un STOP"
                   ]
                 ],
                 "note": "Invisibles si SF2 / SF3 / SF4 non affectés dans INPUTS."
@@ -16340,7 +16346,7 @@ const MARQUES = [
                   ],
                   [
                     "Autotest",
-                    "Prise en compte et testée avant chaque départ"
+                    "Prise en compte et testée avant chaque départ (fermeture pour palpeurs SF et cellules C, ouverture pour sécurités SO) ; contact resté fermé = arrêt comme un STOP"
                   ]
                 ],
                 "note": "22 = palpeur 1 ouverture. Invisibles si SO2 à SO4 non affectés."
@@ -16380,7 +16386,7 @@ const MARQUES = [
                   ],
                   [
                     "Autotest",
-                    "Prise en compte et testée avant chaque départ"
+                    "Prise en compte et testée avant chaque départ (fermeture pour palpeurs SF et cellules C, ouverture pour sécurités SO) ; contact resté fermé = arrêt comme un STOP"
                   ]
                 ]
               },
@@ -16399,7 +16405,7 @@ const MARQUES = [
                   ],
                   [
                     "Autotest",
-                    "Prise en compte et testée avant chaque départ"
+                    "Prise en compte et testée avant chaque départ (fermeture pour palpeurs SF et cellules C, ouverture pour sécurités SO) ; contact resté fermé = arrêt comme un STOP"
                   ]
                 ]
               },
@@ -16418,7 +16424,7 @@ const MARQUES = [
                   ],
                   [
                     "Autotest",
-                    "Prise en compte et testée avant chaque départ"
+                    "Prise en compte et testée avant chaque départ (fermeture pour palpeurs SF et cellules C, ouverture pour sécurités SO) ; contact resté fermé = arrêt comme un STOP"
                   ]
                 ],
                 "note": "Invisibles si C3 / C4 non affectées dans INPUTS."
@@ -16655,7 +16661,7 @@ const MARQUES = [
                   ],
                   [
                     "Feux oranges",
-                    "Pilotage de feux oranges"
+                    "Actif pendant la manœuvre et le préavis (libellé « Éclairage » p. 21)"
                   ]
                 ]
               },
@@ -16684,7 +16690,7 @@ const MARQUES = [
                     "Fonction du relais du relayage"
                   ]
                 ],
-                "note": "Visible si relayage activé sur l'option 1. Le paragraphe 39 n'existe pas dans la notice."
+                "note": "Visible si relayage activé sur l'option 1."
               },
               {
                 "code": "45",
@@ -16725,7 +16731,7 @@ const MARQUES = [
             ]
           },
           {
-            "nom": "MENU USINE (mot de passe)",
+            "nom": "MENU USINE",
             "items": [
               {
                 "code": "U1",
@@ -16876,9 +16882,10 @@ const MARQUES = [
                 "valeurs": [
                   [
                     "+ / − puis VALID",
-                    "Positionner la porte puis « Mémoriser »"
+                    "Positionner la porte à la position piéton puis « Mémoriser »"
                   ]
-                ]
+                ],
+                "note": "La notice p. 27 écrit ici « fermer totalement la porte » (probable copier-coller de FDC FERM)."
               },
               {
                 "code": "Réglage FDC FERM",
@@ -16980,7 +16987,7 @@ const MARQUES = [
         ],
         "apres": [
           "Menu INFO CARTE : version du programme (ex. 1.07), N° de série, durée de fonctionnement.",
-          "Reset EEPROM (menu USINE) : remet tous les paramètres à leurs valeurs par défaut ; le mot de passe reste à modifier dans le même menu.",
+          "Reset EEPROM (menu USINE) : remet tous les paramètres à leurs valeurs par défaut.",
           "Rotation moteur inversée : menu USINE > « Rotation Mot Ouv » sur Inverse (pas besoin de changer le câblage)."
         ]
       }
