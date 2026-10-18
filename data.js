@@ -17,7 +17,7 @@ const CHANGELOG = [
     "Nouvelles cartes à afficheur : ZM3E, ZM3ES (400 V triphasé), ZLJ24, avec menu FONCTIONS, ENCODEUR, RÉGLAGE TEMPS, bornier complet et branchements.",
     "Nouvelles cartes à fonctions F : ZN7 (coulissant 24 V avec encodeur, fonctions F, U, A, H) et ZL92 (moteurs 24 V).",
     "Nouvelles cartes à dip-switch : ZBX6, ZBX241 (avec batteries BN1), ZL90 (calibrage automatique, serrure et coup de bélier), ZBX10, ZA3, ZA4, ZA5.",
-    "Nouvelles cartes de barrière : ZA3P (88003-0183, carte de remplacement de la ZA3) et 88003-0184 (barrières CAT1DAGS : codes E4, E11, E13, E15 et avertissements C0, C1, C4, C5, C7)."
+    "Nouvelles cartes de barrière : ZA3P (88003-0183, carte de remplacement) et 88003-0184 (barrières CAT1DAGS : codes E4, E11, E13, E15 et avertissements C0, C1, C4, C5, C7)."
   ], docs: [
     "Notice Came FA00379M4A (ZM3E)", "Notice Came FA00557M4A (ZM3ES)", "Notice Came FA00434M4A (ZLJ24)", "Notice Came FA00402M4A (ZN7)", "Notice Came FA00042M4A (ZBX6)",
     "Notice Came 319LR17 (ZBX241 + BN1)", "Notice Came 319LR07 (ZL90)", "Notice Came 319LR36 (ZL92)", "Notice Came 319LR21 (ZBX10)",
@@ -432,22 +432,27 @@ const MARQUES = [
               "label": "Série RS485",
               "desc": "Carte RSE pour la domotique via CRP (Came Remote Protocol)",
               "t": "bus"
+            },
+            {
+              "n": "Antenne",
+              "label": "Antenne",
+              "desc": "Câble RG58 de l'antenne (carte radio AF enfichée)",
+              "t": "bus"
             }
           ]
         }
       ],
       "fusibles": "Non indiqués sur la fiche de rechange (voir le manuel de l'armoire).",
       "notes": [
-        "Moteur à retard : M1 ouvre en premier, M2 ferme en premier.",
+        "Moteur M1 : retard à l'ouverture ; moteur M2 : retard à la fermeture (intitulés de la fiche).",
         "Fiche valable pour ZM3E110 et ZM3EP (même carte 3199ZM3E).",
-        "Carte radio AF : l'enficher uniquement hors tension (batteries débranchées) ; la carte mère ne la reconnaît qu'à la remise sous tension.",
         "Avant toute intervention, et avant d'insérer une carte à enfichage (AF, R700, etc.) : couper la tension de ligne et débrancher les batteries éventuelles."
       ]
     },
     "parametres": {
       "intro": "Menu à afficheur : FONCTIONS, ENCODEUR, RÉGLAGE TEMPS, UTILISATEURS, INFO, TEST MOT. La fiche donne l'arborescence et les choix, pas les valeurs d'usine.",
       "navigation": [
-        "Menu à afficheur : LANGUE, FONCTIONS, RÉGLAGE TEMPS, UTILISATEURS, INFO, TEST MOT. (et ENCODEUR ou CONFIG COURSE selon la carte).",
+        "Menu à afficheur : LANGUE, FONCTIONS, RÉGLAGE TEMPS, UTILISATEURS, INFO, TEST MOT., plus ENCODEUR et / ou CONFIG COURSE sur les cartes qui les ont (voir l'intro de la carte).",
         "La fiche de rechange donne l'arborescence et les choix possibles séparés par « > ». Les touches de navigation et le sens exact de chaque réglage sont dans le manuel de l'armoire (docs.came.com).",
         "La valeur d'usine n'est pas indiquée sur la fiche (colonne « usine » : —)."
       ],
@@ -708,7 +713,7 @@ const MARQUES = [
                 ],
                 [
                   "Ouverture-Fermeture-inversion",
-                  "Pas à pas"
+                  "Ouvre – ferme – inversion"
                 ]
               ]
             },
@@ -864,7 +869,7 @@ const MARQUES = [
                 ],
                 [
                   "M2",
-                  "Un seul vantail"
+                  "Moteur M2 seul"
                 ]
               ]
             },
@@ -917,7 +922,7 @@ const MARQUES = [
               "valeurs": [
                 [
                   "Activée",
-                  "Détection d'obstacle par encodeur"
+                  "Activée"
                 ],
                 [
                   "Désactivée",
@@ -1169,16 +1174,14 @@ const MARQUES = [
     "apprentissage": {
       "avant": [
         "Couper la tension de ligne et débrancher les batteries avant d'insérer une carte à enfichage (AF, R700, etc.).",
-        "Vérifier le sens de marche des moteurs avec le menu TEST MOT. (« <=M1 M2=> »).",
-        "Régler d'abord le menu FONCTIONS : nombre de moteurs, type de moteur, fins de course (NF / NO), configuration."
+        "Vérifier le sens de marche des moteurs avec le menu TEST MOT. (« <=M1 M2=> »)."
       ],
       "etapes": [
-        "Menu ENCODEUR > Réglage course : confirmer « oui ».",
-        "Laisser la carte faire l'apprentissage de la course.",
-        "Régler ensuite les temps (menu RÉGLAGE TEMPS) et les débuts de ralentissement par moteur (menu ENCODEUR)."
+        "La fiche ne décrit aucune procédure. Elle indique seulement dans le menu ENCODEUR la ligne « Réglage course (confirmer ? oui / non) », qui lance l'apprentissage de la course.",
+        "Pour les temps et les débuts de ralentissement par moteur : menus RÉGLAGE TEMPS et ENCODEUR."
       ],
       "apres": [
-        "La fiche de rechange ne décrit pas le déroulement de l'apprentissage : se reporter au manuel de l'armoire (docs.came.com).",
+        "Déroulement exact de l'apprentissage : voir le manuel de l'armoire (docs.came.com).",
         "Mémoriser les émetteurs : menu UTILISATEURS > Nouvel Utilisateur.",
         "Menu INFO : version, nombre de courses, remise à zéro du système."
       ]
@@ -1378,6 +1381,12 @@ const MARQUES = [
               "label": "Série RS485",
               "desc": "Carte RSE pour la domotique via CRP (Came Remote Protocol)",
               "t": "bus"
+            },
+            {
+              "n": "Antenne",
+              "label": "Antenne",
+              "desc": "Câble RG58 de l'antenne (carte radio AF enfichée)",
+              "t": "bus"
             }
           ]
         }
@@ -1386,6 +1395,7 @@ const MARQUES = [
       "notes": [
         "Moteurs triphasés 400 V : ne pas confondre avec la ZM3E (230 V monophasé, encodeurs).",
         "Pas de bornes d'encodeur sur cette carte : arrêt par fins de course.",
+        "Capteur sur S1-GND : le texte français dit TSP00 ou LT001, le texte russe TST01 ou LT001.",
         "Carte radio AF : l'enficher uniquement hors tension (batteries débranchées) ; la carte mère ne la reconnaît qu'à la remise sous tension.",
         "Avant toute intervention, et avant d'insérer une carte à enfichage (AF, R700, etc.) : couper la tension de ligne et débrancher les batteries éventuelles."
       ]
@@ -1393,7 +1403,7 @@ const MARQUES = [
     "parametres": {
       "intro": "Menu à afficheur : FONCTIONS, RÉGLAGE TEMPS, UTILISATEURS, INFO, TEST MOT. La fiche donne l'arborescence et les choix, pas les valeurs d'usine.",
       "navigation": [
-        "Menu à afficheur : LANGUE, FONCTIONS, RÉGLAGE TEMPS, UTILISATEURS, INFO, TEST MOT. (et ENCODEUR ou CONFIG COURSE selon la carte).",
+        "Menu à afficheur : LANGUE, FONCTIONS, RÉGLAGE TEMPS, UTILISATEURS, INFO, TEST MOT., plus ENCODEUR et / ou CONFIG COURSE sur les cartes qui les ont (voir l'intro de la carte).",
         "La fiche de rechange donne l'arborescence et les choix possibles séparés par « > ». Les touches de navigation et le sens exact de chaque réglage sont dans le manuel de l'armoire (docs.came.com).",
         "La valeur d'usine n'est pas indiquée sur la fiche (colonne « usine » : —)."
       ],
@@ -1654,7 +1664,7 @@ const MARQUES = [
                 ],
                 [
                   "Ouverture-Fermeture-inversion",
-                  "Pas à pas"
+                  "Ouvre – ferme – inversion"
                 ]
               ]
             },
@@ -1725,7 +1735,7 @@ const MARQUES = [
                 ],
                 [
                   "Activé",
-                  "Poussée sur la butée avant l'ouverture"
+                  "Coup de bélier activé"
                 ]
               ]
             },
@@ -1767,7 +1777,7 @@ const MARQUES = [
                 ],
                 [
                   "M2",
-                  "Un seul vantail"
+                  "Moteur M2 seul"
                 ]
               ]
             },
@@ -1958,9 +1968,7 @@ const MARQUES = [
         "Régler le menu FONCTIONS : nombre de moteurs, fins de course NF / NO, configuration « fin de course »."
       ],
       "etapes": [
-        "Raccorder les fins de course (contacts NF sur FA1 / FC1 / FA2 / FC2).",
-        "Régler le temps de fonctionnement (menu RÉGLAGE TEMPS, 10 à 150 s) et les retards M1 / M2.",
-        "Contrôler un cycle complet d'ouverture et de fermeture."
+        "La fiche ne décrit aucune procédure de réglage. Les fins de course se raccordent sur FA1 / FC1 / FA2 / FC2 (contacts NF) ; temps de fonctionnement, retards M1 / M2 et autres réglages : menu RÉGLAGE TEMPS."
       ],
       "apres": [
         "La fiche de rechange ne décrit pas de procédure d'apprentissage : se reporter au manuel de l'armoire (docs.came.com).",
@@ -2168,6 +2176,12 @@ const MARQUES = [
               "label": "Série RS485",
               "desc": "Carte RSE pour la domotique via CRP (Came Remote Protocol)",
               "t": "bus"
+            },
+            {
+              "n": "Antenne",
+              "label": "Antenne",
+              "desc": "Câble RG58 de l'antenne (carte radio AF enfichée)",
+              "t": "bus"
             }
           ]
         }
@@ -2175,15 +2189,15 @@ const MARQUES = [
       "fusibles": "Non indiqués sur la fiche de rechange (voir le manuel de l'armoire).",
       "notes": [
         "Fiche valable pour ZLJ24 et ZLJ24110 (même carte 3199ZLJ24).",
+        "Menu Config. : le texte français omet « ENCODER » que les textes italien et russe listent.",
         "Moteurs possibles (menu CONFIG COURSE, Type moteur) : Frog-F4024E, Frog-J, Frog-FL, Amico, Myto, Axo, Fast, Ferni.",
-        "Carte radio AF : l'enficher uniquement hors tension (batteries débranchées) ; la carte mère ne la reconnaît qu'à la remise sous tension.",
         "Avant toute intervention, et avant d'insérer une carte à enfichage (AF, R700, etc.) : couper la tension de ligne et débrancher les batteries éventuelles."
       ]
     },
     "parametres": {
       "intro": "Menu à afficheur : FONCTIONS, CONFIG COURSE, ENCODEUR, RÉGLAGE TEMPS, UTILISATEURS, INFO, TEST MOT. La fiche donne l'arborescence et les choix, pas les valeurs d'usine.",
       "navigation": [
-        "Menu à afficheur : LANGUE, FONCTIONS, RÉGLAGE TEMPS, UTILISATEURS, INFO, TEST MOT. (et ENCODEUR ou CONFIG COURSE selon la carte).",
+        "Menu à afficheur : LANGUE, FONCTIONS, RÉGLAGE TEMPS, UTILISATEURS, INFO, TEST MOT., plus ENCODEUR et / ou CONFIG COURSE sur les cartes qui les ont (voir l'intro de la carte).",
         "La fiche de rechange donne l'arborescence et les choix possibles séparés par « > ». Les touches de navigation et le sens exact de chaque réglage sont dans le manuel de l'armoire (docs.came.com).",
         "La valeur d'usine n'est pas indiquée sur la fiche (colonne « usine » : —)."
       ],
@@ -2444,7 +2458,7 @@ const MARQUES = [
                 ],
                 [
                   "Ouverture-Fermeture-inversion",
-                  "Pas à pas"
+                  "Ouvre – ferme – inversion"
                 ]
               ]
             },
@@ -2608,7 +2622,7 @@ const MARQUES = [
                 ],
                 [
                   "M2",
-                  "Un seul vantail"
+                  "Moteur M2 seul"
                 ]
               ]
             },
@@ -2709,7 +2723,7 @@ const MARQUES = [
               "valeurs": [
                 [
                   "Activée",
-                  "Détection d'obstacle par encodeur"
+                  "Activée"
                 ],
                 [
                   "Désactivée",
@@ -2951,16 +2965,14 @@ const MARQUES = [
     "apprentissage": {
       "avant": [
         "Couper la tension de ligne et débrancher les batteries avant d'insérer une carte à enfichage (AF, R700, etc.).",
-        "Vérifier le sens de marche des moteurs avec le menu TEST MOT. (« <=M1 M2=> »).",
-        "Régler d'abord le menu FONCTIONS : nombre de moteurs, type de moteur, fins de course (NF / NO), configuration."
+        "Vérifier le sens de marche des moteurs avec le menu TEST MOT. (« <=M1 M2=> »)."
       ],
       "etapes": [
-        "Menu ENCODEUR > Réglage course : confirmer « oui ».",
-        "Laisser la carte faire l'apprentissage de la course.",
-        "Régler ensuite les temps (menu RÉGLAGE TEMPS) et les débuts de ralentissement par moteur (menu ENCODEUR)."
+        "La fiche ne décrit aucune procédure. Elle indique seulement dans le menu ENCODEUR la ligne « Réglage course (confirmer ? oui / non) », qui lance l'apprentissage de la course.",
+        "Pour les temps et les débuts de ralentissement par moteur : menus RÉGLAGE TEMPS et ENCODEUR."
       ],
       "apres": [
-        "La fiche de rechange ne décrit pas le déroulement de l'apprentissage : se reporter au manuel de l'armoire (docs.came.com).",
+        "Déroulement exact de l'apprentissage : voir le manuel de l'armoire (docs.came.com).",
         "Mémoriser les émetteurs : menu UTILISATEURS > Nouvel Utilisateur.",
         "Menu INFO : version, nombre de courses, remise à zéro du système."
       ]
@@ -2969,7 +2981,7 @@ const MARQUES = [
   {
     "id": "came-zn7",
     "nom": "ZN7",
-    "modeles": "Rechange 3199ZN7 — coulissant / barrière 24 V avec encodeur (moteur 24 V DC)",
+    "modeles": "Rechange 3199ZN7 — moteur 24 V DC avec encodeur (type d'automatisme non précisé sur la fiche, classée en coulissant)",
     "type": "Coulissant 24 V — fonctions F, encodeur",
     "source": "Notice Came FA00402M4A (03/2016, fiche de rechange)",
     "codes": [
@@ -2983,7 +2995,7 @@ const MARQUES = [
         "code": "F 11",
         "type": "diag",
         "titre": "Encodeur désactivé",
-        "action": "F 11 = 1 désactive l'encodeur. Si la détection d'obstacle ou les ralentissements ne marchent plus, contrôler cette fonction."
+        "action": "F 11 = 1 désactive l'encodeur : à contrôler si l'encodeur ne semble plus pris en compte."
       },
       {
         "code": "A 5",
@@ -3001,7 +3013,7 @@ const MARQUES = [
         "code": "A 4",
         "type": "test",
         "titre": "Reset des paramètres",
-        "action": "A 4 = 1 remet les paramètres à zéro. À utiliser en dernier recours, puis refaire A 1, A 3 et les réglages."
+        "action": "A 4 = 1 remet les paramètres à zéro (« Resetting parameters » sur la fiche). À utiliser avec précaution."
       }
     ],
     "bornier": {
@@ -3070,7 +3082,7 @@ const MARQUES = [
             {
               "n": "10 · 5",
               "label": "Voyant portail ouvert",
-              "desc": "24 V AC, 3 W max (fonction F 10)",
+              "desc": "24 V, 3 W max (fonction F 10) ; 24 V AC/DC en français et en italien, 24 V AC en anglais",
               "t": "sortie"
             },
             {
@@ -3143,7 +3155,7 @@ const MARQUES = [
       "fusibles": "Non indiqués sur la fiche de rechange.",
       "notes": [
         "Entrées RIO-EDGE [T1] [T2] et RIO-CELL [T1] [T2] : fonctions F 65 à F 68 (accessoires sans fil).",
-        "Carte radio AF : l'enficher uniquement hors tension (batteries débranchées) ; la carte mère ne la reconnaît qu'à la remise sous tension.",
+        "Antenne : câble RG58.",
         "Avant toute intervention, et avant d'insérer une carte à enfichage (AF, R700, etc.) : couper la tension de ligne et débrancher les batteries éventuelles."
       ]
     },
@@ -3315,7 +3327,7 @@ const MARQUES = [
             {
               "code": "F 9",
               "def": "—",
-              "titre": "Détection d'obstacle moteur à l'arrêt",
+              "titre": "Détection d'obstacle avant le démarrage",
               "valeurs": [
                 [
                   "0",
@@ -3903,9 +3915,8 @@ const MARQUES = [
         "Vérifier le câblage des fins de course (FA, FC, contact NF) et de l'encodeur."
       ],
       "etapes": [
-        "Mettre A 3 sur 1 (étalonnage de la course) : la carte apprend la course.",
-        "Régler ensuite les vitesses (F 28, F 30), les sensibilités (F 34, F 35) et les débuts de ralentissement (F 37, F 38).",
-        "Régler l'ouverture partielle (F 36 en %, F 71 en temps)."
+        "A 3 : étalonnage de la course (0 = désactivé, 1 = activé). La fiche ne décrit pas le déroulement.",
+        "Vitesses : F 28 (course) et F 30 (ralentissement) ; sensibilités : F 34 et F 35 ; débuts de ralentissement : F 37 et F 38 ; ouverture partielle : F 36 (en %) et F 71 (en temps)."
       ],
       "apres": [
         "La fiche de rechange ne décrit pas le déroulement de l'étalonnage : voir le manuel de l'armoire (docs.came.com).",
@@ -3917,7 +3928,7 @@ const MARQUES = [
   {
     "id": "came-zbx6",
     "nom": "ZBX6",
-    "modeles": "Rechange 3199ZBX6 — coulissant 230 V, moteur 230 V AC",
+    "modeles": "Rechange 3199ZBX6 — moteur 230 V AC avec fins de course (type d'automatisme non précisé sur la fiche, classée en coulissant)",
     "type": "Coulissant 230 V — 2 dip-switch, 1 trimmer",
     "source": "Notice Came FA00042M4A (05/2015, fiche de rechange)",
     "codes": [
@@ -4034,8 +4045,7 @@ const MARQUES = [
     "parametres": {
       "intro": "Carte très simple : 2 dip-switch et 1 trimmer. Valeur d'usine non indiquée sur la fiche.",
       "navigation": [
-        "Les dip-switch se placent carte hors tension de préférence.",
-        "Trimmer TCA : tourner à droite (+) pour allonger l'attente."
+        "Le trimmer porte le nom TFA dans le texte français (TCA en italien, ACT en anglais)."
       ],
       "groupes": [
         {
@@ -4077,7 +4087,7 @@ const MARQUES = [
           "nom": "Trimmer",
           "items": [
             {
-              "code": "TCA",
+              "code": "TFA / TCA",
               "def": "—",
               "titre": "Temps d'attente avant la fermeture automatique",
               "valeurs": [
@@ -4110,7 +4120,7 @@ const MARQUES = [
   {
     "id": "came-zbx241",
     "nom": "ZBX241",
-    "modeles": "Carte ZBX241 + carte batteries BN1 — moteur 24 V DC avec fins de course",
+    "modeles": "Carte ZBX241 + carte batteries BN1 — moteur 24 V DC avec fins de course (type d'automatisme non précisé, classée en coulissant)",
     "type": "Coulissant 24 V — 9 dip-switch, 3 trimmers, batteries de secours",
     "source": "Notice Came 319LR17 (24 p., FR p. 9-12)",
     "codes": [
@@ -4142,7 +4152,7 @@ const MARQUES = [
         "code": "Photocellules",
         "type": "symptome",
         "titre": "Photocellules sans effet",
-        "action": "Respecter la polarité des photocellules (DIR). Vérifier les dips 7 (2-C1), 8 (1-2 STOP) et 9 (2-C3), qui doivent être sur ON si le dispositif correspondant n'est pas branché."
+        "action": "Respecter la polarité des photocellules (DIR). Pour la réouverture pendant la fermeture, le dip 7 est sur OFF et le dispositif sur 2-C1 ; les dips 8 (STOP 1-2) et 9 (stop partiel 2-C3) fonctionnent de la même façon."
       }
     ],
     "bornier": {
@@ -4165,7 +4175,7 @@ const MARQUES = [
             {
               "n": "BATTERY",
               "label": "Batteries d'urgence",
-              "desc": "Batteries d'urgence 12 V 1,2 Ah (non fournies), reliées par le câble-pontet, via la carte BN1",
+              "desc": "Batteries d'urgence 12 V 1,2 Ah (non fournies) : à brancher sur la borne (+, −) de la ZBX241 avec les fils fournis ; câble-pontet entre les batteries",
               "t": "alim"
             }
           ]
@@ -4257,8 +4267,11 @@ const MARQUES = [
         "Montage à gauche (vu de l'intérieur) : groupe moteur / fins de course déjà branchés. Montage à droite : inverser FA-FC des fins de course et les phases M-N du moteur sur la plaque à bornes.",
         "Photocellules : respecter la polarité (DIR). branchement TX / RX selon le schéma de la notice (p. 10).",
         "Temps de fonctionnement fixe : 90 secondes.",
+        "Sécurité intégrée sensible aux obstacles : en ouverture, le portail s'arrête et active la fermeture automatique ; en fermeture, il inverse jusqu'à l'ouverture complète, avec intervention de la fermeture automatique. Après trois inversions consécutives, le portail reste ouvert sans fermeture automatique.",
+        "Photocellules : réouverture en fermeture ; stop partiel (arrêt puis fermeture automatique programmée) ; stop total (arrêt et exclusion de la fermeture automatique, il faut agir sur les boutons ou la radiocommande). Dip 6 : détection de présence, moteur en fin de course.",
+        "Fermeture automatique : le temporisateur démarre en fin de course d'ouverture ; elle est exclue après un stop total, l'intervention des sécurités ou une coupure de courant. Antenne : câble RG58.",
         "Pour toute intervention à l'intérieur de l'appareillage : couper la tension de ligne et débrancher les batteries (si branchées).",
-        "Cartes radio AF : AF130 (FM 26,995 / TFM), AF150 (FM 30,900), AF26 (AM 26,995), AF30 (AM 30,900), AF43S / AF43SM (AM 433,92, TAM / TOP), AF43SR (ATOMO), AF40 (AM 40,685, TOUCH).",
+        "Cartes radio AF : AF130 (FM 26,995, émetteur TFM), AF150 (FM 30,900), AF26 (AM 26,995, TOP), AF30 (AM 30,900, TOP), AF43S / AF43SM (AM 433,92, TAM / TOP), AF43SR (ATOMO), AF40 (AM 40,685, TOUCH).",
         "Puissance totale des accessoires à 24 V : 40 W maximum."
       ]
     },
@@ -4447,7 +4460,7 @@ const MARQUES = [
       ],
       "apres": [
         "Les détails des paragraphes 7.2 et 7.3 (codage et mémorisation) ne figurent pas dans les pages françaises lues ici : voir la notice.",
-        "Les LED de signalisation code radio (repère 10) indiquent la mémorisation.",
+        "LED de signalisation code radio : repère 10 sur la carte.",
         "Le temps de travail est fixe (90 s) : aucun apprentissage de course."
       ]
     }
@@ -4455,7 +4468,7 @@ const MARQUES = [
   {
     "id": "came-zl90",
     "nom": "ZL90",
-    "modeles": "Moteurs 24 V DC A1824 · FROG J (2 vantaux, avec encodeur)",
+    "modeles": "Moteurs 24 V DC à action retardée (M1 / M2 avec ENC) ; dip 7 : A1824 ou FROG J",
     "type": "Battant 24 V — 10 dip-switch, boutons SET UP / OPEN MOTOR",
     "source": "Notice Came 319LR07 v1.0 (11/2007), pages FR 15 à 20",
     "codes": [
@@ -4469,7 +4482,7 @@ const MARQUES = [
         "code": "PROG clignote",
         "type": "led",
         "titre": "LED PROG clignote après le calibrage",
-        "action": "Contrôler les connexions (moteurs, encodeurs, sens de marche) et répéter l'opération de calibrage."
+        "action": "Contrôler les connexions et répéter l'opération de calibrage."
       },
       {
         "code": "Vantail ferme",
@@ -5015,6 +5028,12 @@ const MARQUES = [
               "t": "nf"
             },
             {
+              "n": "TS",
+              "label": "Test photocellules",
+              "desc": "Raccordement de l'émetteur des photocellules pour le test de sécurité (voir dessin)",
+              "t": "sortie"
+            },
+            {
               "n": "A · B · S1 · GND",
               "label": "Capteurs",
               "desc": "Raccordement TSP00 (transpondeur), LT001 (lecteur de cartes), S7000 (clavier à code), décodage R700 / R800",
@@ -5026,14 +5045,13 @@ const MARQUES = [
       "fusibles": "Non indiqués dans les pages françaises lues.",
       "notes": [
         "Photocellules DIR / DELTA S (émetteur) et DOC / DELTA (récepteur) : le test de sécurité exige le raccordement TS comme sur le dessin et la sélection de F 5.",
-        "Le menu de fonctions détaillé (F 1…) est dans le manuel de l'armoire : les pages françaises de la notice ne le reprennent pas.",
-        "Carte radio AF : l'enficher uniquement hors tension (batteries débranchées) ; la carte mère ne la reconnaît qu'à la remise sous tension."
+        "Le menu de fonctions détaillé (F 1…) n'est pas repris dans les pages françaises de la notice : voir le manuel de l'armoire."
       ]
     },
     "parametres": {
-      "intro": "Les pages françaises de cette notice ne donnent que deux fonctions du menu : F 5 (test de sécurité) et F 51 (lecture de la Memory Roll). Le reste du menu est dans le manuel de l'armoire (docs.came.com).",
+      "intro": "Les pages françaises de cette notice ne donnent que deux fonctions du menu : F 5 (test de sécurité) et F 51 (lecture de la Memory Roll). Le reste du menu est dans le manuel de l'armoire.",
       "navigation": [
-        "Navigation avec ENTER / ESC et les flèches, comme sur les autres cartes à menu F (voir le manuel de l'armoire).",
+        "Navigation : voir le manuel de l'armoire (les pages françaises montrent seulement ENTER / ESC sur le dessin de F 51).",
         "Valeur d'usine non indiquée."
       ],
       "groupes": [
@@ -5047,7 +5065,7 @@ const MARQUES = [
               "valeurs": [
                 [
                   "—",
-                  "Choisir sur quelles entrées (CX, CY, CZ) le test est activé (valeurs détaillées dans le manuel de l'armoire)"
+                  "Choisir sur quelles entrées le test est activé (le dessin de la notice ne montre que CX et CY)"
                 ]
               ],
               "note": "La liste des valeurs de F 5 n'est pas donnée dans les pages françaises."
@@ -5066,7 +5084,7 @@ const MARQUES = [
                   "Activée : charge les données de la Memory Roll dans la carte"
                 ]
               ],
-              "note": "Visible seulement avec la Memory Roll insérée. Couper l'alimentation avant d'insérer ou de retirer la Memory Roll."
+              "note": "Visible seulement avec la Memory Roll insérée."
             }
           ]
         }
@@ -5078,9 +5096,8 @@ const MARQUES = [
         "Si les configurations n'ont pas été sauvegardées sur la Memory Roll, les réafficher comme indiqué dans le manuel de l'armoire ; le service après-vente Came peut en fournir une copie."
       ],
       "etapes": [
-        "Hors tension, insérer la Memory Roll sur la carte.",
-        "Remettre sous tension, aller sur F 51 et mettre 1 pour charger les données.",
-        "Retirer la Memory Roll (hors tension)."
+        "Introduire la carte Memory Roll sur la carte mère.",
+        "Aller sur F 51 (visible seulement avec la Memory Roll) : 1 = activée, charge les données dans la carte (lecture des données, comme sur le dessin de la notice)."
       ],
       "apres": [
         "L'apprentissage de la course n'est pas décrit dans les pages françaises de cette notice."
@@ -5104,7 +5121,7 @@ const MARQUES = [
         "code": "Memory Roll",
         "type": "diag",
         "titre": "Chargement mémoire",
-        "action": "Pour restaurer les configurations précédentes, insérer la Memory Roll et lancer le « Chargement mémoire » (charge dans la carte les données sauvegardées)."
+        "action": "Pour restaurer les configurations précédentes, introduire la Memory Roll et lancer « Charg.memoire » puis « Lecture » (charge dans la carte les données sauvegardées ; chemin dans l'onglet Apprentissage)."
       }
     ],
     "bornier": {
@@ -5144,14 +5161,14 @@ const MARQUES = [
             {
               "n": "F · FA",
               "label": "Fin de course ouverture",
-              "desc": "Contact",
-              "t": "nf"
+              "desc": "Type de contact non précisé dans la notice",
+              "t": "autre"
             },
             {
               "n": "F · FC",
               "label": "Fin de course fermeture",
-              "desc": "Contact",
-              "t": "nf"
+              "desc": "Type de contact non précisé dans la notice",
+              "t": "autre"
             }
           ]
         },
@@ -5240,8 +5257,7 @@ const MARQUES = [
       "fusibles": "Non indiqués dans les pages françaises lues.",
       "notes": [
         "Le menu de la carte contient : LANGUE, FONCTIONS, RÉGL. DURÉES, RADIO UTILISATEURS, ÉTALONNAGE, INFO (affichage « Francais »).",
-        "Photocellules DIR / DOC : test de sécurité à raccorder comme sur le dessin de la notice.",
-        "Carte radio AF : l'enficher uniquement hors tension (batteries débranchées) ; la carte mère ne la reconnaît qu'à la remise sous tension."
+        "Photocellules DIR / DOC : test de sécurité à raccorder comme sur le dessin de la notice."
       ]
     },
     "parametres": {
@@ -5266,7 +5282,7 @@ const MARQUES = [
               ]
             },
             {
-              "code": "Chargement mémoire",
+              "code": "Charg.memoire",
               "def": "—",
               "titre": "Restauration depuis la Memory Roll",
               "valeurs": [
@@ -5274,7 +5290,8 @@ const MARQUES = [
                   "Lecture",
                   "Charge dans la carte les données sauvegardées (Memory Roll insérée)"
                 ]
-              ]
+              ],
+              "note": "Chemin d'après le schéma : ligne « RADIO UTILISA » du menu, ENTER, 4 fois « > », « Charg.memoire », ENTER, « Lecture »."
             }
           ]
         }
@@ -5282,12 +5299,11 @@ const MARQUES = [
     },
     "apprentissage": {
       "avant": [
-        "Câbler l'encodeur (E noir, D rouge) et les fins de course (F-FA, F-FC).",
-        "Couper la tension de ligne et débrancher les batteries avant d'insérer la Memory Roll ou une carte radio."
+        "Câbler l'encodeur (E noir, D rouge) et les fins de course (F-FA, F-FC)."
       ],
       "etapes": [
-        "Insérer la Memory Roll hors tension.",
-        "Menu FONCTIONS > « Chargement mémoire » > Lecture : les données sont chargées dans la carte."
+        "Dans le menu, partir de la ligne « RADIO UTILISA », appuyer sur ENTER puis 4 fois sur « > » jusqu'à « Charg.memoire », ENTER, puis « Lecture » (schéma de la notice) : les données sauvegardées sont chargées dans la carte.",
+        "Memory Roll insérée dans son connecteur avant la lecture."
       ],
       "apres": [
         "L'étalonnage de la course (rubrique ÉTALONNAGE du menu) n'est pas détaillé dans les pages françaises lues : voir le manuel de l'armoire."
@@ -5297,21 +5313,21 @@ const MARQUES = [
   {
     "id": "came-za3",
     "nom": "ZA3",
-    "modeles": "Carte ZA3 (319LR23) — battant 230 V, 2 moteurs 230 V monophasés (ex. FROG)",
+    "modeles": "Carte ZA3 (319LR23) — battant 230 V, 2 motoréducteurs à action retardée (M1 / M2)",
     "type": "Battant 230 V — 10 dip-switch, 3 trimmers",
     "source": "Notice Came 319LR23 (28 p., FR p. 11-14)",
     "codes": [
       {
-        "code": "PROG clignote",
+        "code": "LED mémo.",
         "type": "led",
         "titre": "LED de mémorisation clignote",
         "action": "En maintenant la touche CH1 : la carte attend le code de l'émetteur. La LED reste allumée quand la mémorisation est faite."
       },
       {
-        "code": "Dips 2-CX / 2-C1",
-        "type": "symptome",
-        "titre": "Le portail ne bouge pas, rien sur 2-CX ou 2-C1",
-        "action": "Si 2-CX n'est pas utilisé, le dip 8 doit être sur ON. Si 2-C1 n'est pas utilisé, le dip 9 doit être sur ON (contacts NF)."
+        "code": "Dips 8 / 9",
+        "type": "diag",
+        "titre": "Entrées 2-CX et 2-C1 non utilisées",
+        "action": "Si le dispositif sur 2-CX n'est pas utilisé, placer le dip 8 sur ON. Si celui sur 2-C1 n'est pas utilisé, placer le dip 9 sur ON (contacts NF)."
       },
       {
         "code": "Serrure",
@@ -5455,7 +5471,6 @@ const MARQUES = [
     "parametres": {
       "intro": "10 dip-switch et 3 trimmers. Valeurs d'usine non indiquées dans la notice. Le dip 6 est en logique inverse : OFF = action continue hors service.",
       "navigation": [
-        "Dips à placer carte hors tension de préférence.",
         "Trimmers : régler en tournant avec un petit tournevis."
       ],
       "groupes": [
@@ -5661,11 +5676,11 @@ const MARQUES = [
     },
     "apprentissage": {
       "avant": [
-        "Couper la tension de ligne et débrancher les batteries avant d'enficher la carte radio AF.",
+        "Enficher la carte radio AF après avoir coupé le courant (ou débranché les batteries).",
         "Brancher le câble d'antenne RG58."
       ],
       "etapes": [
-        "Enficher la carte AF hors tension, remettre sous tension.",
+        "Enficher la carte AF courant coupé, remettre sous tension (la carte ne la reconnaît qu'alimentée).",
         "Maintenir la touche CH1 de la carte : la LED clignote.",
         "Appuyer sur la touche de l'émetteur à mémoriser : la LED reste allumée.",
         "Répéter avec CH2 pour le canal accessoire (B1-B2)."
@@ -5679,15 +5694,15 @@ const MARQUES = [
   {
     "id": "came-za3p",
     "nom": "ZA3P (88003-0183)",
-    "modeles": "Carte de rechange 88003-0183 (ZA3P) — remplace la ZA3 sur colonne de barrière",
+    "modeles": "Carte 88003-0183 (ZA3P) — remplacement de carte sur colonne de barrière (dessins old / new)",
     "type": "Barrière 230 V — 10 + 2 dip-switch, 2 trimmers",
     "source": "Notice Came FA02020M4A (11/2023), pages FR 13 à 18",
     "codes": [
       {
         "code": "Remplacement",
         "type": "diag",
-        "titre": "Ancienne carte ZA3 : carte à remplacer",
-        "action": "La notice montre le remplacement de l'ancienne carte (old) par la nouvelle ZA3P (new) dans la colonne : retirer le dôme et la tôle, déposer le capot de l'armoire, remplacer la carte, remonter. Les dessins portent un avertissement (WARNING)."
+        "titre": "Remplacement de la carte (old → new)",
+        "action": "Les dessins de la notice (sans texte) montrent : retirer le dôme et la tôle de la colonne, déposer le capot de l'armoire, remplacer l'ancienne carte (old) par la nouvelle (new), remonter. Ils portent un avertissement (WARNING). Couper l'armoire avant toute intervention."
       },
       {
         "code": "DIP 5",
@@ -5733,7 +5748,7 @@ const MARQUES = [
             {
               "n": "U · V · W · X · Y",
               "label": "Moteur et signalisation",
-              "desc": "Bornier pour l'alimentation du moteur et des dispositifs de signalisation (E, E3, TS, 10, 11, S selon le dessin)",
+              "desc": "Bornier pour l'alimentation du moteur et des dispositifs de signalisation",
               "t": "moteur"
             },
             {
@@ -5756,7 +5771,7 @@ const MARQUES = [
             {
               "n": "2 · C1 · CX",
               "label": "Sécurités",
-              "desc": "Bornier des dispositifs de sécurité (CX : dips 8 et 2 du 2e groupe ; test sur borne TS, dip 10)",
+              "desc": "Bornier des dispositifs de sécurité (CX : dip 8 et dip 2 du 2e groupe ; test sur borne TS, dip 10)",
               "t": "nf"
             }
           ]
@@ -5874,7 +5889,7 @@ const MARQUES = [
             },
             {
               "code": "DIP 7",
-              "def": "OFF",
+              "def": "—",
               "titre": "Non utilisé",
               "valeurs": [
                 [
@@ -5900,7 +5915,7 @@ const MARQUES = [
             },
             {
               "code": "DIP 9",
-              "def": "OFF",
+              "def": "—",
               "titre": "Non utilisé",
               "valeurs": [
                 [
@@ -5931,7 +5946,7 @@ const MARQUES = [
           "items": [
             {
               "code": "2e groupe · DIP 1",
-              "def": "OFF",
+              "def": "—",
               "titre": "Non utilisé",
               "valeurs": [
                 [
@@ -6197,7 +6212,7 @@ const MARQUES = [
     },
     "apprentissage": {
       "avant": [
-        "Couper la tension de ligne et débrancher les batteries avant d'enficher la carte radio.",
+        "Enficher la carte radio après avoir coupé le courant (ou débranché les batteries).",
         "Un seul moteur : brancher sur X-W-Y."
       ],
       "etapes": [
@@ -6395,7 +6410,7 @@ const MARQUES = [
     },
     "apprentissage": {
       "avant": [
-        "Couper la tension de ligne et débrancher les batteries avant d'enficher la carte radio."
+        "Enficher la carte radio après avoir coupé le courant (ou débranché les batteries)."
       ],
       "etapes": [
         "Enficher la carte radio AF hors tension, remettre sous tension.",
@@ -6411,7 +6426,7 @@ const MARQUES = [
   {
     "id": "came-88003-0184",
     "nom": "Carte 88003-0184 (barrière CAT1DAGS)",
-    "modeles": "Carte de rechange 88003-0184 — barrières de la série CAT1DAGS",
+    "modeles": "Carte 88003-0184 — notice renvoyant au fascicule technique des barrières CAT1DAGS",
     "type": "Barrière — afficheur et touches ESC / < > / ENTER",
     "source": "Notice Came FA02006M4A (09/2023), pages FR 9 à 12",
     "codes": [
@@ -6419,43 +6434,43 @@ const MARQUES = [
         "code": "E4",
         "type": "erreur",
         "titre": "Erreur : test des services échoué",
-        "action": "Le test de sécurité (photocellules / services) a échoué : contrôler les dispositifs raccordés, leur câblage et le test de sécurité."
+        "action": "Le test des services a échoué (libellé de la notice, sans autre précision) : contrôler les dispositifs de sécurité raccordés et leur câblage."
       },
       {
         "code": "E11",
         "type": "erreur",
         "titre": "Dépassement du nombre maximum d'obstacles détectés consécutivement",
-        "action": "Trop d'obstacles détectés à la suite : chercher l'obstacle ou la cause (frottement, réglage de sensibilité) avant de remettre en service."
+        "action": "Le nombre maximum d'obstacles détectés à la suite a été dépassé : chercher la cause de ces détections avant de remettre en service."
       },
       {
         "code": "E13",
         "type": "erreur",
         "titre": "Erreur sur les entrées de fin de course, ou les deux butées de fin de course ouvertes",
-        "action": "Contrôler le câblage et l'état des fins de course : les deux butées sont ouvertes en même temps ou une entrée est en défaut."
+        "action": "Contrôler les entrées de fin de course : erreur sur une entrée, ou les deux butées de fin de course sont ouvertes en même temps."
       },
       {
         "code": "E15",
         "type": "erreur",
         "titre": "Erreur : émetteur incompatible",
-        "action": "L'émetteur utilisé n'est pas compatible avec la carte : utiliser un émetteur compatible."
+        "action": "L'émetteur utilisé est signalé incompatible avec la carte."
       },
       {
         "code": "C0",
         "type": "diag",
         "titre": "Avertissement : contact filaire 1-2 (NF) ouvert",
-        "action": "Le bouton d'arrêt ou le dispositif sur 1-2 est ouvert : vérifier le câblage et le contact."
+        "action": "Le contact filaire 1-2 (NF) est ouvert : vérifier le dispositif branché sur 1-2 et son câblage."
       },
       {
         "code": "C7",
         "type": "diag",
         "titre": "Avertissement : contact filaire 2-CX (NF) ouvert",
-        "action": "Vérifier le dispositif de sécurité branché sur 2-CX (contact NF)."
+        "action": "Le contact filaire 2-CX (NF) est ouvert : vérifier le dispositif branché sur 2-CX."
       },
       {
         "code": "C1 C4 C5",
         "type": "diag",
         "titre": "Avertissement : contact filaire 2-CY (NF) des photocellules ouvert",
-        "action": "Vérifier les photocellules branchées sur 2-CY (contact NF) : alignement, câblage, obstacle."
+        "action": "Le contact filaire 2-CY (NF) des photocellules est ouvert : vérifier les photocellules branchées sur 2-CY."
       }
     ],
     "bornier": {
