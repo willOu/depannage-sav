@@ -196,6 +196,19 @@ html{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
   .search{margin-top:6px}.search input{height:40px}.search svg{top:11px}.status{display:none}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+/* DIAG */
+.dq h2,.dres h2{margin:6px 0 10px;font-size:19px}
+.dq .row,.dlinks .row{margin-top:8px;font-weight:600;min-height:52px}
+.row .muted{font-weight:400;color:var(--muted);font-size:14px}
+.dtrail{display:flex;flex-direction:column;gap:6px;margin:8px 0 14px}
+.dstep{background:var(--chip);border-radius:12px;padding:8px 12px;font-size:14px;display:grid;gap:2px}
+.dstep span{color:var(--muted)} .dstep a{color:var(--blue);font-size:13px;justify-self:start;padding:4px 0}
+.dres{background:var(--card);border:1px solid var(--line);border-left:5px solid var(--brand);border-radius:14px;padding:14px;margin-top:6px}
+.dres .dk{font-size:12px;letter-spacing:.8px;text-transform:uppercase;color:var(--brand);font-weight:700;margin-top:8px}
+.dres p{margin:4px 0 8px}
+.dlinks{display:grid;gap:0;margin-top:6px}
+.dbtn{width:100%;margin-top:12px;background:var(--card);border:1px solid var(--line);border-left:5px solid var(--brand);border-radius:14px;padding:14px;text-align:left;cursor:pointer;font-weight:700}
+.dbtn small{display:block;font-weight:400;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -214,6 +227,7 @@ html{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
   <div class="status" id="status"></div>
 </header>
 <main id="app"></main>
+<script src="diag.js"></script> <!-- DIAG -->
 
 <script src="data.js"></script>
 <script>
@@ -264,6 +278,7 @@ function viewHome(){
   const nb = g => BOARDS.filter(x => genreOf(x.c) === g).length;
   let h = `<div class="q">Quel automatisme avez-vous devant vous ?</div><div class="gen">` + GENRES.filter(g => nb(g[0])).map(g =>
     `<button onclick="go('#/g/${g[0]}')">${g[3]}${g[1]}<small>${nb(g[0])} carte${nb(g[0])>1?"s":""}</small></button>`).join("") + `</div>`;
+  if (store.get("diag", true)) h += `<button class="dbtn" onclick="go('#/d')">Diagnostic guidé : trouver la panne en quelques questions<small>Test · le portail ne s'ouvre pas, ne se ferme pas, émetteur sans effet…</small></button>`; /* DIAG */
   h += `<h2>Ou par marque</h2><div class="bchips">` + MARQUES.map(m =>
     `<button class="bchip logo" aria-label="${esc(m.nom)}" onclick="go('#/m/${m.id}')"><img src="icons/marques/${m.id}.png" alt="${esc(m.nom)}" height="28"></button>`).join("") + `</div>`;
   if (recents.length){
@@ -488,6 +503,7 @@ function viewSettings(){
   const th = document.documentElement.dataset.theme;
   let h = `<h2>Affichage</h2><div class="set"><div class="row"><span>Thème</span><div class="seg2">
       <button aria-pressed="${th==="dark"}" onclick="setTheme('dark')">Sombre</button><button aria-pressed="${th==="light"}" onclick="setTheme('light')">Clair</button></div></div></div>`;
+  h += `<h2>Test</h2><div class="set"><div class="row"><span>Diagnostic guidé<br><small style="color:var(--muted)">Arbre de panne (nouveau, à l'essai)</small></span><div class="seg2"><button aria-pressed="${store.get("diag", true)}" onclick="store.set('diag', true);viewSettings()">Oui</button><button aria-pressed="${!store.get("diag", true)}" onclick="store.set('diag', false);viewSettings()">Non</button></div></div></div>`; /* DIAG */
   h += `<h2>Documentations intégrées (${BOARDS.length})</h2><div class="set">` + BOARDS.map(({m, c}) => {
     const has = [["Codes", c.codes && c.codes.length], ["Bornier", c.bornier], ["Écran", c.afficheur], ["Paramètres", c.parametres], ["Apprentissage", c.apprentissage]];
     return `<div class="dk" onclick="go('#/c/${c.id}')" style="cursor:pointer"><div class="n"><span class="badge" style="--c:${m.couleur}">${esc(m.nom)}</span>${esc(c.nom)}</div>
@@ -525,6 +541,7 @@ function route(){
   if (p[0] === "m") return viewBrand(p[1]);
   if (p[0] === "g") return viewGenre(p[1]);
   if (p[0] === "c") return viewBoard(p[1], p[2]);
+  if (p[0] === "d" && store.get("diag", true)) return viewDiag(p[1], p[2]); /* DIAG */
   if (p[0] === "reglages") return viewSettings();
   if (p[0] === "s"){ const q = decodeURIComponent(p.slice(1).join("/")); if ($("#q").value !== q) $("#q").value = q; return viewSearch(q); }
   $("#q").value = "";
