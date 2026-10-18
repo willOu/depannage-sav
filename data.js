@@ -15,6 +15,14 @@ const DATA_VERSION = "2026-10-18";
 /* Journal des modifications — ajouter une entrée en haut à chaque mise à jour.
    docs : nom des notices ajoutées (affichées dans Réglages). */
 const CHANGELOG = [
+  { v: "1.29", date: "2026-10-18", titre: "Lot 2 : DEA System NET230N et NET24N", items: [
+    "Nouvelle marque DEA System : armoires universelles NET230N (moteurs 230 V, 6 types : coulissant, battant, basculante, barrière, sectionnelle, bollard) et NET24N (moteurs 24 V, 4 types).",
+    "Pour chaque armoire : messages d'état et d'erreur de l'afficheur (ErrP, Err3 à Err9, Er10 à Er15, Er81…) avec les remèdes de la notice, paramètres P001 à P099 avec les valeurs par défaut de chaque type (lues sur les tableaux en chiffres 7 segments), configuration des entrées IN_1 à IN_6, bornier, choix du type et apprentissage de la course.",
+    "Onglet Schéma : schéma de base et schémas de câblage de chaque type.",
+    "Valeurs par défaut lues sur des tableaux en chiffres 7 segments puis relues à fort grossissement par une seconde personne (P070 : 108 / 255 sur le NET230N, 200 sur le NET24N)."
+  ], docs: [
+    "DEA System NET230N (R12 et Rév. 03 – 2014)", "DEA System NET24N (R12)"
+  ] },
   { v: "1.28", date: "2026-10-18", titre: "Lot 1 : FAAC 455D / E024S, Robus RB600-1000, Doitrand LF82", items: [
     "FAAC 455 D (platine battants) : segments d'entrées de l'afficheur, programmation de base et avancée (LO, PA, F1, F2, cd, tL, bo, c5, r5, od, F5, PF, EL, SP, Ph, Ad, A5, nC), bornier, apprentissage avec ou sans fins de course et Gatecoder, logiques A / E / S / EP.",
     "FAAC E024S : LED LD4 à LD8 et LED BUS, dip-switches moteur / force, 7 logiques, 8 paramètres de 2e niveau avec valeurs d'usine, bornier, SETUP automatique et manuel, mémorisation des accessoires BUS et des radiocommandes.",
@@ -26711,6 +26719,4188 @@ const MARQUES = [
           ],
           "apres": [
             "Les paramètres sont conservés pour chaque type de portail : changer de type ne perd pas les réglages des autres types."
+          ]
+        }
+      }
+  ]
+},
+/* ------------------------------------------------------------------ */
+{
+  id: "dea", nom: "DEA System", couleur: "#b3261e", sanslogo: true,
+  cartes: [
+          {
+        "id": "dea-net230n",
+        "nom": "NET230N",
+        "modeles": "Armoire universelle 230 V pour automatismes DEA System à 1 ou 2 moteurs 230 V avec ou sans encodeur : LIVI 6NET / 9NET, LOOK · MAC · STING · OLI, GHOST 100 / 200, LIVI 500P / 502 / 902 / 550PL, PASS, STOP, LATO 220, ROCK, GULLIVER, REV…",
+        "type": "Armoire universelle 230 V : portails coulissants, battants, portes basculantes, barrières, sectionnelles, bollards (6 types) — afficheur 4 chiffres, touches + / OK / −",
+        "source": "Notice DEA System NET230N (rév. R12, notice d'emploi en français pages FR-1 à FR-32) ; une notice plus ancienne (Rév. 03 – 2014) existe mais diffère (5 TYPE seulement, sans le TYPE 05 ; organisation des paramètres différente) : elle n'a pas servi de base.",
+        "codes": [
+          {
+            "code": "- - - -",
+            "type": "afficheur",
+            "titre": "Portail fermé",
+            "action": "Repos normal. À la mise sous tension s'affichent en séquence la version du firmware (ou le TYPE choisi) puis ce symbole. Si la platine a déjà été programmée et que le redémarrage vient d'une coupure de courant, la première impulsion de START lance la réinitialisation (voir rESP)."
+          },
+          {
+            "code": "Symbole ouvert",
+            "type": "afficheur",
+            "titre": "Portail ouvert",
+            "action": "Symbole « porte ouverte » (barres haute et basse de l'afficheur)."
+          },
+          {
+            "code": "OPEn",
+            "type": "afficheur",
+            "titre": "Ouverture en cours",
+            "action": "Manœuvre d'ouverture."
+          },
+          {
+            "code": "CLOS",
+            "type": "afficheur",
+            "titre": "Fermeture en cours",
+            "action": "Manœuvre de fermeture."
+          },
+          {
+            "code": "StEP",
+            "type": "afficheur",
+            "titre": "En attente d'une commande",
+            "action": "L'armoire attend une commande après une impulsion de START, en fonctionnement pas-à-pas."
+          },
+          {
+            "code": "StOP",
+            "type": "afficheur",
+            "titre": "Stop ou obstacle avec inversion limitée",
+            "action": "L'entrée STOP est intervenue, ou un obstacle a été détecté avec une durée d'inversion limitée (P055 > 0 ou P056 > 0)."
+          },
+          {
+            "code": "rESP",
+            "type": "afficheur",
+            "titre": "Réinitialisation de la position",
+            "action": "L'armoire vient d'être réinitialisée après une coupure de courant, ou la porte a dépassé le nombre maximal d'inversions autorisées (80) sans atteindre la butée de fermeture, ou le nombre maximal d'opérations consécutives (15) de l'anti-écrasement. Recherche des fins de course d'ouverture puis de fermeture à vitesse ralentie."
+          },
+          {
+            "code": "BOOT",
+            "type": "afficheur",
+            "titre": "Carte en BOOT-MODE (firmware corrompu ou en cours de mise à jour)",
+            "action": "Affichage spécial de la notice (deux traits bas). Rétablir le firmware avec l'application DEAinstaller, NET-NODE branché sur le bon port. Attention : la mise à jour efface paramètres et radiocommandes — faire une sauvegarde de la mémoire avant."
+          },
+          {
+            "code": "ErrP",
+            "type": "erreur",
+            "titre": "Erreur de position : la réinitialisation n'a pas abouti",
+            "action": "L'armoire attend des ordres. Vérifier qu'il n'y a ni frottements ni obstacles sur la course. Donner une impulsion de START pour relancer la manœuvre de configuration de la position et vérifier qu'elle se termine correctement (aider la porte à la main si besoin). Au besoin, ajuster force et vitesse des moteurs."
+          },
+          {
+            "code": "bLOC · UArt",
+            "type": "erreur",
+            "titre": "Programmation tentée avec un NET-NODE connecté",
+            "action": "Couper l'alimentation, déconnecter le NET-NODE du port de communication, remettre sous tension."
+          },
+          {
+            "code": "Err3",
+            "type": "erreur",
+            "titre": "Photocellules et / ou sécurités extérieures actives ou en panne",
+            "action": "Vérifier le bon fonctionnement de tous les dispositifs de sécurité et des photocellules installées."
+          },
+          {
+            "code": "Err4",
+            "type": "erreur",
+            "titre": "Dommage ou surchauffe possible du circuit de puissance",
+            "action": "Couper l'alimentation quelques minutes, rétablir, donner une impulsion de démarrage. Si le message revient, remplacer la centrale."
+          },
+          {
+            "code": "Err5",
+            "type": "erreur",
+            "titre": "Time-out course des moteurs (plus de 4 min sans arrêt)",
+            "action": "Donner une impulsion de START pour relancer la configuration de la position ; vérifier que l'opération se termine correctement."
+          },
+          {
+            "code": "Err6",
+            "type": "erreur",
+            "titre": "Time-out de détection d'obstacle (anti-écrasement désactivé, obstacle plus de 10 s)",
+            "action": "Vérifier l'absence de frottements ou d'obstacles ; impulsion de START pour relancer la configuration de la position ; vérifier que l'opération se termine avec succès."
+          },
+          {
+            "code": "Err7",
+            "type": "erreur",
+            "titre": "Mouvement des moteurs non détecté",
+            "action": "Vérifier le branchement des moteurs et de leurs encodeurs, et le réglage de P029 (avec ou sans encodeur). Si le message se répète, remplacer l'armoire de commande."
+          },
+          {
+            "code": "Err9",
+            "type": "erreur",
+            "titre": "Communication avec la carte mémoire externe (NET-EXP ou NET-NODE) absente ou interrompue",
+            "action": "Vérifier le câble de la carte mémoire externe. Le message apparaît aussi si aucune unité n'est branchée pendant un transfert (suivi alors d'une réinitialisation complète de la centrale). Un DOWNLOAD écrase les données déjà présentes sur la mémoire externe. Pendant un DOWNLOAD / UPLOAD, ne pas l'interrompre (par exemple en débranchant la carte avant la fin). Attention : l'interruption d'un UPLOAD provoque un RESET total de la centrale."
+          },
+          {
+            "code": "Er10 · Er11",
+            "type": "erreur",
+            "titre": "Dommage ou surchauffe possible du circuit de puissance",
+            "action": "Couper l'alimentation quelques minutes, rétablir, donner une impulsion de démarrage. Si le message revient, remplacer la centrale."
+          },
+          {
+            "code": "Er12",
+            "type": "erreur",
+            "titre": "Dommage possible au circuit de puissance ou au circuit de l'encodeur",
+            "action": "Vérifier le câblage encodeur et moteur, couper et remettre le courant, donner une impulsion de démarrage. Si le message revient : entrer dans P003 et manœuvrer la porte avec + et −. Si la porte va à vitesse maximale et que l'écran affiche Err7, remplacer la carte encodeur du moteur. Si le moteur reste à l'arrêt, remplacer la centrale."
+          },
+          {
+            "code": "Er15",
+            "type": "erreur",
+            "titre": "Paramètres sensibles modifiés avec l'application DEAinstaller sans apprentissage de la course",
+            "action": "Exécuter l'apprentissage de la course des moteurs (P003) avant toute autre opération."
+          },
+          {
+            "code": "Er81",
+            "type": "erreur",
+            "titre": "NET-NODE connecté au mauvais port de communication",
+            "action": "Connecter le NET-NODE au connecteur repéré NET-NODE / MEMONET sur la carte (le connecteur NET-EXP est réservé à la carte d'extension)."
+          },
+          {
+            "code": "P013",
+            "type": "diag",
+            "titre": "Visualisation de l'état des entrées et compteur de manœuvres",
+            "action": "P013 puis OK : l'afficheur montre l'état des entrées (segments 1 à 6 = IN_1 à IN_6, 7 à 12 = IN_1 à IN_6 du NET-EXP, voir le schéma de base). OK de nouveau : compteur total de manœuvres suivi du multiplicateur (à multiplier : 120 × 10 = 1 200 manœuvres). OK encore : manœuvres restantes avant la demande de maintenance (1 500 × 1 = 1 500). OK pour sortir."
+          },
+          {
+            "code": "TYPE",
+            "type": "diag",
+            "titre": "Choix du type d'installation",
+            "action": "Clignote à la première mise sous tension ou après un changement de configuration : voir l'onglet Apprent."
+          },
+          {
+            "code": "Types 00 à 05",
+            "type": "diag",
+            "titre": "Le TYPE configuré donne les réglages d'usine",
+            "action": "00 coulissant · 01 battant · 02 basculante · 03 barrière · 04 sectionnelle · 05 bollard. Changer le TYPE recharge les entrées, sorties et paramètres de ce type : revoir ensuite P028, P029, P030."
+          }
+        ],
+        "parametres": {
+          "intro": "Armoire universelle : au premier démarrage on choisit le TYPE d'installation (00 à 05) et la platine charge les entrées, sorties et paramètres adaptés. Les valeurs par défaut sont données dans l'ordre TYPE 00 (coulissant) / 01 (battant) / 02 (basculante) / 03 (barrière) / 04 (sectionnelle) / 05 (bollard). Les valeurs viennent de tableaux en chiffres 7 segments (image) de la notice ; « — » : sans objet pour ce type.",
+          "navigation": [
+            "Défilement : touches + et − jusqu'au paramètre voulu (P001 à P099). OK pour entrer, régler la valeur avec + et −, OK pour valider (l'afficheur revient sur le numéro du paramètre).",
+            "Sortie : + / − jusqu'à l'affichage « - - - - » (portail fermé).",
+            "Restauration : P007 ramène les paramètres de fonctionnement par défaut du TYPE en cours (sauf P016 à P022 et P076 à P098) ; P010 ne restaure que les réglages entrées / sorties (P016 à P022 et P076 à P098).",
+            "Après P007, refaire la programmation et revoir P028 – P029 – P030 ; moteurs réversibles avec électro-frein : P062 = 3 à la fin.",
+            "Rappel de sécurité de la notice : la conformité EN 12453 de la détection d'obstacle interne n'est garantie qu'avec des moteurs à encodeur ; toute augmentation de la force à la fermeture est réservée à du personnel qualifié, avec mesure des forces d'impact (EN 12445) et mention dans le livret de la machine."
+          ],
+          "groupes": [
+            {
+              "nom": "Procédures (P001 à P015)",
+              "items": [
+                {
+                  "code": "P001",
+                  "def": "—",
+                  "titre": "Positionnement moteur 1 (réglage des cames de fin de course)",
+                  "valeurs": [
+                    [
+                      "Procédure",
+                      "Positionnement moteur 1 (réglage des cames de fin de course)"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P002",
+                  "def": "—",
+                  "titre": "Positionnement moteur 2",
+                  "valeurs": [
+                    [
+                      "Procédure",
+                      "Positionnement moteur 2"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P003",
+                  "def": "—",
+                  "titre": "Apprentissage de la course des moteurs",
+                  "valeurs": [
+                    [
+                      "Procédure",
+                      "Apprentissage de la course des moteurs"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P004",
+                  "def": "—",
+                  "titre": "Effacement de tous les émetteurs",
+                  "valeurs": [
+                    [
+                      "Procédure",
+                      "Effacement de tous les émetteurs"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P005",
+                  "def": "—",
+                  "titre": "Apprentissage des émetteurs",
+                  "valeurs": [
+                    [
+                      "Procédure",
+                      "Apprentissage des émetteurs"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P006",
+                  "def": "—",
+                  "titre": "Recherche et effacement d'un émetteur",
+                  "valeurs": [
+                    [
+                      "Procédure",
+                      "Recherche et effacement d'un émetteur"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P007",
+                  "def": "—",
+                  "titre": "Restauration des paramètres de fonctionnement",
+                  "valeurs": [
+                    [
+                      "Procédure",
+                      "Restauration des paramètres de fonctionnement"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P008",
+                  "def": "—",
+                  "titre": "Blocage / déblocage de l'accès à la programmation",
+                  "valeurs": [
+                    [
+                      "Procédure",
+                      "Blocage / déblocage de l'accès à la programmation"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P009",
+                  "def": "—",
+                  "titre": "Apprentissage des dispositifs DE@NET connectés (actuellement non utilisé)",
+                  "valeurs": [
+                    [
+                      "Procédure",
+                      "Apprentissage des dispositifs DE@NET connectés (actuellement non utilisé)"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P010",
+                  "def": "—",
+                  "titre": "Restauration des réglages « I/O » (entrées / sorties)",
+                  "valeurs": [
+                    [
+                      "Procédure",
+                      "Restauration des réglages « I/O » (entrées / sorties)"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P011",
+                  "def": "—",
+                  "titre": "DOWNLOAD : transfert des données vers une mémoire externe",
+                  "valeurs": [
+                    [
+                      "Procédure",
+                      "DOWNLOAD : transfert des données vers une mémoire externe"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P012",
+                  "def": "—",
+                  "titre": "UPLOAD : chargement des données depuis une mémoire externe",
+                  "valeurs": [
+                    [
+                      "Procédure",
+                      "UPLOAD : chargement des données depuis une mémoire externe"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P013",
+                  "def": "—",
+                  "titre": "Visualisation de l'état des entrées et compteur de manœuvres",
+                  "valeurs": [
+                    [
+                      "Procédure",
+                      "Visualisation de l'état des entrées et compteur de manœuvres"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P014 · P015",
+                  "def": "—",
+                  "titre": "Non utilisés",
+                  "valeurs": [
+                    [
+                      "Procédure",
+                      "Non utilisés"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "nom": "Entrées et radio (P016 à P027)",
+              "items": [
+                {
+                  "code": "P016",
+                  "def": "000 / 000 / 000 / 000 / 000 / 000",
+                  "titre": "Type de l'entrée IN_3",
+                  "valeurs": [
+                    [
+                      "000",
+                      "Contact disponible"
+                    ],
+                    [
+                      "001",
+                      "Résistance constante 8K2"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P017",
+                  "def": "001 / 002 / 010 / 008 / 012 / 014",
+                  "titre": "Fonction de l'entrée IN_1",
+                  "valeurs": [
+                    [
+                      "000",
+                      "NONE (entrée non utilisée)"
+                    ],
+                    [
+                      "001",
+                      "START"
+                    ],
+                    [
+                      "002",
+                      "PED. (piétons)"
+                    ],
+                    [
+                      "003",
+                      "OPEN (ouverture séparée)"
+                    ],
+                    [
+                      "004",
+                      "CLOSE (fermeture séparée)"
+                    ],
+                    [
+                      "005",
+                      "OPEN_PM (ouverture homme présent)"
+                    ],
+                    [
+                      "006",
+                      "CLOSE_PM (fermeture homme présent)"
+                    ],
+                    [
+                      "007",
+                      "ELOCK-IN (fonction électro-serrure, voir P062)"
+                    ],
+                    [
+                      "008",
+                      "PHOTO 1 (photocellule 1)"
+                    ],
+                    [
+                      "009",
+                      "PHOTO 2 (photocellule 2)"
+                    ],
+                    [
+                      "010",
+                      "SAFETY 1 (barre palpeuse 1)"
+                    ],
+                    [
+                      "011",
+                      "STOP (bloc) / SAS INPUT (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "012",
+                      "FCA1 (fin de course ouverture moteur 1)"
+                    ],
+                    [
+                      "013",
+                      "FCA2 (fin de course ouverture moteur 2)"
+                    ],
+                    [
+                      "014",
+                      "FCC1 (fin de course fermeture moteur 1)"
+                    ],
+                    [
+                      "015",
+                      "FCC2 (fin de course fermeture moteur 2)"
+                    ],
+                    [
+                      "016",
+                      "SAFETY 2 (barre palpeuse 2)"
+                    ],
+                    [
+                      "017",
+                      "OPEN_IN (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "018",
+                      "OPEN_EXT (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "019",
+                      "AUX_IN (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "020",
+                      "SAFETY INHIBITION (inhibition SAFETY)"
+                    ]
+                  ],
+                  "note": "Après un changement, recâbler l'entrée en conséquence (contact NO pour START / PED / OPEN / CLOSE, NF pour sécurités, STOP et fins de course, voir l'onglet Bornier)."
+                },
+                {
+                  "code": "P018",
+                  "def": "001 / 002 / 010 / 008 / 009 / 011",
+                  "titre": "Fonction de l'entrée IN_2",
+                  "valeurs": [
+                    [
+                      "000",
+                      "NONE (entrée non utilisée)"
+                    ],
+                    [
+                      "001",
+                      "START"
+                    ],
+                    [
+                      "002",
+                      "PED. (piétons)"
+                    ],
+                    [
+                      "003",
+                      "OPEN (ouverture séparée)"
+                    ],
+                    [
+                      "004",
+                      "CLOSE (fermeture séparée)"
+                    ],
+                    [
+                      "005",
+                      "OPEN_PM (ouverture homme présent)"
+                    ],
+                    [
+                      "006",
+                      "CLOSE_PM (fermeture homme présent)"
+                    ],
+                    [
+                      "007",
+                      "ELOCK-IN (fonction électro-serrure, voir P062)"
+                    ],
+                    [
+                      "008",
+                      "PHOTO 1 (photocellule 1)"
+                    ],
+                    [
+                      "009",
+                      "PHOTO 2 (photocellule 2)"
+                    ],
+                    [
+                      "010",
+                      "SAFETY 1 (barre palpeuse 1)"
+                    ],
+                    [
+                      "011",
+                      "STOP (bloc) / SAS INPUT (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "012",
+                      "FCA1 (fin de course ouverture moteur 1)"
+                    ],
+                    [
+                      "013",
+                      "FCA2 (fin de course ouverture moteur 2)"
+                    ],
+                    [
+                      "014",
+                      "FCC1 (fin de course fermeture moteur 1)"
+                    ],
+                    [
+                      "015",
+                      "FCC2 (fin de course fermeture moteur 2)"
+                    ],
+                    [
+                      "016",
+                      "SAFETY 2 (barre palpeuse 2)"
+                    ],
+                    [
+                      "017",
+                      "OPEN_IN (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "018",
+                      "OPEN_EXT (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "019",
+                      "AUX_IN (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "020",
+                      "SAFETY INHIBITION (inhibition SAFETY)"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P019",
+                  "def": "001 / 008 / 010 / 011 / 000 / 000",
+                  "titre": "Fonction de l'entrée IN_3",
+                  "valeurs": [
+                    [
+                      "000",
+                      "NONE (entrée non utilisée)"
+                    ],
+                    [
+                      "001",
+                      "START"
+                    ],
+                    [
+                      "002",
+                      "PED. (piétons)"
+                    ],
+                    [
+                      "003",
+                      "OPEN (ouverture séparée)"
+                    ],
+                    [
+                      "004",
+                      "CLOSE (fermeture séparée)"
+                    ],
+                    [
+                      "005",
+                      "OPEN_PM (ouverture homme présent)"
+                    ],
+                    [
+                      "006",
+                      "CLOSE_PM (fermeture homme présent)"
+                    ],
+                    [
+                      "007",
+                      "ELOCK-IN (fonction électro-serrure, voir P062)"
+                    ],
+                    [
+                      "008",
+                      "PHOTO 1 (photocellule 1)"
+                    ],
+                    [
+                      "009",
+                      "PHOTO 2 (photocellule 2)"
+                    ],
+                    [
+                      "010",
+                      "SAFETY 1 (barre palpeuse 1)"
+                    ],
+                    [
+                      "011",
+                      "STOP (bloc) / SAS INPUT (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "012",
+                      "FCA1 (fin de course ouverture moteur 1)"
+                    ],
+                    [
+                      "013",
+                      "FCA2 (fin de course ouverture moteur 2)"
+                    ],
+                    [
+                      "014",
+                      "FCC1 (fin de course fermeture moteur 1)"
+                    ],
+                    [
+                      "015",
+                      "FCC2 (fin de course fermeture moteur 2)"
+                    ],
+                    [
+                      "016",
+                      "SAFETY 2 (barre palpeuse 2)"
+                    ],
+                    [
+                      "017",
+                      "OPEN_IN (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "018",
+                      "OPEN_EXT (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "019",
+                      "AUX_IN (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "020",
+                      "SAFETY INHIBITION (inhibition SAFETY)"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P020",
+                  "def": "001 / 008 / 000 / 000 / 000 / 000",
+                  "titre": "Fonction de l'entrée IN_4",
+                  "valeurs": [
+                    [
+                      "000",
+                      "NONE (entrée non utilisée)"
+                    ],
+                    [
+                      "001",
+                      "START"
+                    ],
+                    [
+                      "002",
+                      "PED. (piétons)"
+                    ],
+                    [
+                      "003",
+                      "OPEN (ouverture séparée)"
+                    ],
+                    [
+                      "004",
+                      "CLOSE (fermeture séparée)"
+                    ],
+                    [
+                      "005",
+                      "OPEN_PM (ouverture homme présent)"
+                    ],
+                    [
+                      "006",
+                      "CLOSE_PM (fermeture homme présent)"
+                    ],
+                    [
+                      "007",
+                      "ELOCK-IN (fonction électro-serrure, voir P062)"
+                    ],
+                    [
+                      "008",
+                      "PHOTO 1 (photocellule 1)"
+                    ],
+                    [
+                      "009",
+                      "PHOTO 2 (photocellule 2)"
+                    ],
+                    [
+                      "010",
+                      "SAFETY 1 (barre palpeuse 1)"
+                    ],
+                    [
+                      "011",
+                      "STOP (bloc) / SAS INPUT (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "012",
+                      "FCA1 (fin de course ouverture moteur 1)"
+                    ],
+                    [
+                      "013",
+                      "FCA2 (fin de course ouverture moteur 2)"
+                    ],
+                    [
+                      "014",
+                      "FCC1 (fin de course fermeture moteur 1)"
+                    ],
+                    [
+                      "015",
+                      "FCC2 (fin de course fermeture moteur 2)"
+                    ],
+                    [
+                      "016",
+                      "SAFETY 2 (barre palpeuse 2)"
+                    ],
+                    [
+                      "017",
+                      "OPEN_IN (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "018",
+                      "OPEN_EXT (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "019",
+                      "AUX_IN (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "020",
+                      "SAFETY INHIBITION (inhibition SAFETY)"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P021",
+                  "def": "001 / 008 / 000 / 011 / 012 / 014",
+                  "titre": "Fonction de l'entrée IN_5",
+                  "valeurs": [
+                    [
+                      "000",
+                      "NONE (entrée non utilisée)"
+                    ],
+                    [
+                      "001",
+                      "START"
+                    ],
+                    [
+                      "002",
+                      "PED. (piétons)"
+                    ],
+                    [
+                      "003",
+                      "OPEN (ouverture séparée)"
+                    ],
+                    [
+                      "004",
+                      "CLOSE (fermeture séparée)"
+                    ],
+                    [
+                      "005",
+                      "OPEN_PM (ouverture homme présent)"
+                    ],
+                    [
+                      "006",
+                      "CLOSE_PM (fermeture homme présent)"
+                    ],
+                    [
+                      "007",
+                      "ELOCK-IN (fonction électro-serrure, voir P062)"
+                    ],
+                    [
+                      "008",
+                      "PHOTO 1 (photocellule 1)"
+                    ],
+                    [
+                      "009",
+                      "PHOTO 2 (photocellule 2)"
+                    ],
+                    [
+                      "010",
+                      "SAFETY 1 (barre palpeuse 1)"
+                    ],
+                    [
+                      "011",
+                      "STOP (bloc) / SAS INPUT (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "012",
+                      "FCA1 (fin de course ouverture moteur 1)"
+                    ],
+                    [
+                      "013",
+                      "FCA2 (fin de course ouverture moteur 2)"
+                    ],
+                    [
+                      "014",
+                      "FCC1 (fin de course fermeture moteur 1)"
+                    ],
+                    [
+                      "015",
+                      "FCC2 (fin de course fermeture moteur 2)"
+                    ],
+                    [
+                      "016",
+                      "SAFETY 2 (barre palpeuse 2)"
+                    ],
+                    [
+                      "017",
+                      "OPEN_IN (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "018",
+                      "OPEN_EXT (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "019",
+                      "AUX_IN (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "020",
+                      "SAFETY INHIBITION (inhibition SAFETY)"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P022",
+                  "def": "003 / 004 / 010 / 008 / 012 / 014",
+                  "titre": "Fonction de l'entrée IN_6",
+                  "valeurs": [
+                    [
+                      "000",
+                      "NONE (entrée non utilisée)"
+                    ],
+                    [
+                      "001",
+                      "START"
+                    ],
+                    [
+                      "002",
+                      "PED. (piétons)"
+                    ],
+                    [
+                      "003",
+                      "OPEN (ouverture séparée)"
+                    ],
+                    [
+                      "004",
+                      "CLOSE (fermeture séparée)"
+                    ],
+                    [
+                      "005",
+                      "OPEN_PM (ouverture homme présent)"
+                    ],
+                    [
+                      "006",
+                      "CLOSE_PM (fermeture homme présent)"
+                    ],
+                    [
+                      "007",
+                      "ELOCK-IN (fonction électro-serrure, voir P062)"
+                    ],
+                    [
+                      "008",
+                      "PHOTO 1 (photocellule 1)"
+                    ],
+                    [
+                      "009",
+                      "PHOTO 2 (photocellule 2)"
+                    ],
+                    [
+                      "010",
+                      "SAFETY 1 (barre palpeuse 1)"
+                    ],
+                    [
+                      "011",
+                      "STOP (bloc) / SAS INPUT (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "012",
+                      "FCA1 (fin de course ouverture moteur 1)"
+                    ],
+                    [
+                      "013",
+                      "FCA2 (fin de course ouverture moteur 2)"
+                    ],
+                    [
+                      "014",
+                      "FCC1 (fin de course fermeture moteur 1)"
+                    ],
+                    [
+                      "015",
+                      "FCC2 (fin de course fermeture moteur 2)"
+                    ],
+                    [
+                      "016",
+                      "SAFETY 2 (barre palpeuse 2)"
+                    ],
+                    [
+                      "017",
+                      "OPEN_IN (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "018",
+                      "OPEN_EXT (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "019",
+                      "AUX_IN (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "020",
+                      "SAFETY INHIBITION (inhibition SAFETY)"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P023",
+                  "def": "001 / 001 / 001 / 001 / 001 / 001",
+                  "titre": "Fonction du CANAL 1 des émetteurs",
+                  "valeurs": [
+                    [
+                      "000",
+                      "NONE (non utilisé)"
+                    ],
+                    [
+                      "001",
+                      "START"
+                    ],
+                    [
+                      "002",
+                      "PEDESTRIAN (piétons)"
+                    ],
+                    [
+                      "003",
+                      "OPEN (ouverture séparée)"
+                    ],
+                    [
+                      "004",
+                      "CLOSED (fermeture séparée)"
+                    ],
+                    [
+                      "005 · 006",
+                      "Non utilisés"
+                    ],
+                    [
+                      "007",
+                      "ELOCK-IN (fonction électro-serrure, voir P062)"
+                    ],
+                    [
+                      "008",
+                      "AUX_IN (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "009",
+                      "STOP"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P024",
+                  "def": "000 / 000 / 000 / 000 / 000 / 000",
+                  "titre": "Fonction du CANAL 2 des émetteurs",
+                  "valeurs": [
+                    [
+                      "000",
+                      "NONE (non utilisé)"
+                    ],
+                    [
+                      "001",
+                      "START"
+                    ],
+                    [
+                      "002",
+                      "PEDESTRIAN (piétons)"
+                    ],
+                    [
+                      "003",
+                      "OPEN (ouverture séparée)"
+                    ],
+                    [
+                      "004",
+                      "CLOSED (fermeture séparée)"
+                    ],
+                    [
+                      "005 · 006",
+                      "Non utilisés"
+                    ],
+                    [
+                      "007",
+                      "ELOCK-IN (fonction électro-serrure, voir P062)"
+                    ],
+                    [
+                      "008",
+                      "AUX_IN (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "009",
+                      "STOP"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P025",
+                  "def": "000 / 000 / 000 / 000 / 000 / 000",
+                  "titre": "Fonction du CANAL 3 des émetteurs",
+                  "valeurs": [
+                    [
+                      "000",
+                      "NONE (non utilisé)"
+                    ],
+                    [
+                      "001",
+                      "START"
+                    ],
+                    [
+                      "002",
+                      "PEDESTRIAN (piétons)"
+                    ],
+                    [
+                      "003",
+                      "OPEN (ouverture séparée)"
+                    ],
+                    [
+                      "004",
+                      "CLOSED (fermeture séparée)"
+                    ],
+                    [
+                      "005 · 006",
+                      "Non utilisés"
+                    ],
+                    [
+                      "007",
+                      "ELOCK-IN (fonction électro-serrure, voir P062)"
+                    ],
+                    [
+                      "008",
+                      "AUX_IN (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "009",
+                      "STOP"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P026",
+                  "def": "000 / 000 / 000 / 000 / 000 / 000",
+                  "titre": "Fonction du CANAL 4 des émetteurs",
+                  "valeurs": [
+                    [
+                      "000",
+                      "NONE (non utilisé)"
+                    ],
+                    [
+                      "001",
+                      "START"
+                    ],
+                    [
+                      "002",
+                      "PEDESTRIAN (piétons)"
+                    ],
+                    [
+                      "003",
+                      "OPEN (ouverture séparée)"
+                    ],
+                    [
+                      "004",
+                      "CLOSED (fermeture séparée)"
+                    ],
+                    [
+                      "005 · 006",
+                      "Non utilisés"
+                    ],
+                    [
+                      "007",
+                      "ELOCK-IN (fonction électro-serrure, voir P062)"
+                    ],
+                    [
+                      "008",
+                      "AUX_IN (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "009",
+                      "STOP"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P027",
+                  "def": "000 / 000 / 000 / 000 / 000 / 000",
+                  "titre": "Type de codage du récepteur radio (celui de vos émetteurs)",
+                  "valeurs": [
+                    [
+                      "000",
+                      "HCS fix-code"
+                    ],
+                    [
+                      "001",
+                      "HCS rolling-code"
+                    ],
+                    [
+                      "002",
+                      "Dip-switch"
+                    ],
+                    [
+                      "003",
+                      "DART"
+                    ]
+                  ],
+                  "note": "Changer le codage seulement avec la mémoire vide : effacer les émetteurs (P004) APRÈS avoir choisi le nouveau codage. Le paragraphe de programmation standard cite d000 « rolling-code fixe (suggéré) » et d001 « rolling-code complet »."
+                }
+              ]
+            },
+            {
+              "nom": "Moteurs (P028 à P030)",
+              "items": [
+                {
+                  "code": "P028",
+                  "def": "005 / 001 / 003 / 003 / 000 / 005",
+                  "titre": "Type de moteur",
+                  "valeurs": [
+                    [
+                      "000",
+                      "LATO"
+                    ],
+                    [
+                      "001",
+                      "LOOK · MAC · STING"
+                    ],
+                    [
+                      "002",
+                      "GHOST 100 / 200"
+                    ],
+                    [
+                      "003",
+                      "500 · 500MT · 502 · 502EN · 902EN · PASS · 550PL"
+                    ],
+                    [
+                      "004",
+                      "STOP · 500P · 500MT/RF · 502R · 502R/EN · 502L · 902R · 902R/EN/F"
+                    ],
+                    [
+                      "005",
+                      "6NET · OLI · ROCK"
+                    ],
+                    [
+                      "006",
+                      "9NET"
+                    ],
+                    [
+                      "007",
+                      "GULLIVER · REV"
+                    ]
+                  ],
+                  "note": "Moteur OLI ou ROCK : toutes les valeurs de force (P037 à P040) sont automatiquement fixées à 100 % sans modification possible ; la détection d'obstacle est inactive et les forces se règlent avec les bypass situés sur le moteur. Autre marque de moteur : choisir le type équivalent de la gamme DEA System."
+                },
+                {
+                  "code": "P029",
+                  "def": "000 / 001 / 000 / 000 / 000 / 002",
+                  "titre": "Moteurs avec ou sans encodeur",
+                  "valeurs": [
+                    [
+                      "000",
+                      "Moteurs avec encodeur"
+                    ],
+                    [
+                      "001",
+                      "Moteurs sans encodeur, ralentissements habilités"
+                    ],
+                    [
+                      "002",
+                      "Moteurs sans encodeur, ralentissements non habilités"
+                    ]
+                  ],
+                  "note": "À régler correctement avant la procédure de programmation (P003). Sans encodeur : vitesses de course (100 %) et de ralentissement (30 %) fixes quelles que soient les valeurs, et détection d'obstacle ignorée pendant le ralentissement."
+                },
+                {
+                  "code": "P030",
+                  "def": "001 / 002 / 001 / 001 / 001 / 001",
+                  "titre": "Nombre de moteurs",
+                  "valeurs": [
+                    [
+                      "001",
+                      "Un moteur"
+                    ],
+                    [
+                      "002",
+                      "Deux moteurs"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "nom": "Vitesses, ralentissements et forces (P031 à P040)",
+              "items": [
+                {
+                  "code": "P031",
+                  "def": "040 / 050 / 050 / 030 / 030 / 100",
+                  "titre": "Vitesse pendant le ralentissement en ouverture",
+                  "valeurs": [
+                    [
+                      "Plage",
+                      "15 % à 100 % de la vitesse totale"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P032",
+                  "def": "100 / 100 / 100 / 100 / 100 / 100",
+                  "titre": "Vitesse pendant la course en ouverture",
+                  "valeurs": [
+                    [
+                      "Plage",
+                      "15 % à 100 %"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P033",
+                  "def": "100 / 100 / 100 / 100 / 100 / 100",
+                  "titre": "Vitesse pendant la course en fermeture",
+                  "valeurs": [
+                    [
+                      "Plage",
+                      "15 % à 100 %"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P034",
+                  "def": "040 / 050 / 050 / 030 / 030 / 100",
+                  "titre": "Vitesse pendant le ralentissement en fermeture",
+                  "valeurs": [
+                    [
+                      "Plage",
+                      "15 % à 100 %"
+                    ]
+                  ],
+                  "note": "Moteurs sans encodeur : vitesses de course et de ralentissement fixes."
+                },
+                {
+                  "code": "P035",
+                  "def": "025 / 020 / 020 / 030 / 020 / 020",
+                  "titre": "Durée du ralentissement en ouverture",
+                  "valeurs": [
+                    [
+                      "Plage",
+                      "0 % à 80 % de la course"
+                    ]
+                  ],
+                  "note": "Moteurs sans encodeur : si P035 > 10 %, la marge de détection de butée P058 est forcée à cette durée."
+                },
+                {
+                  "code": "P036",
+                  "def": "025 / 020 / 020 / 030 / 020 / 020",
+                  "titre": "Durée du ralentissement en fermeture",
+                  "valeurs": [
+                    [
+                      "Plage",
+                      "0 % à 80 %"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P037",
+                  "def": "050 / 050 / 050 / 099 / 050 / 100",
+                  "titre": "Force du moteur 1 en ouverture",
+                  "valeurs": [
+                    [
+                      "Plage",
+                      "15 % à 100 % (100 % = détection d'obstacle désactivée)"
+                    ]
+                  ],
+                  "note": "Moteurs sans encodeur : pendant le réglage de la force, la détection d'obstacle pendant le ralentissement est ignorée."
+                },
+                {
+                  "code": "P038",
+                  "def": "050 / 050 / 050 / 099 / 050 / 100",
+                  "titre": "Force du moteur 1 en fermeture",
+                  "valeurs": [
+                    [
+                      "Plage",
+                      "15 % à 100 % (100 % = détection d'obstacle désactivée)"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P039",
+                  "def": "050 / 050 / 000 / 099 / 000 / 100",
+                  "titre": "Force du moteur 2 en ouverture (types 00 · 01 · 03 · 05) — TYPE 02 et 04 : force secondaire en fermeture",
+                  "valeurs": [
+                    [
+                      "Types 00 · 01 · 03 · 05",
+                      "15 % à 100 % (100 % = détection d'obstacle désactivée)"
+                    ],
+                    [
+                      "TYPE 02 / 04",
+                      "0 % à 100 % : force du moteur dans la dernière partie de la course en fermeture définie par P058"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P040",
+                  "def": "050 / 050 / 000 / 099 / 050 / 100",
+                  "titre": "Force du moteur 2 en fermeture",
+                  "valeurs": [
+                    [
+                      "Plage",
+                      "0 % à 100 % (100 % = détection d'obstacle désactivée)"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "nom": "Fonctionnement (P041 à P060)",
+              "items": [
+                {
+                  "code": "P041",
+                  "def": "000 / 000 / 000 / 000 / 000 / 000",
+                  "titre": "Temps de fermeture automatique",
+                  "valeurs": [
+                    [
+                      "Plage",
+                      "0 à 255 s (0 = pas de fermeture automatique)"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P042",
+                  "def": "000 / 000 / 000 / 000 / 000 / 000",
+                  "titre": "Temps de fermeture automatique en piéton",
+                  "valeurs": [
+                    [
+                      "Plage",
+                      "0 à 255 s (0 = désactivée)"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P043",
+                  "def": "030 / 035 / 035 / 100 / 100 / 100",
+                  "titre": "Durée de la course piétons",
+                  "valeurs": [
+                    [
+                      "Plage",
+                      "5 % à 100 % de la course"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P044",
+                  "def": "000 / 000 / 000 / 000 / 000 / 000",
+                  "titre": "Temps de préclignotement",
+                  "valeurs": [
+                    [
+                      "Plage",
+                      "0 à 10 s"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P045",
+                  "def": "— / 001 / — / — / — / 000",
+                  "titre": "Temps de décalage en ouverture",
+                  "valeurs": [
+                    [
+                      "Plage",
+                      "0 à 30 s"
+                    ]
+                  ],
+                  "note": "« — » : sans objet pour ce type (un seul vantail)."
+                },
+                {
+                  "code": "P046",
+                  "def": "— / 003 / — / — / — / 000",
+                  "titre": "Temps de décalage en fermeture",
+                  "valeurs": [
+                    [
+                      "Plage",
+                      "0 à 30 s"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P047",
+                  "def": "000 / 000 / 000 / 000 / 000 / 001",
+                  "titre": "Fonction « immeuble en copropriété »",
+                  "valeurs": [
+                    [
+                      "000",
+                      "Désactivée"
+                    ],
+                    [
+                      "001",
+                      "Active seulement en ouverture"
+                    ],
+                    [
+                      "002",
+                      "Active en ouverture et en fermeture automatique"
+                    ]
+                  ],
+                  "note": "Activée : les commandes d'ouverture sont ignorées pendant toute l'ouverture et le temps de pause."
+                },
+                {
+                  "code": "P048",
+                  "def": "000 / 000 / 000 / 000 / 000 / 060",
+                  "titre": "Coup de bélier",
+                  "valeurs": [
+                    [
+                      "000",
+                      "Désactivé"
+                    ],
+                    [
+                      "001",
+                      "Avant chaque ouverture, les moteurs poussent 1 s en fermeture pour faciliter le déverrouillage de l'électro-serrure"
+                    ],
+                    [
+                      "> 001",
+                      "Coup de bélier périodique (X × 1 min, de 2 à 255) pour garder les vantaux en pression sur les butées de fermeture"
+                    ]
+                  ],
+                  "note": "Avec des fins de course de fermeture, la fonction ne s'exécute que si ces fins de course ont été désactivées (cas d'une baisse de pression sur la butée)."
+                },
+                {
+                  "code": "P049",
+                  "def": "001 / 001 / 001 / 001 / 001 / 000",
+                  "titre": "Impulsion pendant la manœuvre",
+                  "valeurs": [
+                    [
+                      "000",
+                      "Inversion : l'impulsion inverse le mouvement"
+                    ],
+                    [
+                      "001",
+                      "Pas-à-pas : l'impulsion arrête le mouvement, la suivante repart dans le sens inverse"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P050",
+                  "def": "002 / 002 / 002 / 002 / 002 / 002",
+                  "titre": "Fonctionnement de l'entrée PHOTO 1",
+                  "valeurs": [
+                    [
+                      "000",
+                      "Photocellule active en fermeture et avant chaque démarrage"
+                    ],
+                    [
+                      "001",
+                      "Photocellules toujours habilitées"
+                    ],
+                    [
+                      "002",
+                      "Photocellules habilitées seulement en fermeture"
+                    ],
+                    [
+                      "003",
+                      "Comme 000, mais avec « fermer immédiatement » habilité"
+                    ],
+                    [
+                      "004",
+                      "Comme 001, mais avec « fermer immédiatement » habilité"
+                    ],
+                    [
+                      "005",
+                      "Comme 002, mais avec « fermer immédiatement » habilité"
+                    ]
+                  ],
+                  "note": "La notice décrit P050 (PHOTO 1) et P051 (PHOTO 2) avec le même tableau de valeurs. Avec « fermer immédiatement » (3 à 5) : à l'ouverture ou pendant le temps de pause, la désactivation de la photocellule termine l'ouverture et la porte se referme seule après 2 s."
+                },
+                {
+                  "code": "P051",
+                  "def": "000 / 001 / 002 / 002 / 002 / 002",
+                  "titre": "Fonctionnement de l'entrée PHOTO 2",
+                  "valeurs": [
+                    [
+                      "000",
+                      "Photocellule active en fermeture et avant chaque démarrage"
+                    ],
+                    [
+                      "001",
+                      "Photocellules toujours habilitées"
+                    ],
+                    [
+                      "002",
+                      "Photocellules habilitées seulement en fermeture"
+                    ],
+                    [
+                      "003",
+                      "Comme 000, mais avec « fermer immédiatement » habilité"
+                    ],
+                    [
+                      "004",
+                      "Comme 001, mais avec « fermer immédiatement » habilité"
+                    ],
+                    [
+                      "005",
+                      "Comme 002, mais avec « fermer immédiatement » habilité"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P052",
+                  "def": "000 / 000 / 060 / 000 / 000 / 000",
+                  "titre": "Contact disponible : voyant / lumière de courtoisie",
+                  "valeurs": [
+                    [
+                      "000",
+                      "Voyant portail ouvert fixe"
+                    ],
+                    [
+                      "> 001",
+                      "Lumière de courtoisie : retard à l'extinction (2 à 255 s)"
+                    ]
+                  ],
+                  "note": "Sortie 9-10 en 230 V, 150 W max."
+                },
+                {
+                  "code": "P053",
+                  "def": "— / 001 / 001 / 001 / 000 / 000",
+                  "titre": "Recherche des butées aussi en ouverture",
+                  "valeurs": [
+                    [
+                      "000",
+                      "Arrêt en ouverture sur le point mémorisé"
+                    ],
+                    [
+                      "001",
+                      "Arrêt en ouverture sur la butée"
+                    ]
+                  ],
+                  "note": "Pendant la manœuvre d'urgence le moteur fait d'abord une ouverture ; avec des fins de course le paramètre est forcé à 1."
+                },
+                {
+                  "code": "P054",
+                  "def": "001 / 001 / 001 / 001 / 001 / 000",
+                  "titre": "Démarrage progressif",
+                  "valeurs": [
+                    [
+                      "000",
+                      "Désactivé"
+                    ],
+                    [
+                      "001",
+                      "Démarrage progressif activé"
+                    ],
+                    [
+                      "002",
+                      "Démarrage progressif lent activé"
+                    ],
+                    [
+                      "003",
+                      "Démarrage progressif configurable (TYPE 2 seulement)"
+                    ]
+                  ],
+                  "note": "TYPE 02 : si = 3, l'espace de ralentissement en ouverture (P035) devient aussi l'espace où la porte se déplace à la vitesse de ralentissement (P031) au début de la fermeture."
+                },
+                {
+                  "code": "P055",
+                  "def": "003 / 003 / 003 / 003 / 003 / 000",
+                  "titre": "Durée de l'inversion sur obstacle en ouverture",
+                  "valeurs": [
+                    [
+                      "000",
+                      "Inversion complète"
+                    ],
+                    [
+                      "> 000",
+                      "Durée d'inversion de 1 à 10 s"
+                    ]
+                  ],
+                  "note": "Obstacle détecté par l'anti-écrasement interne ou par l'entrée SAFETY."
+                },
+                {
+                  "code": "P056",
+                  "def": "003 / 003 / 003 / 003 / 003 / 000",
+                  "titre": "Durée de l'inversion sur obstacle en fermeture",
+                  "valeurs": [
+                    [
+                      "000",
+                      "Inversion complète"
+                    ],
+                    [
+                      "> 000",
+                      "Durée d'inversion de 1 à 10 s"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P057",
+                  "def": "000 / 001 / 003 / 002 / 000 / 000",
+                  "titre": "Facilitation du déblocage manuel",
+                  "valeurs": [
+                    [
+                      "000",
+                      "Désactivée"
+                    ],
+                    [
+                      "> 000",
+                      "Après la butée de fermeture ou d'ouverture, le moteur 1 recule brièvement pour soulager la butée ; la valeur donne la durée (1 à 20 × 25 ms)"
+                    ]
+                  ],
+                  "note": "Trop dur à débloquer après l'apprentissage (types 01 et 03) : augmenter P057 de 1 ou plus. Plage « 1 à 40 × 25 ms » donnée seulement pour le TYPE 0 dans le tableau."
+                },
+                {
+                  "code": "P058",
+                  "def": "012 / 025 / 000 / 020 / 000 / 025",
+                  "titre": "Marge de butée en ouverture (types 00 · 01 · 03 · 05) — TYPE 02 · 04 : durée de la force secondaire en fermeture",
+                  "valeurs": [
+                    [
+                      "Moteur avec encodeur",
+                      "1 à 255 : nombre de tours du rotor"
+                    ],
+                    [
+                      "Moteur sans encodeur",
+                      "1 % à 100 % de la course maximale"
+                    ],
+                    [
+                      "TYPE 02 / 04",
+                      "0 à 255 tours : durée de la dernière partie de la course en fermeture où la force est gérée par P039"
+                    ]
+                  ],
+                  "note": "Durée de la dernière partie de la course pendant laquelle un obstacle est interprété comme une butée (le moteur s'arrête sans inversion)."
+                },
+                {
+                  "code": "P059",
+                  "def": "012 / 025 / 025 / 020 / 025 / 025",
+                  "titre": "Marge de butée en fermeture (types 00 · 01 · 03 · 05) — TYPE 02 · 04 : marge en fermeture avant butée",
+                  "valeurs": [
+                    [
+                      "Moteur avec encodeur",
+                      "1 à 255 tours"
+                    ],
+                    [
+                      "Moteur sans encodeur",
+                      "1 % à 100 %"
+                    ],
+                    [
+                      "TYPE 02 / 04",
+                      "1 à 255 tours : un obstacle dans cette marge est interprété comme butée (arrêt, pas d'inversion)"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P060",
+                  "def": "000 / 000 / 000 / 000 / 000 / 000",
+                  "titre": "Force des moteurs à l'arrivée sur la butée",
+                  "valeurs": [
+                    [
+                      "0",
+                      "Réglage désactivé : la force est calculée automatiquement"
+                    ],
+                    [
+                      "≠ 0",
+                      "Valeur (en %) de la force pour le dernier tronçon, 0 % à 100 %"
+                    ],
+                    [
+                      "TYPE 02 / 04",
+                      "Force dans la marge de butée en fermeture, dont la durée est donnée par P059"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "nom": "Options (P061 à P099)",
+              "items": [
+                {
+                  "code": "P062",
+                  "def": "000 / 000 / 000 / 005 / 000 / 000",
+                  "titre": "Sortie électro-serrure (bornes 13 (−) · 14 (+))",
+                  "valeurs": [
+                    [
+                      "000",
+                      "Sortie « boost » pour électro-serrure art. 110"
+                    ],
+                    [
+                      "001",
+                      "Sortie impulsive 24 V max 5 W"
+                    ],
+                    [
+                      "002",
+                      "Sortie pas-à-pas 24 V max 5 W"
+                    ],
+                    [
+                      "003",
+                      "Sortie électro-frein pour moteurs réversibles"
+                    ],
+                    [
+                      "004",
+                      "Sortie pour alimentation d'électro-serrure avec relais externe"
+                    ],
+                    [
+                      "005",
+                      "Sortie pour alimentation d'électro-aimants de barrières"
+                    ],
+                    [
+                      "> 005",
+                      "Sortie temporisée 24 V max 5 W (6 à 255 s)"
+                    ]
+                  ],
+                  "note": "Les temps d'activation / désactivation pour 000, 004 et 005 se règlent avec P064. Moteurs réversibles avec électro-frein : programmer P062 = 3 à la fin de la procédure."
+                },
+                {
+                  "code": "P063",
+                  "def": "000 / 000 / 000 / 000 / 000 / 000",
+                  "titre": "Sens de marche",
+                  "valeurs": [
+                    [
+                      "000",
+                      "Installation standard"
+                    ],
+                    [
+                      "001",
+                      "Installation inversée"
+                    ]
+                  ],
+                  "note": "Inverse automatiquement les sorties ouvre / ferme des moteurs (évite de modifier le câblage). Après changement, revoir les paramètres de fin de course d'ouverture et de fermeture."
+                },
+                {
+                  "code": "P064",
+                  "def": "002 / 002 / 002 / 002 / 002 / 001",
+                  "titre": "Durée de la serrure électrique",
+                  "valeurs": [
+                    [
+                      "Plage",
+                      "0 à 10 s"
+                    ]
+                  ],
+                  "note": "Si P062 = 000 ou 004 : temps d'activation de la sortie LOCK. Si P062 = 005 : temps de désactivation."
+                },
+                {
+                  "code": "P065",
+                  "def": "000 / 000 / 000 / 000 / 000 / 000",
+                  "titre": "Compteur de manœuvres pour la maintenance",
+                  "valeurs": [
+                    [
+                      "000",
+                      "Réinitialise le compteur et désactive la demande"
+                    ],
+                    [
+                      "> 000",
+                      "Nombre de manœuvres × 500 avant la demande d'entretien (1 à 255)"
+                    ]
+                  ],
+                  "note": "À la demande, la platine ajoute un préclignotement de 4 s. Exemple : P065 = 050 donne 50 × 500 = 25 000 manœuvres. Avant de définir une nouvelle valeur, remettre P065 à 0, puis saisir la nouvelle valeur."
+                },
+                {
+                  "code": "P066",
+                  "def": "001 / 001 / 001 / 001 / 001 / 001",
+                  "titre": "Sortie clignotant",
+                  "valeurs": [
+                    [
+                      "000",
+                      "Clignotement intermittent"
+                    ],
+                    [
+                      "001",
+                      "Clignotement fixe (pour clignotants à circuit intermittent intérieur)"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P067",
+                  "def": "000 / 000 / 000 / 000 / 001 / 001",
+                  "titre": "Entrée SAFETY 1 (SFT)",
+                  "valeurs": [
+                    [
+                      "000",
+                      "Barre palpeuse toujours active"
+                    ],
+                    [
+                      "001",
+                      "Active seulement en fermeture"
+                    ],
+                    [
+                      "002",
+                      "Active seulement en fermeture et avant chaque démarrage"
+                    ],
+                    [
+                      "003",
+                      "Active seulement en ouverture"
+                    ],
+                    [
+                      "004",
+                      "Active seulement en ouverture et avant chaque démarrage"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P068",
+                  "def": "000 / 000 / 000 / 000 / 001 / 001",
+                  "titre": "Entrée SAFETY 2 (SFT)",
+                  "valeurs": [
+                    [
+                      "000",
+                      "Barre palpeuse toujours active"
+                    ],
+                    [
+                      "001",
+                      "Active seulement en fermeture"
+                    ],
+                    [
+                      "002",
+                      "Active seulement en fermeture et avant chaque démarrage"
+                    ],
+                    [
+                      "003",
+                      "Active seulement en ouverture"
+                    ],
+                    [
+                      "004",
+                      "Active seulement en ouverture et avant chaque démarrage"
+                    ]
+                  ],
+                  "note": "Les durées d'inversion après SAFETY sont données par P055 (ouverture) et P056 (fermeture)."
+                },
+                {
+                  "code": "P069",
+                  "def": "000 / 000 / 000 / 000 / 001 / 001",
+                  "titre": "Arrêt retardé sur fin de course",
+                  "valeurs": [
+                    [
+                      "000",
+                      "Désactivé"
+                    ],
+                    [
+                      "001",
+                      "Moteur arrêté 1,5 s après la détection de la fin de course ; si la butée de fermeture est détectée pendant ce délai, arrêt immédiat"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P070",
+                  "def": "108 / 108 / 108 / 108 / 108 / 255",
+                  "titre": "Durée de la pleine puissance au démarrage",
+                  "valeurs": [
+                    [
+                      "000",
+                      "Désactivée (durée au niveau minimum)"
+                    ],
+                    [
+                      "00X",
+                      "Jusqu'à 1,5 s (X × 6 ms)"
+                    ]
+                  ],
+                  "note": "Avec le démarrage progressif lent, ce réglage est sans effet. Valeurs par défaut lues sur l'image du tableau."
+                },
+                {
+                  "code": "P071",
+                  "def": "000 / 000 / 000 / 000 / 000 / 000",
+                  "titre": "Autotest des sécurités",
+                  "valeurs": [
+                    [
+                      "000",
+                      "Sortie 24 V sans autotest"
+                    ],
+                    [
+                      "001",
+                      "Sortie 24 V avec autotest (coupe la sortie et vérifie l'ouverture du contact avant chaque manœuvre)"
+                    ]
+                  ],
+                  "note": "Pour l'autotest, tous les dispositifs de sécurité doivent être raccordés à l'alimentation stabilisée 24V_ST (bornes 33-34) et alignés avant l'apprentissage de la course (P003)."
+                },
+                {
+                  "code": "P072",
+                  "def": "000 / 000 / 000 / 000 / 000 / 000",
+                  "titre": "Fonction SAS (seulement NET_EXP)",
+                  "valeurs": [
+                    [
+                      "000",
+                      "Désactivée"
+                    ],
+                    [
+                      "001",
+                      "Activée : la sortie SAS se branche sur l'entrée STOP / SAS INPUT d'une deuxième centrale"
+                    ]
+                  ],
+                  "note": "Si les deux portes sont débloquées à la main et déplacées, il y a inter-blocage : refermer à la main au moins l'une des deux."
+                },
+                {
+                  "code": "P073",
+                  "def": "000 / 000 / 000 / 000 / 000 / 000",
+                  "titre": "« Homme mort » forcé",
+                  "valeurs": [
+                    [
+                      "000",
+                      "Désactivé"
+                    ],
+                    [
+                      "001",
+                      "Activé : OPEN et CLOSE passent en homme mort (OPEN UP / CLOSE UP) tant qu'elles sont maintenues si une sécurité est occupée ou en défaut"
+                    ]
+                  ],
+                  "note": "Incompatible avec les valeurs 001 et 003 de P067 / P068 pour des bords sensibles. Ne pas l'utiliser avec des horloges / minuteries sur des entrées OPEN ou CLOSE (conseil de la notice)."
+                },
+                {
+                  "code": "P061",
+                  "def": "—",
+                  "titre": "Non utilisé",
+                  "valeurs": [
+                    [
+                      "—",
+                      "Aucune fonction"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P074 à P076",
+                  "def": "—",
+                  "titre": "Non utilisés",
+                  "valeurs": [
+                    [
+                      "—",
+                      "Aucune fonction"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P077",
+                  "def": "001 / 000 / 000 / 000 / 000 / 000",
+                  "titre": "Frein électronique (TYPE 00 seulement)",
+                  "valeurs": [
+                    [
+                      "000",
+                      "Désactivé"
+                    ],
+                    [
+                      "001",
+                      "Activé : l'armoire pilote le moteur pour créer une force de freinage à chaque arrêt"
+                    ]
+                  ],
+                  "note": "Seulement avec un moteur unique et un encodeur."
+                },
+                {
+                  "code": "P078 à P099",
+                  "def": "—",
+                  "titre": "Paramètres de la carte d'extension NET_EXP",
+                  "valeurs": [
+                    [
+                      "—",
+                      "Pour le détail, voir la notice du NET_EXP."
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "bornier": {
+          "groupes": [
+            {
+              "nom": "Alimentation et moteurs",
+              "bornes": [
+                {
+                  "n": "1 · 2",
+                  "label": "Alimentation secteur",
+                  "desc": "230 V ~ ±10 %, 50 / 60 Hz (câble 3 × 1,5 mm² minimum). Prévoir en amont un interrupteur ou disjoncteur omnipolaire.",
+                  "t": "alim"
+                },
+                {
+                  "n": "3 · 4 · 5",
+                  "label": "Moteur 1",
+                  "desc": "230 V ~ max 500 W (600 W si un seul moteur).",
+                  "t": "moteur"
+                },
+                {
+                  "n": "6 · 7 · 8",
+                  "label": "Moteur 2 (si présent)",
+                  "desc": "230 V ~ max 500 W.",
+                  "t": "moteur"
+                },
+                {
+                  "n": "ENC_M1 · ENC_M2",
+                  "label": "Encodeurs",
+                  "desc": "Connecteurs d'encodeur des moteurs 1 et 2, câble dédié 3 × 0,22 mm².",
+                  "t": "bus"
+                }
+              ]
+            },
+            {
+              "nom": "Sorties",
+              "bornes": [
+                {
+                  "n": "9 · 10",
+                  "label": "Lampe témoin portail ouvert",
+                  "desc": "230 V ~ max 150 W : fixe (P052 = 0) ou lumière de courtoisie (P052 > 1).",
+                  "t": "sortie"
+                },
+                {
+                  "n": "11 · 12",
+                  "label": "Clignotant 230 V",
+                  "desc": "230 V ~ max 40 W.",
+                  "t": "sortie"
+                },
+                {
+                  "n": "13 (−) · 14 (+)",
+                  "label": "Électro-serrure / sortie 24 V configurable",
+                  "desc": "Selon P062 : boost pour électro-serrure (max 1 × art. 110), impulsive, pas-à-pas, électro-frein, alimentation électro-serrure avec relais externe, électro-aimants de barrières ou sortie temporisée. 24 V max 5 W.",
+                  "t": "sortie"
+                },
+                {
+                  "n": "15 · 16",
+                  "label": "Sortie 24 V (WL / FL 24 V)",
+                  "desc": "24 V max 100 mA, clignotants à LED uniquement. Le jumper FL / WL fait de cette sortie un clone de la sortie Flash 230 (FL) ou de la sortie Warning (WL).",
+                  "t": "sortie"
+                }
+              ]
+            },
+            {
+              "nom": "Entrées de commande (IN_1 à IN_6)",
+              "bornes": [
+                {
+                  "n": "28 · 29",
+                  "label": "IN_1 / COM",
+                  "desc": "Défaut : START (types 00 à 04) ; OPEN (type 05). Contact NO.",
+                  "t": "no"
+                },
+                {
+                  "n": "26 · 27",
+                  "label": "IN_2 / COM",
+                  "desc": "Défaut : PED. (00, 01) · PHOTO 1 (02, 03, 04) · CLOSE (05). Contact NO pour PED. / CLOSE, NF pour PHOTO 1.",
+                  "t": "autre"
+                },
+                {
+                  "n": "24 · 25",
+                  "label": "IN_3 / COM",
+                  "desc": "Défaut : SAFETY (00, 01, 02, 05) · NONE (03, 04). NF si utilisée, NO si NONE.",
+                  "t": "nf"
+                },
+                {
+                  "n": "22 · 23",
+                  "label": "IN_4 / COM",
+                  "desc": "Défaut : PHOTO 1 (00, 01, 05) · STOP (02, 04) · NONE (03).",
+                  "t": "nf"
+                },
+                {
+                  "n": "20 · 21",
+                  "label": "IN_5 / COM",
+                  "desc": "Défaut : FCA 1 (00, 04, 05) · PHOTO 2 (01) · NONE (02, 03). Contact NF si utilisée.",
+                  "t": "nf"
+                },
+                {
+                  "n": "18 · 19",
+                  "label": "IN_6 / COM",
+                  "desc": "Défaut : FCC 1 (00, 04, 05) · STOP (01) · NONE (02, 03). Contact NF si utilisée.",
+                  "t": "nf"
+                }
+              ]
+            },
+            {
+              "nom": "Antenne et alimentations auxiliaires",
+              "bornes": [
+                {
+                  "n": "Antenne (2 bornes)",
+                  "label": "Entrée radio",
+                  "desc": "Signal et masse de l'antenne (câble RG58). Bornes non numérotées sur la carte.",
+                  "t": "autre"
+                },
+                {
+                  "n": "31 · 32",
+                  "label": "24 V ~ auxiliaire (AUX + ST)",
+                  "desc": "Alimentation des accessoires en connexion normale.",
+                  "t": "alim"
+                },
+                {
+                  "n": "33 (+) · 34 (−)",
+                  "label": "24 V stabilisé — sécurités contrôlées",
+                  "desc": "Alimentation des dispositifs de sécurité avec autotest (P071), max 200 mA (24V_AUX + 24V_ST = max 200 mA au total).",
+                  "t": "alim"
+                }
+              ]
+            },
+            {
+              "nom": "Connecteurs",
+              "bornes": [
+                {
+                  "n": "CON 1",
+                  "label": "NET-EXP",
+                  "desc": "Carte d'extension.",
+                  "t": "bus"
+                },
+                {
+                  "n": "CON 2",
+                  "label": "NET-NODE / MEMONET",
+                  "desc": "Interface DEAinstaller et mémoire externe.",
+                  "t": "bus"
+                }
+              ]
+            }
+          ],
+          "fusibles": "F1 = 160 mA · F2 = 5 A (l'afficheur de la carte ne précise pas le circuit protégé par chacun : voir le schéma de base).",
+          "notes": [
+            "Entrées : la notice met en défaut 6 configurations (une par TYPE) ; tout peut être reconfiguré avec P017 à P022, puis recâbler.",
+            "Les entrées inutilisées en NF (sécurités, STOP, fins de course) doivent être shuntées (« si vous ne l'utilisez pas, court-circuitez-la »).",
+            "Garder au moins 4 mm d'air (ou 1 mm d'isolant) entre le 230 V et la très basse tension.",
+            "Schémas de câblage par TYPE : onglet Schéma."
+          ]
+        },
+        "apprentissage": {
+          "avant": [
+            "Alimenter la platine : TYPE clignote. Maintenir OK environ 5 s, choisir le type (00 coulissant, 01 battant, 02 basculante, 03 barrière, 04 sectionnelle, 05 bollard) avec + / −, valider avec OK. Le choix est mémorisé.",
+            "Pour changer le TYPE plus tard : maintenir OK en alimentant la platine, puis maintenir OK environ 5 s, choisir et valider (abandonner avant OK recharge l'ancienne configuration).",
+            "Régler P028 (type de moteur), P029 (avec / sans encodeur) et P030 (1 ou 2 moteurs) AVANT d'apprendre la course. Types 00 et 03 : P063 pour le sens de marche.",
+            "Fins de course à cames : régler les cames avec P001 (et P002 pour le moteur 2) en manœuvrant avec + (ouvre) et − (ferme)."
+          ],
+          "etapes": [
+            "P003 puis OK : l'afficheur clignote, appuyer sur OK ; relâcher quand le clignotement s'arrête.",
+            "La manœuvre d'apprentissage démarre : le moteur 1 part en ouverture (s'il part en fermeture : couper, inverser les fils du moteur, recommencer).",
+            "Attendre que le ou les vantaux cherchent puis s'arrêtent sur la butée d'ouverture, puis de fermeture. Pour avancer l'arrêt en ouverture, appuyer sur START (ou OK sur la carte) pour simuler la butée.",
+            "Moteurs SANS encodeur (TYPE 01 : P029 = 001 ; TYPE 05 : P029 = 002 par défaut) : la butée n'est pas détectée, il faut la simuler en appuyant sur OK à l'arrivée en butée, à l'ouverture puis à la fermeture.",
+            "L'afficheur revient sur « - - - - » : apprentissage terminé.",
+            "Radio : P027 pour le codage, P005 pour mémoriser (appuyer sur la touche de l'émetteur quand le symbole apparaît ; attendre 10 s pour finir). P004 efface tout, P006 un seul émetteur."
+          ],
+          "apres": [
+            "Types 01 et 03 : faire une manœuvre complète puis vérifier que le déverrouillage manuel n'est pas trop dur ; sinon augmenter P057 de 1 ou plus.",
+            "Régler vitesses, forces et temps (P031 à P060) selon la porte, puis mesurer les forces d'impact (EN 12445) et vérifier les sécurités.",
+            "Pour verrouiller la programmation : P008 avec un émetteur à codage dip-switch (touche CH1 dans les 10 s). Déblocage par la même procédure ; le déblocage avec réinitialisation globale efface tous les réglages.",
+            "Sauvegarde : P011 (DOWNLOAD) et P012 (UPLOAD) avec une mémoire externe : maintenir OK 5 s. Ne pas débrancher pendant le transfert."
+          ]
+        }
+      },
+      {
+        "id": "dea-net24n",
+        "nom": "NET24N",
+        "modeles": "Armoire universelle 24 V pour automatismes DEA System à 1 ou 2 moteurs 24 V avec ou sans encodeur : LIVI 5/24 · 8/24 · 6/24N · 9/24N, REV, GEKO, LOOK · MAC · STING, GHOST 100/200, LIVI 500 / 502 / 550PL, ANGOLO, LIVI 902/24 · 905/24, PASS, STOP",
+        "type": "Armoire universelle 24 V : portails coulissants, battants, portes basculantes, barrières (4 types) — alimentation transformateur 230/22 V ou batteries, afficheur 4 chiffres",
+        "source": "Notice DEA System NET24N (rév. R12, notice d'emploi en français pages FR-1 à FR-30).",
+        "codes": [
+          {
+            "code": "- - - -",
+            "type": "afficheur",
+            "titre": "Portail fermé",
+            "action": "Repos normal. À la mise sous tension s'affichent en séquence la version du firmware (ou le TYPE choisi) puis ce symbole. Si la platine a déjà été programmée et que le redémarrage vient d'une coupure de courant, la première impulsion de START lance la réinitialisation (voir rESP)."
+          },
+          {
+            "code": "Symbole ouvert",
+            "type": "afficheur",
+            "titre": "Portail ouvert",
+            "action": "Symbole « porte ouverte » (barres haute et basse de l'afficheur)."
+          },
+          {
+            "code": "OPEn",
+            "type": "afficheur",
+            "titre": "Ouverture en cours",
+            "action": "Manœuvre d'ouverture."
+          },
+          {
+            "code": "CLOS",
+            "type": "afficheur",
+            "titre": "Fermeture en cours",
+            "action": "Manœuvre de fermeture."
+          },
+          {
+            "code": "StEP",
+            "type": "afficheur",
+            "titre": "En attente d'une commande",
+            "action": "L'armoire attend une commande après une impulsion de START, en fonctionnement pas-à-pas."
+          },
+          {
+            "code": "StOP",
+            "type": "afficheur",
+            "titre": "Stop ou obstacle avec inversion limitée",
+            "action": "L'entrée STOP est intervenue, ou un obstacle a été détecté avec une durée d'inversion limitée (P055 > 0 ou P056 > 0)."
+          },
+          {
+            "code": "rESP",
+            "type": "afficheur",
+            "titre": "Réinitialisation de la position",
+            "action": "L'armoire vient d'être réinitialisée après une coupure de courant, ou la porte a dépassé le nombre maximal d'inversions autorisées (80) sans atteindre la butée de fermeture, ou le nombre maximal d'opérations consécutives (15) de l'anti-écrasement. Recherche des fins de course d'ouverture puis de fermeture à vitesse ralentie."
+          },
+          {
+            "code": "BOOT",
+            "type": "afficheur",
+            "titre": "Carte en BOOT-MODE (firmware corrompu ou en cours de mise à jour)",
+            "action": "Affichage spécial de la notice (deux traits bas). Rétablir le firmware avec l'application DEAinstaller, NET-NODE branché sur le bon port. Attention : la mise à jour efface paramètres et radiocommandes — faire une sauvegarde de la mémoire avant."
+          },
+          {
+            "code": "ErrP",
+            "type": "erreur",
+            "titre": "Erreur de position : la réinitialisation n'a pas abouti",
+            "action": "L'armoire attend des ordres. Vérifier qu'il n'y a ni frottements ni obstacles sur la course. Donner une impulsion de START pour relancer la manœuvre de configuration de la position et vérifier qu'elle se termine correctement (aider la porte à la main si besoin). Au besoin, ajuster force et vitesse des moteurs."
+          },
+          {
+            "code": "bLOC · UArt",
+            "type": "erreur",
+            "titre": "Programmation tentée avec un NET-NODE connecté",
+            "action": "Couper l'alimentation, déconnecter le NET-NODE du port de communication, remettre sous tension."
+          },
+          {
+            "code": "Err3",
+            "type": "erreur",
+            "titre": "Photocellules et / ou sécurités extérieures actives ou en panne",
+            "action": "Vérifier le bon fonctionnement de tous les dispositifs de sécurité et des photocellules installées."
+          },
+          {
+            "code": "Err4",
+            "type": "erreur",
+            "titre": "Dommage ou surchauffe possible du circuit de puissance",
+            "action": "Couper l'alimentation quelques minutes, rétablir, donner une impulsion de démarrage. Si le message revient, remplacer la centrale."
+          },
+          {
+            "code": "Err5",
+            "type": "erreur",
+            "titre": "Time-out course des moteurs (plus de 4 min sans arrêt)",
+            "action": "Donner une impulsion de START pour relancer la configuration de la position ; vérifier que l'opération se termine correctement."
+          },
+          {
+            "code": "Err6",
+            "type": "erreur",
+            "titre": "Time-out de détection d'obstacle (anti-écrasement désactivé, obstacle plus de 10 s)",
+            "action": "Vérifier l'absence de frottements ou d'obstacles ; impulsion de START pour relancer la configuration de la position ; vérifier que l'opération se termine avec succès."
+          },
+          {
+            "code": "Err7",
+            "type": "erreur",
+            "titre": "Mouvement des moteurs non détecté",
+            "action": "Vérifier le bon branchement des moteurs et de leurs encodeurs, et le bon positionnement des jumpers J5 et J9 comme indiqué sur le schéma électrique. Si le message se répète, remplacer l'armoire de commande."
+          },
+          {
+            "code": "Err9",
+            "type": "erreur",
+            "titre": "Communication avec la carte mémoire externe (NET-EXP ou NET-NODE) absente ou interrompue",
+            "action": "Vérifier le câble de la carte mémoire externe. Le message apparaît aussi si aucune unité n'est branchée pendant un transfert (suivi alors d'une réinitialisation complète de la centrale). Un DOWNLOAD écrase les données déjà présentes sur la mémoire externe. Pendant un DOWNLOAD / UPLOAD, ne pas l'interrompre (par exemple en débranchant la carte avant la fin). Attention : l'interruption d'un UPLOAD provoque un RESET total de la centrale."
+          },
+          {
+            "code": "Er10 · Er11",
+            "type": "erreur",
+            "titre": "Dommage ou surchauffe possible du circuit de puissance",
+            "action": "Couper l'alimentation quelques minutes, rétablir, donner une impulsion de démarrage. Si le message revient, remplacer la centrale."
+          },
+          {
+            "code": "Er12",
+            "type": "erreur",
+            "titre": "Dommage possible au circuit de puissance ou au circuit de l'encodeur",
+            "action": "Vérifier le câblage encodeur et moteur, couper et remettre le courant, donner une impulsion de démarrage. Si le message revient : entrer dans P003 et manœuvrer la porte avec + et −. Si la porte va à vitesse maximale et que l'écran affiche Err7, remplacer la carte encodeur du moteur. Si le moteur reste à l'arrêt, remplacer la centrale."
+          },
+          {
+            "code": "Er15",
+            "type": "erreur",
+            "titre": "Paramètres sensibles modifiés avec l'application DEAinstaller sans apprentissage de la course",
+            "action": "Exécuter l'apprentissage de la course des moteurs (P003) avant toute autre opération."
+          },
+          {
+            "code": "Er81",
+            "type": "erreur",
+            "titre": "NET-NODE connecté au mauvais port de communication",
+            "action": "Connecter le NET-NODE au connecteur repéré NET-NODE / MEMONET sur la carte (le connecteur NET-EXP est réservé à la carte d'extension)."
+          },
+          {
+            "code": "P013",
+            "type": "diag",
+            "titre": "Visualisation de l'état des entrées et compteur de manœuvres",
+            "action": "P013 puis OK : l'afficheur montre l'état des entrées (segments 1 à 6 = IN_1 à IN_6, 7 à 12 = IN_1 à IN_6 du NET-EXP, voir le schéma de base). OK de nouveau : compteur total de manœuvres suivi du multiplicateur (à multiplier : 120 × 10 = 1 200 manœuvres). OK encore : manœuvres restantes avant la demande de maintenance (1 500 × 1 = 1 500). OK pour sortir."
+          },
+          {
+            "code": "TYPE",
+            "type": "diag",
+            "titre": "Choix du type d'installation",
+            "action": "Clignote à la première mise sous tension ou après un changement de configuration : voir l'onglet Apprent."
+          },
+          {
+            "code": "Types 00 à 03",
+            "type": "diag",
+            "titre": "Le TYPE configuré donne les réglages d'usine",
+            "action": "00 coulissant · 01 battant · 02 basculante · 03 barrière. Changer le TYPE recharge les entrées, sorties et paramètres de ce type : revoir ensuite P028, P029, P030."
+          }
+        ],
+        "parametres": {
+          "intro": "Armoire universelle : au premier démarrage on choisit le TYPE d'installation (00 à 03) et la platine charge les entrées, sorties et paramètres adaptés. Les valeurs par défaut sont données dans l'ordre TYPE 00 (coulissant) / 01 (battant) / 02 (basculante) / 03 (barrière). Les valeurs viennent de tableaux en chiffres 7 segments (image) de la notice ; « — » : sans objet pour ce type.",
+          "navigation": [
+            "Défilement : touches + et − jusqu'au paramètre voulu (P001 à P099). OK pour entrer, régler la valeur avec + et −, OK pour valider.",
+            "Sortie : + / − jusqu'à l'affichage « - - - - » (portail fermé).",
+            "Restauration : P007 recharge les paramètres de fonctionnement par défaut du TYPE (sauf P016 à P022 et P076 à P098) ; P010 ne restaure que les réglages entrées / sorties.",
+            "Après P007, refaire la programmation et revoir P028 – P029 – P030 ; moteurs réversibles avec électro-frein : P062 = 3 à la fin.",
+            "Rappel de sécurité de la notice : la conformité EN 12453 de la détection d'obstacle interne n'est garantie qu'avec des moteurs à encodeur ; toute augmentation de la force à la fermeture est réservée à du personnel qualifié (mesure EN 12445)."
+          ],
+          "groupes": [
+            {
+              "nom": "Procédures (P001 à P015)",
+              "items": [
+                {
+                  "code": "P001",
+                  "def": "—",
+                  "titre": "Positionnement moteur 1 (réglage des cames de fin de course)",
+                  "valeurs": [
+                    [
+                      "Procédure",
+                      "Positionnement moteur 1 (réglage des cames de fin de course)"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P002",
+                  "def": "—",
+                  "titre": "Positionnement moteur 2",
+                  "valeurs": [
+                    [
+                      "Procédure",
+                      "Positionnement moteur 2"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P003",
+                  "def": "—",
+                  "titre": "Apprentissage de la course des moteurs",
+                  "valeurs": [
+                    [
+                      "Procédure",
+                      "Apprentissage de la course des moteurs"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P004",
+                  "def": "—",
+                  "titre": "Effacement de tous les émetteurs",
+                  "valeurs": [
+                    [
+                      "Procédure",
+                      "Effacement de tous les émetteurs"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P005",
+                  "def": "—",
+                  "titre": "Apprentissage des émetteurs",
+                  "valeurs": [
+                    [
+                      "Procédure",
+                      "Apprentissage des émetteurs"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P006",
+                  "def": "—",
+                  "titre": "Recherche et effacement d'un émetteur",
+                  "valeurs": [
+                    [
+                      "Procédure",
+                      "Recherche et effacement d'un émetteur"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P007",
+                  "def": "—",
+                  "titre": "Restauration des paramètres de fonctionnement",
+                  "valeurs": [
+                    [
+                      "Procédure",
+                      "Restauration des paramètres de fonctionnement"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P008",
+                  "def": "—",
+                  "titre": "Blocage / déblocage de l'accès à la programmation",
+                  "valeurs": [
+                    [
+                      "Procédure",
+                      "Blocage / déblocage de l'accès à la programmation"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P009",
+                  "def": "—",
+                  "titre": "Apprentissage des dispositifs DE@NET connectés (actuellement non utilisé)",
+                  "valeurs": [
+                    [
+                      "Procédure",
+                      "Apprentissage des dispositifs DE@NET connectés (actuellement non utilisé)"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P010",
+                  "def": "—",
+                  "titre": "Restauration des réglages « I/O » (entrées / sorties)",
+                  "valeurs": [
+                    [
+                      "Procédure",
+                      "Restauration des réglages « I/O » (entrées / sorties)"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P011",
+                  "def": "—",
+                  "titre": "DOWNLOAD : transfert des données vers une mémoire externe",
+                  "valeurs": [
+                    [
+                      "Procédure",
+                      "DOWNLOAD : transfert des données vers une mémoire externe"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P012",
+                  "def": "—",
+                  "titre": "UPLOAD : chargement des données depuis une mémoire externe",
+                  "valeurs": [
+                    [
+                      "Procédure",
+                      "UPLOAD : chargement des données depuis une mémoire externe"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P013",
+                  "def": "—",
+                  "titre": "Visualisation de l'état des entrées et compteur de manœuvres",
+                  "valeurs": [
+                    [
+                      "Procédure",
+                      "Visualisation de l'état des entrées et compteur de manœuvres"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P014 · P015",
+                  "def": "—",
+                  "titre": "Non utilisés",
+                  "valeurs": [
+                    [
+                      "Procédure",
+                      "Non utilisés"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "nom": "Entrées et radio (P016 à P027)",
+              "items": [
+                {
+                  "code": "P016",
+                  "def": "000 / 000 / 000 / 000",
+                  "titre": "Type de l'entrée IN_3",
+                  "valeurs": [
+                    [
+                      "000",
+                      "Contact disponible"
+                    ],
+                    [
+                      "001",
+                      "Résistance constante 8K2"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P017",
+                  "def": "001 / 002 / 010 / 008 / 012 / 014",
+                  "titre": "Fonction de l'entrée IN_1",
+                  "valeurs": [
+                    [
+                      "000",
+                      "NONE (entrée non utilisée)"
+                    ],
+                    [
+                      "001",
+                      "START"
+                    ],
+                    [
+                      "002",
+                      "PED. (piétons)"
+                    ],
+                    [
+                      "003",
+                      "OPEN (ouverture séparée)"
+                    ],
+                    [
+                      "004",
+                      "CLOSE (fermeture séparée)"
+                    ],
+                    [
+                      "005",
+                      "OPEN_PM (ouverture homme présent)"
+                    ],
+                    [
+                      "006",
+                      "CLOSE_PM (fermeture homme présent)"
+                    ],
+                    [
+                      "007",
+                      "ELOCK-IN (fonction électro-serrure, voir P062)"
+                    ],
+                    [
+                      "008",
+                      "PHOTO 1 (photocellule 1)"
+                    ],
+                    [
+                      "009",
+                      "PHOTO 2 (photocellule 2)"
+                    ],
+                    [
+                      "010",
+                      "SAFETY 1 (barre palpeuse 1)"
+                    ],
+                    [
+                      "011",
+                      "STOP (bloc) / SAS INPUT (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "012",
+                      "FCA1 (fin de course ouverture moteur 1)"
+                    ],
+                    [
+                      "013",
+                      "FCA2 (fin de course ouverture moteur 2)"
+                    ],
+                    [
+                      "014",
+                      "FCC1 (fin de course fermeture moteur 1)"
+                    ],
+                    [
+                      "015",
+                      "FCC2 (fin de course fermeture moteur 2)"
+                    ],
+                    [
+                      "016",
+                      "SAFETY 2 (barre palpeuse 2)"
+                    ],
+                    [
+                      "017",
+                      "OPEN_IN (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "018",
+                      "OPEN_EXT (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "019",
+                      "AUX_IN (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "020",
+                      "SAFETY INHIBITION (inhibition SAFETY)"
+                    ]
+                  ],
+                  "note": "Après un changement, recâbler l'entrée en conséquence (contact NO pour START / PED / OPEN / CLOSE, NF pour sécurités, STOP et fins de course, voir l'onglet Bornier)."
+                },
+                {
+                  "code": "P018",
+                  "def": "001 / 002 / 010 / 008 / 009 / 011",
+                  "titre": "Fonction de l'entrée IN_2",
+                  "valeurs": [
+                    [
+                      "000",
+                      "NONE (entrée non utilisée)"
+                    ],
+                    [
+                      "001",
+                      "START"
+                    ],
+                    [
+                      "002",
+                      "PED. (piétons)"
+                    ],
+                    [
+                      "003",
+                      "OPEN (ouverture séparée)"
+                    ],
+                    [
+                      "004",
+                      "CLOSE (fermeture séparée)"
+                    ],
+                    [
+                      "005",
+                      "OPEN_PM (ouverture homme présent)"
+                    ],
+                    [
+                      "006",
+                      "CLOSE_PM (fermeture homme présent)"
+                    ],
+                    [
+                      "007",
+                      "ELOCK-IN (fonction électro-serrure, voir P062)"
+                    ],
+                    [
+                      "008",
+                      "PHOTO 1 (photocellule 1)"
+                    ],
+                    [
+                      "009",
+                      "PHOTO 2 (photocellule 2)"
+                    ],
+                    [
+                      "010",
+                      "SAFETY 1 (barre palpeuse 1)"
+                    ],
+                    [
+                      "011",
+                      "STOP (bloc) / SAS INPUT (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "012",
+                      "FCA1 (fin de course ouverture moteur 1)"
+                    ],
+                    [
+                      "013",
+                      "FCA2 (fin de course ouverture moteur 2)"
+                    ],
+                    [
+                      "014",
+                      "FCC1 (fin de course fermeture moteur 1)"
+                    ],
+                    [
+                      "015",
+                      "FCC2 (fin de course fermeture moteur 2)"
+                    ],
+                    [
+                      "016",
+                      "SAFETY 2 (barre palpeuse 2)"
+                    ],
+                    [
+                      "017",
+                      "OPEN_IN (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "018",
+                      "OPEN_EXT (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "019",
+                      "AUX_IN (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "020",
+                      "SAFETY INHIBITION (inhibition SAFETY)"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P019",
+                  "def": "001 / 008 / 010 / 011 / 000 / 000",
+                  "titre": "Fonction de l'entrée IN_3",
+                  "valeurs": [
+                    [
+                      "000",
+                      "NONE (entrée non utilisée)"
+                    ],
+                    [
+                      "001",
+                      "START"
+                    ],
+                    [
+                      "002",
+                      "PED. (piétons)"
+                    ],
+                    [
+                      "003",
+                      "OPEN (ouverture séparée)"
+                    ],
+                    [
+                      "004",
+                      "CLOSE (fermeture séparée)"
+                    ],
+                    [
+                      "005",
+                      "OPEN_PM (ouverture homme présent)"
+                    ],
+                    [
+                      "006",
+                      "CLOSE_PM (fermeture homme présent)"
+                    ],
+                    [
+                      "007",
+                      "ELOCK-IN (fonction électro-serrure, voir P062)"
+                    ],
+                    [
+                      "008",
+                      "PHOTO 1 (photocellule 1)"
+                    ],
+                    [
+                      "009",
+                      "PHOTO 2 (photocellule 2)"
+                    ],
+                    [
+                      "010",
+                      "SAFETY 1 (barre palpeuse 1)"
+                    ],
+                    [
+                      "011",
+                      "STOP (bloc) / SAS INPUT (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "012",
+                      "FCA1 (fin de course ouverture moteur 1)"
+                    ],
+                    [
+                      "013",
+                      "FCA2 (fin de course ouverture moteur 2)"
+                    ],
+                    [
+                      "014",
+                      "FCC1 (fin de course fermeture moteur 1)"
+                    ],
+                    [
+                      "015",
+                      "FCC2 (fin de course fermeture moteur 2)"
+                    ],
+                    [
+                      "016",
+                      "SAFETY 2 (barre palpeuse 2)"
+                    ],
+                    [
+                      "017",
+                      "OPEN_IN (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "018",
+                      "OPEN_EXT (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "019",
+                      "AUX_IN (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "020",
+                      "SAFETY INHIBITION (inhibition SAFETY)"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P020",
+                  "def": "001 / 008 / 000 / 000 / 000 / 000",
+                  "titre": "Fonction de l'entrée IN_4",
+                  "valeurs": [
+                    [
+                      "000",
+                      "NONE (entrée non utilisée)"
+                    ],
+                    [
+                      "001",
+                      "START"
+                    ],
+                    [
+                      "002",
+                      "PED. (piétons)"
+                    ],
+                    [
+                      "003",
+                      "OPEN (ouverture séparée)"
+                    ],
+                    [
+                      "004",
+                      "CLOSE (fermeture séparée)"
+                    ],
+                    [
+                      "005",
+                      "OPEN_PM (ouverture homme présent)"
+                    ],
+                    [
+                      "006",
+                      "CLOSE_PM (fermeture homme présent)"
+                    ],
+                    [
+                      "007",
+                      "ELOCK-IN (fonction électro-serrure, voir P062)"
+                    ],
+                    [
+                      "008",
+                      "PHOTO 1 (photocellule 1)"
+                    ],
+                    [
+                      "009",
+                      "PHOTO 2 (photocellule 2)"
+                    ],
+                    [
+                      "010",
+                      "SAFETY 1 (barre palpeuse 1)"
+                    ],
+                    [
+                      "011",
+                      "STOP (bloc) / SAS INPUT (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "012",
+                      "FCA1 (fin de course ouverture moteur 1)"
+                    ],
+                    [
+                      "013",
+                      "FCA2 (fin de course ouverture moteur 2)"
+                    ],
+                    [
+                      "014",
+                      "FCC1 (fin de course fermeture moteur 1)"
+                    ],
+                    [
+                      "015",
+                      "FCC2 (fin de course fermeture moteur 2)"
+                    ],
+                    [
+                      "016",
+                      "SAFETY 2 (barre palpeuse 2)"
+                    ],
+                    [
+                      "017",
+                      "OPEN_IN (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "018",
+                      "OPEN_EXT (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "019",
+                      "AUX_IN (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "020",
+                      "SAFETY INHIBITION (inhibition SAFETY)"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P021",
+                  "def": " /  /  /  /  / ",
+                  "titre": "Fonction de l'entrée IN_5",
+                  "valeurs": [
+                    [
+                      "000",
+                      "NONE (entrée non utilisée)"
+                    ],
+                    [
+                      "001",
+                      "START"
+                    ],
+                    [
+                      "002",
+                      "PED. (piétons)"
+                    ],
+                    [
+                      "003",
+                      "OPEN (ouverture séparée)"
+                    ],
+                    [
+                      "004",
+                      "CLOSE (fermeture séparée)"
+                    ],
+                    [
+                      "005",
+                      "OPEN_PM (ouverture homme présent)"
+                    ],
+                    [
+                      "006",
+                      "CLOSE_PM (fermeture homme présent)"
+                    ],
+                    [
+                      "007",
+                      "ELOCK-IN (fonction électro-serrure, voir P062)"
+                    ],
+                    [
+                      "008",
+                      "PHOTO 1 (photocellule 1)"
+                    ],
+                    [
+                      "009",
+                      "PHOTO 2 (photocellule 2)"
+                    ],
+                    [
+                      "010",
+                      "SAFETY 1 (barre palpeuse 1)"
+                    ],
+                    [
+                      "011",
+                      "STOP (bloc) / SAS INPUT (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "012",
+                      "FCA1 (fin de course ouverture moteur 1)"
+                    ],
+                    [
+                      "013",
+                      "FCA2 (fin de course ouverture moteur 2)"
+                    ],
+                    [
+                      "014",
+                      "FCC1 (fin de course fermeture moteur 1)"
+                    ],
+                    [
+                      "015",
+                      "FCC2 (fin de course fermeture moteur 2)"
+                    ],
+                    [
+                      "016",
+                      "SAFETY 2 (barre palpeuse 2)"
+                    ],
+                    [
+                      "017",
+                      "OPEN_IN (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "018",
+                      "OPEN_EXT (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "019",
+                      "AUX_IN (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "020",
+                      "SAFETY INHIBITION (inhibition SAFETY)"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P022",
+                  "def": " /  /  /  /  / ",
+                  "titre": "Fonction de l'entrée IN_6",
+                  "valeurs": [
+                    [
+                      "000",
+                      "NONE (entrée non utilisée)"
+                    ],
+                    [
+                      "001",
+                      "START"
+                    ],
+                    [
+                      "002",
+                      "PED. (piétons)"
+                    ],
+                    [
+                      "003",
+                      "OPEN (ouverture séparée)"
+                    ],
+                    [
+                      "004",
+                      "CLOSE (fermeture séparée)"
+                    ],
+                    [
+                      "005",
+                      "OPEN_PM (ouverture homme présent)"
+                    ],
+                    [
+                      "006",
+                      "CLOSE_PM (fermeture homme présent)"
+                    ],
+                    [
+                      "007",
+                      "ELOCK-IN (fonction électro-serrure, voir P062)"
+                    ],
+                    [
+                      "008",
+                      "PHOTO 1 (photocellule 1)"
+                    ],
+                    [
+                      "009",
+                      "PHOTO 2 (photocellule 2)"
+                    ],
+                    [
+                      "010",
+                      "SAFETY 1 (barre palpeuse 1)"
+                    ],
+                    [
+                      "011",
+                      "STOP (bloc) / SAS INPUT (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "012",
+                      "FCA1 (fin de course ouverture moteur 1)"
+                    ],
+                    [
+                      "013",
+                      "FCA2 (fin de course ouverture moteur 2)"
+                    ],
+                    [
+                      "014",
+                      "FCC1 (fin de course fermeture moteur 1)"
+                    ],
+                    [
+                      "015",
+                      "FCC2 (fin de course fermeture moteur 2)"
+                    ],
+                    [
+                      "016",
+                      "SAFETY 2 (barre palpeuse 2)"
+                    ],
+                    [
+                      "017",
+                      "OPEN_IN (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "018",
+                      "OPEN_EXT (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "019",
+                      "AUX_IN (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "020",
+                      "SAFETY INHIBITION (inhibition SAFETY)"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P023",
+                  "def": "001 / 001 / 001 / 001",
+                  "titre": "Fonction du CANAL 1 des émetteurs",
+                  "valeurs": [
+                    [
+                      "000",
+                      "NONE (non utilisé)"
+                    ],
+                    [
+                      "001",
+                      "START"
+                    ],
+                    [
+                      "002",
+                      "PEDESTRIAN (piétons)"
+                    ],
+                    [
+                      "003",
+                      "OPEN (ouverture séparée)"
+                    ],
+                    [
+                      "004",
+                      "CLOSED (fermeture séparée)"
+                    ],
+                    [
+                      "005 · 006",
+                      "Non utilisés"
+                    ],
+                    [
+                      "007",
+                      "ELOCK-IN (fonction électro-serrure, voir P062)"
+                    ],
+                    [
+                      "008",
+                      "AUX_IN (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "009",
+                      "STOP"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P024",
+                  "def": "000 / 000 / 000 / 000",
+                  "titre": "Fonction du CANAL 2 des émetteurs",
+                  "valeurs": [
+                    [
+                      "000",
+                      "NONE (non utilisé)"
+                    ],
+                    [
+                      "001",
+                      "START"
+                    ],
+                    [
+                      "002",
+                      "PEDESTRIAN (piétons)"
+                    ],
+                    [
+                      "003",
+                      "OPEN (ouverture séparée)"
+                    ],
+                    [
+                      "004",
+                      "CLOSED (fermeture séparée)"
+                    ],
+                    [
+                      "005 · 006",
+                      "Non utilisés"
+                    ],
+                    [
+                      "007",
+                      "ELOCK-IN (fonction électro-serrure, voir P062)"
+                    ],
+                    [
+                      "008",
+                      "AUX_IN (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "009",
+                      "STOP"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P025",
+                  "def": "000 / 000 / 000 / 000",
+                  "titre": "Fonction du CANAL 3 des émetteurs",
+                  "valeurs": [
+                    [
+                      "000",
+                      "NONE (non utilisé)"
+                    ],
+                    [
+                      "001",
+                      "START"
+                    ],
+                    [
+                      "002",
+                      "PEDESTRIAN (piétons)"
+                    ],
+                    [
+                      "003",
+                      "OPEN (ouverture séparée)"
+                    ],
+                    [
+                      "004",
+                      "CLOSED (fermeture séparée)"
+                    ],
+                    [
+                      "005 · 006",
+                      "Non utilisés"
+                    ],
+                    [
+                      "007",
+                      "ELOCK-IN (fonction électro-serrure, voir P062)"
+                    ],
+                    [
+                      "008",
+                      "AUX_IN (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "009",
+                      "STOP"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P026",
+                  "def": "000 / 000 / 000 / 000",
+                  "titre": "Fonction du CANAL 4 des émetteurs",
+                  "valeurs": [
+                    [
+                      "000",
+                      "NONE (non utilisé)"
+                    ],
+                    [
+                      "001",
+                      "START"
+                    ],
+                    [
+                      "002",
+                      "PEDESTRIAN (piétons)"
+                    ],
+                    [
+                      "003",
+                      "OPEN (ouverture séparée)"
+                    ],
+                    [
+                      "004",
+                      "CLOSED (fermeture séparée)"
+                    ],
+                    [
+                      "005 · 006",
+                      "Non utilisés"
+                    ],
+                    [
+                      "007",
+                      "ELOCK-IN (fonction électro-serrure, voir P062)"
+                    ],
+                    [
+                      "008",
+                      "AUX_IN (seulement pour NET_EXP)"
+                    ],
+                    [
+                      "009",
+                      "STOP"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P027",
+                  "def": "000 / 000 / 000 / 000",
+                  "titre": "Type de codage du récepteur radio (celui de vos émetteurs)",
+                  "valeurs": [
+                    [
+                      "000",
+                      "HCS fix-code"
+                    ],
+                    [
+                      "001",
+                      "HCS rolling-code"
+                    ],
+                    [
+                      "002",
+                      "Dip-switch"
+                    ],
+                    [
+                      "003",
+                      "DART"
+                    ]
+                  ],
+                  "note": "Changer le codage seulement avec la mémoire vide : effacer les émetteurs (P004) APRÈS avoir choisi le nouveau codage. Le paragraphe de programmation standard cite d000 « rolling-code fixe (suggéré) » et d001 « rolling-code complet »."
+                }
+              ]
+            },
+            {
+              "nom": "Moteurs (P028 à P030)",
+              "items": [
+                {
+                  "code": "P028",
+                  "def": "005 / 000 / 003 / 003",
+                  "titre": "Type de moteur",
+                  "valeurs": [
+                    [
+                      "000",
+                      "GEKO"
+                    ],
+                    [
+                      "001",
+                      "LOOK · MAC · STING"
+                    ],
+                    [
+                      "002",
+                      "GHOST 100 / 200"
+                    ],
+                    [
+                      "003",
+                      "500 · 502 · 902 · PASS · 550PL · ANGOLO"
+                    ],
+                    [
+                      "004",
+                      "502MT/24 · 902R/24 · STOP"
+                    ],
+                    [
+                      "005",
+                      "LIVI 5/24"
+                    ],
+                    [
+                      "006",
+                      "LIVI 8/24"
+                    ],
+                    [
+                      "007",
+                      "REV"
+                    ]
+                  ],
+                  "note": "Autre marque de moteur : choisir le type équivalent de la gamme DEA System. Lecture de la notice : par TYPE, les moteurs prévus sont — 00 : LIVI 5/24, 8/24, REV (le tableau des données techniques écrit LIVI 6/24N · 9/24N · REV) ; 01 : GEKO, LOOK · MAC · STING, GHOST, LIVI 500 · 502 · 550PL · ANGOLO ; 02 : LIVI 902/24 · 905/24 ; 03 : PASS, STOP."
+                },
+                {
+                  "code": "P029",
+                  "def": "001 / 001 / 000 / 000",
+                  "titre": "Moteurs avec ou sans encodeur",
+                  "valeurs": [
+                    [
+                      "000",
+                      "Moteurs avec encodeur"
+                    ],
+                    [
+                      "001",
+                      "Moteurs sans encodeur"
+                    ]
+                  ],
+                  "note": "Régler aussi les jumpers J5 (moteur 1) et J9 (moteur 2) : position A = moteur avec encodeur (P029 = 0), position B = sans encodeur (P029 = 1). J5, J9 et P029 doivent être corrects avant la programmation."
+                },
+                {
+                  "code": "P030",
+                  "def": "001 / 002 / 001 / 001",
+                  "titre": "Nombre de moteurs",
+                  "valeurs": [
+                    [
+                      "001",
+                      "Un moteur"
+                    ],
+                    [
+                      "002",
+                      "Deux moteurs"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "nom": "Vitesses, ralentissements et forces (P031 à P040)",
+              "items": [
+                {
+                  "code": "P031",
+                  "def": "040 / 050 / 050 / 030",
+                  "titre": "Vitesse pendant le ralentissement en ouverture",
+                  "valeurs": [
+                    [
+                      "Plage",
+                      "15 % à 100 % de la vitesse totale"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P032",
+                  "def": "100 / 100 / 100 / 100",
+                  "titre": "Vitesse pendant la course en ouverture",
+                  "valeurs": [
+                    [
+                      "Plage",
+                      "15 % à 100 %"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P033",
+                  "def": "100 / 100 / 100 / 100",
+                  "titre": "Vitesse pendant la course en fermeture",
+                  "valeurs": [
+                    [
+                      "Plage",
+                      "15 % à 100 %"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P034",
+                  "def": "040 / 050 / 050 / 030",
+                  "titre": "Vitesse pendant le ralentissement en fermeture",
+                  "valeurs": [
+                    [
+                      "Plage",
+                      "15 % à 100 %"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P035",
+                  "def": "025 / 020 / 020 / 030",
+                  "titre": "Durée du ralentissement en ouverture",
+                  "valeurs": [
+                    [
+                      "Plage",
+                      "0 % à 80 % de la course"
+                    ]
+                  ],
+                  "note": "Moteurs sans encodeur : si P035 > 10 %, la marge de détection de butée P058 est forcée à cette durée."
+                },
+                {
+                  "code": "P036",
+                  "def": "025 / 020 / 020 / 030",
+                  "titre": "Durée du ralentissement en fermeture",
+                  "valeurs": [
+                    [
+                      "Plage",
+                      "0 % à 80 %"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P037",
+                  "def": "050 / 050 / 050 / 099",
+                  "titre": "Force du moteur 1 en ouverture",
+                  "valeurs": [
+                    [
+                      "Plage",
+                      "15 % à 100 % (100 % = détection d'obstacle désactivée)"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P038",
+                  "def": "050 / 050 / 050 / 099",
+                  "titre": "Force du moteur 1 en fermeture",
+                  "valeurs": [
+                    [
+                      "Plage",
+                      "15 % à 100 % (100 % = détection d'obstacle désactivée)"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P039",
+                  "def": "050 / 050 / 000 / 099",
+                  "titre": "Force du moteur 2 en ouverture (types 00 · 01 · 03) — TYPE 02 : force secondaire en fermeture",
+                  "valeurs": [
+                    [
+                      "Types 00 · 01 · 03",
+                      "15 % à 100 % (100 % = détection d'obstacle désactivée)"
+                    ],
+                    [
+                      "TYPE 02",
+                      "0 % à 100 % : force du moteur dans la dernière partie de la course en fermeture définie par P058"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P040",
+                  "def": "— / 050 / — / 099",
+                  "titre": "Force du moteur 2 en fermeture",
+                  "valeurs": [
+                    [
+                      "Plage",
+                      "15 % à 100 % (100 % = détection d'obstacle désactivée)"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "nom": "Fonctionnement (P041 à P060)",
+              "items": [
+                {
+                  "code": "P041",
+                  "def": "000 / 000 / 000 / 000",
+                  "titre": "Temps de fermeture automatique",
+                  "valeurs": [
+                    [
+                      "Plage",
+                      "0 à 255 s (0 = pas de fermeture automatique)"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P042",
+                  "def": "000 / 000 / 000 / 000",
+                  "titre": "Temps de fermeture automatique en piéton",
+                  "valeurs": [
+                    [
+                      "Plage",
+                      "0 à 255 s (0 = désactivée)"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P043",
+                  "def": "030 / 035 / 035 / 100",
+                  "titre": "Durée de la course piétons",
+                  "valeurs": [
+                    [
+                      "Plage",
+                      "5 % à 100 % de la course"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P044",
+                  "def": "000 / 000 / 000 / 000",
+                  "titre": "Temps de préclignotement",
+                  "valeurs": [
+                    [
+                      "Plage",
+                      "0 à 10 s"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P045",
+                  "def": "— / 001 / — / —",
+                  "titre": "Temps de décalage en ouverture",
+                  "valeurs": [
+                    [
+                      "Plage",
+                      "0 à 30 s"
+                    ]
+                  ],
+                  "note": "« — » : sans objet pour ce type (un seul vantail)."
+                },
+                {
+                  "code": "P046",
+                  "def": "— / 003 / — / —",
+                  "titre": "Temps de décalage en fermeture",
+                  "valeurs": [
+                    [
+                      "Plage",
+                      "0 à 30 s"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P047",
+                  "def": "000 / 000 / 000 / 000",
+                  "titre": "Fonction « immeuble en copropriété »",
+                  "valeurs": [
+                    [
+                      "000",
+                      "Désactivée"
+                    ],
+                    [
+                      "001",
+                      "Active seulement en ouverture"
+                    ],
+                    [
+                      "002",
+                      "Active en ouverture et en fermeture automatique"
+                    ]
+                  ],
+                  "note": "Activée : les commandes d'ouverture sont ignorées pendant toute l'ouverture et le temps de pause."
+                },
+                {
+                  "code": "P048",
+                  "def": "000 / 000 / 000 / 000",
+                  "titre": "Coup de bélier",
+                  "valeurs": [
+                    [
+                      "000",
+                      "Désactivé"
+                    ],
+                    [
+                      "001",
+                      "Avant chaque ouverture, les moteurs poussent 1 s en fermeture pour faciliter le déverrouillage de l'électro-serrure"
+                    ],
+                    [
+                      "> 001",
+                      "Coup de bélier périodique (X × 1 min, de 2 à 255) pour garder les vantaux en pression sur les butées de fermeture"
+                    ]
+                  ],
+                  "note": "Avec des fins de course de fermeture, la fonction ne s'exécute que si ces fins de course ont été désactivées (cas d'une baisse de pression sur la butée)."
+                },
+                {
+                  "code": "P049",
+                  "def": "001 / 001 / 001 / 001",
+                  "titre": "Impulsion pendant la manœuvre",
+                  "valeurs": [
+                    [
+                      "000",
+                      "Inversion : l'impulsion inverse le mouvement"
+                    ],
+                    [
+                      "001",
+                      "Pas-à-pas : l'impulsion arrête le mouvement, la suivante repart dans le sens inverse"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P050",
+                  "def": "002 / 002 / 002 / 002",
+                  "titre": "Fonctionnement de l'entrée PHOTO 1",
+                  "valeurs": [
+                    [
+                      "000",
+                      "Photocellule active en fermeture et avant chaque démarrage"
+                    ],
+                    [
+                      "001",
+                      "Photocellules toujours habilitées"
+                    ],
+                    [
+                      "002",
+                      "Photocellules habilitées seulement en fermeture"
+                    ],
+                    [
+                      "003",
+                      "Comme 000, mais avec « fermer immédiatement » habilité"
+                    ],
+                    [
+                      "004",
+                      "Comme 001, mais avec « fermer immédiatement » habilité"
+                    ],
+                    [
+                      "005",
+                      "Comme 002, mais avec « fermer immédiatement » habilité"
+                    ]
+                  ],
+                  "note": "La notice décrit P050 (PHOTO 1) et P051 (PHOTO 2) avec le même tableau de valeurs. Avec « fermer immédiatement » (3 à 5) : à l'ouverture ou pendant le temps de pause, la désactivation de la photocellule termine l'ouverture et la porte se referme seule après 2 s."
+                },
+                {
+                  "code": "P051",
+                  "def": "000 / 001 / 002 / 002",
+                  "titre": "Fonctionnement de l'entrée PHOTO 2",
+                  "valeurs": [
+                    [
+                      "000",
+                      "Photocellule active en fermeture et avant chaque démarrage"
+                    ],
+                    [
+                      "001",
+                      "Photocellules toujours habilitées"
+                    ],
+                    [
+                      "002",
+                      "Photocellules habilitées seulement en fermeture"
+                    ],
+                    [
+                      "003",
+                      "Comme 000, mais avec « fermer immédiatement » habilité"
+                    ],
+                    [
+                      "004",
+                      "Comme 001, mais avec « fermer immédiatement » habilité"
+                    ],
+                    [
+                      "005",
+                      "Comme 002, mais avec « fermer immédiatement » habilité"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P052",
+                  "def": "000 / 000 / 060 / 000",
+                  "titre": "Contact disponible : voyant / lumière de courtoisie",
+                  "valeurs": [
+                    [
+                      "000",
+                      "Voyant portail ouvert fixe"
+                    ],
+                    [
+                      "001",
+                      "Voyant intermittent"
+                    ],
+                    [
+                      "> 001",
+                      "Lumière de courtoisie : retard à l'extinction (2 à 255 s)"
+                    ]
+                  ],
+                  "note": "Sortie 12-13 en 24 V, 15 W max."
+                },
+                {
+                  "code": "P053",
+                  "def": "— / 000 / 001 / 001",
+                  "titre": "Recherche des butées aussi en ouverture",
+                  "valeurs": [
+                    [
+                      "000",
+                      "Arrêt en ouverture sur le point mémorisé"
+                    ],
+                    [
+                      "001",
+                      "Arrêt en ouverture sur la butée"
+                    ]
+                  ],
+                  "note": "Pendant la manœuvre d'urgence le moteur fait d'abord une ouverture ; avec des fins de course le paramètre est forcé à 1."
+                },
+                {
+                  "code": "P054",
+                  "def": "001 / 001 / 001 / 001",
+                  "titre": "Démarrage progressif",
+                  "valeurs": [
+                    [
+                      "000",
+                      "Désactivé"
+                    ],
+                    [
+                      "001",
+                      "Démarrage progressif activé"
+                    ],
+                    [
+                      "002",
+                      "Démarrage progressif lent activé"
+                    ],
+                    [
+                      "003",
+                      "Démarrage progressif configurable (TYPE 2 seulement)"
+                    ]
+                  ],
+                  "note": "TYPE 02 : si = 3, l'espace de ralentissement en ouverture (P035) devient aussi l'espace où la porte se déplace à la vitesse de ralentissement (P031) au début de la fermeture."
+                },
+                {
+                  "code": "P055",
+                  "def": "003 / 003 / 003 / 003",
+                  "titre": "Durée de l'inversion sur obstacle en ouverture",
+                  "valeurs": [
+                    [
+                      "000",
+                      "Inversion complète"
+                    ],
+                    [
+                      "> 000",
+                      "Durée d'inversion de 1 à 10 s"
+                    ]
+                  ],
+                  "note": "Obstacle détecté par l'anti-écrasement interne ou par l'entrée SAFETY."
+                },
+                {
+                  "code": "P056",
+                  "def": "003 / 003 / 003 / 003",
+                  "titre": "Durée de l'inversion sur obstacle en fermeture",
+                  "valeurs": [
+                    [
+                      "000",
+                      "Inversion complète"
+                    ],
+                    [
+                      "> 000",
+                      "Durée d'inversion de 1 à 10 s"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P057",
+                  "def": "000 / 001 / 003 / 002",
+                  "titre": "Facilitation du déblocage manuel",
+                  "valeurs": [
+                    [
+                      "000",
+                      "Désactivée"
+                    ],
+                    [
+                      "> 000",
+                      "Après la butée de fermeture ou d'ouverture, le moteur 1 recule brièvement pour soulager la butée ; la valeur donne la durée (1 à 20 × 25 ms)"
+                    ]
+                  ],
+                  "note": "Trop dur à débloquer après l'apprentissage (types 01 et 03) : augmenter P057 de 1 ou plus. Plage « 1 à 40 × 25 ms » donnée seulement pour le TYPE 0 dans le tableau."
+                },
+                {
+                  "code": "P058",
+                  "def": "012 / 025 / 000 / 020",
+                  "titre": "Marge de butée en ouverture (types 00 · 01 · 03) — TYPE 02 : durée de la force secondaire en fermeture",
+                  "valeurs": [
+                    [
+                      "Moteur avec encodeur",
+                      "1 à 255 : nombre de tours du rotor"
+                    ],
+                    [
+                      "Moteur sans encodeur",
+                      "1 % à 100 % de la course maximale"
+                    ],
+                    [
+                      "TYPE 02",
+                      "0 à 255 tours : durée de la dernière partie de la course en fermeture où la force est gérée par P039"
+                    ]
+                  ],
+                  "note": "Durée de la dernière partie de la course pendant laquelle un obstacle est interprété comme une butée (le moteur s'arrête sans inversion)."
+                },
+                {
+                  "code": "P059",
+                  "def": "012 / 025 / 025 / 020",
+                  "titre": "Marge de butée en fermeture (types 00 · 01 · 03) — TYPE 02 : marge en fermeture avant butée",
+                  "valeurs": [
+                    [
+                      "Moteur avec encodeur",
+                      "1 à 255 tours"
+                    ],
+                    [
+                      "Moteur sans encodeur",
+                      "1 % à 100 %"
+                    ],
+                    [
+                      "TYPE 02",
+                      "1 à 255 tours : un obstacle dans cette marge est interprété comme butée (arrêt, pas d'inversion)"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P060",
+                  "def": "000 / 035 / 000 / 000",
+                  "titre": "Force des moteurs à l'arrivée sur la butée",
+                  "valeurs": [
+                    [
+                      "0",
+                      "Réglage désactivé : la force est calculée automatiquement"
+                    ],
+                    [
+                      "≠ 0",
+                      "Valeur (en %) de la force pour le dernier tronçon, 0 % à 100 %"
+                    ],
+                    [
+                      "TYPE 02",
+                      "Force dans la marge de butée en fermeture, dont la durée est donnée par P059"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "nom": "Options (P061 à P099)",
+              "items": [
+                {
+                  "code": "P061",
+                  "def": "000 / 000 / 000 / 000",
+                  "titre": "Économie d'énergie (Energy saving)",
+                  "valeurs": [
+                    [
+                      "000",
+                      "Désactivée"
+                    ],
+                    [
+                      "001",
+                      "Après 10 s d'inactivité, la platine éteint les sorties 24 V et l'afficheur ; ils se rallument à la première commande reçue"
+                    ]
+                  ],
+                  "note": "Conseillée avec alimentation par batteries et / ou panneau solaire. Active : la fonction SAS n'est pas disponible et seule l'alimentation stabilisée 24V_ST doit être utilisée."
+                },
+                {
+                  "code": "P062",
+                  "def": "000 / 000 / 000 / 005",
+                  "titre": "Sortie électro-serrure (bornes 14 (−) · 15 (+))",
+                  "valeurs": [
+                    [
+                      "000",
+                      "Sortie « boost » pour électro-serrure art. 110"
+                    ],
+                    [
+                      "001",
+                      "Sortie impulsive 24 V max 5 W"
+                    ],
+                    [
+                      "002",
+                      "Sortie pas-à-pas 24 V max 5 W"
+                    ],
+                    [
+                      "003",
+                      "Sortie électro-frein pour moteurs réversibles"
+                    ],
+                    [
+                      "004",
+                      "Sortie pour alimentation d'électro-serrure avec relais externe"
+                    ],
+                    [
+                      "005",
+                      "Sortie pour alimentation d'électro-aimants de barrières"
+                    ],
+                    [
+                      "> 005",
+                      "Sortie temporisée 24 V max 5 W (6 à 255 s)"
+                    ]
+                  ],
+                  "note": "Les temps d'activation / désactivation pour 000, 004 et 005 se règlent avec P064. Moteurs réversibles avec électro-frein : programmer P062 = 3 à la fin de la procédure."
+                },
+                {
+                  "code": "P063",
+                  "def": "000 / 000 / 000 / 000",
+                  "titre": "Sens de marche",
+                  "valeurs": [
+                    [
+                      "000",
+                      "Installation standard"
+                    ],
+                    [
+                      "001",
+                      "Installation inversée"
+                    ]
+                  ],
+                  "note": "Inverse automatiquement les sorties ouvre / ferme des moteurs (évite de modifier le câblage). Après changement, revoir les paramètres de fin de course d'ouverture et de fermeture."
+                },
+                {
+                  "code": "P064",
+                  "def": "002 / 002 / 002 / 002",
+                  "titre": "Durée de la serrure électrique",
+                  "valeurs": [
+                    [
+                      "Plage",
+                      "0 à 10 s"
+                    ]
+                  ],
+                  "note": "Si P062 = 000 ou 004 : temps d'activation de la sortie LOCK. Si P062 = 005 : temps de désactivation."
+                },
+                {
+                  "code": "P065",
+                  "def": "000 / 000 / 000 / 000",
+                  "titre": "Compteur de manœuvres pour la maintenance",
+                  "valeurs": [
+                    [
+                      "000",
+                      "Réinitialise le compteur et désactive la demande"
+                    ],
+                    [
+                      "> 000",
+                      "Nombre de manœuvres × 500 avant la demande d'entretien (1 à 255)"
+                    ]
+                  ],
+                  "note": "À la demande, la platine ajoute un préclignotement de 4 s. Exemple : P065 = 050 donne 50 × 500 = 25 000 manœuvres. Avant de définir une nouvelle valeur, remettre P065 à 0, puis saisir la nouvelle valeur."
+                },
+                {
+                  "code": "P066",
+                  "def": "001 / 001 / 001 / 001",
+                  "titre": "Sortie clignotant",
+                  "valeurs": [
+                    [
+                      "000",
+                      "Clignotement intermittent"
+                    ],
+                    [
+                      "001",
+                      "Clignotement fixe (pour clignotants à circuit intermittent intérieur)"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P067",
+                  "def": "000 / 000 / 000 / 000",
+                  "titre": "Entrée SAFETY 1 (SFT)",
+                  "valeurs": [
+                    [
+                      "000",
+                      "Barre palpeuse toujours active"
+                    ],
+                    [
+                      "001",
+                      "Active seulement en fermeture"
+                    ],
+                    [
+                      "002",
+                      "Active seulement en fermeture et avant chaque démarrage"
+                    ],
+                    [
+                      "003",
+                      "Active seulement en ouverture"
+                    ],
+                    [
+                      "004",
+                      "Active seulement en ouverture et avant chaque démarrage"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P068",
+                  "def": "000 / 000 / 000 / 000",
+                  "titre": "Entrée SAFETY 2 (SFT)",
+                  "valeurs": [
+                    [
+                      "000",
+                      "Barre palpeuse toujours active"
+                    ],
+                    [
+                      "001",
+                      "Active seulement en fermeture"
+                    ],
+                    [
+                      "002",
+                      "Active seulement en fermeture et avant chaque démarrage"
+                    ],
+                    [
+                      "003",
+                      "Active seulement en ouverture"
+                    ],
+                    [
+                      "004",
+                      "Active seulement en ouverture et avant chaque démarrage"
+                    ]
+                  ],
+                  "note": "Les durées d'inversion après SAFETY sont données par P055 (ouverture) et P056 (fermeture)."
+                },
+                {
+                  "code": "P069",
+                  "def": "000 / 000 / 000 / 000",
+                  "titre": "Arrêt retardé sur fin de course",
+                  "valeurs": [
+                    [
+                      "000",
+                      "Désactivé"
+                    ],
+                    [
+                      "001",
+                      "Moteur arrêté 1,5 s après la détection de la fin de course ; si la butée de fermeture est détectée pendant ce délai, arrêt immédiat"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P070",
+                  "def": "200 / 200 / 200 / 200",
+                  "titre": "Durée de la pleine puissance au démarrage",
+                  "valeurs": [
+                    [
+                      "000",
+                      "Désactivée (durée au niveau minimum)"
+                    ],
+                    [
+                      "00X",
+                      "Jusqu'à 1,5 s (X × 6 ms)"
+                    ]
+                  ],
+                  "note": "Avec le démarrage progressif lent, ce réglage est sans effet. Valeurs par défaut lues sur l'image du tableau."
+                },
+                {
+                  "code": "P071",
+                  "def": "000 / 000 / 000 / 000",
+                  "titre": "Autotest des sécurités",
+                  "valeurs": [
+                    [
+                      "000",
+                      "Sortie 24 V sans autotest"
+                    ],
+                    [
+                      "001",
+                      "Sortie 24 V avec autotest (coupe la sortie et vérifie l'ouverture du contact avant chaque manœuvre)"
+                    ]
+                  ],
+                  "note": "Pour l'autotest, tous les dispositifs de sécurité doivent être raccordés à l'alimentation stabilisée 24V_ST (bornes 1-2) et alignés avant l'apprentissage de la course (P003)."
+                },
+                {
+                  "code": "P072",
+                  "def": "000 / 000 / 000 / 000",
+                  "titre": "Fonction SAS (seulement NET_EXP)",
+                  "valeurs": [
+                    [
+                      "000",
+                      "Désactivée"
+                    ],
+                    [
+                      "001",
+                      "Activée : la sortie SAS se branche sur l'entrée STOP / SAS INPUT d'une deuxième centrale"
+                    ]
+                  ],
+                  "note": "Si les deux portes sont débloquées à la main et déplacées, il y a inter-blocage : refermer à la main au moins l'une des deux."
+                },
+                {
+                  "code": "P073",
+                  "def": "000 / 000 / 000 / 000",
+                  "titre": "« Homme mort » forcé",
+                  "valeurs": [
+                    [
+                      "000",
+                      "Désactivé"
+                    ],
+                    [
+                      "001",
+                      "Activé : OPEN et CLOSE passent en homme mort (OPEN UP / CLOSE UP) tant qu'elles sont maintenues si une sécurité est occupée ou en défaut"
+                    ]
+                  ],
+                  "note": "Incompatible avec les valeurs 001 et 003 de P067 / P068 pour des bords sensibles. Ne pas l'utiliser avec des horloges / minuteries sur des entrées OPEN ou CLOSE (conseil de la notice)."
+                },
+                {
+                  "code": "P074 à P077",
+                  "def": "—",
+                  "titre": "Non utilisés",
+                  "valeurs": [
+                    [
+                      "—",
+                      "Aucune fonction"
+                    ]
+                  ]
+                },
+                {
+                  "code": "P078 à P099",
+                  "def": "—",
+                  "titre": "Paramètres de la carte d'extension NET_EXP",
+                  "valeurs": [
+                    [
+                      "—",
+                      "Pour le détail, voir la notice du NET_EXP."
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "bornier": {
+          "groupes": [
+            {
+              "nom": "Alimentation et moteurs",
+              "bornes": [
+                {
+                  "n": "CON 1",
+                  "label": "Alimentation secteur",
+                  "desc": "230 V ~ ±10 %, 50 / 60 Hz, vers le transformateur 230 / 22 V (fusible F1).",
+                  "t": "alim"
+                },
+                {
+                  "n": "3 · 4",
+                  "label": "Entrée 22 V ~ du transformateur",
+                  "desc": "Puissance du transformateur : 80, 120, 150 ou 250 VA selon les moteurs.",
+                  "t": "alim"
+                },
+                {
+                  "n": "5 · 6",
+                  "label": "Entrée 24 V = batterie ou panneau photovoltaïque",
+                  "desc": "Batterie ou accumulateur Green Energy ; respecter les polarités. Fusible F2 = 15 A.",
+                  "t": "alim"
+                },
+                {
+                  "n": "7 · 8",
+                  "label": "Moteur 1",
+                  "desc": "Sortie moteur 24 V ; jamais plus de 10 A avec un seul moteur, 7 A par sortie avec deux.",
+                  "t": "moteur"
+                },
+                {
+                  "n": "9",
+                  "label": "Masse des moteurs",
+                  "desc": "Raccordement des parties métalliques des moteurs.",
+                  "t": "moteur"
+                },
+                {
+                  "n": "10 · 11",
+                  "label": "Moteur 2 (si présent)",
+                  "desc": "Sortie moteur 24 V.",
+                  "t": "moteur"
+                },
+                {
+                  "n": "ENC_M1 · ENC_M2",
+                  "label": "Encodeurs",
+                  "desc": "Câble blindé dédié ≥ 3 × 0,25 mm². Jumpers J5 (M1) et J9 (M2) : A = avec encodeur, B = sans.",
+                  "t": "bus"
+                }
+              ]
+            },
+            {
+              "nom": "Sorties",
+              "bornes": [
+                {
+                  "n": "12 · 13",
+                  "label": "Lampe témoin portail ouvert",
+                  "desc": "24 V max 15 W : fixe (P052 = 0), intermittente (P052 = 1) ou lumière de courtoisie (P052 > 1).",
+                  "t": "sortie"
+                },
+                {
+                  "n": "14 (−) · 15 (+)",
+                  "label": "Électro-serrure / sortie 24 V configurable",
+                  "desc": "Selon P062 : boost électro-serrure (max 1 × art. 110), impulsive 24 V max 5 W, pas-à-pas, électro-frein de stationnement, alimentation électro-serrure avec relais externe, électro-aimants de barrières ou sortie temporisée.",
+                  "t": "sortie"
+                },
+                {
+                  "n": "16 · 17",
+                  "label": "Clignotant",
+                  "desc": "24 V max 15 W (clignotant AURA N).",
+                  "t": "sortie"
+                }
+              ]
+            },
+            {
+              "nom": "Entrées de commande (IN_1 à IN_6)",
+              "bornes": [
+                {
+                  "n": "28 · 29",
+                  "label": "IN_1 / COM",
+                  "desc": "START (types 00 à 03). Contact NO.",
+                  "t": "no"
+                },
+                {
+                  "n": "26 · 27",
+                  "label": "IN_2 / COM",
+                  "desc": "PED. (00, 01) NO · PHOTO 1 (02, 03) NF.",
+                  "t": "autre"
+                },
+                {
+                  "n": "24 · 25",
+                  "label": "IN_3 / COM",
+                  "desc": "SAFETY (00, 01, 02) NF · NONE (03) NO.",
+                  "t": "nf"
+                },
+                {
+                  "n": "22 · 23",
+                  "label": "IN_4 / COM",
+                  "desc": "PHOTO 1 (00, 01) NF · STOP (02) NF · NONE (03) NO.",
+                  "t": "nf"
+                },
+                {
+                  "n": "20 · 21",
+                  "label": "IN_5 / COM",
+                  "desc": "FCA 1 (00) · PHOTO 2 (01) NF · NONE (02, 03) NO.",
+                  "t": "nf"
+                },
+                {
+                  "n": "18 · 19",
+                  "label": "IN_6 / COM",
+                  "desc": "FCC 1 (00) · STOP (01) NF · NONE (02, 03) NO.",
+                  "t": "nf"
+                }
+              ]
+            },
+            {
+              "nom": "Antenne et alimentations auxiliaires",
+              "bornes": [
+                {
+                  "n": "Antenne (2 bornes)",
+                  "label": "Entrée radio",
+                  "desc": "Signal et masse de l'antenne (câble RG58).",
+                  "t": "autre"
+                },
+                {
+                  "n": "32 (+) · 33 (−)",
+                  "label": "24 V = auxiliaire (AUX + ST)",
+                  "desc": "Connexion normale des accessoires ; 24V_AUX + 24V_ST = max 200 mA au total.",
+                  "t": "alim"
+                },
+                {
+                  "n": "1 (−) · 2 (+)",
+                  "label": "24 V = stabilisé pour sécurités avec autotest",
+                  "desc": "Alimentation des sécurités contrôlées (P071), max 200 mA.",
+                  "t": "alim"
+                }
+              ]
+            },
+            {
+              "nom": "Connecteurs",
+              "bornes": [
+                {
+                  "n": "NET-NODE / MEMONET",
+                  "label": "Interface DEAinstaller et mémoire externe",
+                  "desc": "Voir le schéma de base.",
+                  "t": "bus"
+                },
+                {
+                  "n": "NET-EXP",
+                  "label": "Carte d'extension",
+                  "desc": "Voir le schéma de base.",
+                  "t": "bus"
+                }
+              ]
+            }
+          ],
+          "fusibles": "F1 (transformateur) : 1 A pour LIVI 6/24N et 9/24N (80 VA) ; 2 A pour tous les autres modèles, REV (250 VA) et STOP 4 à 5 m compris ; 3,15 A pour STOP à partir de 6 m (250 VA) · F2 (entrée batteries) : 15 A · batteries 2 × 12 V 1,3 A (TYPE 00 et 01) ou 2 × 12 V 4 A (TYPE 02 et 03).",
+          "notes": [
+            "Entrées inutilisées en NF (sécurités, STOP, fins de course) : à shunter.",
+            "Garder au moins 4 mm d'air (ou 1 mm d'isolant) entre le 230 V et la très basse tension.",
+            "Câbles moteurs : section mini 1,5 mm². Schémas de câblage par TYPE : onglet Schéma."
+          ]
+        },
+        "apprentissage": {
+          "avant": [
+            "Alimenter la platine : TYPE clignote. Maintenir OK environ 5 s, choisir le type (00 coulissant, 01 battant, 02 basculante, 03 barrière) avec + / −, valider avec OK. Le choix est mémorisé.",
+            "Pour changer le TYPE plus tard : maintenir OK en alimentant la platine, puis maintenir OK environ 5 s, choisir et valider (abandonner avant OK recharge l'ancienne configuration).",
+            "Régler P028, P029 (avec les jumpers J5 / J9) et P030 AVANT d'apprendre la course. Types 00 et 03 : P063 pour le sens de marche.",
+            "Fins de course à cames : régler les cames avec P001 (et P002 pour le moteur 2) en manœuvrant avec + (ouvre) et − (ferme)."
+          ],
+          "etapes": [
+            "P003 puis OK : l'afficheur clignote, appuyer sur OK ; relâcher quand le clignotement s'arrête.",
+            "La manœuvre d'apprentissage démarre : le moteur 1 part en ouverture (s'il part en fermeture : couper, inverser les fils du moteur, recommencer).",
+            "Attendre que le ou les vantaux cherchent puis s'arrêtent sur la butée d'ouverture, puis de fermeture. Pour avancer l'arrêt en ouverture, appuyer sur START (ou OK sur la carte) pour simuler la butée.",
+            "Moteurs SANS encodeur (TYPE 01 : P029 = 001 ; TYPE 05 : P029 = 002 par défaut) : la butée n'est pas détectée, il faut la simuler en appuyant sur OK à l'arrivée en butée, à l'ouverture puis à la fermeture.",
+            "L'afficheur revient sur « - - - - » : apprentissage terminé.",
+            "Radio : P027 pour le codage, P005 pour mémoriser (appuyer sur la touche de l'émetteur quand le symbole apparaît ; attendre 10 s pour finir). P004 efface tout, P006 un seul émetteur."
+          ],
+          "apres": [
+            "Types 01 et 03 : faire une manœuvre complète puis vérifier que le déverrouillage manuel n'est pas trop dur ; sinon augmenter P057 de 1 ou plus.",
+            "Régler vitesses, forces et temps (P031 à P060) selon la porte, puis mesurer les forces d'impact (EN 12445) et vérifier les sécurités.",
+            "Pour verrouiller la programmation : P008 avec un émetteur à codage dip-switch (touche CH1 dans les 10 s). Déblocage par la même procédure ; le déblocage avec réinitialisation globale efface tous les réglages.",
+            "Sauvegarde : P011 (DOWNLOAD) et P012 (UPLOAD) avec une mémoire externe : maintenir OK 5 s. Ne pas débrancher pendant le transfert."
           ]
         }
       }

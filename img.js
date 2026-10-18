@@ -82,6 +82,22 @@
       S("doitrand-lf82-p5", "Raccordement des cellules intérieure et extérieure", 5, "Plan du 27/05/2005 : bornier J3, cellules Carlo Gavazzi."),
       S("doitrand-lf82-p6", "Câblage du variateur Telemecanique", 6, "Plan du 21/11/2005 : alimentation, variateur, bornier moteur, relais 12 V et carte LF82.")
     ],
+    "dea-net230n": [
+      S("dea-net230n-p72", "Schéma de base NET230N", 72, "Implantation de la carte : bornes 1 à 34, entrées IN_1 à IN_6, connecteurs CON 1 (NET-EXP) et CON 2 (NET-NODE / MEMONET), jumper FL / WL, et numérotation des segments de l'afficheur pour P013 (page FR-6)."),
+      S("dea-net230n-p73", "Câblage TYPE 00 (coulissant)", 73, "Page FR-7 : alimentation, moteur, encodeur, photocellule, START, PED., SAFETY, fins de course, clignotant et lampe témoin."),
+      S("dea-net230n-p74", "Câblage TYPE 01 (battant)", 74, "Page FR-8 : deux moteurs (encodeurs en pointillé, seulement s'ils sont présents ; le TYPE 01 est sans encodeur par défaut), photocellules 1 et 2, commandes et sécurités."),
+      S("dea-net230n-p75", "Câblage TYPE 02 (basculante)", 75, "Page FR-9."),
+      S("dea-net230n-p76", "Câblage TYPE 03 (barrière)", 76, "Page FR-10 : moteur M1, encodeur, électro-aimant, photocellule 1, START."),
+      S("dea-net230n-p77", "Câblage TYPE 04 (sectionnelle)", 77, "Page FR-11 : moteur, encodeur, STOP, FCA1, FCC1, photocellule 1."),
+      S("dea-net230n-p78", "Câblage TYPE 05 (bollard)", 78, "Page FR-12.")
+    ],
+    "dea-net24n": [
+      S("dea-net24n-p08", "Schéma de base NET24N", 8, "Implantation de la carte : bornes, entrées IN_1 à IN_6, jumpers J5 / J9 des encodeurs, connecteurs NET-NODE / MEMONET et NET-EXP (page FR-6)."),
+      S("dea-net24n-p09", "Câblage TYPE 00 (coulissant)", 9, "Page FR-7 : transformateur 230 / 22 V, moteurs (séries REV et LIVI N), photocellule, commandes, fins de course, lampe témoin."),
+      S("dea-net24n-p10", "Câblage TYPE 01 (battant)", 10, "Page FR-8 : deux moteurs avec encodeurs, photocellules 1 et 2, START, PED., SAFETY, STOP, électro-serrure."),
+      S("dea-net24n-p11", "Câblage TYPE 02 (basculante)", 11, "Page FR-9."),
+      S("dea-net24n-p12", "Câblage TYPE 03 (barrière)", 12, "Page FR-10.")
+    ],
     "afca-starteco4-contacteurs": [
       S("afca-c4-p03", "Alimentation de la carte", 3, "Alimentation 400 V tri ou 230 V, moteur sur U V W, condensateur, pont de sélection de tension."),
       S("afca-c4-p05", "Raccordement de la platine", 5, "Bornier complet avec les entrées IN1 à IN11 et la liste des bornes."),
