@@ -15,6 +15,15 @@ const DATA_VERSION = "2026-10-18";
 /* Journal des modifications — ajouter une entrée en haut à chaque mise à jour.
    docs : nom des notices ajoutées (affichées dans Réglages). */
 const CHANGELOG = [
+  { v: "1.30", date: "2026-10-18", titre: "Lot 3 : barrières ELKA (MO 24) et La Barrière Automatique", items: [
+    "Nouvelle marque ELKA : barrières P 2500 à P 5000 et T 3000 à T 3500 avec la logique MO 24 (afficheur 4 chiffres et joystick) : codes eR01 à eR16, messages (lrn1, send, Poff, SYNC, eep, re-0 / re-1), LED, menus P101 à P802 avec valeurs d'usine, relais multifonctions, feux, boucles A / B / C et logiques de direction, bornier, apprentissage.",
+    "Nouvelle marque La Barrière Automatique : LBA 6 / 6R / 63PK / 7 / 7R / 74 (automate Siemens LOGO + variateur Unidrive), LBA 4 (platine ENPC001652, dip-switches SW1), LBA 12 (lisse 3 à 12 m) et carte ONE-C (logiques capteurs inductifs et capteur angulaire, Modbus, codes moteur 106 / 107).",
+    "Pour chaque fiche : pannes et remèdes de la notice, paramètres du variateur (00.003, 00.011, 00.022…) et de l'automate avec leurs valeurs d'usine, bornier façade et interne, réglage des capteurs, butées et compensation, ouverture manuelle, sauvegarde SD.",
+    "Onglet Schéma : schémas de câblage ELKA (alimentation, sorties, moteur BLDC, boucles, entrées, relais), schémas LBA 4 / 6 / 7 et tableau SW1.",
+    "Valeurs d'usine non fournies par la notice (variateur LBA, sensibilités ELKA P601 à P603) : affichées « — ». Incohérences relevées dans les notices signalées en note (coquille « MO 64 », bornes 42 / 44, plages P2 de la LBA 4)."
+  ], docs: [
+    "ELKA P 2500 – P 5000 (parties 1 et 2, V2.0)", "ELKA T 3000 – T 3500 (parties 1 et 2)", "La Barrière Automatique LBA 4 / 6 / 7 (2017)", "La Barrière Automatique LBA 12", "ONE-C (COAT015196-C, indice I, et ancienne notice)", "Siemens LOGO (carte tourniquet)"
+  ] },
   { v: "1.29", date: "2026-10-18", titre: "Lot 2 : DEA System NET230N et NET24N", items: [
     "Nouvelle marque DEA System : armoires universelles NET230N (moteurs 230 V, 6 types : coulissant, battant, basculante, barrière, sectionnelle, bollard) et NET24N (moteurs 24 V, 4 types).",
     "Pour chaque armoire : messages d'état et d'erreur de l'afficheur (ErrP, Err3 à Err9, Er10 à Er15, Er81…) avec les remèdes de la notice, paramètres P001 à P099 avec les valeurs par défaut de chaque type (lues sur les tableaux en chiffres 7 segments), configuration des entrées IN_1 à IN_6, bornier, choix du type et apprentissage de la course.",
@@ -30904,6 +30913,6446 @@ const MARQUES = [
           ]
         }
       }
+  ]
+},
+{
+  id: "elka", nom: "ELKA", couleur: "#c26a00", sanslogo: true, alias: "MO 24 barrière levante ELKA-Torantriebe",
+  cartes: [
+    {
+      "id": "elka-p2500-5000",
+      "nom": "P 2500 – P 5000 (MO 24)",
+      "modeles": "Barrières ELKA P 2500 / P 3000 / P 3500 / P 4000 / P 5000 (lisse de 2,5 à 5 m, longueur maxi 2 500 / 3 000 / 3 500 / 4 000 / 5 000 mm) — logique de commande MO 24 ; la logique est aussi décrite pour les S 5000 à S 9000 (leur notice d'installation n'est pas fournie)",
+      "type": "Barrière levante de parking (P 2500 à P 5000) — logique MO 24, afficheur 4 chiffres et joystick, boucles d'induction A / B / C intégrées",
+      "source": "Manuel de montage et d'emploi ELKA, traduction française : « Barrières P 2500 – P 5000 », partie 1 Installation (V2.0 – 07.17, 59 p.) et partie 2 Logique de commande MO 24 (V2.0 – 07.17, 51 p.)",
+      "codes": [
+        {
+          "code": "eR01",
+          "type": "erreur",
+          "titre": "Lisse dégondée",
+          "action": "Le contact « lisse dégondée » (bornes 25-26) est ouvert. Contrôler le contact et le câblage ; si la lisse est réellement dégondée, la remettre en place. Selon P548 la barrière stoppe (1) ou continue de fonctionner (0) pendant que le signal est émis."
+        },
+        {
+          "code": "eR02",
+          "type": "erreur",
+          "titre": "Alimentation externe 12 V coupée (surcharge)",
+          "action": "La sortie 12 V (bornes 1-2) est coupée suite à une surcharge détectée. Contrôler les consommateurs externes et le câblage."
+        },
+        {
+          "code": "eR03",
+          "type": "erreur",
+          "titre": "Alimentation externe 24 V coupée (surcharge)",
+          "action": "Une des sorties 24 V (bornes 3-4, 5-6, 7-8) est coupée suite à une surcharge détectée. Contrôler les consommateurs externes et le câblage."
+        },
+        {
+          "code": "eR04",
+          "type": "erreur",
+          "titre": "Boucle A hors plage de fréquence",
+          "action": "La fréquence de la boucle A n'est pas dans la plage autorisée. Contrôler la boucle ; le cas échéant changer la fréquence avec le DIP-switch 1 (Hi / Lo)."
+        },
+        {
+          "code": "eR05",
+          "type": "erreur",
+          "titre": "Boucle B hors plage de fréquence",
+          "action": "Même défaut sur la boucle B. Contrôler la boucle ; le cas échéant changer la fréquence avec le DIP-switch 2."
+        },
+        {
+          "code": "eR06",
+          "type": "erreur",
+          "titre": "Boucle C hors plage de fréquence",
+          "action": "Même défaut sur la boucle C. Contrôler la boucle ; le cas échéant changer la fréquence avec le DIP-switch 3."
+        },
+        {
+          "code": "eR07",
+          "type": "erreur",
+          "titre": "Test des cellules en échec",
+          "action": "Une erreur est survenue pendant la première phase du test (l'émetteur est coupé et le récepteur ne signale pas d'obstacle dans les 2,5 s) : cellule défectueuse. Contrôler les cellules, la commande de leur alimentation (relais multifonction réglé sur « test des cellules ») et les résistances de 1 kΩ en parallèle des contacts."
+        },
+        {
+          "code": "eR08",
+          "type": "erreur",
+          "titre": "Test de la tranche de sécurité en échec",
+          "action": "Une erreur est survenue pendant le test de la tranche de sécurité (SLZ, bornes 21-22, résistance 8,2 kΩ). Contrôler la tranche de sécurité."
+        },
+        {
+          "code": "eR09",
+          "type": "erreur",
+          "titre": "Erreur sur l'entrée STOP",
+          "action": "Une erreur a été constatée à l'évaluation de l'entrée Stop : la notice indique que la logique de commande est défectueuse."
+        },
+        {
+          "code": "eR10",
+          "type": "erreur",
+          "titre": "Erreur d'écriture EEPROM",
+          "action": "Erreur à la sauvegarde des données dans l'EEPROM : la logique est défectueuse. Si l'EEPROM est défectueuse, les données d'erreur peuvent ne plus être lisibles et l'afficheur indique « eep »."
+        },
+        {
+          "code": "eR11",
+          "type": "erreur",
+          "titre": "Erreur de lecture EEPROM (somme de contrôle)",
+          "action": "Erreur à la lecture des données de l'EEPROM : les données sont perdues. Refaire l'apprentissage de la logique de commande ; si l'erreur revient, la logique est défectueuse."
+        },
+        {
+          "code": "eR12",
+          "type": "erreur",
+          "titre": "Amplificateur de mesure du courant moteur",
+          "action": "Erreur constatée sur l'amplificateur de mesure du contrôle de courant moteur : la logique de commande est défectueuse."
+        },
+        {
+          "code": "eR13",
+          "type": "erreur",
+          "titre": "Erreur de la partie puissance",
+          "action": "Erreur constatée à la partie puissance : la logique de commande est défectueuse."
+        },
+        {
+          "code": "eR14",
+          "type": "erreur",
+          "titre": "Partie puissance trop chaude",
+          "action": "La partie puissance du moteur est devenue trop chaude. La logique est bloquée jusqu'à son refroidissement. Si l'erreur survient plusieurs fois, c'est un défaut."
+        },
+        {
+          "code": "eR15",
+          "type": "erreur",
+          "titre": "Tension d'alimentation 24 V hors plage",
+          "action": "La logique surveille la tension 24 V et se bloque dès qu'elle sort de la plage admise (aussi si l'accumulateur est déchargé en secours). Contrôler le bloc d'alimentation 24 V ou charger l'accumulateur."
+        },
+        {
+          "code": "eR16",
+          "type": "erreur",
+          "titre": "Lisse manœuvrée à la main sur plus de 50 %",
+          "action": "La logique a reconnu que la lisse a été manœuvrée à la main sur plus de la moitié de sa course et se bloque. Pour effacer l'erreur : appuyer sur PROG, couper puis remettre l'alimentation, ou remettre la lisse à sa position initiale."
+        },
+        {
+          "code": "(écran éteint)",
+          "type": "afficheur",
+          "titre": "Fonctionnement normal",
+          "action": "En service l'afficheur est éteint. Le point décimal du chiffre des unités clignote au rythme des secondes (prêt au service). Le point décimal du chiffre des milliers brille si le module TCP est présent et une connexion socket est établie."
+        },
+        {
+          "code": "Poff",
+          "type": "afficheur",
+          "titre": "Panne de réseau détectée",
+          "action": "S'affiche à la détection d'une panne du réseau (P103 = 1, module ANAE connecté) : la barrière reçoit une impulsion d'ouverture et s'ouvre par ses ressorts."
+        },
+        {
+          "code": "SYNC",
+          "type": "afficheur",
+          "titre": "Cheminement de synchronisation (Auto-Sync)",
+          "action": "Avec P549 = 1 : après la mise sous tension, une fermeture est lancée automatiquement après 3 s ; les sécurités restent actives et la fermeture est répétée jusqu'à la synchronisation par coupure de force en position FERMER."
+        },
+        {
+          "code": "eep",
+          "type": "afficheur",
+          "titre": "EEPROM défectueuse",
+          "action": "Affiché quand l'EEPROM est défectueuse et que les données d'erreur ne peuvent plus être lues (voir eR10 / eR11)."
+        },
+        {
+          "code": "lrn1",
+          "type": "afficheur",
+          "titre": "Apprentissage des cellules en cours",
+          "action": "Après P101 : si le test des cellules est activé, le nombre de cellules connectées est mémorisé."
+        },
+        {
+          "code": "lrn2",
+          "type": "afficheur",
+          "titre": "Erreur pendant l'apprentissage des cellules",
+          "action": "Une erreur est survenue pendant l'apprentissage des cellules (LS) : vérifier le raccordement des cellules (1 kΩ en parallèle du contact de chaque récepteur) puis relancer par une brève pression sur PROG."
+        },
+        {
+          "code": "lrn3",
+          "type": "afficheur",
+          "titre": "Une cellule signale un obstacle",
+          "action": "Pendant l'apprentissage une cellule signale un obstacle : dégager le champ des cellules puis relancer par une brève pression sur PROG."
+        },
+        {
+          "code": "send",
+          "type": "afficheur",
+          "titre": "Attente d'un code radio (P102)",
+          "action": "Émettre le code avec la touche de la télécommande codée ; xxxx s'affiche quand le code est reçu. Maintenu 5 s sur PROG : le code est effacé (affichage « ---- »)."
+        },
+        {
+          "code": "hhhh / ----",
+          "type": "afficheur",
+          "titre": "Code radio mémorisé / pas de code",
+          "action": "Affichage à l'entrée de P102 : hhhh = un code radio est mémorisé, ---- = aucun code."
+        },
+        {
+          "code": "re-0 · re-1",
+          "type": "afficheur",
+          "titre": "Restauration des réglages (P801 / P802)",
+          "action": "re-0 : retour au réglage d'usine (maintenir PROG 5 s, l'affichage passe à 0000). re-1 : retour à la configuration client (maintenir PROG 5 s, l'affichage passe à 0001)."
+        },
+        {
+          "code": "Vp",
+          "type": "led",
+          "titre": "Tension d'alimentation (jaune)",
+          "action": "Brille si la tension d'alimentation est présente."
+        },
+        {
+          "code": "LS",
+          "type": "led",
+          "titre": "Cellules (vert)",
+          "action": "Brille si le contact LS est ouvert."
+        },
+        {
+          "code": "Bm.",
+          "type": "led",
+          "titre": "Lisse dégondée (vert)",
+          "action": "Brille si le contact lisse dégondée est fermé (état normal)."
+        },
+        {
+          "code": "BT*",
+          "type": "led",
+          "titre": "Entrée BT / BTA3 / BTZ1B (vert)",
+          "action": "Brille si le contact de l'entrée configurable est fermé."
+        },
+        {
+          "code": "BTZ1A",
+          "type": "led",
+          "titre": "Touche FERMER 1A (vert)",
+          "action": "Brille si le contact BTZ1A est fermé."
+        },
+        {
+          "code": "BTA1",
+          "type": "led",
+          "titre": "Touche OUVRIR 1 (vert)",
+          "action": "Brille si le contact BTA1 est fermé."
+        },
+        {
+          "code": "BTZ2",
+          "type": "led",
+          "titre": "Touche FERMER 2 (vert)",
+          "action": "Brille si le contact BTZ2 est fermé (contact à ouverture : doit briller au repos)."
+        },
+        {
+          "code": "BTA2",
+          "type": "led",
+          "titre": "Touche OUVRIR 2 (vert)",
+          "action": "Brille si le contact BTA2 est fermé."
+        },
+        {
+          "code": "BTS",
+          "type": "led",
+          "titre": "Touche STOP (vert)",
+          "action": "Brille si le contact BTS est fermé (contact à ouverture : doit briller au repos)."
+        },
+        {
+          "code": "NAE",
+          "type": "led",
+          "titre": "Détection de panne réseau (vert)",
+          "action": "Brille si le module ANAE est connecté et que la tension d'alimentation est présente."
+        },
+        {
+          "code": "SLZ",
+          "type": "led",
+          "titre": "Tranche de sécurité (rouge)",
+          "action": "Brille si la tranche de sécurité est activée."
+        },
+        {
+          "code": "IL-A · IL-B · IL-C",
+          "type": "led",
+          "titre": "Boucles d'induction (rouge)",
+          "action": "Brille si la boucle correspondante est occupée. Clignote en cas d'erreur de la boucle."
+        },
+        {
+          "code": "RADIO",
+          "type": "led",
+          "titre": "Radio (rouge)",
+          "action": "Brille si le code radio mémorisé est reçu."
+        },
+        {
+          "code": "BRAKE",
+          "type": "led",
+          "titre": "Frein (rouge)",
+          "action": "Brille si le moteur est freiné."
+        },
+        {
+          "code": "LED1 · LED2",
+          "type": "led",
+          "titre": "Réserve (rouge)",
+          "action": "Réservées, sans fonction décrite."
+        },
+        {
+          "code": "Prêt à l'emploi",
+          "type": "led",
+          "titre": "LED à allumer pour une barrière prête",
+          "action": "Pour indiquer que la barrière est opérationnelle : Vp, Bm., BTS et NAE (si la détection de panne réseau est connectée) doivent briller. Après installation, Vp, BTZ2, BTS et Bm. doivent briller."
+        },
+        {
+          "code": "Barrière sans réaction",
+          "type": "symptome",
+          "titre": "À la mise en service, rien ne bouge",
+          "action": "Contrôler que le commutateur de service est sur RUN (en SERVICE, seuls le joystick et la manœuvre manuelle fonctionnent : radio, BUS, boucles et commandes externes sont ignorés). Contrôler les LED Vp, Bm., BTS (et NAE) allumées. Les entrées LS (23-24), lisse dégondée (25-26), BTZ2 (41-42), BTS (43-44) doivent porter un contact à ouverture ou un pont, et la SLZ (21-22) une résistance de 8,2 kΩ."
+        },
+        {
+          "code": "Ne ferme pas",
+          "type": "symptome",
+          "titre": "La barrière ne se ferme pas",
+          "action": "Les sécurités bloquent la fermeture : SLZ activée, cellules (LS ouvert), boucle de sécurité occupée, BTZ1A / BTZ1B maintenu fermé en position fermée (verrouillage), commande d'ouverture BTA1 / BTA2 maintenue. Regarder les LED correspondantes. Vérifier aussi P543 / P545 selon la réaction voulue."
+        },
+        {
+          "code": "S'ouvre seule après coupure",
+          "type": "symptome",
+          "titre": "Elle s'ouvre à chaque coupure de courant",
+          "action": "Avec P103 = 1 (détection de panne réseau, module ANAE), la barrière reçoit une impulsion d'ouverture et s'ouvre par ses ressorts : c'est le fonctionnement prévu."
+        },
+        {
+          "code": "Se ferme au redémarrage",
+          "type": "symptome",
+          "titre": "Elle se ferme après la mise sous tension",
+          "action": "Fermeture automatique active (P301 > 0 s) ou Auto-Sync (P549 = 1, affichage SYNC) : la barrière ouverte se ferme après la durée de maintien à l'ouverture ou lance une fermeture de synchronisation."
+        },
+        {
+          "code": "Lisse non équilibrée",
+          "type": "symptome",
+          "titre": "La lisse ne reste pas à 45° / bat sur les butées",
+          "action": "Contrôler les ressorts de compensation (si un ressort est cassé, changer tous les ressorts) et leur nombre selon la longueur de lisse. Lisse libérée par le déverrouillage et placée à 45° : elle doit s'équilibrer seule ; corriger en contractant ou décontractant les ressorts (écrou de serrage, sens horaire = contracter)."
+        }
+      ],
+      "parametres": {
+        "intro": "Logique MO 24 : afficheur 4 × 7 segments et joystick. Les valeurs « Usine » sont celles du tableau de la notice (P801 les rétablit). La liste des paramètres est la même pour toutes les barrières ELKA gérées par la MO 24 ; les paramètres modifiés par le BUS ne sont pas bloqués par le mot de passe.",
+        "navigation": [
+          "Joystick : UP (vers le haut), DOWN (vers le bas), PROG (appui au centre).",
+          "Entrer dans le menu : maintenir PROG environ 2 s, l'affichage montre P100. UP / DOWN font défiler le menu principal (P100, P200… P800) ; PROG ouvre le sous-menu (P101…), UP / DOWN défilent, PROG ouvre le réglage, PROG repasse au point suivant.",
+          "Sortie d'un sous-menu : aller avec UP / DOWN sur la sortie (P1PP, P2PP…) puis PROG. Sortie du menu principal : aller sur PPPP puis PROG : les données sont enregistrées dans l'EEPROM.",
+          "Saisie d'un nombre : UP +1, DOWN −1 ; maintenu, défilement par 10, puis par 100 toutes les 0,4 s, puis par 1000 après 4 s. Dépassement : la valeur revient au maximum admis.",
+          "Pendant les réglages, passer le commutateur de service sur SERVICE (pour éviter une manœuvre imprévue) puis le remettre sur RUN.",
+          "Mot de passe (P550) : 3552 = pas de mot de passe ; tout autre nombre active la protection (tout est alors consultable mais non modifiable sauf P550). Le réglage d'usine inchangeable pour désactiver est 3552."
+        ],
+        "groupes": [
+          {
+            "nom": "P100 · Fonctions de base",
+            "items": [
+              {
+                "code": "P101",
+                "def": "1",
+                "titre": "Vitesse de la barrière et apprentissage des cellules",
+                "valeurs": [
+                  [
+                    "0",
+                    "Rapide"
+                  ],
+                  [
+                    "1",
+                    "Standard (usine)"
+                  ],
+                  [
+                    "2",
+                    "Lente"
+                  ]
+                ],
+                "note": "Après validation, « lrn1 » s'affiche si le test des cellules est activé : le nombre de cellules connectées est mémorisé. En cas d'erreur, brève pression sur PROG pour relancer ; maintenir PROG 5 s pour annuler. Un changement de modèle (P570) remet la vitesse standard."
+              },
+              {
+                "code": "P102",
+                "def": "—",
+                "titre": "Apprentissage / effacement du code radio",
+                "valeurs": [
+                  [
+                    "PROG bref",
+                    "send : émettre le code ; xxxx quand reçu"
+                  ],
+                  [
+                    "PROG maintenu",
+                    "send puis ---- après 5 s : code effacé"
+                  ],
+                  [
+                    "PROG bref 2 fois",
+                    "Annuler sans changer"
+                  ]
+                ],
+                "note": "Usine : aucun code (-+-+-+-+-)."
+              },
+              {
+                "code": "P103",
+                "def": "0",
+                "titre": "Tension d'alimentation",
+                "valeurs": [
+                  [
+                    "0",
+                    "Normal : 24 V DC par le bloc d'alimentation (arrêt en cas de panne réseau) ; avec accumulateur optionnel, la barrière tient un court moment en secours"
+                  ],
+                  [
+                    "1",
+                    "Avec détection de panne réseau (module ANAE) : impulsion d'ouverture à la coupure, ouverture par ressorts, affichage Poff"
+                  ]
+                ]
+              },
+              {
+                "code": "P104",
+                "def": "0",
+                "titre": "Limitation d'ouverture",
+                "valeurs": [
+                  [
+                    "0",
+                    "90° (complètement ouverte)"
+                  ],
+                  [
+                    "1",
+                    "env. 85°"
+                  ],
+                  [
+                    "2",
+                    "env. 80°"
+                  ],
+                  [
+                    "3",
+                    "env. 75°"
+                  ],
+                  [
+                    "4",
+                    "env. 70°"
+                  ],
+                  [
+                    "5",
+                    "env. 65°"
+                  ],
+                  [
+                    "6",
+                    "env. 60°"
+                  ],
+                  [
+                    "7",
+                    "env. 55°"
+                  ]
+                ],
+                "note": "Utile avec un plafond bas ou un obstacle. Le moteur maintient la lisse dans cette position."
+              },
+              {
+                "code": "P105",
+                "def": "0",
+                "titre": "Occultation des sécurités avant la position FERMER",
+                "valeurs": [
+                  [
+                    "0",
+                    "Sécurités évaluées à chaque position"
+                  ],
+                  [
+                    "1",
+                    "Non évaluées dans les 10° avant la fermeture"
+                  ],
+                  [
+                    "2",
+                    "Non évaluées dans les 20° avant la fermeture"
+                  ],
+                  [
+                    "3",
+                    "Non évaluées dans les 30° avant la fermeture"
+                  ]
+                ],
+                "note": "Concerne cellules (LS), tranche de sécurité (SLZ) et sécurisation par boucle."
+              }
+            ]
+          },
+          {
+            "nom": "P200 · Système BUS",
+            "items": [
+              {
+                "code": "P201",
+                "def": "16",
+                "titre": "Adresse RS485 de la barrière",
+                "valeurs": [
+                  [
+                    "16 à 254",
+                    "En décimal (0x10 à 0xFE)"
+                  ]
+                ]
+              },
+              {
+                "code": "P210 à P213",
+                "def": "192 · 168 · 0 · 200",
+                "titre": "Adresse IP (octets 1 à 4)",
+                "valeurs": [],
+                "note": "Exemple 192.168.0.200 : P210 = 192, P211 = 168, P212 = 0, P213 = 200."
+              },
+              {
+                "code": "P220 à P223",
+                "def": "192 · 168 · 0 · 1",
+                "titre": "Adresse passerelle (octets 1 à 4)",
+                "valeurs": []
+              },
+              {
+                "code": "P230 à P233",
+                "def": "255 · 255 · 255 · 0",
+                "titre": "Masque de sous-réseau (octets 1 à 4)",
+                "valeurs": []
+              },
+              {
+                "code": "P240 · P241",
+                "def": "52 · 719",
+                "titre": "Numéro de port logiciel (52719 = 0xCDEF)",
+                "valeurs": [],
+                "note": "P240 = dizaines de mille et milliers (00 à 65), P241 = centaines, dizaines, unités (000 à 999). Pour 52719 : P240 = 52, P241 = 719. Le port est limité à 65535 (P241 est corrigé automatiquement)."
+              }
+            ]
+          },
+          {
+            "nom": "P300 · Durées",
+            "items": [
+              {
+                "code": "P301",
+                "def": "0,0 s",
+                "titre": "Durée de maintien à l'ouverture (fermeture automatique)",
+                "valeurs": [
+                  [
+                    "0,0 s",
+                    "Fermeture automatique non activée"
+                  ],
+                  [
+                    "0,1 à 655,0 s",
+                    "Durée avant fermeture automatique"
+                  ]
+                ],
+                "note": "Non redéclenchée par BTA1 à BTA3. Un stop bloque la fermeture automatique jusqu'à la commande suivante. Après mise sous tension ou fin de programmation, la barrière ouverte se ferme après la durée."
+              },
+              {
+                "code": "P302",
+                "def": "0,0 s",
+                "titre": "Pré-avertissement avant l'ouverture",
+                "valeurs": [
+                  [
+                    "0,0 s",
+                    "Non activé"
+                  ],
+                  [
+                    "0,1 à 655,0 s",
+                    "Durée"
+                  ]
+                ]
+              },
+              {
+                "code": "P303",
+                "def": "0,0 s",
+                "titre": "Pré-avertissement avant la fermeture",
+                "valeurs": [
+                  [
+                    "0,0 s",
+                    "Non activé"
+                  ],
+                  [
+                    "0,1 à 655,0 s",
+                    "Durée"
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "nom": "P400 · Compteurs",
+            "items": [
+              {
+                "code": "P401",
+                "def": "250 (= 250 000)",
+                "titre": "Intervalle de maintenance",
+                "valeurs": [
+                  [
+                    "1000 à 9 999 000",
+                    "À régler en milliers de mouvements (valeur × 1000)"
+                  ]
+                ],
+                "note": "La logique a aussi un compteur d'heures de service lisible par le BUS."
+              },
+              {
+                "code": "P402",
+                "def": "—",
+                "titre": "Compteur de maintenance (affichage / remise à zéro)",
+                "valeurs": [
+                  [
+                    "PROG bref",
+                    "Quitter"
+                  ],
+                  [
+                    "PROG maintenu 5 s",
+                    "Remise à zéro puis sortie"
+                  ]
+                ],
+                "note": "Affichage × 1000 : 3456 = entre 3 456 000 et 3 457 000 mouvements."
+              },
+              {
+                "code": "P410",
+                "def": "0",
+                "titre": "Compteur de commande : limite inférieure",
+                "valeurs": [
+                  [
+                    "−9 à 0",
+                    "Chaque commande de fermeture décrémente"
+                  ]
+                ],
+                "note": "Passage de 1 à 0 : fermeture ; de 0 à 1 : ouverture."
+              },
+              {
+                "code": "P411",
+                "def": "1",
+                "titre": "Compteur de commande : limite supérieure",
+                "valeurs": [
+                  [
+                    "1 à 9",
+                    "Chaque commande d'ouverture incrémente"
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "nom": "P500 · Relais multifonctions",
+            "items": [
+              {
+                "code": "P501",
+                "def": "0",
+                "titre": "Relais multifonction 1 (bornes 9-10)",
+                "valeurs": [
+                  [
+                    "0",
+                    "Désactivé"
+                  ],
+                  [
+                    "1",
+                    "Dysfonctionnement : actif si un code d'erreur est affiché"
+                  ],
+                  [
+                    "2",
+                    "Maintenance : actif si le compteur dépasse l'intervalle réglé"
+                  ],
+                  [
+                    "3",
+                    "Information lisse dégondée : actif à l'ouverture du contact « lisse dégondée »"
+                  ],
+                  [
+                    "4",
+                    "Mode tandem : actif si la barrière n'est pas en position FERMETURE (déjà actif au pré-avertissement d'ouverture)"
+                  ],
+                  [
+                    "5",
+                    "Feu rouge (réglage P510-P516)"
+                  ],
+                  [
+                    "6",
+                    "Feu vert (réglage P520-P526)"
+                  ],
+                  [
+                    "7",
+                    "Feu d'avertissement (réglage P530-P536)"
+                  ],
+                  [
+                    "8",
+                    "Illumination de la lisse par LED : actif en position FERMER, éteint en OUVERT, clignote entre les deux"
+                  ],
+                  [
+                    "9",
+                    "Position finale OUVERTURE : actif si la barrière est ouverte (déjà coupé pendant le pré-avertissement de fermeture)"
+                  ],
+                  [
+                    "10",
+                    "Position FERMER / lyre de repos magnétique : actif si la barrière est fermée (coupé dès le pré-avertissement d'ouverture ; avec une lyre magnétique P302 doit être ≥ 1,5 s)"
+                  ],
+                  [
+                    "11",
+                    "Relais BUS : piloté par le BUS (marche / arrêt, impulsion par seconde)"
+                  ],
+                  [
+                    "12",
+                    "Test des cellules : commute l'alimentation des émetteurs pour le test"
+                  ],
+                  [
+                    "13",
+                    "Déverrouillage : commute si la lisse est manœuvrée à la main sur plus de 50 %"
+                  ],
+                  [
+                    "14",
+                    "Présence : actif si l'évaluation des boucles signale « présence »"
+                  ],
+                  [
+                    "15 · 19 · 23",
+                    "Boucle A · B · C occupée (statique)"
+                  ],
+                  [
+                    "16 · 20 · 24",
+                    "État de la boucle A · B · C : en service, non défectueuse, non occupée"
+                  ],
+                  [
+                    "17 · 21 · 25",
+                    "Boucle A · B · C occupée (impulsion)"
+                  ],
+                  [
+                    "18 · 22 · 26",
+                    "Libération de la boucle A · B · C (impulsion)"
+                  ],
+                  [
+                    "27",
+                    "Comptage +1 (impulsion)"
+                  ],
+                  [
+                    "28",
+                    "Comptage −1 (impulsion)"
+                  ],
+                  [
+                    "29",
+                    "Logique de direction : passage venant de la droite (impulsion)"
+                  ],
+                  [
+                    "30",
+                    "Logique de direction : passage venant de la gauche (impulsion)"
+                  ],
+                  [
+                    "31",
+                    "Actif si la barrière est fermée (coupé dès le pré-avertissement d'ouverture et si BTS est ouvert) : pour lyre de repos magnétique"
+                  ],
+                  [
+                    "32",
+                    "Actif si une connexion TCP-SOCKET est établie"
+                  ],
+                  [
+                    "33",
+                    "Actif si la détection de panne réseau est connectée et le réseau présent (le relais retombe sur panne : repère « service par accumulateur »)"
+                  ],
+                  [
+                    "34",
+                    "Avertisseur sonore UL 325 : actif 5 min après une coupure de force à l'ouverture / fermeture ou une détection LS / SLZ à la fermeture"
+                  ]
+                ],
+                "note": "Même liste de modes pour P502 à P506 et P560 à P567. Les relais sont indépendants : plusieurs peuvent avoir la même fonction. Contact libre de potentiel, 24 V / 1 A."
+              },
+              {
+                "code": "P502",
+                "def": "0",
+                "titre": "Relais multifonction 2 (bornes 11-12)",
+                "valeurs": [],
+                "note": "Mêmes modes que P501."
+              },
+              {
+                "code": "P503",
+                "def": "0",
+                "titre": "Relais multifonction 3 (bornes 13-14)",
+                "valeurs": [],
+                "note": "Mêmes modes que P501."
+              },
+              {
+                "code": "P504",
+                "def": "12",
+                "titre": "Relais multifonction 4 (bornes 15-16)",
+                "valeurs": [],
+                "note": "Mêmes modes que P501. Usine : 12 = test des cellules."
+              },
+              {
+                "code": "P505",
+                "def": "5",
+                "titre": "Relais multifonction 5 (bornes 17-18)",
+                "valeurs": [],
+                "note": "Mêmes modes que P501. Usine : 5 = feu rouge."
+              },
+              {
+                "code": "P506",
+                "def": "6",
+                "titre": "Relais multifonction 6 (bornes 19-20)",
+                "valeurs": [],
+                "note": "Mêmes modes que P501. Usine : 6 = feu vert."
+              },
+              {
+                "code": "P560 à P567",
+                "def": "0",
+                "titre": "Relais multifonctions 7 à 14 (carte d'extension en option)",
+                "valeurs": [],
+                "note": "Platine d'extension de 8 relais en option ; mêmes modes que P501 (P560 = Multi7 … P567 = Multi14)."
+              }
+            ]
+          },
+          {
+            "nom": "P510 à P516 · Feu rouge",
+            "items": [
+              {
+                "code": "P510",
+                "def": "1",
+                "titre": "Feu rouge — position finale FERMER",
+                "valeurs": [
+                  [
+                    "0",
+                    "Hors service"
+                  ],
+                  [
+                    "1",
+                    "En service"
+                  ],
+                  [
+                    "2",
+                    "Clignotement"
+                  ]
+                ]
+              },
+              {
+                "code": "P511",
+                "def": "2",
+                "titre": "Feu rouge — pré-avertissement avant ouverture",
+                "valeurs": [
+                  [
+                    "0",
+                    "Hors service"
+                  ],
+                  [
+                    "1",
+                    "En service"
+                  ],
+                  [
+                    "2",
+                    "Clignotement"
+                  ]
+                ]
+              },
+              {
+                "code": "P512",
+                "def": "2",
+                "titre": "Feu rouge — pré-avertissement avant fermeture",
+                "valeurs": [
+                  [
+                    "0",
+                    "Hors service"
+                  ],
+                  [
+                    "1",
+                    "En service"
+                  ],
+                  [
+                    "2",
+                    "Clignotement"
+                  ]
+                ]
+              },
+              {
+                "code": "P513",
+                "def": "1",
+                "titre": "Feu rouge — pendant l'ouverture",
+                "valeurs": [
+                  [
+                    "0",
+                    "Hors service"
+                  ],
+                  [
+                    "1",
+                    "En service"
+                  ],
+                  [
+                    "2",
+                    "Clignotement"
+                  ]
+                ]
+              },
+              {
+                "code": "P514",
+                "def": "1",
+                "titre": "Feu rouge — pendant la fermeture",
+                "valeurs": [
+                  [
+                    "0",
+                    "Hors service"
+                  ],
+                  [
+                    "1",
+                    "En service"
+                  ],
+                  [
+                    "2",
+                    "Clignotement"
+                  ]
+                ]
+              },
+              {
+                "code": "P515",
+                "def": "1",
+                "titre": "Feu rouge — stop intermédiaire",
+                "valeurs": [
+                  [
+                    "0",
+                    "Hors service"
+                  ],
+                  [
+                    "1",
+                    "En service"
+                  ],
+                  [
+                    "2",
+                    "Clignotement"
+                  ]
+                ]
+              },
+              {
+                "code": "P516",
+                "def": "0",
+                "titre": "Feu rouge — position finale OUVERT",
+                "valeurs": [
+                  [
+                    "0",
+                    "Hors service"
+                  ],
+                  [
+                    "1",
+                    "En service"
+                  ],
+                  [
+                    "2",
+                    "Clignotement"
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "nom": "P520 à P526 · Feu vert",
+            "items": [
+              {
+                "code": "P520",
+                "def": "0",
+                "titre": "Feu vert — position finale FERMER",
+                "valeurs": [
+                  [
+                    "0",
+                    "Hors service"
+                  ],
+                  [
+                    "1",
+                    "En service"
+                  ],
+                  [
+                    "2",
+                    "Clignotement"
+                  ]
+                ]
+              },
+              {
+                "code": "P521",
+                "def": "0",
+                "titre": "Feu vert — pré-avertissement avant ouverture",
+                "valeurs": [
+                  [
+                    "0",
+                    "Hors service"
+                  ],
+                  [
+                    "1",
+                    "En service"
+                  ],
+                  [
+                    "2",
+                    "Clignotement"
+                  ]
+                ]
+              },
+              {
+                "code": "P522",
+                "def": "0",
+                "titre": "Feu vert — pré-avertissement avant fermeture",
+                "valeurs": [
+                  [
+                    "0",
+                    "Hors service"
+                  ],
+                  [
+                    "1",
+                    "En service"
+                  ],
+                  [
+                    "2",
+                    "Clignotement"
+                  ]
+                ]
+              },
+              {
+                "code": "P523",
+                "def": "0",
+                "titre": "Feu vert — pendant l'ouverture",
+                "valeurs": [
+                  [
+                    "0",
+                    "Hors service"
+                  ],
+                  [
+                    "1",
+                    "En service"
+                  ],
+                  [
+                    "2",
+                    "Clignotement"
+                  ]
+                ]
+              },
+              {
+                "code": "P524",
+                "def": "0",
+                "titre": "Feu vert — pendant la fermeture",
+                "valeurs": [
+                  [
+                    "0",
+                    "Hors service"
+                  ],
+                  [
+                    "1",
+                    "En service"
+                  ],
+                  [
+                    "2",
+                    "Clignotement"
+                  ]
+                ]
+              },
+              {
+                "code": "P525",
+                "def": "0",
+                "titre": "Feu vert — stop intermédiaire",
+                "valeurs": [
+                  [
+                    "0",
+                    "Hors service"
+                  ],
+                  [
+                    "1",
+                    "En service"
+                  ],
+                  [
+                    "2",
+                    "Clignotement"
+                  ]
+                ]
+              },
+              {
+                "code": "P526",
+                "def": "1",
+                "titre": "Feu vert — position finale OUVERT",
+                "valeurs": [
+                  [
+                    "0",
+                    "Hors service"
+                  ],
+                  [
+                    "1",
+                    "En service"
+                  ],
+                  [
+                    "2",
+                    "Clignotement"
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "nom": "P530 à P536 · Feu d'avertissement",
+            "items": [
+              {
+                "code": "P530",
+                "def": "0",
+                "titre": "Feu d'avertissement — position finale FERMER",
+                "valeurs": [
+                  [
+                    "0",
+                    "Hors service"
+                  ],
+                  [
+                    "1",
+                    "En service"
+                  ],
+                  [
+                    "2",
+                    "Clignotement"
+                  ]
+                ]
+              },
+              {
+                "code": "P531",
+                "def": "1",
+                "titre": "Feu d'avertissement — pré-avertissement avant ouverture",
+                "valeurs": [
+                  [
+                    "0",
+                    "Hors service"
+                  ],
+                  [
+                    "1",
+                    "En service"
+                  ],
+                  [
+                    "2",
+                    "Clignotement"
+                  ]
+                ]
+              },
+              {
+                "code": "P532",
+                "def": "1",
+                "titre": "Feu d'avertissement — pré-avertissement avant fermeture",
+                "valeurs": [
+                  [
+                    "0",
+                    "Hors service"
+                  ],
+                  [
+                    "1",
+                    "En service"
+                  ],
+                  [
+                    "2",
+                    "Clignotement"
+                  ]
+                ]
+              },
+              {
+                "code": "P533",
+                "def": "1",
+                "titre": "Feu d'avertissement — pendant l'ouverture",
+                "valeurs": [
+                  [
+                    "0",
+                    "Hors service"
+                  ],
+                  [
+                    "1",
+                    "En service"
+                  ],
+                  [
+                    "2",
+                    "Clignotement"
+                  ]
+                ]
+              },
+              {
+                "code": "P534",
+                "def": "1",
+                "titre": "Feu d'avertissement — pendant la fermeture",
+                "valeurs": [
+                  [
+                    "0",
+                    "Hors service"
+                  ],
+                  [
+                    "1",
+                    "En service"
+                  ],
+                  [
+                    "2",
+                    "Clignotement"
+                  ]
+                ]
+              },
+              {
+                "code": "P535",
+                "def": "0",
+                "titre": "Feu d'avertissement — stop intermédiaire",
+                "valeurs": [
+                  [
+                    "0",
+                    "Hors service"
+                  ],
+                  [
+                    "1",
+                    "En service"
+                  ],
+                  [
+                    "2",
+                    "Clignotement"
+                  ]
+                ]
+              },
+              {
+                "code": "P536",
+                "def": "0",
+                "titre": "Feu d'avertissement — position finale OUVERT",
+                "valeurs": [
+                  [
+                    "0",
+                    "Hors service"
+                  ],
+                  [
+                    "1",
+                    "En service"
+                  ],
+                  [
+                    "2",
+                    "Clignotement"
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "nom": "P540 à P550 · Modes de service",
+            "items": [
+              {
+                "code": "P540",
+                "def": "0",
+                "titre": "Fonction de l'entrée BT / BTA3 / BTZ1B (bornes 33-34)",
+                "valeurs": [
+                  [
+                    "0",
+                    "BT : bouton à séquences logiques (ouvre ; ferme si ouverte et fermeture automatique active ou comptage désactivé)"
+                  ],
+                  [
+                    "1",
+                    "BTA3 : bouton OUVRIR"
+                  ],
+                  [
+                    "2",
+                    "BTZ1B : bouton FERMER"
+                  ]
+                ]
+              },
+              {
+                "code": "P541",
+                "def": "1",
+                "titre": "Contrôle de la force",
+                "valeurs": [
+                  [
+                    "0",
+                    "Stop à la rencontre d'un obstacle, suivi d'une ouverture"
+                  ],
+                  [
+                    "1",
+                    "Stop à la rencontre d'un obstacle"
+                  ]
+                ]
+              },
+              {
+                "code": "P542",
+                "def": "0",
+                "titre": "Réaction aux cellules (LS) en fermeture",
+                "valeurs": [
+                  [
+                    "0",
+                    "Stop suivi d'une ouverture immédiate"
+                  ],
+                  [
+                    "1",
+                    "Stop"
+                  ]
+                ]
+              },
+              {
+                "code": "P543",
+                "def": "0",
+                "titre": "Fermeture automatique par cellules",
+                "valeurs": [
+                  [
+                    "0",
+                    "Hors service"
+                  ],
+                  [
+                    "1",
+                    "En service : fermeture dès que l'obstacle quitte le champ des cellules"
+                  ]
+                ]
+              },
+              {
+                "code": "P544",
+                "def": "0",
+                "titre": "Test des cellules",
+                "valeurs": [
+                  [
+                    "0",
+                    "Hors service"
+                  ],
+                  [
+                    "1",
+                    "En service"
+                  ]
+                ],
+                "note": "Test en deux phases : émetteur coupé (le récepteur doit signaler un obstacle sous 2,5 s, sinon eR07), puis émetteur remis (le récepteur ne doit plus signaler d'obstacle, sinon la fermeture est interrompue sans code). Jusqu'à 6 cellules en série, une résistance de 1 kΩ en parallèle du contact de chaque récepteur, alimentation émetteurs commutée par un relais réglé sur le mode 12. Faire ensuite P101 pour mémoriser le nombre de cellules."
+              },
+              {
+                "code": "P545",
+                "def": "0",
+                "titre": "Sécurisation par boucle",
+                "valeurs": [
+                  [
+                    "0",
+                    "Stop suivi d'une ouverture immédiate"
+                  ],
+                  [
+                    "1",
+                    "Stop (« FREEZE ») : attribuer en plus « fermer à la libération de la boucle » dans P703 / P713 / P723"
+                  ]
+                ]
+              },
+              {
+                "code": "P546",
+                "def": "0",
+                "titre": "Fermeture immédiate",
+                "valeurs": [
+                  [
+                    "0",
+                    "Commande de fermeture mémorisée, exécutée après la position OUVERT"
+                  ],
+                  [
+                    "1",
+                    "Exécutée tout de suite : stop puis fermeture immédiate"
+                  ]
+                ]
+              },
+              {
+                "code": "P547",
+                "def": "0",
+                "titre": "Service homme mort",
+                "valeurs": [
+                  [
+                    "0",
+                    "Auto-maintien"
+                  ],
+                  [
+                    "1",
+                    "Homme mort : ouvre / ferme seulement tant que la commande (BTA1-3 / BTZ1A-1B-2 ou niveau BUS) est maintenue"
+                  ]
+                ],
+                "note": "Les sécurités LS, SLZ, force et boucles restent actives à la fermeture."
+              },
+              {
+                "code": "P548",
+                "def": "0",
+                "titre": "Fonction lisse dégondée",
+                "valeurs": [
+                  [
+                    "0",
+                    "Pas de stop (code d'erreur seulement)"
+                  ],
+                  [
+                    "1",
+                    "Stop à la signalisation lisse dégondée"
+                  ]
+                ]
+              },
+              {
+                "code": "P549",
+                "def": "0",
+                "titre": "Auto-Sync",
+                "valeurs": [
+                  [
+                    "0",
+                    "Sans"
+                  ],
+                  [
+                    "1",
+                    "Avec : fermeture de synchronisation après mise sous tension (affichage SYNC)"
+                  ]
+                ],
+                "note": "Obligatoire avec la fonction de boucle « Ouvrir et sécuriser » (P702 / P712 / P722)."
+              },
+              {
+                "code": "P550",
+                "def": "3552",
+                "titre": "Protection par mot de passe",
+                "valeurs": [
+                  [
+                    "3552",
+                    "Aucun mot de passe"
+                  ],
+                  [
+                    "autre nombre",
+                    "Mot de passe actif (modifs bloquées sauf P550)"
+                  ]
+                ]
+              },
+              {
+                "code": "P570",
+                "def": "7",
+                "titre": "Série de barrière",
+                "valeurs": [
+                  [
+                    "3",
+                    "P 2500"
+                  ],
+                  [
+                    "4",
+                    "P 3000"
+                  ],
+                  [
+                    "5",
+                    "P 3500"
+                  ],
+                  [
+                    "6",
+                    "P 4000"
+                  ],
+                  [
+                    "7",
+                    "P 5000"
+                  ],
+                  [
+                    "1 · 2",
+                    "T 3000 · T 3500 (notice T)"
+                  ]
+                ],
+                "note": "Livrée, la barrière est préréglée selon la plaque d'identification ; la valeur « 7 » du tableau des réglages d'usine de la notice correspond à une P 5000. À régler après un changement ou un échange de logique ; la vitesse repasse en standard. Changer de modèle impose d'adapter la lisse, le type et le nombre de ressorts."
+              }
+            ]
+          },
+          {
+            "nom": "P600 · Boucles d'induction",
+            "items": [
+              {
+                "code": "DIP 1 · 2 · 3",
+                "def": "OFF",
+                "titre": "Fréquence des boucles A · B · C",
+                "valeurs": [
+                  [
+                    "OFF",
+                    "Fréquence haute (Hi)"
+                  ],
+                  [
+                    "ON",
+                    "Fréquence basse (Lo)"
+                  ]
+                ],
+                "note": "À changer si une autre boucle proche travaille sur la même fréquence. Boucle : inductance admise 30 à 450 µH (conseillée 50 à 300 µH), résistance < 8 Ω amenée incluse."
+              },
+              {
+                "code": "P601 · P602 · P603",
+                "def": "4",
+                "titre": "Sensibilité boucle A · B · C",
+                "valeurs": [
+                  [
+                    "0 à 7",
+                    "8 niveaux ; plus la valeur est haute, plus la boucle est sensible (la notice ne détaille pas l'échelle)"
+                  ]
+                ]
+              },
+              {
+                "code": "P610 · P611 · P612",
+                "def": "3",
+                "titre": "Durée de maintien « occupé » boucle A · B · C",
+                "valeurs": [
+                  [
+                    "0",
+                    "5 minutes"
+                  ],
+                  [
+                    "1",
+                    "30 minutes"
+                  ],
+                  [
+                    "2",
+                    "1 heure"
+                  ],
+                  [
+                    "3",
+                    "∞ (pas de nouvelle synchronisation)"
+                  ]
+                ],
+                "note": "Passé ce délai la boucle se resynchronise et signale « non occupée » même si le véhicule est dessus. Attention avec « fermer à la libération » (P703 / P713 / P723) : la barrière se ferme seule après la resynchronisation."
+              },
+              {
+                "code": "P620 · P621 · P622",
+                "def": "—",
+                "titre": "Compteur de synchronisations boucle A · B · C",
+                "valeurs": [],
+                "note": "Compte jusqu'à 9999. Maintenir PROG 5 s pour effacer et quitter."
+              },
+              {
+                "code": "P630",
+                "def": "0",
+                "titre": "Mode de service prédéfini des boucles",
+                "valeurs": [
+                  [
+                    "0",
+                    "Toutes les boucles hors service"
+                  ],
+                  [
+                    "1",
+                    "Mode 1 : sécurisation et fermeture avec une boucle"
+                  ],
+                  [
+                    "2",
+                    "Mode 2 : sécurisation et fermeture avec une boucle (A et B)"
+                  ],
+                  [
+                    "3",
+                    "Mode 3 : ouverture, sécurisation et fermeture avec deux boucles"
+                  ],
+                  [
+                    "4",
+                    "Mode 4 : présence, sécurisation et fermeture avec deux boucles"
+                  ],
+                  [
+                    "5",
+                    "Mode 5 : présence, ouverture et fermeture avec trois boucles"
+                  ],
+                  [
+                    "6",
+                    "Mode 6 : ouverture avec logique de direction, sécurisation et fermeture avec trois boucles"
+                  ],
+                  [
+                    "7",
+                    "Mode 7 : ouverture, sécurisation et fermeture avec trois boucles"
+                  ],
+                  [
+                    "8",
+                    "Mode 8 : présence, sécurisation et fermeture avec trois boucles"
+                  ],
+                  [
+                    "9",
+                    "Affiché : la configuration actuelle ne correspond à aucun mode prédéfini"
+                  ]
+                ],
+                "note": "La notice dit « mémorisées sur la logique MO 64 » (probable coquille pour MO 24)."
+              }
+            ]
+          },
+          {
+            "nom": "P700 · Boucles en réglage manuel",
+            "items": [
+              {
+                "code": "P701 · P711 · P721",
+                "def": "0",
+                "titre": "Boucle A · B · C : mise en / hors service",
+                "valeurs": [
+                  [
+                    "0",
+                    "Hors service"
+                  ],
+                  [
+                    "1",
+                    "En service"
+                  ]
+                ]
+              },
+              {
+                "code": "P702 · P712 · P722",
+                "def": "0",
+                "titre": "Boucle A · B · C : comportement à l'occupation",
+                "valeurs": [
+                  [
+                    "0",
+                    "Sans fonction"
+                  ],
+                  [
+                    "1",
+                    "Sécuriser"
+                  ],
+                  [
+                    "2",
+                    "Ouvrir"
+                  ],
+                  [
+                    "3",
+                    "Ouvrir et sécuriser (Auto-Sync P549 obligatoire)"
+                  ],
+                  [
+                    "4",
+                    "Fermer"
+                  ]
+                ]
+              },
+              {
+                "code": "P703 · P713 · P723",
+                "def": "0",
+                "titre": "Boucle A · B · C : comportement à la libération",
+                "valeurs": [
+                  [
+                    "0",
+                    "Sans fonction"
+                  ],
+                  [
+                    "1",
+                    "Fermer"
+                  ]
+                ]
+              },
+              {
+                "code": "P704 · P714 · P724",
+                "def": "0",
+                "titre": "Boucle A · B · C : présence",
+                "valeurs": [
+                  [
+                    "0",
+                    "Sans fonction"
+                  ],
+                  [
+                    "1",
+                    "Signaler la présence"
+                  ],
+                  [
+                    "2",
+                    "Bloquer la présence"
+                  ]
+                ]
+              },
+              {
+                "code": "P730 · P740",
+                "def": "0",
+                "titre": "Logique de direction 1 · 2 : choix des entrées",
+                "valeurs": [
+                  [
+                    "0",
+                    "Désactivée"
+                  ],
+                  [
+                    "1",
+                    "gauche A · droite B"
+                  ],
+                  [
+                    "2",
+                    "gauche B · droite A"
+                  ],
+                  [
+                    "3",
+                    "gauche A · droite C"
+                  ],
+                  [
+                    "4",
+                    "gauche C · droite A"
+                  ],
+                  [
+                    "5",
+                    "gauche B · droite C"
+                  ],
+                  [
+                    "6",
+                    "gauche C · droite B"
+                  ]
+                ],
+                "note": "Les deux boucles doivent être activées (P701…). Distance entre les deux boucles : au plus une longueur de véhicule."
+              },
+              {
+                "code": "P731 · P741",
+                "def": "0",
+                "titre": "Passage venant de la gauche : ouvrir / fermer",
+                "valeurs": [
+                  [
+                    "0",
+                    "Sans fonction"
+                  ],
+                  [
+                    "1",
+                    "Ouvrir"
+                  ],
+                  [
+                    "2",
+                    "Fermer"
+                  ]
+                ]
+              },
+              {
+                "code": "P732 · P742",
+                "def": "0",
+                "titre": "Passage venant de la droite : ouvrir / fermer",
+                "valeurs": [
+                  [
+                    "0",
+                    "Sans fonction"
+                  ],
+                  [
+                    "1",
+                    "Ouvrir"
+                  ],
+                  [
+                    "2",
+                    "Fermer"
+                  ]
+                ]
+              },
+              {
+                "code": "P733 · P743",
+                "def": "0",
+                "titre": "Passage venant de la gauche : compter",
+                "valeurs": [
+                  [
+                    "0",
+                    "Sans fonction"
+                  ],
+                  [
+                    "1",
+                    "+1"
+                  ],
+                  [
+                    "2",
+                    "−1"
+                  ]
+                ]
+              },
+              {
+                "code": "P734 · P744",
+                "def": "0",
+                "titre": "Passage venant de la droite : compter",
+                "valeurs": [
+                  [
+                    "0",
+                    "Sans fonction"
+                  ],
+                  [
+                    "1",
+                    "+1"
+                  ],
+                  [
+                    "2",
+                    "−1"
+                  ]
+                ]
+              },
+              {
+                "code": "P735 · P745",
+                "def": "0",
+                "titre": "Occupation venant de la gauche : ouvrir / fermer",
+                "valeurs": [
+                  [
+                    "0",
+                    "Sans fonction"
+                  ],
+                  [
+                    "1",
+                    "Ouvrir"
+                  ],
+                  [
+                    "2",
+                    "Fermer"
+                  ]
+                ]
+              },
+              {
+                "code": "P736 · P746",
+                "def": "0",
+                "titre": "Occupation venant de la droite : ouvrir / fermer",
+                "valeurs": [
+                  [
+                    "0",
+                    "Sans fonction"
+                  ],
+                  [
+                    "1",
+                    "Ouvrir"
+                  ],
+                  [
+                    "2",
+                    "Fermer"
+                  ]
+                ]
+              },
+              {
+                "code": "P737 · P747",
+                "def": "0",
+                "titre": "Occupation venant de la gauche : présence",
+                "valeurs": [
+                  [
+                    "0",
+                    "Sans fonction"
+                  ],
+                  [
+                    "1",
+                    "Signaler la présence"
+                  ],
+                  [
+                    "2",
+                    "Bloquer la signalisation"
+                  ]
+                ]
+              },
+              {
+                "code": "P738 · P748",
+                "def": "0",
+                "titre": "Occupation venant de la droite : présence",
+                "valeurs": [
+                  [
+                    "0",
+                    "Sans fonction"
+                  ],
+                  [
+                    "1",
+                    "Signaler la présence"
+                  ],
+                  [
+                    "2",
+                    "Bloquer la signalisation"
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "nom": "P800 · Réinitialisation",
+            "items": [
+              {
+                "code": "P801",
+                "def": "—",
+                "titre": "Retour au réglage d'usine",
+                "valeurs": [
+                  [
+                    "re-0",
+                    "Maintenir PROG 5 s : l'affichage passe à 0000 et la configuration d'usine est rétablie ; PROG bref : quitter sans modifier"
+                  ]
+                ]
+              },
+              {
+                "code": "P802",
+                "def": "—",
+                "titre": "Retour à la configuration client",
+                "valeurs": [
+                  [
+                    "re-1",
+                    "Maintenir PROG 5 s : l'affichage passe à 0001 ; la configuration client est rétablie"
+                  ]
+                ],
+                "note": "La mémoire client ne peut être remplie que par une commande du système BUS (elle ne reprend pas compteurs de service, de maintenance ni mémoire d'erreurs) ; elle ne se saisit pas au menu."
+              }
+            ]
+          }
+        ]
+      },
+      "bornier": {
+        "groupes": [
+          {
+            "nom": "Alimentation et service",
+            "bornes": [
+              {
+                "n": "Secteur",
+                "label": "Alimentation 100-240 V, 50-60 Hz",
+                "desc": "Câble d'alimentation vers l'interrupteur marche / arrêt et la borne de terre ; fixer le câble avec les éclisses prévues. La logique est alimentée en 24 V DC par un bloc à découpage (courant absorbé max. 1,4 A à 230 V). Prévoir sectionneur / disjoncteur verrouillable, 2 pôles.",
+                "t": "alim"
+              },
+              {
+                "n": "Commutateur de service",
+                "label": "RUN / SERVICE",
+                "desc": "En SERVICE : seul le joystick (ouvrir / fermer) agit ; radio, BUS, boucles et commandes externes sont ignorés. À mettre en SERVICE pour les réglages ou les travaux sur la mécanique.",
+                "t": "autre"
+              },
+              {
+                "n": "1-2 · 12V / Gnd",
+                "label": "Sortie 12 V stabilisée",
+                "desc": "500 mA maxi (surcharge : eR02).",
+                "t": "alim"
+              },
+              {
+                "n": "3-4 · 5-6 · 7-8",
+                "label": "Sorties 24 V stabilisées",
+                "desc": "24 V DC, 1500 mA maxi au total pour les trois sorties (surcharge : eR03).",
+                "t": "alim"
+              },
+              {
+                "n": "45 · ANT / 46 · Gnd",
+                "label": "Antenne",
+                "desc": "Borne d'antenne de la radio.",
+                "t": "autre"
+              },
+              {
+                "n": "47 · NAE / 48 · Gnd",
+                "label": "Détection de panne réseau (ANAE)",
+                "desc": "Module optionnel de détection de panne de courant.",
+                "t": "autre"
+              }
+            ]
+          },
+          {
+            "nom": "Sorties relais (libres de potentiel, 24 V DC / 1 A)",
+            "bornes": [
+              {
+                "n": "9-10 · Multi1",
+                "label": "Relais multifonction 1",
+                "desc": "Fonction réglée par P501 (usine : 0).",
+                "t": "sortie"
+              },
+              {
+                "n": "11-12 · Multi2",
+                "label": "Relais multifonction 2",
+                "desc": "P502 (usine : 0).",
+                "t": "sortie"
+              },
+              {
+                "n": "13-14 · Multi3",
+                "label": "Relais multifonction 3",
+                "desc": "P503 (usine : 0).",
+                "t": "sortie"
+              },
+              {
+                "n": "15-16 · Multi4",
+                "label": "Relais multifonction 4",
+                "desc": "P504 (usine : 12 = test des cellules : alimentation des émetteurs).",
+                "t": "sortie"
+              },
+              {
+                "n": "17-18 · Multi5",
+                "label": "Relais multifonction 5",
+                "desc": "P505 (usine : 5 = feu rouge).",
+                "t": "sortie"
+              },
+              {
+                "n": "19-20 · Multi6",
+                "label": "Relais multifonction 6",
+                "desc": "P506 (usine : 6 = feu vert).",
+                "t": "sortie"
+              }
+            ]
+          },
+          {
+            "nom": "Entrées de sécurité (contact à ouverture ou pont obligatoire)",
+            "bornes": [
+              {
+                "n": "21-22 · SLZ",
+                "label": "Tranche de sécurité FERMETURE",
+                "desc": "Résistance de 8,2 kΩ. Si elle signale, la barrière ne ferme pas ; en fermeture elle stoppe puis s'ouvre. Testée avant chaque fermeture (erreur eR08).",
+                "t": "nf"
+              },
+              {
+                "n": "23-24 · LS",
+                "label": "Cellules (jusqu'à 6, contacts en série)",
+                "desc": "Contact à ouverture, non contrôlé pendant l'ouverture. Avec test des cellules : résistance 1 kΩ en parallèle du contact de chaque récepteur (P544, P101).",
+                "t": "nf"
+              },
+              {
+                "n": "25-26 · Bm",
+                "label": "Lisse dégondée",
+                "desc": "Contact à ouverture : ouvert = erreur eR01.",
+                "t": "nf"
+              },
+              {
+                "n": "41-42 · BTZ2",
+                "label": "Touche FERMER 2",
+                "desc": "Contact à ouverture : ouverture du contact = commande de fermeture ; pas de verrouillage en position fermée. Pont obligatoire si non utilisée.",
+                "t": "nf"
+              },
+              {
+                "n": "43-44 · BTS",
+                "label": "Touche STOP",
+                "desc": "Contact à ouverture : ouvert = stop et effacement des commandes mémorisées, la fermeture automatique est bloquée jusqu'à la commande suivante. Pont obligatoire si non utilisée.",
+                "t": "nf"
+              }
+            ]
+          },
+          {
+            "nom": "Commandes et boucles",
+            "bornes": [
+              {
+                "n": "27-28 · LOOP-A",
+                "label": "Boucle d'induction A",
+                "desc": "Raccorder la boucle (inductance 30-450 µH).",
+                "t": "autre"
+              },
+              {
+                "n": "29-30 · LOOP-B",
+                "label": "Boucle d'induction B",
+                "desc": "",
+                "t": "autre"
+              },
+              {
+                "n": "31-32 · LOOP-C",
+                "label": "Boucle d'induction C",
+                "desc": "",
+                "t": "autre"
+              },
+              {
+                "n": "33-34 · BT*",
+                "label": "BT / BTA3 / BTZ1B (selon P540)",
+                "desc": "Contact à fermeture, usine = BT (séquence).",
+                "t": "no"
+              },
+              {
+                "n": "35-36 · BTA1",
+                "label": "Touche OUVRIR 1",
+                "desc": "Contact à fermeture. Commande d'ouverture sur flanc ; la barrière ne ferme pas tant que le contact est fermé ; ne redéclenche pas la durée de maintien.",
+                "t": "no"
+              },
+              {
+                "n": "37-38 · BTA2",
+                "label": "Touche OUVRIR 2",
+                "desc": "Comme BTA1.",
+                "t": "no"
+              },
+              {
+                "n": "39-40 · BTZ1A",
+                "label": "Touche FERMER 1A",
+                "desc": "Contact à fermeture, commande de fermeture ; en position fermée, la barrière ne s'ouvre pas tant que BTZ1A / BTZ1B est fermé (verrouillage).",
+                "t": "no"
+              }
+            ]
+          }
+        ],
+        "notes": [
+          "Longueur maximale du câble pour BT, BTS, BTA1, BTA2, BTZ1A, BTZ2, LS, SLZ : 30 m ; au-delà de 20 m, prévoir des modules parafoudre.",
+          "Après installation de tous les éléments, doivent briller : Vp (tension de service), BTZ2, BTS et Bm.",
+          "Une platine d'extension de 8 relais multifonctions supplémentaires (Multi7 à Multi14) existe en option (voir son manuel). Maintenir la barrière alimentée : contrôler le facteur de service 100 %, IP 54, température -30 à +50 °C."
+        ]
+      },
+      "apprentissage": {
+        "avant": [
+          "Couper l'alimentation avant toute intervention sur la mécanique (zones d'écrasement). Mettre le commutateur de service sur SERVICE pendant les réglages, puis sur RUN.",
+          "Vérifier que Vp, Bm., BTS (et NAE si le module est connecté) brillent ; les entrées LS, lisse dégondée, BTZ2, BTS portent un contact à ouverture ou un pont, la SLZ une résistance 8,2 kΩ.",
+          "Mécanique : régler les ressorts de compensation (nombre selon la longueur de lisse, voir la fiche). Lisse déverrouillée et placée à 45° : elle doit rester en équilibre ; corriger en contractant ou décontractant les ressorts, toujours en position OUVERT (ressorts sans énergie).",
+          "Vérifier que P570 correspond au modèle de barrière (plaque d'identification) ; il y a changement de vitesse standard automatique en cas de modification."
+        ],
+        "etapes": [
+          "Régler le modèle de barrière dans P570 si la logique a été remplacée.",
+          "P101 : choisir la vitesse (0 rapide, 1 standard, 2 lente) puis valider : si le test des cellules est activé (P544 = 1), lrn1 s'affiche et le nombre de cellules est mémorisé.",
+          "P102 : mémoriser le code radio (PROG bref, « send », émettre le code ; xxxx confirme).",
+          "Régler P103 (alimentation / détection panne réseau), P104 (limitation d'ouverture) et P105 (occultation des sécurités).",
+          "Régler les durées (P301 fermeture automatique, P302 / P303 pré-avertissements) et les modes de service P500 à P550 selon l'installation.",
+          "Boucles : régler la fréquence (DIP-switch 1 à 3), les sensibilités P601-P603 et le mode P630 ou la configuration manuelle P700.",
+          "Quitter le menu en allant sur PPPP puis PROG pour enregistrer dans l'EEPROM."
+        ],
+        "apres": [
+          "Remettre le commutateur de service sur RUN.",
+          "Vérifier la fonction des éléments de sécurité (boucles, cellules, inversion de mouvement en cas d'augmentation de force) et du déverrouillage manuel (tirer le levier : la lisse se manœuvre à la main vers OUVERT ; il n'y a pas de position intermédiaire sûre).",
+          "Maintenance conseillée tous les six mois : ressorts (si un ressort est cassé, changer tous les ressorts), équilibre de la lisse, liaison équipotentielle, ancrage, vis de lisse, déverrouillage, serrage des visseries, graissage des tiges de guidage."
+        ]
+      }
+    },
+    {
+      "id": "elka-t3000-3500",
+      "nom": "T 3000 – T 3500 (MO 24)",
+      "modeles": "Barrières ELKA T 3000 (lisse 3,24 m, libre passage 3 000 mm) et T 3500 (lisse 3,74 m, libre passage 3 500 mm) — logique de commande MO 24",
+      "type": "Barrière levante de péage (T 3000 – T 3500) — logique MO 24, afficheur 4 chiffres et joystick, boucles d'induction A / B / C intégrées",
+      "source": "Manuel de montage et d'emploi ELKA, traduction française : « Barrières T 3000 – T 3500 », partie 1 Installation (V1.4 – 11.16, 48 p.) et partie 2 Logique de commande MO 24 (V1.5 – 11.16, 62 p.)",
+      "codes": [
+        {
+          "code": "eR01",
+          "type": "erreur",
+          "titre": "Lisse dégondée",
+          "action": "Le contact « lisse dégondée » (bornes 25-26) est ouvert. Contrôler le contact et le câblage ; si la lisse est réellement dégondée, la remettre en place. Selon P548 la barrière stoppe (1) ou continue de fonctionner (0) pendant que le signal est émis."
+        },
+        {
+          "code": "eR02",
+          "type": "erreur",
+          "titre": "Alimentation externe 12 V coupée (surcharge)",
+          "action": "La sortie 12 V (bornes 1-2) est coupée suite à une surcharge détectée. Contrôler les consommateurs externes et le câblage."
+        },
+        {
+          "code": "eR03",
+          "type": "erreur",
+          "titre": "Alimentation externe 24 V coupée (surcharge)",
+          "action": "Une des sorties 24 V (bornes 3-4, 5-6, 7-8) est coupée suite à une surcharge détectée. Contrôler les consommateurs externes et le câblage."
+        },
+        {
+          "code": "eR04",
+          "type": "erreur",
+          "titre": "Boucle A hors plage de fréquence",
+          "action": "La fréquence de la boucle A n'est pas dans la plage autorisée. Contrôler la boucle ; le cas échéant changer la fréquence avec le DIP-switch 1 (Hi / Lo)."
+        },
+        {
+          "code": "eR05",
+          "type": "erreur",
+          "titre": "Boucle B hors plage de fréquence",
+          "action": "Même défaut sur la boucle B. Contrôler la boucle ; le cas échéant changer la fréquence avec le DIP-switch 2."
+        },
+        {
+          "code": "eR06",
+          "type": "erreur",
+          "titre": "Boucle C hors plage de fréquence",
+          "action": "Même défaut sur la boucle C. Contrôler la boucle ; le cas échéant changer la fréquence avec le DIP-switch 3."
+        },
+        {
+          "code": "eR07",
+          "type": "erreur",
+          "titre": "Test des cellules en échec",
+          "action": "Une erreur est survenue pendant la première phase du test (l'émetteur est coupé et le récepteur ne signale pas d'obstacle dans les 2,5 s) : cellule défectueuse. Contrôler les cellules, la commande de leur alimentation (relais multifonction réglé sur « test des cellules ») et les résistances de 1 kΩ en parallèle des contacts."
+        },
+        {
+          "code": "eR08",
+          "type": "erreur",
+          "titre": "Test de la tranche de sécurité en échec",
+          "action": "Une erreur est survenue pendant le test de la tranche de sécurité (SLZ, bornes 21-22, résistance 8,2 kΩ). Contrôler la tranche de sécurité."
+        },
+        {
+          "code": "eR09",
+          "type": "erreur",
+          "titre": "Erreur sur l'entrée STOP",
+          "action": "Une erreur a été constatée à l'évaluation de l'entrée Stop : la notice indique que la logique de commande est défectueuse."
+        },
+        {
+          "code": "eR10",
+          "type": "erreur",
+          "titre": "Erreur d'écriture EEPROM",
+          "action": "Erreur à la sauvegarde des données dans l'EEPROM : la logique est défectueuse. Si l'EEPROM est défectueuse, les données d'erreur peuvent ne plus être lisibles et l'afficheur indique « eep »."
+        },
+        {
+          "code": "eR11",
+          "type": "erreur",
+          "titre": "Erreur de lecture EEPROM (somme de contrôle)",
+          "action": "Erreur à la lecture des données de l'EEPROM : les données sont perdues. Refaire l'apprentissage de la logique de commande ; si l'erreur revient, la logique est défectueuse."
+        },
+        {
+          "code": "eR12",
+          "type": "erreur",
+          "titre": "Amplificateur de mesure du courant moteur",
+          "action": "Erreur constatée sur l'amplificateur de mesure du contrôle de courant moteur : la logique de commande est défectueuse."
+        },
+        {
+          "code": "eR13",
+          "type": "erreur",
+          "titre": "Erreur de la partie puissance",
+          "action": "Erreur constatée à la partie puissance : la logique de commande est défectueuse."
+        },
+        {
+          "code": "eR14",
+          "type": "erreur",
+          "titre": "Partie puissance trop chaude",
+          "action": "La partie puissance du moteur est devenue trop chaude. La logique est bloquée jusqu'à son refroidissement. Si l'erreur survient plusieurs fois, c'est un défaut."
+        },
+        {
+          "code": "eR15",
+          "type": "erreur",
+          "titre": "Tension d'alimentation 24 V hors plage",
+          "action": "La logique surveille la tension 24 V et se bloque dès qu'elle sort de la plage admise (aussi si l'accumulateur est déchargé en secours). Contrôler le bloc d'alimentation 24 V ou charger l'accumulateur."
+        },
+        {
+          "code": "eR16",
+          "type": "erreur",
+          "titre": "Lisse manœuvrée à la main sur plus de 50 %",
+          "action": "La logique a reconnu que la lisse a été manœuvrée à la main sur plus de la moitié de sa course et se bloque. Pour effacer l'erreur : appuyer sur PROG, couper puis remettre l'alimentation, ou remettre la lisse à sa position initiale."
+        },
+        {
+          "code": "(écran éteint)",
+          "type": "afficheur",
+          "titre": "Fonctionnement normal",
+          "action": "En service l'afficheur est éteint. Le point décimal du chiffre des unités clignote au rythme des secondes (prêt au service). Le point décimal du chiffre des milliers brille si le module TCP est présent et une connexion socket est établie."
+        },
+        {
+          "code": "Poff",
+          "type": "afficheur",
+          "titre": "Panne de réseau détectée",
+          "action": "S'affiche à la détection d'une panne du réseau (P103 = 1, module ANAE connecté) : la barrière reçoit une impulsion d'ouverture et s'ouvre par ses ressorts."
+        },
+        {
+          "code": "SYNC",
+          "type": "afficheur",
+          "titre": "Cheminement de synchronisation (Auto-Sync)",
+          "action": "Avec P549 = 1 : après la mise sous tension, une fermeture est lancée automatiquement après 3 s ; les sécurités restent actives et la fermeture est répétée jusqu'à la synchronisation par coupure de force en position FERMER."
+        },
+        {
+          "code": "eep",
+          "type": "afficheur",
+          "titre": "EEPROM défectueuse",
+          "action": "Affiché quand l'EEPROM est défectueuse et que les données d'erreur ne peuvent plus être lues (voir eR10 / eR11)."
+        },
+        {
+          "code": "lrn1",
+          "type": "afficheur",
+          "titre": "Apprentissage des cellules en cours",
+          "action": "Après P101 : si le test des cellules est activé, le nombre de cellules connectées est mémorisé."
+        },
+        {
+          "code": "lrn2",
+          "type": "afficheur",
+          "titre": "Erreur pendant l'apprentissage des cellules",
+          "action": "Une erreur est survenue pendant l'apprentissage des cellules (LS) : vérifier le raccordement des cellules (1 kΩ en parallèle du contact de chaque récepteur) puis relancer par une brève pression sur PROG."
+        },
+        {
+          "code": "lrn3",
+          "type": "afficheur",
+          "titre": "Une cellule signale un obstacle",
+          "action": "Pendant l'apprentissage une cellule signale un obstacle : dégager le champ des cellules puis relancer par une brève pression sur PROG."
+        },
+        {
+          "code": "send",
+          "type": "afficheur",
+          "titre": "Attente d'un code radio (P102)",
+          "action": "Émettre le code avec la touche de la télécommande codée ; xxxx s'affiche quand le code est reçu. Maintenu 5 s sur PROG : le code est effacé (affichage « ---- »)."
+        },
+        {
+          "code": "hhhh / ----",
+          "type": "afficheur",
+          "titre": "Code radio mémorisé / pas de code",
+          "action": "Affichage à l'entrée de P102 : hhhh = un code radio est mémorisé, ---- = aucun code."
+        },
+        {
+          "code": "re-0 · re-1",
+          "type": "afficheur",
+          "titre": "Restauration des réglages (P801 / P802)",
+          "action": "re-0 : retour au réglage d'usine (maintenir PROG 5 s, l'affichage passe à 0000). re-1 : retour à la configuration client (maintenir PROG 5 s, l'affichage passe à 0001)."
+        },
+        {
+          "code": "Vp",
+          "type": "led",
+          "titre": "Tension d'alimentation (jaune)",
+          "action": "Brille si la tension d'alimentation est présente."
+        },
+        {
+          "code": "LS",
+          "type": "led",
+          "titre": "Cellules (vert)",
+          "action": "Brille si le contact LS est ouvert."
+        },
+        {
+          "code": "Bm.",
+          "type": "led",
+          "titre": "Lisse dégondée (vert)",
+          "action": "Brille si le contact lisse dégondée est fermé (état normal)."
+        },
+        {
+          "code": "BT*",
+          "type": "led",
+          "titre": "Entrée BT / BTA3 / BTZ1B (vert)",
+          "action": "Brille si le contact de l'entrée configurable est fermé."
+        },
+        {
+          "code": "BTZ1A",
+          "type": "led",
+          "titre": "Touche FERMER 1A (vert)",
+          "action": "Brille si le contact BTZ1A est fermé."
+        },
+        {
+          "code": "BTA1",
+          "type": "led",
+          "titre": "Touche OUVRIR 1 (vert)",
+          "action": "Brille si le contact BTA1 est fermé."
+        },
+        {
+          "code": "BTZ2",
+          "type": "led",
+          "titre": "Touche FERMER 2 (vert)",
+          "action": "Brille si le contact BTZ2 est fermé (contact à ouverture : doit briller au repos)."
+        },
+        {
+          "code": "BTA2",
+          "type": "led",
+          "titre": "Touche OUVRIR 2 (vert)",
+          "action": "Brille si le contact BTA2 est fermé."
+        },
+        {
+          "code": "BTS",
+          "type": "led",
+          "titre": "Touche STOP (vert)",
+          "action": "Brille si le contact BTS est fermé (contact à ouverture : doit briller au repos)."
+        },
+        {
+          "code": "NAE",
+          "type": "led",
+          "titre": "Détection de panne réseau (vert)",
+          "action": "Brille si le module ANAE est connecté et que la tension d'alimentation est présente."
+        },
+        {
+          "code": "SLZ",
+          "type": "led",
+          "titre": "Tranche de sécurité (rouge)",
+          "action": "Brille si la tranche de sécurité est activée."
+        },
+        {
+          "code": "IL-A · IL-B · IL-C",
+          "type": "led",
+          "titre": "Boucles d'induction (rouge)",
+          "action": "Brille si la boucle correspondante est occupée. Clignote en cas d'erreur de la boucle."
+        },
+        {
+          "code": "RADIO",
+          "type": "led",
+          "titre": "Radio (rouge)",
+          "action": "Brille si le code radio mémorisé est reçu."
+        },
+        {
+          "code": "BRAKE",
+          "type": "led",
+          "titre": "Frein (rouge)",
+          "action": "Brille si le moteur est freiné."
+        },
+        {
+          "code": "LED1 · LED2",
+          "type": "led",
+          "titre": "Réserve (rouge)",
+          "action": "Réservées, sans fonction décrite."
+        },
+        {
+          "code": "Prêt à l'emploi",
+          "type": "led",
+          "titre": "LED à allumer pour une barrière prête",
+          "action": "Pour indiquer que la barrière est opérationnelle : Vp, Bm., BTS et NAE (si la détection de panne réseau est connectée) doivent briller. Après installation, Vp, BTZ2, BTS et Bm. doivent briller."
+        },
+        {
+          "code": "Barrière sans réaction",
+          "type": "symptome",
+          "titre": "À la mise en service, rien ne bouge",
+          "action": "Contrôler que le commutateur de service est sur RUN (en SERVICE, seuls le joystick et la manœuvre manuelle fonctionnent : radio, BUS, boucles et commandes externes sont ignorés). Contrôler les LED Vp, Bm., BTS (et NAE) allumées. Les entrées LS (23-24), lisse dégondée (25-26), BTZ2 (41-42), BTS (43-44) doivent porter un contact à ouverture ou un pont, et la SLZ (21-22) une résistance de 8,2 kΩ."
+        },
+        {
+          "code": "Ne ferme pas",
+          "type": "symptome",
+          "titre": "La barrière ne se ferme pas",
+          "action": "Les sécurités bloquent la fermeture : SLZ activée, cellules (LS ouvert), boucle de sécurité occupée, BTZ1A / BTZ1B maintenu fermé en position fermée (verrouillage), commande d'ouverture BTA1 / BTA2 maintenue. Regarder les LED correspondantes. Vérifier aussi P543 / P545 selon la réaction voulue."
+        },
+        {
+          "code": "S'ouvre seule après coupure",
+          "type": "symptome",
+          "titre": "Elle s'ouvre à chaque coupure de courant",
+          "action": "Avec P103 = 1 (détection de panne réseau, module ANAE), la barrière reçoit une impulsion d'ouverture et s'ouvre par ses ressorts : c'est le fonctionnement prévu."
+        },
+        {
+          "code": "Se ferme au redémarrage",
+          "type": "symptome",
+          "titre": "Elle se ferme après la mise sous tension",
+          "action": "Fermeture automatique active (P301 > 0 s) ou Auto-Sync (P549 = 1, affichage SYNC) : la barrière ouverte se ferme après la durée de maintien à l'ouverture ou lance une fermeture de synchronisation."
+        },
+        {
+          "code": "Lisse non équilibrée",
+          "type": "symptome",
+          "titre": "La lisse ne reste pas à 45° / bat sur les butées",
+          "action": "Contrôler les ressorts de compensation (si un ressort est cassé, changer tous les ressorts) et leur nombre selon la longueur de lisse. Lisse libérée par le déverrouillage et placée à 45° : elle doit s'équilibrer seule ; corriger en contractant ou décontractant les ressorts (écrou de serrage, sens horaire = contracter)."
+        }
+      ],
+      "parametres": {
+        "intro": "Logique MO 24 : afficheur 4 × 7 segments et joystick. Les valeurs « Usine » sont celles du tableau de la notice (P801 les rétablit). La liste des paramètres est la même pour toutes les barrières ELKA gérées par la MO 24 ; les paramètres modifiés par le BUS ne sont pas bloqués par le mot de passe.",
+        "navigation": [
+          "Joystick : UP (vers le haut), DOWN (vers le bas), PROG (appui au centre).",
+          "Entrer dans le menu : maintenir PROG environ 2 s, l'affichage montre P100. UP / DOWN font défiler le menu principal (P100, P200… P800) ; PROG ouvre le sous-menu (P101…), UP / DOWN défilent, PROG ouvre le réglage, PROG repasse au point suivant.",
+          "Sortie d'un sous-menu : aller avec UP / DOWN sur la sortie (P1PP, P2PP…) puis PROG. Sortie du menu principal : aller sur PPPP puis PROG : les données sont enregistrées dans l'EEPROM.",
+          "Saisie d'un nombre : UP +1, DOWN −1 ; maintenu, défilement par 10, puis par 100 toutes les 0,4 s, puis par 1000 après 4 s. Dépassement : la valeur revient au maximum admis.",
+          "Pendant les réglages, passer le commutateur de service sur SERVICE (pour éviter une manœuvre imprévue) puis le remettre sur RUN.",
+          "Mot de passe (P550) : 3552 = pas de mot de passe ; tout autre nombre active la protection (tout est alors consultable mais non modifiable sauf P550). Le réglage d'usine inchangeable pour désactiver est 3552."
+        ],
+        "groupes": [
+          {
+            "nom": "P100 · Fonctions de base",
+            "items": [
+              {
+                "code": "P101",
+                "def": "1",
+                "titre": "Vitesse de la barrière et apprentissage des cellules",
+                "valeurs": [
+                  [
+                    "0",
+                    "Rapide"
+                  ],
+                  [
+                    "1",
+                    "Standard (usine)"
+                  ]
+                ],
+                "note": "Après validation, « lrn1 » s'affiche si le test des cellules est activé : le nombre de cellules connectées est mémorisé. En cas d'erreur, brève pression sur PROG pour relancer ; maintenir PROG 5 s pour annuler. Un changement de modèle (P570) remet la vitesse standard."
+              },
+              {
+                "code": "P102",
+                "def": "—",
+                "titre": "Apprentissage / effacement du code radio",
+                "valeurs": [
+                  [
+                    "PROG bref",
+                    "send : émettre le code ; xxxx quand reçu"
+                  ],
+                  [
+                    "PROG maintenu",
+                    "send puis ---- après 5 s : code effacé"
+                  ],
+                  [
+                    "PROG bref 2 fois",
+                    "Annuler sans changer"
+                  ]
+                ],
+                "note": "Usine : aucun code (-+-+-+-+-)."
+              },
+              {
+                "code": "P103",
+                "def": "0",
+                "titre": "Tension d'alimentation",
+                "valeurs": [
+                  [
+                    "0",
+                    "Normal : 24 V DC par le bloc d'alimentation (arrêt en cas de panne réseau) ; avec accumulateur optionnel, la barrière tient un court moment en secours"
+                  ],
+                  [
+                    "1",
+                    "Avec détection de panne réseau (module ANAE) : impulsion d'ouverture à la coupure, ouverture par ressorts, affichage Poff"
+                  ]
+                ]
+              },
+              {
+                "code": "P104",
+                "def": "0",
+                "titre": "Limitation d'ouverture",
+                "valeurs": [
+                  [
+                    "0",
+                    "90° (complètement ouverte)"
+                  ],
+                  [
+                    "1",
+                    "env. 85°"
+                  ],
+                  [
+                    "2",
+                    "env. 80°"
+                  ],
+                  [
+                    "3",
+                    "env. 75°"
+                  ],
+                  [
+                    "4",
+                    "env. 70°"
+                  ],
+                  [
+                    "5",
+                    "env. 65°"
+                  ],
+                  [
+                    "6",
+                    "env. 60°"
+                  ],
+                  [
+                    "7",
+                    "env. 55°"
+                  ]
+                ],
+                "note": "Utile avec un plafond bas ou un obstacle. Le moteur maintient la lisse dans cette position."
+              },
+              {
+                "code": "P105",
+                "def": "0",
+                "titre": "Occultation des sécurités avant la position FERMER",
+                "valeurs": [
+                  [
+                    "0",
+                    "Sécurités évaluées à chaque position"
+                  ],
+                  [
+                    "1",
+                    "Non évaluées dans les 10° avant la fermeture"
+                  ],
+                  [
+                    "2",
+                    "Non évaluées dans les 20° avant la fermeture"
+                  ],
+                  [
+                    "3",
+                    "Non évaluées dans les 30° avant la fermeture"
+                  ]
+                ],
+                "note": "Concerne cellules (LS), tranche de sécurité (SLZ) et sécurisation par boucle."
+              }
+            ]
+          },
+          {
+            "nom": "P200 · Système BUS",
+            "items": [
+              {
+                "code": "P201",
+                "def": "16",
+                "titre": "Adresse RS485 de la barrière",
+                "valeurs": [
+                  [
+                    "16 à 254",
+                    "En décimal (0x10 à 0xFE)"
+                  ]
+                ]
+              },
+              {
+                "code": "P210 à P213",
+                "def": "192 · 168 · 0 · 200",
+                "titre": "Adresse IP (octets 1 à 4)",
+                "valeurs": [],
+                "note": "Exemple 192.168.0.200 : P210 = 192, P211 = 168, P212 = 0, P213 = 200."
+              },
+              {
+                "code": "P220 à P223",
+                "def": "192 · 168 · 0 · 1",
+                "titre": "Adresse passerelle (octets 1 à 4)",
+                "valeurs": []
+              },
+              {
+                "code": "P230 à P233",
+                "def": "255 · 255 · 255 · 0",
+                "titre": "Masque de sous-réseau (octets 1 à 4)",
+                "valeurs": []
+              },
+              {
+                "code": "P240 · P241",
+                "def": "52 · 719",
+                "titre": "Numéro de port logiciel (52719 = 0xCDEF)",
+                "valeurs": [],
+                "note": "P240 = dizaines de mille et milliers (00 à 65), P241 = centaines, dizaines, unités (000 à 999). Pour 52719 : P240 = 52, P241 = 719. Le port est limité à 65535 (P241 est corrigé automatiquement)."
+              }
+            ]
+          },
+          {
+            "nom": "P300 · Durées",
+            "items": [
+              {
+                "code": "P301",
+                "def": "0,0 s",
+                "titre": "Durée de maintien à l'ouverture (fermeture automatique)",
+                "valeurs": [
+                  [
+                    "0,0 s",
+                    "Fermeture automatique non activée"
+                  ],
+                  [
+                    "0,1 à 655,0 s",
+                    "Durée avant fermeture automatique"
+                  ]
+                ],
+                "note": "Non redéclenchée par BTA1 à BTA3. Un stop bloque la fermeture automatique jusqu'à la commande suivante. Après mise sous tension ou fin de programmation, la barrière ouverte se ferme après la durée."
+              },
+              {
+                "code": "P302",
+                "def": "0,0 s",
+                "titre": "Pré-avertissement avant l'ouverture",
+                "valeurs": [
+                  [
+                    "0,0 s",
+                    "Non activé"
+                  ],
+                  [
+                    "0,1 à 655,0 s",
+                    "Durée"
+                  ]
+                ]
+              },
+              {
+                "code": "P303",
+                "def": "0,0 s",
+                "titre": "Pré-avertissement avant la fermeture",
+                "valeurs": [
+                  [
+                    "0,0 s",
+                    "Non activé"
+                  ],
+                  [
+                    "0,1 à 655,0 s",
+                    "Durée"
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "nom": "P400 · Compteurs",
+            "items": [
+              {
+                "code": "P401",
+                "def": "250 (= 250 000)",
+                "titre": "Intervalle de maintenance",
+                "valeurs": [
+                  [
+                    "1000 à 9 999 000",
+                    "À régler en milliers de mouvements (valeur × 1000)"
+                  ]
+                ],
+                "note": "La logique a aussi un compteur d'heures de service lisible par le BUS."
+              },
+              {
+                "code": "P402",
+                "def": "—",
+                "titre": "Compteur de maintenance (affichage / remise à zéro)",
+                "valeurs": [
+                  [
+                    "PROG bref",
+                    "Quitter"
+                  ],
+                  [
+                    "PROG maintenu 5 s",
+                    "Remise à zéro puis sortie"
+                  ]
+                ],
+                "note": "Affichage × 1000 : 3456 = entre 3 456 000 et 3 457 000 mouvements."
+              },
+              {
+                "code": "P410",
+                "def": "0",
+                "titre": "Compteur de commande : limite inférieure",
+                "valeurs": [
+                  [
+                    "−9 à 0",
+                    "Chaque commande de fermeture décrémente"
+                  ]
+                ],
+                "note": "Passage de 1 à 0 : fermeture ; de 0 à 1 : ouverture."
+              },
+              {
+                "code": "P411",
+                "def": "1",
+                "titre": "Compteur de commande : limite supérieure",
+                "valeurs": [
+                  [
+                    "1 à 9",
+                    "Chaque commande d'ouverture incrémente"
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "nom": "P500 · Relais multifonctions",
+            "items": [
+              {
+                "code": "P501",
+                "def": "0",
+                "titre": "Relais multifonction 1 (bornes 9-10)",
+                "valeurs": [
+                  [
+                    "0",
+                    "Désactivé"
+                  ],
+                  [
+                    "1",
+                    "Dysfonctionnement : actif si un code d'erreur est affiché"
+                  ],
+                  [
+                    "2",
+                    "Maintenance : actif si le compteur dépasse l'intervalle réglé"
+                  ],
+                  [
+                    "3",
+                    "Information lisse dégondée : actif à l'ouverture du contact « lisse dégondée »"
+                  ],
+                  [
+                    "4",
+                    "Mode tandem : actif si la barrière n'est pas en position FERMETURE (déjà actif au pré-avertissement d'ouverture)"
+                  ],
+                  [
+                    "5",
+                    "Feu rouge (réglage P510-P516)"
+                  ],
+                  [
+                    "6",
+                    "Feu vert (réglage P520-P526)"
+                  ],
+                  [
+                    "7",
+                    "Feu d'avertissement (réglage P530-P536)"
+                  ],
+                  [
+                    "8",
+                    "Illumination de la lisse par LED : actif en position FERMER, éteint en OUVERT, clignote entre les deux"
+                  ],
+                  [
+                    "9",
+                    "Position finale OUVERTURE : actif si la barrière est ouverte (déjà coupé pendant le pré-avertissement de fermeture)"
+                  ],
+                  [
+                    "10",
+                    "Position FERMER / lyre de repos magnétique : actif si la barrière est fermée (coupé dès le pré-avertissement d'ouverture ; avec une lyre magnétique P302 doit être ≥ 1,5 s)"
+                  ],
+                  [
+                    "11",
+                    "Relais BUS : piloté par le BUS (marche / arrêt, impulsion par seconde)"
+                  ],
+                  [
+                    "12",
+                    "Test des cellules : commute l'alimentation des émetteurs pour le test"
+                  ],
+                  [
+                    "13",
+                    "Déverrouillage : commute si la lisse est manœuvrée à la main sur plus de 50 %"
+                  ],
+                  [
+                    "14",
+                    "Présence : actif si l'évaluation des boucles signale « présence »"
+                  ],
+                  [
+                    "15 · 19 · 23",
+                    "Boucle A · B · C occupée (statique)"
+                  ],
+                  [
+                    "16 · 20 · 24",
+                    "État de la boucle A · B · C : en service, non défectueuse, non occupée"
+                  ],
+                  [
+                    "17 · 21 · 25",
+                    "Boucle A · B · C occupée (impulsion)"
+                  ],
+                  [
+                    "18 · 22 · 26",
+                    "Libération de la boucle A · B · C (impulsion)"
+                  ],
+                  [
+                    "27",
+                    "Comptage +1 (impulsion)"
+                  ],
+                  [
+                    "28",
+                    "Comptage −1 (impulsion)"
+                  ],
+                  [
+                    "29",
+                    "Logique de direction : passage venant de la droite (impulsion)"
+                  ],
+                  [
+                    "30",
+                    "Logique de direction : passage venant de la gauche (impulsion)"
+                  ],
+                  [
+                    "31",
+                    "Actif si la barrière est fermée (coupé dès le pré-avertissement d'ouverture et si BTS est ouvert) : pour lyre de repos magnétique"
+                  ],
+                  [
+                    "32",
+                    "Actif si une connexion TCP-SOCKET est établie"
+                  ],
+                  [
+                    "33",
+                    "Actif si la détection de panne réseau est connectée et le réseau présent (le relais retombe sur panne : repère « service par accumulateur »)"
+                  ],
+                  [
+                    "34",
+                    "Avertisseur sonore UL 325 : actif 5 min après une coupure de force à l'ouverture / fermeture ou une détection LS / SLZ à la fermeture"
+                  ]
+                ],
+                "note": "Même liste de modes pour P502 à P506 et P560 à P567. Les relais sont indépendants : plusieurs peuvent avoir la même fonction. Contact libre de potentiel, 24 V / 1 A."
+              },
+              {
+                "code": "P502",
+                "def": "0",
+                "titre": "Relais multifonction 2 (bornes 11-12)",
+                "valeurs": [],
+                "note": "Mêmes modes que P501."
+              },
+              {
+                "code": "P503",
+                "def": "0",
+                "titre": "Relais multifonction 3 (bornes 13-14)",
+                "valeurs": [],
+                "note": "Mêmes modes que P501."
+              },
+              {
+                "code": "P504",
+                "def": "12",
+                "titre": "Relais multifonction 4 (bornes 15-16)",
+                "valeurs": [],
+                "note": "Mêmes modes que P501. Usine : 12 = test des cellules."
+              },
+              {
+                "code": "P505",
+                "def": "5",
+                "titre": "Relais multifonction 5 (bornes 17-18)",
+                "valeurs": [],
+                "note": "Mêmes modes que P501. Usine : 5 = feu rouge."
+              },
+              {
+                "code": "P506",
+                "def": "6",
+                "titre": "Relais multifonction 6 (bornes 19-20)",
+                "valeurs": [],
+                "note": "Mêmes modes que P501. Usine : 6 = feu vert."
+              },
+              {
+                "code": "P560 à P567",
+                "def": "0",
+                "titre": "Relais multifonctions 7 à 14 (carte d'extension en option)",
+                "valeurs": [],
+                "note": "Platine d'extension de 8 relais en option ; mêmes modes que P501 (P560 = Multi7 … P567 = Multi14)."
+              }
+            ]
+          },
+          {
+            "nom": "P510 à P516 · Feu rouge",
+            "items": [
+              {
+                "code": "P510",
+                "def": "1",
+                "titre": "Feu rouge — position finale FERMER",
+                "valeurs": [
+                  [
+                    "0",
+                    "Hors service"
+                  ],
+                  [
+                    "1",
+                    "En service"
+                  ],
+                  [
+                    "2",
+                    "Clignotement"
+                  ]
+                ]
+              },
+              {
+                "code": "P511",
+                "def": "2",
+                "titre": "Feu rouge — pré-avertissement avant ouverture",
+                "valeurs": [
+                  [
+                    "0",
+                    "Hors service"
+                  ],
+                  [
+                    "1",
+                    "En service"
+                  ],
+                  [
+                    "2",
+                    "Clignotement"
+                  ]
+                ]
+              },
+              {
+                "code": "P512",
+                "def": "2",
+                "titre": "Feu rouge — pré-avertissement avant fermeture",
+                "valeurs": [
+                  [
+                    "0",
+                    "Hors service"
+                  ],
+                  [
+                    "1",
+                    "En service"
+                  ],
+                  [
+                    "2",
+                    "Clignotement"
+                  ]
+                ]
+              },
+              {
+                "code": "P513",
+                "def": "1",
+                "titre": "Feu rouge — pendant l'ouverture",
+                "valeurs": [
+                  [
+                    "0",
+                    "Hors service"
+                  ],
+                  [
+                    "1",
+                    "En service"
+                  ],
+                  [
+                    "2",
+                    "Clignotement"
+                  ]
+                ]
+              },
+              {
+                "code": "P514",
+                "def": "1",
+                "titre": "Feu rouge — pendant la fermeture",
+                "valeurs": [
+                  [
+                    "0",
+                    "Hors service"
+                  ],
+                  [
+                    "1",
+                    "En service"
+                  ],
+                  [
+                    "2",
+                    "Clignotement"
+                  ]
+                ]
+              },
+              {
+                "code": "P515",
+                "def": "1",
+                "titre": "Feu rouge — stop intermédiaire",
+                "valeurs": [
+                  [
+                    "0",
+                    "Hors service"
+                  ],
+                  [
+                    "1",
+                    "En service"
+                  ],
+                  [
+                    "2",
+                    "Clignotement"
+                  ]
+                ]
+              },
+              {
+                "code": "P516",
+                "def": "0",
+                "titre": "Feu rouge — position finale OUVERT",
+                "valeurs": [
+                  [
+                    "0",
+                    "Hors service"
+                  ],
+                  [
+                    "1",
+                    "En service"
+                  ],
+                  [
+                    "2",
+                    "Clignotement"
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "nom": "P520 à P526 · Feu vert",
+            "items": [
+              {
+                "code": "P520",
+                "def": "0",
+                "titre": "Feu vert — position finale FERMER",
+                "valeurs": [
+                  [
+                    "0",
+                    "Hors service"
+                  ],
+                  [
+                    "1",
+                    "En service"
+                  ],
+                  [
+                    "2",
+                    "Clignotement"
+                  ]
+                ]
+              },
+              {
+                "code": "P521",
+                "def": "0",
+                "titre": "Feu vert — pré-avertissement avant ouverture",
+                "valeurs": [
+                  [
+                    "0",
+                    "Hors service"
+                  ],
+                  [
+                    "1",
+                    "En service"
+                  ],
+                  [
+                    "2",
+                    "Clignotement"
+                  ]
+                ]
+              },
+              {
+                "code": "P522",
+                "def": "0",
+                "titre": "Feu vert — pré-avertissement avant fermeture",
+                "valeurs": [
+                  [
+                    "0",
+                    "Hors service"
+                  ],
+                  [
+                    "1",
+                    "En service"
+                  ],
+                  [
+                    "2",
+                    "Clignotement"
+                  ]
+                ]
+              },
+              {
+                "code": "P523",
+                "def": "0",
+                "titre": "Feu vert — pendant l'ouverture",
+                "valeurs": [
+                  [
+                    "0",
+                    "Hors service"
+                  ],
+                  [
+                    "1",
+                    "En service"
+                  ],
+                  [
+                    "2",
+                    "Clignotement"
+                  ]
+                ]
+              },
+              {
+                "code": "P524",
+                "def": "0",
+                "titre": "Feu vert — pendant la fermeture",
+                "valeurs": [
+                  [
+                    "0",
+                    "Hors service"
+                  ],
+                  [
+                    "1",
+                    "En service"
+                  ],
+                  [
+                    "2",
+                    "Clignotement"
+                  ]
+                ]
+              },
+              {
+                "code": "P525",
+                "def": "0",
+                "titre": "Feu vert — stop intermédiaire",
+                "valeurs": [
+                  [
+                    "0",
+                    "Hors service"
+                  ],
+                  [
+                    "1",
+                    "En service"
+                  ],
+                  [
+                    "2",
+                    "Clignotement"
+                  ]
+                ]
+              },
+              {
+                "code": "P526",
+                "def": "1",
+                "titre": "Feu vert — position finale OUVERT",
+                "valeurs": [
+                  [
+                    "0",
+                    "Hors service"
+                  ],
+                  [
+                    "1",
+                    "En service"
+                  ],
+                  [
+                    "2",
+                    "Clignotement"
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "nom": "P530 à P536 · Feu d'avertissement",
+            "items": [
+              {
+                "code": "P530",
+                "def": "0",
+                "titre": "Feu d'avertissement — position finale FERMER",
+                "valeurs": [
+                  [
+                    "0",
+                    "Hors service"
+                  ],
+                  [
+                    "1",
+                    "En service"
+                  ],
+                  [
+                    "2",
+                    "Clignotement"
+                  ]
+                ]
+              },
+              {
+                "code": "P531",
+                "def": "1",
+                "titre": "Feu d'avertissement — pré-avertissement avant ouverture",
+                "valeurs": [
+                  [
+                    "0",
+                    "Hors service"
+                  ],
+                  [
+                    "1",
+                    "En service"
+                  ],
+                  [
+                    "2",
+                    "Clignotement"
+                  ]
+                ]
+              },
+              {
+                "code": "P532",
+                "def": "1",
+                "titre": "Feu d'avertissement — pré-avertissement avant fermeture",
+                "valeurs": [
+                  [
+                    "0",
+                    "Hors service"
+                  ],
+                  [
+                    "1",
+                    "En service"
+                  ],
+                  [
+                    "2",
+                    "Clignotement"
+                  ]
+                ]
+              },
+              {
+                "code": "P533",
+                "def": "1",
+                "titre": "Feu d'avertissement — pendant l'ouverture",
+                "valeurs": [
+                  [
+                    "0",
+                    "Hors service"
+                  ],
+                  [
+                    "1",
+                    "En service"
+                  ],
+                  [
+                    "2",
+                    "Clignotement"
+                  ]
+                ]
+              },
+              {
+                "code": "P534",
+                "def": "1",
+                "titre": "Feu d'avertissement — pendant la fermeture",
+                "valeurs": [
+                  [
+                    "0",
+                    "Hors service"
+                  ],
+                  [
+                    "1",
+                    "En service"
+                  ],
+                  [
+                    "2",
+                    "Clignotement"
+                  ]
+                ]
+              },
+              {
+                "code": "P535",
+                "def": "0",
+                "titre": "Feu d'avertissement — stop intermédiaire",
+                "valeurs": [
+                  [
+                    "0",
+                    "Hors service"
+                  ],
+                  [
+                    "1",
+                    "En service"
+                  ],
+                  [
+                    "2",
+                    "Clignotement"
+                  ]
+                ]
+              },
+              {
+                "code": "P536",
+                "def": "0",
+                "titre": "Feu d'avertissement — position finale OUVERT",
+                "valeurs": [
+                  [
+                    "0",
+                    "Hors service"
+                  ],
+                  [
+                    "1",
+                    "En service"
+                  ],
+                  [
+                    "2",
+                    "Clignotement"
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "nom": "P540 à P550 · Modes de service",
+            "items": [
+              {
+                "code": "P540",
+                "def": "0",
+                "titre": "Fonction de l'entrée BT / BTA3 / BTZ1B (bornes 33-34)",
+                "valeurs": [
+                  [
+                    "0",
+                    "BT : bouton à séquences logiques (ouvre ; ferme si ouverte et fermeture automatique active ou comptage désactivé)"
+                  ],
+                  [
+                    "1",
+                    "BTA3 : bouton OUVRIR"
+                  ],
+                  [
+                    "2",
+                    "BTZ1B : bouton FERMER"
+                  ]
+                ]
+              },
+              {
+                "code": "P541",
+                "def": "1",
+                "titre": "Contrôle de la force",
+                "valeurs": [
+                  [
+                    "0",
+                    "Stop à la rencontre d'un obstacle, suivi d'une ouverture"
+                  ],
+                  [
+                    "1",
+                    "Stop à la rencontre d'un obstacle"
+                  ]
+                ]
+              },
+              {
+                "code": "P542",
+                "def": "0",
+                "titre": "Réaction aux cellules (LS) en fermeture",
+                "valeurs": [
+                  [
+                    "0",
+                    "Stop suivi d'une ouverture immédiate"
+                  ],
+                  [
+                    "1",
+                    "Stop"
+                  ]
+                ]
+              },
+              {
+                "code": "P543",
+                "def": "0",
+                "titre": "Fermeture automatique par cellules",
+                "valeurs": [
+                  [
+                    "0",
+                    "Hors service"
+                  ],
+                  [
+                    "1",
+                    "En service : fermeture dès que l'obstacle quitte le champ des cellules"
+                  ]
+                ]
+              },
+              {
+                "code": "P544",
+                "def": "0",
+                "titre": "Test des cellules",
+                "valeurs": [
+                  [
+                    "0",
+                    "Hors service"
+                  ],
+                  [
+                    "1",
+                    "En service"
+                  ]
+                ],
+                "note": "Test en deux phases : émetteur coupé (le récepteur doit signaler un obstacle sous 2,5 s, sinon eR07), puis émetteur remis (le récepteur ne doit plus signaler d'obstacle, sinon la fermeture est interrompue sans code). Jusqu'à 6 cellules en série, une résistance de 1 kΩ en parallèle du contact de chaque récepteur, alimentation émetteurs commutée par un relais réglé sur le mode 12. Faire ensuite P101 pour mémoriser le nombre de cellules."
+              },
+              {
+                "code": "P545",
+                "def": "0",
+                "titre": "Sécurisation par boucle",
+                "valeurs": [
+                  [
+                    "0",
+                    "Stop suivi d'une ouverture immédiate"
+                  ],
+                  [
+                    "1",
+                    "Stop (« FREEZE ») : attribuer en plus « fermer à la libération de la boucle » dans P703 / P713 / P723"
+                  ]
+                ]
+              },
+              {
+                "code": "P546",
+                "def": "0",
+                "titre": "Fermeture immédiate",
+                "valeurs": [
+                  [
+                    "0",
+                    "Commande de fermeture mémorisée, exécutée après la position OUVERT"
+                  ],
+                  [
+                    "1",
+                    "Exécutée tout de suite : stop puis fermeture immédiate"
+                  ]
+                ]
+              },
+              {
+                "code": "P547",
+                "def": "0",
+                "titre": "Service homme mort",
+                "valeurs": [
+                  [
+                    "0",
+                    "Auto-maintien"
+                  ],
+                  [
+                    "1",
+                    "Homme mort : ouvre / ferme seulement tant que la commande (BTA1-3 / BTZ1A-1B-2 ou niveau BUS) est maintenue"
+                  ]
+                ],
+                "note": "Les sécurités LS, SLZ, force et boucles restent actives à la fermeture."
+              },
+              {
+                "code": "P548",
+                "def": "0",
+                "titre": "Fonction lisse dégondée",
+                "valeurs": [
+                  [
+                    "0",
+                    "Pas de stop (code d'erreur seulement)"
+                  ],
+                  [
+                    "1",
+                    "Stop à la signalisation lisse dégondée"
+                  ]
+                ]
+              },
+              {
+                "code": "P549",
+                "def": "0",
+                "titre": "Auto-Sync",
+                "valeurs": [
+                  [
+                    "0",
+                    "Sans"
+                  ],
+                  [
+                    "1",
+                    "Avec : fermeture de synchronisation après mise sous tension (affichage SYNC)"
+                  ]
+                ],
+                "note": "Obligatoire avec la fonction de boucle « Ouvrir et sécuriser » (P702 / P712 / P722)."
+              },
+              {
+                "code": "P550",
+                "def": "3552",
+                "titre": "Protection par mot de passe",
+                "valeurs": [
+                  [
+                    "3552",
+                    "Aucun mot de passe"
+                  ],
+                  [
+                    "autre nombre",
+                    "Mot de passe actif (modifs bloquées sauf P550)"
+                  ]
+                ]
+              },
+              {
+                "code": "P570",
+                "def": "7",
+                "titre": "Série de barrière",
+                "valeurs": [
+                  [
+                    "1",
+                    "T 3000"
+                  ],
+                  [
+                    "2",
+                    "T 3500"
+                  ],
+                  [
+                    "3 à 7",
+                    "P 2500 à P 5000 (notice P)"
+                  ]
+                ],
+                "note": "Livrée, la barrière est préréglée selon la plaque d'identification ; la valeur « 7 » du tableau des réglages d'usine de la notice correspond à une P 5000. À régler après un changement ou un échange de logique ; la vitesse repasse en standard. Changer de modèle impose d'adapter la lisse, le type et le nombre de ressorts."
+              }
+            ]
+          },
+          {
+            "nom": "P600 · Boucles d'induction",
+            "items": [
+              {
+                "code": "DIP 1 · 2 · 3",
+                "def": "OFF",
+                "titre": "Fréquence des boucles A · B · C",
+                "valeurs": [
+                  [
+                    "OFF",
+                    "Fréquence haute (Hi)"
+                  ],
+                  [
+                    "ON",
+                    "Fréquence basse (Lo)"
+                  ]
+                ],
+                "note": "À changer si une autre boucle proche travaille sur la même fréquence. Boucle : inductance admise 30 à 450 µH (conseillée 50 à 300 µH), résistance < 8 Ω amenée incluse."
+              },
+              {
+                "code": "P601 · P602 · P603",
+                "def": "4",
+                "titre": "Sensibilité boucle A · B · C",
+                "valeurs": [
+                  [
+                    "0 à 7",
+                    "8 niveaux ; plus la valeur est haute, plus la boucle est sensible (la notice ne détaille pas l'échelle)"
+                  ]
+                ]
+              },
+              {
+                "code": "P610 · P611 · P612",
+                "def": "3",
+                "titre": "Durée de maintien « occupé » boucle A · B · C",
+                "valeurs": [
+                  [
+                    "0",
+                    "5 minutes"
+                  ],
+                  [
+                    "1",
+                    "30 minutes"
+                  ],
+                  [
+                    "2",
+                    "1 heure"
+                  ],
+                  [
+                    "3",
+                    "∞ (pas de nouvelle synchronisation)"
+                  ]
+                ],
+                "note": "Passé ce délai la boucle se resynchronise et signale « non occupée » même si le véhicule est dessus. Attention avec « fermer à la libération » (P703 / P713 / P723) : la barrière se ferme seule après la resynchronisation."
+              },
+              {
+                "code": "P620 · P621 · P622",
+                "def": "—",
+                "titre": "Compteur de synchronisations boucle A · B · C",
+                "valeurs": [],
+                "note": "Compte jusqu'à 9999. Maintenir PROG 5 s pour effacer et quitter."
+              },
+              {
+                "code": "P630",
+                "def": "0",
+                "titre": "Mode de service prédéfini des boucles",
+                "valeurs": [
+                  [
+                    "0",
+                    "Toutes les boucles hors service"
+                  ],
+                  [
+                    "1",
+                    "Mode 1 : sécurisation et fermeture avec une boucle"
+                  ],
+                  [
+                    "2",
+                    "Mode 2 : sécurisation et fermeture avec une boucle (A et B)"
+                  ],
+                  [
+                    "3",
+                    "Mode 3 : ouverture, sécurisation et fermeture avec deux boucles"
+                  ],
+                  [
+                    "4",
+                    "Mode 4 : présence, sécurisation et fermeture avec deux boucles"
+                  ],
+                  [
+                    "5",
+                    "Mode 5 : présence, ouverture et fermeture avec trois boucles"
+                  ],
+                  [
+                    "6",
+                    "Mode 6 : ouverture avec logique de direction, sécurisation et fermeture avec trois boucles"
+                  ],
+                  [
+                    "7",
+                    "Mode 7 : ouverture, sécurisation et fermeture avec trois boucles"
+                  ],
+                  [
+                    "8",
+                    "Mode 8 : présence, sécurisation et fermeture avec trois boucles"
+                  ],
+                  [
+                    "9",
+                    "Affiché : la configuration actuelle ne correspond à aucun mode prédéfini"
+                  ]
+                ],
+                "note": "La notice dit « mémorisées sur la logique MO 64 » (probable coquille pour MO 24)."
+              }
+            ]
+          },
+          {
+            "nom": "P700 · Boucles en réglage manuel",
+            "items": [
+              {
+                "code": "P701 · P711 · P721",
+                "def": "0",
+                "titre": "Boucle A · B · C : mise en / hors service",
+                "valeurs": [
+                  [
+                    "0",
+                    "Hors service"
+                  ],
+                  [
+                    "1",
+                    "En service"
+                  ]
+                ]
+              },
+              {
+                "code": "P702 · P712 · P722",
+                "def": "0",
+                "titre": "Boucle A · B · C : comportement à l'occupation",
+                "valeurs": [
+                  [
+                    "0",
+                    "Sans fonction"
+                  ],
+                  [
+                    "1",
+                    "Sécuriser"
+                  ],
+                  [
+                    "2",
+                    "Ouvrir"
+                  ],
+                  [
+                    "3",
+                    "Ouvrir et sécuriser (Auto-Sync P549 obligatoire)"
+                  ],
+                  [
+                    "4",
+                    "Fermer"
+                  ]
+                ]
+              },
+              {
+                "code": "P703 · P713 · P723",
+                "def": "0",
+                "titre": "Boucle A · B · C : comportement à la libération",
+                "valeurs": [
+                  [
+                    "0",
+                    "Sans fonction"
+                  ],
+                  [
+                    "1",
+                    "Fermer"
+                  ]
+                ]
+              },
+              {
+                "code": "P704 · P714 · P724",
+                "def": "0",
+                "titre": "Boucle A · B · C : présence",
+                "valeurs": [
+                  [
+                    "0",
+                    "Sans fonction"
+                  ],
+                  [
+                    "1",
+                    "Signaler la présence"
+                  ],
+                  [
+                    "2",
+                    "Bloquer la présence"
+                  ]
+                ]
+              },
+              {
+                "code": "P730 · P740",
+                "def": "0",
+                "titre": "Logique de direction 1 · 2 : choix des entrées",
+                "valeurs": [
+                  [
+                    "0",
+                    "Désactivée"
+                  ],
+                  [
+                    "1",
+                    "gauche A · droite B"
+                  ],
+                  [
+                    "2",
+                    "gauche B · droite A"
+                  ],
+                  [
+                    "3",
+                    "gauche A · droite C"
+                  ],
+                  [
+                    "4",
+                    "gauche C · droite A"
+                  ],
+                  [
+                    "5",
+                    "gauche B · droite C"
+                  ],
+                  [
+                    "6",
+                    "gauche C · droite B"
+                  ]
+                ],
+                "note": "Les deux boucles doivent être activées (P701…). Distance entre les deux boucles : au plus une longueur de véhicule."
+              },
+              {
+                "code": "P731 · P741",
+                "def": "0",
+                "titre": "Passage venant de la gauche : ouvrir / fermer",
+                "valeurs": [
+                  [
+                    "0",
+                    "Sans fonction"
+                  ],
+                  [
+                    "1",
+                    "Ouvrir"
+                  ],
+                  [
+                    "2",
+                    "Fermer"
+                  ]
+                ]
+              },
+              {
+                "code": "P732 · P742",
+                "def": "0",
+                "titre": "Passage venant de la droite : ouvrir / fermer",
+                "valeurs": [
+                  [
+                    "0",
+                    "Sans fonction"
+                  ],
+                  [
+                    "1",
+                    "Ouvrir"
+                  ],
+                  [
+                    "2",
+                    "Fermer"
+                  ]
+                ]
+              },
+              {
+                "code": "P733 · P743",
+                "def": "0",
+                "titre": "Passage venant de la gauche : compter",
+                "valeurs": [
+                  [
+                    "0",
+                    "Sans fonction"
+                  ],
+                  [
+                    "1",
+                    "+1"
+                  ],
+                  [
+                    "2",
+                    "−1"
+                  ]
+                ]
+              },
+              {
+                "code": "P734 · P744",
+                "def": "0",
+                "titre": "Passage venant de la droite : compter",
+                "valeurs": [
+                  [
+                    "0",
+                    "Sans fonction"
+                  ],
+                  [
+                    "1",
+                    "+1"
+                  ],
+                  [
+                    "2",
+                    "−1"
+                  ]
+                ]
+              },
+              {
+                "code": "P735 · P745",
+                "def": "0",
+                "titre": "Occupation venant de la gauche : ouvrir / fermer",
+                "valeurs": [
+                  [
+                    "0",
+                    "Sans fonction"
+                  ],
+                  [
+                    "1",
+                    "Ouvrir"
+                  ],
+                  [
+                    "2",
+                    "Fermer"
+                  ]
+                ]
+              },
+              {
+                "code": "P736 · P746",
+                "def": "0",
+                "titre": "Occupation venant de la droite : ouvrir / fermer",
+                "valeurs": [
+                  [
+                    "0",
+                    "Sans fonction"
+                  ],
+                  [
+                    "1",
+                    "Ouvrir"
+                  ],
+                  [
+                    "2",
+                    "Fermer"
+                  ]
+                ]
+              },
+              {
+                "code": "P737 · P747",
+                "def": "0",
+                "titre": "Occupation venant de la gauche : présence",
+                "valeurs": [
+                  [
+                    "0",
+                    "Sans fonction"
+                  ],
+                  [
+                    "1",
+                    "Signaler la présence"
+                  ],
+                  [
+                    "2",
+                    "Bloquer la signalisation"
+                  ]
+                ]
+              },
+              {
+                "code": "P738 · P748",
+                "def": "0",
+                "titre": "Occupation venant de la droite : présence",
+                "valeurs": [
+                  [
+                    "0",
+                    "Sans fonction"
+                  ],
+                  [
+                    "1",
+                    "Signaler la présence"
+                  ],
+                  [
+                    "2",
+                    "Bloquer la signalisation"
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "nom": "P800 · Réinitialisation",
+            "items": [
+              {
+                "code": "P801",
+                "def": "—",
+                "titre": "Retour au réglage d'usine",
+                "valeurs": [
+                  [
+                    "re-0",
+                    "Maintenir PROG 5 s : l'affichage passe à 0000 et la configuration d'usine est rétablie ; PROG bref : quitter sans modifier"
+                  ]
+                ]
+              },
+              {
+                "code": "P802",
+                "def": "—",
+                "titre": "Retour à la configuration client",
+                "valeurs": [
+                  [
+                    "re-1",
+                    "Maintenir PROG 5 s : l'affichage passe à 0001 ; la configuration client est rétablie"
+                  ]
+                ],
+                "note": "La mémoire client ne peut être remplie que par une commande du système BUS (elle ne reprend pas compteurs de service, de maintenance ni mémoire d'erreurs) ; elle ne se saisit pas au menu."
+              }
+            ]
+          }
+        ]
+      },
+      "bornier": {
+        "groupes": [
+          {
+            "nom": "Alimentation et service",
+            "bornes": [
+              {
+                "n": "Secteur",
+                "label": "Alimentation 100-240 V, 50-60 Hz",
+                "desc": "Câble d'alimentation vers l'interrupteur marche / arrêt et la borne de terre ; fixer le câble avec les éclisses prévues. La logique est alimentée en 24 V DC par un bloc à découpage (courant absorbé max. 1,4 A à 230 V). Prévoir sectionneur / disjoncteur verrouillable, 2 pôles.",
+                "t": "alim"
+              },
+              {
+                "n": "Commutateur de service",
+                "label": "RUN / SERVICE",
+                "desc": "En SERVICE : seul le joystick (ouvrir / fermer) agit ; radio, BUS, boucles et commandes externes sont ignorés. À mettre en SERVICE pour les réglages ou les travaux sur la mécanique.",
+                "t": "autre"
+              },
+              {
+                "n": "1-2 · 12V / Gnd",
+                "label": "Sortie 12 V stabilisée",
+                "desc": "500 mA maxi (surcharge : eR02).",
+                "t": "alim"
+              },
+              {
+                "n": "3-4 · 5-6 · 7-8",
+                "label": "Sorties 24 V stabilisées",
+                "desc": "24 V DC, 1500 mA maxi au total pour les trois sorties (surcharge : eR03).",
+                "t": "alim"
+              },
+              {
+                "n": "45 · ANT / 46 · Gnd",
+                "label": "Antenne",
+                "desc": "Borne d'antenne de la radio.",
+                "t": "autre"
+              },
+              {
+                "n": "47 · NAE / 48 · Gnd",
+                "label": "Détection de panne réseau (ANAE)",
+                "desc": "Module optionnel de détection de panne de courant.",
+                "t": "autre"
+              }
+            ]
+          },
+          {
+            "nom": "Sorties relais (libres de potentiel, 24 V DC / 1 A)",
+            "bornes": [
+              {
+                "n": "9-10 · Multi1",
+                "label": "Relais multifonction 1",
+                "desc": "Fonction réglée par P501 (usine : 0).",
+                "t": "sortie"
+              },
+              {
+                "n": "11-12 · Multi2",
+                "label": "Relais multifonction 2",
+                "desc": "P502 (usine : 0).",
+                "t": "sortie"
+              },
+              {
+                "n": "13-14 · Multi3",
+                "label": "Relais multifonction 3",
+                "desc": "P503 (usine : 0).",
+                "t": "sortie"
+              },
+              {
+                "n": "15-16 · Multi4",
+                "label": "Relais multifonction 4",
+                "desc": "P504 (usine : 12 = test des cellules : alimentation des émetteurs).",
+                "t": "sortie"
+              },
+              {
+                "n": "17-18 · Multi5",
+                "label": "Relais multifonction 5",
+                "desc": "P505 (usine : 5 = feu rouge).",
+                "t": "sortie"
+              },
+              {
+                "n": "19-20 · Multi6",
+                "label": "Relais multifonction 6",
+                "desc": "P506 (usine : 6 = feu vert).",
+                "t": "sortie"
+              }
+            ]
+          },
+          {
+            "nom": "Entrées de sécurité (contact à ouverture ou pont obligatoire)",
+            "bornes": [
+              {
+                "n": "21-22 · SLZ",
+                "label": "Tranche de sécurité FERMETURE",
+                "desc": "Résistance de 8,2 kΩ. Si elle signale, la barrière ne ferme pas ; en fermeture elle stoppe puis s'ouvre. Testée avant chaque fermeture (erreur eR08).",
+                "t": "nf"
+              },
+              {
+                "n": "23-24 · LS",
+                "label": "Cellules (jusqu'à 6, contacts en série)",
+                "desc": "Contact à ouverture, non contrôlé pendant l'ouverture. Avec test des cellules : résistance 1 kΩ en parallèle du contact de chaque récepteur (P544, P101).",
+                "t": "nf"
+              },
+              {
+                "n": "25-26 · Bm",
+                "label": "Lisse dégondée",
+                "desc": "Contact à ouverture : ouvert = erreur eR01.",
+                "t": "nf"
+              },
+              {
+                "n": "41-42 · BTZ2",
+                "label": "Touche FERMER 2",
+                "desc": "Contact à ouverture : ouverture du contact = commande de fermeture ; pas de verrouillage en position fermée. Pont obligatoire si non utilisée.",
+                "t": "nf"
+              },
+              {
+                "n": "43-44 · BTS",
+                "label": "Touche STOP",
+                "desc": "Contact à ouverture : ouvert = stop et effacement des commandes mémorisées, la fermeture automatique est bloquée jusqu'à la commande suivante. Pont obligatoire si non utilisée.",
+                "t": "nf"
+              }
+            ]
+          },
+          {
+            "nom": "Commandes et boucles",
+            "bornes": [
+              {
+                "n": "27-28 · LOOP-A",
+                "label": "Boucle d'induction A",
+                "desc": "Raccorder la boucle (inductance 30-450 µH).",
+                "t": "autre"
+              },
+              {
+                "n": "29-30 · LOOP-B",
+                "label": "Boucle d'induction B",
+                "desc": "",
+                "t": "autre"
+              },
+              {
+                "n": "31-32 · LOOP-C",
+                "label": "Boucle d'induction C",
+                "desc": "",
+                "t": "autre"
+              },
+              {
+                "n": "33-34 · BT*",
+                "label": "BT / BTA3 / BTZ1B (selon P540)",
+                "desc": "Contact à fermeture, usine = BT (séquence).",
+                "t": "no"
+              },
+              {
+                "n": "35-36 · BTA1",
+                "label": "Touche OUVRIR 1",
+                "desc": "Contact à fermeture. Commande d'ouverture sur flanc ; la barrière ne ferme pas tant que le contact est fermé ; ne redéclenche pas la durée de maintien.",
+                "t": "no"
+              },
+              {
+                "n": "37-38 · BTA2",
+                "label": "Touche OUVRIR 2",
+                "desc": "Comme BTA1.",
+                "t": "no"
+              },
+              {
+                "n": "39-40 · BTZ1A",
+                "label": "Touche FERMER 1A",
+                "desc": "Contact à fermeture, commande de fermeture ; en position fermée, la barrière ne s'ouvre pas tant que BTZ1A / BTZ1B est fermé (verrouillage).",
+                "t": "no"
+              }
+            ]
+          }
+        ],
+        "notes": [
+          "Longueur maximale du câble pour BT, BTS, BTA1, BTA2, BTZ1A, BTZ2, LS, SLZ : 30 m ; au-delà de 20 m, prévoir des modules parafoudre.",
+          "Après installation de tous les éléments, doivent briller : Vp (tension de service), BTZ2, BTS et Bm.",
+          "Une platine d'extension de 8 relais multifonctions supplémentaires (Multi7 à Multi14) existe en option (voir son manuel). Consommation maxi 210 W (T 3000) / 180 W (T 3500) ; vitesse standard 0,9 s / 1,3 s, rapide 0,6 s / 0,9 s."
+        ]
+      },
+      "apprentissage": {
+        "avant": [
+          "Couper l'alimentation avant toute intervention sur la mécanique (zones d'écrasement). Mettre le commutateur de service sur SERVICE pendant les réglages, puis sur RUN.",
+          "Vérifier que Vp, Bm., BTS (et NAE si le module est connecté) brillent ; les entrées LS, lisse dégondée, BTZ2, BTS portent un contact à ouverture ou un pont, la SLZ une résistance 8,2 kΩ.",
+          "Mécanique : ressorts de compensation selon la longueur de lisse ; en position OUVERT les ressorts doivent être sans tension préalable et sans jeu avec la cuvette de ressort.",
+          "Vérifier que P570 correspond au modèle de barrière (plaque d'identification) ; il y a changement de vitesse standard automatique en cas de modification."
+        ],
+        "etapes": [
+          "Régler le modèle de barrière dans P570 si la logique a été remplacée.",
+          "P101 : choisir la vitesse (0 rapide, 1 standard) puis valider : si le test des cellules est activé (P544 = 1), lrn1 s'affiche et le nombre de cellules est mémorisé.",
+          "P102 : mémoriser le code radio (PROG bref, « send », émettre le code ; xxxx confirme).",
+          "Régler P103 (alimentation / détection panne réseau), P104 (limitation d'ouverture) et P105 (occultation des sécurités).",
+          "Régler les durées (P301 fermeture automatique, P302 / P303 pré-avertissements) et les modes de service P500 à P550 selon l'installation.",
+          "Boucles : régler la fréquence (DIP-switch 1 à 3), les sensibilités P601-P603 et le mode P630 ou la configuration manuelle P700.",
+          "Quitter le menu en allant sur PPPP puis PROG pour enregistrer dans l'EEPROM."
+        ],
+        "apres": [
+          "Remettre le commutateur de service sur RUN.",
+          "Vérifier la fonction des éléments de sécurité (boucles, cellules, inversion de mouvement en cas d'augmentation de force) et du déverrouillage manuel (tirer le levier : la lisse se manœuvre à la main vers OUVERT ; il n'y a pas de position intermédiaire sûre).",
+          "Contrôler régulièrement l'état de la carrosserie, la lisse, les ressorts et le déverrouillage."
+        ]
+      }
+    }
+  ]
+},
+{
+  id: "lba", nom: "La Barrière Automatique", couleur: "#0b5cab", sanslogo: true, alias: "LBA Unidrive Siemens LOGO ONE-C barrière levante tourniquet",
+  cartes: [
+    {
+      "id": "lba-67",
+      "nom": "LBA 6 / 7 (automate + variateur)",
+      "modeles": "LBA 6 / 6R / 63PK (lisse jusqu'à 6 m ou 3,80 m selon modèle) et LBA 7 / 7R / 74 (lisse jusqu'à 7 m, 6 m ou 4 m) — moteur triphasé 0,18 kW 230 V, variateur 0,25 kW, automate programmable Siemens LOGO",
+      "type": "Barrière levante (La Barrière Automatique) — irréversible (LBA 6 / 7) ou réversible (6R / 63PK / 7R / 74) ; commande par automate et variateur de fréquence",
+      "source": "La Barrière Automatique, Instructions de service Barrières LBA 4 / 6 / 7 (version 2017) : §8, 9, 11, 12, 14.2 et 14.3 ; automate : notice « Siemens LOGO »",
+      "codes": [
+        {
+          "code": "FAN.F",
+          "type": "erreur",
+          "titre": "Défaillance du variateur (ventilateur)",
+          "action": "Vérifier que le ventilateur n'est pas obstrué. Sinon contacter le SAV pour remplacer le variateur."
+        },
+        {
+          "code": "It.Ac",
+          "type": "erreur",
+          "titre": "Dépassement du délai de surcharge du courant de sortie",
+          "action": "S'assurer que la lisse n'est pas bloquée. Reprendre le réglage des capteurs de position (butées et capteurs)."
+        },
+        {
+          "code": "O.Ld1",
+          "type": "erreur",
+          "titre": "Surcharge de la sortie logique",
+          "action": "Vérifier que la charge totale sur la sortie logique ne dépasse pas 100 mA et que le câblage de la sortie n'est pas endommagé."
+        },
+        {
+          "code": "I.AC.Lt",
+          "type": "erreur",
+          "titre": "Limite de courant activée (avertissement)",
+          "action": "Ce n'est pas une erreur : le variateur continue de fonctionner mais ne peut plus accélérer. Diminuer les rampes et les vitesses dans le variateur (00.003, 00.004, vitesses)."
+        },
+        {
+          "code": "Ne s'ouvre pas",
+          "type": "symptome",
+          "titre": "La barrière ne s'ouvre pas",
+          "action": "Regarder l'état des entrées / sorties de l'automate (flèches gauche / droite depuis l'écran de la date) : la commande d'ouverture arrive-t-elle ? Vérifier le câblage de la commande (ou de la boucle d'ouverture libre). Variateur en défaut : lire le message (FAN.F, It.Ac, O.Ld1…). Impossible d'ouvrir même hors tension : réducteur cassé, contacter le SAV (remplacement de l'ensemble motoréducteur). LBA 4/6/7 : vérifier que la manivelle est remise à sa place sur le côté de la platine (son contacteur coupe l'alimentation de la carte)."
+        },
+        {
+          "code": "Ne se ferme pas",
+          "type": "symptome",
+          "titre": "La barrière ne se ferme pas",
+          "action": "Vérifier l'arrivée de la commande de fermeture sur l'automate. Une commande d'ouverture active (maintenue) empêche la fermeture : la désactiver. Une entrée de sécurité active (boucle de sécurité, cellule IR, détecteur ultrason) : retirer le véhicule ou l'objet, vérifier l'orientation des cellules IR ; sans cellule IR ni détecteur ultrason, vérifier qu'il y a un shunt sur l'entrée de sécurité (la notice cite « bornes 42 et 44 »). Variateur en défaut, réducteur cassé ou manivelle mal rangée : voir « Ne s'ouvre pas »."
+        },
+        {
+          "code": "Se ferme sur un véhicule",
+          "type": "symptome",
+          "titre": "Elle se ferme alors qu'un véhicule est devant la cellule ou sur la boucle",
+          "action": "Le véhicule n'est pas détecté : vérifier le câblage de l'organe de sécurité concerné."
+        },
+        {
+          "code": "Pas de fermeture après passage",
+          "type": "symptome",
+          "titre": "Elle ne se ferme pas après le passage sur la boucle de sécurité",
+          "action": "La fermeture après passage n'est pas activée : faire un shunt entre les bornes 7 et 8 du bornier façade (mode automatique, shunt 5-6 en place)."
+        },
+        {
+          "code": "Pas de fermeture temporisée",
+          "type": "symptome",
+          "titre": "Elle ne se ferme pas au bout de la temporisation",
+          "action": "La fermeture après temporisation n'est pas activée : faire un shunt entre les bornes 9 et 10 du bornier façade (mode automatique)."
+        },
+        {
+          "code": "Ne reste pas ouverte",
+          "type": "symptome",
+          "titre": "La barrière ne reste pas ouverte",
+          "action": "Une fermeture automatique (après passage ou après temporisation) est activée : supprimer le ou les shunts entre les bornes 7, 8, 9 et 10."
+        },
+        {
+          "code": "Pas de relevage au manque de tension",
+          "type": "symptome",
+          "titre": "(LBA 6R / 63PK / 7R / 74) Elle ne s'ouvre pas automatiquement sur coupure de courant",
+          "action": "La compensation n'est pas assez forte : l'augmenter (réglage hors tension, écrou sur la tige du ressort). Le relevage automatique doit rester lent et peut être limité par la longueur de la lisse et le poids des accessoires."
+        },
+        {
+          "code": "N'atteint pas l'horizontale",
+          "type": "symptome",
+          "titre": "La barrière n'atteint pas la position horizontale",
+          "action": "Réversibles : compensation trop forte (la diminuer) ; maintien de couple à retarder légèrement (augmenter 00.022). LBA 4/6/7 : temporisation de ralentissement de fermeture trop courte (augmenter 00.022 en valeur négative) ; capteur fermeture trop bas sur l'équerre (le remonter légèrement). Dans tous les cas : butée de fermeture trop haute par rapport au reposoir ou à la béquille (ou l'inverse), reprendre leur réglage."
+        },
+        {
+          "code": "Barrière Fermée",
+          "type": "diag",
+          "titre": "Message d'état de l'automate",
+          "action": "Premier écran de l'automate : état de la barrière (ouverte, fermée, ouverture en cours…). Flèches haut / bas : écran suivant (compteurs, programme, date et heure)."
+        },
+        {
+          "code": "Nb cycles / Nb M. cycl",
+          "type": "diag",
+          "titre": "Compteurs",
+          "action": "Nombre de cycles (ouverture) effectués ou de dégondages subis ; « M. cycl » = millions de cycles. Non modifiables."
+        },
+        {
+          "code": "PROG007180 v1",
+          "type": "diag",
+          "titre": "Programme de l'automate",
+          "action": "Nom et version du programme implanté dans l'automate."
+        },
+        {
+          "code": "Date et heure",
+          "type": "diag",
+          "titre": "Écran d'accès aux entrées / sorties et au menu",
+          "action": "Depuis cet écran : flèches gauche / droite = états des entrées (I) et sorties (Q) ; ESC = menu (l'écran devient orange). Date non à jour tant qu'elle n'est pas réglée."
+        }
+      ],
+      "parametres": {
+        "intro": "Deux niveaux de réglage : le variateur (Unidrive M200, 0,25 kW) pour les rampes et les vitesses, et l'automate programmable (Siemens LOGO, programme PROG007180) pour les temporisations. La notice ne donne pas de valeurs d'usine pour le variateur (elles dépendent du modèle et de la lisse) ; relever les valeurs en place avant toute modification ou les sauvegarder sur carte SD.",
+        "navigation": [
+          "Variateur : Entrée pour entrer dans le menu (les deux chiffres clignotent), choisir le menu 00, Entrée, choisir le paramètre, Entrée (la valeur apparaît), Entrée (la valeur clignote), régler avec les flèches, Entrée pour valider, puis Échap plusieurs fois pour sortir.",
+          "Automate : depuis l'écran date / heure, ESC ouvre le menu (écran orange) ; Programmer, puis Déf. paramètres. Sélectionner le paramètre avec les flèches et OK, OK à nouveau (la valeur clignote), régler avec haut / bas, OK pour valider, ESC pour revenir à la liste, ESC deux fois pour sortir du menu.",
+          "Commande locale de l'automate : maintenir Flèche haut puis appuyer sur ESC pour ordonner une ouverture / fermeture."
+        ],
+        "groupes": [
+          {
+            "nom": "Variateur · LBA 4 / 6 / 7 (irréversibles)",
+            "items": [
+              {
+                "code": "00.003",
+                "def": "—",
+                "titre": "Rampe d'accélération en ouverture et fermeture (s)",
+                "valeurs": []
+              },
+              {
+                "code": "00.004",
+                "def": "—",
+                "titre": "Rampe de décélération en ouverture et fermeture (s)",
+                "valeurs": []
+              },
+              {
+                "code": "00.011",
+                "def": "—",
+                "titre": "Vitesse d'ouverture (Hz)",
+                "valeurs": []
+              },
+              {
+                "code": "00.013",
+                "def": "—",
+                "titre": "Vitesse de fermeture (Hz)",
+                "valeurs": []
+              },
+              {
+                "code": "00.014",
+                "def": "—",
+                "titre": "Vitesse de ralentissement de fermeture (Hz)",
+                "valeurs": [],
+                "note": "Fréquence de la petite vitesse de fin de fermeture."
+              },
+              {
+                "code": "00.022",
+                "def": "—",
+                "titre": "Temporisation de ralentissement de fermeture (s)",
+                "valeurs": [
+                  [
+                    "Valeur négative",
+                    "Toujours un temps négatif. Exemple −2,0 s : la barrière descend 2 s en petite vitesse à partir du moment où elle enclenche le capteur de fin de course fermeture, puis s'arrête"
+                  ]
+                ],
+                "note": "C'est ce temps qui fixe la position horizontale : capteur fermeture coupé à environ 10 cm de l'horizontale."
+              }
+            ]
+          },
+          {
+            "nom": "Variateur · LBA 6R / 63PK / 7R / 74 (réversibles)",
+            "items": [
+              {
+                "code": "00.003",
+                "def": "—",
+                "titre": "Rampe d'accélération en ouverture et fermeture (s)",
+                "valeurs": []
+              },
+              {
+                "code": "00.004",
+                "def": "—",
+                "titre": "Rampe de décélération en ouverture et fermeture (s)",
+                "valeurs": []
+              },
+              {
+                "code": "00.011",
+                "def": "—",
+                "titre": "Petite vitesse (maintien de couple) de fermeture (Hz)",
+                "valeurs": []
+              },
+              {
+                "code": "00.012",
+                "def": "—",
+                "titre": "Grande vitesse de fermeture (Hz)",
+                "valeurs": []
+              },
+              {
+                "code": "00.013",
+                "def": "—",
+                "titre": "Petite vitesse (maintien de couple) d'ouverture (Hz)",
+                "valeurs": []
+              },
+              {
+                "code": "00.014",
+                "def": "—",
+                "titre": "Grande vitesse d'ouverture (Hz)",
+                "valeurs": []
+              },
+              {
+                "code": "00.022",
+                "def": "—",
+                "titre": "Temporisation d'actionnement du maintien de couple (s)",
+                "valeurs": [],
+                "note": "La modification des paramètres a une incidence sur le réglage des fins de course."
+              },
+              {
+                "code": "00.030",
+                "def": "—",
+                "titre": "Sauvegarde / chargement du programme variateur (module SD)",
+                "valeurs": [
+                  [
+                    "Read",
+                    "Charger depuis la carte SD"
+                  ],
+                  [
+                    "Prog",
+                    "Copier le programme actuel vers la carte SD"
+                  ]
+                ],
+                "note": "Insérer le module carte SD correspondant au programme à charger, ou un module à carte vierge pour copier."
+              }
+            ]
+          },
+          {
+            "nom": "Automate (LOGO) · paramètres du programme",
+            "items": [
+              {
+                "code": "T. FAP",
+                "def": "0 s",
+                "titre": "Attente avant fermeture automatique après passage",
+                "valeurs": [],
+                "note": "Notice : « TL : temps d'attente… (Ne pas modifier TH) »."
+              },
+              {
+                "code": "T. Ferm auto",
+                "def": "15 s",
+                "titre": "Attente avant fermeture automatique si non-passage",
+                "valeurs": []
+              },
+              {
+                "code": "T. Securite",
+                "def": "30 s",
+                "titre": "Temps de sécurité : défaut si aucun fin de course n'est détecté",
+                "valeurs": [],
+                "note": "Au-delà, la barrière se met en défaut et coupe la commande."
+              },
+              {
+                "code": "T.deverr",
+                "def": "0,5 s",
+                "titre": "Temps de fermeture avant une ouverture",
+                "valeurs": [],
+                "note": "Évite un blocage dû au verrouillage."
+              },
+              {
+                "code": "T. verr/vent",
+                "def": "1 s",
+                "titre": "Délai d'activation du verrouillage (ou de la ventouse) barrière fermée",
+                "valeurs": []
+              },
+              {
+                "code": "T. Presign.O",
+                "def": "0 s",
+                "titre": "Présignalisation (feu flash) avant ouverture",
+                "valeurs": []
+              },
+              {
+                "code": "T. Presign.F",
+                "def": "0 s",
+                "titre": "Présignalisation (feu flash) avant fermeture",
+                "valeurs": []
+              },
+              {
+                "code": "T.Detection",
+                "def": "0,5 s",
+                "titre": "Durée minimale de détection (boucle de sécurité) pour activer la fermeture après passage",
+                "valeurs": []
+              },
+              {
+                "code": "Nb cycles · Nb Mill.cycles",
+                "def": "—",
+                "titre": "Compteurs de cycles (lecture seule)",
+                "valeurs": [],
+                "note": "0 à 999 999, puis le compteur de millions est incrémenté."
+              }
+            ]
+          }
+        ]
+      },
+      "bornier": {
+        "groupes": [
+          {
+            "nom": "Bornier façade (bas de la platine, LBA 6 / 7 et variantes)",
+            "bornes": [
+              {
+                "n": "1-2",
+                "label": "Commande d'ouverture",
+                "desc": "Contact sec NO, impulsion. Une commande d'ouverture maintenue empêche la fermeture (l'ouverture est prioritaire).",
+                "t": "no"
+              },
+              {
+                "n": "3-4",
+                "label": "Commande de fermeture",
+                "desc": "Contact sec NO, impulsion.",
+                "t": "no"
+              },
+              {
+                "n": "5-6",
+                "label": "Mode automatique / manuel",
+                "desc": "Shunt = mode automatique (défaut) : ordres automatiques actifs (boucle d'ouverture, fermeture après passage, fermeture après temporisation). Sans shunt = manuel : la barrière ne bouge que sur commande 1 à 4.",
+                "t": "autre"
+              },
+              {
+                "n": "7-8",
+                "label": "Validation fermeture après passage (FAP)",
+                "desc": "Shunt = la barrière se ferme après le passage d'un véhicule sur la boucle de sécurité. Actif seulement en mode automatique.",
+                "t": "autre"
+              },
+              {
+                "n": "9-10",
+                "label": "Validation fermeture après temporisation",
+                "desc": "Shunt = fermeture après temporisation (T. Ferm auto, défaut 15 s) si aucun véhicule n'est passé. Actif seulement en mode automatique.",
+                "t": "autre"
+              },
+              {
+                "n": "11-12",
+                "label": "Report barrière ouverte",
+                "desc": "Contact sec NO.",
+                "t": "sortie"
+              },
+              {
+                "n": "13-14",
+                "label": "Report barrière fermée",
+                "desc": "Contact sec NO.",
+                "t": "sortie"
+              },
+              {
+                "n": "15-16",
+                "label": "Report boucle de présence (option)",
+                "desc": "Contact sec NO.",
+                "t": "sortie"
+              },
+              {
+                "n": "17-18",
+                "label": "Report synthèse défaut (option)",
+                "desc": "Contact sec NC.",
+                "t": "sortie"
+              },
+              {
+                "n": "19-20",
+                "label": "Report lisse tombée (option)",
+                "desc": "Contact sec NC.",
+                "t": "sortie"
+              },
+              {
+                "n": "21(+) / 22(−)",
+                "label": "Alimentation 24 Vdc",
+                "desc": "Alimente notamment l'émetteur de la cellule infrarouge (option).",
+                "t": "alim"
+              },
+              {
+                "n": "23(+) / 24(−)",
+                "label": "Verrouillage / ventouse sur reposoir (option)",
+                "desc": "Commande du verrouillage mécanique ou de la ventouse électromagnétique.",
+                "t": "sortie"
+              },
+              {
+                "n": "25 · 26 · 27",
+                "label": "Feu rouge / vert (option)",
+                "desc": "25 = commun, 26 = vert, 27 = rouge (3 fils). Le feu vert est allumé lorsque la barrière est ouverte.",
+                "t": "sortie"
+              },
+              {
+                "n": "28-29",
+                "label": "Report porte ouverte (option)",
+                "desc": "Contact sec NC.",
+                "t": "sortie"
+              },
+              {
+                "n": "N · Ph · terre",
+                "label": "Alimentation 230 V",
+                "desc": "Câble 3G 1,5 ou 2,5 mm² selon la distance, à câbler en dernier. Protection en tête de ligne : disjoncteur différentiel 10 A – 30 mA par barrière. Terre sur la barrette de masse à côté du bornier.",
+                "t": "alim"
+              }
+            ]
+          },
+          {
+            "nom": "Bornier interne 002BN (capteurs et accessoires)",
+            "bornes": [
+              {
+                "n": "30-31",
+                "label": "Alimentation du capteur fin de course ouverture",
+                "desc": "Fils marron / bleu du capteur inductif.",
+                "t": "alim"
+              },
+              {
+                "n": "32-33",
+                "label": "Fin de course ouverture",
+                "desc": "Entrée du capteur (une borne peut rester libre, voir schéma).",
+                "t": "nf"
+              },
+              {
+                "n": "34-35",
+                "label": "Alimentation du capteur fin de course fermeture",
+                "desc": "Fils marron / bleu.",
+                "t": "alim"
+              },
+              {
+                "n": "36-37",
+                "label": "Fin de course fermeture",
+                "desc": "Entrée du capteur.",
+                "t": "nf"
+              },
+              {
+                "n": "42 à 47",
+                "label": "Cellules infrarouges n° 1 et n° 2",
+                "desc": "Alimentation et contacts NC des cellules ; les numéros exacts sont à lire sur le schéma. Sans cellule, un shunt est nécessaire sur l'entrée de sécurité.",
+                "t": "nf"
+              },
+              {
+                "n": "48-49",
+                "label": "Feu flash",
+                "desc": "Sortie du clignotant.",
+                "t": "sortie"
+              },
+              {
+                "n": "50-51",
+                "label": "Alarme de verrouillage du reposoir",
+                "desc": "",
+                "t": "sortie"
+              },
+              {
+                "n": "52-53",
+                "label": "Feux de lisse",
+                "desc": "",
+                "t": "sortie"
+              },
+              {
+                "n": "54-55",
+                "label": "Verrouillage interne",
+                "desc": "",
+                "t": "sortie"
+              },
+              {
+                "n": "60-61",
+                "label": "Alimentation 24 V des options",
+                "desc": "",
+                "t": "alim"
+              }
+            ]
+          }
+        ],
+        "notes": [
+          "Les commandes d'ouverture et de fermeture sont des contacts secs NO sous forme d'impulsions. Les boucles magnétiques se raccordent directement sur leurs détecteurs (connecteurs repérés S sécurité, O ouverture, P présence), sans passer par le bornier.",
+          "Alimenter la barrière dès l'installation pour éviter la condensation à l'intérieur.",
+          "Notice : le dépannage cite « un shunt entre les bornes 42 et 44 » sans cellule IR, alors que le bornier façade s'arrête à 29 : se reporter au schéma (borniers 002BN) et au câblage réel."
+        ]
+      },
+      "apprentissage": {
+        "avant": [
+          "Les barrières sont réglées en usine ; ajuster seulement les butées et capteurs si besoin (longueur de lisse modifiée, accessoires). Les réglages se font sous tension et capot ouvert : risque de blessures.",
+          "Attention à la fermeture automatique (fermeture après passage activée) pendant les réglages.",
+          "Barrière représentée en sens normal ; en sens inverse, les positions des capteurs sont inversées."
+        ],
+        "etapes": [
+          "Irréversibles (LBA 4/6/7), 1re étape — capteurs : régler le capteur d'ouverture pour qu'il soit activé (voyant allumé) environ 10° avant la verticale (90°) ; la barrière doit s'arrêter en position verticale. Serrer l'écrou côté came avec une clé de 17.",
+          "Irréversibles — capteur de fermeture : activé environ 10° avant l'horizontale (0°) (environ 10 cm de la position fermée) ; la barrière doit s'arrêter à l'horizontale. Affiner avec 00.022 (valeur négative). Serrer à la clé de 17.",
+          "Irréversibles, 2e étape — butées (sauf LBA 4) : capot ôté et alimentation coupée, desserrer le contre-écrou, visser ou dévisser la butée pour bloquer la lisse en cas de sur-course (légèrement après la position finale), rebloquer le contre-écrou. Les butées ne servent que de sécurité si un capteur est défectueux.",
+          "Réversibles (6R / 63PK / 7R / 74), 1re étape — butées : elles définissent les positions ouverte et fermée. Alimentation coupée, régler chaque butée sur la position voulue et rebloquer le contre-écrou.",
+          "Réversibles, 2e étape — capteurs : ils ralentissent la lisse avant les positions. Capteur d'ouverture activé environ 10° avant 90° et capteur de fermeture environ 10° avant 0° ; la barrière doit arriver sur la butée en vitesse lente.",
+          "Réversibles — capteur de position fermée : insérer une cale d'environ 5 mm sous la butée de fermeture, régler le capteur en limite de détection (activé), serrer à la clé de 17.",
+          "Réversibles — compensation (hors tension) : desserrer le contre-écrou sur la tige du ressort, serrer l'écrou pour plus de compensation (relevage automatique activé / augmenté) ou le desserrer pour moins, resserrer le contre-écrou."
+        ],
+        "apres": [
+          "Remettre le capot et contrôler les cycles ouverture / fermeture, l'absence de rebond en fin de course, les sécurités (boucle, cellule) et la signalisation.",
+          "Maintenance tous les 6 mois : nettoyage, serrage de la visserie et des fils, connectiques, position horizontale et verticale de la lisse. Chaque année : réglages, organes de sécurité / signalisation / verrouillage, sectionneur, commandes locales et distantes, graissage de l'ensemble de compensation (chaîne, maillon rapide, ressort), position et état du ressort.",
+          "Ouverture manuelle sans tension (LBA 4/6/7) : ouvrir la porte avec la clé (de base clé 405), prendre la manivelle fixée sur le côté de la platine (son contacteur coupe l'alimentation de la carte), l'insérer dans le trou sur le côté, tourner dans le sens horaire pour lever, antihoraire pour baisser. Réversibles : la lisse s'ouvre seule ou est libre et se lève à la main."
+        ]
+      }
+    },
+    {
+      "id": "lba-4",
+      "nom": "LBA 4 (platine ENPC001652)",
+      "modeles": "LBA 4 (lisse jusqu'à 4 m, moteur triphasé 0,18 kW 230 V, variateur 0,25 kW, carte électronique ENPC001652 sans automate)",
+      "type": "Barrière levante irréversible (La Barrière Automatique) — commande par platine électronique ENPC001652",
+      "source": "La Barrière Automatique, Instructions de service Barrières LBA 4 / 6 / 7 (version 2017) : §9.7 (platine ENPC001652), §8 et §14.1 (LBA 4)",
+      "codes": [
+        {
+          "code": "Cde1 – Ouverture",
+          "type": "led",
+          "titre": "LED commande d'ouverture",
+          "action": "Allumée si contact fermé entre 3 et 4 ou télécommande radio d'ouverture."
+        },
+        {
+          "code": "Cde2 – Fermeture",
+          "type": "led",
+          "titre": "LED commande de fermeture",
+          "action": "Allumée si contact fermé entre 4 et 5 (boucle magnétique d'entrée ou sortie libre, interrupteur horaire, etc.)."
+        },
+        {
+          "code": "Mode Auto-Manu",
+          "type": "led",
+          "titre": "LED mode automatique / manuel",
+          "action": "Allumée si shunt ou contact fermé entre 6 et 7."
+        },
+        {
+          "code": "Fdco",
+          "type": "led",
+          "titre": "LED fin de course ouverture",
+          "action": "Éteinte si contact ouvert entre 8 et 9 : barrière ouverte."
+        },
+        {
+          "code": "Fdcf",
+          "type": "led",
+          "titre": "LED fin de course fermeture",
+          "action": "Éteinte si contact ouvert entre 9 et 10 : barrière fermée."
+        },
+        {
+          "code": "Boucl Magn.",
+          "type": "led",
+          "titre": "LED boucle magnétique",
+          "action": "Éteinte si contact ouvert entre 12 et 13 : présence d'un véhicule (normalement allumée)."
+        },
+        {
+          "code": "Cel Ferm",
+          "type": "led",
+          "titre": "LED cellule infrarouge",
+          "action": "Éteinte si contact ouvert entre 13 et 14 : obstacle sur la cellule (normalement allumée)."
+        },
+        {
+          "code": "Alarme (rouge)",
+          "type": "led",
+          "titre": "LED alarme",
+          "action": "Allumée si le temps de manœuvre dépasse la temporisation d'anti-patinage, si le transformateur est en surcharge, si une sécurité est active plus de deux minutes, et pendant 3 s après un reset."
+        },
+        {
+          "code": "Cycles (verte)",
+          "type": "led",
+          "titre": "LED cycle",
+          "action": "Allumée pendant toute la durée d'un cycle ouverture, pause et refermeture."
+        },
+        {
+          "code": "Tension électronique",
+          "type": "led",
+          "titre": "LED alimentation",
+          "action": "Allumée si l'alimentation 230 V et le 5 / 12 Vdc (F1) sont présents."
+        },
+        {
+          "code": "FAN.F",
+          "type": "erreur",
+          "titre": "Défaillance du variateur (ventilateur)",
+          "action": "Vérifier que le ventilateur n'est pas obstrué. Sinon contacter le SAV pour remplacer le variateur."
+        },
+        {
+          "code": "It.Ac",
+          "type": "erreur",
+          "titre": "Dépassement du délai de surcharge du courant de sortie",
+          "action": "S'assurer que la lisse n'est pas bloquée. Reprendre le réglage des capteurs de position (butées et capteurs)."
+        },
+        {
+          "code": "O.Ld1",
+          "type": "erreur",
+          "titre": "Surcharge de la sortie logique",
+          "action": "Vérifier que la charge totale sur la sortie logique ne dépasse pas 100 mA et que le câblage de la sortie n'est pas endommagé."
+        },
+        {
+          "code": "I.AC.Lt",
+          "type": "erreur",
+          "titre": "Limite de courant activée (avertissement)",
+          "action": "Ce n'est pas une erreur : le variateur continue de fonctionner mais ne peut plus accélérer. Diminuer les rampes et les vitesses dans le variateur (00.003, 00.004, vitesses)."
+        },
+        {
+          "code": "Ne s'ouvre pas",
+          "type": "symptome",
+          "titre": "La barrière ne s'ouvre pas",
+          "action": "Contrôler avec les LED de la platine que la commande d'ouverture est reçue (Cde1). Vérifier le câblage de la commande ou de la boucle d'ouverture libre. Variateur en défaut : lire le message (FAN.F, It.Ac, O.Ld1). Impossible d'ouvrir même hors tension : réducteur cassé, contacter le SAV. Vérifier que la manivelle est remise en place."
+        },
+        {
+          "code": "Ne se ferme pas",
+          "type": "symptome",
+          "titre": "La barrière ne se ferme pas",
+          "action": "Une commande d'ouverture est active, ou une sécurité est active (boucle, cellule IR : LED Boucl Magn. ou Cel Ferm éteinte) : retirer l'obstacle, vérifier l'orientation des cellules. Variateur en défaut, réducteur cassé ou manivelle mal rangée : voir « Ne s'ouvre pas »."
+        },
+        {
+          "code": "Alarme allumée",
+          "type": "symptome",
+          "titre": "LED rouge Alarme allumée",
+          "action": "Temps de manœuvre trop long (anti-patinage, P1 avec SW1-4 sur OFF), surcharge du transformateur, ou sécurité active plus de 2 minutes ; elle s'allume aussi 3 s après un reset."
+        },
+        {
+          "code": "N'atteint pas l'horizontale",
+          "type": "symptome",
+          "titre": "La barrière n'atteint pas la position horizontale",
+          "action": "Augmenter 00.022 du variateur (temporisation de ralentissement de fermeture, valeur négative), remonter légèrement le capteur fermeture sur son équerre, ou reprendre le réglage du reposoir / de la béquille."
+        }
+      ],
+      "parametres": {
+        "intro": "La LBA 4 est pilotée par la platine ENPC001652 (et non par l'automate des LBA 6 / 7). Le programme se choisit avec les 8 dip-switches SW1 (commandes en haut du tableau, fonctions communes SW1-4 à SW1-8) ; pour valider un changement de SW1, de P1 ou de P2, faire un RESET. Le variateur se règle comme sur les LBA 6 / 7 (00.003, 00.004, 00.011, 00.013, 00.014, 00.022).",
+        "navigation": [
+          "Réglages sur la platine : SW1 (programmation), potentiomètres P1 et P2, bouton RESET, bouton BP Cde 1 (commande locale d'ouverture).",
+          "Variateur : voir la fiche LBA 6 / 7 (menu 00)."
+        ],
+        "groupes": [
+          {
+            "nom": "SW1-1 à SW1-3 · Mode de commande",
+            "items": [
+              {
+                "code": "SW1-1 · 2 · 3",
+                "def": "—",
+                "titre": "Programme de commande (contact 6-7 : ouvert = automatique, fermé = manuel)",
+                "valeurs": [
+                  [
+                    "On · On · Off",
+                    "Auto : FAAP + fermeture tempo ; Manuel : ouverture / fermeture par impulsion"
+                  ],
+                  [
+                    "Off · Off · On",
+                    "Auto : FAAP + fermeture tempo ; Manuel : « poste de garde » (ouverture par impulsion, fermeture à pression maintenue, réouverture au relâchement)"
+                  ],
+                  [
+                    "On · Off · On",
+                    "Auto : FAAP + fermeture tempo ; Manuel : « homme mort » (ouverture et fermeture à pression maintenue, arrêt au relâchement)"
+                  ],
+                  [
+                    "On · On · On",
+                    "Auto : FAAP sans refermeture temporisée ; Manuel : « homme mort »"
+                  ],
+                  [
+                    "Off · On · On",
+                    "Contact 6-7 ouvert : manuel, commandes d'ouverture et de fermeture permanentes ; contact 6-7 fermé : « poste de garde » (ouverture par impulsion, fermeture à pression maintenue)"
+                  ]
+                ],
+                "note": "Les arrêts d'urgence (BP) et les sécurités (cellule IR, boucle…) arrêtent la barrière ; arrêt et réouverture sur sécurité. Une barrière arrêtée est à relancer par un ordre d'ouverture. FAAP : fermeture automatique après passage sur la boucle de sécurité et fermeture temporisée si non-passage, réglable en P2 (10 à 60 s)."
+              }
+            ]
+          },
+          {
+            "nom": "SW1-4 à SW1-8 · Fonctions communes",
+            "items": [
+              {
+                "code": "SW1-4",
+                "def": "—",
+                "titre": "FAAP",
+                "valeurs": [
+                  [
+                    "Off",
+                    "Fermeture instantanée après passage sur la boucle magnétique"
+                  ],
+                  [
+                    "On",
+                    "Retard après passage sur la boucle, réglable avec P1 de 0 à 5 s"
+                  ]
+                ]
+              },
+              {
+                "code": "SW1-5",
+                "def": "—",
+                "titre": "Préavis clignotant",
+                "valeurs": [
+                  [
+                    "Off",
+                    "Préavis de 2 s avant ouverture et fermeture"
+                  ],
+                  [
+                    "On",
+                    "Sans préavis"
+                  ]
+                ]
+              },
+              {
+                "code": "SW1-6",
+                "def": "—",
+                "titre": "Réouverture (REOUV)",
+                "valeurs": [
+                  [
+                    "Off",
+                    "Sans réouverture au bout de 5 s si le fin de course fermeture n'est pas atteint"
+                  ],
+                  [
+                    "On",
+                    "Avec réouverture au bout de 5 s si le fin de course fermeture n'est pas atteint"
+                  ]
+                ]
+              },
+              {
+                "code": "SW1-7",
+                "def": "—",
+                "titre": "Mode manuel (MODE MANU)",
+                "valeurs": [
+                  [
+                    "Off",
+                    "Manuel 1 BP"
+                  ],
+                  [
+                    "On",
+                    "Manuel 2 BP"
+                  ]
+                ]
+              },
+              {
+                "code": "SW1-8",
+                "def": "—",
+                "titre": "Type de fin de course (MODE FDC)",
+                "valeurs": [
+                  [
+                    "Off",
+                    "FDC contact NC : LED allumée au repos, éteinte si le fin de course est activé"
+                  ],
+                  [
+                    "On",
+                    "FDC contact NO : LED éteinte au repos, allumée si le fin de course est activé"
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "nom": "Potentiomètres",
+            "items": [
+              {
+                "code": "P1",
+                "def": "—",
+                "titre": "Temporisation (0 à 5 s ou anti-patinage 0 à 120 s)",
+                "valeurs": [
+                  [
+                    "SW1-4 On",
+                    "Temporisation de fermeture après passage sur la boucle, 0 à 5 s"
+                  ],
+                  [
+                    "SW1-4 Off",
+                    "Temporisation d'anti-patinage, 0 à 120 s"
+                  ]
+                ],
+                "note": "La notice indique l'anti-patinage 0 à 120 s ; le tableau FAAP cite P2 de 10 à 60 s pour la fermeture temporisée alors que §9.7.3 indique 0 à 120 s : valeurs de la notice, non résolues."
+              },
+              {
+                "code": "P2",
+                "def": "—",
+                "titre": "Temporisation de refermeture (0 à 120 s)",
+                "valeurs": []
+              }
+            ]
+          }
+        ]
+      },
+      "bornier": {
+        "groupes": [
+          {
+            "nom": "Bornier platine ENPC001652 (numérotation LBA 4)",
+            "bornes": [
+              {
+                "n": "3-4",
+                "label": "Commande d'ouverture",
+                "desc": "Seule commande présente sur le bornier de la LBA 4 avec l'alimentation 24 Vdc (15-16).",
+                "t": "no"
+              },
+              {
+                "n": "4-5",
+                "label": "Commande de fermeture",
+                "desc": "Contact fermé entre 4 et 5 (boucle d'entrée ou de sortie libre, interrupteur horaire…).",
+                "t": "no"
+              },
+              {
+                "n": "6-7",
+                "label": "Mode automatique / manuel",
+                "desc": "Contact ouvert = automatique, fermé = manuel.",
+                "t": "autre"
+              },
+              {
+                "n": "8-9",
+                "label": "Fin de course ouverture",
+                "desc": "Contact ouvert = barrière ouverte (LED Fdco éteinte).",
+                "t": "nf"
+              },
+              {
+                "n": "9-10",
+                "label": "Fin de course fermeture",
+                "desc": "Contact ouvert = barrière fermée (LED Fdcf éteinte).",
+                "t": "nf"
+              },
+              {
+                "n": "12-13",
+                "label": "Boucle magnétique",
+                "desc": "Contact ouvert = présence véhicule (LED normalement allumée).",
+                "t": "nf"
+              },
+              {
+                "n": "13-14",
+                "label": "Cellule infrarouge",
+                "desc": "Contact ouvert = obstacle (LED normalement allumée).",
+                "t": "nf"
+              },
+              {
+                "n": "15-16",
+                "label": "Alimentation 24 Vdc",
+                "desc": "Protégée par F2 (2 A).",
+                "t": "alim"
+              }
+            ]
+          }
+        ],
+        "fusibles": "F1 : 1 A temporisé HPC (haut pouvoir de coupure, 1500 A mini), protège le primaire du transformateur et la sortie chauffage. F2 : 2 A temporisé, protège la sortie 24 Vdc.",
+        "notes": [
+          "Les bornes de la LBA 4 ne suivent pas la numérotation façade des LBA 6 / 7 : suivre le tableau ci-dessus et le schéma de la page 59 de la notice. Les bornes n'apparaissant pas ici (11, 17 et suivantes) ne sont pas décrites dans la notice.",
+          "Le bornier de la notice §8 est celui des LBA 6 / 7 ; la LBA 4 a une numérotation propre (3-4 ouverture, 15-16 alimentation 24 Vdc)."
+        ]
+      },
+      "apprentissage": {
+        "avant": [
+          "Les barrières sont réglées en usine ; ajuster seulement les butées et capteurs si besoin (longueur de lisse modifiée, accessoires). Les réglages se font sous tension et capot ouvert : risque de blessures.",
+          "Attention à la fermeture automatique (fermeture après passage activée) pendant les réglages.",
+          "Barrière représentée en sens normal ; en sens inverse, les positions des capteurs sont inversées."
+        ],
+        "etapes": [
+          "Irréversibles (LBA 4/6/7), 1re étape — capteurs : régler le capteur d'ouverture pour qu'il soit activé (voyant allumé) environ 10° avant la verticale (90°) ; la barrière doit s'arrêter en position verticale. Serrer l'écrou côté came avec une clé de 17.",
+          "Irréversibles — capteur de fermeture : activé environ 10° avant l'horizontale (0°) (environ 10 cm de la position fermée) ; la barrière doit s'arrêter à l'horizontale. Affiner avec 00.022 (valeur négative). Serrer à la clé de 17.",
+          "Pas de butées réglables pour la LBA 4 : seuls les capteurs inductifs déterminent les positions."
+        ],
+        "apres": [
+          "Remettre le capot et contrôler les cycles ouverture / fermeture, l'absence de rebond en fin de course, les sécurités (boucle, cellule) et la signalisation.",
+          "Maintenance tous les 6 mois : nettoyage, serrage de la visserie et des fils, connectiques, position horizontale et verticale de la lisse. Chaque année : réglages, organes de sécurité / signalisation / verrouillage, sectionneur, commandes locales et distantes, graissage de l'ensemble de compensation (chaîne, maillon rapide, ressort), position et état du ressort.",
+          "Ouverture manuelle sans tension (LBA 4/6/7) : ouvrir la porte avec la clé (de base clé 405), prendre la manivelle fixée sur le côté de la platine (son contacteur coupe l'alimentation de la carte), l'insérer dans le trou sur le côté, tourner dans le sens horaire pour lever, antihoraire pour baisser. Réversibles : la lisse s'ouvre seule ou est libre et se lève à la main."
+        ]
+      }
+    },
+    {
+      "id": "lba-12",
+      "nom": "LBA 12 (lisse 3 à 12 m)",
+      "modeles": "LBA 12 — lisse fibre de verre tronconique Ø140 mm de 3 à 12 m, moteur triphasé 0,55 kW 230 V, variateur 0,55 kW, automate programmable Siemens LOGO (programme PVT)",
+      "type": "Barrière levante grande longueur (La Barrière Automatique) — fins de course mécaniques à cames, variateur et automate",
+      "source": "La Barrière Automatique, Dossier installation & maintenance LBA 12 (instruction de service FR, COAT010027)",
+      "codes": [
+        {
+          "code": "inh",
+          "type": "diag",
+          "titre": "Variateur prêt, entraînement inhibé",
+          "action": "Indication affichée quand le variateur est prêt et que les paramètres ne sont ni modifiés ni affichés : « inh », « rdy » ou la valeur du paramètre du mode État."
+        },
+        {
+          "code": "rdy",
+          "type": "diag",
+          "titre": "Variateur prêt",
+          "action": "Idem : variateur prêt, en attente d'ordre de marche."
+        },
+        {
+          "code": "Mise en sécurité",
+          "type": "diag",
+          "titre": "Variateur déclenché (Er.xxx)",
+          "action": "En mise en sécurité, l'afficheur indique que le variateur a déclenché et affiche le code (ex. « Er. OU »). Les codes ne sont pas listés dans cette notice."
+        },
+        {
+          "code": "Alarme",
+          "type": "diag",
+          "titre": "Alarme variateur (clignotement)",
+          "action": "En condition d'alarme, l'afficheur clignote en alternant la valeur du paramètre du mode État et l'alarme (ex. « d.OU.Ld »). Codes non listés dans la notice."
+        },
+        {
+          "code": "Autocalibrage",
+          "type": "diag",
+          "titre": "Autocalibrage moteur en cours",
+          "action": "Affiché pendant l'autocalibrage (00.038) ; attendre « inh » et l'arrêt du moteur."
+        },
+        {
+          "code": "Barrière Fermée",
+          "type": "diag",
+          "titre": "Message d'état de l'automate",
+          "action": "Premier écran : état de la barrière (ouverte, fermée, ouverture en cours…). Flèches haut / bas : compteurs (cycles, dégondages), nom et version du programme, date et heure."
+        },
+        {
+          "code": "Entrées / sorties",
+          "type": "diag",
+          "titre": "Écrans I et Q",
+          "action": "Depuis l'écran date et heure : flèches gauche / droite. Case grisée = 1 (active), non grisée = 0. Pas d'entrées / sorties analogiques dans ce programme."
+        },
+        {
+          "code": "Commandes locales",
+          "type": "diag",
+          "titre": "ESC + ↑ / ESC + ↓",
+          "action": "ESC + flèche haut = commande d'ouverture ; ESC + flèche bas = commande de fermeture."
+        },
+        {
+          "code": "Ne ferme pas à fond",
+          "type": "symptome",
+          "titre": "La lisse n'atteint pas la butée de fermeture",
+          "action": "Régler le capteur de fermeture pour qu'il se déclenche plus tard, ou augmenter le temps de petite vitesse (paramètre 00.022, valeur négative)."
+        },
+        {
+          "code": "Défaut sécurité fin de course",
+          "type": "symptome",
+          "titre": "La barrière passe en défaut et coupe le moteur",
+          "action": "Le capteur de fin de course de sécurité (placé juste après celui d'ouverture) est actif : le fin de course d'ouverture est défaillant ou déréglé. Reprendre le réglage des cames."
+        },
+        {
+          "code": "Manivelle absente",
+          "type": "symptome",
+          "titre": "Barrière sans mouvement, manivelle retirée",
+          "action": "La platine support amovible a un micro-contact de position de manivelle : manivelle ôtée, aucun mouvement. La ranger à sa place (côté de la platine)."
+        }
+      ],
+      "parametres": {
+        "intro": "Variateur (0,55 kW) pour les vitesses et rampes, automate (LOGO) pour les temporisations. Aucune valeur d'usine n'est donnée pour le variateur dans la notice : relever les valeurs en place avant de modifier, ou sauvegarder sur carte SD.",
+        "navigation": [
+          "Variateur : touche Entrée (menu, les deux chiffres clignotent), choisir « 00 », Entrée, choisir le paramètre, Entrée (valeur), Entrée (clignote), régler, Entrée pour valider, Échap plusieurs fois pour sortir.",
+          "Automate : ESC depuis l'écran date et heure (écran orange) → Programmer → Déf. paramètres ; OK pour sélectionner, OK à nouveau, haut / bas pour la valeur, OK pour valider, ESC pour revenir.",
+          "Serveur web de l'automate : relier un PC par câble Ethernet, entrer l'adresse IP de l'automate (ex. 192.168.0.1) dans le navigateur ; mot de passe réglé au préalable (par défaut aucun). Onglets : Système LOGO!, Variable LOGO!, LOGO! BM et LOGO! TD (visualisation de la face avant et pilotage identiques aux commandes locales)."
+        ],
+        "groupes": [
+          {
+            "nom": "Variateur",
+            "items": [
+              {
+                "code": "00.001",
+                "def": "—",
+                "titre": "Vitesse minimale appliquée au variateur (Hz)",
+                "valeurs": []
+              },
+              {
+                "code": "00.002",
+                "def": "—",
+                "titre": "Vitesse maximale appliquée au variateur (Hz)",
+                "valeurs": []
+              },
+              {
+                "code": "00.003",
+                "def": "—",
+                "titre": "Rampe d'accélération en ouverture et fermeture (s)",
+                "valeurs": []
+              },
+              {
+                "code": "00.004",
+                "def": "—",
+                "titre": "Rampe de décélération en ouverture et fermeture (s)",
+                "valeurs": []
+              },
+              {
+                "code": "00.011",
+                "def": "—",
+                "titre": "Vitesse d'ouverture (Hz)",
+                "valeurs": []
+              },
+              {
+                "code": "00.012",
+                "def": "—",
+                "titre": "Vitesse de ralentissement en ouverture (Hz)",
+                "valeurs": []
+              },
+              {
+                "code": "00.013",
+                "def": "—",
+                "titre": "Vitesse de fermeture (Hz)",
+                "valeurs": []
+              },
+              {
+                "code": "00.014",
+                "def": "—",
+                "titre": "Vitesse de ralentissement en fermeture (Hz)",
+                "valeurs": [],
+                "note": "Fréquence de la petite vitesse de fin de fermeture."
+              },
+              {
+                "code": "00.022",
+                "def": "—",
+                "titre": "Temporisation de ralentissement en fermeture (s)",
+                "valeurs": [
+                  [
+                    "Valeur négative",
+                    "Toujours un temps négatif. −2,0 s : la barrière descend 2 s en petite vitesse après avoir enclenché le fin de course fermeture, puis s'arrête"
+                  ]
+                ],
+                "note": "Fin de course fermeture à couper environ 10 cm avant l'horizontale ; c'est ce temps qui donne l'horizontale. La modification des paramètres a une incidence sur le réglage des fins de course."
+              },
+              {
+                "code": "00.030",
+                "def": "—",
+                "titre": "Sauvegarde / restauration par module SD",
+                "valeurs": [
+                  [
+                    "Read",
+                    "Carte SD → variateur : saisir Read, valider, puis Reset"
+                  ],
+                  [
+                    "Prog",
+                    "Variateur → carte SD : saisir Prog, valider, puis Reset"
+                  ]
+                ]
+              },
+              {
+                "code": "00.038",
+                "def": "—",
+                "titre": "Autocalibrage moteur",
+                "valeurs": [
+                  [
+                    "1",
+                    "Autocalibrage à l'arrêt"
+                  ],
+                  [
+                    "2",
+                    "Autocalibrage avec rotation"
+                  ]
+                ],
+                "note": "Donner ensuite un ordre de marche (+24 V sur la borne 12 ou 13) ; attendre « inh » et l'arrêt du moteur."
+              }
+            ]
+          },
+          {
+            "nom": "Automate (LOGO) · paramètres du programme",
+            "items": [
+              {
+                "code": "T. FAP",
+                "def": "0 s",
+                "titre": "Attente avant fermeture automatique après passage",
+                "valeurs": []
+              },
+              {
+                "code": "T. Ferm auto",
+                "def": "15 s",
+                "titre": "Attente avant fermeture automatique si non-passage",
+                "valeurs": []
+              },
+              {
+                "code": "T. Securite",
+                "def": "30 s",
+                "titre": "Temps au-delà duquel la barrière se met en défaut si aucun des deux fins de course n'est détecté",
+                "valeurs": []
+              },
+              {
+                "code": "T.deverr",
+                "def": "0,5 s",
+                "titre": "Temps de fermeture avant ouverture (évite le blocage dû au verrouillage)",
+                "valeurs": []
+              },
+              {
+                "code": "T. verr/vent",
+                "def": "1 s",
+                "titre": "Délai d'activation du verrouillage / de la ventouse une fois la barrière fermée",
+                "valeurs": []
+              },
+              {
+                "code": "T. Presign.O",
+                "def": "0 s",
+                "titre": "Présignalisation (feu flash) avant ouverture",
+                "valeurs": []
+              },
+              {
+                "code": "T. Presign.F",
+                "def": "0 s",
+                "titre": "Présignalisation (feu flash) avant fermeture",
+                "valeurs": []
+              },
+              {
+                "code": "T.Detection",
+                "def": "0,5 s",
+                "titre": "Durée minimale de détection pour être prise en compte",
+                "valeurs": []
+              },
+              {
+                "code": "Nb cycles · Nb Mill.cycles",
+                "def": "—",
+                "titre": "Compteurs de cycles (lecture seule)",
+                "valeurs": []
+              }
+            ]
+          }
+        ]
+      },
+      "bornier": {
+        "groupes": [
+          {
+            "nom": "Entrées de l'automate (12 entrées, 8 sorties)",
+            "bornes": [
+              {
+                "n": "Contact d'ouverture",
+                "label": "Contact sec du contrôle d'accès",
+                "desc": "Fermé : la barrière s'ouvre et reste ouverte tant que le contact est maintenu. Ouvert : la barrière se ferme (ou se fermera) seulement si elle est complètement ouverte (fin de course ouvert actionné), si les sécurités sont inactives et si l'une des entrées « fermeture après passage » ou « fermeture après tempo » est fermée.",
+                "t": "no"
+              },
+              {
+                "n": "Contact de fermeture",
+                "label": "Contact sec du contrôle d'accès",
+                "desc": "Fermé : la barrière se ferme si les sécurités sont inactives et la commande d'ouverture ouverte.",
+                "t": "no"
+              },
+              {
+                "n": "Fin de course n° 1",
+                "label": "Capteur barrière ouverte",
+                "desc": "Actif : le variateur passe en petite vitesse (00.012) puis coupe le moteur.",
+                "t": "no"
+              },
+              {
+                "n": "Fin de course n° 2",
+                "label": "Capteur barrière fermée",
+                "desc": "Actif : le variateur passe en petite vitesse (00.014). Si la lisse n'atteint pas la butée, régler le capteur plus tard ou augmenter 00.022.",
+                "t": "no"
+              },
+              {
+                "n": "Fin de course sécurité",
+                "label": "Capteur au-delà de l'ouverture",
+                "desc": "Actif : la barrière passe en défaut et coupe les commandes du moteur.",
+                "t": "nf"
+              },
+              {
+                "n": "Shunt FAP",
+                "label": "Validation fermeture après passage",
+                "desc": "Fermé : active ; ouvert : désactive. Temporisation réglable dans l'automate.",
+                "t": "autre"
+              },
+              {
+                "n": "Shunt FAT",
+                "label": "Validation fermeture temporisée",
+                "desc": "Fermé : active ; ouvert : désactive. Temporisation réglable dans l'automate.",
+                "t": "autre"
+              },
+              {
+                "n": "Sorties automate",
+                "label": "Ouverture · fermeture · petite vitesse temporisée",
+                "desc": "Sorties de commande du variateur (non disponibles pour le client).",
+                "t": "sortie"
+              },
+              {
+                "n": "Variateur 12 / 13",
+                "label": "Ordre de marche",
+                "desc": "+24 V sur la borne 12 ou 13 donne l'ordre de marche (utilisé pour l'autocalibrage).",
+                "t": "autre"
+              },
+              {
+                "n": "Alimentation",
+                "label": "230 V ±10 %, 50 Hz ±2 Hz monophasé",
+                "desc": "Câble 3G 1,5 ou 2,5 mm² selon la distance ; disjoncteur différentiel 10 A – 30 mA par barrière ; raccordement hors tension ; terre sur le bornier prévu. Alimenter dès l'installation (condensation). Microcoupures < 100 ms sans incidence.",
+                "t": "alim"
+              }
+            ]
+          }
+        ],
+        "notes": [
+          "La notice LBA 12 ne contient pas de schéma de bornier (renvoi à un schéma électrique non fourni dans le PDF) : le câblage des bornes n'est donc pas détaillé ici.",
+          "La notice ne liste pas les codes d'erreur du variateur : se reporter à la documentation du variateur."
+        ]
+      },
+      "apprentissage": {
+        "avant": [
+          "Barrière testée et réglée en usine ; tout changement de lisse (longueur, accessoire) impose de reprendre les réglages et celui de la compensation.",
+          "Les réglages se font sous tension, capot ôté : risque de blessures. Couper l'alimentation pour toute opération mécanique (compensation).",
+          "Fins de course mécaniques à cames : celui le plus près du réducteur est celui de l'ouverture, ensuite le capteur de sécurité, puis la fermeture. Ce sont les cames qui règlent l'horizontale et la verticale ; les fins de course arrêtent le moteur et enclenchent le frein."
+        ],
+        "etapes": [
+          "Prérégler manuellement : approcher les fins de course au plus près des cames (l'axe du fin de course doit passer au centre de la came), amener la barrière en ouverture et en fermeture à la main (manivelle).",
+          "Fin de course de sécurité : même réglage, la came déclenche le capteur juste après le fin de course d'ouverture.",
+          "Réglage final en manœuvrant la barrière électriquement ; affiner la fermeture avec 00.022 (négatif) et 00.014.",
+          "Compensation (hors tension) : sortir l'ensemble compensation, dévisser le contre-écrou sur le tirant avec 2 clés de 30, visser ou dévisser le 2e écrou (2 cm maxi par rapport à la position initiale, 6 cm sous le 1er écrou), resserrer le contre-écrou, remettre l'ensemble.",
+          "Ventouse : plaque polaire à 50 mm mini du bord de la lisse (trou Ø8) ; éjecteur à assouplir en dévissant légèrement avec une clé 6 pans, puis tester le blocage."
+        ],
+        "apres": [
+          "Ouverture manuelle sans tension : ouvrir la porte avec la clé (de base clé 405), prendre la manivelle fixée sur le côté de la platine (son contacteur coupe l'alimentation de la carte), l'insérer dans le trou latéral, sens horaire pour lever, antihoraire pour baisser.",
+          "Sauvegarde du programme automate : insérer la carte, aller à la date puis ESC, Stopper → OUI, Carte → « Enr prog -> carte » ; restauration : « Chg prog <- carte » puis Démarrer → OUI.",
+          "Étapes de maintenance préventive (§7.2) et de remplacement (§8) : la notice fournie s'arrête à §7.1."
+        ]
+      }
+    },
+    {
+      "id": "lba-one-c",
+      "nom": "ONE-C (carte de commande)",
+      "modeles": "Carte de commande ONE-C des barrières La Barrière Automatique (LBA 4, 6, 6R, 63PK, 63PG, 7, 7R, 74, 86 NEO, 12) — moteur jusqu'à 0,55 kW, notices COAT015196-C (indice I) et ancienne notice (logique inductive seule)",
+      "type": "Carte de commande de barrière levante (ONE-C) — logiques capteurs inductifs et capteur angulaire, Modbus RTU / TCP, serveur web",
+      "source": "La Barrière Automatique, Notice d'utilisation ONE-C version 2023 (COAT015196-C, indice I) ; ancienne notice ONE-C « carte barrière » (logique capteurs inductifs)",
+      "codes": [
+        {
+          "code": "BARRIERE OUVERTE",
+          "type": "diag",
+          "titre": "État : ouverte",
+          "action": "Barrière ouverte, fermeture après temporisation ou mode auto non activés."
+        },
+        {
+          "code": "BARRIERE OUVERTE 15S",
+          "type": "diag",
+          "titre": "État : ouverte, compte à rebours",
+          "action": "Se refermera automatiquement à la fin du compte à rebours (fermeture après temporisation et mode auto activés). Compte à rebours qui reste à 15 s : un ordre d'ouverture et / ou une sécurité est actif."
+        },
+        {
+          "code": "BARRIERE FERMEE",
+          "type": "diag",
+          "titre": "État : fermée",
+          "action": "—"
+        },
+        {
+          "code": "OUVERTURE EN COURS · FERMETURE EN COURS",
+          "type": "diag",
+          "titre": "États de manœuvre",
+          "action": "—"
+        },
+        {
+          "code": "DETECTION BOUCLE",
+          "type": "diag",
+          "titre": "Véhicule sur la boucle de sécurité",
+          "action": "Fermeture impossible."
+        },
+        {
+          "code": "DETECTION CELLULE",
+          "type": "diag",
+          "titre": "Véhicule devant les cellules IR (ou ultrasons)",
+          "action": "Fermeture impossible."
+        },
+        {
+          "code": "BARRIERE DEGONDEE",
+          "type": "diag",
+          "titre": "Barrière dégondée",
+          "action": "Fermeture impossible si l'option « Regondage automatique » est activée."
+        },
+        {
+          "code": "MANIVELLE ABSENTE",
+          "type": "diag",
+          "titre": "Manivelle hors de son logement",
+          "action": "Pilotage impossible, moteur coupé : remettre la manivelle."
+        },
+        {
+          "code": "Temps de manœuvre dépassé",
+          "type": "erreur",
+          "titre": "Mise en sécurité",
+          "action": "Le temps d'ouverture ou de fermeture a dépassé T_manoeuvre (30 s par défaut) : pilotage moteur coupé, reset de la barrière nécessaire."
+        },
+        {
+          "code": "Moteur en défaut · code 106",
+          "type": "erreur",
+          "titre": "Erreur de calcul des enroulements à la mise sous tension",
+          "action": "Moteur débranché, court-circuit sur les phases, mauvaise configuration du moteur (Param_Motor_3), etc."
+        },
+        {
+          "code": "Moteur en défaut · code 107",
+          "type": "erreur",
+          "titre": "Surchauffe du module IGBT",
+          "action": "Laisser refroidir ; vérifier l'environnement et la charge."
+        },
+        {
+          "code": "Moteur en défaut · autre code",
+          "type": "erreur",
+          "titre": "Code non décrit",
+          "action": "Contacter le SAV. (0 = pas d'erreur.)"
+        },
+        {
+          "code": "Messages d'état",
+          "type": "led",
+          "titre": "Dernière ligne de l'écran Informations",
+          "action": "Voir les états ci-dessus."
+        },
+        {
+          "code": "Informations (menu)",
+          "type": "led",
+          "titre": "Menu INFORMATIONS",
+          "action": "Adresse MAC de µC1, version et date du firmware µC1 et µC2 (µC2 = contrôle moteur), nom et version du projet, nom et version du produit, date de compilation, langue."
+        },
+        {
+          "code": "I1 … I8 / Q1 … Q6",
+          "type": "led",
+          "titre": "LED d'entrées / sorties de la carte",
+          "action": "LED allumée = entrée / sortie active (1). Les entrées AI1 à AI4 n'ont pas de LED (visibles seulement à l'écran). Des LED indiquent aussi les tensions 3,3 V, 5 V et 24 V."
+        },
+        {
+          "code": "Remplacement de carte",
+          "type": "test",
+          "titre": "Reprise du programme par carte SD",
+          "action": "Retirer l'ancienne carte, récupérer sa carte SD (logement en haut à gauche), la mettre dans la nouvelle ; au démarrage « UPDATE PLC FROM SDCARD AUTO SAVE ? » : ENTER (YES), « Done » ; ENTER, START PLC, ESC, puis redémarrer la barrière."
+        }
+      ],
+      "parametres": {
+        "intro": "Carte de commande ONE-C (automate programmable embarqué, LCD 4 × 20, touches ESC / ▼ / ▲ / ENTER). Deux profils : OP (sans mot de passe) et ADMIN (mot de passe à quatre chiffres, à demander au SAV). Les paramètres grisés dans la notice ne doivent pas être modifiés sans contacter le SAV. La liste dépend du type de barrière et des clients.",
+        "navigation": [
+          "Menu principal : ESC + ENTER maintenus 3 s → choix du profil OP / ADMIN → PLC MENU.",
+          "ESC maintenu 2 s : paramètres avancés. ENTER maintenu 2 s : état des entrées / sorties. ▲ / ▼ : commande locale d'ouverture / fermeture (depuis les écrans « Informations » et « Inputs-Outputs »).",
+          "Menu OP : Informations, Start / Stop PLC, User parameters, IP config, Download PLC prog, Upload PLC prog. ADMIN ajoute Erase PLC prog, Erase PLC retain, Erase userparam, Located vars, Reboot.",
+          "Modifier un paramètre : User parameters, ENTER pour sélectionner (la valeur s'affiche), ENTER pour éditer, ▲ / ▼ pour régler, ENTER pour valider, ESC pour revenir, ESC pour sortir."
+        ],
+        "groupes": [
+          {
+            "nom": "Logique à capteurs inductifs · réglages OP et ADMIN",
+            "items": [
+              {
+                "code": "T_manoeuvre",
+                "def": "30 s",
+                "titre": "Temps de manœuvre : défaut si aucun fin de course détecté",
+                "valeurs": [],
+                "note": "Au-delà : « Temps de manœuvre dépassé », moteur coupé, reset nécessaire. OP + ADMIN."
+              },
+              {
+                "code": "FAT",
+                "def": "—",
+                "titre": "Fermeture automatique après temporisation",
+                "valeurs": [
+                  [
+                    "TRUE",
+                    "Activé"
+                  ],
+                  [
+                    "FALSE",
+                    "Désactivé"
+                  ]
+                ]
+              },
+              {
+                "code": "FAP",
+                "def": "—",
+                "titre": "Fermeture automatique après passage sur la boucle de sécurité",
+                "valeurs": [
+                  [
+                    "TRUE",
+                    "Activé"
+                  ],
+                  [
+                    "FALSE",
+                    "Désactivé"
+                  ]
+                ]
+              },
+              {
+                "code": "T_FAT",
+                "def": "15 s",
+                "titre": "Attente avant fermeture automatique après temporisation",
+                "valeurs": []
+              },
+              {
+                "code": "T_FAP",
+                "def": "0 s",
+                "titre": "Attente avant fermeture automatique après passage",
+                "valeurs": []
+              },
+              {
+                "code": "T_Detection_FAP",
+                "def": "0,5 s",
+                "titre": "Durée minimale de détection de la boucle pour valider la fermeture après passage",
+                "valeurs": []
+              },
+              {
+                "code": "T_PVT",
+                "def": "1 s",
+                "titre": "Petite vitesse temporisée en fermeture (barrières irréversibles)",
+                "valeurs": []
+              },
+              {
+                "code": "Presign_OUV",
+                "def": "0 s",
+                "titre": "Présignalisation avant ouverture",
+                "valeurs": []
+              },
+              {
+                "code": "Presign_FERM",
+                "def": "0 s",
+                "titre": "Présignalisation avant fermeture",
+                "valeurs": []
+              },
+              {
+                "code": "Clignotement_feux",
+                "def": "—",
+                "titre": "Clignotement des feux sur lisse",
+                "valeurs": [
+                  [
+                    "TRUE",
+                    "Activé"
+                  ],
+                  [
+                    "FALSE",
+                    "Désactivé"
+                  ]
+                ]
+              },
+              {
+                "code": "Mode_1_BP",
+                "def": "—",
+                "titre": "Mode « 1 BP » : la commande d'ouverture devient fermeture quand la barrière est ouverte",
+                "valeurs": [
+                  [
+                    "TRUE",
+                    "Activé"
+                  ],
+                  [
+                    "FALSE",
+                    "Désactivé"
+                  ]
+                ]
+              },
+              {
+                "code": "Mode_homme_mort",
+                "def": "—",
+                "titre": "Homme mort : la fermeture doit être maintenue jusqu'à la fin, sinon réouverture",
+                "valeurs": [
+                  [
+                    "TRUE",
+                    "Activé"
+                  ],
+                  [
+                    "FALSE",
+                    "Désactivé"
+                  ]
+                ]
+              },
+              {
+                "code": "Mode_capteurs_NC",
+                "def": "—",
+                "titre": "Fins de course en normalement fermé (NC) au lieu de NO",
+                "valeurs": [
+                  [
+                    "TRUE",
+                    "NC"
+                  ],
+                  [
+                    "FALSE",
+                    "NO"
+                  ]
+                ]
+              },
+              {
+                "code": "Activation_deverr",
+                "def": "—",
+                "titre": "Barrière à verrouillage mécanique (hors ventouse)",
+                "valeurs": [
+                  [
+                    "TRUE",
+                    "Activé"
+                  ],
+                  [
+                    "FALSE",
+                    "Désactivé"
+                  ]
+                ]
+              },
+              {
+                "code": "PWM_verrou",
+                "def": "—",
+                "titre": "PWM sur la sortie verrouillage Q3",
+                "valeurs": [
+                  [
+                    "TRUE",
+                    "Activé"
+                  ],
+                  [
+                    "FALSE",
+                    "Désactivé"
+                  ]
+                ]
+              },
+              {
+                "code": "Param_Vit_1",
+                "def": "—",
+                "titre": "Vitesse d'ouverture (Hz)",
+                "valeurs": []
+              },
+              {
+                "code": "Param_Vit_2",
+                "def": "—",
+                "titre": "Vitesse de fermeture (Hz)",
+                "valeurs": []
+              },
+              {
+                "code": "Param_Vit_3",
+                "def": "—",
+                "titre": "Vitesse de ralentissement (maintien de couple) en ouverture (Hz)",
+                "valeurs": []
+              },
+              {
+                "code": "Param_Vit_4",
+                "def": "—",
+                "titre": "Vitesse de ralentissement (maintien de couple) en fermeture (Hz)",
+                "valeurs": []
+              },
+              {
+                "code": "Param_Vit_5",
+                "def": "—",
+                "titre": "Rampe d'accélération en ouverture (Hz/s)",
+                "valeurs": []
+              },
+              {
+                "code": "Param_Vit_6",
+                "def": "—",
+                "titre": "Rampe d'accélération en fermeture (Hz/s)",
+                "valeurs": []
+              },
+              {
+                "code": "Param_Vit_7",
+                "def": "—",
+                "titre": "Rampe de décélération en ouverture (Hz/s)",
+                "valeurs": []
+              },
+              {
+                "code": "Param_Vit_8",
+                "def": "—",
+                "titre": "Rampe de décélération en fermeture (Hz/s)",
+                "valeurs": []
+              },
+              {
+                "code": "Param_Vit_9",
+                "def": "—",
+                "titre": "Vitesse d'ouverture lors du regondage automatique (Hz)",
+                "valeurs": []
+              },
+              {
+                "code": "English",
+                "def": "—",
+                "titre": "Messages en anglais / français",
+                "valeurs": [
+                  [
+                    "TRUE",
+                    "Anglais"
+                  ],
+                  [
+                    "FALSE",
+                    "Français"
+                  ]
+                ]
+              },
+              {
+                "code": "t_reouverture",
+                "def": "0 s",
+                "titre": "Retard avant coupure moteur après une réouverture à la volée en ayant quitté le fin de course ouverture",
+                "valeurs": [],
+                "note": "Barrières irréversibles seulement ; assure une réouverture complète (lisse avec grille)."
+              },
+              {
+                "code": "t_reouv_2",
+                "def": "0 s",
+                "titre": "Même retard sans avoir quitté le fin de course ouverture",
+                "valeurs": [],
+                "note": "Barrières irréversibles seulement."
+              },
+              {
+                "code": "T_ON_FEUX · T_OFF_FEUX",
+                "def": "0,5 s · 0,5 s",
+                "titre": "Durées d'allumage / d'extinction des feux sur lisse (si Clignotement_feux)",
+                "valeurs": []
+              },
+              {
+                "code": "Mode_orange",
+                "def": "—",
+                "titre": "Éclairage orange des éléments de signalisation pendant le mouvement",
+                "valeurs": [
+                  [
+                    "TRUE",
+                    "Activé"
+                  ],
+                  [
+                    "FALSE",
+                    "Désactivé"
+                  ]
+                ]
+              },
+              {
+                "code": "Cligno_orange",
+                "def": "—",
+                "titre": "Clignotement pendant la phase orange",
+                "valeurs": [
+                  [
+                    "TRUE",
+                    "Activé"
+                  ],
+                  [
+                    "FALSE",
+                    "Désactivé"
+                  ]
+                ]
+              },
+              {
+                "code": "Cligno_rouge",
+                "def": "—",
+                "titre": "Clignotement du feu rouge (ou capot LED / lisse lumineuse)",
+                "valeurs": [
+                  [
+                    "TRUE",
+                    "Activé"
+                  ],
+                  [
+                    "FALSE",
+                    "Désactivé"
+                  ]
+                ]
+              },
+              {
+                "code": "Veille_Vert · T_Veille_Vert",
+                "def": "— · 60 s",
+                "titre": "Extinction automatique du feu vert après T_Veille_Vert",
+                "valeurs": [
+                  [
+                    "TRUE",
+                    "Activé"
+                  ],
+                  [
+                    "FALSE",
+                    "Désactivé"
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "nom": "Logique à capteurs inductifs · réservés ADMIN",
+            "items": [
+              {
+                "code": "Regondage_auto",
+                "def": "—",
+                "titre": "Regondage automatique (LBA63PG)",
+                "valeurs": [
+                  [
+                    "TRUE",
+                    "Activé"
+                  ],
+                  [
+                    "FALSE",
+                    "Désactivé"
+                  ]
+                ]
+              },
+              {
+                "code": "Reversibilite",
+                "def": "—",
+                "titre": "Barrière réversible : active le « maintien de couple »",
+                "valeurs": [
+                  [
+                    "TRUE",
+                    "Activé"
+                  ],
+                  [
+                    "FALSE",
+                    "Désactivé"
+                  ]
+                ]
+              },
+              {
+                "code": "Reouverture_secu",
+                "def": "—",
+                "titre": "Réouverture automatique sur détection d'un organe de sécurité",
+                "valeurs": [
+                  [
+                    "TRUE",
+                    "Activé"
+                  ],
+                  [
+                    "FALSE",
+                    "Désactivé"
+                  ]
+                ]
+              },
+              {
+                "code": "Param_Boost_1 · 3",
+                "def": "—",
+                "titre": "Boost moteur en mouvement (%) · en maintien de couple (%)",
+                "valeurs": []
+              },
+              {
+                "code": "Param_Boost_2 · 4",
+                "def": "—",
+                "titre": "Vitesse sous laquelle le boost s'applique : mouvement (Hz) · maintien de couple (Hz)",
+                "valeurs": []
+              },
+              {
+                "code": "Param_Motor_1 · 2",
+                "def": "—",
+                "titre": "Courant maximal moteur en mouvement (A) · en maintien de couple (A)",
+                "valeurs": []
+              },
+              {
+                "code": "Param_Motor_3",
+                "def": "—",
+                "titre": "Choix du moteur piloté",
+                "valeurs": [
+                  [
+                    "1",
+                    "0,18 kW 1,2 A Bonfiglioli"
+                  ],
+                  [
+                    "2",
+                    "0,25 kW 1,5 A Leroy Somer"
+                  ],
+                  [
+                    "3",
+                    "0,55 kW 3 A Bonfiglioli"
+                  ],
+                  [
+                    "4",
+                    "0,25 kW 1,4 A Bonfiglioli"
+                  ]
+                ]
+              },
+              {
+                "code": "Sens_barriere",
+                "def": "—",
+                "titre": "Sens de rotation du moteur",
+                "valeurs": [
+                  [
+                    "1",
+                    "Sens normal"
+                  ],
+                  [
+                    "−1",
+                    "Sens inverse"
+                  ]
+                ]
+              },
+              {
+                "code": "Retard_MDC_ouv · Retard_MDC_ferm",
+                "def": "—",
+                "titre": "Retard avant activation du maintien de couple en fin de course ouverture · fermeture (s)",
+                "valeurs": []
+              },
+              {
+                "code": "PROG0XXXXX",
+                "def": "—",
+                "titre": "Référence du programme",
+                "valeurs": []
+              }
+            ]
+          },
+          {
+            "nom": "Logique à capteur angulaire · configuration (ADMIN)",
+            "items": [
+              {
+                "code": "Type_barriere",
+                "def": "—",
+                "titre": "Type de barrière à piloter",
+                "valeurs": [
+                  [
+                    "1",
+                    "LBA4"
+                  ],
+                  [
+                    "2",
+                    "LBA6"
+                  ],
+                  [
+                    "3",
+                    "LBA6R"
+                  ],
+                  [
+                    "4",
+                    "LBA63PK"
+                  ],
+                  [
+                    "5",
+                    "LBA63PG aval"
+                  ],
+                  [
+                    "6",
+                    "LBA63PG amont"
+                  ],
+                  [
+                    "7",
+                    "LBA7"
+                  ],
+                  [
+                    "8",
+                    "LBA7R"
+                  ],
+                  [
+                    "9",
+                    "LBA74"
+                  ],
+                  [
+                    "10",
+                    "LBA86NEO IR"
+                  ],
+                  [
+                    "11",
+                    "LBA86NEO R"
+                  ],
+                  [
+                    "12",
+                    "LBA12"
+                  ]
+                ],
+                "note": "Redémarrage de la barrière obligatoire après modification."
+              },
+              {
+                "code": "Longueur_lisse",
+                "def": "—",
+                "titre": "Longueur de la lisse (m)",
+                "valeurs": []
+              },
+              {
+                "code": "Lisse",
+                "def": "—",
+                "titre": "Type de lisse montée",
+                "valeurs": [
+                  [
+                    "1",
+                    "Carbone"
+                  ],
+                  [
+                    "2",
+                    "Flex"
+                  ],
+                  [
+                    "3",
+                    "84×57"
+                  ],
+                  [
+                    "4",
+                    "135×93"
+                  ],
+                  [
+                    "5",
+                    "180×118"
+                  ],
+                  [
+                    "6",
+                    "175×75"
+                  ],
+                  [
+                    "7",
+                    "Ø80"
+                  ],
+                  [
+                    "8",
+                    "Ø140"
+                  ],
+                  [
+                    "9",
+                    "IPE acier"
+                  ],
+                  [
+                    "10",
+                    "HV1/HV2"
+                  ]
+                ]
+              },
+              {
+                "code": "Grille",
+                "def": "—",
+                "titre": "Type de grille",
+                "valeurs": [
+                  [
+                    "0",
+                    "Pas de grille"
+                  ],
+                  [
+                    "1",
+                    "Grille GA"
+                  ],
+                  [
+                    "2",
+                    "Grille GTH"
+                  ],
+                  [
+                    "3",
+                    "Grille HP"
+                  ]
+                ]
+              },
+              {
+                "code": "Accessoire_lisse",
+                "def": "—",
+                "titre": "Accessoire de lisse",
+                "valeurs": [
+                  [
+                    "0",
+                    "Aucun"
+                  ],
+                  [
+                    "1",
+                    "Ventouse ou reposoir verrouillable"
+                  ],
+                  [
+                    "2",
+                    "Béquille"
+                  ],
+                  [
+                    "3",
+                    "Lisse lumineuse"
+                  ],
+                  [
+                    "4",
+                    "Lisse lumineuse + ventouse"
+                  ],
+                  [
+                    "5",
+                    "Lisse lumineuse + béquille"
+                  ]
+                ]
+              },
+              {
+                "code": "Boost_vit_1 · Boost_vit_2",
+                "def": "100 % · 100 %",
+                "titre": "Boost appliqué à la vitesse d'ouverture · de fermeture (%)",
+                "valeurs": []
+              }
+            ]
+          },
+          {
+            "nom": "Logique à capteur angulaire · réglages OP et ADMIN",
+            "items": [
+              {
+                "code": "T_manoeuvre",
+                "def": "30 s",
+                "titre": "Temps de manœuvre : défaut si aucun fin de course détecté",
+                "valeurs": [],
+                "note": "Au-delà : « Temps de manœuvre dépassé », moteur coupé, reset nécessaire. OP + ADMIN."
+              },
+              {
+                "code": "FAT",
+                "def": "—",
+                "titre": "Fermeture automatique après temporisation",
+                "valeurs": [
+                  [
+                    "TRUE",
+                    "Activé"
+                  ],
+                  [
+                    "FALSE",
+                    "Désactivé"
+                  ]
+                ]
+              },
+              {
+                "code": "FAP",
+                "def": "—",
+                "titre": "Fermeture automatique après passage sur la boucle de sécurité",
+                "valeurs": [
+                  [
+                    "TRUE",
+                    "Activé"
+                  ],
+                  [
+                    "FALSE",
+                    "Désactivé"
+                  ]
+                ]
+              },
+              {
+                "code": "T_FAT",
+                "def": "15 s",
+                "titre": "Attente avant fermeture automatique après temporisation",
+                "valeurs": []
+              },
+              {
+                "code": "T_FAP",
+                "def": "0 s",
+                "titre": "Attente avant fermeture automatique après passage",
+                "valeurs": []
+              },
+              {
+                "code": "T_Detection_FAP",
+                "def": "0,5 s",
+                "titre": "Durée minimale de détection de la boucle pour valider la fermeture après passage",
+                "valeurs": []
+              },
+              {
+                "code": "Presign_OUV",
+                "def": "0 s",
+                "titre": "Présignalisation avant ouverture",
+                "valeurs": []
+              },
+              {
+                "code": "Presign_FERM",
+                "def": "0 s",
+                "titre": "Présignalisation avant fermeture",
+                "valeurs": []
+              },
+              {
+                "code": "Clignotement_feux",
+                "def": "—",
+                "titre": "Clignotement des feux sur lisse",
+                "valeurs": [
+                  [
+                    "TRUE",
+                    "Activé"
+                  ],
+                  [
+                    "FALSE",
+                    "Désactivé"
+                  ]
+                ]
+              },
+              {
+                "code": "Mode_1_BP",
+                "def": "—",
+                "titre": "Mode « 1 BP » : la commande d'ouverture devient fermeture quand la barrière est ouverte",
+                "valeurs": [
+                  [
+                    "TRUE",
+                    "Activé"
+                  ],
+                  [
+                    "FALSE",
+                    "Désactivé"
+                  ]
+                ]
+              },
+              {
+                "code": "Mode_homme_mort",
+                "def": "—",
+                "titre": "Homme mort : la fermeture doit être maintenue jusqu'à la fin, sinon réouverture",
+                "valeurs": [
+                  [
+                    "TRUE",
+                    "Activé"
+                  ],
+                  [
+                    "FALSE",
+                    "Désactivé"
+                  ]
+                ]
+              },
+              {
+                "code": "Activation_deverr",
+                "def": "—",
+                "titre": "Barrière à verrouillage mécanique (hors ventouse) : légère refermeture avant chaque ouverture",
+                "valeurs": [
+                  [
+                    "TRUE",
+                    "Activé"
+                  ],
+                  [
+                    "FALSE",
+                    "Désactivé"
+                  ]
+                ]
+              },
+              {
+                "code": "t_deverrouillage",
+                "def": "0,2 s",
+                "titre": "Durée de la refermeture avant ouverture (si Activation_deverr)",
+                "valeurs": []
+              },
+              {
+                "code": "PWM_verrou",
+                "def": "—",
+                "titre": "PWM sur la sortie verrouillage Q3 pour consommer moins",
+                "valeurs": [
+                  [
+                    "TRUE",
+                    "Activé"
+                  ],
+                  [
+                    "FALSE",
+                    "Désactivé"
+                  ]
+                ]
+              },
+              {
+                "code": "English",
+                "def": "—",
+                "titre": "Messages en anglais (TRUE) ou français (FALSE)",
+                "valeurs": [
+                  [
+                    "TRUE",
+                    "Anglais"
+                  ],
+                  [
+                    "FALSE",
+                    "Français"
+                  ]
+                ]
+              },
+              {
+                "code": "T_PVT",
+                "def": "1 s",
+                "titre": "Petite vitesse temporisée en fermeture (barrières irréversibles)",
+                "valeurs": []
+              },
+              {
+                "code": "T_ON_feux · T_OFF_feux",
+                "def": "0,5 s · 0,5 s",
+                "titre": "Durées feux sur lisse allumés / éteints",
+                "valeurs": []
+              },
+              {
+                "code": "T_verrouillage",
+                "def": "1 s",
+                "titre": "Délai d'activation du verrouillage après fermeture complète",
+                "valeurs": []
+              },
+              {
+                "code": "Angle_deverr",
+                "def": "20°",
+                "titre": "Angle à partir duquel le verrouillage est désactivé en cas de forçage de la lisse",
+                "valeurs": []
+              },
+              {
+                "code": "Butee_1",
+                "def": "—",
+                "titre": "Butée ouverture enregistrée à l'apprentissage (°)",
+                "valeurs": []
+              },
+              {
+                "code": "Tolerance_1",
+                "def": "±5°",
+                "titre": "Tolérance autour de la butée ouverture (barrière considérée ouverte)",
+                "valeurs": []
+              },
+              {
+                "code": "Butee_2",
+                "def": "—",
+                "titre": "Butée fermeture enregistrée à l'apprentissage (°)",
+                "valeurs": []
+              },
+              {
+                "code": "Tolerance_2",
+                "def": "±5°",
+                "titre": "Tolérance autour de la butée fermeture (barrière considérée fermée)",
+                "valeurs": []
+              },
+              {
+                "code": "Offset_Ouv · Offset_Ferm",
+                "def": "0° · 0°",
+                "titre": "Plage de ralenti avant la butée ouverture · fermeture, une fois le ralentissement terminé",
+                "valeurs": []
+              }
+            ]
+          },
+          {
+            "nom": "Logique à capteur angulaire · réservés ADMIN",
+            "items": [
+              {
+                "code": "Regondage_auto",
+                "def": "—",
+                "titre": "Regondage automatique (LBA63PG)",
+                "valeurs": [
+                  [
+                    "TRUE",
+                    "Activé"
+                  ],
+                  [
+                    "FALSE",
+                    "Désactivé"
+                  ]
+                ]
+              },
+              {
+                "code": "Reouverture_secu",
+                "def": "—",
+                "titre": "Réouverture automatique sur détection d'un organe de sécurité",
+                "valeurs": [
+                  [
+                    "TRUE",
+                    "Activé"
+                  ],
+                  [
+                    "FALSE",
+                    "Désactivé"
+                  ]
+                ]
+              },
+              {
+                "code": "Etat_apprentissage",
+                "def": "—",
+                "titre": "Apprentissage réalisé ou non (lecture)",
+                "valeurs": [
+                  [
+                    "TRUE",
+                    "Réalisé"
+                  ],
+                  [
+                    "FALSE",
+                    "Non réalisé"
+                  ]
+                ]
+              },
+              {
+                "code": "Reouverture_obstacle",
+                "def": "—",
+                "titre": "Réouverture automatique sur détection d'obstacle en fermeture",
+                "valeurs": [
+                  [
+                    "TRUE",
+                    "Activé"
+                  ],
+                  [
+                    "FALSE",
+                    "Désactivé"
+                  ]
+                ]
+              },
+              {
+                "code": "T_detection_choc",
+                "def": "0,03 s",
+                "titre": "Durée de blocage de la lisse pour considérer un obstacle",
+                "valeurs": []
+              },
+              {
+                "code": "Seuil_detection_choc",
+                "def": "0,5 (50 %)",
+                "titre": "Seuil de vitesse (en % de la consigne) sous lequel la lisse est considérée bloquée",
+                "valeurs": []
+              },
+              {
+                "code": "Nb_chocs_autorises",
+                "def": "3",
+                "titre": "Essais de refermeture après détection d'obstacle avant mise en défaut",
+                "valeurs": [],
+                "note": "Défaut réinitialisé en envoyant un ordre d'ouverture."
+              },
+              {
+                "code": "T_pos_ouverte",
+                "def": "2 s",
+                "titre": "Temps d'ouverture avant refermeture après une réouverture sur obstacle",
+                "valeurs": []
+              },
+              {
+                "code": "Offset_Vit_1 · Offset_Vit_2",
+                "def": "—",
+                "titre": "Modification de la vitesse d'ouverture · de fermeture de ±10 Hz",
+                "valeurs": []
+              },
+              {
+                "code": "Offset_Pvit_1 · Offset_Pvit_2",
+                "def": "—",
+                "titre": "Modification de la petite vitesse d'ouverture · de fermeture de ±10 Hz",
+                "valeurs": []
+              },
+              {
+                "code": "Defaut_cinematique",
+                "def": "—",
+                "titre": "Détection d'un défaut dans la chaîne cinématique (du câble moteur au câble du capteur angulaire)",
+                "valeurs": [
+                  [
+                    "TRUE",
+                    "Activé"
+                  ],
+                  [
+                    "FALSE",
+                    "Désactivé"
+                  ]
+                ]
+              },
+              {
+                "code": "Regondage_arriere",
+                "def": "—",
+                "titre": "Procédure de regondage adaptée à un dégondage arrière",
+                "valeurs": [
+                  [
+                    "TRUE",
+                    "Activé"
+                  ],
+                  [
+                    "FALSE",
+                    "Désactivé"
+                  ]
+                ]
+              },
+              {
+                "code": "Vit_pause",
+                "def": "—",
+                "titre": "Vitesse de stop (réversibles, sans réouverture sur sécurité) pour équilibrer la lisse entre ressort et vitesse de pause (Hz)",
+                "valeurs": []
+              },
+              {
+                "code": "Fonction_Q4",
+                "def": "4",
+                "titre": "Sortie Q4 reprogrammable : 1 → Q4 se comporte comme Q1 (feu flash)",
+                "valeurs": []
+              },
+              {
+                "code": "Mode_I3_NC · I4 · I5 · I8",
+                "def": "—",
+                "titre": "Changement de l'état NO / NC des entrées I3, I4, I5, I8",
+                "valeurs": []
+              },
+              {
+                "code": "Mode_QR1_NC … QR6_NC",
+                "def": "—",
+                "titre": "Changement de l'état NO / NC des sorties relais QR1 à QR6",
+                "valeurs": []
+              },
+              {
+                "code": "Tolerance_referm",
+                "def": "—",
+                "titre": "Angle de tolérance acceptable en position fermée (°)",
+                "valeurs": []
+              },
+              {
+                "code": "T_Tolerance_referm",
+                "def": "70 ms",
+                "titre": "Temps de dépassement acceptable en position fermée (évite les micro-rebonds du capteur angulaire)",
+                "valeurs": []
+              }
+            ]
+          }
+        ]
+      },
+      "bornier": {
+        "groupes": [
+          {
+            "nom": "Entrées numériques 24 Vdc (attribution par défaut)",
+            "bornes": [
+              {
+                "n": "I1",
+                "label": "Commande d'ouverture",
+                "desc": "NO.",
+                "t": "no"
+              },
+              {
+                "n": "I2",
+                "label": "Commande de fermeture",
+                "desc": "NO.",
+                "t": "no"
+              },
+              {
+                "n": "I3",
+                "label": "Boucle magnétique de sécurité",
+                "desc": "NF.",
+                "t": "nf"
+              },
+              {
+                "n": "I4",
+                "label": "Cellule IR (ou ultrason) de sécurité n° 1",
+                "desc": "NF.",
+                "t": "nf"
+              },
+              {
+                "n": "I5",
+                "label": "Cellule IR (ou ultrason) de sécurité n° 2",
+                "desc": "NF.",
+                "t": "nf"
+              },
+              {
+                "n": "I6",
+                "label": "Boucle magnétique d'ouverture libre",
+                "desc": "NO.",
+                "t": "no"
+              },
+              {
+                "n": "I7",
+                "label": "Mode automatique / manuel",
+                "desc": "1 = auto, 0 = manuel.",
+                "t": "autre"
+              },
+              {
+                "n": "I8",
+                "label": "Capteur de dégondage (lisse tombée)",
+                "desc": "NC.",
+                "t": "nf"
+              }
+            ]
+          },
+          {
+            "nom": "Entrées analogiques 0-10 V / numériques (capteurs de position)",
+            "bornes": [
+              {
+                "n": "AI1",
+                "label": "Fin de course ouverture",
+                "desc": "NO ; non attribuée en logique angulaire.",
+                "t": "no"
+              },
+              {
+                "n": "AI2",
+                "label": "Ralentissement ouverture",
+                "desc": "NO ; non attribuée en angulaire.",
+                "t": "no"
+              },
+              {
+                "n": "AI3",
+                "label": "Ralentissement fermeture",
+                "desc": "NO, ou fin de course manivelle (barrières irréversibles) ; non attribuée en angulaire.",
+                "t": "no"
+              },
+              {
+                "n": "AI4",
+                "label": "Fin de course fermeture",
+                "desc": "NO ; non attribuée en angulaire.",
+                "t": "no"
+              },
+              {
+                "n": "Encod",
+                "label": "Codeur de position angulaire absolu",
+                "desc": "Pour la logique à capteur angulaire.",
+                "t": "autre"
+              }
+            ]
+          },
+          {
+            "nom": "Sorties",
+            "bornes": [
+              {
+                "n": "Q1",
+                "label": "Feu flash sur capot",
+                "desc": "Transistor 24 Vdc, 0,75 A par sortie, 40 W au total.",
+                "t": "sortie"
+              },
+              {
+                "n": "Q2",
+                "label": "Feux sur lisse",
+                "desc": "",
+                "t": "sortie"
+              },
+              {
+                "n": "Q3",
+                "label": "Ventouse / verrouillage",
+                "desc": "PWM possible (PWM_verrou).",
+                "t": "sortie"
+              },
+              {
+                "n": "Q4",
+                "label": "Alarme dégondage",
+                "desc": "Reprogrammable (Fonction_Q4).",
+                "t": "sortie"
+              },
+              {
+                "n": "Q5",
+                "label": "Feu vert",
+                "desc": "",
+                "t": "sortie"
+              },
+              {
+                "n": "Q6",
+                "label": "Feu rouge",
+                "desc": "",
+                "t": "sortie"
+              },
+              {
+                "n": "QR1",
+                "label": "Report barrière ouverte",
+                "desc": "Relais contact sec NO, 10 A 250 Vac.",
+                "t": "sortie"
+              },
+              {
+                "n": "QR2",
+                "label": "Report barrière fermée",
+                "desc": "NO.",
+                "t": "sortie"
+              },
+              {
+                "n": "QR3",
+                "label": "Report dégondée / lisse tombée",
+                "desc": "NC.",
+                "t": "sortie"
+              },
+              {
+                "n": "QR4",
+                "label": "Report boucle de sécurité",
+                "desc": "NO.",
+                "t": "sortie"
+              },
+              {
+                "n": "QR5",
+                "label": "Report synthèse défaut",
+                "desc": "NC.",
+                "t": "sortie"
+              },
+              {
+                "n": "QR6",
+                "label": "Non attribuée",
+                "desc": "",
+                "t": "sortie"
+              },
+              {
+                "n": "AQ",
+                "label": "Sortie analogique 0-10 V",
+                "desc": "Pour un accessoire analogique.",
+                "t": "sortie"
+              }
+            ]
+          },
+          {
+            "nom": "Moteur, alimentation, communication",
+            "bornes": [
+              {
+                "n": "U · V · W · GND",
+                "label": "Moteur triphasé",
+                "desc": "0,55 kW maximum.",
+                "t": "moteur"
+              },
+              {
+                "n": "R Br",
+                "label": "Relais de frein",
+                "desc": "Contact sec pour le frein du moteur (si besoin).",
+                "t": "sortie"
+              },
+              {
+                "n": "230 Vac : L · N · GND",
+                "label": "Alimentation générale de la carte",
+                "desc": "",
+                "t": "alim"
+              },
+              {
+                "n": "24 Vdc supplémentaire",
+                "label": "Entrée optionnelle",
+                "desc": "À utiliser si les 40 W des sorties transistors sont dépassés.",
+                "t": "alim"
+              },
+              {
+                "n": "Ethernet",
+                "label": "Modbus TCP/IP (serveur)",
+                "desc": "Adresse IP par défaut 192.168.0.100 (statique ou DHCP, menu IP CONFIG).",
+                "t": "bus"
+              },
+              {
+                "n": "RS485",
+                "label": "Modbus RTU (esclave)",
+                "desc": "Si la carte n'est pas en bout de ligne, retirer le cavalier à droite du connecteur.",
+                "t": "bus"
+              },
+              {
+                "n": "SD Card",
+                "label": "Sauvegarde / mise à jour",
+                "desc": "Carte SD de sauvegarde automatique (en haut à gauche) ; sert aussi à mettre à jour ou sauvegarder le programme ou le firmware.",
+                "t": "autre"
+              }
+            ]
+          }
+        ],
+        "notes": [
+          "L'attribution des entrées / sorties est celle par défaut ; elle varie selon le type de barrière et les clients.",
+          "Notice : les exemples d'IP citent 192.168.0.100 (défaut) et 192.168.0.1 / .3 pour le PC ; la notice renvoie aussi à un « §12.1 » absent de ce document."
+        ]
+      },
+      "apprentissage": {
+        "avant": [
+          "Choisir la version de logique : capteurs inductifs (AI1 à AI4 câblés sur fins de course et ralentissements) ou capteur angulaire (codeur sur Encod ; AI1, AI2, AI4 inutilisées).",
+          "En logique angulaire : régler Type_barriere (ADMIN) puis redémarrer la barrière ; renseigner Longueur_lisse, Lisse, Grille, Accessoire_lisse."
+        ],
+        "etapes": [
+          "Lire Etat_apprentissage : FALSE = apprentissage des butées non réalisé. La notice ne décrit pas la procédure de l'apprentissage ; elle enregistre Butee_1 (ouverture) et Butee_2 (fermeture) en degrés.",
+          "Régler les vitesses et rampes (Param_Vit_1 à 9 en logique inductive, Offset_Vit / Offset_Pvit en angulaire) et le sens du moteur (Sens_barriere).",
+          "Régler les fermetures automatiques (FAT / FAP et leurs temporisations), les présignalisations et les feux."
+        ],
+        "apres": [
+          "Sauvegarde / chargement du programme : menu OP, DOWNLOAD PLC PROG ou UPLOAD PLC PROG, choisir le fichier .LBA de la carte SD. START / STOP PLC arrête ou relance le programme sans couper l'alimentation.",
+          "Modbus : voir la table d'échange (§5.4) de la notice."
+        ]
+      }
+    }
   ]
 }
 ];

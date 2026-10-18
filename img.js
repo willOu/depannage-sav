@@ -98,6 +98,37 @@
       S("dea-net24n-p11", "Câblage TYPE 02 (basculante)", 11, "Page FR-9."),
       S("dea-net24n-p12", "Câblage TYPE 03 (barrière)", 12, "Page FR-10.")
     ],
+    "elka-p2500-5000": [
+      S("elka-p-p41", "Connecteur de la logique MO 24", 41, "Figure 33 : emplacement des bornes et tableau des contacts à ouverture ou ponts obligatoires à la mise en service."),
+      S("elka-mo24-p05", "Platine MO 24 : toutes les bornes", 5, "Figure 1 de la partie 2 : platine, bornes 1 à 48, joystick, LED, DIP-switch, commutateur de service."),
+      S("elka-p-p43", "Alimentation 230 V / bloc RSP320-24", 43, "Figure 34 : interrupteur principal, bloc d'alimentation RSP320-24 et détection de panne de courant ANAE (option)."),
+      S("elka-p-p44", "Sorties 12 V / 24 V", 44, "Figure 35 : sorties X1/1 à X1/8 (12 V et 24 V)."),
+      S("elka-p-p45", "Moteur BLDC", 45, "Figure 36 : raccordement du moteur BLDC sur les bornes U V W HA HB HC."),
+      S("elka-p-p46", "Boucles d'induction A / B / C", 46, "Figure 37 : raccordement des boucles LOOP-A, LOOP-B, LOOP-C."),
+      S("elka-p-p47", "Entrées : touches et sécurités", 47, "Figure 38 : SLZ, LS, Bm, BT*, BTA1, BTA2, ANT, BTZ1A, BTZ2, BTS, NAE."),
+      S("elka-p-p48", "Relais multifonctions 7 à 14 (option)", 48, "Figure 39 : platine d'extension et exemple de câblage.")
+    ],
+    "elka-t3000-3500": [
+      S("elka-t-p33", "Connecteur de la logique MO 24", 33, "Figure 23 : emplacement des bornes et tableau des contacts à ouverture ou ponts obligatoires."),
+      S("elka-t-p36", "Alimentation 230 V / bloc RSP320-24", 36, "Figure 24 : interrupteur principal, bloc d'alimentation RSP320-24 et détection de panne de courant ANAE (option)."),
+      S("elka-t-p37", "Sorties 12 V / 24 V", 37, "Figure 25 : sorties X1/1 à X1/8 (12 V et 24 V)."),
+      S("elka-t-p38", "Moteur BLDC", 38, "Figure 26."),
+      S("elka-t-p39", "Boucles d'induction A / B / C", 39, "Figure 27."),
+      S("elka-t-p40", "Entrées : touches et sécurités", 40, "Figure 28.")
+    ],
+    "lba-67": [
+      S("lba67-p24", "Bornier façade 1 à 29", 24, "Page 24 : bornier en bas de la platine, commandes, modes, reports, feux et alimentation."),
+      S("lba67-p61", "Schéma électrique : irréversibles (LBA 6 / 7)", 61, "Page 61 : automate LOGO, variateur, bornes 002BN, boucles et accessoires."),
+      S("lba67-p62", "Borniers 002BN et tables", 62, "Page 62 : numérotation du bornier interne 002BN et tableaux d'options."),
+      S("lba67-p60", "Implantation LBA 6 / 7", 60, "Page 60 : implantation des composants de la platine."),
+      S("lba67-p63", "Implantation : réversibles", 63, "Page 63."),
+      S("lba67-p64", "Schéma électrique : réversibles (6R / 63PK / 7R / 74)", 64, "Page 64 : automate, variateur Unidrive M200 0,25 kW, moteur, capteurs et accessoires."),
+      S("lba67-p65", "Borniers : réversibles", 65, "Page 65.")
+    ],
+    "lba-4": [
+      S("lba4-p41", "Tableau de programmation SW1", 41, "Page 41 : positions des dip-switches SW1-1 à SW1-8 et fonctions."),
+      S("lba4-p59", "Schéma électrique LBA 4", 59, "Page 59 : platine ENPC001652, variateur, moteur, capteurs.")
+    ],
     "afca-starteco4-contacteurs": [
       S("afca-c4-p03", "Alimentation de la carte", 3, "Alimentation 400 V tri ou 230 V, moteur sur U V W, condensateur, pont de sélection de tension."),
       S("afca-c4-p05", "Raccordement de la platine", 5, "Bornier complet avec les entrées IN1 à IN11 et la liste des bornes."),
