@@ -15,6 +15,11 @@ const DATA_VERSION = "2026-10-18";
 /* Journal des modifications — ajouter une entrée en haut à chaque mise à jour.
    docs : nom des notices ajoutées (affichées dans Réglages). */
 const CHANGELOG = [
+  { v: "1.22", date: "2026-10-18", titre: "Schéma : Roger et BFT", items: [
+    "Onglet « Schéma » sur les 5 cartes Roger (B70/1DC, B70/1DCHP, B70/2ML, EDGE1, CTRL) : installation type avec câbles conseillés, raccordements électriques et tableaux des contacts de la notice.",
+    "Onglet « Schéma » sur BFT MERAK et LEO B CBB : tableaux de configuration et de bornier de la notice.",
+    "Ces pages sont des tableaux : elles complètent l'onglet Bornier sans le remplacer."
+  ], docs: [] },
   { v: "1.21", date: "2026-10-18", titre: "Schéma : Nice RUN", items: [
     "Onglet « Schéma » sur la carte Nice RUN : page de la notice avec le raccordement du clignotant, des photocellules, du sélecteur et des commandes."
   ], docs: [] },

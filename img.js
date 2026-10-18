@@ -51,6 +51,47 @@
     "came-za3p": [
       S("came-za3p-p13", "Description des composants de la carte", 13, "Dessin de la carte numéroté (borniers, trimmers TL / TFA, dip-switchs, fusibles) avec légende."),
     ],
+    "roger-b70-1dc": [
+      S("roger-b70-1dc-p126", "Installation type et câbles conseillés", 126, "Dessin de l'installation complète avec repères et tableau des câbles conseillés (section, longueur maxi)."),
+      S("roger-b70-1dc-p127", "Raccordements électriques", 127, "Alimentation, transformateur, moteur et batteries : dessins de câblage de la carte."),
+      S("roger-b70-1dc-p128", "Commandes et accessoires", 128, "Début du tableau des contacts : alimentation accessoires, lampe, sécurités, photocellules."),
+      S("roger-b70-1dc-p129", "Commandes et accessoires : bornes", 129, "Tableau des contacts avec le détail de chaque borne et de ses paramètres."),
+      S("roger-b70-1dc-p130", "Commandes et accessoires : bornes (suite)", 130, "Suite du tableau des contacts : sécurités, lampes, serrures, récepteur radio, chargeur de batterie.")
+    ],
+    "roger-b70-1dchp": [
+      S("roger-b70-1dchp-p119", "Installation type et câbles conseillés", 119, "Dessin de l'installation complète avec repères et tableau des câbles conseillés (section, longueur maxi)."),
+      S("roger-b70-1dchp-p120", "Raccordements électriques", 120, "Alimentation, transformateur, moteur et batteries : dessins de câblage de la carte."),
+      S("roger-b70-1dchp-p121", "Commandes et accessoires", 121, "Début du tableau des contacts."),
+      S("roger-b70-1dchp-p122", "Commandes et accessoires : bornes", 122, "Tableau des contacts avec le détail de chaque borne et de ses paramètres.")
+    ],
+    "roger-b70-2ml": [
+      S("roger-b70-2ml-p102", "Installation type et câbles conseillés", 102, "Dessin de l'installation complète avec repères et tableau des câbles conseillés (section, longueur maxi)."),
+      S("roger-b70-2ml-p103", "Raccordements électriques", 103, "Alimentation, transformateur, moteur et batteries : dessins de câblage de la carte."),
+      S("roger-b70-2ml-p104", "Commandes et accessoires", 104, "Début du tableau des contacts."),
+      S("roger-b70-2ml-p105", "Commandes et accessoires : bornes", 105, "Tableau des contacts avec le détail de chaque borne et de ses paramètres.")
+    ],
+    "roger-edge1": [
+      S("roger-edge1-p115", "Installation type et câbles conseillés", 115, "Dessin de l'installation complète avec repères et tableau des câbles conseillés (section, longueur maxi)."),
+      S("roger-edge1-p116", "Raccordements électriques", 116, "Alimentation, transformateur, moteur et batteries : dessins de câblage de la carte."),
+      S("roger-edge1-p117", "Commandes et accessoires", 117, "Début du tableau des contacts."),
+      S("roger-edge1-p118", "Commandes et accessoires : bornes", 118, "Tableau des contacts avec le détail de chaque borne et de ses paramètres."),
+      S("roger-edge1-p119", "Commandes et accessoires : bornes (suite)", 119, "Suite du tableau des contacts : sécurités, lampes, serrures, récepteur radio, chargeur de batterie.")
+    ],
+    "roger-ctrl": [
+      S("roger-ctrl-p132", "Installation type et câbles conseillés", 132, "Dessin de l'installation complète avec repères et tableau des câbles conseillés (section, longueur maxi)."),
+      S("roger-ctrl-p133", "Raccordements électriques", 133, "Alimentation, transformateur, moteur et batteries : dessins de câblage de la carte."),
+      S("roger-ctrl-p134", "Commandes et accessoires", 134, "Début du tableau des contacts."),
+      S("roger-ctrl-p135", "Commandes et accessoires : bornes", 135, "Tableau des contacts avec le détail de chaque borne et de ses paramètres."),
+      S("roger-ctrl-p136", "Commandes et accessoires : bornes (suite)", 136, "Suite du tableau des contacts : sécurités, lampes, serrures, récepteur radio, chargeur de batterie.")
+    ],
+    "bft-merak": [
+      S("bft-merak-p052", "Configuration des sorties AUX", 52, "Fonctions des sorties AUX et des entrées de la carte, selon la logique choisie."),
+      S("bft-merak-p053", "Bornier et configuration", 53, "Tableau des bornes : alimentation, moteur, entrées de commande et de sécurité, antenne.")
+    ],
+    "bft-leo-b-cbb": [
+      S("bft-leo-b-cbb-p032", "Données techniques et bornier", 32, "Caractéristiques de la carte, préparation de l'installation et tableau des bornes."),
+      S("bft-leo-b-cbb-p033", "Bornier et configuration", 33, "Tableau des bornes et configuration des entrées et sorties.")
+    ],
     "nice-run": [
       S("nice-run-p61", "Connexions électriques et installation des dispositifs", 61, "Raccordement du clignotant LUCYB (S.C.A.), des photocellules MOFB (TX / RX), du sélecteur à clé MOSE et des commandes ouverture / fermeture (fig. 14 à 16), avec la liste des bornes.")
     ],
