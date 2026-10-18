@@ -1560,7 +1560,7 @@ const MARQUES = [
         "code": "Sb",
         "type": "test",
         "titre": "TEST : poignée de déverrouillage ouverte",
-        "action": "Refermer la poignée, clé en position fermée, vérifier le raccordement au contact de déverrouillage. Sans interrupteur, ponter le contact."
+        "action": "Refermer la poignée, clé en position fermée, vérifier le raccordement au contact de déverrouillage. Sans interrupteur, ponter le contact (selon le tableau p. 125 ; la p. 143 ne le dit pas)."
       },
       {
         "code": "17",
@@ -1595,8 +1595,8 @@ const MARQUES = [
       {
         "code": "FE (TEST)",
         "type": "test",
-        "titre": "TEST : les deux fins de course raccordés ou activés",
-        "action": "Les deux fins de course sont actifs ou non raccordés : vérifier les raccordements et le réglage des fins de course."
+        "titre": "TEST : les deux fins de course ont le contact ouvert ou ne sont pas raccordés",
+        "action": "Les deux fins de course ont le contact ouvert ou ne sont pas raccordés : vérifier les raccordements et le réglage. Fins de course magnétiques : le fusible F3 est peut-être grillé, le remplacer."
       },
       {
         "code": "FA",
@@ -1828,7 +1828,7 @@ const MARQUES = [
         },
         {
           "titre": "Nouveautés P3.10 (selon la notice)",
-          "texte": "Meilleure gestion du freinage lors d'une inversion due au bord sensible ou aux photocellules · protection électronique du variateur renforcée · amélioration de la gestion du limiteur de tension B72/CL, notamment l'activation automatique (par L1) pour les automatismes High Speed et réversibles · signalisation par le relais SC améliorée quand le paramètre A8 = 02 ou que le déverrouillage empêche le démarrage · inversion accélérée à l'activation de la bande sensible."
+          "texte": "Meilleure gestion du freinage lors d'une inversion due au bord sensible ou aux photocellules · protection électronique du variateur renforcée · amélioration de la gestion du B74/BCONNECT, notamment l'activation automatique (par. L0 = 01) pour les automatismes High Speed et réversibles, qui ne peuvent pas activer le low power (L1 non visible) · signalisation par le relais COR améliorée quand le paramètre 20 = 01 (signale, en plus du déverrouillage, d'autres situations empêchant le démarrage du moteur) · inversion accélérée à l'activation de la bande sensible."
         }
       ]
     },
@@ -1902,7 +1902,7 @@ const MARQUES = [
                   "BG30/804/HS : irréversible High Speed, vantail 800 kg max (la notice écrit 1500 kg à la p. 131 et 800 kg aux pp. 127 et 141)."
                 ]
               ],
-              "note": "Réglé en usine par Roger pour le moteur. Si la valeur est changée, toutes les caractéristiques High Speed ou réversible sont perdues et le moteur ne fonctionne plus correctement. Après un retour aux valeurs usine, à ressaisir à la main. Choisir 03 à 07 désactive le mode low power : L1 n'est plus affiché. Un mauvais réglage provoque des erreurs de fonctionnement."
+              "note": "Réglé en usine par Roger pour le moteur. Si la valeur est changée, toutes les caractéristiques High Speed ou réversible sont perdues et le moteur ne fonctionne plus correctement. Après un retour aux valeurs usine : à vérifier (pp. 131 et 139 se contredisent). Choisir 03 à 07 désactive le mode low power : L1 n'est plus affiché. Un mauvais réglage provoque des erreurs de fonctionnement."
             },
             {
               "code": "71",
@@ -1918,7 +1918,7 @@ const MARQUES = [
                   "Moteur installé à droite."
                 ]
               ],
-              "note": "À ressaisir à la main après un retour aux valeurs usine."
+              "note": "Après un retour aux valeurs usine : la p. 139 dit que 71 est conservé, la p. 136 dit de le reconfigurer à la main, donc à vérifier."
             },
             {
               "code": "70",
@@ -1950,7 +1950,7 @@ const MARQUES = [
                   "Magnétiques (capteurs à effet Hall)."
                 ]
               ],
-              "note": "Un bon choix permet de surveiller les contacts même en veille (par ex. déplacement manuel après déverrouillage)."
+              "note": "Seul 00 (micro-interrupteurs) permet de surveiller les fins de course en veille : les magnétiques (01) ne sont pas alimentés en stand-by. Un choix correct aide la centrale à gérer les changements d'état (par ex. déplacement manuel après déverrouillage)."
             },
             {
               "code": "65",
@@ -2221,7 +2221,7 @@ const MARQUES = [
                   "2 à 9 min de pause."
                 ]
               ],
-              "note": "Visible seulement si 81 01."
+              "note": "Visible seulement si 81 est différent de 00 (01 ou 02)."
             }
           ]
         },
@@ -2326,7 +2326,7 @@ const MARQUES = [
               "valeurs": [
                 [
                   "01–10",
-                  "01 = 2 m/min, 02 = 2,5 m/min, 03 = 3 m/min, 04 = 3,5 m/min, 05 = 4 m/min (la notice ne détaille pas les valeurs 06 à 10)."
+                  "01 = 2 m/min, 02 = 2,5 m/min, 03 = 3 m/min, 04 = 3,5 m/min, 05 = 4 m/min (la notice ne détaille pas les valeurs 06 à 10 ; plage imprimée 01–10 p. 134, probablement 01–05)."
                 ]
               ],
               "note": "Après le ralentissement, le portail continue à vitesse constante jusqu'au fin de course. L'espace est réglé par 13 et 14."
@@ -2877,7 +2877,7 @@ const MARQUES = [
                   "Reste allumée 2 à 9 min après la manœuvre."
                 ]
               ],
-              "note": "Non visible si 20 différent de 00."
+              "note": "Avec 20 = 00, la sortie COR est gérée par le paramètre 79."
             }
           ]
         },
@@ -2982,7 +2982,7 @@ const MARQUES = [
                   "Après 20 min."
                 ]
               ],
-              "note": "Pas de veille portail ouvert en attente de refermeture (A2, 21), ni pendant le décompte de la fermeture garantie (81, 82), ni pendant 88, ni tant que la sortie COR est active, ni quand un accessoire est branché sur l'afficheur. Sur les High Speed et réversibles, le low power est désactivé automatiquement : L1 n'est pas visible. Pour activer le stand-by sans attendre : appuyer sur UP, DOWN, + et − ensemble ; l'écran affiche StbY."
+              "note": "Pas de veille portail ouvert en attente de refermeture (A2, 21), ni pendant le décompte de la fermeture garantie (81, 82), ni tant que la sortie COR est active, ni quand un accessoire est branché sur l'afficheur. Sur les High Speed et réversibles, le low power est désactivé automatiquement : L1 n'est pas visible. Pour activer le stand-by sans attendre : appuyer sur UP, DOWN, + et − ensemble ; l'écran affiche StbY."
             }
           ]
         },
@@ -3092,12 +3092,12 @@ const MARQUES = [
               ]
             },
             {
-              "code": "oП–o1",
+              "code": "oN–o1",
               "def": "lecture",
               "titre": "Compteur de manœuvres",
               "valeurs": [
                 [
-                  "oП o0 o1",
+                  "oN o0 o1",
                   "Lire à la suite × 100. Ex. 01 23 45 → 1 234 500 manœuvres."
                 ]
               ]
@@ -3316,7 +3316,7 @@ const MARQUES = [
             {
               "n": "ENC",
               "label": "Encodeur",
-              "desc": "Débrancher / rebrancher uniquement hors tension. Si remplacé : refaire l'apprentissage.",
+              "desc": "Débrancher / rebrancher uniquement hors tension. Débrancher uniquement hors tension.",
               "t": "moteur"
             },
             {
@@ -3352,13 +3352,13 @@ const MARQUES = [
         "Puissance absorbée nominale : BG30/1603-1604 185 W · 2203-2204 150 W · 1003-1004/HS 180 W · 1404/R 160 W · 1804/HS 150 W · 1504/HS 155 W · 803-804/HS 185 W. Puissance de démarrage de 470 W à 650 W selon le modèle.",
         "Puissances max : clignotant 25 W, courtoisie 100 W (230 V~) / 40 W (24 V), voyant portail ouvert 3 W, accessoires 20 W. Température de fonctionnement −20 à +55 °C.",
         "Câbles : clignotant FIFTHY/24 2 x 1 mm² (10 m max) ; lumière de courtoisie 2 x 1 mm² (20 m max) ; antenne RG58 (10 m max).",
-        "Limiteur de tension B72/CL : obligatoire sur les BG30/804/HS, 1004/HS, 1504/HS, 1804/HS et 1404/R achetés avant novembre 2023. Il absorbe l'énergie de freinage brusque (STOP, bord sensible, inversion) quand le paramètre 85 est réglé. Si la LED CLAMP reste allumée en permanence, il est endommagé : le remplacer. Ne pas l'enlever, sauf avec le chargeur B71/BCHP HW 02 qui le remplace.",
+        "Limiteur de tension B72/CL : obligatoire sur les BG30/804/HS, 1004/HS, 1504/HS, 1804/HS et 1404/R achetés avant novembre 2023. Il absorbe l'énergie de freinage brusque (STOP, bord sensible, inversion) notamment quand le paramètre 65 est sur 01. Si la LED CLAMP reste allumée en permanence, il est endommagé : le remplacer. Ne pas l'enlever, sauf avec le chargeur B71/BCHP HW 02 qui le remplace.",
         "Déblocage mécanique : le message StoP clignote à l'écran. À la refermeture, si le portail n'est pas complètement ouvert ou fermé, la carte lance une récupération de position (manœuvre lente) à la première commande."
       ]
     },
     "apprentissage": {
       "avant": [
-        "A1 — modèle : 01 BG30/1600 · 02 BG30/2200 · 03 BG30/1000/HS · 04 BG30/1400/R (réversible) · 05 BG30/1800/HS · 06 BG30/1504/HS · 07 BG30/804/HS. Réglé en usine : à ressaisir à la main après un retour aux valeurs usine.",
+        "A1 — modèle : 01 BG30/1600 · 02 BG30/2200 · 03 BG30/1000/HS · 04 BG30/1400/R (réversible) · 05 BG30/1800/HS · 06 BG30/1504/HS · 07 BG30/804/HS. Réglé en usine. Après un retour aux valeurs usine : la p. 139 dit que A1 est conservé, les pp. 131 et 136 disent de le reconfigurer à la main, donc à vérifier.",
         "71 — position : 71 00 moteur à gauche, 71 01 moteur à droite (vue de l'intérieur).",
         "Fins de course réglés pour que le portail s'arrête un peu avant la butée mécanique.",
         "Homme présent désactivé : A7 00. Portail en position fermée.",
@@ -3379,7 +3379,7 @@ const MARQUES = [
         "Garder au moins 3 cm entre le point d'arrêt et la butée mécanique ; sinon déplacer le fin de course et refaire l'apprentissage.",
         "Contrôle final : StoP doit clignoter quand on ouvre la poignée de déverrouillage.",
         "Essai (notice, ch. 21) : vérifier la course et les ralentissements, les forces d'impact (EN 12453 et EN 12445), l'intervention des sécurités, la reprise après coupure du secteur et des batteries (portail en position intermédiaire), et le réglage des fins de course.",
-        "Moteur réversible BG30/1400/R : après une coupure ou un déplacement à la main de plus de 3 cm, la centrale lance une récupération de position à la première commande."
+        "Moteur réversible BG30/1400/R : après un déplacement à la main de plus de 3 cm (1400/R seulement) ou une coupure en position intermédiaire, la centrale lance une récupération de position à la première commande."
       ]
     }
   },
