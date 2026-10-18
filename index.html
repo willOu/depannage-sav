@@ -118,9 +118,9 @@ h2{font-size:13px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted
 .legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px;background:var(--tc)}
 .detail{background:var(--card);border:1px solid var(--line);border-left:6px solid var(--tc,var(--brand));border-radius:12px;padding:10px 12px;margin-bottom:12px;font-size:15px}
 table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:14.5px}
-td{padding:9px 10px;border-top:1px solid var(--line);vertical-align:top}
+td{padding:9px 10px;border-top:1px solid var(--line);vertical-align:top;overflow-wrap:break-word}
 tr:first-child td{border-top:0}
-td:first-child{font:700 14px ui-monospace,Menlo,monospace;white-space:nowrap;border-left:5px solid var(--tc)}
+td:first-child{font:700 14px ui-monospace,Menlo,monospace;white-space:normal;overflow-wrap:normal;word-break:normal;max-width:10em;border-left:5px solid var(--tc)}
 .note{background:var(--chip);border-radius:12px;padding:10px 12px;font-size:14px;margin-top:8px}
 ol.steps{counter-reset:s;list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px}
 ol.steps li{counter-increment:s;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 12px 12px 52px;position:relative;font-size:15.5px}
@@ -261,6 +261,8 @@ const app = $("#app");
 const TYPES = { afficheur:"Afficheur", flash:"Clignotant", led:"LED", diag:"Diagnostic", erreur:"Erreur", symptome:"Symptôme", test:"Mode TEST" };
 const TERM = { alim:"Alimentation", no:"Commande NO", nf:"Sécurité / NF", sortie:"Sortie", moteur:"Moteur / usine", bus:"Bus", autre:"Autre" };
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+/* repère de borne : coupe seulement entre les mots (pas au tiret de « 48-49 ») */
+const nw = t => String(t).split(" ").map(w => `<span style="white-space:nowrap">${esc(w)}</span>`).join(" ");
 const norm = s => String(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[·\-_/]/g," ").replace(/\s+/g," ").trim();
 
 /* index */
@@ -376,9 +378,9 @@ function viewBoard(id, tab){
       p += `<h2>${esc(g.nom)}</h2><div class="strip">` + g.bornes.map((x, i) =>
         `<button class="term" style="--tc:var(--t-${x.t})" data-k="${gi}-${i}" aria-pressed="false"><div class="screw"><i></i></div><div class="n">${esc(x.n)}</div><div class="l">${esc(x.label)}</div><div class="bar"></div></button>`
       ).join("") + `</div><div class="detail" id="d${gi}" hidden></div>
-      <table>${g.bornes.map(x => `<tr style="--tc:var(--t-${x.t})"><td>${esc(x.n)}</td><td><b>${esc(x.label)}</b> — ${esc(x.desc)}</td></tr>`).join("")}</table>`;
+      <table>${g.bornes.map(x => `<tr style="--tc:var(--t-${x.t})"><td>${nw(x.n)}</td><td><b>${esc(x.label)}</b>${x.desc ? " — " + esc(x.desc) : ""}</td></tr>`).join("")}</table>`;
     });
-    p += `<h2>Fusibles</h2><div class="note">${esc(c.bornier.fusibles)}</div>`;
+    if (c.bornier.fusibles) p += `<h2>Fusibles</h2><div class="note">${esc(c.bornier.fusibles)}</div>`;
     if (c.bornier.notes && c.bornier.notes.length) p += `<h2>À savoir</h2><div class="note"><ul class="plain">${c.bornier.notes.map(n => `<li>${esc(n)}</li>`).join("")}</ul></div>`;
     pane.innerHTML = p;
     pane.querySelectorAll(".term").forEach(btn => btn.onclick = () => {
@@ -530,7 +532,7 @@ function viewSearch(q){
   if (codes.length) h += `<h2>Codes et signalisations (${codes.length})</h2><div class="list">` + codes.slice(0, 60).map(r =>
     `<div onclick="go('#/c/${r.id}/codes')" style="cursor:pointer">${codeCard(r.x, r.ctx, q)}</div>`).join("") + `</div>`;
   if (terms.length) h += `<h2>Bornes (${terms.length})</h2><table>` + terms.slice(0, 40).map(r =>
-    `<tr style="--tc:var(--t-${r.t.t});cursor:pointer" onclick="go('#/c/${r.id}/bornier')"><td>${esc(r.t.n)}</td><td>${r.ctx}<br><b>${highlight(r.t.label,q)}</b> — ${highlight(r.t.desc,q)}</td></tr>`).join("") + `</table>`;
+    `<tr style="--tc:var(--t-${r.t.t});cursor:pointer" onclick="go('#/c/${r.id}/bornier')"><td>${nw(r.t.n)}</td><td>${r.ctx}<br><b>${highlight(r.t.label,q)}</b> — ${highlight(r.t.desc,q)}</td></tr>`).join("") + `</table>`;
   if (params.length) h += `<h2>Paramètres (${params.length})</h2><table>` + params.slice(0, 40).map(r =>
     `<tr style="cursor:pointer" onclick="paramOpen=${esc(JSON.stringify(r.x.code))};go('#/c/${r.id}/param')"><td>${esc(r.x.code)}</td><td>${r.ctx}<br><b>${highlight(r.x.titre,q)}</b> · usine ${esc(r.x.def)}</td></tr>`).join("") + `</table>`;
   if (!h) h = `<div class="empty">Rien trouvé pour « ${esc(q)} ».<br>Essayez le code seul (ex. <b>E8</b>), un mot (ex. <b>encodeur</b>) ou la marque.</div>`;
