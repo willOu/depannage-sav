@@ -224,7 +224,7 @@ html{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 .sch .p{color:var(--muted);font-size:12.5px}
 .schv{position:fixed;inset:0;z-index:50;background:#000;display:flex;flex-direction:column}
 .schv[hidden]{display:none}
-.schb{display:flex;align-items:center;gap:6px;padding:8px;background:#111;color:#fff}
+.schb{padding-top:max(8px,env(safe-area-inset-top))!important;display:flex;align-items:center;gap:6px;padding:8px;background:#111;color:#fff}
 .schb span{flex:1;text-align:center;font-weight:600}
 .schb button{min-width:44px;height:44px;border:1px solid #555;border-radius:10px;background:#222;color:#fff;font-size:20px}
 .schc{flex:1;overflow:auto;touch-action:pan-x pan-y pinch-zoom;background:#fff}

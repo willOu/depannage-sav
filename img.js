@@ -39,13 +39,17 @@
       const setZ = z => { zoom = Math.max(1, Math.min(4, z)); document.getElementById("schi").style.width = (zoom * 100) + "%"; };
       o.querySelector("#schz").onclick = () => setZ(zoom + 0.5);
       o.querySelector("#schm").onclick = () => setZ(zoom - 0.5);
-      o.querySelector("#schx").onclick = () => { o.hidden = true; document.body.style.overflow = ""; };
+      const closeV = () => { o.hidden = true; document.body.style.overflow = ""; };
+      o.querySelector("#schx").onclick = () => { if (history.state && history.state.schv) history.back(); else closeV(); };
+      addEventListener("popstate", () => { if (!o.hidden) closeV(); });
+      o.onclick = e => { if (e.target === o) o.querySelector("#schx").click(); };
       o.querySelector("#schp").onclick = () => show(cur.i - 1);
       o.querySelector("#schn").onclick = () => show(cur.i + 1);
       o.querySelector("#schi").ondblclick = () => setZ(zoom >= 2 ? 1 : 2.5);
       addEventListener("keydown", e => { if (!o.hidden && e.key === "Escape") o.querySelector("#schx").click(); });
     }
     o.hidden = false; document.body.style.overflow = "hidden";
+    try { history.pushState({ schv: 1 }, "", location.href); } catch (e) {}
     show(i);
   }
   function show(i) {

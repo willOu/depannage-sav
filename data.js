@@ -15,6 +15,9 @@ const DATA_VERSION = "2026-10-18";
 /* Journal des modifications — ajouter une entrée en haut à chaque mise à jour.
    docs : nom des notices ajoutées (affichées dans Réglages). */
 const CHANGELOG = [
+  { v: "1.19", date: "2026-10-18", titre: "Schéma : retour arrière", items: [
+    "La visionneuse d'image se ferme avec le bouton Retour du téléphone (ou le geste retour), avec ✕, ou en touchant le fond noir."
+  ], docs: [] },
   { v: "1.18", date: "2026-10-18", titre: "Onglet Schéma (pages de notice en image)", items: [
     "Nouvel onglet « Schéma » sur les trois Startéco AFCA et le feu LUMOS-M : les pages de la notice avec le dessin de la carte, ses bornes et le raccordement des accessoires.",
     "Chaque image s'agrandit (boutons + / −, pincement, double-touche) et reste disponible hors ligne."
