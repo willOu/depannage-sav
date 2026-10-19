@@ -10,11 +10,19 @@
    (la première entrée donne le numéro affiché partout : accueil, en-tête, Réglages).
    ===================================================================== */
 
-const DATA_VERSION = "2026-10-18";
+const DATA_VERSION = "2026-10-19";
 
 /* Journal des modifications — ajouter une entrée en haut à chaque mise à jour.
    docs : nom des notices ajoutées (affichées dans Réglages). */
 const CHANGELOG = [
+  { v: "1.33", date: "2026-10-19", titre: "BFT : THALIA BT A80 / A160 et DEIMOS ULTRA BT A 400 / 600", items: [
+    "Nouvelle fiche BFT THALIA BT A80 / BT A160 (battants 24 V, 1 ou 2 moteurs) : codes de diagnostic et erreurs (ER01 à ER09, ER1x à ER5x, ER72, ER73, Er83, erF2, ERf3, ErF4, ERF9, Ersw), mode basse consommation, menus PARAM / LOGIC / RADIO avec valeurs d'usine, types de moteur (IGEA, SUB, KUSTOS, PHOBOS, GIUNO ULTRA, VIRGO SMART, E5, ELI), entrées SAFE, commandes IC, sorties AUX, serrure électrique, bornier selon le moteur, réglage des fins de course et auto-configuration.",
+    "Nouvelle fiche « MERAK (DEIMOS ULTRA) » pour la notice D811980 (DEIMOS ULTRA BT A 400 / 600) : c'est une autre version de la carte MERAK, avec d'autres valeurs d'usine (ESP.RAL 10, ESP.DECEL 15, ouverture partielle 20, VIT.RALL 25), SAFE 2 sur la borne 74, entrées FAULT 73 et 75, code fixe, modes série vantaux opposés et carte d'extension EXPI / EXPO. La fiche MERAK existante (notice D814459) n'est pas modifiée, seule sa source est précisée.",
+    "Onglet Schéma : platine et bornier THALIA, touches de programmation, compatibilité des moteurs, platine et bornier DEIMOS ULTRA, menus et diagnostics.",
+    "Incohérences relevées dans les notices, signalées en note : SAFE 2 à 6 (BAR) au tableau des logiques mais « Défaut PHOT » au bornier THALIA, ELI 250 BT cité au bornier mais barré au tableau de compatibilité, pas de code ER05 sur THALIA."
+  ], docs: [
+    "BFT THALIA BT A80 / BT A160 (D814283 0AR00_11)", "BFT DEIMOS ULTRA BT A 400 / BT A 600 (D811980 00100_01)"
+  ] },
   { v: "1.32", date: "2026-10-19", titre: "Favoris et accessoires par famille", items: [
     "Favoris : une étoile ★ sur chaque fiche, et la liste « Mes favoris » en haut de l'accueil. Les favoris sont propres à chaque personne et enregistrés dans le navigateur de son téléphone : changer de navigateur ou effacer les données du navigateur efface les favoris. La mention est rappelée sur l'accueil, dans les Réglages et à chaque ajout. Réglages : compteur et bouton « Effacer mes favoris ».",
     "Accessoires : fiches classées par famille (motorisations, feux et signalisation, sécurités, détection de véhicule, commandes) avec un filtre par famille."
@@ -9574,7 +9582,7 @@ const MARQUES = [
     nom: "MERAK",
     modeles: "Deimos Ultra BT A400 · A600 · BT B 400 · 600 · Ares Ultra BT B 1000 · 1500 · Ares Veloce BT B 500 · 1000",
     type: "Coulissant 24 V — afficheur 4 caractères, touches + / − / OK",
-    source: "Notices BFT D811980 00100_01 et D814459 0AR00_09 (MERAK BT A)",
+    source: "Notice BFT D814459 0AR00_09 (MERAK BT A) ; valeurs de l'ancienne notice D811980 pour les fusibles. La notice D811980 (DEIMOS ULTRA BT A 400 / 600) a ses propres valeurs d'usine : voir la fiche « MERAK (DEIMOS ULTRA) »",
     codes: [
       { code: "STRE", type: "diag", titre: "Entrée Start externe activée", action: "Diagnostic d'entrée (START E)." },
       { code: "STRI", type: "diag", titre: "Entrée Start interne activée", action: "Diagnostic d'entrée (START I)." },
@@ -9868,6 +9876,2932 @@ const MARQUES = [
       ]
     }
   },
+  {
+      "id": "bft-thalia-a80-a160",
+      "nom": "THALIA",
+      "modeles": "THALIA BT A80 · THALIA BT A160 · THALIA BT A160 120V (moteurs battants 24 V BT : IGEA, SUB, KUSTOS, PHOBOS, GIUNO ULTRA, VIRGO SMART, E5, ELI)",
+      "type": "Battant 24 V — 1 ou 2 moteurs, afficheur 4 caractères, touches + / − / OK",
+      "source": "Notice BFT D814283 0AR00_11 (THALIA BT A80 / BT A160), version française pages 66 à 80",
+      "codes": [
+        {
+          "code": "STRE",
+          "type": "diag",
+          "titre": "Entrée Start externe activée",
+          "action": "Diagnostic d'entrée (START E)."
+        },
+        {
+          "code": "STRI",
+          "type": "diag",
+          "titre": "Entrée Start interne activée",
+          "action": "Diagnostic d'entrée (START I)."
+        },
+        {
+          "code": "OPEN",
+          "type": "diag",
+          "titre": "Entrée OPEN activée",
+          "action": "Diagnostic d'entrée."
+        },
+        {
+          "code": "CLS",
+          "type": "diag",
+          "titre": "Entrée CLOSE activée",
+          "action": "Diagnostic d'entrée."
+        },
+        {
+          "code": "PED",
+          "type": "diag",
+          "titre": "Entrée piéton PED activée",
+          "action": "Diagnostic d'entrée."
+        },
+        {
+          "code": "TImE",
+          "type": "diag",
+          "titre": "Entrée TIMER activée",
+          "action": "Diagnostic d'entrée."
+        },
+        {
+          "code": "STOP",
+          "type": "diag",
+          "titre": "Entrée STOP activée",
+          "action": "Diagnostic d'entrée (contact NF ouvert)."
+        },
+        {
+          "code": "PHOT",
+          "type": "diag",
+          "titre": "Entrée photocellule PHOT activée",
+          "action": "Aussi affiché si l'entrée est configurée en photocellule vérifiée : activation de l'entrée FAULT associée."
+        },
+        {
+          "code": "PHOP",
+          "type": "diag",
+          "titre": "Photocellule à l'ouverture (PHOT OP) activée",
+          "action": "Idem si configurée en photocellule vérifiée active à l'ouverture seulement : activation de l'entrée FAULT associée."
+        },
+        {
+          "code": "PHCL",
+          "type": "diag",
+          "titre": "Photocellule à la fermeture (PHOT CL) activée",
+          "action": "Idem si configurée en photocellule vérifiée active à la fermeture seulement : activation de l'entrée FAULT associée."
+        },
+        {
+          "code": "BAR",
+          "type": "diag",
+          "titre": "Entrée bord sensible BAR activée",
+          "action": "Aussi si configurée en bord vérifié : activation de l'entrée FAULT associée."
+        },
+        {
+          "code": "baro",
+          "type": "diag",
+          "titre": "Bord BAR avec inversion à l'ouverture seulement, activé",
+          "action": "Aussi si configuré en bord vérifié : activation de l'entrée FAULT associée."
+        },
+        {
+          "code": "barc",
+          "type": "diag",
+          "titre": "Bord BAR avec inversion à la fermeture seulement, activé",
+          "action": "Aussi si configuré en bord vérifié : activation de l'entrée FAULT associée."
+        },
+        {
+          "code": "SET",
+          "type": "afficheur",
+          "titre": "Attente d'une manœuvre complète sans interruption",
+          "action": "La carte attend une manœuvre complète ouverture-fermeture, sans arrêt intermédiaire, pour obtenir le couple nécessaire. Attention : la détection d'obstacle n'est pas active."
+        },
+        {
+          "code": "ER01",
+          "type": "erreur",
+          "titre": "Test photocellules échoué",
+          "action": "Vérifier le branchement des photocellules et la configuration des logiques."
+        },
+        {
+          "code": "ER02",
+          "type": "erreur",
+          "titre": "Test bord sensible échoué",
+          "action": "Vérifier le branchement du bord et la configuration des logiques."
+        },
+        {
+          "code": "ER03",
+          "type": "erreur",
+          "titre": "Test photocellules à l'ouverture échoué",
+          "action": "Vérifier le branchement des photocellules et la configuration des paramètres / logiques."
+        },
+        {
+          "code": "ER04",
+          "type": "erreur",
+          "titre": "Test photocellules à la fermeture échoué",
+          "action": "Vérifier le branchement des photocellules et la configuration des paramètres / logiques."
+        },
+        {
+          "code": "ER06",
+          "type": "erreur",
+          "titre": "Test bord 8k2 échoué",
+          "action": "Vérifier le branchement du bord et la configuration des paramètres / logiques. La notice ne cite pas de code ER05."
+        },
+        {
+          "code": "ER07",
+          "type": "erreur",
+          "titre": "Test bord à l'ouverture échoué",
+          "action": "Vérifier le branchement du bord et la configuration des paramètres / logiques."
+        },
+        {
+          "code": "ER08",
+          "type": "erreur",
+          "titre": "Test bord à la fermeture échoué",
+          "action": "Vérifier le branchement du bord et la configuration des paramètres / logiques."
+        },
+        {
+          "code": "ER09",
+          "type": "erreur",
+          "titre": "Court-circuit détecté entre 2 entrées de sécurité adjacentes",
+          "action": "Vérifier le raccordement des entrées de sécurité."
+        },
+        {
+          "code": "ER1x",
+          "type": "erreur",
+          "titre": "Erreur d'essai matériel de la carte",
+          "action": "Vérifier les connexions sur le moteur. Problème matériel sur la carte : s'adresser au SAV. (x = 0 à 9 ou A à F)"
+        },
+        {
+          "code": "ER2x",
+          "type": "erreur",
+          "titre": "Erreur codeur",
+          "action": "Câbles d'alimentation du moteur ou du signal codeur inversés ou débranchés, ou programmation erronée (Fig. E de la notice). Le mouvement de l'actionneur est trop lent ou arrêté par rapport au fonctionnement programmé. (x = 0 à 9 ou A à F)"
+        },
+        {
+          "code": "ER3x",
+          "type": "erreur",
+          "titre": "Inversion pour obstacle (Amperostop)",
+          "action": "Vérifier les obstacles éventuels le long du parcours. (x = 0 à 9 ou A à F)"
+        },
+        {
+          "code": "ER4x",
+          "type": "erreur",
+          "titre": "Alarme thermique",
+          "action": "Attendre le refroidissement de l'automatisme. (x = 0 à 9 ou A à F)"
+        },
+        {
+          "code": "ER5x",
+          "type": "erreur",
+          "titre": "Erreur de communication avec les dispositifs distants",
+          "action": "Vérifier la connexion des accessoires et / ou des cartes d'extension reliés en série. (x = 0 à 9 ou A à F)"
+        },
+        {
+          "code": "ER72",
+          "type": "erreur",
+          "titre": "Erreur de cohérence des paramètres de la centrale (logiques et paramètres)",
+          "action": "OK confirme les configurations détectées : la carte continue avec celles-ci. Vérifier ensuite les paramètres et les logiques."
+        },
+        {
+          "code": "ER73",
+          "type": "erreur",
+          "titre": "Erreur dans les paramètres D-track",
+          "action": "OK : la carte continue avec D-track par défaut. Procéder à une auto-configuration."
+        },
+        {
+          "code": "Er83",
+          "type": "erreur",
+          "titre": "Erreur de mémoire EEPROM",
+          "action": "Vérifier que la carte mémoire est bien insérée, couper et remettre l'alimentation. Si le défaut persiste : assistance technique."
+        },
+        {
+          "code": "Er8x · Er9x",
+          "type": "erreur",
+          "titre": "Erreur interne de contrôle / supervision du système",
+          "action": "Couper et remettre l'alimentation. Si le problème persiste : service après-vente. (x = 0 à 9 ou A à F)"
+        },
+        {
+          "code": "er93",
+          "type": "erreur",
+          "titre": "Lecture incorrecte de la carte mémoire amovible",
+          "action": "Vérifier que la carte mémoire amovible est correctement insérée."
+        },
+        {
+          "code": "erF2",
+          "type": "erreur",
+          "titre": "Surcharge de l'alimentation",
+          "action": "La notice ne donne pas de remède pour ce code."
+        },
+        {
+          "code": "ERf3",
+          "type": "erreur",
+          "titre": "Erreur de réglage des logiques (entrées SAFE, type de moteur)",
+          "action": "Vérifier le bon réglage des logiques SAFE et du type de moteur."
+        },
+        {
+          "code": "ErF4",
+          "type": "erreur",
+          "titre": "Surcharge de la sortie d'alimentation des auxiliaires",
+          "action": "Vérifier le raccordement de l'alimentation des auxiliaires et l'absorption totale des auxiliaires."
+        },
+        {
+          "code": "ERF9",
+          "type": "erreur",
+          "titre": "Surcharge de la sortie serrure électrique",
+          "action": "Vérifier les connexions de la serrure ; serrure inadaptée."
+        },
+        {
+          "code": "Ersw",
+          "type": "erreur",
+          "titre": "Erreur pendant le réglage des fins de course (E5 BT A18 / E5 BT A12 seulement)",
+          "action": "Câbles d'alimentation du moteur ou du signal codeur inversés ou débranchés, ou programmation erronée (Fig. E)."
+        },
+        {
+          "code": "888.8",
+          "type": "afficheur",
+          "titre": "Point à l'écran : mode basse consommation actif",
+          "action": "Normal : après 10 s moteur à l'arrêt, les accessoires (bornes 50-51) ne sont plus alimentés (logique P save = 1). Pour régler des accessoires (alignement des photocellules) : P save = 0, régler, puis P save = 1. Accessoire à alimentation continue (récepteur radio…) : P save = 0."
+        },
+        {
+          "code": "BLOC",
+          "type": "afficheur",
+          "titre": "Accès bloqué",
+          "action": "10 mots de passe faux consécutifs : attendre 3 minutes. Mot de passe par défaut : 1234."
+        },
+        {
+          "code": "non disponible",
+          "type": "afficheur",
+          "titre": "Menu réglage des fins de course (refc) non actif",
+          "action": "Le menu refc n'est actif que pour les moteurs à codeur ou à fins de course indépendants (GIUNO ULTRA, E5 BT A12 / A18…). Pour un moteur non spécifié, « non disponible » s'affiche."
+        }
+      ],
+      "afficheur": {
+        "intro": "Afficheur 4 caractères à 7 segments avec 3 touches (+, −, OK). La notice ne donne pas de signification segment par segment : l'afficheur sert aux menus, aux diagnostics d'entrées et aux codes d'erreur (onglet Codes).",
+        "ecrans": [],
+        "reperes": {},
+        "regles": [],
+        "autres": [
+          {
+            "titre": "Touches et menus",
+            "texte": "+ monter · − descendre · OK confirmer / allumer l'afficheur. + et − ensemble : sortir du menu. OK une fois : menu simplifié (lang, TYPE, n.mot, dir, preset, reg fc, autoset, radio). OK deux fois : menu avancé (param, logic, radio, default, LANGUE, autoset, refc, stat, PASSword). Langues : ita, fra, deu, eng, esp."
+          },
+          {
+            "titre": "Commandes écran éteint",
+            "texte": "+ : commande d'ouverture. − : commande de fermeture. + plus de 2 s : ajout de la touche choisie comme 1er canal radio. − plus de 2 s : 2e canal radio. Plus de 5 s : suppression des radiocommandes (selon la figure de la notice). Accès au menu par OK, plus de 5 s sur OK : menu d'auto-configuration."
+          },
+          {
+            "titre": "Mot de passe",
+            "texte": "Demandé si la logique niv prot est à 1, 2, 3 ou 4 (usine 1234). Après 10 essais faux : BLOC pendant 3 minutes. La notice indique que ce mot de passe sert pour la programmation de la carte via le réseau U-link."
+          },
+          {
+            "titre": "Menu STAT",
+            "texte": "Version du logiciel de la centrale, nombre total de manœuvres (en centaines), nombre de radiocommandes mémorisées, 30 dernières erreurs. Chaque erreur s'affiche sous la forme 01.33 : 2 premiers chiffres = rang (01 = la plus récente), 2 derniers = code. L'erreur qui clignote est la première après le dernier entretien."
+          },
+          {
+            "titre": "Basse consommation",
+            "texte": "Un point à l'écran (888.8) : mode basse consommation actif. Les accessoires (bornes 50-51) sont coupés 10 s après l'arrêt du moteur. Avec P save = 0, les accessoires restent alimentés (consommation en attente > 0,5 W)."
+          }
+        ]
+      },
+      "parametres": {
+        "intro": "Notice D814283. Trois menus : PARAM (valeurs chiffrées, tableau A), LOGIC (réglages à choix, tableau B) et RADIO (tableau C). Les bornes mini / maxi varient avec le type de moteur choisi dans la logique TYPE DE MOTEUR. Après modification d'un paramètre de course ou de vitesse, refaire une manœuvre complète sans interruption.",
+        "navigation": [
+          "OK deux fois : menu avancé. OK une fois : menu simplifié.",
+          "+ / − : naviguer ou changer la valeur. OK : entrer / confirmer. + et − ensemble : sortir.",
+          "Défaut : menu DEFAUT, puis refaire une AUTO-CONFIGURATION.",
+          "Type de moteur : la logique TYPE DE MOTEUR est à 0 en usine (moteurs non actifs) : choisir le type avant tout réglage.",
+          "Menu STAT : version, nombre de manœuvres, radiocommandes, 30 dernières erreurs."
+        ],
+        "groupes": [
+          {
+            "nom": "Temps",
+            "items": [
+              {
+                "code": "retard ouv",
+                "def": "3",
+                "titre": "Temps de retard à l'ouverture du moteur 2 (s)",
+                "valeurs": [
+                  [
+                    "0–10",
+                    "Retard du moteur 2 par rapport au moteur 1 à l'ouverture."
+                  ]
+                ]
+              },
+              {
+                "code": "retard fer",
+                "def": "6",
+                "titre": "Temps de retard à la fermeture du moteur 1 (s)",
+                "valeurs": [
+                  [
+                    "0–25",
+                    "Retard du moteur 1 par rapport au moteur 2 à la fermeture."
+                  ]
+                ],
+                "note": "Au maximum, le moteur 1 attend la fermeture complète du moteur 2 avant de démarrer."
+              },
+              {
+                "code": "tcA",
+                "def": "10",
+                "titre": "Temps de fermeture automatique (s)",
+                "valeurs": [
+                  [
+                    "0–120",
+                    "Temps d'attente avant la fermeture automatique."
+                  ]
+                ]
+              },
+              {
+                "code": "ped.tca",
+                "def": "0",
+                "titre": "Temps de fermeture automatique après manœuvre piéton (s)",
+                "valeurs": [
+                  [
+                    "0–120",
+                    "Utilisé seulement s'il est différent de 0. À 0 : même temps que pour la manœuvre non piétonne."
+                  ]
+                ]
+              },
+              {
+                "code": "t evac FEU",
+                "def": "40",
+                "titre": "Temps d'évacuation de la zone du sémaphore (s)",
+                "valeurs": [
+                  [
+                    "1–180",
+                    "Temps d'évacuation de la zone réglée par le sémaphore."
+                  ]
+                ]
+              },
+              {
+                "code": "t.eclairage",
+                "def": "90",
+                "titre": "Temps d'allumage de l'éclairage de courtoisie (s)",
+                "valeurs": [
+                  [
+                    "30–300",
+                    "Durée d'allumage de l'éclairage de courtoisie."
+                  ]
+                ]
+              },
+              {
+                "code": "t.sortie",
+                "def": "10",
+                "titre": "Temps d'activation de la sortie temporisée (s)",
+                "valeurs": [
+                  [
+                    "1–240",
+                    "Durée d'activation de la sortie canal radio temporisée (AUX = 15)."
+                  ]
+                ]
+              },
+              {
+                "code": "Entretien",
+                "def": "0",
+                "titre": "Seuil de manœuvres avant demande d'entretien (centaines)",
+                "valeurs": [
+                  [
+                    "0–250",
+                    "Après ce nombre de manœuvres, la demande d'entretien est signalée sur la sortie AUX configurée Entretien ou Clignotant et Entretien."
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "nom": "Course, ralentissement, vitesse",
+            "items": [
+              {
+                "code": "ESP rAL ouv",
+                "def": "10",
+                "titre": "Espace de ralentissement à l'ouverture (%)",
+                "valeurs": [
+                  [
+                    "10–100",
+                    "SUB BT, E5 BT A18, PHOBOS VELOCE BT B35."
+                  ],
+                  [
+                    "20–100",
+                    "E5 BT A12."
+                  ],
+                  [
+                    "0–100",
+                    "Tous les autres moteurs."
+                  ]
+                ],
+                "note": "Pourcentage de la course totale. Refaire une manœuvre complète sans interruption après modification. Pendant « SET », la détection d'obstacle n'est pas active. Actionneurs à butées intégrées : ralentissement toujours actif, valeur supérieure à 5. GIUNO : l'espace se règle avec les capteurs coulissants. ELI BT A35 : ralentissement non désactivable, valeurs inférieures à 10 % prises à 10 %."
+              },
+              {
+                "code": "ESP rAL FErM",
+                "def": "10",
+                "titre": "Espace de ralentissement à la fermeture (%)",
+                "valeurs": [
+                  [
+                    "10–100",
+                    "SUB BT, E5 BT A18, PHOBOS VELOCE BT B35."
+                  ],
+                  [
+                    "20–100",
+                    "E5 BT A12."
+                  ],
+                  [
+                    "0–100",
+                    "Tous les autres moteurs."
+                  ]
+                ],
+                "note": "Mêmes remarques que pour l'ouverture."
+              },
+              {
+                "code": "ESP dEcE.",
+                "def": "15",
+                "titre": "Espace de décélération (%)",
+                "valeurs": [
+                  [
+                    "15–100",
+                    "PHOBOS VELOCE BT B35, ELI BT A35 V, ELI BT A35 V + FCE."
+                  ],
+                  [
+                    "0–100",
+                    "Tous les autres moteurs."
+                  ]
+                ],
+                "note": "Passage de la vitesse de régime à la vitesse de ralentissement, à l'ouverture et à la fermeture, en pourcentage de la course totale. Refaire une manœuvre complète sans interruption après modification."
+              },
+              {
+                "code": "ouv PArtiELLE",
+                "def": "100",
+                "titre": "Ouverture partielle moteur 1 (%)",
+                "valeurs": [
+                  [
+                    "10–100",
+                    "Espace d'ouverture partielle par rapport à l'ouverture totale, après une commande piéton PED."
+                  ]
+                ]
+              },
+              {
+                "code": "vit ouv",
+                "def": "100",
+                "titre": "Vitesse à l'ouverture (%)",
+                "valeurs": [
+                  [
+                    "20–100",
+                    "SUB BT, ELI BT A35 V."
+                  ],
+                  [
+                    "15–100",
+                    "Tous les autres moteurs."
+                  ]
+                ],
+                "note": "Pourcentage de la vitesse maximale. Refaire une manœuvre complète sans interruption après modification."
+              },
+              {
+                "code": "vit FErM",
+                "def": "100",
+                "titre": "Vitesse à la fermeture (%)",
+                "valeurs": [
+                  [
+                    "20–100",
+                    "SUB BT, ELI BT A35 V."
+                  ],
+                  [
+                    "15–100",
+                    "Tous les autres moteurs."
+                  ]
+                ],
+                "note": "Pourcentage de la vitesse maximale. Refaire une manœuvre complète sans interruption après modification."
+              },
+              {
+                "code": "vit rALL",
+                "def": "25",
+                "titre": "Vitesse de ralentissement (%)",
+                "valeurs": [
+                  [
+                    "20–50",
+                    "SUB BT, ELI BT A35 V, ELI BT A35 V + FCE."
+                  ],
+                  [
+                    "15–50",
+                    "PHOBOS VELOCE BT B35."
+                  ],
+                  [
+                    "15–100",
+                    "Tous les autres moteurs."
+                  ]
+                ],
+                "note": "Vitesse du moteur à l'ouverture et à la fermeture pendant le ralentissement, en pourcentage de la vitesse de régime maximale. ELI BT A35 : valeurs supérieures à 50 % prises à 50 %."
+              }
+            ]
+          },
+          {
+            "nom": "Forces",
+            "items": [
+              {
+                "code": "ForcE ouv",
+                "def": "50",
+                "titre": "Force du ou des vantaux à l'ouverture (%)",
+                "valeurs": [
+                  [
+                    "1–100",
+                    "Pourcentage de force fourni en plus de celui mémorisé à l'auto-configuration (et mis à jour ensuite) avant de déclencher l'alarme d'obstacle. Réglé automatiquement par l'auto-configuration."
+                  ]
+                ],
+                "note": "A une incidence directe sur la force de choc : vérifier le respect de la réglementation (EN 12453). Installer au besoin des dispositifs antiécrasement."
+              },
+              {
+                "code": "ForcE FErM",
+                "def": "50",
+                "titre": "Force du ou des vantaux à la fermeture (%)",
+                "valeurs": [
+                  [
+                    "1–100",
+                    "Même principe qu'à l'ouverture."
+                  ]
+                ],
+                "note": "A une incidence directe sur la force de choc."
+              },
+              {
+                "code": "force pression swc",
+                "def": "100",
+                "titre": "Force du vantail en appui sur la butée de fermeture (%)",
+                "valeurs": [
+                  [
+                    "0–100",
+                    "Force exercée par le vantail pendant la pression sur le fin de course de fermeture (logique PRESS SWC)."
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "nom": "Logiques : moteurs, fermeture et mouvement",
+            "items": [
+              {
+                "code": "TYPE DE MOTEUR",
+                "def": "0",
+                "titre": "Type de moteur connecté à la carte",
+                "valeurs": [
+                  [
+                    "0",
+                    "Moteurs non actifs."
+                  ],
+                  [
+                    "1, 2, 4, 5",
+                    "Non gérés."
+                  ],
+                  [
+                    "3",
+                    "IGEA BT."
+                  ],
+                  [
+                    "6",
+                    "SUB BT."
+                  ],
+                  [
+                    "7",
+                    "KUSTOS BT A · PHOBOS BT A · PHOBOS N BT."
+                  ],
+                  [
+                    "8",
+                    "GIUNO ULTRA BT A20 · GIUNO ULTRA BT A50."
+                  ],
+                  [
+                    "9",
+                    "VIRGO SMART BT A, 5 fils."
+                  ],
+                  [
+                    "10",
+                    "VIRGO SMART BT A, 3 fils."
+                  ],
+                  [
+                    "11",
+                    "E5 BT A18."
+                  ],
+                  [
+                    "12",
+                    "E5 BT A12."
+                  ],
+                  [
+                    "13",
+                    "ELI BT A40 + FCE."
+                  ],
+                  [
+                    "14",
+                    "ELI BT A35 V + FCE."
+                  ],
+                  [
+                    "15",
+                    "ELI BT A40."
+                  ],
+                  [
+                    "16",
+                    "ELI BT A35."
+                  ],
+                  [
+                    "17",
+                    "PHOBOS VELOCE BT B35."
+                  ]
+                ],
+                "note": "Utiliser 2 moteurs du même type. La notice liste ELI 250 BT au bornier mais le tableau de compatibilité le barre (voir note du bornier)."
+              },
+              {
+                "code": "mOT.ACTIF",
+                "def": "2",
+                "titre": "Nombre de moteurs actifs",
+                "valeurs": [
+                  [
+                    "1",
+                    "Seul le moteur 1 est actif (1 vantail)."
+                  ],
+                  [
+                    "2",
+                    "Les deux moteurs sont actifs (2 vantaux)."
+                  ]
+                ]
+              },
+              {
+                "code": "options",
+                "def": "0",
+                "titre": "Options d'installation",
+                "valeurs": [
+                  [
+                    "0 à 5",
+                    "Voir Fig. E0 à E5 de la notice (sens d'ouverture, branchement des moteurs). Sauf IGEA BT."
+                  ],
+                  [
+                    "6, 7",
+                    "Voir Fig. E6 et E7. Seulement pour VIRGO."
+                  ]
+                ]
+              },
+              {
+                "code": "TCA (logique)",
+                "def": "0",
+                "titre": "Fermeture automatique",
+                "valeurs": [
+                  [
+                    "0",
+                    "Logique non active."
+                  ],
+                  [
+                    "1",
+                    "Active la fermeture automatique."
+                  ]
+                ]
+              },
+              {
+                "code": "FE.RAP",
+                "def": "0",
+                "titre": "Fermeture rapide",
+                "valeurs": [
+                  [
+                    "0",
+                    "Logique non active."
+                  ],
+                  [
+                    "1",
+                    "Fermeture 3 s après le dégagement des photocellules, sans attendre la fin du TCA réglé."
+                  ]
+                ]
+              },
+              {
+                "code": "mOUVT PAS A PAS",
+                "def": "0",
+                "titre": "Mouvement pas à pas",
+                "valeurs": [
+                  [
+                    "0",
+                    "Logique 4 pas (Start E, Start I, Ped). Portail fermé : ouvre. En fermeture : stop. Ouvert : ferme. En ouverture : stop + TCA. Après stop : ouvre."
+                  ],
+                  [
+                    "1",
+                    "Logique 3 pas : l'impulsion pendant la fermeture inverse le mouvement. Fermé : ouvre. En fermeture : ouvre. Ouvert : ferme. En ouverture : stop + TCA. Après stop : ouvre."
+                  ],
+                  [
+                    "2",
+                    "Logique 2 pas : à chaque impulsion le mouvement est inversé. Fermé : ouvre. En fermeture : ouvre. Ouvert : ferme. En ouverture : ferme. Après stop : ouvre."
+                  ]
+                ]
+              },
+              {
+                "code": "PREAL",
+                "def": "0",
+                "titre": "Préalarme (préclignotement)",
+                "valeurs": [
+                  [
+                    "0",
+                    "Le clignotant s'allume en même temps que le démarrage des moteurs."
+                  ],
+                  [
+                    "1–10",
+                    "Le clignotant s'allume avant le démarrage des moteurs ; la valeur donne la durée du préclignotement en secondes."
+                  ]
+                ]
+              },
+              {
+                "code": "HOmmE mORT",
+                "def": "0",
+                "titre": "Homme présent",
+                "valeurs": [
+                  [
+                    "0",
+                    "Fonctionnement à impulsions."
+                  ],
+                  [
+                    "1",
+                    "Homme présent : entrée 61 = OPEN UP, entrée 62 = CLOSE UP. La manœuvre dure tant que la touche est enfoncée. Dispositifs de sécurité non actifs."
+                  ],
+                  [
+                    "2",
+                    "Homme présent d'urgence : fonctionnement normal à impulsions ; si la carte échoue 3 fois de suite aux essais de sécurité (Er0x), homme présent activé jusqu'au relâchement. Entrées 61 / 62 = OPEN UP / CLOSE UP. Sécurités non actives."
+                  ],
+                  [
+                    "3",
+                    "Homme présent à la fermeture : l'ouverture est automatique, la fermeture dure tant que CLOSE est maintenu. Sécurités non actives pendant la fermeture."
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "nom": "Logiques : blocages et fonctions spéciales",
+            "items": [
+              {
+                "code": "BL.ImP.OUV",
+                "def": "0",
+                "titre": "Verrouillage des impulsions à l'ouverture",
+                "valeurs": [
+                  [
+                    "0",
+                    "Une impulsion Start E, Start I ou Ped agit pendant l'ouverture."
+                  ],
+                  [
+                    "1",
+                    "Elle n'agit pas pendant l'ouverture."
+                  ]
+                ]
+              },
+              {
+                "code": "BL.ImP.TCA",
+                "def": "0",
+                "titre": "Verrouillage des impulsions pendant le TCA",
+                "valeurs": [
+                  [
+                    "0",
+                    "Une impulsion agit pendant la pause TCA."
+                  ],
+                  [
+                    "1",
+                    "Elle n'agit pas pendant la pause TCA."
+                  ]
+                ]
+              },
+              {
+                "code": "BLI.FE",
+                "def": "0",
+                "titre": "Verrouillage des impulsions à la fermeture",
+                "valeurs": [
+                  [
+                    "0",
+                    "Une impulsion agit pendant la fermeture."
+                  ],
+                  [
+                    "1",
+                    "Elle n'agit pas pendant la fermeture."
+                  ]
+                ]
+              },
+              {
+                "code": "COUP BEL.OUV",
+                "def": "0",
+                "titre": "Coup de bélier à l'ouverture",
+                "valeurs": [
+                  [
+                    "0",
+                    "Logique non active."
+                  ],
+                  [
+                    "1",
+                    "Avant l'ouverture, le portail pousse environ 2 s en fermeture pour faciliter le déclenchement de la serrure."
+                  ]
+                ],
+                "note": "Ne pas utiliser sans butées d'arrêt mécaniques adéquates."
+              },
+              {
+                "code": "COUP BEL.FE",
+                "def": "0",
+                "titre": "Coup de bélier à la fermeture",
+                "valeurs": [
+                  [
+                    "0",
+                    "Logique non active."
+                  ],
+                  [
+                    "1",
+                    "Avant la fermeture, le portail pousse environ 2 s en ouverture."
+                  ]
+                ],
+                "note": "Ne pas utiliser sans butées d'arrêt mécaniques adéquates."
+              },
+              {
+                "code": "mAINT.BLOC",
+                "def": "0",
+                "titre": "Maintien du verrouillage",
+                "valeurs": [
+                  [
+                    "0",
+                    "Logique non active."
+                  ],
+                  [
+                    "1",
+                    "Si les moteurs restent à l'arrêt en position ouverte ou fermée plus d'une heure, ils sont activés environ 3 s vers la butée, toutes les heures."
+                  ]
+                ],
+                "note": "Compense la perte de volume d'huile des moteurs oléodynamiques (baisse de température, fuites internes). Ne pas utiliser sans butées mécaniques adéquates."
+              },
+              {
+                "code": "PRESS SWC",
+                "def": "0",
+                "titre": "Pression sur le fin de course de fermeture",
+                "valeurs": [
+                  [
+                    "0",
+                    "Le mouvement s'arrête uniquement à l'action du fin de course : régler très précisément le fin de course de fermeture (Fig. F réf. B). À utiliser avec butée mécanique de fermeture."
+                  ],
+                  [
+                    "1",
+                    "Les vantaux continuent quelques secondes après le fin de course ou jusqu'à la butée, sans que la butée soit prise pour un obstacle (Amperostop)."
+                  ]
+                ],
+                "note": "Régler la force d'appui avec le paramètre force pression swc."
+              },
+              {
+                "code": "ICE",
+                "def": "0",
+                "titre": "Fonction Ice (basses températures)",
+                "valeurs": [
+                  [
+                    "0",
+                    "Seuil Ampérostop fixe sur la valeur réglée."
+                  ],
+                  [
+                    "1",
+                    "À chaque départ, la centrale compense automatiquement le seuil de l'alarme d'obstacle."
+                  ]
+                ],
+                "note": "Après activation, refaire une auto-configuration. Vérifier la force de choc (EN 12453) ; en cas de doute, utiliser des sécurités auxiliaires."
+              },
+              {
+                "code": "P save",
+                "def": "1",
+                "titre": "Power Down (basse consommation)",
+                "valeurs": [
+                  [
+                    "0",
+                    "Power Down désactivé : accessoires toujours alimentés. Consommation en attente supérieure à 0,5 W."
+                  ],
+                  [
+                    "1",
+                    "Power Down activé : accessoires coupés quand le portail est arrêté."
+                  ]
+                ],
+                "note": "Pour régler des accessoires : P save = 0, puis 1 après réglage."
+              },
+              {
+                "code": "ulink 1",
+                "def": "0",
+                "titre": "Protocole U-Link",
+                "valeurs": [
+                  [
+                    "0",
+                    "Les deux connecteurs U-Link prennent en charge le nouveau protocole U-Link2."
+                  ],
+                  [
+                    "1",
+                    "Protocole U-Link précédent sur le connecteur 1 de la carte en option."
+                  ]
+                ]
+              },
+              {
+                "code": "batt config",
+                "def": "0",
+                "titre": "Configuration batterie (coupure de courant)",
+                "valeurs": [
+                  [
+                    "0",
+                    "Aucune modification du fonctionnement."
+                  ],
+                  [
+                    "1",
+                    "Ouverture totale et attente du retour du courant."
+                  ],
+                  [
+                    "2",
+                    "Ouverture partielle (paramètre ouv partielle) et attente du retour du courant."
+                  ],
+                  [
+                    "3",
+                    "Fermeture totale et attente du retour du courant."
+                  ]
+                ]
+              },
+              {
+                "code": "feu pre",
+                "def": "0",
+                "titre": "Préclignotement du feu sémaphore",
+                "valeurs": [
+                  [
+                    "0",
+                    "Préclignotement exclu."
+                  ],
+                  [
+                    "1",
+                    "Feux rouges clignotants 3 s au début de la manœuvre."
+                  ]
+                ]
+              },
+              {
+                "code": "feu rouge",
+                "def": "0",
+                "titre": "Feu rouge fixe",
+                "valeurs": [
+                  [
+                    "0",
+                    "Feux rouges éteints, portail fermé."
+                  ],
+                  [
+                    "1",
+                    "Feux rouges allumés, portail fermé."
+                  ]
+                ]
+              },
+              {
+                "code": "PUSH go",
+                "def": "0",
+                "titre": "Push&Go (E5 BT A12 seulement)",
+                "valeurs": [
+                  [
+                    "0",
+                    "Logique désactivée."
+                  ],
+                  [
+                    "1",
+                    "Une poussée manuelle du vantail immobile vers l'ouverture provoque son ouverture automatique."
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "nom": "Entrées de sécurité",
+            "items": [
+              {
+                "code": "1 SAFE",
+                "def": "0",
+                "titre": "Entrée de sécurité SAFE 1 (borne 72)",
+                "valeurs": [
+                  [
+                    "0",
+                    "PHOT : photocellule non vérifiée, active en ouverture et en fermeture (inversion à la libération en fermeture)."
+                  ],
+                  [
+                    "1",
+                    "PHOT TEST : photocellule vérifiée."
+                  ],
+                  [
+                    "2",
+                    "PHOT OP : photocellule non vérifiée, active seulement à l'ouverture."
+                  ],
+                  [
+                    "3",
+                    "PHOT OP TEST : vérifiée, ouverture seulement."
+                  ],
+                  [
+                    "4",
+                    "PHOT CL : non vérifiée, active seulement à la fermeture (inversion immédiate)."
+                  ],
+                  [
+                    "5",
+                    "PHOT CL TEST : vérifiée, fermeture seulement."
+                  ],
+                  [
+                    "6",
+                    "BAR : bord sensible non vérifié (inversion 2 s)."
+                  ],
+                  [
+                    "7",
+                    "BAR TEST : bord sensible vérifié (inversion 2 s)."
+                  ],
+                  [
+                    "8",
+                    "BAR 8k2 : bord résistif 8,2 kΩ (inversion 2 s). Pas actif sur SAFE 11 et 13."
+                  ],
+                  [
+                    "9",
+                    "BAR OP : bord, inversion 2 s à l'ouverture ; à la fermeture, arrêt (STOP)."
+                  ],
+                  [
+                    "10",
+                    "BAR OP TEST : bord vérifié, inversion à l'ouverture, arrêt à la fermeture."
+                  ],
+                  [
+                    "11",
+                    "BAR OP 8k2 : bord 8k2, inversion à l'ouverture, arrêt à la fermeture. Pas actif sur SAFE 11 et 13."
+                  ],
+                  [
+                    "12",
+                    "BAR CL : bord, inversion 2 s à la fermeture ; à l'ouverture, arrêt (STOP)."
+                  ],
+                  [
+                    "13",
+                    "BAR CL TEST : bord vérifié, inversion à la fermeture, arrêt à l'ouverture."
+                  ],
+                  [
+                    "14",
+                    "BAR CL 8k2 : bord 8k2, inversion à la fermeture, arrêt à l'ouverture. Pas actif sur SAFE 11 et 13."
+                  ]
+                ],
+                "note": "Le tableau B regroupe les options des entrées SAFE ; la liste des fonctions possibles de SAFE 1 est donnée p. 73-74 (0 à 14). Dispositifs de type D (EN 12453) branchés en mode non vérifié : entretien obligatoire au moins tous les 6 mois. Entrée inutilisée : laisser le pont d'usine."
+              },
+              {
+                "code": "2 SAFE",
+                "def": "6",
+                "titre": "Entrée de sécurité SAFE 2 (borne 73)",
+                "valeurs": [
+                  [
+                    "0",
+                    "PHOT : photocellule non vérifiée, active en ouverture et en fermeture (inversion à la libération en fermeture)."
+                  ],
+                  [
+                    "1",
+                    "PHOT TEST : photocellule vérifiée."
+                  ],
+                  [
+                    "2",
+                    "PHOT OP : photocellule non vérifiée, active seulement à l'ouverture."
+                  ],
+                  [
+                    "3",
+                    "PHOT OP TEST : vérifiée, ouverture seulement."
+                  ],
+                  [
+                    "4",
+                    "PHOT CL : non vérifiée, active seulement à la fermeture (inversion immédiate)."
+                  ],
+                  [
+                    "5",
+                    "PHOT CL TEST : vérifiée, fermeture seulement."
+                  ],
+                  [
+                    "6",
+                    "BAR : bord sensible non vérifié (inversion 2 s)."
+                  ],
+                  [
+                    "7",
+                    "BAR TEST : bord sensible vérifié (inversion 2 s)."
+                  ],
+                  [
+                    "8",
+                    "BAR 8k2 : bord résistif 8,2 kΩ (inversion 2 s). Pas actif sur SAFE 11 et 13."
+                  ],
+                  [
+                    "9",
+                    "BAR OP : bord, inversion 2 s à l'ouverture ; à la fermeture, arrêt (STOP)."
+                  ],
+                  [
+                    "10",
+                    "BAR OP TEST : bord vérifié, inversion à l'ouverture, arrêt à la fermeture."
+                  ],
+                  [
+                    "11",
+                    "BAR OP 8k2 : bord 8k2, inversion à l'ouverture, arrêt à la fermeture. Pas actif sur SAFE 11 et 13."
+                  ],
+                  [
+                    "12",
+                    "BAR CL : bord, inversion 2 s à la fermeture ; à l'ouverture, arrêt (STOP)."
+                  ],
+                  [
+                    "13",
+                    "BAR CL TEST : bord vérifié, inversion à la fermeture, arrêt à l'ouverture."
+                  ],
+                  [
+                    "14",
+                    "BAR CL 8k2 : bord 8k2, inversion à la fermeture, arrêt à l'ouverture. Pas actif sur SAFE 11 et 13."
+                  ]
+                ],
+                "note": "Valeur d'usine 6 (BAR) au tableau B, alors que le bornier (p. 73) indique « Défaut PHOT » pour SAFE 2 : la notice se contredit. Dispositifs de type D (EN 12453) branchés en mode non vérifié : entretien obligatoire au moins tous les 6 mois. Entrée inutilisée : laisser le pont d'usine."
+              },
+              {
+                "code": "10 SAFE · 11 SAFE · 12 SAFE · 13 SAFE",
+                "def": "15",
+                "titre": "Entrées SAFE 10 à 13 (carte d'extension, bornes 77 à 80)",
+                "valeurs": [
+                  [
+                    "0–14",
+                    "Mêmes options que SAFE 2."
+                  ],
+                  [
+                    "15",
+                    "Entrée désactivée : à laisser en l'absence de la carte d'extension (non actif sur SAFE 1 et 2)."
+                  ]
+                ],
+                "note": "Si la carte d'extension n'est pas utilisée, laisser la valeur d'usine 15."
+              }
+            ]
+          },
+          {
+            "nom": "Entrées de commande et radio",
+            "items": [
+              {
+                "code": "1 ic",
+                "def": "0",
+                "titre": "Entrée de commande IC 1 (borne 61)",
+                "valeurs": [
+                  [
+                    "0",
+                    "Start E."
+                  ],
+                  [
+                    "1",
+                    "Start I."
+                  ],
+                  [
+                    "2",
+                    "Open."
+                  ],
+                  [
+                    "3",
+                    "Close."
+                  ],
+                  [
+                    "4",
+                    "Ped."
+                  ],
+                  [
+                    "5",
+                    "Timer."
+                  ],
+                  [
+                    "6",
+                    "Timer Piéton."
+                  ]
+                ],
+                "note": "Start E / Start I / Ped suivent la logique mOUVT PAS A PAS. Timer : comme Open mais la fermeture est garantie même après une coupure de courant."
+              },
+              {
+                "code": "2 ic",
+                "def": "4",
+                "titre": "Entrée de commande IC 2 (borne 62)",
+                "valeurs": [
+                  [
+                    "0–6",
+                    "Mêmes options que IC 1."
+                  ]
+                ]
+              },
+              {
+                "code": "10 ic · 11 ic",
+                "def": "2 · 3",
+                "titre": "Entrées IC 10 (borne 64) et IC 11 (borne 65), carte d'extension",
+                "valeurs": [
+                  [
+                    "0–6",
+                    "Mêmes options que IC 1."
+                  ]
+                ],
+                "note": "Valeur d'usine : IC 10 = 2 (Open), IC 11 = 3 (Close)."
+              },
+              {
+                "code": "1ch",
+                "def": "0",
+                "titre": "Commande du 1er canal radio",
+                "valeurs": [
+                  [
+                    "0",
+                    "Start E."
+                  ],
+                  [
+                    "1",
+                    "Start I."
+                  ],
+                  [
+                    "2",
+                    "Open."
+                  ],
+                  [
+                    "3",
+                    "Close."
+                  ],
+                  [
+                    "4",
+                    "Ped."
+                  ],
+                  [
+                    "5",
+                    "STOP."
+                  ],
+                  [
+                    "6",
+                    "AUX1."
+                  ],
+                  [
+                    "8",
+                    "AUX11 (carte d'extension seulement)."
+                  ],
+                  [
+                    "9",
+                    "AUX2."
+                  ],
+                  [
+                    "12",
+                    "Éclairage de courtoisie (logique bistable ; au moins une sortie AUX doit être réglée en éclairage de courtoisie)."
+                  ],
+                  [
+                    "7, 10, 11",
+                    "Non utilisés."
+                  ]
+                ],
+                "note": "AUX1 / AUX2 / AUX11 ne sont actifs que si la sortie est réglée en canal radio monostable, lumière de courtoisie, lumière de zone, lumière escaliers, canal radio bistable ou temporisé."
+              },
+              {
+                "code": "2ch",
+                "def": "9",
+                "titre": "Commande du 2e canal radio",
+                "valeurs": [
+                  [
+                    "0–12",
+                    "Mêmes options que 1ch. Valeur d'usine 9 : AUX2."
+                  ]
+                ]
+              },
+              {
+                "code": "3ch",
+                "def": "2",
+                "titre": "Commande du 3e canal radio",
+                "valeurs": [
+                  [
+                    "0–12",
+                    "Mêmes options que 1ch. Valeur d'usine 2 : Open."
+                  ]
+                ]
+              },
+              {
+                "code": "4ch",
+                "def": "5",
+                "titre": "Commande du 4e canal radio",
+                "valeurs": [
+                  [
+                    "0–12",
+                    "Mêmes options que 1ch. Valeur d'usine 5 : STOP."
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "nom": "Sorties AUX et serrure",
+            "items": [
+              {
+                "code": "1AUX",
+                "def": "6",
+                "titre": "Sortie AUX 1 (bornes 20-21)",
+                "valeurs": [
+                  [
+                    "0",
+                    "Canal radio monostable (contact fermé 1 s)."
+                  ],
+                  [
+                    "1",
+                    "SCA, voyant portail ouvert (fermé en ouverture et portail ouvert, intermittent en fermeture, ouvert portail fermé)."
+                  ],
+                  [
+                    "2",
+                    "Lumière de courtoisie (fermé pendant t.eclairage)."
+                  ],
+                  [
+                    "3",
+                    "Lumière de zone (fermé pendant toute la manœuvre)."
+                  ],
+                  [
+                    "4",
+                    "Lumière escaliers (fermé 1 s après le début de la manœuvre)."
+                  ],
+                  [
+                    "5",
+                    "Alarme portail ouvert (fermé si le vantail reste ouvert plus de 2 fois le TCA)."
+                  ],
+                  [
+                    "6",
+                    "Clignotant (fermé pendant la manœuvre)."
+                  ],
+                  [
+                    "9",
+                    "Entretien (fermé quand le seuil du paramètre Entretien est atteint)."
+                  ],
+                  [
+                    "10",
+                    "Clignotant et entretien (4 cycles : fermé 10 s, ouvert 5 s en fin de manœuvre portail fermé quand le seuil est atteint)."
+                  ],
+                  [
+                    "13",
+                    "État portail fermé."
+                  ],
+                  [
+                    "14",
+                    "Canal radio bistable."
+                  ],
+                  [
+                    "15",
+                    "Canal radio temporisé (t.sortie ; un nouvel appui relance le temps)."
+                  ],
+                  [
+                    "16",
+                    "État portail ouvert."
+                  ],
+                  [
+                    "7, 8, 11, 12",
+                    "Non utilisés."
+                  ]
+                ]
+              },
+              {
+                "code": "2AUX",
+                "def": "0",
+                "titre": "Sortie AUX 2 (bornes 26-27)",
+                "valeurs": [
+                  [
+                    "0–16",
+                    "Mêmes options que 1AUX."
+                  ]
+                ]
+              },
+              {
+                "code": "10AUX · 11AUX",
+                "def": "3 · 1",
+                "titre": "Sorties AUX 10 (22-23) et AUX 11 (24-25), carte d'extension",
+                "valeurs": [
+                  [
+                    "0–16",
+                    "Mêmes options que 1AUX."
+                  ]
+                ],
+                "note": "Valeur d'usine : AUX 10 = 3 (lumière de zone), AUX 11 = 1 (SCA)."
+              },
+              {
+                "code": "SERRURE",
+                "def": "0",
+                "titre": "Type de verrouillage (bornes 28-29)",
+                "valeurs": [
+                  [
+                    "0",
+                    "Serrure électrique à déclic 12 V (30 W max) : impulsion à chaque ouverture."
+                  ],
+                  [
+                    "1",
+                    "Serrure électrique à aimant 12 V (15 W max, 0,5 A) : active portail fermé. Mise hors tension non activée avec ce réglage."
+                  ],
+                  [
+                    "2",
+                    "Serrure électrique à déclic 24 V (30 W max) : impulsion à chaque ouverture."
+                  ],
+                  [
+                    "3",
+                    "Serrure électrique à aimant 24 V (15 W max, 0,25 A) : active portail fermé. Mise hors tension non activée avec ce réglage."
+                  ],
+                  [
+                    "4",
+                    "Serrure à traction : active pendant toute la manœuvre (1 A pendant 1 s, puis 0,2 A)."
+                  ]
+                ],
+                "note": "Si les vantaux dépassent 3 m, une serrure électrique est indispensable."
+              }
+            ]
+          },
+          {
+            "nom": "Réseau, protection",
+            "items": [
+              {
+                "code": "niv prot",
+                "def": "0",
+                "titre": "Niveau de protection (mot de passe, radio)",
+                "valeurs": [
+                  [
+                    "0",
+                    "Mot de passe non demandé. Mémorisation radio à distance (touche cachée) activée, saisie automatique des replay activée, programmation par U-Link possible."
+                  ],
+                  [
+                    "1",
+                    "Mot de passe demandé (1234 par défaut). Fonctions radio et U-Link comme en 0."
+                  ],
+                  [
+                    "2",
+                    "Non utilisé."
+                  ],
+                  [
+                    "3",
+                    "Mot de passe demandé. Mémorisation radio et saisie automatique des replay désactivées ; programmation U-Link possible."
+                  ],
+                  [
+                    "4",
+                    "Mot de passe demandé. Mémorisation radio et replay désactivées ; modification des paramètres par U-Link impossible. Radiocommandes mémorisées seulement par le menu Radio."
+                  ]
+                ]
+              },
+              {
+                "code": "mODE SERIE",
+                "def": "0",
+                "titre": "Mode série (réseau BFT)",
+                "valeurs": [
+                  [
+                    "0",
+                    "SLAVE standard : la carte reçoit et communique commandes et diagnostics."
+                  ],
+                  [
+                    "1",
+                    "MASTER standard : la carte envoie les commandes (START, OPEN, CLOSE, PED, STOP) à d'autres cartes."
+                  ]
+                ]
+              },
+              {
+                "code": "ADRESSE",
+                "def": "0",
+                "titre": "Adresse sur le réseau BFT (0 à 119)",
+                "valeurs": [
+                  [
+                    "0–119",
+                    "Adresse de la carte dans une connexion de réseau BFT locale."
+                  ]
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "bornier": {
+        "groupes": [
+          {
+            "nom": "Alimentation et moteurs",
+            "bornes": [
+              {
+                "n": "L · N",
+                "label": "Secteur",
+                "desc": "Monophasé 220-230 V 50/60 Hz (THALIA BT A160 120V : 110-120 V). Câble multipolaire 2 x 1,5 mm² minimum.",
+                "t": "alim"
+              },
+              {
+                "n": "10 · 11",
+                "label": "Moteur 1",
+                "desc": "MOT 1 + / −. Retard de phase à la fermeture. Vérifier les branchements de la Fig. E. Câble 1,5 mm² minimum, mini H05RN-F.",
+                "t": "moteur"
+              },
+              {
+                "n": "14 · 15",
+                "label": "Moteur 2",
+                "desc": "MOT 2 + / −. Retard de phase à l'ouverture. Vérifier les branchements de la Fig. E.",
+                "t": "moteur"
+              }
+            ]
+          },
+          {
+            "nom": "Sorties AUX et serrure",
+            "bornes": [
+              {
+                "n": "20 · 21",
+                "label": "AUX 1",
+                "desc": "Contact alimenté en 24 V, NO, 1 A max. Défaut : clignotant (logique 1AUX = 6).",
+                "t": "sortie"
+              },
+              {
+                "n": "26 · 27",
+                "label": "AUX 2",
+                "desc": "Contact libre NO, 24 V / 1 A max. Défaut : 2e canal radio (logique 2AUX = 0).",
+                "t": "sortie"
+              },
+              {
+                "n": "28 · 29",
+                "label": "LOCK 12/24 V",
+                "desc": "Serrure électrique : à déclic 12 V (30 W), aimant 12 V (15 W), déclic 24 V (30 W), aimant 24 V (15 W) ou traction. Logique SERRURE.",
+                "t": "sortie"
+              }
+            ]
+          },
+          {
+            "nom": "Fins de course : moteurs à 5 fils (ELI 250 BT, VIRGO SMART BT A, ELI BT A35 V + FCE, ELI BT A40 + FCE)",
+            "bornes": [
+              {
+                "n": "41",
+                "label": "+ REF SWE",
+                "desc": "Commun fins de course.",
+                "t": "autre"
+              },
+              {
+                "n": "42",
+                "label": "SWC 1",
+                "desc": "Fin de course de fermeture du moteur 1 (NF).",
+                "t": "nf"
+              },
+              {
+                "n": "43",
+                "label": "SWO 1",
+                "desc": "Fin de course d'ouverture du moteur 1 (NF).",
+                "t": "nf"
+              },
+              {
+                "n": "44",
+                "label": "SWC 2",
+                "desc": "Fin de course de fermeture du moteur 2 (NF).",
+                "t": "nf"
+              },
+              {
+                "n": "45",
+                "label": "SWO 2",
+                "desc": "Fin de course d'ouverture du moteur 2 (NF).",
+                "t": "nf"
+              }
+            ]
+          },
+          {
+            "nom": "Fins de course : moteurs à fil unique (PHOBOS N BT, IGEA BT, SUB BT, PHOBOS BT A, KUSTOS BT A, VIRGO SMART BT A 3 fils)",
+            "bornes": [
+              {
+                "n": "42",
+                "label": "SW 1",
+                "desc": "Contrôle des fins de course du moteur 1, pour actionneurs à gestion des fins de course à un fil.",
+                "t": "nf"
+              },
+              {
+                "n": "43",
+                "label": "SW 2",
+                "desc": "Contrôle des fins de course du moteur 2, même principe.",
+                "t": "nf"
+              }
+            ]
+          },
+          {
+            "nom": "Fins de course : GIUNO ULTRA BT A20 / A50, E5 BT A18, E5 BT A12",
+            "bornes": [
+              {
+                "n": "40",
+                "label": "− REF SWE",
+                "desc": "Commun fin de course.",
+                "t": "autre"
+              },
+              {
+                "n": "42",
+                "label": "SW 1",
+                "desc": "Contrôle des fins de course du moteur 1.",
+                "t": "nf"
+              },
+              {
+                "n": "43",
+                "label": "SW 2",
+                "desc": "Contrôle des fins de course du moteur 2.",
+                "t": "nf"
+              }
+            ]
+          },
+          {
+            "nom": "Codeur : ELI BT A35, ELI BT A40",
+            "bornes": [
+              {
+                "n": "40",
+                "label": "− REF SWE",
+                "desc": "Alimentation codeur, câble blanc.",
+                "t": "alim"
+              },
+              {
+                "n": "41",
+                "label": "+ REF SWE",
+                "desc": "Alimentation codeur, câble marron.",
+                "t": "alim"
+              },
+              {
+                "n": "42",
+                "label": "ENC M1",
+                "desc": "Signal codeur moteur 1, câble vert.",
+                "t": "autre"
+              },
+              {
+                "n": "43",
+                "label": "ENC M2",
+                "desc": "Signal codeur moteur 2, câble vert.",
+                "t": "autre"
+              }
+            ]
+          },
+          {
+            "nom": "Alimentation accessoires",
+            "bornes": [
+              {
+                "n": "50",
+                "label": "24 V −",
+                "desc": "Alimentation accessoires.",
+                "t": "alim"
+              },
+              {
+                "n": "51",
+                "label": "24 V +",
+                "desc": "Alimentation accessoires (0,5 A max).",
+                "t": "alim"
+              },
+              {
+                "n": "52",
+                "label": "24 Vsafe +",
+                "desc": "Alimentation des dispositifs de sécurité vérifiés (émetteurs photocellules et bord). Active seulement pendant la manœuvre.",
+                "t": "alim"
+              }
+            ]
+          },
+          {
+            "nom": "Commandes",
+            "bornes": [
+              {
+                "n": "60",
+                "label": "COM IC",
+                "desc": "Commun entrées IC 1 et IC 2. Ne pas relier la borne 60 (COM IC) à la borne 70 (COM).",
+                "t": "autre"
+              },
+              {
+                "n": "61",
+                "label": "IC 1",
+                "desc": "NO configurable. Défaut : START E.",
+                "t": "no"
+              },
+              {
+                "n": "62",
+                "label": "IC 2",
+                "desc": "NO configurable. Défaut : PED.",
+                "t": "no"
+              }
+            ]
+          },
+          {
+            "nom": "Sécurités",
+            "bornes": [
+              {
+                "n": "70",
+                "label": "COM",
+                "desc": "Commun STOP, SAFE 1 et SAFE 2.",
+                "t": "autre"
+              },
+              {
+                "n": "71",
+                "label": "STOP",
+                "desc": "NF. Inutilisé : laisser le pont d'usine 70-71.",
+                "t": "nf"
+              },
+              {
+                "n": "72",
+                "label": "SAFE 1",
+                "desc": "NF configurable. Défaut : PHOT. Inutilisé : pont 70-72.",
+                "t": "nf"
+              },
+              {
+                "n": "73",
+                "label": "SAFE 2",
+                "desc": "NF configurable. Défaut indiqué PHOT au bornier, BAR (6) au tableau des logiques. Inutilisé : pont 70-73.",
+                "t": "nf"
+              }
+            ]
+          },
+          {
+            "nom": "Antenne",
+            "bornes": [
+              {
+                "n": "Y · #",
+                "label": "Antenne",
+                "desc": "Antenne accordée 433 MHz, câble coaxial RG58 (# = blindage). Les masses métalliques proches perturbent la réception.",
+                "t": "autre"
+              }
+            ]
+          }
+        ],
+        "notes": [
+          "Ponts d'usine : 70-71, 70-72, 70-73. Les retirer seulement si la borne est utilisée.",
+          "Moteurs : utiliser 2 moteurs du même type. Fins de course et codeur : l'affectation des bornes 40 à 45 dépend du moteur (quatre blocs ci-dessus) ; se reporter à la Fig. E de la notice et à la notice du moteur.",
+          "Contradiction de la notice : le bornier cite « ELI 250 BT » (moteurs à 5 fils), mais le tableau de compatibilité (page 10) barre ELI 250 BT, LUX BT et LUX G BT. Elle indique aussi que IGEA BT (après le 01/03/2022), ELI BT A40, ELI BT A40 + FCE, ELI BT A35 V et ELI BT A35 V + FCE (après le 01/04/2022) ne sont compatibles qu'à partir de ces dates de fabrication.",
+          "Contradiction de la notice : SAFE 2 est à 6 (BAR) en usine au tableau des logiques, alors que le bornier annonce PHOT par défaut.",
+          "Données techniques : THALIA BT A80 = 200 W, THALIA BT A160 = 400 W. Consommation en attente 0,48 W. Accessoires 24 V ≤ 0,5 A. Température de fonctionnement : A80 −20 à +60 °C, A160 et A160 120V −20 à +55 °C. Radio 433,92 MHz rolling code, 128 radiocommandes (2048 avec le kit extension). Indice de protection : A80 IP 45 (DUO) ou IP 55 (FLAT), A160 IP 45 (DUO).",
+          "Type D (EN 12453) en mode non vérifié : entretien obligatoire au moins tous les 6 mois."
+        ]
+      },
+      "apprentissage": {
+        "avant": [
+          "Monter et mettre en sécurité l'installation selon la notice du moteur avant l'auto-configuration. Pour un meilleur résultat, faire l'auto-configuration avec les moteurs au repos (pas surchauffés).",
+          "Menu simplifié : choisir la langue (lang), le TYPE de moteur (type, valeur d'usine 0 = moteurs non actifs), le nombre de moteurs (n.mot), le sens d'ouverture (dir, options de la Fig. E) et éventuellement le preset : rAU (résidentiel automatique), rSAU (résidentiel semi-automatique), cAU (collectif automatique), cSAU (collectif semi-automatique), INDu (homme présent).",
+          "Tableau des presets (notice) : TCA = 1 et mouvement pas à pas = 1 pour rAU et cAU, 0 pour rSAU, cSAU et INDu ; préalarme = 3 pour cAU et cSAU, 0 sinon ; homme présent = 1 pour INDu seulement ; verrouillage des impulsions à l'ouverture = 1 pour cAU et cSAU, 0 sinon.",
+          "Moteurs à codeur ou à fins de course indépendants : régler d'abord les fins de course dans le menu refc (reg fc), puis lancer l'auto-configuration."
+        ],
+        "etapes": [
+          "Réglage des fins de course (menu reg fc / refc) : GIUNO ULTRA BT A20 / A50 : placer le vantail avec + / −, régler les fins de course comme dans la notice du moteur. E5 BT A12 / A18 : placer le vantail avec + / − dans la position demandée (ouverture ou fermeture) puis OK ; on peut aussi pousser le vantail à la main près des fins de course, puis le conduire avec + / − jusqu'à la butée, et confirmer par OK ou par la télécommande (déjà mémorisée). Ces manœuvres se font en homme présent, vitesse réduite, sans sécurités.",
+          "Menu AUTOSET (OK, ou OK plus de 5 s) : la centrale fait une ouverture puis une fermeture et règle le couple minimum nécessaire. 1 à 3 manœuvres. Ne pas occulter les photocellules ni utiliser START, STOP ou l'afficheur.",
+          "À la fin, vérifier les valeurs de couple et les ajuster si nécessaire (ForcE ouv / ForcE FErM), puis mesurer les forces d'impact (EN 12453).",
+          "Mémoriser les radiocommandes : menu radio, adj 1ch à adj 4ch : la touche voulue est associée à la commande du canal 1 à 4 ; appuyer sur la touche de l'émetteur à mémoriser. Effacer 1 retire une radiocommande (par sa position ou en appuyant sur sa touche) ; effacer 128 supprime toute la liste."
+        ],
+        "apres": [
+          "Attention : la détection d'obstacle n'est pas active pendant l'auto-configuration ; surveiller la zone et empêcher tout accès.",
+          "Séquence de vérification : auto-configuration, mesure des forces, réglage vitesse et sensibilité, bord passif, dispositifs sensibles à la pression ou électrosensibles (bord actif), manœuvre en homme présent seulement si nécessaire, puis contrôle de tous les dispositifs de détection de présence.",
+          "Menu DEFAUT : ramène la centrale aux valeurs d'usine ; refaire ensuite une AUTO-CONFIGURATION.",
+          "Après modification de ESP rAL ouv, ESP rAL FErM, ESP dEcE., vit ouv, vit FErM ou vit rALL : refaire une manœuvre complète sans interruption.",
+          "Programmation à distance (modules U-Link en option) : certains modules réduisent la portée radio ; utiliser une antenne accordée sur 433 MHz."
+        ]
+      }
+    },
+  {
+      "id": "bft-merak-deimos-ultra",
+      "nom": "MERAK (DEIMOS ULTRA)",
+      "modeles": "DEIMOS ULTRA BT A 400 · DEIMOS ULTRA BT A 600 (carte MERAK, notice D811980)",
+      "type": "Coulissant 24 V — afficheur 4 caractères, touches + / − / OK, 1 moteur",
+      "source": "Notice BFT D811980 00100_01 (DEIMOS ULTRA BT A 400 / BT A 600), version française pages 33 à 42",
+      "codes": [
+        {
+          "code": "STRE",
+          "type": "diag",
+          "titre": "Entrée Start externe activée",
+          "action": "Diagnostic d'entrée (START E)."
+        },
+        {
+          "code": "STRI",
+          "type": "diag",
+          "titre": "Entrée Start interne activée",
+          "action": "Diagnostic d'entrée (START I)."
+        },
+        {
+          "code": "OPEN",
+          "type": "diag",
+          "titre": "Entrée OPEN activée",
+          "action": "Diagnostic d'entrée."
+        },
+        {
+          "code": "CLS",
+          "type": "diag",
+          "titre": "Entrée CLOSE activée",
+          "action": "Diagnostic d'entrée."
+        },
+        {
+          "code": "PED",
+          "type": "diag",
+          "titre": "Entrée piéton PED activée",
+          "action": "Diagnostic d'entrée."
+        },
+        {
+          "code": "TIME",
+          "type": "diag",
+          "titre": "Entrée TIMER activée",
+          "action": "Diagnostic d'entrée."
+        },
+        {
+          "code": "STOP",
+          "type": "diag",
+          "titre": "Entrée STOP activée",
+          "action": "Diagnostic d'entrée (contact NF ouvert)."
+        },
+        {
+          "code": "PHOT",
+          "type": "diag",
+          "titre": "Entrée photocellule PHOT activée",
+          "action": "Diagnostic d'entrée."
+        },
+        {
+          "code": "PHOP",
+          "type": "diag",
+          "titre": "Photocellule à l'ouverture (PHOT OP) activée",
+          "action": "Diagnostic d'entrée."
+        },
+        {
+          "code": "PHCL",
+          "type": "diag",
+          "titre": "Photocellule à la fermeture (PHOT CL) activée",
+          "action": "Diagnostic d'entrée."
+        },
+        {
+          "code": "BAR",
+          "type": "diag",
+          "titre": "Entrée bord sensible BAR activée",
+          "action": "Diagnostic d'entrée."
+        },
+        {
+          "code": "BAR 2",
+          "type": "diag",
+          "titre": "Bord sur le moteur esclave activé (vantaux coulissants opposés)",
+          "action": "Diagnostic d'entrée de la carte esclave."
+        },
+        {
+          "code": "SWC",
+          "type": "diag",
+          "titre": "Fin de course de fermeture du moteur activé",
+          "action": "Diagnostic d'entrée."
+        },
+        {
+          "code": "SWO",
+          "type": "diag",
+          "titre": "Fin de course d'ouverture du moteur activé",
+          "action": "Diagnostic d'entrée."
+        },
+        {
+          "code": "SET",
+          "type": "afficheur",
+          "titre": "Attente d'une manœuvre complète sans interruption",
+          "action": "La carte attend une manœuvre complète ouverture-fermeture, sans arrêt intermédiaire, pour obtenir le couple nécessaire. Attention : la détection d'obstacle n'est pas active."
+        },
+        {
+          "code": "ER01",
+          "type": "erreur",
+          "titre": "Test photocellules échoué",
+          "action": "Vérifier le branchement des photocellules et la configuration des logiques."
+        },
+        {
+          "code": "ER02",
+          "type": "erreur",
+          "titre": "Test bord sensible échoué",
+          "action": "Vérifier le branchement du bord et la configuration des logiques."
+        },
+        {
+          "code": "ER03",
+          "type": "erreur",
+          "titre": "Test photocellules à l'ouverture échoué",
+          "action": "Vérifier le branchement des photocellules et la configuration des paramètres / logiques."
+        },
+        {
+          "code": "ER04",
+          "type": "erreur",
+          "titre": "Test photocellules à la fermeture échoué",
+          "action": "Vérifier le branchement des photocellules et la configuration des paramètres / logiques."
+        },
+        {
+          "code": "ER05",
+          "type": "erreur",
+          "titre": "Test du bord sur le moteur esclave échoué (vantaux opposés)",
+          "action": "Vérifier le branchement du bord et la configuration des paramètres / logiques."
+        },
+        {
+          "code": "ER06",
+          "type": "erreur",
+          "titre": "Test bord 8k2 échoué",
+          "action": "Vérifier le branchement du bord et la configuration des paramètres / logiques."
+        },
+        {
+          "code": "ER1x",
+          "type": "erreur",
+          "titre": "Erreur d'essai matériel de la carte",
+          "action": "Vérifier les connexions sur le moteur. Problème matériel sur la carte : s'adresser au SAV. (x = 0 à 9 ou A à F)"
+        },
+        {
+          "code": "ER3x",
+          "type": "erreur",
+          "titre": "Inversion pour obstacle (Amperostop)",
+          "action": "Vérifier les obstacles éventuels le long du parcours. (x = 0 à 9 ou A à F)"
+        },
+        {
+          "code": "ER4x",
+          "type": "erreur",
+          "titre": "Alarme thermique",
+          "action": "Attendre le refroidissement de l'automatisme. (x = 0 à 9 ou A à F)"
+        },
+        {
+          "code": "ER5x",
+          "type": "erreur",
+          "titre": "Erreur de communication avec les dispositifs distants",
+          "action": "Vérifier la connexion des accessoires et / ou des cartes d'extension reliés en série. (x = 0 à 9 ou A à F)"
+        },
+        {
+          "code": "ER7x",
+          "type": "erreur",
+          "titre": "Erreur interne de contrôle / supervision du système",
+          "action": "Couper et remettre l'alimentation. Si le problème persiste : service après-vente. (x = 0 à 9 ou A à F)"
+        },
+        {
+          "code": "ErFx",
+          "type": "erreur",
+          "titre": "Erreur de fin de course",
+          "action": "Vérifier les connexions des fins de course. (x = 0 à 9 ou A à F)"
+        },
+        {
+          "code": "BLOC",
+          "type": "afficheur",
+          "titre": "Accès bloqué",
+          "action": "10 mots de passe faux consécutifs : attendre 3 minutes. Mot de passe par défaut : 1234."
+        },
+        {
+          "code": "rSt",
+          "type": "afficheur",
+          "titre": "Retour aux valeurs d'usine : confirmation demandée",
+          "action": "Affiché pendant la procédure de retour usine : confirmer par OK dans les 3 secondes. Efface aussi toutes les radiocommandes."
+        }
+      ],
+      "afficheur": {
+        "intro": "Afficheur 4 caractères à 7 segments avec 3 touches (+, −, OK). La notice ne donne pas de signification segment par segment : l'afficheur sert aux menus, aux diagnostics d'entrées et aux codes d'erreur (onglet Codes).",
+        "ecrans": [],
+        "reperes": {},
+        "regles": [],
+        "autres": [
+          {
+            "titre": "Touches et menus",
+            "texte": "+ monter · − descendre · OK confirmer / allumer l'afficheur. + et − ensemble : sortir du menu. OK une fois : menu simplifié (language, dir, preset, autoset, e telec). OK deux fois : menu avancé (param, logic, radio, default, langue, autoset, stat, password). Langues : ita, fra, deu, eng, esp."
+          },
+          {
+            "titre": "Commandes écran éteint",
+            "texte": "+ : ouverture (OPEN puis STOP). − : fermeture (CLOSE puis STOP). Une nouvelle pression pendant le mouvement commande un arrêt."
+          },
+          {
+            "titre": "Mot de passe",
+            "texte": "Demandé si la logique niveau de protection est à 1, 2, 3 ou 4 (usine 1234). Après 10 essais faux : BLOC pendant 3 minutes. La notice précise que ce mot de passe sert à la programmation de la carte via le réseau U-link."
+          },
+          {
+            "titre": "Menu STAT",
+            "texte": "Version du logiciel (bft…), nombre de manœuvres (n. an), nombre de radiocommandes (n. teleco), 30 dernières erreurs (err). Chaque erreur s'affiche sous la forme 01.33 : 2 premiers chiffres = rang (01 = la plus récente), 2 derniers = code."
+          },
+          {
+            "titre": "Retour usine",
+            "texte": "Couper l'alimentation, ouvrir l'entrée STOP, appuyer en même temps sur − et OK, remettre sous tension : RST s'affiche, confirmer par OK dans les 3 s, attendre la fin. Efface aussi toutes les radiocommandes ; refaire ensuite une auto-configuration."
+          }
+        ]
+      },
+      "parametres": {
+        "intro": "Notice D811980. Trois menus : PARAM (valeurs chiffrées, tableau A), LOGIC (réglages à choix, tableau B) et RADIO (tableau C). Attention : les valeurs d'usine de cette carte diffèrent de celles de la carte MERAK BT A de la notice D814459 (ex. ESP.RAL 10 au lieu de 5, ESP.DECEL 15 au lieu de 25, ouverture partielle 20 au lieu de 30, VIT.RALL 25 au lieu de 15). Après modification d'un paramètre de course ou de vitesse, refaire une manœuvre complète sans interruption.",
+        "navigation": [
+          "OK deux fois : menu avancé. OK une fois : menu simplifié.",
+          "+ / − : naviguer ou changer la valeur. OK : entrer / confirmer. + et − ensemble : sortir.",
+          "Avec un niveau de protection 1 à 4, un mot de passe est demandé (usine 1234). Après 10 essais faux : BLOC pendant 3 min.",
+          "Menu DEFAUT : valeurs d'usine, puis refaire une AUTO-CONFIGURATION.",
+          "Programmateur palmaire universel (version > V1.40) et modules U-Link en option : voir leurs notices."
+        ],
+        "groupes": [
+          {
+            "nom": "Temps",
+            "items": [
+              {
+                "code": "TCA",
+                "def": "10",
+                "titre": "Temps de fermeture automatique (s)",
+                "valeurs": [
+                  [
+                    "0–120",
+                    "Temps d'attente avant la fermeture automatique."
+                  ]
+                ]
+              },
+              {
+                "code": "T.EVAC.SEM",
+                "def": "40",
+                "titre": "Temps d'évacuation de la zone du sémaphore (s)",
+                "valeurs": [
+                  [
+                    "1–180",
+                    "Temps d'évacuation de la zone réglée par le sémaphore."
+                  ]
+                ]
+              },
+              {
+                "code": "Entretien",
+                "def": "0",
+                "titre": "Seuil de manœuvres avant demande d'entretien (centaines)",
+                "valeurs": [
+                  [
+                    "0–250",
+                    "Après ce nombre de manœuvres, la demande d'entretien est signalée sur la sortie AUX configurée Entretien ou Clignotant et Entretien."
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "nom": "Course : ralentissement, ouverture partielle, vitesse",
+            "items": [
+              {
+                "code": "ESP.RAL.OUV",
+                "def": "10",
+                "titre": "Espace de ralentissement à l'ouverture (%)",
+                "valeurs": [
+                  [
+                    "5–50",
+                    "Pourcentage de la course totale."
+                  ]
+                ],
+                "note": "Refaire une manœuvre complète sans interruption après modification. Pendant « SET », la détection d'obstacle n'est pas active."
+              },
+              {
+                "code": "ESP.RAL.FERM",
+                "def": "10",
+                "titre": "Espace de ralentissement à la fermeture (%)",
+                "valeurs": [
+                  [
+                    "5–50",
+                    "Pourcentage de la course totale."
+                  ]
+                ],
+                "note": "Mêmes remarques qu'à l'ouverture."
+              },
+              {
+                "code": "ESP.DECEL",
+                "def": "15",
+                "titre": "Espace de décélération (%)",
+                "valeurs": [
+                  [
+                    "0–50",
+                    "Passage de la vitesse de régime à la vitesse de ralentissement, à l'ouverture et à la fermeture, en pourcentage de la course totale."
+                  ]
+                ],
+                "note": "Refaire une manœuvre complète sans interruption après modification."
+              },
+              {
+                "code": "ouv. partielle",
+                "def": "20",
+                "titre": "Ouverture partielle (%)",
+                "valeurs": [
+                  [
+                    "10–99",
+                    "Espace d'ouverture partielle par rapport à l'ouverture totale, après une commande piéton PED."
+                  ]
+                ]
+              },
+              {
+                "code": "VIT OUV",
+                "def": "99",
+                "titre": "Vitesse à l'ouverture (%)",
+                "valeurs": [
+                  [
+                    "15–99",
+                    "Pourcentage de la vitesse maximale du moteur."
+                  ]
+                ],
+                "note": "Refaire une manœuvre complète sans interruption après modification."
+              },
+              {
+                "code": "VIT FERM",
+                "def": "99",
+                "titre": "Vitesse à la fermeture (%)",
+                "valeurs": [
+                  [
+                    "15–99",
+                    "Pourcentage de la vitesse maximale du moteur."
+                  ]
+                ],
+                "note": "Refaire une manœuvre complète sans interruption après modification."
+              },
+              {
+                "code": "VIT.RALL",
+                "def": "25",
+                "titre": "Vitesse de ralentissement (%)",
+                "valeurs": [
+                  [
+                    "15–30",
+                    "Vitesse du moteur à l'ouverture et à la fermeture pendant le ralentissement, en pourcentage de la vitesse de régime maximale."
+                  ]
+                ],
+                "note": "Refaire une manœuvre complète sans interruption après modification."
+              }
+            ]
+          },
+          {
+            "nom": "Forces",
+            "items": [
+              {
+                "code": "FORCE OUV",
+                "def": "50",
+                "titre": "Force du vantail à l'ouverture (%)",
+                "valeurs": [
+                  [
+                    "1–99",
+                    "Pourcentage de force fourni en plus de celui mémorisé à l'auto-configuration (et mis à jour ensuite) avant de déclencher l'alarme d'obstacle. Réglé automatiquement par l'auto-configuration."
+                  ]
+                ],
+                "note": "A une incidence directe sur la force de choc : vérifier le respect de la réglementation (EN 12453, méthode de mesure EN 12445). Installer au besoin des dispositifs antiécrasement."
+              },
+              {
+                "code": "FORCE FERM",
+                "def": "50",
+                "titre": "Force du vantail à la fermeture (%)",
+                "valeurs": [
+                  [
+                    "1–99",
+                    "Même principe qu'à l'ouverture."
+                  ]
+                ],
+                "note": "A une incidence directe sur la force de choc."
+              },
+              {
+                "code": "FORCE RAL OUV",
+                "def": "50",
+                "titre": "Force du vantail à l'ouverture en ralentissement (%)",
+                "valeurs": [
+                  [
+                    "1–99",
+                    "Même principe, à la vitesse de ralentissement."
+                  ]
+                ],
+                "note": "A une incidence directe sur la force de choc."
+              },
+              {
+                "code": "FORCE RAL FERM",
+                "def": "50",
+                "titre": "Force du vantail à la fermeture en ralentissement (%)",
+                "valeurs": [
+                  [
+                    "1–99",
+                    "Même principe, à la vitesse de ralentissement."
+                  ]
+                ],
+                "note": "A une incidence directe sur la force de choc."
+              }
+            ]
+          },
+          {
+            "nom": "Logiques : fermeture et mouvement",
+            "items": [
+              {
+                "code": "TCA (logique)",
+                "def": "0",
+                "titre": "Fermeture automatique",
+                "valeurs": [
+                  [
+                    "0",
+                    "Logique non active."
+                  ],
+                  [
+                    "1",
+                    "Active la fermeture automatique."
+                  ]
+                ]
+              },
+              {
+                "code": "FE.RAP",
+                "def": "0",
+                "titre": "Fermeture rapide",
+                "valeurs": [
+                  [
+                    "0",
+                    "Logique non active."
+                  ],
+                  [
+                    "1",
+                    "Fermeture 3 s après le dégagement des photocellules, sans attendre la fin du TCA réglé."
+                  ]
+                ]
+              },
+              {
+                "code": "MOUVT PAS A PAS",
+                "def": "0",
+                "titre": "Mouvement pas à pas",
+                "valeurs": [
+                  [
+                    "0",
+                    "Logique 4 pas (Start E, Start I, Ped). Fermé : ouvre. En fermeture : stop. Ouvert : ferme. En ouverture : stop + TCA. Après stop : ouvre."
+                  ],
+                  [
+                    "1",
+                    "Logique 3 pas : l'impulsion pendant la fermeture inverse le mouvement. Fermé : ouvre. En fermeture : ouvre. Ouvert : ferme. En ouverture : stop + TCA. Après stop : ouvre."
+                  ],
+                  [
+                    "2",
+                    "Logique 2 pas : à chaque impulsion le mouvement est inversé. Fermé : ouvre. En fermeture : ouvre. Ouvert : ferme. En ouverture : ferme. Après stop : ouvre."
+                  ]
+                ]
+              },
+              {
+                "code": "PREAL",
+                "def": "0",
+                "titre": "Préalarme",
+                "valeurs": [
+                  [
+                    "0",
+                    "Le clignotant s'allume au démarrage du moteur."
+                  ],
+                  [
+                    "1",
+                    "Le clignotant s'allume environ 3 s avant le démarrage du moteur."
+                  ]
+                ]
+              },
+              {
+                "code": "HOMME MORTE",
+                "def": "0",
+                "titre": "Homme présent",
+                "valeurs": [
+                  [
+                    "0",
+                    "Fonctionnement à impulsions."
+                  ],
+                  [
+                    "1",
+                    "Homme présent : entrée 61 = OPEN UP, entrée 62 = CLOSE UP. La manœuvre dure tant que la touche est enfoncée. Dispositifs de sécurité non actifs."
+                  ],
+                  [
+                    "2",
+                    "Homme présent d'urgence : fonctionnement normal à impulsions ; si la carte échoue 3 fois de suite aux essais de sécurité (Er0x), homme présent activé jusqu'au relâchement. Sécurités non actives."
+                  ]
+                ]
+              },
+              {
+                "code": "INV.SENS.OUV",
+                "def": "0",
+                "titre": "Inversion du sens d'ouverture",
+                "valeurs": [
+                  [
+                    "0",
+                    "Fonctionnement standard (Fig. S réf. 1)."
+                  ],
+                  [
+                    "1",
+                    "Sens d'ouverture inversé par rapport au standard (Fig. S réf. 2)."
+                  ]
+                ],
+                "note": "Pour changer le sens d'ouverture, ne pas intervertir les étriers de fin de course : utiliser cette logique (ou dir du menu simplifié)."
+              }
+            ]
+          },
+          {
+            "nom": "Logiques : blocages et fonctions spéciales",
+            "items": [
+              {
+                "code": "BL.IMP.OUV",
+                "def": "0",
+                "titre": "Verrouillage des impulsions à l'ouverture",
+                "valeurs": [
+                  [
+                    "0",
+                    "Une impulsion Start E, Start I ou Ped agit pendant l'ouverture."
+                  ],
+                  [
+                    "1",
+                    "Elle n'agit pas pendant l'ouverture."
+                  ]
+                ]
+              },
+              {
+                "code": "BL.IMP.TCA",
+                "def": "0",
+                "titre": "Verrouillage des impulsions pendant le TCA",
+                "valeurs": [
+                  [
+                    "0",
+                    "Une impulsion agit pendant la pause TCA."
+                  ],
+                  [
+                    "1",
+                    "Elle n'agit pas pendant la pause TCA."
+                  ]
+                ]
+              },
+              {
+                "code": "BLI.FE",
+                "def": "0",
+                "titre": "Verrouillage des impulsions à la fermeture",
+                "valeurs": [
+                  [
+                    "0",
+                    "Une impulsion agit pendant la fermeture."
+                  ],
+                  [
+                    "1",
+                    "Elle n'agit pas pendant la fermeture."
+                  ]
+                ]
+              },
+              {
+                "code": "ICE",
+                "def": "0",
+                "titre": "Fonction Ice (basses températures)",
+                "valeurs": [
+                  [
+                    "0",
+                    "Seuil Ampérostop fixe sur la valeur réglée."
+                  ],
+                  [
+                    "1",
+                    "À chaque départ, la centrale compense automatiquement le seuil de l'alarme d'obstacle."
+                  ]
+                ],
+                "note": "Après activation, refaire une auto-configuration. Vérifier la force de choc (EN 12453) ; en cas de doute, utiliser des sécurités auxiliaires."
+              },
+              {
+                "code": "FEU PRE-CLIGNOTEMENT",
+                "def": "0",
+                "titre": "Préclignotement du feu sémaphore",
+                "valeurs": [
+                  [
+                    "0",
+                    "Préclignotement exclu."
+                  ],
+                  [
+                    "1",
+                    "Feux rouges clignotants 3 s au début de la manœuvre."
+                  ]
+                ]
+              },
+              {
+                "code": "FEU ROUGE FIXE",
+                "def": "0",
+                "titre": "Feu rouge fixe",
+                "valeurs": [
+                  [
+                    "0",
+                    "Feux rouges éteints, portail fermé."
+                  ],
+                  [
+                    "1",
+                    "Feux rouges allumés, portail fermé."
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "nom": "Entrées, sorties et radio",
+            "items": [
+              {
+                "code": "SAFE 1",
+                "def": "0",
+                "titre": "Entrée de sécurité SAFE 1 (borne 72)",
+                "valeurs": [
+                  [
+                    "0",
+                    "PHOT : photocellule non vérifiée, active à l'ouverture et à la fermeture (inversion à la libération en fermeture)."
+                  ],
+                  [
+                    "1",
+                    "PHOT TEST : photocellule vérifiée."
+                  ],
+                  [
+                    "2",
+                    "PHOT OP : active seulement à l'ouverture."
+                  ],
+                  [
+                    "3",
+                    "PHOT OP TEST : vérifiée, ouverture seulement."
+                  ],
+                  [
+                    "4",
+                    "PHOT CL : active seulement à la fermeture (inversion immédiate)."
+                  ],
+                  [
+                    "5",
+                    "PHOT CL TEST : vérifiée, fermeture seulement."
+                  ],
+                  [
+                    "6",
+                    "BAR : bord sensible non vérifié (inversion 2 s)."
+                  ],
+                  [
+                    "7",
+                    "BAR TEST : bord sensible vérifié (inversion 2 s)."
+                  ],
+                  [
+                    "8",
+                    "BAR 8k2 : bord résistif 8,2 kΩ (inversion 2 s)."
+                  ]
+                ],
+                "note": "Le tableau B regroupe les options 0 à 8 des entrées SAFE ; la liste des fonctions possibles de SAFE 1 est donnée p. 36 (PHOT … BAR 8K2). Dispositifs de type D (EN 12453) branchés en mode non vérifié : entretien obligatoire au moins tous les 6 mois. Entrée inutilisée : laisser le pont d'usine."
+              },
+              {
+                "code": "SAFE 2",
+                "def": "6",
+                "titre": "Entrée de sécurité SAFE 2 (borne 74)",
+                "valeurs": [
+                  [
+                    "0",
+                    "PHOT : photocellule non vérifiée, active à l'ouverture et à la fermeture (inversion à la libération en fermeture)."
+                  ],
+                  [
+                    "1",
+                    "PHOT TEST : photocellule vérifiée."
+                  ],
+                  [
+                    "2",
+                    "PHOT OP : active seulement à l'ouverture."
+                  ],
+                  [
+                    "3",
+                    "PHOT OP TEST : vérifiée, ouverture seulement."
+                  ],
+                  [
+                    "4",
+                    "PHOT CL : active seulement à la fermeture (inversion immédiate)."
+                  ],
+                  [
+                    "5",
+                    "PHOT CL TEST : vérifiée, fermeture seulement."
+                  ],
+                  [
+                    "6",
+                    "BAR : bord sensible non vérifié (inversion 2 s)."
+                  ],
+                  [
+                    "7",
+                    "BAR TEST : bord sensible vérifié (inversion 2 s)."
+                  ],
+                  [
+                    "8",
+                    "BAR 8k2 : bord résistif 8,2 kΩ (inversion 2 s)."
+                  ]
+                ],
+                "note": "Valeur d'usine 6 (BAR). Sur la carte configurée en esclave (vantaux opposés), l'entrée bord ne se configure que sur SAFE 2. Dispositifs de type D (EN 12453) branchés en mode non vérifié : entretien obligatoire au moins tous les 6 mois. Entrée inutilisée : laisser le pont d'usine."
+              },
+              {
+                "code": "IC 1",
+                "def": "0",
+                "titre": "Entrée de commande IC 1 (borne 61)",
+                "valeurs": [
+                  [
+                    "0",
+                    "Start E."
+                  ],
+                  [
+                    "1",
+                    "Start I."
+                  ],
+                  [
+                    "2",
+                    "Open."
+                  ],
+                  [
+                    "3",
+                    "Close."
+                  ],
+                  [
+                    "4",
+                    "Ped."
+                  ],
+                  [
+                    "5",
+                    "Timer."
+                  ],
+                  [
+                    "6",
+                    "Timer Piéton."
+                  ]
+                ],
+                "note": "Start E / Start I / Ped suivent la logique MOUVT PAS A PAS. Timer : comme Open mais la fermeture est garantie même après une coupure de courant."
+              },
+              {
+                "code": "IC 2",
+                "def": "4",
+                "titre": "Entrée de commande IC 2 (borne 62)",
+                "valeurs": [
+                  [
+                    "0–6",
+                    "Mêmes options que IC 1."
+                  ]
+                ]
+              },
+              {
+                "code": "AUX 0",
+                "def": "6",
+                "titre": "Sortie AUX 0 (bornes 20-21)",
+                "valeurs": [
+                  [
+                    "0",
+                    "2e canal radio (contact fermé 1 s à l'activation)."
+                  ],
+                  [
+                    "1",
+                    "SCA, voyant portail ouvert (fermé en ouverture et portail ouvert, intermittent en fermeture, ouvert portail fermé)."
+                  ],
+                  [
+                    "2",
+                    "Lumière de courtoisie (fermé 90 s après la dernière manœuvre)."
+                  ],
+                  [
+                    "3",
+                    "Lumière de zone (fermé pendant toute la manœuvre)."
+                  ],
+                  [
+                    "4",
+                    "Lumière escaliers (fermé 1 s après le début de la manœuvre)."
+                  ],
+                  [
+                    "5",
+                    "Alarme portail ouvert (fermé si le vantail reste ouvert plus de 2 fois le TCA)."
+                  ],
+                  [
+                    "6",
+                    "Clignotant (fermé pendant la manœuvre)."
+                  ],
+                  [
+                    "7",
+                    "Serrure électrique à déclic (fermé 2 s à chaque ouverture)."
+                  ],
+                  [
+                    "8",
+                    "Serrure électrique à aimant (fermé portail fermé)."
+                  ],
+                  [
+                    "9",
+                    "Entretien (fermé quand le seuil du paramètre Entretien est atteint)."
+                  ],
+                  [
+                    "10",
+                    "Clignotant et entretien (en fin de manœuvre portail fermé, seuil atteint : 4 fois fermé 10 s / ouvert 5 s)."
+                  ]
+                ],
+                "note": "Si aucune sortie n'est réglée en 2e canal radio, le 2e canal radio commande l'ouverture piétonne."
+              },
+              {
+                "code": "AUX 3",
+                "def": "0",
+                "titre": "Sortie AUX 3 (bornes 26-27)",
+                "valeurs": [
+                  [
+                    "0–10",
+                    "Mêmes options que AUX 0."
+                  ]
+                ]
+              },
+              {
+                "code": "CODE FIXE",
+                "def": "0",
+                "titre": "Code radio",
+                "valeurs": [
+                  [
+                    "0",
+                    "Récepteur en rolling code : les clones à code fixe ne sont pas acceptés."
+                  ],
+                  [
+                    "1",
+                    "Récepteur en code fixe : les clones à code fixe sont acceptés."
+                  ]
+                ]
+              },
+              {
+                "code": "Niveau de protection",
+                "def": "0",
+                "titre": "Niveau de protection (mot de passe, radio)",
+                "valeurs": [
+                  [
+                    "0",
+                    "Mot de passe non demandé. Mémorisation radio à distance (touche cachée) activée, saisie automatique des clones et des replay activée, programmation par U-Link possible."
+                  ],
+                  [
+                    "1",
+                    "Mot de passe demandé (1234 par défaut). Fonctions B, C, D, E comme en 0."
+                  ],
+                  [
+                    "2",
+                    "Mot de passe demandé. Mémorisation radio et saisie automatique des clones désactivées ; replay et U-Link comme en 0."
+                  ],
+                  [
+                    "3",
+                    "Mot de passe demandé. Mémorisation radio et saisie automatique des replay désactivées ; clones et U-Link comme en 0."
+                  ],
+                  [
+                    "4",
+                    "Mot de passe demandé. Mémorisation radio, clones et replay désactivés ; modification des paramètres par U-Link impossible. Radiocommandes mémorisées seulement par le menu Radio."
+                  ]
+                ],
+                "note": "Le niveau 4 interdit l'accès aux clones non désirés et aux parasites radio éventuels."
+              },
+              {
+                "code": "MODE SERIE",
+                "def": "0",
+                "titre": "Mode série (réseau BFT)",
+                "valeurs": [
+                  [
+                    "0",
+                    "SLAVE standard : la carte reçoit et communique commandes et diagnostics."
+                  ],
+                  [
+                    "1",
+                    "MASTER standard : la carte envoie les commandes (START, OPEN, CLOSE, PED, STOP) à d'autres cartes."
+                  ],
+                  [
+                    "2",
+                    "ESCLAVE vantaux coulissants opposés : réseau local sans module intelligent (Fig. R)."
+                  ],
+                  [
+                    "3",
+                    "MAÎTRE vantaux opposés : la carte est maître dans un réseau à vantaux opposés (Fig. R)."
+                  ]
+                ]
+              },
+              {
+                "code": "ADRESSE",
+                "def": "0",
+                "titre": "Adresse sur le réseau BFT (0 à 119)",
+                "valeurs": [
+                  [
+                    "0–119",
+                    "Adresse de la carte dans une connexion de réseau BFT locale."
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "nom": "Carte d'extension entrées / sorties (option)",
+            "items": [
+              {
+                "code": "EXPI1",
+                "def": "1",
+                "titre": "Entrée EXPI1 (bornes 1-2 de la carte d'extension)",
+                "valeurs": [
+                  [
+                    "0–6",
+                    "Commandes : Start E, Start I, Open, Close, Ped, Timer, Timer Piéton."
+                  ],
+                  [
+                    "7",
+                    "Phot."
+                  ],
+                  [
+                    "8",
+                    "Phot op."
+                  ],
+                  [
+                    "9",
+                    "Phot cl."
+                  ],
+                  [
+                    "10",
+                    "Bar."
+                  ],
+                  [
+                    "11",
+                    "Phot test (l'entrée 3, EXPI2, passe en entrée de vérification EXPFAULT1)."
+                  ],
+                  [
+                    "12",
+                    "Phot op test (idem, EXPFAULT1)."
+                  ],
+                  [
+                    "13",
+                    "Phot cl test (idem, EXPFAULT1)."
+                  ],
+                  [
+                    "14",
+                    "Bar test (idem, EXPFAULT1)."
+                  ]
+                ]
+              },
+              {
+                "code": "EXPI2",
+                "def": "0",
+                "titre": "Entrée EXPI2 (bornes 1-3 de la carte d'extension)",
+                "valeurs": [
+                  [
+                    "0–6",
+                    "Commandes : Start E, Start I, Open, Close, Ped, Timer, Timer Piéton."
+                  ],
+                  [
+                    "7",
+                    "Phot."
+                  ],
+                  [
+                    "8",
+                    "Phot op."
+                  ],
+                  [
+                    "9",
+                    "Phot cl."
+                  ],
+                  [
+                    "10",
+                    "Bar."
+                  ]
+                ]
+              },
+              {
+                "code": "EXPO1",
+                "def": "11",
+                "titre": "Sortie EXPO1 (bornes 4-5 de la carte d'extension)",
+                "valeurs": [
+                  [
+                    "0",
+                    "2e canal radio."
+                  ],
+                  [
+                    "1",
+                    "SCA."
+                  ],
+                  [
+                    "2",
+                    "Lumière de courtoisie."
+                  ],
+                  [
+                    "3",
+                    "Lumière de zone."
+                  ],
+                  [
+                    "4",
+                    "Lumière escaliers."
+                  ],
+                  [
+                    "5",
+                    "Alarme."
+                  ],
+                  [
+                    "6",
+                    "Clignotant."
+                  ],
+                  [
+                    "7",
+                    "Serrure à déclic."
+                  ],
+                  [
+                    "8",
+                    "Serrure à aimant."
+                  ],
+                  [
+                    "9",
+                    "Entretien."
+                  ],
+                  [
+                    "10",
+                    "Clignotant et entretien."
+                  ],
+                  [
+                    "11",
+                    "Gestion sémaphore avec carte TLB."
+                  ]
+                ]
+              },
+              {
+                "code": "EXPO2",
+                "def": "11",
+                "titre": "Sortie EXPO2 (bornes 6-7 de la carte d'extension)",
+                "valeurs": [
+                  [
+                    "0–11",
+                    "Mêmes options que EXPO1."
+                  ]
+                ],
+                "note": "La notice répète le titre « EXPO2 » dans les deux lignes ; la ligne des bornes 4-5 est lue comme EXPO1."
+              }
+            ]
+          }
+        ]
+      },
+      "bornier": {
+        "groupes": [
+          {
+            "nom": "Alimentation et moteur",
+            "bornes": [
+              {
+                "n": "L · N",
+                "label": "Secteur",
+                "desc": "Monophasé 220-230 V 50/60 Hz (versions 120 V 60 Hz). Alimente le primaire du transformateur (JP31, 220-230 V).",
+                "t": "alim"
+              },
+              {
+                "n": "JP31 · JP32",
+                "label": "Primaire transformateur",
+                "desc": "Connexion du primaire du transformateur, 220-230 V.",
+                "t": "alim"
+              },
+              {
+                "n": "JP13",
+                "label": "Secondaire transformateur",
+                "desc": "Alimentation de la carte en 24 V alternatif (secondaire du transformateur).",
+                "t": "alim"
+              },
+              {
+                "n": "10 · 11",
+                "label": "Moteur",
+                "desc": "MOT + / MOT −, moteur 24 V.",
+                "t": "moteur"
+              },
+              {
+                "n": "JP10",
+                "label": "Fins de course",
+                "desc": "Connecteur du groupe de fins de course magnétiques (SWC / SWO).",
+                "t": "autre"
+              }
+            ]
+          },
+          {
+            "nom": "Sorties AUX",
+            "bornes": [
+              {
+                "n": "20 · 21",
+                "label": "AUX 0",
+                "desc": "Contact alimenté en 24 V, NO, 1 A max. Défaut : clignotant (logique AUX 0 = 6).",
+                "t": "sortie"
+              },
+              {
+                "n": "26 · 27",
+                "label": "AUX 3",
+                "desc": "Contact libre NO, 24 V max / 1 A max. Défaut : 2e canal radio (logique AUX 3 = 0).",
+                "t": "sortie"
+              }
+            ]
+          },
+          {
+            "nom": "Alimentation accessoires",
+            "bornes": [
+              {
+                "n": "50",
+                "label": "24 V −",
+                "desc": "Alimentation accessoires.",
+                "t": "alim"
+              },
+              {
+                "n": "51",
+                "label": "24 V +",
+                "desc": "Alimentation accessoires (0,5 A max).",
+                "t": "alim"
+              },
+              {
+                "n": "52",
+                "label": "24 Vsafe +",
+                "desc": "Alimentation des dispositifs de sécurité vérifiés (émetteurs photocellules et bord). Active seulement pendant la manœuvre.",
+                "t": "alim"
+              }
+            ]
+          },
+          {
+            "nom": "Commandes",
+            "bornes": [
+              {
+                "n": "60",
+                "label": "COM",
+                "desc": "Commun entrées IC 1 et IC 2.",
+                "t": "autre"
+              },
+              {
+                "n": "61",
+                "label": "IC 1",
+                "desc": "NO configurable. Défaut : START E.",
+                "t": "no"
+              },
+              {
+                "n": "62",
+                "label": "IC 2",
+                "desc": "NO configurable. Défaut : PED.",
+                "t": "no"
+              }
+            ]
+          },
+          {
+            "nom": "Sécurités",
+            "bornes": [
+              {
+                "n": "70",
+                "label": "COM",
+                "desc": "Commun STOP, SAFE 1 et SAFE 2.",
+                "t": "autre"
+              },
+              {
+                "n": "71",
+                "label": "STOP",
+                "desc": "NF. Inutilisé : laisser le pont d'usine 70-71.",
+                "t": "nf"
+              },
+              {
+                "n": "72",
+                "label": "SAFE 1",
+                "desc": "NF configurable. Défaut : PHOT. Inutilisé : pont 70-72.",
+                "t": "nf"
+              },
+              {
+                "n": "73",
+                "label": "FAULT 1",
+                "desc": "Entrée de vérification des dispositifs de sécurité connectés sur SAFE 1.",
+                "t": "nf"
+              },
+              {
+                "n": "74",
+                "label": "SAFE 2",
+                "desc": "NF configurable. Défaut : BAR. Inutilisé : pont 70-74.",
+                "t": "nf"
+              },
+              {
+                "n": "75",
+                "label": "FAULT 2",
+                "desc": "Entrée de vérification des dispositifs de sécurité connectés sur SAFE 2.",
+                "t": "nf"
+              }
+            ]
+          },
+          {
+            "nom": "Antenne",
+            "bornes": [
+              {
+                "n": "Y · #",
+                "label": "Antenne",
+                "desc": "Antenne accordée 433 MHz, câble coaxial RG58 (# = blindage). Les masses métalliques proches perturbent la réception.",
+                "t": "autre"
+              }
+            ]
+          }
+        ],
+        "fusibles": "F1 0,63 A T (220-230 V) / 1,6 A T (120 V) · F3 1,25 A T (valeurs lues sur le schéma de la carte, Fig. G).",
+        "notes": [
+          "Ponts d'usine : 70-71, 70-72, 70-74. Les retirer seulement si la borne est utilisée. Sur cette carte, les bornes 73 et 75 sont les entrées FAULT (vérification) de SAFE 1 et SAFE 2 : ce n'est pas la même numérotation que la carte MERAK BT A de la notice D814459 (SAFE 2 = 73).",
+          "Changement de sens : ne pas intervertir les étriers de fin de course ; utiliser la logique d'inversion du sens d'ouverture.",
+          "Données techniques : DEIMOS ULTRA BT A 400 = 50 W, poids maxi vantail 4000 N (≈ 400 kg) en standard, 3000 N (≈ 300 kg) en rapide ; BT A 600 = 70 W, 6000 N (≈ 600 kg) en standard, 3600 N (≈ 360 kg) en rapide. Moteur 24 V, pignon module 4 (14 dents standard, 18 dents rapide), vitesse 12 m/min (standard) ou 15,5 m/min (rapide), IP 44, −20 à +55 °C, batterie de secours en option (2 x 12 V 1,2 Ah). Radio 433,92 MHz rolling code, 63 radiocommandes.",
+          "Carte d'extension entrées / sorties (option) : entrées EXPI1 / EXPI2 (+ EXPFAULT1), sorties EXPO1 / EXPO2 (sémaphore avec carte TLB). Les bornes de cette carte ne sont pas détaillées dans les pages françaises.",
+          "Type D (EN 12453) en mode non vérifié : entretien obligatoire au moins tous les 6 mois."
+        ]
+      },
+      "apprentissage": {
+        "avant": [
+          "Monter et mettre en sécurité l'installation (butées d'arrêt mécaniques à l'ouverture et à la fermeture, fins de course magnétiques, crémaillère) avant l'auto-configuration. Pour un meilleur résultat, faire l'auto-configuration moteur au repos (pas surchauffé).",
+          "Menu simplifié : choisir la langue, dir (drt : moteur installé à droite, gch : à gauche) et éventuellement le preset : ar (résidentiel automatique), sr (résidentiel semi-automatique), ac (collectif automatique), sc (collectif semi-automatique), ind (homme présent).",
+          "Tableau des presets (notice) : TCA = 1 et mouvement pas à pas = 1 pour ar et ac, 0 pour sr, sc et ind ; préalarme = 1 pour ac et sc, 0 sinon ; homme présent = 1 pour ind seulement ; verrouillage des impulsions à l'ouverture = 1 pour ac et sc, 0 sinon.",
+          "Mémoriser le premier émetteur avec le timbre clé (MASTER) : en programmation manuelle, le premier émetteur attribue le CODE CLÉ du récepteur, nécessaire ensuite pour cloner les émetteurs radio."
+        ],
+        "etapes": [
+          "Menu AUTOSET : appuyer sur OK. La carte fait une ouverture puis une fermeture (1 à 3 manœuvres) et règle le couple minimum nécessaire. Ne pas occulter les photocellules ni utiliser START, STOP ou l'afficheur.",
+          "+ et − ensemble pendant l'auto-configuration : arrêt de l'automatisme et sortie, l'afficheur indique OK.",
+          "À la fin, vérifier les valeurs de couple et les ajuster si nécessaire, puis mesurer les forces d'impact (EN 12453, méthode EN 12445).",
+          "Mémoriser les radiocommandes (menu radio) : adj start puis touche cachée, relâcher, touche désirée ; adj 2ch pour le 2e canal (sans sortie 2e canal radio, il commande l'ouverture piétonne). Mémorisation à distance : touche cachée puis touche normale d'une radiocommande déjà mémorisée, puis dans les 10 s la touche cachée et la touche normale de la nouvelle ; répéter pour en ajouter d'autres.",
+          "effacer 64 supprime toute la liste. cod rk affiche le code récepteur nécessaire pour cloner. wk : ON active la programmation à distance par un émetteur W LINK déjà mémorisé (3 minutes après la dernière pression), OFF la désactive."
+        ],
+        "apres": [
+          "Attention : la détection d'obstacle n'est pas active pendant l'auto-configuration ; surveiller la zone et empêcher tout accès.",
+          "Séquence de vérification : auto-configuration, mesure des forces, sensibilité, bord passif, dispositifs sensibles à la pression ou électrosensibles (bord actif), homme présent seulement si nécessaire, puis contrôle de tous les dispositifs de détection de présence.",
+          "Menu DEFAUT ou retour usine : refaire une AUTO-CONFIGURATION ; le retour usine efface toutes les radiocommandes.",
+          "Après modification de ESP.RAL.OUV, ESP.RAL.FERM, ESP.DECEL, VIT OUV, VIT FERM ou VIT.RALL : refaire une manœuvre complète sans interruption.",
+          "Le bord actif (N1) doit être monté de façon à ne pas être déclenché par les butées d'arrêt mécaniques. Manœuvre manuelle : déblocage mécanique à poignée, accompagner le vantail sans le pousser violemment."
+        ]
+      }
+    },
   {
     id: "bft-leo-b-cbb",
     nom: "LEO B CBB",

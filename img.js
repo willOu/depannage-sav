@@ -202,6 +202,17 @@
       S("roger-ctrl-p135", "Commandes et accessoires : bornes", 135, "Tableau des contacts avec le détail de chaque borne et de ses paramètres."),
       S("roger-ctrl-p136", "Commandes et accessoires : bornes (suite)", 136, "Suite du tableau des contacts : sécurités, lampes, serrures, récepteur radio, chargeur de batterie.")
     ],
+    "bft-thalia-a80-a160": [
+      S("thalia-p03", "Platine et bornier", 3, "Figure B : platine THALIA, afficheur, touches S1 S2 S3, bornes 10 à 73, exemples AUX 2 et alimentation DUO / FLAT."),
+      S("thalia-p04", "Afficheur et touches de programmation", 4, "Diagnostics, afficheur 8888 et fonction des touches + − OK (commandes radio, navigation, autoset)."),
+      S("thalia-p10", "Compatibilité des moteurs", 10, "Moteurs compatibles avec la THALIA BT A80 / A160 et dates de fabrication minimales."),
+      S("thalia-p11", "Raccordement moteur : IGEA BT", 11, "Figure E : branchement du moteur IGEA BT, valeur de la logique TYPE DE MOTEUR et cycles maximums.")
+    ],
+    "bft-merak-deimos-ultra": [
+      S("deimos-p03", "Platine et bornier", 3, "Figure G : platine MERAK, afficheur, touches S1 S2 S3, bornes 10 à 75, AUX 0 et AUX 3, entrées FAULT."),
+      S("deimos-p04", "Menu simplifié", 4, "Figure 1 : langue, dir, preset, autoset et mémorisation radio."),
+      S("deimos-p09", "Menus avancés et diagnostics", 9, "Accès aux menus (figure 1), menu radio, menu stat et tableau des codes de diagnostic.")
+    ],
     "bft-merak": [
       S("bft-merak-p052", "Configuration des sorties AUX", 52, "Fonctions des sorties AUX et des entrées de la carte, selon la logique choisie."),
       S("bft-merak-p053", "Bornier et configuration", 53, "Tableau des bornes : alimentation, moteur, entrées de commande et de sécurité, antenne.")
