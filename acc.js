@@ -1779,6 +1779,29 @@
   };
 
 
+  /* Marques d'accessoires : slug = nom normalisé ; les marques déjà présentes dans MARQUES (cartes) y sont rattachées */
+  const slugM = n => norm(n).replace(/ /g, "-");
+  const accOf = nom => ACCESSOIRES.filter(a => norm(a.marque) === norm(nom));
+  window.accBrandsOnly = function () {
+    const seen = new Set(), out = [];
+    ACCESSOIRES.forEach(a => {
+      const k = norm(a.marque);
+      if (seen.has(k) || MARQUES.some(m => norm(m.nom) === k)) return;
+      seen.add(k); out.push({ slug: slugM(a.marque), nom: a.marque, couleur: a.couleur });
+    });
+    return out.sort((x, y) => x.nom.localeCompare(y.nom));
+  };
+  window.accBrandHtml = function (nom) {
+    const l = accOf(nom);
+    return l.length ? `<h2>Accessoires ${esc(nom)}</h2><div class="list">${l.map(rowAcc).join("")}</div>` : "";
+  };
+  window.viewAccBrand = function (slug) {
+    const b = ACCESSOIRES.find(a => slugM(a.marque) === slug);
+    if (!b) return viewHome();
+    setHead(b.marque, true);
+    app.innerHTML = `<p class="note">Accessoires ${esc(b.marque)} : fiches issues des notices fabricant.</p><div class="list">${accOf(b.marque).map(rowAcc).join("")}</div>`;
+  };
+
   window.viewAcc = function (id, tab) {
     const a = ACCESSOIRES.find(x => x.id === id); if (!a) return viewAccList();
     setHead(`${a.marque} ${a.nom}`, true);

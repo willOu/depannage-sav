@@ -15,6 +15,10 @@ const DATA_VERSION = "2026-10-19";
 /* Journal des modifications — ajouter une entrée en haut à chaque mise à jour.
    docs : nom des notices ajoutées (affichées dans Réglages). */
 const CHANGELOG = [
+  { v: "1.35", date: "2026-10-19", titre: "Marques d'accessoires sur l'accueil", items: [
+    "Les marques qui n'ont que des accessoires (CARDIN, INTRATONE, LOCINOX, OPERA, OPTEX, PRASTEL, SEWOSY, THEBEN, BBC Bircher) apparaissent maintenant dans « Ou par marque » sur la page d'accueil, avec leurs fiches.",
+    "Sur la page d'une marque qui a des cartes et des accessoires (Came, FAAC, CASIT, AFCA…), les accessoires sont listés sous les cartes."
+  ], docs: [] },
   { v: "1.34", date: "2026-10-19", titre: "16 nouvelles fiches accessoires", items: [
     "Contrôle d'accès : claviers SEWOSY K1000 / KR1000 / KRN1000 et PRASTEL EASYKA / EASYBKA (codes d'usine, menus, procédures de remise à zéro), et gamme INTRATONE : centrale 1 porte 03-0102, centrale 2 portes 03-0101, interphone vidéo ONLY-ONE, carte relais 12-0110, clavier codé Mini 04-0107, module Mini HF 17-0104.",
     "Radio : récepteurs CARDIN S449 (RQM / RSQ / RCQ449) et S504 (RQM / RSQ / RCQ504), avec mémorisation, effacement et signalisations des LED.",

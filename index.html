@@ -326,7 +326,7 @@ function viewHome(){
   h += `<button class="dbtn" onclick="go('#/d')">Diagnostic guidé : trouver la panne en quelques questions<small><b>EN TEST</b> · peut contenir des erreurs ou mal fonctionner</small></button>`; /* DIAG */
   h += `<button class="dbtn" onclick="go('#/a')">Accessoires : gyrophares, radio, photocellules…<small>${ACCESSOIRES.length} fiche${ACCESSOIRES.length>1?"s":""} par famille · rubrique en construction</small></button>`; /* ACC */
   h += `<h2>Ou par marque</h2><div class="bchips">` + MARQUES.map(m =>
-    m.sanslogo ? `<button class="bchip" style="--c:${m.couleur}" onclick="go('#/m/${m.id}')"><i></i>${esc(m.nom)}</button>` : `<button class="bchip logo" aria-label="${esc(m.nom)}" onclick="go('#/m/${m.id}')"><img src="icons/marques/${m.id}.png" alt="${esc(m.nom)}" height="${m.id==="afca"?52:m.id==="casit"?36:28}"></button>`).join("") + `</div>`;
+    m.sanslogo ? `<button class="bchip" style="--c:${m.couleur}" onclick="go('#/m/${m.id}')"><i></i>${esc(m.nom)}</button>` : `<button class="bchip logo" aria-label="${esc(m.nom)}" onclick="go('#/m/${m.id}')"><img src="icons/marques/${m.id}.png" alt="${esc(m.nom)}" height="${m.id==="afca"?52:m.id==="casit"?36:28}"></button>`).join("") + accBrandsOnly().map(b => `<button class="bchip" style="--c:${b.couleur}" onclick="go('#/ma/${b.slug}')"><i></i>${esc(b.nom)}</button>`).join("") + `</div>`;
   const favs = getFavs().map(findBoard).filter(Boolean);
   h += `<h2>★ Mes favoris</h2>` + (favs.length ? `<div class="list">` + favs.map(rowBoard).join("") + `</div>` : `<p class="note">Aucun favori. Ouvrez une fiche et touchez l'étoile ★ pour la retrouver ici.</p>`) + `<p class="hotn">${esc(FAV_NOTE)}</p>`;
   if (recents.length){
@@ -379,7 +379,7 @@ function hotlineHtml(m){
 function viewBrand(id){
   const m = MARQUES.find(x => x.id === id); if (!m) return viewHome();
   setHead(m.nom, true);
-  app.innerHTML = hotlineHtml(m) + `<h2>Cartes ${esc(m.nom)}</h2><div class="list">` + m.cartes.map(c => rowBoard({m, c})).join("") + `</div>`;
+  app.innerHTML = hotlineHtml(m) + `<h2>Cartes ${esc(m.nom)}</h2><div class="list">` + m.cartes.map(c => rowBoard({m, c})).join("") + `</div>` + accBrandHtml(m.nom);
 }
 
 let paramOpen = "";
@@ -633,6 +633,7 @@ function route(){
   if (p[0] === "m") return viewBrand(p[1]);
   if (p[0] === "g") return viewGenre(p[1]);
   if (p[0] === "c") return viewBoard(p[1], p[2]);
+  if (p[0] === "ma") return viewAccBrand(p[1]);
   if (p[0] === "a") return p[1] ? viewAcc(p[1], p[2]) : viewAccList(); /* ACC */
   if (p[0] === "d") return viewDiag(p[1], p[2]); /* DIAG */
   if (p[0] === "reglages") return viewSettings();
