@@ -15,6 +15,16 @@ const DATA_VERSION = "2026-10-19";
 /* Journal des modifications — ajouter une entrée en haut à chaque mise à jour.
    docs : nom des notices ajoutées (affichées dans Réglages). */
 const CHANGELOG = [
+  { v: "1.34", date: "2026-10-19", titre: "16 nouvelles fiches accessoires", items: [
+    "Contrôle d'accès : claviers SEWOSY K1000 / KR1000 / KRN1000 et PRASTEL EASYKA / EASYBKA (codes d'usine, menus, procédures de remise à zéro), et gamme INTRATONE : centrale 1 porte 03-0102, centrale 2 portes 03-0101, interphone vidéo ONLY-ONE, carte relais 12-0110, clavier codé Mini 04-0107, module Mini HF 17-0104.",
+    "Radio : récepteurs CARDIN S449 (RQM / RSQ / RCQ449) et S504 (RQM / RSQ / RCQ504), avec mémorisation, effacement et signalisations des LED.",
+    "Verrouillage : LOCINOX ELECTRADROP-E / E-P (verrou de sol) et OPERA 28800 / 28800LC (électroverrou).",
+    "Autres : PRASTEL FEBO-LIGHT (feu clignotant), CASIT CS2 (bord sensible à microrupteurs, platine EQDW24), horloges THEBEN TR 64x top2 et top3.",
+    "La rubrique Accessoires compte maintenant des familles : contrôle d'accès et interphones, commandes radio, verrouillage, horloges programmables.",
+    "Incohérences relevées dans les notices, signalées en note : CARDIN S449 (3000 codes ou 300 selon la page, extinction de l'émetteur 20 ou 25 s), INTRATONE (référence 01-0201 / 03-0102 de la centrale 1 porte, numéros de série VIGIK+ 75 / 76 / 78), LOCINOX (couleurs de fils différentes entre le manuel et la feuille de 2024), OPERA (coquille « LCW »), PRASTEL EASYKA (deux procédures de retour d'usine), CASIT CS2 (traduction française approximative)."
+  ], docs: [
+    "SEWOSY K1000 (vG_25/11/04)", "PRASTEL EASYKA / EASYBKA et notice simplifiée EASYBKA/R", "PRASTEL FEBO-LIGHT", "CASIT CS2 micro NC-NO (rév. 01)", "THEBEN TR 64x top2 et top3", "OPERA Gate Bolt 28800 / 28800LC (rév. 03/24)", "LOCINOX ELECTRADROP-E / E-P (D00000086) et manuel MANU-000100", "CARDIN S449 / S486 (ZVL614.00)", "CARDIN S504 / S508 (ZVL544.02)", "INTRATONE centrale 1 porte V233-6019-AA", "INTRATONE centrale 2 portes V233-5001-BA", "INTRATONE ONLY-ONE V233-6031-AA", "INTRATONE carte relais V233-0006-BB", "INTRATONE clavier codé Mini V233-5022-BD", "INTRATONE module Mini HF V233-6049-AA"
+  ] },
   { v: "1.33", date: "2026-10-19", titre: "BFT : THALIA BT A80 / A160 et DEIMOS ULTRA BT A 400 / 600", items: [
     "Nouvelle fiche BFT THALIA BT A80 / BT A160 (battants 24 V, 1 ou 2 moteurs) : codes de diagnostic et erreurs (ER01 à ER09, ER1x à ER5x, ER72, ER73, Er83, erF2, ERf3, ErF4, ERF9, Ersw), mode basse consommation, menus PARAM / LOGIC / RADIO avec valeurs d'usine, types de moteur (IGEA, SUB, KUSTOS, PHOBOS, GIUNO ULTRA, VIRGO SMART, E5, ELI), entrées SAFE, commandes IC, sorties AUX, serrure électrique, bornier selon le moteur, réglage des fins de course et auto-configuration.",
     "Nouvelle fiche « MERAK (DEIMOS ULTRA) » pour la notice D811980 (DEIMOS ULTRA BT A 400 / 600) : c'est une autre version de la carte MERAK, avec d'autres valeurs d'usine (ESP.RAL 10, ESP.DECEL 15, ouverture partielle 20, VIT.RALL 25), SAFE 2 sur la borne 74, entrées FAULT 73 et 75, code fixe, modes série vantaux opposés et carte d'extension EXPI / EXPO. La fiche MERAK existante (notice D814459) n'est pas modifiée, seule sa source est précisée.",

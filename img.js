@@ -36,6 +36,65 @@
       S("bircher-xrf1-p2", "Câblage et appairage", 2, "Dip de l'émetteur, pile CR2450N, bornier du récepteur (1-2 alimentation, 3-6 sorties, 7-8 test) et appairage."),
       S("bircher-xrf1-p3", "États, dépannage et caractéristiques", 3, "Effacement des appairages, test, tableau de la sortie d'état et des LED, avertissements pile et erreur.")
     ],
+    "sewosy-k1000": [
+      S("sewosy-k1000-p02", "Caractéristiques et raccordement", 2, "Tableau des caractéristiques, couleurs des fils (relais 1 et 2, boutons poussoirs, contact magnétique) et signification des bips.")
+    ],
+    "prastel-easyka": [
+      S("prastel-easyka-p02", "Raccordement et programmation", 2, "Notice simplifiée EASYBKA/R : câblage et procédure de programmation.")
+    ],
+    "prastel-febo-light": [
+      S("prastel-febo-p1", "Notice FEBO-LIGHT", 1, "Bornes 1-2 (230 V), 3-4 (12 V), 3-5 (24 V) et position du cavalier JP1.")
+    ],
+    "casit-cs2": [
+      S("casit-cs2-p8", "Platine EQDW24", 8, "Câblage de la barre palpeuse sur la platine EQDW24 : bornes 6-7, 1-5 et 2-3, résistance de 8,2 kΩ.")
+    ],
+    "theben-tr64x-top3": [
+      S("theben-top3-p1", "Montage et raccordement", 1, "Versions TR 641 / 642 / 644 top3, montage sur rail DIN et schémas de raccordement.")
+    ],
+    "theben-tr64x-top2": [
+      S("theben-top2-p4", "Écran et touches", 4, "Affichage de l'horloge top2, touches MENU, flèches et OK, principe de fonctionnement.")
+    ],
+    "opera-28800": [
+      S("opera-28800-p6", "Version avec chauffage", 6, "Câblage de la 28800 : fils 1 à 6, LED de la carte, alimentation 24 V."),
+      S("opera-28800-p7", "Version sans chauffage", 7, "Câblage de la 28800LC et position du pêne (contact C).")
+    ],
+    "locinox-electradrop": [
+      S("locinox-electradrop-p2", "Câblage ELECTRADROP-E / E-P", 2, "Fils signal, alimentation et sortie de position, relais externe, chronogrammes (signal continu ou impulsionnel).")
+    ],
+    "cardin-s504": [
+      S("cardin-s504-p14", "Récepteur sous coffret", 14, "Bornier, cavaliers, boutons MEMO / DEL et LED."),
+      S("cardin-s504-p15", "Récepteur à carte", 15, "Récepteur à carte 2 canaux, cavaliers J1 et SEL CH1 / CH2."),
+      S("cardin-s504-p16", "Mini récepteur", 16, "Mini récepteur IP20, bornier à 10 voies.")
+    ],
+    "cardin-s449": [
+      S("cardin-s449-p49", "Récepteur sous coffret", 49, "Récepteur RCQ449 : bornier à 14 voies, boutons P1 / P2, cavaliers."),
+      S("cardin-s449-p50", "Récepteur à carte", 50, "Récepteur à carte RSQ449, connexions et cavaliers."),
+      S("cardin-s449-p51", "Mini récepteur", 51, "Mini récepteur RQM449 : bornier à 8 voies, cavaliers J1.")
+    ],
+    "intratone-centrale-1-porte": [
+      S("intratone-c1-p05", "Carte et switches", 5, "Position de la mémoire, de la pile et des LED, tableau des switches S1 à S6."),
+      S("intratone-c1-p06", "Schéma de câblage", 6, "Câblage de la centrale 03-0102 avec les appareils, la ventouse ou la gâche et le câble de liaison.")
+    ],
+    "intratone-centrale-2-portes": [
+      S("intratone-c2-p03", "Câblage", 3, "Alimentation et connecteurs de la centrale 2 portes."),
+      S("intratone-c2-p06", "Bouton poussoir, ventouse et gâche", 6, "Câblage du bouton poussoir avec ventouse ou gâche."),
+      S("intratone-c2-p07", "Menu de configuration", 7, "Écrans du menu de configuration de la centrale.")
+    ],
+    "intratone-only-one": [
+      S("intratone-onlyone-p06", "Schéma de câblage", 6, "Câblage de l'interphone ONLY-ONE sur la centrale 03-0102.")
+    ],
+    "intratone-carte-relais": [
+      S("intratone-relais-p3", "Câblage", 3, "Câblage des modules 17-0102, 03-0102 et des cartes relais des portes 2, 3 et 4."),
+      S("intratone-relais-p6", "Réglages", 6, "Potentiomètres P1 et P2 et switches S1 / S2 de numéro de porte.")
+    ],
+    "intratone-clavier-mini": [
+      S("intratone-mini-kp-p4", "Câblage et pose", 4, "Bus 3-4 et fixation du clavier."),
+      S("intratone-mini-kp-p5", "Second clavier", 5, "Ajout ou remplacement d'un second clavier.")
+    ],
+    "intratone-mini-hf": [
+      S("intratone-minihf-p06", "Schéma de câblage", 6, "Câblage du module Mini HF avec le clavier 04-0107."),
+      S("intratone-minihf-p07", "Schéma produit et réseau", 7, "Bornier, switch antenne, impulsion et LED de réception réseau.")
+    ],
     "optex-ovs02gt": [
       S("optex-ovs02-p5", "Voyant et bornier", 5, "Tableau des couleurs du voyant, bornier 1 (alimentation et sortie 1) et bornier 2 (sortie 2 et entrée), bouton reset d'usine."),
       S("optex-ovs02-p37", "Spécifications et zone de détection", 37, "Tableau des spécifications du OVS-02GT et diagramme de zone de détection (portée 1 m, 3 m, 8 m).")
