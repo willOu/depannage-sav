@@ -62,6 +62,11 @@ h2{font-size:13px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted
 .hotl .mono{font:700 16px ui-monospace,Menlo,monospace;color:var(--brand)}
 .hotl small{color:var(--muted);font-size:12px}
 .hotn{color:var(--muted);font-size:12.5px;margin:8px 0 0}
+.boardhead{position:relative}
+.boardhead h3{padding-right:46px}
+.favbtn{position:absolute;top:8px;right:8px;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--chip);color:var(--muted);font-size:22px;line-height:1;cursor:pointer}
+.bchip.on{outline:2px solid var(--brand);outline-offset:1px}
+.favbtn[aria-pressed="true"]{color:#e8a200;border-color:#e8a200}
 .tabs{display:flex;overflow-x:auto;scrollbar-width:none;gap:4px;margin:14px 0 10px;position:sticky;top:var(--hh,112px);z-index:3;background:var(--bg);padding:6px 0}
 .tabs button{flex:1 0 auto;min-width:0;border:1px solid var(--line);background:var(--card);border-radius:10px;height:44px;font-weight:600;font-size:13px;padding:0 8px;white-space:nowrap}
 .pfind{width:100%;height:44px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font-size:16px;padding:0 12px;margin:4px 0 6px}
@@ -319,9 +324,11 @@ function viewHome(){
   let h = `<div class="q">Quel automatisme avez-vous devant vous ?</div><div class="gen">` + GENRES.filter(g => nb(g[0])).map(g =>
     `<button onclick="go('#/g/${g[0]}')">${g[3]}${g[1]}<small>${nb(g[0])} carte${nb(g[0])>1?"s":""}</small></button>`).join("") + `</div>`;
   h += `<button class="dbtn" onclick="go('#/d')">Diagnostic guidé : trouver la panne en quelques questions<small><b>EN TEST</b> · peut contenir des erreurs ou mal fonctionner</small></button>`; /* DIAG */
-  h += `<button class="dbtn" onclick="go('#/a')">Accessoires : gyrophares, radio, photocellules…<small>${ACCESSOIRES.length} fiche${ACCESSOIRES.length>1?"s":""} · rubrique en construction</small></button>`; /* ACC */
+  h += `<button class="dbtn" onclick="go('#/a')">Accessoires : gyrophares, radio, photocellules…<small>${ACCESSOIRES.length} fiche${ACCESSOIRES.length>1?"s":""} par famille · rubrique en construction</small></button>`; /* ACC */
   h += `<h2>Ou par marque</h2><div class="bchips">` + MARQUES.map(m =>
     m.sanslogo ? `<button class="bchip" style="--c:${m.couleur}" onclick="go('#/m/${m.id}')"><i></i>${esc(m.nom)}</button>` : `<button class="bchip logo" aria-label="${esc(m.nom)}" onclick="go('#/m/${m.id}')"><img src="icons/marques/${m.id}.png" alt="${esc(m.nom)}" height="${m.id==="afca"?52:m.id==="casit"?36:28}"></button>`).join("") + `</div>`;
+  const favs = getFavs().map(findBoard).filter(Boolean);
+  h += `<h2>★ Mes favoris</h2>` + (favs.length ? `<div class="list">` + favs.map(rowBoard).join("") + `</div>` : `<p class="note">Aucun favori. Ouvrez une fiche et touchez l'étoile ★ pour la retrouver ici.</p>`) + `<p class="hotn">${esc(FAV_NOTE)}</p>`;
   if (recents.length){
     h += `<h2>Dernières consultées</h2><div class="list">` + recents.map(rowBoard).join("") + `</div>`;
   }
@@ -340,6 +347,16 @@ function viewGenre(g){
   const G = GENRES.find(x => x[0] === g); if (!G) return viewHome();
   setHead(G[2], true);
   app.innerHTML = `<h2>${esc(G[2])}</h2><div class="list">` + BOARDS.filter(x => genreOf(x.c) === g).map(rowBoard).join("") + `</div>`;
+}
+/* Favoris : enregistrés dans ce navigateur seulement (localStorage), propres à chaque personne */
+const FAV_NOTE = "Les favoris sont enregistrés dans ce navigateur, sur ce téléphone. Changer de navigateur ou effacer les données du navigateur efface les favoris.";
+const getFavs = () => store.get("favs", []).filter(x => typeof x === "string");
+const isFav = id => getFavs().includes(id);
+function toggleFav(id){
+  const f = getFavs(); const i = f.indexOf(id);
+  if (i >= 0) f.splice(i, 1); else f.unshift(id);
+  store.set("favs", f);
+  return i < 0;
 }
 function rowBoard({m, c}){
   return `<button class="row" onclick="go('#/c/${c.id}')"><span class="badge" style="--c:${m.couleur}">${esc(m.nom)}</span><b>${esc(c.nom)}</b><small>${esc(c.modeles)}</small></button>`;
@@ -373,11 +390,19 @@ function viewBoard(id, tab){
   setHead(`${m.nom} · ${c.nom}`, true);
   const rec = store.get("recents", []).filter(x => x !== id); rec.unshift(id); store.set("recents", rec.slice(0, 4));
 
-  let h = `<div class="boardhead" style="--c:${m.couleur}"><h3>${esc(c.nom)}</h3><p>${esc(c.modeles)}</p><p>${esc(c.type)}</p><div class="src">Source : ${esc(c.source)}</div>${hotlineHtml(m)}</div>
+  let h = `<div class="boardhead" style="--c:${m.couleur}"><button class="favbtn" id="fav" aria-pressed="${isFav(id)}" aria-label="Ajouter aux favoris" title="Favori : enregistré dans ce navigateur seulement">${isFav(id) ? "★" : "☆"}</button><h3>${esc(c.nom)}</h3><p>${esc(c.modeles)}</p><p>${esc(c.type)}</p><div class="src">Source : ${esc(c.source)}</div>${hotlineHtml(m)}</div>
   <div class="tabs" role="tablist">
     ${[["codes","Codes"],["bornier","Bornier"],["aff","Écran"],["param","Paramètres"],["appr","Apprent."]].concat(window.hasSchema && hasSchema(id) ? [["sch","Schéma"]] : []).map(([k,l]) => `<button role="tab" aria-selected="${tab===k}" onclick="go('#/c/${id}/${k}')">${l}</button>`).join("")}
   </div><div id="pane"></div>`;
   app.innerHTML = h;
+  const fb = $("#fav");
+  if (fb) fb.onclick = () => {
+    const on = toggleFav(id);
+    fb.setAttribute("aria-pressed", on); fb.textContent = on ? "★" : "☆";
+    fb.setAttribute("aria-label", on ? "Retirer des favoris" : "Ajouter aux favoris");
+    let t = $("#favnote"); if (!t) { t = document.createElement("div"); t.id = "favnote"; t.className = "hotn"; fb.parentNode.appendChild(t); }
+    t.textContent = on ? "Ajoutée aux favoris. " + FAV_NOTE : "Retirée des favoris.";
+  };
   const pane = $("#pane");
 
   if (tab === "sch"){ pane.innerHTML = schemaPane(id); return; } /* SCH */
@@ -569,6 +594,8 @@ function viewSettings(){
   const th = document.documentElement.dataset.theme;
   let h = `<h2>Affichage</h2><div class="set"><div class="row"><span>Thème</span><div class="seg2">
       <button aria-pressed="${th==="dark"}" onclick="setTheme('dark')">Sombre</button><button aria-pressed="${th==="light"}" onclick="setTheme('light')">Clair</button></div></div></div>`;
+  const nf = getFavs().map(findBoard).filter(Boolean).length;
+  h += `<h2>Favoris</h2><div class="set"><div class="row"><span>Fiches en favori</span><span class="mono">${nf}</span></div></div><p class="note">${esc(FAV_NOTE)}</p>` + (nf ? `<button class="dbtn" onclick="if(confirm('Effacer tous vos favoris ?')){store.set('favs',[]);viewSettings();}">Effacer mes favoris</button>` : "");
   h += `<h2>Documentations intégrées (${BOARDS.length})</h2><div class="set" id="dks">` + BOARDS.map(({m, c}, i) => {
     const has = [["Codes", c.codes && c.codes.length], ["Bornier", c.bornier], ["Écran", c.afficheur], ["Paramètres", c.parametres], ["Apprentissage", c.apprentissage]];
     return `<div class="dk" ${i>=5?"hidden":""} onclick="go('#/c/${c.id}')" style="cursor:pointer"><div class="n"><span class="badge" style="--c:${m.couleur}">${esc(m.nom)}</span>${esc(c.nom)}</div>

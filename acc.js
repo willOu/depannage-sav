@@ -288,10 +288,30 @@
     return ACCESSOIRES.filter(a => { const t = norm(`${a.marque} ${a.alias || ""} ${a.nom} ${a.categorie} ${a.modeles} ${a.resume} gyrophare clignotant feu`); return words.every(w => t.includes(w)); }).map(rowAcc).join("");
   };
 
+  /* Familles (déduites de la catégorie de chaque fiche) */
+  const FAMILLES = [
+    ["motor", "Motorisations", /motor|op[ée]rateur|moteur/i],
+    ["feu", "Feux et signalisation", /feu|clignotant|gyrophare|voyant/i],
+    ["secu", "Sécurités (bords sensibles, cellules)", /bord|palpeu|cellule|radio de bords|s[ée]curit/i],
+    ["detect", "Détection de véhicule", /d[ée]tect|boucle/i],
+    ["cmd", "Commandes (radio, clavier)", /clavier|radiocommande|t[ée]l[ée]commande|r[ée]cepteur|transpondeur/i]
+  ];
+  const familleOf = a => (FAMILLES.find(f => f[2].test(a.categorie)) || ["autre", "Autres"])[0];
+  const familleNom = k => (FAMILLES.find(f => f[0] === k) || [0, "Autres"])[1];
+  let accFam = "";
+  window.setAccFam = function (k) { accFam = k; viewAccList(); };
+
   window.viewAccList = function () {
     setHead("Accessoires", true);
-    app.innerHTML = `<p class="note"><b>Accessoires</b> : gyrophares, radio, photocellules, claviers… Rubrique en construction : une fiche pour l'instant.</p><h2>Fiches (${ACCESSOIRES.length})</h2><div class="list">${ACCESSOIRES.map(rowAcc).join("")}</div>`;
+    const fams = [...new Set(ACCESSOIRES.map(familleOf))];
+    if (accFam && !fams.includes(accFam)) accFam = "";
+    const chips = `<div class="bchips"><button class="bchip${accFam ? "" : " on"}" aria-pressed="${!accFam}" onclick="setAccFam('')">Toutes (${ACCESSOIRES.length})</button>` +
+      fams.map(k => `<button class="bchip${accFam === k ? " on" : ""}" aria-pressed="${accFam === k}" onclick="setAccFam('${k}')">${esc(familleNom(k))} (${ACCESSOIRES.filter(x => familleOf(x) === k).length})</button>`).join("") + `</div>`;
+    const show = fams.filter(k => !accFam || k === accFam);
+    app.innerHTML = `<p class="note"><b>Accessoires</b> : fiches issues des notices fabricant (raccordement, installation, réglages). Rubrique en construction : elle s'enrichit au fil des notices reçues.</p>${chips}` +
+      show.map(k => `<h2>${esc(familleNom(k))}</h2><div class="list">${ACCESSOIRES.filter(x => familleOf(x) === k).map(rowAcc).join("")}</div>`).join("");
   };
+
 
   window.viewAcc = function (id, tab) {
     const a = ACCESSOIRES.find(x => x.id === id); if (!a) return viewAccList();

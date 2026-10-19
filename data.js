@@ -15,6 +15,10 @@ const DATA_VERSION = "2026-10-18";
 /* Journal des modifications — ajouter une entrée en haut à chaque mise à jour.
    docs : nom des notices ajoutées (affichées dans Réglages). */
 const CHANGELOG = [
+  { v: "1.32", date: "2026-10-19", titre: "Favoris et accessoires par famille", items: [
+    "Favoris : une étoile ★ sur chaque fiche, et la liste « Mes favoris » en haut de l'accueil. Les favoris sont propres à chaque personne et enregistrés dans le navigateur de son téléphone : changer de navigateur ou effacer les données du navigateur efface les favoris. La mention est rappelée sur l'accueil, dans les Réglages et à chaque ajout. Réglages : compteur et bouton « Effacer mes favoris ».",
+    "Accessoires : fiches classées par famille (motorisations, feux et signalisation, sécurités, détection de véhicule, commandes) avec un filtre par famille."
+  ], docs: [] },
   { v: "1.31", date: "2026-10-18", titre: "Assistance fabricant et diagnostic des barrières", items: [
     "Assistance fabricant : sur chaque page de marque et dans l'en-tête de chaque fiche, les numéros de téléphone relevés dans les notices (appel en un clic), avec la notice d'origine. Ils peuvent avoir changé depuis l'édition de la notice : à vérifier. Pas de numéro dans les notices ELKA et Doitrand.",
     "Diagnostic guidé : nouvelle rubrique « Barrière levante » (ne s'ouvre pas, ne se ferme pas, lisse mal positionnée ou dégondée) pour ELKA MO 24, LBA 4 / 6 / 7 / 12 et carte ONE-C, avec des réponses tirées des tableaux de pannes et des messages des notices et des liens directs vers l'onglet utile de la fiche."
