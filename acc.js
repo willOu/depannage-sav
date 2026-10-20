@@ -1751,6 +1751,27 @@
     return ACCESSOIRES.filter(a => { const t = norm(`${a.marque} ${a.alias || ""} ${a.nom} ${a.categorie} ${a.modeles} ${a.resume} gyrophare clignotant feu`); return words.every(w => t.includes(w)); }).map(rowAcc).join("");
   };
 
+  /* Recherche dans le contenu des fiches (caractéristiques, bornes, installation, codes, notes) */
+  window.accDeep = function (q) {
+    const words = norm(q || "").split(" ").filter(Boolean);
+    if (!words.length) return "";
+    const ok = t => { const n = norm(t); return words.every(w => n.includes(w)); };
+    const hits = [];
+    ACCESSOIRES.forEach(a => {
+      const ctx = `<span class="badge" style="--c:${a.couleur}">${esc(a.marque)}</span>${esc(a.nom)}`;
+      const add = (tab, lab, txt) => hits.push({ id: a.id, tab, lab, txt, ctx });
+      (a.specs || []).forEach(s => { if (ok(`${a.marque} ${a.nom} ${s[0]} ${s[1]}`)) add("info", s[0], s[1]); });
+      (a.raccordement || []).forEach(r => { if (ok(`${a.marque} ${a.nom} ${r.n} ${r.label} ${r.desc}`)) add("racc", `${r.n} · ${r.label}`, r.desc); });
+      (a.installation || []).forEach(t => { if (ok(`${a.marque} ${a.nom} ${t}`)) add("inst", "Installation", t); });
+      (a.codes || []).forEach(c => { if (ok(`${a.marque} ${a.nom} ${c[0]} ${c[1]}`)) add("notes", c[0], c[1]); });
+      (a.notes || []).forEach(t => { if (ok(`${a.marque} ${a.nom} ${t}`)) add("notes", "Note", t); });
+    });
+    if (!hits.length) return "";
+    const TAB = { info: "Infos", racc: "Raccord.", inst: "Installation", notes: "Notes" };
+    return `<h2>Dans les fiches accessoires (${hits.length})</h2><table>` + hits.slice(0, 40).map(r =>
+      `<tr style="cursor:pointer" onclick="go('#/a/${r.id}/${r.tab}')"><td>${esc(TAB[r.tab])}</td><td>${r.ctx}<br><b>${highlight(r.lab, q)}</b> — ${highlight(r.txt.length > 220 ? r.txt.slice(0, 220) + "…" : r.txt, q)}</td></tr>`).join("") + `</table>`;
+  };
+
   /* Familles (déduites de la catégorie de chaque fiche) */
   const FAMILLES = [
     ["motor", "Motorisations", /motor|op[ée]rateur|moteur/i],

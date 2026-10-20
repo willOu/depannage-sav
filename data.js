@@ -10,11 +10,15 @@
    (la première entrée donne le numéro affiché partout : accueil, en-tête, Réglages).
    ===================================================================== */
 
-const DATA_VERSION = "2026-10-19";
+const DATA_VERSION = "2026-10-20";
 
 /* Journal des modifications — ajouter une entrée en haut à chaque mise à jour.
    docs : nom des notices ajoutées (affichées dans Réglages). */
 const CHANGELOG = [
+  { v: "1.36", date: "2026-10-20", titre: "Recherche dans le contenu des accessoires", items: [
+    "La barre de recherche cherche maintenant dans le contenu des fiches accessoires : caractéristiques, bornes et fils, installation, codes et notes (ex. « 2580 », « EM4200 », « varistance », « CR2032 »). Un résultat ouvre directement le bon onglet de la fiche.",
+    "Le texte d'aide de la barre de recherche mentionne les accessoires."
+  ], docs: [] },
   { v: "1.35", date: "2026-10-19", titre: "Marques d'accessoires sur l'accueil", items: [
     "Les marques qui n'ont que des accessoires (CARDIN, INTRATONE, LOCINOX, OPERA, OPTEX, PRASTEL, SEWOSY, THEBEN, BBC Bircher) apparaissent maintenant dans « Ou par marque » sur la page d'accueil, avec leurs fiches.",
     "Sur la page d'une marque qui a des cartes et des accessoires (Came, FAAC, CASIT, AFCA…), les accessoires sont listés sous les cartes."
