@@ -1739,6 +1739,218 @@
         "Ne pas installer à l'extérieur en cas de températures extrêmes (Finlande, Suède, Norvège).",
         "Intratone (COGELEC), 370 rue de Maunit, 85290 Mortagne-sur-Sèvre (indiqué sur la notice)."
       ]
+    },
+    {
+      "id": "afca-securis-bc-bi",
+      "nom": "Barre palpeuse Sécuris BC² / BI²",
+      "marque": "AFCA",
+      "alias": "ABLE V2",
+      "couleur": "#c7511f",
+      "categorie": "Bord sensible (barre palpeuse optique PB18)",
+      "modeles": "Barre palpeuse de sécurité AFCA Sécuris, profils caoutchouc BC² ou BI² sur rail aluminium, cellules IR PB18 (émettrice + réceptrice, câble 8 m), interface 1 voie",
+      "source": "Notice AFCA Barre palpeuse Sécuris profil BC² et BI² (version 21-06-05), 4 p., avec déclaration de conformité du 15-03-05",
+      "resume": "Barre palpeuse optique : deux cellules infrarouges NPN PB18 aux extrémités d'un profil caoutchouc ; l'écrasement du profil coupe le faisceau. Se raccorde soit par une interface 1 voie (sortie contact sec NF, réglage de sensibilité, autotest), soit directement sur les bornes cellules d'une armoire Startéco 3. La force d'impact doit être annulée en moins de 750 ms (EN 12453).",
+      "specs": [
+        [
+          "Composition",
+          "1 cellule émettrice PB18 (câble 8 m) · 1 cellule réceptrice PB18 (câble 8 m) · bouchons droit et gauche · 1 profil caoutchouc BI² ou BC² · rail support aluminium"
+        ],
+        [
+          "Cellules PB18",
+          "IR NPN protégées contre les courts-circuits · 10 à 30 Vdc · 40 mA maxi · IP 67 · faisceau ±5°"
+        ],
+        [
+          "Distance de détection",
+          "15 m (12 m dans le palpeur)"
+        ],
+        [
+          "Température",
+          "-20 °C à +50 °C"
+        ],
+        [
+          "Interface 1 voie — alimentation",
+          "24 V ac-dc"
+        ],
+        [
+          "Interface — sortie alimentation cellules",
+          "12 Vdc, 600 mA maxi"
+        ],
+        [
+          "Interface — sortie",
+          "Contact sec NF, 1 A / 48 Vcc maxi"
+        ],
+        [
+          "Interface — entrée test",
+          "Contact sec NO"
+        ],
+        [
+          "Interface — voyants",
+          "LED rouge : sous tension · LED verte : signal barre palpeuse"
+        ],
+        [
+          "Interface — réglage",
+          "Potentiomètre de sensibilité (livrée au maximum)"
+        ]
+      ],
+      "raccordement": [
+        {
+          "n": "~",
+          "label": "Interface — alimentation",
+          "desc": "24 V ac-dc (repère ~ sur le schéma)."
+        },
+        {
+          "n": "NC",
+          "label": "Interface — sortie contact sec",
+          "desc": "Contact NF vers l'entrée sécurité de l'armoire de commande. Il s'ouvre quand le profil est écrasé et pendant l'autotest."
+        },
+        {
+          "n": "T",
+          "label": "Interface — entrée test",
+          "desc": "Contact sec NO venant de l'armoire de commande : doit se fermer au moins 0,2 s en début de cycle."
+        },
+        {
+          "n": "- + S (émettrice)",
+          "label": "Cellule émettrice",
+          "desc": "Fil bleu (-), marron (+), noir (réglage). Le fil noir n'est pas raccordé si le réglage de sensibilité n'est pas nécessaire."
+        },
+        {
+          "n": "- + S (réceptrice)",
+          "label": "Cellule réceptrice",
+          "desc": "Fil bleu (-), marron (+), noir (-) signal."
+        },
+        {
+          "n": "Startéco 3 : 32 · 33",
+          "label": "Sans interface — alimentation émettrice (TX test)",
+          "desc": "0V / 12V : fils bleu (-) et marron (+) de l'émettrice. Le fil noir de l'émettrice est marqué « réglage / facultatif / MUTE » sur le schéma et n'est pas raccordé."
+        },
+        {
+          "n": "Startéco 3 : 34 · 35 · 41",
+          "label": "Sans interface — réceptrice",
+          "desc": "0V (34) / 12V (35) (RX) : fils bleu (-) et marron (+) ; fil noir (signal) sur la borne SB (41), barre basse, du bornier inférieur « cellules et barres palpeuses »."
+        },
+        {
+          "n": "Startéco 3 : 40 (SH)",
+          "label": "Barre haute (active en ouverture)",
+          "desc": "Raccorder le fil noir de la cellule réceptrice sur la borne 40 au lieu de 41."
+        }
+      ],
+      "installation": [
+        "Fixer le rail aluminium avec des vis autoforeuses.",
+        "Détacher les parties caoutchouc « A » sur toute la longueur.",
+        "Clipper un des côtés du caoutchouc sur le rail.",
+        "Enfoncer les cellules à chaque extrémité du caoutchouc.",
+        "Faire passer le câble de la cellule réceptrice dans la partie « C » pour le faire ressortir à l'autre extrémité. Ne pas couper le caoutchouc pour faire ressortir les câbles.",
+        "Clipper l'autre côté du caoutchouc.",
+        "Coller les bouchons aux deux extrémités.",
+        "Réglage de sensibilité : la norme EN 12453 impose d'annuler la force d'impact en moins de 750 ms. L'interface est livrée au maximum ; si besoin, retirer la fenêtre supérieure avec un tournevis, mettre le potentiomètre au minimum (la LED signal doit s'éteindre), puis l'augmenter jusqu'à l'allumage de la LED signal, et refermer la fenêtre.",
+        "Autotest : raccorder la commande de test (contact sec NO se fermant 0,2 s minimum en début de cycle). Le relais de sortie reste ouvert pendant le test et ne se referme que si le test est concluant."
+      ],
+      "notes": [
+        "Défaut d'autotest : l'interface reste bloquée et la LED verte clignote. Pour la réinitialiser, couper son alimentation.",
+        "Moins de conducteurs : on peut relier les 2 fils bleus des cellules sur une seule borne (-) de l'interface.",
+        "Le schéma de raccordement direct est donné uniquement pour l'armoire Startéco 3.",
+        "La déclaration de conformité (AFCA, Genas, signée le 15-03-05) cite les normes EN 13241-1, EN 12453, EN 12978, EN 60204-1 et EN 954-1."
+      ]
+    },
+    {
+      "id": "ist-bs10",
+      "nom": "BS10",
+      "marque": "IST",
+      "couleur": "#4a5560",
+      "categorie": "Bord sensible de sécurité (barre palpeuse mécanique à micro-interrupteurs)",
+      "modeles": "Bord sensible BS10 — caoutchouc TPE sur profil aluminium, 2 micro-interrupteurs, pour portails coulissants et battants ; électronique de contrôle BS02-E02/E04 ou similaire",
+      "source": "Notice d'installation IST MDI BS10 (Rev. 14-01), italien / français / anglais, 5 p. — fichier fourni : fyese1.pdf. La notice ne comporte pas le tableau de dépannage (g.2) qu'elle cite en page 1.",
+      "resume": "Bord sensible à profil caoutchouc extrudé et aluminium, fixé sur la colonne ou la grille du portail : la déformation du caoutchouc agit sur 2 micro-interrupteurs en partie haute. Sortie en contact NC ou en contact résistif 8,2 kΩ (cavalier J1). Câble acier précontraint avec réglage de sensibilité par vis. Doit être monté à la verticale, par un installateur qualifié.",
+      "specs": [
+        [
+          "Matériaux",
+          "Extrudé souple TPE · extrudé rigide aluminium · pièces rigides nylon"
+        ],
+        [
+          "Pré-course",
+          "18 mm"
+        ],
+        [
+          "Après-course",
+          "24 mm"
+        ],
+        [
+          "Vitesse maxi de relevé",
+          "12 m/min"
+        ],
+        [
+          "Temps de réponse",
+          "> 0,15 s à 12 m/min · > 2 s à 0,6 m/min (valeurs telles qu'imprimées, avec le signe >)"
+        ],
+        [
+          "Temps de recouvrement de la déformation",
+          "< 2 s"
+        ],
+        [
+          "Sortie",
+          "J1 NC : contact NC · J1 R : contact résistif 8,2 kΩ"
+        ],
+        [
+          "Température d'exercice",
+          "-10 °C / +60 °C"
+        ],
+        [
+          "Humidité relative à 40 °C",
+          "93 %"
+        ],
+        [
+          "Degré de protection",
+          "IP54"
+        ],
+        [
+          "Catégorie avec électronique de contrôle BS02-E02/E04 ou similaire",
+          "2/3 selon EN 954-1 (valeur imprimée « 2/3 »)"
+        ],
+        [
+          "Hauteur des trous de fixation, par longueur de bord (MBS)",
+          "1000 mm : clip H1.2 = 500 · 1500 : H1.1 = 200, H1.3 = 1300 · 1700 : H1.1 = 200, H1.3 = 1500 · 2000 : H1.1 = 200, H1.2 = 1000, H1.3 = 1800 · 2500 : H1.1 = 200, H1.2 = 1250, H1.3 = 2300 · 3000 : H1.1 = 200, H1.2 = 1500, H1.3 = 2800 · 4000 : H1.1 = 200, H1.2 = 2000, H1.3 = 3800"
+        ],
+        [
+          "Hauteur des trous des supports (H2.1 / H2.2)",
+          "H2.1 = 22 mm pour toutes les longueurs · H2.2 : 1000 → 978 · 1500 → 1478 · 1700 → 1678 · 2000 → 1978 · 2500 → 2478 · 3000 → 2978 · 4000 → 3978 (tableau TAB. 1, mm)"
+        ]
+      ],
+      "raccordement": [
+        {
+          "n": "J1 NC",
+          "label": "Sortie contact NC",
+          "desc": "Cavalier J1 sur NC : le bord délivre un contact normalement fermé vers l'électronique de contrôle."
+        },
+        {
+          "n": "J1 R",
+          "label": "Sortie contact résistif",
+          "desc": "Cavalier J1 sur R : le bord délivre un contact résistif 8,2 kΩ."
+        },
+        {
+          "n": "Bornier",
+          "label": "Liens du bord",
+          "desc": "Une fois le bord assemblé sur la colonne ou la grille, faire les liens selon le schéma de la notice (DIS. 2 part. 1) ; le câble entre par l'ouverture « entrée câbles » sous le bornier (DIS. 2 part. 2)."
+        }
+      ],
+      "installation": [
+        "Montage par des installateurs qualifiés. Toute modification du système ou de sa configuration non autorisée par le fabricant peut créer des situations dangereuses.",
+        "Fixer le CLIP (DIS. 1 part. 1) à la colonne ou à la grille en se référant au tableau TAB. 1 (H 1.1 / H 1.2 / H 1.3).",
+        "Placer la barre dans les clips et la fixer par les trous à la colonne ou à la grille (DIS. 1 part. 2), voir TAB. 1 (H 2.1 / H 2.2). Le bord doit être placé à la verticale, la carte avec les micros dans la partie supérieure.",
+        "Raccorder le bord (cavalier J1 sur NC ou R) selon le schéma DIS. 2.",
+        "Tension du câble et tarage : la barre est livrée avec le câble précontraint ; ajuster la barre en tournant la vis (DIS. 3 part. 1) sur le bras de la partie supérieure. Vers la droite la sensibilité augmente (+), vers la gauche elle diminue (−).",
+        "Le fonctionnement optimal est obtenu lorsque l'intervention électrique se produit avec une déformation au centre de la barre d'environ 20 mm (DIS. 4).",
+        "Encastrement des capuchons : placer le capuchon souple face à la plaque de support, faire glisser les extrémités libres dans leurs sièges, accrocher les deux crochets latéraux de blocage dans les fentes (DIS. 5 part. 1 et 2), appuyer légèrement jusqu'au déclic, puis fixer avec la vis fournie (DIS. 5 part. 3). Pour retirer : même opération en sens inverse, enlever la vis puis dégager le capuchon avec un outil dans les fentes en poussant les crochets vers l'intérieur.",
+        "Changer la hauteur — démontage : insérer l'arrêt de rotation fourni pour bloquer le mouvement de la came (DIS. 6 part. 1) ; dévisser la goupille de verrouillage du câble venant de la partie inférieure de la barre (DIS. 6 part. 2) ; débrancher le câble du raccord jusqu'au support inférieur (DIS. 7 part. 1) ; enlever le support supérieur du profil aluminium (DIS. 7 part. 2) ; retirer complètement le caoutchouc de l'aluminium (DIS. 7 part. 3).",
+        "Changer la hauteur — longueur : couper l'aluminium et le caoutchouc à la même taille pour la hauteur voulue ; le caoutchouc doit être 40 mm plus long que le profil aluminium. Exemple de la notice, MBS = 1800 mm : caoutchouc = MBS − 245 = 1555 mm ; aluminium = MBS − 285 = 1515 mm.",
+        "Changer la hauteur — remontage : glisser le caoutchouc dans l'aluminium (DIS. 8), il doit déborder de 20 mm par rapport au profil (DIS. 9 part. 1) ; remonter le support supérieur (DIS. 9 part. 2) ; repasser le câble acier dans le conduit du caoutchouc (DIS. 9 part. 3) ; brancher le câble dans le raccord en le sortant par le trou oblique (DIS. 9 part. 4) ; en maintenant la tension sur le câble, serrer la goupille de verrouillage (DIS. 10 part. 2) ; retirer l'arrêt de rotation (DIS. 10 part. 1) ; refaire connexion, tension du câble et tarage, encastrement des capuchons."
+      ],
+      "notes": [
+        "Ne pas desserrer la goupille de verrouillage qui bloque le câble de la came pendant le démontage (avertissement de la notice).",
+        "Pour améliorer l'évacuation des sédiments qui peuvent se former dans le capuchon inférieur, la notice conseille de percer un trou de Ø 5 mm dans le capuchon inférieur (DIS. 5 part. 4).",
+        "Pas de réinitialisation à faire après une alarme : la récupération est automatique. Si un défaut maintient le dispositif en alarme, la notice renvoie à un tableau de dépannage (g.2) qui n'est pas dans le document fourni.",
+        "L'installateur doit informer l'utilisateur final des dispositifs de sécurité, de leurs caractéristiques, et que les zones d'accès aux dispositifs doivent rester libres de tout obstacle.",
+        "Le texte imprimé nomme le fabricant « IST » dans l'en-tête (« IST MDI BS10 ») ; aucune adresse ni déclaration de conformité n'est jointe."
+      ]
     }
   ];
   window.ACCESSOIRES = ACCESSOIRES;

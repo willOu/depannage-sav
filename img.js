@@ -111,9 +111,52 @@
       S("afca-c3m-p04", "Raccordement de la platine", 4, "Bornier complet, fins de course des deux moteurs (24-26 et 27-29), cellules et barres palpeuses."),
       S("afca-c3m-p06", "Autotest des sécurités", 6, "Raccordement des cellules et amplificateurs avec autotest.")
     ],
+    "v2-pd19": [
+      S("v2-pd19-p66", "Raccordements électriques PD19", 66, "Bornier de la PD19 (Ayros 400-1200 / Forteco 1200-2200) : alimentation, moteur, fin de course, photocellules, barres palpeuses, 24 V~, antenne, ADI. Manuel ZIS371."),
+      S("v2-ev-forteco-1", "Vue éclatée Forteco", 1, "Éclaté des pièces détachées Forteco (fichier « Vue éclatée Forteco »)."),
+      S("v2-ev-forteco-2", "Vue éclatée Forteco : nomenclature", 2, "Codes pièces par modèle (coffrets PD19, moteurs, condensateurs, carte)."),
+      S("v2-ev-ayros230-1", "Vue éclatée Ayros 230 V", 1, "Éclaté des pièces détachées Ayros 230 V (fichier « Vue éclatée Ayros 230V »)."),
+      S("v2-ev-ayros230-2", "Vue éclatée Ayros 230 V : nomenclature", 2, "Codes pièces par modèle (moteurs, condensateurs, coffrets PD19 / PD20).")
+    ],
+    "v2-ayros1500": [
+      S("v2-ev-ayros230-1", "Vue éclatée Ayros 230 V (dont Ayros 1500-I)", 1, "Éclaté des pièces détachées : la vue présente aussi l'Ayros 1500-I (fichier « Vue éclatée Ayros 230V »)."),
+      S("v2-ev-ayros230-2", "Vue éclatée Ayros 230 V : nomenclature", 2, "Codes pièces par modèle, dont l'Ayros 1500-I (moteur, condensateur, coffret PD20).")
+    ],
+    "v2-ayros24v": [
+      S("v2-pd14-p72", "Interface ADI et raccordements PD14", 72, "Description de l'interface ADI et bornes J1 à J9, E1 à E5 de la PD14. Manuel ZIS334."),
+      S("v2-pd14-p73", "Schéma de raccordement PD14", 73, "Schéma de la carte : moteur, encodeur, fin de course, batterie 24 V, récepteur, accessoires."),
+      S("v2-ev-ayros24-1", "Vue éclatée Ayros 24 V", 1, "Éclaté des pièces détachées Ayros 24 V (fichier « Vue éclatée Ayros 24V »)."),
+      S("v2-ev-ayros24-2", "Vue éclatée Ayros 24 V : nomenclature", 2, "Codes pièces par modèle.")
+    ],
+    "v2-heavy1": [
+      S("v2-heavy1-p58", "Branchements électriques HEAVY1", 58, "Branchements de la carte supérieure et de la carte inférieure : bornes, moteur, frein, sorties, alimentation. Notice ZIS354 (fichier ZIS355)."),
+      S("v2-heavy1-p59", "Implantation des cartes HEAVY1", 59, "Vue de la carte logique, de la carte puissance et de la façade.")
+    ],
+    "afca-forteco-pass": [
+      S("afca-fpass-p10", "Schéma armoire de commande PD19", 8, "Caractéristiques de la PD19 et schéma de la carte avec ses borniers (page imprimée 8)."),
+      S("afca-fpass-p21", "Raccordement feu orange, antenne, cellules, éclairage", 19, "Exemple de cellule SENSIVA, feu LUMOS M avec antenne, éclairage 230 V (page imprimée 19).")
+    ],
+    "afca-startindus": [
+      S("afca-si-p03", "Alimentation de la carte", 3, "Alimentation 230 / 400 V et raccordement moteur."),
+      S("afca-si-p04", "Raccordements", 4, "Bornier complet 1 à 31, entrées, alimentations, options."),
+      S("afca-si-p13", "Affectation des entrées", 13, "Entrées IN1 à IN10 et fonctions affectables.")
+    ],
+    "afca-startone": [
+      S("afca-st1-p03", "Implantation de la carte", 3, "Caractéristiques techniques, fusibles, connecteurs H3 / H4, boutons de programmation et borniers."),
+      S("afca-st1-p04", "Alimentation platine et moteurs", 4, "Alimentation 230 V mono et moteurs M1 / M2 (bornes 46 à 56 d'après le schéma)."),
+      S("afca-st1-p05", "Raccordement de la platine et propriétés des bornes", 5, "Bornes 1 à 41 et 57-58 (antenne), liste des bornes."),
+      S("afca-st1-p07", "Affectation des entrées de la carte", 7, "Entrées IN1 à IN13 par défaut, clavier et canaux du récepteur MR2."),
+      S("afca-st1-p08", "Autotest des entrées de sécurité", 8, "Cavalier J1, sortie 7-8, alimentation 12 V autotest.")
+    ],
+    "afca-startrm": [
+      S("afca-srm-p04", "Raccordement de la platine et propriétés des bornes", 4, "Bornier J1 (1 à 18), J3 (19 à 32), J2 fins de course (33 à 37), J4 terre, liste des bornes.")
+    ],
     "v2-forteco2500": [
       S("v2-forteco-p66", "Raccordements électriques PD20", 66, "Bornier L N, B1-B2 clignotant, B3-B4 courtoisie, M1 à M12 (START, START P., STOP, photocellules, barres palpeuses, 24 V~), A1-A2 antenne, connecteurs ADI et récepteur."),
       S("v2-forteco-p68", "Panneau de contrôle (afficheur)", 68, "Signification des segments, flèches et points de l'afficheur et des touches.")
+,
+      S("v2-ev-forteco-1", "Vue éclatée Forteco", 1, "Éclaté des pièces détachées Forteco (fichier « Vue éclatée Forteco ») : repères 1 à 22 et A à D."),
+      S("v2-ev-forteco-2", "Vue éclatée Forteco : nomenclature", 2, "Codes pièces de la vue éclatée, dont les coffrets de commande PD19 et PD20 (Forteco 2500-I) et la carte inverter.")
     ],
     "afca-starteco4-2m-revers": [
       S("afca-c4r-p03", "Moteur et électrofrein", 3, "Bornes 42-44 alimentation, moteur 1 (45-48) et moteur 2 (49-52), condensateur, frein sur l'option 1 (12-13), déblocage."),
