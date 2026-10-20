@@ -1801,6 +1801,7 @@
 
 
   /* Marques d'accessoires : slug = nom normalisé ; les marques déjà présentes dans MARQUES (cartes) y sont rattachées */
+  const LOGOS = ["optex", "cardin", "intratone", "locinox", "prastel", "theben", "opera", "bbc-bircher"];
   const slugM = n => norm(n).replace(/ /g, "-");
   const accOf = nom => ACCESSOIRES.filter(a => norm(a.marque) === norm(nom));
   window.accBrandsOnly = function () {
@@ -1808,7 +1809,7 @@
     ACCESSOIRES.forEach(a => {
       const k = norm(a.marque);
       if (seen.has(k) || MARQUES.some(m => norm(m.nom) === k)) return;
-      seen.add(k); out.push({ slug: slugM(a.marque), nom: a.marque, couleur: a.couleur });
+      seen.add(k); out.push({ slug: slugM(a.marque), nom: a.marque, couleur: a.couleur, logo: LOGOS.includes(slugM(a.marque)) });
     });
     return out.sort((x, y) => x.nom.localeCompare(y.nom));
   };

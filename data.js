@@ -15,6 +15,9 @@ const DATA_VERSION = "2026-10-20";
 /* Journal des modifications — ajouter une entrée en haut à chaque mise à jour.
    docs : nom des notices ajoutées (affichées dans Réglages). */
 const CHANGELOG = [
+  { v: "1.37", date: "2026-10-20", titre: "Logos des marques", items: [
+    "Logos ajoutés sur la page d'accueil pour Doitrand, DEA System, ELKA, La Barrière Automatique, OPTEX, CARDIN, INTRATONE, LOCINOX, PRASTEL, THEBEN, OPERA et BBC Bircher. SEWOSY reste en pastille de couleur (pas de logo fourni)."
+  ], docs: [] },
   { v: "1.36", date: "2026-10-20", titre: "Recherche dans le contenu des accessoires", items: [
     "La barre de recherche cherche maintenant dans le contenu des fiches accessoires : caractéristiques, bornes et fils, installation, codes et notes (ex. « 2580 », « EM4200 », « varistance », « CR2032 »). Un résultat ouvre directement le bon onglet de la fiche.",
     "Le texte d'aide de la barre de recherche mentionne les accessoires."
@@ -29231,7 +29234,7 @@ const MARQUES = [
 },
 /* ------------------------------------------------------------------ */
 {
-  id: "doitrand", nom: "Doitrand", couleur: "#1d4e89", sanslogo: true,
+  id: "doitrand", nom: "Doitrand", couleur: "#1d4e89",
   cartes: [
           {
         "id": "doitrand-lf82",
@@ -29695,7 +29698,7 @@ const MARQUES = [
 },
 /* ------------------------------------------------------------------ */
 {
-  id: "dea", nom: "DEA System", couleur: "#b3261e", sanslogo: true,
+  id: "dea", nom: "DEA System", couleur: "#b3261e",
   cartes: [
           {
         "id": "dea-net230n",
@@ -33876,7 +33879,7 @@ const MARQUES = [
   ]
 },
 {
-  id: "elka", nom: "ELKA", couleur: "#c26a00", sanslogo: true, alias: "MO 24 barrière levante ELKA-Torantriebe",
+  id: "elka", nom: "ELKA", couleur: "#c26a00", alias: "MO 24 barrière levante ELKA-Torantriebe",
   cartes: [
     {
       "id": "elka-p2500-5000",
@@ -37798,7 +37801,7 @@ const MARQUES = [
   ]
 },
 {
-  id: "lba", nom: "La Barrière Automatique", couleur: "#0b5cab", sanslogo: true, alias: "LBA Unidrive Siemens LOGO ONE-C barrière levante tourniquet",
+  id: "lba", nom: "La Barrière Automatique", couleur: "#0b5cab", alias: "LBA Unidrive Siemens LOGO ONE-C barrière levante tourniquet",
   cartes: [
     {
       "id": "lba-67",
