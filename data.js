@@ -23559,7 +23559,7 @@ const MARQUES = [
             ],
             "apres": [
               "La sensibilité aux obstacles se règle avec S.EnC (0 à 7) : à 0 l'obstacle n'est détecté que portail arrêté. Il n'y a pas de capteur ampèremétrique ni de seuil proposé en fin d'apprentissage sur cette armoire.",
-              "Menu -Cnt : tot affiche le total de cycles (▲ / ▼ alternent milliers / unités) ; SErv règle le compteur de cycles avant entretien (1re pression : arrondi aux 1 000, puis +1 000 ou −100 par pression). À zéro : 5 s de préavis supplémentaires avant chaque départ en ouverture jusqu'à l'accès au menu SErv ; si aucun nouveau nombre n'est programmé, la fonction est désactivée.",
+              "Menu -Cnt : tot affiche le total de cycles (▲ / ▼ alternent milliers / unités) ; SErv règle le compteur de cycles avant entretien (notice AYROS : 1re pression arrondie aux 1 000, puis +1 000 ou −100 par pression ; notice FORTECO : ±1 000 cycles par pression, sans arrondi ; les deux notices se contredisent, non tranché). À zéro : 5 s de préavis supplémentaires avant chaque départ en ouverture jusqu'à l'accès au menu SErv ; si aucun nouveau nombre n'est programmé, la fonction est désactivée.",
               "Homme mort d'urgence (installation, entretien, défaut cellules / barres / fins de course / encodeur) : 3 commandes START d'au moins 1 s séparées d'au moins 1 s, la 4e commande déplace le portail tant qu'elle est maintenue ; la fonction s'éteint après 10 s d'inactivité.",
               "Entretien conseillé tous les six mois (notice chap. 15). Essai selon EN 12445 / EN 12453."
             ]

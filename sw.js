@@ -1,6 +1,6 @@
 /* Service worker — tout est mis en cache à l'installation.
    Après modification de data.js ou index.html, augmenter VERSION. */
-const VERSION = "sav-2026-10-20-46";
+const VERSION = "sav-2026-10-20-47";
 const FILES = ["./", "index.html", "data.js", "diag.js", "ask.js", "acc.js", "img.js", "manifest.webmanifest",
   "icons/icon-192.png", "icons/icon-512.png", "icons/icon-maskable-512.png", "icons/apple-touch-icon.png",
   "icons/marques/came.png", "icons/marques/nice.png", "icons/marques/faac.png", "icons/marques/bft.png", "icons/marques/roger.png", "icons/marques/afca.png", "icons/marques/casit.png", "icons/marques/optex.png", "icons/marques/cardin.png", "icons/marques/doitrand.png", "icons/marques/intratone.png", "icons/marques/locinox.png", "icons/marques/lba.png", "icons/marques/prastel.png", "icons/marques/dea.png", "icons/marques/theben.png", "icons/marques/elka.png", "icons/marques/opera.png", "icons/marques/bbc-bircher.png",
