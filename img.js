@@ -148,6 +148,44 @@
       S("afca-st1-p07", "Affectation des entrées de la carte", 7, "Entrées IN1 à IN13 par défaut, clavier et canaux du récepteur MR2."),
       S("afca-st1-p08", "Autotest des entrées de sécurité", 8, "Cavalier J1, sortie 7-8, alimentation 12 V autotest.")
     ],
+    "v2-city1evo": [
+      S("v2-city1-p67", "Schéma de câblage et bornier", 65, "Implantation de la platine : bornes L1-L11, E1-E5, Z1-Z6, H1-H8, L / N, touches DOWN / MENU / UP, connecteurs RM, ADI, USB, J1-J3, fusible F1."),
+      S("v2-city1-p66", "Tableau des bornes", 64, "Fonction de chaque borne (communs, NO / NF), LED MAINS / OVERLOAD et fusible F1."),
+      S("v2-city1-p72", "Encodeurs et fins de course", 70, "Raccordement de 1 ou 2 moteurs avec encodeur, fins de course, clignotant."),
+      S("v2-city1-p75", "Panneau de contrôle", 73, "Afficheur, flèches, segments des entrées et menus -Pr.S, -Pr.F, -Cnt, -APP, -dEF."),
+      S("v2-city1-p80", "Tableau des événements", 78, "Codes E001 à E242 avec niveau et message affiché.")
+    ],
+    "v2-city4evo": [
+      S("v2-city4-p63", "Schéma de câblage CITY4-EVO", 61, "Borniers L1-L11, Z1-Z6, G1-G7, N / L, touches DOWN / MENU / UP, LED MAINS / OVERLOAD, fusible F1, connecteurs RM, ADI, USB, J1-J3."),
+      S("v2-city4-p62", "Description des bornes", 60, "Légende des borniers L, Z, G et des LED, fusible F1 et cavaliers du module LOW ENERGY."),
+      S("v2-city4-p69", "Panneau de contrôle (afficheur)", 67, "Segments d'état des entrées, points des touches, flèches d'état du portail, alarmes ADI."),
+      S("v2-city4-p72", "Compteurs de cycles", 70, "Lecture du total, de SErv et programmation de l'entretien."),
+      S("v2-city4-p71", "Auto-apprentissage des temps de travail", 69, "Procédure -APP / t.LAv avec ou sans fin de course et capteur d'obstacles.")
+    ],
+    "v2-city11": [
+      S("v2-city11-p18", "Branchements électriques", 16, "Bornier L1-L11, K1-K10, N / L, antenne, récepteur MR, dip-switchs, trimmers et LED."),
+      S("v2-city11-p19", "Trimmers et LED", 17, "Plages des trimmers POWER / WORK / PAUSE / DELAY et état des LED au repos."),
+      S("v2-city11-p20", "Dip-switchs 1 à 12", 18, "Tableau des fonctions de la logique de fonctionnement."),
+      S("v2-city11-p15", "Caractéristiques techniques", 13, "Alimentation, charges, fusible F1 et dimensions.")
+    ],
+    "afca-city5": [
+      S("afca-city5-p03", "Présentation de la platine", 3, "Borniers G1-G7, Z1-Z6, M1-M12, récepteur MR1, feux extérieurs / intérieurs, repères de l'afficheur."),
+      S("afca-city5-p05", "Tableau des fonctions paramétrables", 5, "Paramètres riP.E à FinE avec valeurs possibles et valeurs d'usine.")
+    ],
+    "afca-flexy2": [
+      S("afca-flexy2-p03", "Raccordement aux borniers", 3, "Bornes L1-L11, K1-K10, N / L, détail des entrées de commande et de sécurité, éclairage, feux orange, fins de course."),
+      S("afca-flexy2-p05", "Dip-switchs 1 à 12", 5, "Tableau des fonctions programmables par dip-switch.")
+    ],
+    "jcm-rb3-868": [
+      S("jcm-rb3-p05", "Récepteur RB3 R868", 5, "LED R1 / R2 / R3, bouton PROG, pont MR, sélecteurs SW1 à SW4, entrée ATEST, sorties R1 / R2 / R3."),
+      S("jcm-rb3-p06", "Émetteur RB3 T868", 6, "Entrées IN1 / IN2, LED d'état, piles, sélecteurs d'options selon le type de bande."),
+      S("jcm-rb3-p09", "Raccordement à l'armoire", 9, "Sorties de sécurité vers une entrée contact de sécurité ou bande 8k2."),
+      S("jcm-rb3-p13", "Raccordement de la bande à l'émetteur", 13, "Bande résistive, contact mécanique, bandes optiques OSE-S7502 / OSE-S7502B.")
+    ],
+    "jcm-radioband": [
+      S("jcm-radioband-p1", "Émetteur TBX et récepteur RU", 1, "Implantation des cartes : entrée B1, connecteur piles, bouton PROG, cavaliers CS1 / BS1 / CS2 / BS2, bornes d'alimentation, R1, R2 et ATEST."),
+      S("jcm-radioband-p3", "Autotest, voyants, programmation", 3, "Polarité de l'autotest, voyants, programmation du TBX / RU / RC-RCS et fonction CHECK.")
+    ],
     "afca-startrm": [
       S("afca-srm-p04", "Raccordement de la platine et propriétés des bornes", 4, "Bornier J1 (1 à 18), J3 (19 à 32), J2 fins de course (33 à 37), J4 terre, liste des bornes.")
     ],

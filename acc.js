@@ -1951,6 +1951,198 @@
         "L'installateur doit informer l'utilisateur final des dispositifs de sécurité, de leurs caractéristiques, et que les zones d'accès aux dispositifs doivent rester libres de tout obstacle.",
         "Le texte imprimé nomme le fabricant « IST » dans l'en-tête (« IST MDI BS10 ») ; aucune adresse ni déclaration de conformité n'est jointe."
       ]
+    },
+    {
+      "id": "jcm-rb3-868",
+      "nom": "RB3 R868 / T868 (RadioBand 3)",
+      "marque": "JCM Technologies",
+      "couleur": "#e2711d",
+      "categorie": "Transmission radio de bande de sécurité (récepteur + émetteurs 868 MHz)",
+      "modeles": "Récepteur RB3 R868 / RB3 R868W et émetteurs RB3 T868 / RB3 T868W — jusqu'à 6 bandes de sécurité par récepteur (3 par relais)",
+      "source": "Manuel de l'utilisateur JCM Technologies RB3 R868, RB3 T868, RB3 T868W & RB3 R868W (réf. pied de page UM_3201473_RB3S SYSTEM_FR_Rev01), 28 p., fichier UM_3201473_RB3W-SYSTEM_FR.pdf",
+      "resume": "Système sans fil qui remplace le câble spiralé d'une bande de sécurité : l'émetteur fixé sur le vantail transmet par radio l'état de la bande (résistive 8,2 kΩ, optique, contact NC) au récepteur, qui ouvre ou ferme un relais vers l'armoire de commande. Le récepteur vérifie en permanence les émetteurs. Catégorie 2, PLd (EN ISO 13849-1:2015), certifié TÜV NORD.",
+      "specs": [
+        [
+          "Fréquence",
+          "Multifréquence 868 MHz auto-réglable : canal 1 : 868,700 – 869,200 MHz ; canal 2 : 868,000 – 868,600 MHz ; canal 3 : 869,400 – 869,650 MHz ; canal 4 : 869,400 – 869,650 MHz"
+        ],
+        [
+          "Alimentation récepteur",
+          "12 / 24 V ac/dc (9 – 35 Vdc, 8 – 28 Vac)"
+        ],
+        [
+          "Alimentation émetteur",
+          "2 piles 3,6 Vdc type ER14505 (AA), durée environ 2 ans (dépend du mode et du nombre de manœuvres avec les bandes optiques standard)"
+        ],
+        [
+          "Consommation maxi",
+          "Récepteur 255 mA · émetteur 12 mA"
+        ],
+        [
+          "Mémoire du récepteur",
+          "6 bandes de sécurité (3 sur le relais 1, 3 sur le relais 2)"
+        ],
+        [
+          "Puissance rayonnée",
+          "< 25 mW"
+        ],
+        [
+          "Portée en champ libre",
+          "50 m"
+        ],
+        [
+          "Temps de réaction",
+          "35 ms typique ; maximum 265 ms en cas d'interférences (SW1 = OFF)"
+        ],
+        [
+          "Indice de protection",
+          "IP65 avec presse-étoupes montés (remplacer par un bouchon les entrées de câble non utilisées)"
+        ],
+        [
+          "Sécurité",
+          "EN ISO 13849-1:2015, catégorie 2, PLd ; norme produit EN 12978:2003+A1:2009"
+        ],
+        [
+          "Équipements compatibles",
+          "RB3 T868, RB3 T868W, RB3 TGL868 et RB3 TGLA868 (avec les récepteurs RB3 R868 / R868W) ; RSEC3"
+        ]
+      ],
+      "raccordement": [
+        {
+          "n": "12/24Vac/dc",
+          "label": "Récepteur : alimentation",
+          "desc": "Entrée d'alimentation 9-35 Vdc ou 8-28 Vac."
+        },
+        {
+          "n": "R1 · R2",
+          "label": "Récepteur : sorties relais",
+          "desc": "Contact normalement fermé (CS) ou 8,2 kΩ (BS) pour chaque relais, selon l'entrée de l'armoire : entrée bande 8k2 ou entrée contact de sécurité / STOP. Repos (sans détection) : fermé, ou 8,2 kΩ ; bande active : ouvert, ou 0 Ω ; LED R1 / R2 allumée = bande activée ou débranchée."
+        },
+        {
+          "n": "R3",
+          "label": "Récepteur : sortie indicatrice",
+          "desc": "Batterie faible ou élément actif selon SW3."
+        },
+        {
+          "n": "ATEST",
+          "label": "Récepteur : entrée de test",
+          "desc": "Entrée 12/24 V ac/dc 5 mA pour le test du système (polarité selon SW4) et / ou l'activation de la bande (SW2). Le signal ATEST est à connecter avant chaque cycle pour respecter l'EN ISO 13849-1:2015."
+        },
+        {
+          "n": "IN1 · IN2",
+          "label": "Émetteur : entrées bandes",
+          "desc": "IN1 : bande optique toujours active (OSE-S7502B, OSE-S7502), optique standard, résistive 8,2 kΩ ou contact NC. IN2 : seulement résistive 8,2 kΩ ou contact mécanique. Position des sélecteurs de l'émetteur : voir installation."
+        }
+      ],
+      "installation": [
+        "Sélecteurs du récepteur (toute modification impose de reprogrammer le système) : SW1 détecteur d'interférence : ON = état de sécurité après 7 s ; OFF = après 265 ms. SW2 : ON = bandes optiques toujours actives uniquement (OSE-S7502B et OSE-S7502, le texte écrit deux fois OSE-S7502) ; WORK = les éléments optiques s'éteignent (il faut alors désactiver ATEST pendant le mouvement de la porte). SW3 : ON = R3 indique batterie faible ; OFF = R3 comme R1 / R2 (tableau p. 5) ou « ALARME » avec contact qui se ferme quand une bande est active (texte p. 10) : la notice se contredit, non tranché. SW4 : polarité ATEST, négatif (signal fixe 12 ou 24 V que l'unité met à 0 V) ou positif (sans tension, l'unité envoie 12 ou 24 V ; position à utiliser aussi sans ATEST).",
+        "Sélecteurs de l'émetteur IN1 (SW1 / SW2) : bande optique toujours active (OSE-S7502B et OSE-S7502) = OFF / OFF ; bande optique standard = ON / OFF ; bande résistive 8k2 = OFF / ON ; contact NC = ON / ON. IN2 (SW3) : contact NC = ON ; bande résistive 8k2 = OFF. La position doit correspondre au type de bande ; le SW3 n'a pas d'effet si rien n'est connecté à IN2.",
+        "Mode WORK obligatoire avec des bandes optiques standard (forte consommation). Les deux modes sont possibles avec les OSE-S7502B et OSE-S7502 toujours actives : ON = universel pour toutes les armoires ; WORK = piles plus durables. Si le cycle de la porte est inférieur à 7 s, travailler uniquement en mode WORK.",
+        "Ne pas transporter l'équipement avec les piles connectées. Brancher le connecteur des piles pour faire fonctionner l'émetteur.",
+        "Programmation : régler d'abord tous les sélecteurs. Appuyer sur PROG du récepteur et le maintenir jusqu'au mode voulu. Le récepteur reste en programmation 60 s avant le 1er émetteur, puis 20 s de plus par émetteur suivant.",
+        "Mode 1 (IN1 → R1, mémoire = 1 émetteur) : maintenir PROG du récepteur jusqu'à ce que la LED R1 s'allume, puis appuyer sur PROG de l'émetteur : un bip confirme. Sortie : attendre 10 s ou appuyer sur PROG du récepteur (2 bips).",
+        "Mode 2 (IN1 → R2, mémoire = 1 émetteur) : LED R2 allumée, même suite.",
+        "Mode 3 (IN1 → R1 et R2, mémoire = 2 émetteurs) : LED R1 et R2 allumées, même suite.",
+        "Mode 4 (IN1 → R1 et IN2 → R2, mémoire = 2 émetteurs) : LED R1 et R2 clignotantes, même suite ; sur IN2 bande mécanique, contact ou 8k2.",
+        "Contrôle : une fois câblée et programmée, R1 / R2 sont éteintes au repos, de même que IN1 / IN2 de l'émetteur. Les voyants IN1 / IN2 de l'émetteur s'éteignent 5 min après un appui sur PROG de l'émetteur (économie de pile) et se rallument par un nouvel appui.",
+        "Fonction CHECK (couverture radio) : appuyer au moins 1 s sur CHECK du récepteur : voyant allumé et 4 bips. Faire une manœuvre complète : 1 bip toutes les 1,5 s ; aucun autre bip en fin de manœuvre = correct. Trois bips consécutifs = défaut ou mauvaise communication ; appuyer sur chaque bande pour trouver celle qui ne marche pas. Sortie : touche CHECK ou 5 min ; 7 bips à la sortie, voyant clignotant en continu en cas de panne. À faire en fin d'installation."
+      ],
+      "notes": [
+        "Reset total du récepteur : maintenir PROG jusqu'à ce que R1 s'allume, garder PROG appuyé et faire un pont sur le jumper « MR » : 10 bips d'avertissement puis d'autres plus rapides = fait. Sortie : attendre 10 s ou PROG (2 bips).",
+        "Sans bande programmée sur R1 / R2, le relais se met en sécurité (ouvert, LED allumée).",
+        "Dépannage (tableau p. 22, les symboles de LED et de bips ne sont pas tous lisibles) : détection de la bande → vérifier que la LED IN1 / IN2 de l'émetteur passe ON à l'appui sur PROG ; récepteur avec un autre émetteur en mémoire → vérifier IN1 / IN2 de tous les RB3 T, remettre à zéro et reprogrammer ; panne de communication → fonction CHECK ; bande mal détectée (non connectée, non programmée ou sélecteur incorrect) → remettre à zéro, câbler, vérifier le sélecteur, reprogrammer l'émetteur ; batterie faible ou perte de radio (interférences) → vérifier les piles ; récepteur en mode WORK en attente d'un signal ATEST → attendre le signal de l'armoire ; mémoire pleine (indication lors de la mémorisation d'un nouvel émetteur) → remettre à zéro et reprogrammer, 6 bandes maximum (3 par relais) ; changement de mode de travail avec des émetteurs déjà mémorisés → remettre à zéro, changer SW2, reprogrammer.",
+        "Piles au lithium : stocker au frais (30 °C maxi conseillé, jamais plus de 100 °C), au sec, dans leur emballage ; ne pas mélanger neuves et anciennes ; ne pas court-circuiter, démonter, percer, chauffer ni mouiller. Retirer les piles avant la mise au rebut.",
+        "Contradiction dans la notice : la page 3 écrit que la fréquence de travail du récepteur n'interfère pas avec les systèmes de télécommande 868 MHz alors que le système travaille lui-même en 868 MHz.",
+        "La notice couvre aussi les références RB3 R868W / T868W ; le pied de page de la notice porte la référence « RB3S SYSTEM » alors que le fichier fourni s'appelle « RB3W-SYSTEM ».",
+        "Fabricant : JCM TECHNOLOGIES, S.A., C/ Costa d'en Paratge 6B, 08500 Vic (Barcelone), Espagne. Déclaration UE : directive RED 2014/53/UE, machines 2006/42/CE, RoHS 2011/65/UE."
+      ]
+    },
+    {
+      "id": "jcm-radioband",
+      "nom": "RADIOBAND TBX / RU / RC-RCS",
+      "marque": "JCM Technologies",
+      "couleur": "#e2711d",
+      "categorie": "Transmission radio de barre palpeuse (émetteur + récepteur 868,90 MHz)",
+      "modeles": "Émetteur RADIOBAND/TBX, récepteurs RADIOBAND/RU (boîtier 82×190×40 mm, 2 sorties relais) et RADIOBAND/RC-RCS (module embrochable)",
+      "source": "Notice JCM Technologies RADIOBAND (français, 4 p., fichier Notice_FR.pdf, sans référence ni date)",
+      "resume": "Système radio pour barres palpeuses de portes de garage : l'émetteur TBX, relié à la barre palpeuse, transmet son état au récepteur RU qui commande deux relais de sortie vers l'armoire (entrée bande 8,2 kΩ ou contact de sécurité). Le récepteur vérifie toutes les 20 s que les émetteurs fonctionnent et bloque la manœuvre sinon.",
+      "specs": [
+        [
+          "Fréquence",
+          "868,90 MHz"
+        ],
+        [
+          "Émetteur RADIOBAND/TBX",
+          "3 V DC (2 × 1,5 V LR6 AA) · 12 mA · < 25 mW · -20 / +55 °C · IP65 · 85×53×36 mm · portée garantie 10 m · piles environ 2 ans · 7 min mini entre deux activations (directive R&TTE)"
+        ],
+        [
+          "Récepteur RADIOBAND/RU",
+          "Mémoire : 6 TBX (3 pour le relais 1, 3 pour le relais 2) · 2 relais de sortie · alimentation 12 / 24 Vac/dc (9-35 Vdc, 8-28 Vac) · contacts 1 A · 18 mA repos / 80 mA fonctionnement · 2 entrées autotest 0 / 12 ou 24 Vac/dc à polarité sélectionnable · IP54 (IP65 avec presse-étoupe) · 82×190×40 mm"
+        ],
+        [
+          "Récepteur RADIOBAND/RC-RCS",
+          "Mémoire 6 TBX · alimentation à brancher (connecteur dispositifs de sécurité) · 18 mA · autotest incorporé · IP20 · 50×20×17 mm"
+        ],
+        [
+          "Conformité",
+          "Directive machines selon EN-954-1, catégorie 2 ; FCC partie 15"
+        ]
+      ],
+      "raccordement": [
+        {
+          "n": "B1 (TBX)",
+          "label": "Émetteur : entrée barre palpeuse",
+          "desc": "Connecter la barre palpeuse à la borne B1 (s'assurer que la barre est étanche). Pour un élément non résistif (contact NF), court-circuiter le jumper JP1 : application non conforme à la norme EN 12453 car la connexion de l'élément non résistif n'est pas vérifiée."
+        },
+        {
+          "n": "1 · 2 (RU)",
+          "label": "Alimentation",
+          "desc": "12 ou 24 Vac/dc : borne 1 (+), borne 2 (−)."
+        },
+        {
+          "n": "3 · 4 (RU)",
+          "label": "R1 : sortie relais 1",
+          "desc": "Vers l'armoire : entrée bande de sécurité (résistive 8,2 kΩ) selon le cavalier BS1 (figure 1), ou entrée contact de sécurité selon le cavalier CS1 (figure 2)."
+        },
+        {
+          "n": "5 · 6 (RU)",
+          "label": "R2 : sortie relais 2",
+          "desc": "Même principe que R1, selon les cavaliers BS2 / CS2 (schéma p. 1) ; le texte p. 2 cite BS1 / CS1 pour R2 : non tranché."
+        },
+        {
+          "n": "7 (RU)",
+          "label": "AUTOTEST commun",
+          "desc": "Commun (−) des entrées autotest des sécurités."
+        },
+        {
+          "n": "8 (RU)",
+          "label": "AUTOTEST relais 1",
+          "desc": "Entrée autotest pour le relais 1."
+        },
+        {
+          "n": "9 (RU)",
+          "label": "AUTOTEST relais 2",
+          "desc": "Entrée autotest pour le relais 2."
+        }
+      ],
+      "installation": [
+        "TBX : fixer le fond du boîtier sur le tablier de la porte, sans surfaces métalliques entre le récepteur et l'émetteur ; passer les câbles par la partie inférieure ; connecter la barre palpeuse sur B1 ; fermer le couvercle avec les vis fournies.",
+        "RU : fixer le boîtier avec vis et chevilles, le plus près possible du tablier de la porte, sans surfaces métalliques entre récepteur et émetteur ; câbler l'alimentation selon le schéma, puis enregistrer les TBX.",
+        "Autotest polarisé : vérifier sur l'armoire si la sortie autotest, à l'état d'attente, est à polarité négative (0 V) ou positive (12 ou 24 Vac/dc). Avec autotest : sortie 0 V au repos / 12-24 V activée = polarité positive, pont ATEST POL OFF ; sortie 12/24 V au repos / 0 V activée = négative, pont ATEST POL ON ; ATEST1 et ATEST2 connectés. Sans équipement autotest : pont OFF, ATEST1 et ATEST2 non connectés. Ne connecter que la sortie d'autotest à utiliser. Activer le signal d'autotest de l'armoire (durée maximale 3 s). Sans autotest, il n'y a pas de vérification du système en début de manœuvre : non conforme à l'EN 12453.",
+        "Programmation du TBX (RU) : appuyer 1 s sur PROG du récepteur (bip, la LED B1 s'allume = relais 1) ; un nouvel appui passe au relais 2 (LED B2). Envoyer le code du TBX (appui sur son poussoir de programmation) : un bip de 0,5 s confirme. Après 10 s sans nouvel émetteur, 2 bips lents et sortie. Mémoire pleine : 7 bips rapides + 2 lents (6 TBX déjà programmés).",
+        "Programmation RC-RCS : appui 1 s sur PROG ; le récepteur entre en programmation de la bande de sécurité fermeture (BSC) ; un nouvel appui passe à la bande ouverture (BSO) ; envoyer le code du TBX. Seul l'émetteur peut être programmé dans un récepteur.",
+        "Remplacement d'un TBX : reset du système (effacement total) puis reprogrammation de tous les TBX de l'installation.",
+        "Vérification (CHECK) : appui d'au moins 1 s sur CHECK : voyant allumé, 4 bips. Manœuvre complète : 1 bip toutes les 1,5 s. Aucun autre bip = correct ; appuyer à nouveau sur CHECK ou attendre 5 min (2 bips). Trois bips consécutifs = erreur de communication : appuyer sur les barres pour trouver celle qui ne marche pas (1 bip à l'appui = elle fonctionne, 3 bips = anomalie). Remède : changer l'orientation des antennes ou installer une antenne extérieure AED-868 ou FLAT-868. À la sortie : 7 bips et voyant clignotant en continu."
+      ],
+      "notes": [
+        "Voyants du récepteur : LED relais 1 / 2 normalement éteintes, elles indiquent l'état de la sortie du relais ; allumée = R1 / R2 non connecté ; en programmation, allumée = canal à programmer.",
+        "Couverture du signal (scintillements du voyant CHECK à l'appui sur une barre) : 1 = très faible, erreur de barre ; 2 = faible, OK ; 3 = normale, OK ; 4 = bonne, OK ; 5 = très bonne, OK.",
+        "Effacement total : en mode programmation, laisser PROG appuyé et faire un pont entre les bornes « MR » pendant 3 s : 10 bips puis des bips plus rapides ; sortie après 10 s sans programmation (2 bips lents).",
+        "Piles faibles du TBX : le récepteur émet 4 bips courts avec les LED B1 ou B2 toutes les 20 s ; avec plusieurs TBX, activer chaque bande et vérifier si B1 ou B2 clignote 4 fois : il faut alors remplacer les piles de ce TBX. Remplacement : retirer le couvercle, piles à l'arrière, respecter la polarité, même plage de température.",
+        "Câbles d'alimentation : section maxi 3,8 mm². Installer le matériel en position verticale, fermement fixé à la structure. Un signal centré sur 868,9 MHz pourrait retarder la réaction du système.",
+        "La notice indique le même temps de 7 min entre deux activations pour le TBX et pour l'autotest (« directive R&TTE »).",
+        "Fabricant cité dans la notice : JCM Technologies, S.A."
+      ]
     }
   ];
   window.ACCESSOIRES = ACCESSOIRES;
