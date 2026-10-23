@@ -15,6 +15,11 @@ const DATA_VERSION = "2026-10-20";
 /* Journal des modifications — ajouter une entrée en haut à chaque mise à jour.
    docs : nom des notices ajoutées (affichées dans Réglages). */
 const CHANGELOG = [
+  { v: "1.40", date: "2026-10-23", titre: "Recherche par symptôme, mode hors ligne vérifié, scan d'étiquette (bêta)", items: [
+    "Recherche par symptôme : tapez une phrase (« le portail ne s'ouvre pas », « la LED clignote », « photocellule bloquée ») et l'appli propose, dans « Pannes qui ressemblent », les codes, voyants et symptômes des notices les plus proches, toutes marques confondues. Ce n'est pas un diagnostic : vérifiez sur la fiche.",
+    "Mode hors ligne vérifié : la barre d'état indique « ✓ tout est téléchargé (N fichiers) » après avoir comparé le contenu enregistré à la liste complète, complète automatiquement ce qui manque quand il y a du réseau, et affiche « ⚠ incomplet » sinon. Bouton « Vérifier / compléter » dans les réglages.",
+    "Scan d'étiquette (BÊTA) : photographiez la plaque de l'armoire, l'appli lit le texte et propose les fiches correspondantes. Le moteur de lecture se télécharge au premier scan (réseau nécessaire ce jour-là) ; le texte lu reste modifiable. La lecture peut se tromper."
+  ], docs: [] },
   { v: "1.39", date: "2026-10-20", titre: "V2 / AFCA : City 1 Evo, City 4 Evo, City 5, City 11, Flexy 2 et radio JCM", items: [
     "Cartes V2 (rangées avec AFCA / ABLE) : CITY1 EVO (ZIS644), CITY4 EVO (ZIS454) avec codes d'erreur Err2 à Er10, journal d'événements E001 à E242, paramètres avec valeurs d'usine battant / coulissant, auto-apprentissage et compteurs de cycles, et CITY11 (IL353, 2014, carte à 12 dip-switchs et 4 trimmers).",
     "Cartes AFCA : City 5 (feux de signalisation entrée / sortie, paramètres riP.E à FinE, capteurs de présence, comptage de véhicules) et Flexy 2 (portail double battant 230 V, 12 dip-switchs, potentiomètres POWER / WORK / PAUSE / DELAY, récepteur intégré 4 canaux, dépannage).",

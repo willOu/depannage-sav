@@ -257,7 +257,7 @@ html{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
   <button class="back" id="back">‹ Retour</button>
   <div class="search">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-    <input id="q" type="search" inputmode="search" autocomplete="off" placeholder="Code, modèle, borne, accessoire…" aria-label="Rechercher">
+    <input id="q" type="search" inputmode="search" autocomplete="off" placeholder="Code, modèle, borne, symptôme…" aria-label="Rechercher">
   </div>
   <div class="status" id="status"></div>
 </header>
@@ -268,6 +268,8 @@ html{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 <script src="acc.js"></script> <!-- ACC -->
 
 <script src="data.js"></script>
+<script src="sympt.js"></script> <!-- SYMPT -->
+<script src="scan.js"></script> <!-- SCAN -->
 <script>
 const $ = s => document.querySelector(s);
 const app = $("#app");
@@ -325,6 +327,7 @@ function viewHome(){
     `<button onclick="go('#/g/${g[0]}')">${g[3]}${g[1]}<small>${nb(g[0])} carte${nb(g[0])>1?"s":""}</small></button>`).join("") + `</div>`;
   h += `<button class="dbtn" onclick="go('#/d')">Diagnostic guidé : trouver la panne en quelques questions<small><b>EN TEST</b> · peut contenir des erreurs ou mal fonctionner</small></button>`; /* DIAG */
   h += `<button class="dbtn" onclick="go('#/a')">Accessoires : gyrophares, radio, photocellules…<small>${ACCESSOIRES.length} fiche${ACCESSOIRES.length>1?"s":""} par famille · rubrique en construction</small></button>`; /* ACC */
+  h += `<button class="dbtn" onclick="go('#/scan')">Scanner une étiquette : photographier la plaque de l'armoire<small><b>BÊTA</b> · lecture automatique du texte, peut se tromper</small></button>`; /* SCAN */
   h += `<h2>Ou par marque</h2><div class="bchips">` + MARQUES.map(m =>
     m.sanslogo ? `<button class="bchip" style="--c:${m.couleur}" onclick="go('#/m/${m.id}')"><i></i>${esc(m.nom)}</button>` : `<button class="bchip logo" aria-label="${esc(m.nom)}" onclick="go('#/m/${m.id}')"><img src="icons/marques/${m.id}.png" alt="${esc(m.nom)}" height="${({afca:52,casit:36,dea:40,elka:40,doitrand:32,opera:34})[m.id]||28}"></button>`).join("") + accBrandsOnly().map(b => b.logo ? `<button class="bchip logo" aria-label="${esc(b.nom)}" onclick="go('#/ma/${b.slug}')"><img src="icons/marques/${b.slug}.png" alt="${esc(b.nom)}" height="${b.slug==="opera"?34:28}"></button>` : `<button class="bchip" style="--c:${b.couleur}" onclick="go('#/ma/${b.slug}')"><i></i>${esc(b.nom)}</button>`).join("") + `</div>`;
   const favs = getFavs().map(findBoard).filter(Boolean);
@@ -335,13 +338,25 @@ function viewHome(){
   h += `<p class="foot">Codes et borniers repris des notices fabricant citées sur chaque fiche.<br>En cas de doute, la notice livrée avec le matériel fait foi.</p>`;
   app.innerHTML = h;
 }
+function swAsk(msg){
+  return new Promise(res => {
+    const sw = navigator.serviceWorker && navigator.serviceWorker.controller; if (!sw) return res(null);
+    const ch = new MessageChannel(); ch.port1.onmessage = e => res(e.data); sw.postMessage(msg, [ch.port2]); setTimeout(() => res(null), 3000);
+  });
+}
+async function offlineInfo(repair){
+  if (!("serviceWorker" in navigator) || !window.caches) return { ok:false, txt:"mode hors ligne indisponible sur ce navigateur" };
+  if (!navigator.serviceWorker.controller) return { ok:false, txt:"mode hors ligne en préparation : ouvrez l'appli une fois avec du réseau" };
+  let r = await swAsk(repair ? "repair" : "check");
+  if (!r) return { ok:true, txt:"mode hors ligne actif (vérification détaillée indisponible : rouvrez l'appli)" };
+  if (r.missing && !repair && navigator.onLine){ await swAsk("repair"); r = await swAsk("check") || r; }
+  if (!r.missing) return { ok:true, txt:`tout est téléchargé (${r.total} fichiers) : l'appli fonctionne sans réseau`, r };
+  return { ok:false, txt:`incomplet : ${r.total - r.missing} fichiers sur ${r.total}. ${navigator.onLine ? "Réessayez dans un instant." : "Connectez-vous pour compléter."}`, r };
+}
 function offlineState(){
-  const set = (ok, t) => { const e = $("#status"), s = $("#offs"); if (!e || !s) return; e.classList.toggle("ok", !!ok); s.textContent = t; };
-  if (!("serviceWorker" in navigator) || !window.caches) return set(false, "mode hors ligne indisponible sur ce navigateur");
-  caches.keys().then(k => {
-    const ready = k.length && navigator.serviceWorker.controller;
-    set(!!ready, ready ? "mode hors ligne actif (toutes les fiches fonctionnent sans réseau)" : "mode hors ligne en préparation : ouvrez l'appli une fois avec du réseau");
-  }).catch(() => set(false, "mode hors ligne non vérifiable"));
+  const set = (ok, t) => { const e = $("#status"), s = $("#offs"); if (!e || !s) return; e.classList.toggle("ok", !!ok); s.textContent = (ok ? "✓ " : "⚠ ") + t; };
+  offlineInfo(false).then(o => set(o.ok, o.txt)).catch(() => set(false, "mode hors ligne non vérifiable"));
+  if ("serviceWorker" in navigator && !navigator.serviceWorker.controller && !offlineState.w){ offlineState.w = 1; navigator.serviceWorker.ready.then(() => setTimeout(() => { offlineState.w = 0; offlineState(); }, 1200)).catch(() => {}); }
 }
 function viewGenre(g){
   const G = GENRES.find(x => x[0] === g); if (!G) return viewHome();
@@ -576,6 +591,11 @@ function viewSearch(q){
   let h = "";
   try { const al = window.accList ? accList(q) : ""; if (al) h += `<h2>Accessoires</h2><div class="list">${al}</div>`; } catch (e) {} /* ACC */
   try { if (window.askAnswer && words.length >= 2) h += askAnswer(q); } catch (e) {} /* ASK */
+  try { /* SYMPT */
+    const sl = window.symptList ? symptList(q, 6) : [];
+    if (sl.length) h += `<h2>Pannes qui ressemblent</h2><p class="note">Recherche par symptôme : entrées des notices proches de votre phrase. Ce n'est pas un diagnostic, vérifiez sur la fiche.</p><div class="list">` + sl.map(r =>
+      `<div onclick="go('#/c/${r.c.id}/codes')" style="cursor:pointer">${codeCard(r.x, `<span class="badge" style="--c:${r.m.couleur}">${esc(r.m.nom)}</span>${esc(r.c.nom)}`, q)}</div>`).join("") + `</div>`;
+  } catch (e) {}
   if (boards.length) h += `<h2>Cartes</h2><div class="list">${boards.map(rowBoard).join("")}</div>`;
   if (codes.length) h += `<h2>Codes et signalisations (${codes.length})</h2><div class="list">` + codes.slice(0, 60).map(r =>
     `<div onclick="go('#/c/${r.id}/codes')" style="cursor:pointer">${codeCard(r.x, r.ctx, q)}</div>`).join("") + `</div>`;
@@ -584,7 +604,7 @@ function viewSearch(q){
   if (params.length) h += `<h2>Paramètres (${params.length})</h2><table>` + params.slice(0, 40).map(r =>
     `<tr style="cursor:pointer" onclick="paramOpen=${esc(JSON.stringify(r.x.code))};go('#/c/${r.id}/param')"><td>${esc(r.x.code)}</td><td>${r.ctx}<br><b>${highlight(r.x.titre,q)}</b> · usine ${esc(r.x.def)}</td></tr>`).join("") + `</table>`;
   try { if (window.accDeep) h += accDeep(q); } catch (e) {} /* ACC */
-  if (!h) h = `<div class="empty">Rien trouvé pour « ${esc(q)} ».<br>Essayez le code seul (ex. <b>E8</b>), un mot (ex. <b>encodeur</b>) ou la marque.</div>`;
+  if (!h) h = `<div class="empty">Rien trouvé pour « ${esc(q)} ».<br>Essayez le code seul (ex. <b>E8</b>), un mot (ex. <b>encodeur</b>), la marque, ou décrivez la panne (ex. <b>le portail ne s'ouvre pas</b>).</div>`;
   app.innerHTML = h;
 }
 
@@ -607,11 +627,14 @@ function viewSettings(){
       ${e.docs && e.docs.length ? `<div class="docs"><b>Documentation ajoutée :</b>${e.docs.map(d => `<div class="doc">${esc(d)}</div>`).join("")}</div>` : ""}</div>`).join("") + `</div>`;
   h += `<h2>Version</h2><div class="set"><div class="row"><span>Version de l'appli</span><span class="mono">v${APP_V}</span></div><div class="row"><span>Données</span><span class="mono">${fdate(DATA_VERSION)}</span></div>
       <div class="row"><span>Hors ligne</span><span class="mono" id="swv">…</span></div></div>
+      <p class="note" id="swd">Vérification du mode hors ligne…</p><button class="dbtn" id="swb">Vérifier / compléter le téléchargement</button>
       <p class="note">En cas de doute, la notice livrée avec le matériel fait foi.</p>`;
   app.innerHTML = h;
   const sv = $("#swv");
   if ("caches" in window) caches.keys().then(k => { sv.textContent = k.length ? k.sort().pop().replace("sav-", "") : "pas encore enregistré"; }).catch(() => sv.textContent = "—");
   else sv.textContent = "non pris en charge";
+  const chk = rep_ => { $("#swd").textContent = "Vérification…"; offlineInfo(rep_).then(o => { $("#swd").textContent = (o.ok ? "✓ " : "⚠ ") + o.txt; status(); }); };
+  $("#swb").onclick = () => chk(true); chk(false);
 }
 
 /* ---------- navigation ---------- */
@@ -637,6 +660,7 @@ function route(){
   if (p[0] === "ma") return viewAccBrand(p[1]);
   if (p[0] === "a") return p[1] ? viewAcc(p[1], p[2]) : viewAccList(); /* ACC */
   if (p[0] === "d") return viewDiag(p[1], p[2]); /* DIAG */
+  if (p[0] === "scan") return viewScan(); /* SCAN */
   if (p[0] === "reglages") return viewSettings();
   if (p[0] === "s"){ const q = decodeURIComponent(p.slice(1).join("/")); if ($("#q").value !== q) $("#q").value = q; return viewSearch(q); }
   $("#q").value = "";
