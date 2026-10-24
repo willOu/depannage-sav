@@ -79,7 +79,12 @@ h2{font-size:13px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted
 .cl{padding:12px 14px;border-top:1px solid var(--line)}
 .cl:first-child{border-top:0}
 .cl .d{font-size:12px;color:var(--muted);font-weight:600}
-.cl h4{margin:2px 0 6px;font-size:15px}
+.cl summary{cursor:pointer;list-style:none;font-size:14.5px;line-height:1.35;padding-right:18px;position:relative}
+.cl summary::-webkit-details-marker{display:none}
+.cl summary::after{content:"▸";position:absolute;right:0;top:0;color:var(--muted)}
+.cl[open] summary::after{content:"▾"}
+.cl summary .d{display:block;font-size:12px;color:var(--muted);font-weight:600}
+.cl ul{margin-top:8px!important}
 .cl ul{margin:0;padding-left:18px;font-size:14px;line-height:1.45}
 .cl .docs{margin-top:8px;font-size:13px}
 .doc{display:flex;gap:8px;align-items:flex-start;margin-top:4px}
@@ -638,9 +643,9 @@ function viewSettings(){
     return `<div class="dk" ${i>=5?"hidden":""} onclick="go('#/c/${c.id}')" style="cursor:pointer"><div class="n"><span class="badge" style="--c:${m.couleur}">${esc(m.nom)}</span>${esc(c.nom)}</div>
       <div class="s">${esc(c.source)}</div><div class="tb">${has.map(([l, ok]) => `<span class="${ok?"ok":""}">${ok?"✓ ":""}${l}</span>`).join("")}</div></div>`;
   }).join("") + `</div>` + (BOARDS.length>5 ? `<button class="dbtn" id="dkmore" onclick="document.querySelectorAll('#dks .dk[hidden]').forEach(e=>e.hidden=false);this.remove()">Charger plus (${BOARDS.length-5} autres)</button>` : "");
-  h += `<h2>Nouveautés</h2><div class="set">` + CHANGELOG.map(e => `<div class="cl"><div class="d">v${esc(e.v)} · ${fdate(e.date)}</div><h4>${esc(e.titre)}</h4>
+  h += `<h2>Nouveautés</h2><div class="set">` + CHANGELOG.map(e => `<details class="cl"><summary><span class="d">v${esc(e.v)} · ${fdate(e.date)}</span> <b>${esc(e.titre)}</b></summary>
       <ul>${e.items.map(i => `<li>${esc(i)}</li>`).join("")}</ul>
-      ${e.docs && e.docs.length ? `<div class="docs"><b>Documentation ajoutée :</b>${e.docs.map(d => `<div class="doc">${esc(d)}</div>`).join("")}</div>` : ""}</div>`).join("") + `</div>`;
+      ${e.docs && e.docs.length ? `<div class="docs"><b>Documentation ajoutée :</b>${e.docs.map(d => `<div class="doc">${esc(d)}</div>`).join("")}</div>` : ""}</details>`).join("") + `</div>`;
   h += `<h2>Version</h2><div class="set"><div class="row"><span>Version de l'appli</span><span class="mono">v${APP_V}</span></div><div class="row"><span>Données</span><span class="mono">${fdate(DATA_VERSION)}</span></div>
       <div class="row"><span>Hors ligne</span><span class="mono" id="swv">…</span></div></div>
       <p class="note" id="swd">Vérification du mode hors ligne…</p><button class="dbtn" id="swb">Vérifier / compléter le téléchargement</button>

@@ -192,6 +192,9 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "1.50", date: "2026-10-24", titre: "Nouveautés repliées dans Réglages", items: [
+    "Dans Réglages, chaque version du journal des nouveautés tient sur une ligne : on touche pour afficher le détail."
+  ], docs: [] },
   { v: "1.49", date: "2026-10-24", titre: "Favoris sur les accessoires", items: [
     "L'étoile ★ est maintenant aussi sur les fiches accessoires (claviers, radio, gyrophares…). Elles apparaissent dans « Mes favoris » de l'accueil avec les cartes. Les favoris restent propres à chaque tablette."
   ], docs: [] },
