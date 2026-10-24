@@ -17,6 +17,42 @@ const DATA_VERSION = "2026-10-20";
 /* Liens vers les notices sur le site du fabricant (trouvés par recherche web ; nécessitent du réseau).
    Seules les fiches dont le lien a été identifié avec certitude y figurent. */
 const NOTICES = {
+ "bft-thalia-a80-a160": [
+  {
+   "t": "Page produit THALIA BT A80",
+   "u": "https://www.bft-automation.com/en_INT/product/thalia-bt-a80-duo/"
+  }
+ ],
+ "bft-merak-deimos-ultra": [
+  {
+   "t": "Page produit DEIMOS ULTRA BT A400",
+   "u": "https://www.bft-automation.com/en_INT/product/deimos-ultra-bt-a400/"
+  }
+ ],
+ "bft-leo-b-cbb": [
+  {
+   "t": "Page produit LEO B CBB",
+   "u": "https://www.bft-automation.com/en_INT/product/leo-b-cbb-l01/"
+  }
+ ],
+ "doitrand-lf82": [
+  {
+   "t": "Notices Doitrand (portail SAV du fabricant)",
+   "u": "https://sav.doitrand.fr/4-notices"
+  }
+ ],
+ "dea-net230n": [
+  {
+   "t": "Manuels DEA System (portail du fabricant)",
+   "u": "https://cloud.deasystem.com/it/manuali"
+  }
+ ],
+ "dea-net24n": [
+  {
+   "t": "Manuels DEA System (portail du fabricant)",
+   "u": "https://cloud.deasystem.com/it/manuali"
+  }
+ ],
  "came-zbx7n": [
   {
    "t": "Notice BX-74 / BX-78 (carte ZBX7N)",
@@ -156,6 +192,9 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "1.42", date: "2026-10-24", titre: "Notices fabricant : BFT, Doitrand, DEA", items: [
+    "Rubrique « Notice sur le site du fabricant » ajoutée sur 6 fiches : BFT Thalia, Merak / Deimos Ultra, Leo B CBB (pages produit), Doitrand LF82 (portail notices du fabricant) et DEA NET230N / NET24N (portail des manuels). Ce sont des pages d'accueil à parcourir, pas des PDF directs."
+  ], docs: [] },
   { v: "1.41", date: "2026-10-24", titre: "Liens vers les notices sur le site du fabricant", items: [
     "Nouvelle rubrique « 📄 Notice sur le site du fabricant » sur 22 fiches (Came, Nice, FAAC, Roger, V2, AFCA) : lien direct vers le PDF ou la page produit officielle. Il faut du réseau pour l'ouvrir. Le fichier en ligne peut être une édition plus récente que celle citée sur la fiche : en cas de différence, la fiche reste celle de la notice indiquée dans « Source »."
   ], docs: [] },
