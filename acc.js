@@ -2294,7 +2294,7 @@
     const a = ACCESSOIRES.find(x => x.id === id); if (!a) return viewAccList();
     setHead(`${a.marque} ${a.nom}`, true);
     const tabs = TABS.filter(t => has(a, t[0])); tab = tabs.some(t => t[0] === tab) ? tab : "info";
-    let h = `<p class="note">${esc(a.resume)}</p><div class="tabs" role="tablist">` + tabs.map(t => `<button role="tab" aria-selected="${t[0] === tab}" onclick="go('#/a/${a.id}/${t[0]}')">${t[1]}</button>`).join("") + `</div>`;
+    let h = `<div class="boardhead" style="--c:${a.couleur}"><button class="favbtn" id="fav" aria-pressed="${isFav(a.id)}" aria-label="Ajouter aux favoris" title="Favori : enregistré dans ce navigateur seulement">${isFav(a.id) ? "★" : "☆"}</button><h3>${esc(a.nom)}</h3><p>${esc(a.marque)} · ${esc(a.categorie)}</p></div><p class="note">${esc(a.resume)}</p><div class="tabs" role="tablist">` + tabs.map(t => `<button role="tab" aria-selected="${t[0] === tab}" onclick="go('#/a/${a.id}/${t[0]}')">${t[1]}</button>`).join("") + `</div>`;
     if (tab === "info") h += `<div class="set">` + a.specs.map(s => `<div style="padding:11px 14px;border-top:1px solid var(--line)"><div style="font-size:12.5px;color:var(--muted);font-weight:600">${esc(s[0])}</div><div style="font-size:15.5px;margin-top:2px">${esc(s[1])}</div></div>`).join("") + `</div>`;
     if (tab === "sch") h += schemaPane(a.id);
     if (tab === "ntc") h += noticePane(a);
@@ -2303,5 +2303,14 @@
     if (tab === "notes") h += (a.codes ? `<h2>Codes</h2><table>` + a.codes.map(c => `<tr><td>${esc(c[0])}</td><td>${esc(c[1])}</td></tr>`).join("") + `</table>` : "") + (a.notes ? `<div class="note"><ul class="plain">${a.notes.map(n => `<li>${esc(n)}</li>`).join("")}</ul></div>` : "");
     h += `<p class="foot">Source : ${esc(a.source)}.<br>En cas de doute, la notice livrée avec le matériel fait foi.</p>`;
     app.innerHTML = h;
+    const fb = document.getElementById("fav");
+    if (fb) fb.onclick = () => {
+      const on = toggleFav(a.id);
+      fb.setAttribute("aria-pressed", on); fb.textContent = on ? "★" : "☆";
+      fb.setAttribute("aria-label", on ? "Retirer des favoris" : "Ajouter aux favoris");
+      let t = document.getElementById("favnote"); if (!t) { t = document.createElement("div"); t.id = "favnote"; t.className = "hotn"; fb.parentNode.appendChild(t); }
+      t.textContent = on ? "Ajoutée aux favoris. " + FAV_NOTE : "Retirée des favoris.";
+    };
   };
+  window.rowAccFav = id => { const a = ACCESSOIRES.find(x => x.id === id); return a ? rowAcc(a) : ""; };
 })();

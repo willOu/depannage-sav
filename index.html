@@ -341,8 +341,8 @@ function viewHome(){
   h += `<button class="dbtn" onclick="go('#/scan')">Scanner une étiquette : photographier la plaque de l'armoire<small><b>BÊTA</b> · lecture automatique du texte, peut se tromper</small></button>`; /* SCAN */
   h += `<h2>Ou par marque</h2><div class="bchips">` + MARQUES.map(m =>
     m.sanslogo ? `<button class="bchip" style="--c:${m.couleur}" onclick="go('#/m/${m.id}')"><i></i>${esc(m.nom)}</button>` : `<button class="bchip logo" aria-label="${esc(m.nom)}" onclick="go('#/m/${m.id}')"><img src="icons/marques/${m.id}.png" alt="${esc(m.nom)}" height="${({afca:52,casit:36,dea:40,elka:40,doitrand:32,opera:34})[m.id]||28}"></button>`).join("") + accBrandsOnly().map(b => b.logo ? `<button class="bchip logo" aria-label="${esc(b.nom)}" onclick="go('#/ma/${b.slug}')"><img src="icons/marques/${b.slug}.png" alt="${esc(b.nom)}" height="${b.slug==="opera"?34:28}"></button>` : `<button class="bchip" style="--c:${b.couleur}" onclick="go('#/ma/${b.slug}')"><i></i>${esc(b.nom)}</button>`).join("") + `</div>`;
-  const favs = getFavs().map(findBoard).filter(Boolean);
-  h += `<h2>★ Mes favoris</h2>` + (favs.length ? `<div class="list">` + favs.map(rowBoard).join("") + `</div>` : `<p class="note">Aucun favori. Ouvrez une fiche et touchez l'étoile ★ pour la retrouver ici.</p>`) + `<p class="hotn">${esc(FAV_NOTE)}</p>`;
+  const favs = getFavs().map(x => findBoard(x) ? rowBoard(findBoard(x)) : (window.rowAccFav ? rowAccFav(x) : "")).filter(Boolean);
+  h += `<h2>★ Mes favoris</h2>` + (favs.length ? `<div class="list">` + favs.join("") + `</div>` : `<p class="note">Aucun favori. Ouvrez une fiche (carte ou accessoire) et touchez l'étoile ★ pour la retrouver ici.</p>`) + `<p class="hotn">${esc(FAV_NOTE)}</p>`;
   if (recents.length){
     h += `<h2>Dernières consultées</h2><div class="list">` + recents.map(rowBoard).join("") + `</div>`;
   }

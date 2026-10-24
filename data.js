@@ -192,6 +192,9 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "1.49", date: "2026-10-24", titre: "Favoris sur les accessoires", items: [
+    "L'étoile ★ est maintenant aussi sur les fiches accessoires (claviers, radio, gyrophares…). Elles apparaissent dans « Mes favoris » de l'accueil avec les cartes. Les favoris restent propres à chaque tablette."
+  ], docs: [] },
   { v: "1.48", date: "2026-10-24", titre: "Prastel EASYBKA : notice simplifiée complète", items: [
     "Nouvel onglet « Notice » sur la fiche clavier Prastel EASYKA / EASYBKA : la notice simplifiée (2 pages) en entier, transcrite et en images zoomables.",
     "Fiche complétée : fils REX1 / REX2 avec leur masse, couleurs des voyants à chaque étape de programmation, procédure de retour usine. La contradiction sur le fil blanc (REX2 ou entrée auxiliaire selon la notice) est signalée dans les notes."
