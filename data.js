@@ -192,6 +192,9 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "1.58", date: "2026-10-25", titre: "Quiz de formation (test)", items: [
+    "Nouveau quiz de formation (EN TEST, bouton sur l'accueil) : 10 questions sur les codes erreur et les borniers, toutes marques ou une seule. Les questions et les réponses proposées viennent uniquement des fiches de l'appli ; les erreurs renvoient vers la fiche à revoir."
+  ], docs: [] },
   { v: "1.57", date: "2026-10-24", titre: "Réglages réorganisés", items: [
     "Réglages rangés en rubriques : Compte, Messages du SAV, Préférences (thème, favoris), Hors ligne et version, Administration, Informations. Les nouveautés et la liste des documentations sont repliées sur une seule ligne chacune."
   ], docs: [] },

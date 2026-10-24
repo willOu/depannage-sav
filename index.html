@@ -175,6 +175,15 @@ ul.plain li{margin:4px 0}
 .foot{color:var(--muted);font-size:12px;text-align:center;margin-top:28px}
 .sig{display:flex;align-items:center;justify-content:center;gap:8px;margin:28px 0 8px;color:var(--muted);font-size:12px}
 .sig i{display:flex;gap:3px}.sig i b{width:8px;height:8px;border-radius:2px;display:block}
+.qzh{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);font-weight:600;margin-top:4px}
+.qzbar{height:6px;border-radius:3px;background:var(--chip);margin:6px 0 10px;overflow:hidden}.qzbar i{display:block;height:100%;background:var(--brand)}
+.qzc{margin:0;font-size:13px;color:var(--muted);font-weight:600}
+.qzo{display:grid;gap:8px;margin-top:10px}.qzo .row{font-size:15.5px}.qzo .row.mono{font-family:ui-monospace,monospace}
+.qzo .row.bon{border-color:#2e9d57;background:color-mix(in srgb,#2e9d57 16%,var(--card))}
+.qzo .row.faux{border-color:#E5372E;background:color-mix(in srgb,#E5372E 16%,var(--card))}
+.qzo .row.off{opacity:.55}.qzo .row:disabled{cursor:default;color:var(--ink)}
+.qzx small{color:var(--muted)}
+.qzr{text-align:center;padding:18px 0 6px}.qzr .big{font-size:48px;font-weight:800}.qzr small{display:block;color:var(--muted);margin-top:4px}
 .srow{display:flex;width:100%;justify-content:space-between;align-items:center;gap:10px;padding:13px 14px;border:0;border-top:1px solid var(--line);background:none;color:var(--ink);font:inherit;font-size:15.5px;text-align:left;cursor:pointer}
 .srow i{font-style:normal;color:var(--muted);font-size:20px;line-height:1}
 .set .rr{display:flex;align-items:center;gap:10px}
@@ -227,6 +236,8 @@ details.grp>summary small{display:block;font-weight:400;font-size:12.5px;color:v
 #login button{width:100%;padding:14px;border-radius:12px;border:0;font:inherit;font-weight:700;font-size:16px;background:#1B1A19;color:#fff;cursor:pointer}
 #login button:disabled{opacity:.6}
 #login .lgm{margin:0;text-align:center;font-size:14.5px;color:#F2D6D6}#login .lgm.bad{background:#fff;color:#9B2424;padding:8px 12px;border-radius:10px;font-weight:600}
+#login .lgd{display:block;width:100%;text-align:left;background:#fff;color:#1B1A19;font-weight:600}#login .lgd small{display:block;letter-spacing:0;margin-bottom:0;font-weight:400;font-size:12.5px;color:#6b6461;margin-top:2px}
+#login .lgd2{background:transparent;border:1px solid #F2D6D6;color:#fff}
 #login .lgn{margin:0;text-align:center;font-size:12.5px;color:#F2D6D6;white-space:nowrap}
 #login .lgv{margin:8px 0 0;text-align:center;font-size:12px;color:#F2D6D6;opacity:.8}
 html.locked body>*:not(#login):not(#splash){display:none!important}
@@ -346,6 +357,7 @@ html{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 <script src="auth.js"></script> <!-- AUTH -->
 <script src="sync.js"></script> <!-- SYNC -->
 <script src="cmp.js"></script> <!-- CMP -->
+<script src="quiz.js"></script> <!-- QUIZ -->
 <script src="sympt.js"></script> <!-- SYMPT -->
 <script src="scan.js"></script> <!-- SCAN -->
 <script>
@@ -405,6 +417,7 @@ function viewHome(){
     `<button onclick="go('#/g/${g[0]}')">${g[3]}${g[1]}<small>${nb(g[0])} carte${nb(g[0])>1?"s":""}</small></button>`).join("") + `</div>`;
   h += `<button class="dbtn" onclick="go('#/d')">Diagnostic guidé : trouver la panne en quelques questions<small><b>EN TEST</b> · peut contenir des erreurs ou mal fonctionner</small></button>`; /* DIAG */
   h += `<button class="dbtn" onclick="go('#/a')">Accessoires : gyrophares, radio, photocellules…<small>${ACCESSOIRES.length} fiche${ACCESSOIRES.length>1?"s":""} par famille · rubrique en construction</small></button>`; /* ACC */
+  h += `<button class="dbtn" onclick="go('#/quiz')">Quiz de formation : codes erreur et borniers<small><b>EN TEST</b> · 10 questions tirées des fiches</small></button>`; /* QUIZ */
   h += `<button class="dbtn" onclick="go('#/cmp')">Comparateur de borniers : remplacer une carte par une autre<small>bornes des deux cartes rangées par fonction · aide indicative</small></button>`; /* CMP */
   h += `<button class="dbtn" onclick="go('#/scan')">Scanner une étiquette : photographier la plaque de l'armoire<small><b>BÊTA</b> · lecture automatique du texte, peut se tromper</small></button>`; /* SCAN */
   h += `<h2>Ou par marque</h2><div class="bchips">` + MARQUES.map(m =>
@@ -773,6 +786,7 @@ function route(){
   if (p[0] === "a") return p[1] ? viewAcc(p[1], p[2]) : viewAccList(); /* ACC */
   if (p[0] === "d") return viewDiag(p[1], p[2]); /* DIAG */
   if (p[0] === "scan") return viewScan(); /* SCAN */
+  if (p[0] === "quiz") return viewQuiz(p[1]); /* QUIZ */
   if (p[0] === "cmp") return viewCmp(p[1] && p[1] !== "-" ? decodeURIComponent(p[1]) : "", p[2] ? decodeURIComponent(p[2]) : ""); /* CMP */
   if (p[0] === "stats") return SYNC.viewStats(p[1]); /* SYNC */
   if (p[0] === "reglages") return viewSettings();
