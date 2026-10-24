@@ -192,6 +192,12 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "1.56", date: "2026-10-24", titre: "Favoris partagés, messages du SAV, comparateur de borniers", items: [
+    "Favoris synchronisés : ils suivent votre compte et se retrouvent sur votre téléphone et votre tablette. Sans réseau, les changements partent dès le retour du réseau.",
+    "Messages du SAV : les informations publiées par le SAV (nouvelle notice, alerte, rappel produit) s'affichent à l'accueil ; « J'ai lu » les range dans Réglages.",
+    "Comparateur de borniers (accueil, ou bouton dans l'onglet Bornier) : pour remplacer une carte par une autre, les bornes des deux cartes sont rangées par fonction. Aide indicative, à vérifier sur les notices.",
+    "Les fiches consultées sont comptées (sans rien changer pour vous) pour savoir quelles cartes et pannes reviennent le plus."
+  ], docs: [] },
   { v: "1.55", date: "2026-10-24", titre: "Écran de connexion", items: [
     "Le numéro de version s'affiche en bas de l'écran de connexion, et le texte sous le mot de passe tient sur une ligne."
   ], docs: [] },

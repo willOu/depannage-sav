@@ -46,6 +46,7 @@
     if (a === "net") return "net";
     if (a === "non") return "refus";
     S.lastOk = Date.now(); if (a !== "ok") S.nom = a; save(S);
+    setTimeout(() => dispatchEvent(new Event("auth-ok")), 0);
     return "ok";
   }
   const horsDelai = () => !S || !S.lastOk || (Date.now() - S.lastOk) > MAX_HORS_LIGNE_JOURS * 864e5;
@@ -70,12 +71,13 @@
       const r = await call("/auth/v1/token?grant_type=password", { method: "POST", headers: H(), body: JSON.stringify({ email, password: pw }) });
       if (r.net) { b.disabled = false; m.className = "lgm bad"; m.textContent = "Pas de réseau : la première connexion demande du réseau."; return; }
       if (!r.ok) { b.disabled = false; m.className = "lgm bad"; m.textContent = r.j && /ban/i.test(JSON.stringify(r.j)) ? "Ce compte est désactivé. Contactez le SAV." : r.status === 429 ? "Trop d'essais : patientez quelques minutes." : r.status === 400 || r.status === 401 ? "Email ou mot de passe incorrect." : "Connexion impossible pour le moment. Réessayez."; return; }
+      if (S && S.email && S.email.toLowerCase() !== email) { try { dispatchEvent(new Event("auth-out")); } catch (e) {} } /* autre compte : on oublie les favoris locaux du précédent */
       S = { ...tokens(r.j, email), lastOk: 0 };
       const a = await autorise(S.access_token);
       if (a === "net") { b.disabled = false; m.className = "lgm bad"; m.textContent = "Vérification impossible : réessayez avec du réseau."; S = null; save(null); return; }
       if (a === "non") { S = null; save(null); b.disabled = false; m.className = "lgm bad"; m.textContent = "Ce compte n'est pas autorisé à utiliser Diag'SAV."; return; }
       S.lastOk = Date.now(); if (a !== "ok") S.nom = a; save(S);
-      ouvrir();
+      ouvrir(); setTimeout(() => dispatchEvent(new Event("auth-ok")), 0);
     };
   }
   function ouvrir() {
@@ -83,7 +85,7 @@
     document.documentElement.classList.remove("locked");
     if (onReady) { const f = onReady; onReady = null; f(); }
   }
-  function verrou(msg) { S = S ? { email: S.email } : null; save(null); ecran(msg, "bad"); }
+  function verrou(msg) { S = S ? { email: S.email } : null; save(S); ecran(msg, "bad"); }
 
   async function reverif(silent) {
     if (busy || !S || !S.refresh_token) return; busy = true;
@@ -110,8 +112,27 @@
       addEventListener("online", () => { if (S) reverif(true); });
     },
     email: () => (S && S.email) || "",
+    /* appel authentifié à Supabase (renouvelle le jeton une fois s'il a expiré) ; renvoie { ok, status, j } ou { net: true } */
+    async api(path, opt) {
+      if (!S || !S.access_token) return { ok: false, status: 401 };
+      const o = opt || {}, h = t => ({ ...H(t), ...(o.headers || {}) });
+      let r = await call(path, { ...o, headers: h(S.access_token) });
+      if (!r.net && r.status === 401 && S && S.refresh_token) {
+        const v = await verifier();
+        if (v !== "ok") { if (v === "refus") verrou("Votre accès a été désactivé. Contactez le SAV."); else if (v === "expire") verrou("Session expirée : reconnectez-vous."); return { ok: false, status: 401 }; }
+        r = await call(path, { ...o, headers: h(S.access_token) });
+      }
+      return r;
+    },
+    pret: () => !!(S && S.access_token && !document.documentElement.classList.contains("locked")),
     nom: () => (S && S.nom) || "",
-    deconnecter() { const t = S && S.access_token; if (t) call("/auth/v1/logout?scope=local", { method: "POST", headers: H(t) }, 4000); S = null; save(null); location.reload(); },
+    async deconnecter() {
+      let reste = 0;
+      try { if (window.SYNC && SYNC.vider) reste = await Promise.race([SYNC.vider(), new Promise(r => setTimeout(() => r(-1), 6000))]); } catch (e) {}
+      if (reste !== 0 && !confirm(reste > 0 ? reste + " changement(s) (favoris, consultations) n'ont pas pu être envoyés faute de réseau et seront perdus. Se déconnecter quand même ?" : "L'envoi des derniers changements n'a pas abouti. Se déconnecter quand même ?")) return;
+      const t = S && S.access_token; if (t) call("/auth/v1/logout?scope=local", { method: "POST", headers: H(t) }, 4000);
+      S = null; save(null); try { dispatchEvent(new Event("auth-out")); } catch (e) {} setTimeout(() => location.reload(), 300);
+    },
     joursRestants() { return S && S.lastOk ? Math.max(0, MAX_HORS_LIGNE_JOURS - Math.floor((Date.now() - S.lastOk) / 864e5)) : 0; }
   };
 })();

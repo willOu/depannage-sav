@@ -274,6 +274,7 @@ function viewDiag(sid, pathStr) {
     `<div class="dstep"><span>${esc(s.q)}</span><b>${esc(s.a)}</b><a href="${base}${i ? "/" + path.slice(0, i).join("-") : ""}">Modifier</a></div>`).join("") + `</div>`;
   if (r.n.r) {
     const x = r.n.r;
+    if (window.SYNC) SYNC.vue("diag", (r.t.titre + " → " + x.titre).slice(0, 120)); /* SYNC */
     h += `<div class="dres"><div class="dk">Cause probable</div><h2>${esc(x.titre)}</h2><p>${esc(x.cause)}</p>
       <div class="dk">À faire</div><ol class="steps">${x.actions.map(a => `<li>${esc(a)}</li>`).join("")}</ol></div>`;
     h += `<div class="dlinks">` + x.liens.map(l => `<button class="row" onclick="go('${l[1]}')">${esc(l[0])}</button>`).join("") +
