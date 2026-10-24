@@ -195,9 +195,6 @@ const CHANGELOG = [
   { v: "1.55", date: "2026-10-24", titre: "Écran de connexion", items: [
     "Le numéro de version s'affiche en bas de l'écran de connexion, et le texte sous le mot de passe tient sur une ligne."
   ], docs: [] },
-  { v: "1.54", date: "2026-10-24", titre: "Nom de l'entreprise retiré", items: [
-    "Le nom de l'entreprise n'apparaît plus dans l'appli : écran de démarrage, écran de connexion, signature des fiches et nom de l'appli installée."
-  ], docs: [] },
   { v: "1.53", date: "2026-10-24", titre: "Corrections", items: [
     "Après 14 jours sans réseau, l'appli se rouvre toute seule dès que le réseau revient (avant, il fallait la relancer).",
     "Un compte désactivé voit « Ce compte est désactivé » à la connexion, et non plus « mot de passe incorrect ». Trop d'essais : message clair au lieu d'une déconnexion.",
