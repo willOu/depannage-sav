@@ -650,7 +650,7 @@ function viewSettings(){
   let h = `<h2>Affichage</h2><div class="set"><div class="row"><span>Thème</span><div class="seg2">
       <button aria-pressed="${th==="dark"}" onclick="setTheme('dark')">Sombre</button><button aria-pressed="${th==="light"}" onclick="setTheme('light')">Clair</button></div></div></div>`;
   if (window.AUTH_ACTIF) h += `<h2>Compte</h2><div class="set"><div class="row"><span>Connecté</span><span class="mono">${esc(AUTH.nom() || AUTH.email() || "—")}</span></div><div class="row"><span>Accès hors ligne</span><span class="mono">${AUTH.joursRestants()} j restants</span></div></div><p class="note">L'accès est vérifié à chaque ouverture avec du réseau. Sans réseau, il reste valable 14 jours après la dernière vérification.</p><button class="dbtn" onclick="if(confirm('Se déconnecter de Diag\\'SAV ?'))AUTH.deconnecter()">Se déconnecter</button>`;
-  const nf = getFavs().map(findBoard).filter(Boolean).length;
+  const nf = getFavs().filter(x => findBoard(x) || (window.ACCESSOIRES || []).some(a => a.id === x)).length;
   h += `<h2>Favoris</h2><div class="set"><div class="row"><span>Fiches en favori</span><span class="mono">${nf}</span></div></div><p class="note">${esc(FAV_NOTE)}</p>` + (nf ? `<button class="dbtn" onclick="if(confirm('Effacer tous vos favoris ?')){store.set('favs',[]);viewSettings();}">Effacer mes favoris</button>` : "");
   h += `<h2>Documentations intégrées (${BOARDS.length})</h2><div class="set" id="dks">` + BOARDS.map(({m, c}, i) => {
     const has = [["Codes", c.codes && c.codes.length], ["Bornier", c.bornier], ["Écran", c.afficheur], ["Paramètres", c.parametres], ["Apprentissage", c.apprentissage]];

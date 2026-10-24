@@ -192,6 +192,11 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "1.53", date: "2026-10-24", titre: "Corrections", items: [
+    "Après 14 jours sans réseau, l'appli se rouvre toute seule dès que le réseau revient (avant, il fallait la relancer).",
+    "Un compte désactivé voit « Ce compte est désactivé » à la connexion, et non plus « mot de passe incorrect ». Trop d'essais : message clair au lieu d'une déconnexion.",
+    "Réglages : le nombre de favoris compte aussi les fiches accessoires."
+  ], docs: [] },
   { v: "1.52", date: "2026-10-24", titre: "Connexion activée", items: [
     "L'appli demande maintenant de se connecter (email et mot de passe fournis par le SAV), une seule fois par appareil. L'accès est vérifié à chaque ouverture avec du réseau et reste valable 14 jours sans réseau."
   ], docs: [] },

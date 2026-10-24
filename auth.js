@@ -8,7 +8,7 @@
 (function () {
   const URL_ = "https://egcsppwvfxtvdxdgygcp.supabase.co";
   const KEY = "sb_publishable_OhMbSV6EeqeSaJcTahWeiw_-KDRRQYK";
-  const ACCES_REQUIS = true; /* passer à true quand les comptes des techniciens sont créés : l'appli demande alors la connexion */
+  const ACCES_REQUIS = true; /* false = appli ouverte sans connexion */
   const MAX_HORS_LIGNE_JOURS = 14;
   const REVERIF_MS = 30 * 60 * 1000; /* nouvelle vérification au retour au premier plan après 30 min */
   const LS = "diagsav-auth";
@@ -40,7 +40,7 @@
     if (!S || !S.refresh_token) return "expire";
     const r = await call("/auth/v1/token?grant_type=refresh_token", { method: "POST", headers: H(), body: JSON.stringify({ refresh_token: S.refresh_token }) });
     if (r.net) return "net";
-    if (!r.ok) return r.status >= 500 ? "net" : (r.j && /ban/i.test(JSON.stringify(r.j)) ? "refus" : "expire");
+    if (!r.ok) return r.status >= 500 || r.status === 408 || r.status === 429 ? "net" : (r.j && /ban/i.test(JSON.stringify(r.j)) ? "refus" : "expire");
     S = { ...tokens(r.j), lastOk: S.lastOk }; save(S);
     const a = await autorise(S.access_token);
     if (a === "net") return "net";
@@ -69,7 +69,7 @@
       b.disabled = true; m.className = "lgm"; m.textContent = "Connexion…";
       const r = await call("/auth/v1/token?grant_type=password", { method: "POST", headers: H(), body: JSON.stringify({ email, password: pw }) });
       if (r.net) { b.disabled = false; m.className = "lgm bad"; m.textContent = "Pas de réseau : la première connexion demande du réseau."; return; }
-      if (!r.ok) { b.disabled = false; m.className = "lgm bad"; m.textContent = r.status === 400 || r.status === 401 ? "Email ou mot de passe incorrect." : r.j && /ban/i.test(JSON.stringify(r.j)) ? "Ce compte est désactivé." : "Connexion impossible pour le moment. Réessayez."; return; }
+      if (!r.ok) { b.disabled = false; m.className = "lgm bad"; m.textContent = r.j && /ban/i.test(JSON.stringify(r.j)) ? "Ce compte est désactivé. Contactez le SAV." : r.status === 429 ? "Trop d'essais : patientez quelques minutes." : r.status === 400 || r.status === 401 ? "Email ou mot de passe incorrect." : "Connexion impossible pour le moment. Réessayez."; return; }
       S = { ...tokens(r.j, email), lastOk: 0 };
       const a = await autorise(S.access_token);
       if (a === "net") { b.disabled = false; m.className = "lgm bad"; m.textContent = "Vérification impossible : réessayez avec du réseau."; S = null; save(null); return; }
@@ -89,9 +89,10 @@
     if (busy || !S || !S.refresh_token) return; busy = true;
     try {
       const v = await verifier();
-      if (v === "refus") verrou("Votre accès a été désactivé. Contactez le SAV.");
+      if (v === "ok") { if (document.documentElement.classList.contains("locked")) ouvrir(); }
+      else if (v === "refus") verrou("Votre accès a été désactivé. Contactez le SAV.");
       else if (v === "expire") verrou("Session expirée : reconnectez-vous.");
-      else if (v === "net" && horsDelai()) { ecran("Plus de vérification depuis plus de " + MAX_HORS_LIGNE_JOURS + " jours : connectez-vous au réseau pour continuer.", "bad"); }
+      else if (v === "net" && horsDelai()) { ecran("Plus de vérification depuis plus de " + MAX_HORS_LIGNE_JOURS + " jours : connectez-vous au réseau pour continuer (l'appli se rouvrira toute seule).", "bad"); }
     } finally { busy = false; }
   }
 
@@ -103,7 +104,7 @@
       if (S && S.refresh_token && !horsDelai()) { ouvrir(); reverif(true); }
       else if (S && S.refresh_token) { /* délai dépassé : il faut vérifier avant d'ouvrir */
         ecran("Vérification de votre accès…");
-        verifier().then(v => { if (v === "ok") ouvrir(); else if (v === "net") ecran("Plus de vérification depuis plus de " + MAX_HORS_LIGNE_JOURS + " jours : connectez-vous au réseau pour continuer.", "bad"); else ecran(v === "refus" ? "Votre accès a été désactivé. Contactez le SAV." : "Session expirée : reconnectez-vous.", "bad"); });
+        verifier().then(v => { if (v === "ok") ouvrir(); else if (v === "net") ecran("Plus de vérification depuis plus de " + MAX_HORS_LIGNE_JOURS + " jours : connectez-vous au réseau pour continuer (l'appli se rouvrira toute seule).", "bad"); else verrou(v === "refus" ? "Votre accès a été désactivé. Contactez le SAV." : "Session expirée : reconnectez-vous."); });
       } else ecran();
       document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible" && started && S && Date.now() - (S.lastOk || 0) > REVERIF_MS) reverif(true); });
       addEventListener("online", () => { if (S) reverif(true); });
