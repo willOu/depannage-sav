@@ -192,6 +192,9 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "1.43", date: "2026-10-24", titre: "FAAC : numéros d'assistance et horaires", items: [
+    "Assistance fabricant FAAC : numéros de la page support de faac.fr (assistance technique installateurs, autres demandes, service volets / portes / stores) avec les horaires d'ouverture. Les horaires s'affichent maintenant sous chaque numéro quand ils sont connus."
+  ], docs: [] },
   { v: "1.42", date: "2026-10-24", titre: "Notices fabricant : BFT, Doitrand, DEA", items: [
     "Rubrique « Notice sur le site du fabricant » ajoutée sur 6 fiches : BFT Thalia, Merak / Deimos Ultra, Leo B CBB (pages produit), Doitrand LF82 (portail notices du fabricant) et DEA NET230N / NET24N (portail des manuels). Ce sont des pages d'accueil à parcourir, pas des PDF directs."
   ], docs: [] },
@@ -53026,7 +53029,9 @@ const HOTLINES = {
     { nom: "Nice Rhône-Alpes — Décines-Charpieu", tel: "+33478265653", src: "notice Nice ROBUS 600/1000 (2004)" }
   ],
   faac: [
-    { nom: "FAAC France — Saint-Priest (Lyon)", tel: "+33472218700", src: "notices FAAC E024S et C720-C721" },
+    { nom: "FAAC France — assistance technique (installateurs, spécialistes, grossistes, distributeurs)", tel: "+33472218700", h: "Lun-jeu 8h30-12h00 et 13h30-18h00 · ven 8h30-12h00 et 13h30-17h00", src: "site faac.fr, page support téléphonique (24/10/2026) ; même numéro dans les notices FAAC E024S et C720-C721" },
+    { nom: "FAAC France — toute autre demande", tel: "+33472213020", h: "Lun-jeu 8h30-12h00 et 13h30-18h00 · ven 8h30-12h00 et 13h30-17h00", src: "site faac.fr, page support téléphonique (24/10/2026)" },
+    { nom: "FAAC France — service volets, portes, stores (fabricants de fenêtres et portes, volets roulants et battants, stores : pas les portails)", tel: "+33557551890", h: "Lun-jeu 8h30-12h00 et 13h30-18h00 · ven 8h30-12h00 et 13h30-17h00", src: "site faac.fr, page support téléphonique (24/10/2026)" },
     { nom: "FAAC France — agence Paris (Massy)", tel: "+33169191620", src: "notices FAAC E024S et C720-C721" }
   ],
   bft: [

@@ -385,7 +385,7 @@ function hotlineHtml(m){
   if (typeof HOTLINES === "undefined") return "";
   const l = HOTLINES[m.id] || [];
   const body = l.length
-    ? l.map(x => `<a class="hotl" href="tel:${esc(x.tel)}"><b>${esc(x.nom)}</b><span class="mono">${esc(fmtTel(x.tel))}</span><small>Source : ${esc(x.src)}</small></a>`).join("") +
+    ? l.map(x => `<a class="hotl" href="tel:${esc(x.tel)}"><b>${esc(x.nom)}</b><span class="mono">${esc(fmtTel(x.tel))}</span>${x.h ? `<small>🕘 ${esc(x.h)}</small>` : ""}<small>Source : ${esc(x.src)}</small></a>`).join("") +
       `<p class="hotn">Numéros relevés dans les notices : ils peuvent avoir changé depuis. À vérifier.</p>`
     : `<p class="hotn">Aucun numéro dans les notices fournies pour cette marque.</p>`;
   return `<details class="hot"><summary>☎ Assistance fabricant${l.length ? ` <span>· ${l.length}</span>` : ""}</summary>${body}</details>`;
