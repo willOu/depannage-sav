@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Dépannage SAV</title>
+<title>Diag'SAV</title>
 <meta name="theme-color" content="#9B2424">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Dépannage SAV">
+<meta name="apple-mobile-web-app-title" content="Diag'SAV">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon-192.png">
@@ -250,7 +250,7 @@ html{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 <header id="hdr">
   <div class="top">
     <button class="mark" id="home" title="Accueil" aria-label="Retour à l'accueil" onclick="$('#q').value='';go('#/')"><i></i><i></i><i></i></button>
-    <h1 id="title">Dépannage SAV</h1>
+    <h1 id="title">Diag'SAV</h1>
     <button class="iconbtn" id="theme" title="Mode sombre / clair" aria-label="Changer de thème">◐</button>
     <button class="iconbtn" id="gear" title="Réglages" aria-label="Réglages" onclick="toggleSettings()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
   </div>
@@ -320,7 +320,7 @@ const GENRES = [
 ];
 function genreOf(c){ const t = norm(c.type); return t.includes("coulissant") ? "coulissant" : t.includes("battant") ? "battant" : t.includes("barriere") ? "barriere" : "autre"; }
 function viewHome(){
-  setHead("Dépannage SAV", false);
+  setHead("Diag'SAV", false);
   const recents = store.get("recents", []).map(findBoard).filter(Boolean);
   const nb = g => BOARDS.filter(x => genreOf(x.c) === g).length;
   let h = `<div class="q">Quel automatisme avez-vous devant vous ?</div><div class="gen">` + GENRES.filter(g => nb(g[0])).map(g =>

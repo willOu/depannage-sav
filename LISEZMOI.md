@@ -1,4 +1,4 @@
-# Dépannage SAV — Espacs Automatisme
+# Diag'SAV — Espacs Automatisme (ex Dépannage SAV)
 
 Appli web installable (PWA) : codes erreur, borniers et apprentissage de course par carte,
 consultables **sans réseau** une fois ouverte une première fois.

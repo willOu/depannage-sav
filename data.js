@@ -192,6 +192,9 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "1.45", date: "2026-10-24", titre: "Nouvelle identité : Diag'SAV", items: [
+    "L'appli s'appelle désormais Diag'SAV (anciennement Dépannage SAV), avec une nouvelle icône : les trois carrés bleu, orange, rouge d'Espacs Automatisme sur fond bordeaux, au-dessus de « SAV ». Sur le téléphone, l'ancienne icône est remplacée à la mise à jour ; si elle reste, supprimer l'icône de l'écran d'accueil puis la rajouter."
+  ], docs: [] },
   { v: "1.44", date: "2026-10-24", titre: "Logos Sewosy et JCM Technologies", items: [
     "Les marques d'accessoires Sewosy et JCM Technologies affichent maintenant leur logo sur l'accueil, à la place de la pastille de couleur."
   ], docs: [] },
