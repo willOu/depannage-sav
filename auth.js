@@ -61,7 +61,7 @@
       <input id="lge" type="email" name="email" placeholder="Email" autocomplete="username" required value="${esc((S && S.email) || "")}">
       <input id="lgp" type="password" name="password" placeholder="Mot de passe" autocomplete="current-password" required>
       <button id="lgb" type="submit">Se connecter</button>
-      <p class="lgn">La connexion se fait une seule fois. Il faut du réseau ce jour-là.</p></form>`;
+      <p class="lgn">Une seule connexion, avec du réseau.</p><p class="lgv">Version ${typeof APP_V !== "undefined" ? esc(APP_V) : "—"}</p></form>`;
     document.documentElement.classList.add("locked");
     document.getElementById("lgf").onsubmit = async ev => {
       ev.preventDefault();

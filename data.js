@@ -192,6 +192,9 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "1.55", date: "2026-10-24", titre: "Écran de connexion", items: [
+    "Le numéro de version s'affiche en bas de l'écran de connexion, et le texte sous le mot de passe tient sur une ligne."
+  ], docs: [] },
   { v: "1.54", date: "2026-10-24", titre: "Nom de l'entreprise retiré", items: [
     "Le nom de l'entreprise n'apparaît plus dans l'appli : écran de démarrage, écran de connexion, signature des fiches et nom de l'appli installée."
   ], docs: [] },
