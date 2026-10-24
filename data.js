@@ -192,6 +192,9 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "1.57", date: "2026-10-24", titre: "Réglages réorganisés", items: [
+    "Réglages rangés en rubriques : Compte, Messages du SAV, Préférences (thème, favoris), Hors ligne et version, Administration, Informations. Les nouveautés et la liste des documentations sont repliées sur une seule ligne chacune."
+  ], docs: [] },
   { v: "1.56", date: "2026-10-24", titre: "Favoris partagés, messages du SAV, comparateur de borniers", items: [
     "Favoris synchronisés : ils suivent votre compte et se retrouvent sur votre téléphone et votre tablette. Sans réseau, les changements partent dès le retour du réseau.",
     "Messages du SAV : les informations publiées par le SAV (nouvelle notice, alerte, rappel produit) s'affichent à l'accueil ; « J'ai lu » les range dans Réglages.",

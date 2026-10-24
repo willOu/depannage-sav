@@ -133,21 +133,27 @@
     /* bandeau de l'accueil : messages non lus */
     accueilHtml() { const n = this.nonLus(); return n.length ? `<div class="msgs">` + n.map(m => msgHtml(m, false)).join("") + `</div>` : ""; },
     /* Réglages : messages en cours + publication (admin) */
-    reglagesHtml() {
+    /* Réglages : messages en cours (tous les techniciens) */
+    messagesHtml() {
       if (!actif()) return "";
-      const l = st.get(LUS, []), ms = messages();
-      let h = `<h2>Messages du SAV</h2>` + (ms.length ? ms.map(m => msgHtml(m, true)).join("") : `<p class="note">Aucun message en cours.</p>`);
-      if (estAdmin()) h += `<h2>Administration</h2><div class="set adm">
-        <div class="row"><span>Statistiques de consultation</span><button class="mini" onclick="go('#/stats')">Voir</button></div></div>
-        <div class="note"><b>Publier un message</b>
+      const ms = messages();
+      return `<h2>Messages du SAV</h2>` + (ms.length ? ms.map(m => msgHtml(m, true)).join("") : `<p class="note">Aucun message en cours.</p>`);
+    },
+    /* Réglages : administration (statistiques, publication, messages publiés) */
+    adminHtml() {
+      if (!estAdmin()) return "";
+      const ms = messages();
+      return `<h2>Administration</h2><div class="set">
+        <button class="srow" onclick="go('#/stats')"><span>📊 Statistiques de consultation</span><i>›</i></button>
+        <details class="grp in" id="pubd"><summary>✉️ Publier un message</summary><div class="secb">
         <input id="mt" maxlength="120" placeholder="Titre (ex. Nouvelle notice Came ajoutée)">
         <textarea id="mx" maxlength="1000" rows="3" placeholder="Texte (facultatif)"></textarea>
         <label class="chk"><input type="checkbox" id="ma"> Alerte (en rouge)</label>
         <label class="chk">Affiché pendant <select id="md"><option value="7">7 jours</option><option value="30" selected>30 jours</option><option value="0">sans limite</option></select></label>
-        <button class="dbtn" id="mp">Publier</button><p id="mr" class="hotn"></p></div>` +
-        (ms.length ? `<div class="note"><b>Messages publiés</b>` + ms.map(m => `<div class="row"><span>${esc(m.titre)}</span><button class="mini" onclick="SYNC.suppr(${Number(m.id)})">Retirer</button></div>`).join("") + `</div>` : "");
-      return h;
+        <button class="dbtn" id="mp">Publier</button><p id="mr" class="hotn"></p></div></details>` +
+        (ms.length ? `<details class="grp in"><summary>🗂 Messages publiés (${ms.length})</summary><div class="secb">` + ms.map(m => `<div class="row"><span>${esc(m.titre)}</span><button class="mini" onclick="SYNC.suppr(${Number(m.id)})">Retirer</button></div>`).join("") + `</div></details>` : "") + `</div>`;
     },
+    reglagesHtml() { return this.messagesHtml() + this.adminHtml(); },
     brancherReglages() {
       const b = document.getElementById("mp"); if (!b) return;
       b.onclick = async () => {
@@ -156,7 +162,7 @@
         b.disabled = true; out.textContent = "Publication…";
         const r = await AUTH.api("/rest/v1/messages", { method: "POST", headers: { ...JSONH, Prefer: "return=minimal" }, body: JSON.stringify({ titre, texte, alerte, expire_le: j ? new Date(Date.now() + j * 864e5).toISOString() : null }) });
         b.disabled = false;
-        if (r.ok) { await chargerMessages(); if (typeof viewSettings === "function" && /reglages/.test(location.hash)) viewSettings(); const o2 = document.getElementById("mr"); if (o2) o2.textContent = "✓ Publié. Les techniciens le verront à leur prochaine ouverture avec du réseau."; }
+        if (r.ok) { await chargerMessages(); if (typeof viewSettings === "function" && /reglages/.test(location.hash)) viewSettings(); const pd = document.getElementById("pubd"); if (pd) pd.open = true; const o2 = document.getElementById("mr"); if (o2) o2.textContent = "✓ Publié. Les techniciens le verront à leur prochaine ouverture avec du réseau."; }
         else out.textContent = r.net ? "Pas de réseau : réessayez." : "Publication refusée (droits administrateur ?).";
       };
     },

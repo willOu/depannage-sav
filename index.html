@@ -73,6 +73,9 @@ h2{font-size:13px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted
 .set{border:1px solid var(--line);border-radius:12px;background:var(--card);margin:6px 0;overflow:hidden}
 .set .row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;min-height:48px;border-top:1px solid var(--line)}
 .set .row:first-child{border-top:0}
+.set .row{border:0;border-top:1px solid var(--line);border-radius:0;background:none;width:auto;cursor:default}
+.set .row:first-child{border-top:0}
+.srow,.set details.grp,.secb{text-transform:none;letter-spacing:0}
 .seg2{display:flex;border:1px solid var(--line);border-radius:9px;overflow:hidden}
 .seg2 button{border:0;background:transparent;color:var(--ink);height:36px;padding:0 14px;font-weight:600;font-size:14px}
 .seg2 button[aria-pressed="true"]{background:var(--brand);color:#fff}
@@ -172,6 +175,22 @@ ul.plain li{margin:4px 0}
 .foot{color:var(--muted);font-size:12px;text-align:center;margin-top:28px}
 .sig{display:flex;align-items:center;justify-content:center;gap:8px;margin:28px 0 8px;color:var(--muted);font-size:12px}
 .sig i{display:flex;gap:3px}.sig i b{width:8px;height:8px;border-radius:2px;display:block}
+.srow{display:flex;width:100%;justify-content:space-between;align-items:center;gap:10px;padding:13px 14px;border:0;border-top:1px solid var(--line);background:none;color:var(--ink);font:inherit;font-size:15.5px;text-align:left;cursor:pointer}
+.srow i{font-style:normal;color:var(--muted);font-size:20px;line-height:1}
+.set .rr{display:flex;align-items:center;gap:10px}
+details.grp{border-top:1px solid var(--line)}
+.set>details.grp:first-child,.set>.srow:first-child{border-top:0}
+details.grp>summary{display:block;text-transform:none;letter-spacing:0;color:var(--ink);list-style:none;cursor:pointer;padding:13px 34px 13px 14px;position:relative;font-size:15.5px;font-weight:600}
+details.grp>summary::-webkit-details-marker{display:none}
+details.grp>summary::after{content:"›";position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:20px;transition:transform .2s}
+details.grp[open]>summary::after{transform:translateY(-50%) rotate(90deg)}
+details.grp>summary small{display:block;font-weight:400;font-size:12.5px;color:var(--muted)}
+.secb{padding:0 14px 12px}
+.secb input,.secb textarea,.secb select{width:100%;box-sizing:border-box;margin-top:8px;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:inherit;font-size:15px}
+.secb select{width:auto;margin-left:6px}
+.secb .row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line)}
+.secb.cls{padding:0}.secb.cls .cl{border-top:1px solid var(--line)}
+#dks{padding:0}
 .msgs{margin-bottom:6px}
 .msg{background:var(--card);border:1px solid var(--line);border-left:5px solid #1F5FA8;border-radius:12px;padding:10px 12px;margin:8px 0}
 .msg.al{border-left-color:#E5372E;background:color-mix(in srgb,#E5372E 10%,var(--card))}
@@ -680,24 +699,38 @@ function viewSearch(q){
 function viewSettings(){
   setHead("Réglages", true);
   const th = document.documentElement.dataset.theme;
-  let h = `<h2>Affichage</h2><div class="set"><div class="row"><span>Thème</span><div class="seg2">
-      <button aria-pressed="${th==="dark"}" onclick="setTheme('dark')">Sombre</button><button aria-pressed="${th==="light"}" onclick="setTheme('light')">Clair</button></div></div></div>`;
-  if (window.AUTH_ACTIF) h += `<h2>Compte</h2><div class="set"><div class="row"><span>Connecté</span><span class="mono">${esc(AUTH.nom() || AUTH.email() || "—")}</span></div><div class="row"><span>Accès hors ligne</span><span class="mono">${AUTH.joursRestants()} j restants</span></div></div><p class="note">L'accès est vérifié à chaque ouverture avec du réseau. Sans réseau, il reste valable 14 jours après la dernière vérification.</p><button class="dbtn" onclick="if(confirm('Se déconnecter de Diag\\'SAV ?'))AUTH.deconnecter()">Se déconnecter</button>`;
   const nf = getFavs().filter(x => findBoard(x) || (window.ACCESSOIRES || []).some(a => a.id === x)).length;
-  if (window.SYNC) h += SYNC.reglagesHtml(); /* SYNC */
-  h += `<h2>Favoris</h2><div class="set"><div class="row"><span>Fiches en favori</span><span class="mono">${nf}</span></div></div><p class="note">${esc(FAV_NOTE)}</p>` + (nf ? `<button class="dbtn" onclick="if(confirm('Effacer tous vos favoris ?')){getFavs().forEach(x=>window.SYNC&&SYNC.fav(x,false));store.set('favs',[]);viewSettings();}">Effacer mes favoris</button>` : "");
-  h += `<h2>Documentations intégrées (${BOARDS.length})</h2><div class="set" id="dks">` + BOARDS.map(({m, c}, i) => {
-    const has = [["Codes", c.codes && c.codes.length], ["Bornier", c.bornier], ["Écran", c.afficheur], ["Paramètres", c.parametres], ["Apprentissage", c.apprentissage]];
-    return `<div class="dk" ${i>=5?"hidden":""} onclick="go('#/c/${c.id}')" style="cursor:pointer"><div class="n"><span class="badge" style="--c:${m.couleur}">${esc(m.nom)}</span>${esc(c.nom)}</div>
-      <div class="s">${esc(c.source)}</div><div class="tb">${has.map(([l, ok]) => `<span class="${ok?"ok":""}">${ok?"✓ ":""}${l}</span>`).join("")}</div></div>`;
-  }).join("") + `</div>` + (BOARDS.length>5 ? `<button class="dbtn" id="dkmore" onclick="document.querySelectorAll('#dks .dk[hidden]').forEach(e=>e.hidden=false);this.remove()">Charger plus (${BOARDS.length-5} autres)</button>` : "");
-  h += `<h2>Nouveautés</h2><div class="set">` + CHANGELOG.map(e => `<details class="cl"><summary><span class="d">v${esc(e.v)} · ${fdate(e.date)}</span> <b>${esc(e.titre)}</b></summary>
+  let h = "";
+  /* 1. Compte */
+  if (window.AUTH_ACTIF) h += `<h2>Compte</h2><div class="set"><div class="row"><span>Connecté</span><span class="mono">${esc(AUTH.nom() || AUTH.email() || "—")}</span></div>
+      <div class="row"><span>Accès hors ligne</span><span class="mono">${AUTH.joursRestants()} j restants</span></div>
+      <button class="srow" onclick="if(confirm('Se déconnecter de Diag\\'SAV ?'))AUTH.deconnecter()"><span>Se déconnecter</span><i>›</i></button></div>
+      <p class="hotn">L'accès est vérifié à chaque ouverture avec du réseau ; sans réseau, il reste valable 14 jours.</p>`;
+  /* 2. Messages du SAV */
+  if (window.SYNC) h += SYNC.messagesHtml(); /* SYNC */
+  /* 3. Préférences */
+  h += `<h2>Préférences</h2><div class="set"><div class="row"><span>Thème</span><div class="seg2">
+      <button aria-pressed="${th==="dark"}" onclick="setTheme('dark')">Sombre</button><button aria-pressed="${th==="light"}" onclick="setTheme('light')">Clair</button></div></div>
+      <div class="row"><span>Fiches en favori</span><span class="rr"><span class="mono">${nf}</span>${nf ? `<button class="mini" onclick="if(confirm('Effacer tous vos favoris ?')){getFavs().forEach(x=>window.SYNC&&SYNC.fav(x,false));store.set('favs',[]);viewSettings();}">Effacer</button>` : ""}</span></div></div>
+      <p class="hotn">${esc(FAV_NOTE)}</p>`;
+  /* 4. Hors ligne et version */
+  h += `<h2>Hors ligne et version</h2><div class="set"><div class="row"><span>Version de l'appli</span><span class="mono">v${APP_V}</span></div><div class="row"><span>Données</span><span class="mono">${fdate(DATA_VERSION)}</span></div>
+      <div class="row"><span>Hors ligne</span><span class="mono" id="swv">…</span></div>
+      <button class="srow" id="swb"><span>Vérifier / compléter le téléchargement</span><i>›</i></button></div>
+      <p class="hotn" id="swd">Vérification du mode hors ligne…</p>`;
+  /* 5. Administration (administrateurs seulement) */
+  if (window.SYNC) h += SYNC.adminHtml(); /* SYNC */
+  /* 6. Pour en savoir plus : repliés */
+  h += `<h2>Informations</h2><div class="set">
+    <details class="grp"><summary>🆕 Nouveautés <small>${CHANGELOG.length} versions · dernière v${esc(APP_V)}</small></summary><div class="secb cls">` + CHANGELOG.map(e => `<details class="cl"><summary><span class="d">v${esc(e.v)} · ${fdate(e.date)}</span> <b>${esc(e.titre)}</b></summary>
       <ul>${e.items.map(i => `<li>${esc(i)}</li>`).join("")}</ul>
-      ${e.docs && e.docs.length ? `<div class="docs"><b>Documentation ajoutée :</b>${e.docs.map(d => `<div class="doc">${esc(d)}</div>`).join("")}</div>` : ""}</details>`).join("") + `</div>`;
-  h += `<h2>Version</h2><div class="set"><div class="row"><span>Version de l'appli</span><span class="mono">v${APP_V}</span></div><div class="row"><span>Données</span><span class="mono">${fdate(DATA_VERSION)}</span></div>
-      <div class="row"><span>Hors ligne</span><span class="mono" id="swv">…</span></div></div>
-      <p class="note" id="swd">Vérification du mode hors ligne…</p><button class="dbtn" id="swb">Vérifier / compléter le téléchargement</button>
-      <p class="note">En cas de doute, la notice livrée avec le matériel fait foi.</p>`;
+      ${e.docs && e.docs.length ? `<div class="docs"><b>Documentation ajoutée :</b>${e.docs.map(d => `<div class="doc">${esc(d)}</div>`).join("")}</div>` : ""}</details>`).join("") + `</div></details>
+    <details class="grp"><summary>📚 Documentations intégrées <small>${BOARDS.length} cartes</small></summary><div class="secb" id="dks">` + BOARDS.map(({m, c}) => {
+    const has = [["Codes", c.codes && c.codes.length], ["Bornier", c.bornier], ["Écran", c.afficheur], ["Paramètres", c.parametres], ["Apprentissage", c.apprentissage]];
+    return `<div class="dk" onclick="go('#/c/${c.id}')" style="cursor:pointer"><div class="n"><span class="badge" style="--c:${m.couleur}">${esc(m.nom)}</span>${esc(c.nom)}</div>
+      <div class="s">${esc(c.source)}</div><div class="tb">${has.map(([l, ok]) => `<span class="${ok?"ok":""}">${ok?"✓ ":""}${l}</span>`).join("")}</div></div>`;
+  }).join("") + `</div></details></div>
+      <p class="foot">En cas de doute, la notice livrée avec le matériel fait foi.</p>`;
   app.innerHTML = h;
   if (window.SYNC) SYNC.brancherReglages(); /* SYNC */
   const sv = $("#swv");
