@@ -192,6 +192,9 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "1.47", date: "2026-10-24", titre: "Écran de démarrage : 2,5 secondes", items: [
+    "L'écran de démarrage Diag'SAV reste affiché 2,5 secondes avant l'écran principal."
+  ], docs: [] },
   { v: "1.46", date: "2026-10-24", titre: "Écran de démarrage et signature Diag'SAV", items: [
     "Écran de démarrage Diag'SAV (logo et « Espacs Automatisme » sur fond bordeaux, moins d'une seconde, une fois à chaque ouverture de l'appli) et signature discrète en bas de chaque fiche."
   ], docs: [] },

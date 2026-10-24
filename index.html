@@ -683,7 +683,7 @@ function route(){
 addEventListener("hashchange", route);
 /* écran de démarrage : une fois par ouverture de l'appli */
 (function(){ const sp = document.getElementById("splash"); if (!sp) return; let seen = false; try { seen = sessionStorage.getItem("splash") === "1"; sessionStorage.setItem("splash", "1"); } catch (e) {}
-  if (seen) return sp.remove(); setTimeout(() => { sp.classList.add("off"); setTimeout(() => sp.remove(), 400); }, 900); })();
+  if (seen) return sp.remove(); setTimeout(() => { sp.classList.add("off"); setTimeout(() => sp.remove(), 400); }, 2500); })();
 route();
 
 /* ---------- hors ligne ---------- */

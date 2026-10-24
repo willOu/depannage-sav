@@ -1,6 +1,6 @@
 /* Service worker — tout est mis en cache à l'installation.
    Après modification de data.js ou index.html, augmenter VERSION. */
-const VERSION = "sav-2026-10-24-56";
+const VERSION = "sav-2026-10-24-57";
 const OCR = "sav-ocr-1";
 const FILES = ["./", "index.html", "data.js", "diag.js", "ask.js", "acc.js", "img.js", "sympt.js", "scan.js", "manifest.webmanifest",
   "icons/icon-192.png", "icons/icon-512.png", "icons/icon-maskable-512.png", "icons/apple-touch-icon.png",
