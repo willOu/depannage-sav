@@ -8,7 +8,7 @@
 (function () {
   const URL_ = "https://egcsppwvfxtvdxdgygcp.supabase.co";
   const KEY = "sb_publishable_OhMbSV6EeqeSaJcTahWeiw_-KDRRQYK";
-  const ACCES_REQUIS = false; /* passer à true quand les comptes des techniciens sont créés : l'appli demande alors la connexion */
+  const ACCES_REQUIS = true; /* passer à true quand les comptes des techniciens sont créés : l'appli demande alors la connexion */
   const MAX_HORS_LIGNE_JOURS = 14;
   const REVERIF_MS = 30 * 60 * 1000; /* nouvelle vérification au retour au premier plan après 30 min */
   const LS = "diagsav-auth";

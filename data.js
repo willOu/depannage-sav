@@ -192,6 +192,9 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "1.52", date: "2026-10-24", titre: "Connexion activée", items: [
+    "L'appli demande maintenant de se connecter (email et mot de passe fournis par le SAV), une seule fois par appareil. L'accès est vérifié à chaque ouverture avec du réseau et reste valable 14 jours sans réseau."
+  ], docs: [] },
   { v: "1.51", date: "2026-10-24", titre: "Préparation de l'accès par compte", items: [
     "Écran de connexion et vérification d'accès préparés. Rien ne change pour l'instant : la connexion sera activée plus tard, quand les comptes des techniciens seront créés."
   ], docs: [] },
