@@ -192,6 +192,9 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "1.51", date: "2026-10-24", titre: "Préparation de l'accès par compte", items: [
+    "Écran de connexion et vérification d'accès préparés. Rien ne change pour l'instant : la connexion sera activée plus tard, quand les comptes des techniciens seront créés."
+  ], docs: [] },
   { v: "1.50", date: "2026-10-24", titre: "Nouveautés repliées dans Réglages", items: [
     "Dans Réglages, chaque version du journal des nouveautés tient sur une ligne : on touche pour afficher le détail."
   ], docs: [] },
