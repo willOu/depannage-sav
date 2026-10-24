@@ -2205,7 +2205,7 @@
 
 
   /* Marques d'accessoires : slug = nom normalisé ; les marques déjà présentes dans MARQUES (cartes) y sont rattachées */
-  const LOGOS = ["optex", "cardin", "intratone", "locinox", "prastel", "theben", "opera", "bbc-bircher"];
+  const LOGOS = ["optex", "cardin", "intratone", "locinox", "prastel", "theben", "opera", "bbc-bircher", "sewosy", "jcm-technologies"];
   const slugM = n => norm(n).replace(/ /g, "-");
   const accOf = nom => ACCESSOIRES.filter(a => norm(a.marque) === norm(nom));
   window.accBrandsOnly = function () {

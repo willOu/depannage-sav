@@ -192,6 +192,9 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "1.44", date: "2026-10-24", titre: "Logos Sewosy et JCM Technologies", items: [
+    "Les marques d'accessoires Sewosy et JCM Technologies affichent maintenant leur logo sur l'accueil, à la place de la pastille de couleur."
+  ], docs: [] },
   { v: "1.43", date: "2026-10-24", titre: "FAAC : numéros d'assistance et horaires", items: [
     "Assistance fabricant FAAC : numéros de la page support de faac.fr (assistance technique installateurs, autres demandes, service volets / portes / stores) avec les horaires d'ouverture. Les horaires s'affichent maintenant sous chaque numéro quand ils sont connus."
   ], docs: [] },
