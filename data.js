@@ -192,6 +192,10 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "1.48", date: "2026-10-24", titre: "Prastel EASYBKA : notice simplifiée complète", items: [
+    "Nouvel onglet « Notice » sur la fiche clavier Prastel EASYKA / EASYBKA : la notice simplifiée (2 pages) en entier, transcrite et en images zoomables.",
+    "Fiche complétée : fils REX1 / REX2 avec leur masse, couleurs des voyants à chaque étape de programmation, procédure de retour usine. La contradiction sur le fil blanc (REX2 ou entrée auxiliaire selon la notice) est signalée dans les notes."
+  ], docs: ["Prastel ISEASYBK_FR_S_07_18 (notice simplifiée EASYBKA/R)"] },
   { v: "1.47", date: "2026-10-24", titre: "Écran de démarrage : 2,5 secondes", items: [
     "L'écran de démarrage Diag'SAV reste affiché 2,5 secondes avant l'écran principal."
   ], docs: [] },

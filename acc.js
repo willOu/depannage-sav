@@ -804,12 +804,12 @@
         {
           "n": "Vert",
           "label": "REX / BL",
-          "desc": "Entrée bouton de demande de sortie (REX), à placer à l'intérieur des locaux."
+          "desc": "Entrée bouton de demande de sortie (REX), à placer à l'intérieur des locaux. Notice simplifiée : REX1, commande du relais principal ; le fil noir (masse) sert de commun au bouton poussoir."
         },
         {
           "n": "Blanc",
           "label": "IN / MONITOR",
-          "desc": "Entrée auxiliaire."
+          "desc": "Entrée auxiliaire. La notice simplifiée l'appelle REX2 (commande du relais auxiliaire, avec un second fil noir en masse) : voir les notes."
         },
         {
           "n": "Violet · Gris · Marron",
@@ -872,8 +872,65 @@
         "Code de programmation perdu (clavier en mode normal, voyant vert) : couper l'alimentation, appuyer sur REX, remettre l'alimentation avec REX appuyé, relâcher REX ; dans les 15 secondes, # deux fois puis 1234, puis 3 et le nouveau code. Code normal / sécurisé perdu (clavier en mode sécurisé, voyant rouge) : même manœuvre, puis saisir 3838 dans les 15 s pour revenir en mode normal.",
         "Retour aux réglages d'usine : menu 0 puis code de programmation (efface toute la mémoire, codes spéciaux et utilisateurs compris, 3 bips). Variante de la notice simplifiée : couper l'alimentation, relier ensemble les fils vert et noir, remettre sous tension (code de programmation 1234 pendant 15 s), # deux fois, code, 0 deux fois, code ; 3 bips ; débrancher le fil vert. Les deux notices décrivent donc deux procédures différentes.",
         "Notice simplifiée (EASYBKA / EASYBKR) : modifier le code de programmation (# deux fois, code maître, touche 3, nouveau code) ; code du relais 1 (touche 1, usine 2580) ; code du relais 2 (touche 2, usine 0852). Les noms de menu 1 et 2 de la notice complète sont appelés « code utilisateur unique » dans la simplifiée.",
+        "Notice simplifiée, voyants lors de la programmation : après # deux fois, le voyant de gauche s'éteint et celui de droite devient rouge ; après le code maître, celui de droite devient vert. Touche 3 : les deux voyants verts. Touche 1 (relais 1) : voyant de gauche rouge. Touche 2 (relais 2) : voyant de gauche orange. Après le nouveau code : 3 bips et voyant de droite éteint.",
+        "Contradiction à noter : la notice simplifiée nomme le fil blanc « REX2 » (commande du relais auxiliaire), alors que la notice complète le nomme « IN / MONITOR » (entrée auxiliaire). Les deux textes sont conservés, rien n'est tranché ici.",
+        "Notice simplifiée, retour aux réglages d'usine : dans l'étape « 0 deux fois », les deux voyants clignotent en rouge, puis 3 bips, voyant de gauche vert et celui de droite éteint. Le code à saisir est « à 4 chiffres » (le code de programmation, 1234 pendant les 15 s).",
+        "L'intégralité de la notice simplifiée (ISEASYBK_FR_S_07_18, 2 pages) est dans l'onglet Notice.",
         "Prastel France, tél. 04 42 98 06 06 (numéro indiqué sur la notice, peut avoir changé)."
       ]
+      ,"notice": {
+        "ref": "ISEASYBK_FR_S_07_18 · EASYBKA/R · Programmation simplifiée · Contrôle d'accès · Prastel France",
+        "blocs": [
+          { "h": "Page 1 · 1) Câblage — EASYBKA / EASYBKR", "l": [
+            ["Câble rouge / +", "+VCC (12-24 VAC/CC)"],
+            ["Câble noir / -", "Masse (12-24 VAC/CC)"],
+            ["Câble violet / COM", "Commun (contact relais principal)"],
+            ["Câble gris / NO", "Contact NO (contact relais principal)"],
+            ["Câble marron / NC", "Contact NC (contact relais principal)"],
+            ["Câble vert / REX1", "Commande du relais principal (bouton poussoir)"],
+            ["Câble noir / -", "Masse (bouton poussoir, relais principal)"],
+            ["Câble blanc / REX2", "Commande du relais auxiliaire (bouton poussoir)"],
+            ["Câble noir / -", "Masse (bouton poussoir, relais auxiliaire)"],
+            ["Câble bleu / COM", "Commun (contact relais auxiliaire)"],
+            ["Câble jaune / NO", "Contact NO (contact relais auxiliaire)"],
+            ["Câble orange / NC", "Contact NC (contact relais auxiliaire)"]
+          ]},
+          { "h": "Page 1 · 2) Programmation — codes par défaut", "l": [
+            ["Code de programmation", "1234"],
+            ["Code utilisateur unique (relais de verrouillage)", "2580"],
+            ["Code utilisateur unique (relais auxiliaire)", "0852"]
+          ]},
+          { "h": "Page 2 · A) Modification du code de programmation", "p": [
+            "Appuyer la touche # deux fois : « l'indicateur de gauche s'éteint et celui de droite s'allume en rouge ».",
+            "Entrer le code maître : 1 2 3 4 : « l'indicateur de droite devient vert ».",
+            "Appuyer sur la touche 3 : « les deux indicateurs s'allument en vert ».",
+            "Entrer le nouveau code maître à 4 chiffres : « le clavier émet 3 bips sonores, l'indicateur de droite s'éteint »."
+          ]},
+          { "h": "Page 2 · B) Modification du code du RELAIS 1", "p": [
+            "Appuyer la touche # deux fois : « l'indicateur de gauche s'éteint et celui de droite s'allume en rouge ».",
+            "Entrer le code maître : 1 2 3 4 : « l'indicateur de droite devient vert ».",
+            "Appuyer sur la touche 1 : « l'indicateur de gauche s'allume en rouge ».",
+            "Entrer le nouveau code utilisateur unique à 4 chiffres : « le clavier émet 3 bips sonores et l'indicateur de droite s'éteint »."
+          ]},
+          { "h": "Page 2 · C) Modification du code du RELAIS 2", "p": [
+            "Appuyer la touche # deux fois : « l'indicateur de gauche s'éteint et celui de droite s'allume en rouge ».",
+            "Entrer le code maître : 1 2 3 4 : « l'indicateur de droite devient vert ».",
+            "Appuyer sur la touche 2 : « l'indicateur de gauche s'allume en orange ».",
+            "Entrer le nouveau code utilisateur unique à 4 chiffres : « le clavier émet 3 bips sonores et l'indicateur de droite s'éteint »."
+          ]},
+          { "h": "Page 2 · Retour aux paramètres d'usine par défaut", "p": [
+            "Déconnecter l'alimentation.",
+            "Connecter ensemble les 2 câbles vert et noir.",
+            "Remise sous tension. Pendant 15 secondes le code de programmation est 1234.",
+            "Appuyer deux fois sur la touche #, l'indicateur de droite s'allume en rouge.",
+            "Entrer le code de programmation à 4 chiffres, l'indicateur de droite s'allume en vert.",
+            "Appuyer deux fois sur la touche 0, les deux indicateurs clignotent en rouge.",
+            "Entrer le code de programmation à 4 chiffres : « Le clavier émet 3 bips sonores, l'indicateur de gauche s'allume en vert et celui de droite s'éteint ».",
+            "Déconnecter le câble vert."
+          ]}
+        ],
+        "pied": "Prastel France, ZI Athélia II, 225 impasse du Serpolet, 13704 La Ciotat Cedex, tél. +33 04 42 98 06 06, www.prastel.com. Transcription fidèle, orthographe de la notice corrigée ; les pages d'origine sont ci-dessous."
+      }
     },
     {
       "id": "opera-28800",
@@ -2146,8 +2203,8 @@
     }
   ];
   window.ACCESSOIRES = ACCESSOIRES;
-  const TABS = [["info", "Infos"], ["racc", "Raccord."], ["inst", "Installation"], ["sch", "Schéma"], ["notes", "Notes"]];
-  const has = (a, t) => t === "info" ? true : t === "sch" ? hasSchema(a.id) : t === "racc" ? a.raccordement && a.raccordement.length : t === "inst" ? a.installation && a.installation.length : (a.notes && a.notes.length) || (a.codes && a.codes.length);
+  const TABS = [["info", "Infos"], ["racc", "Raccord."], ["inst", "Installation"], ["sch", "Schéma"], ["notes", "Notes"], ["ntc", "Notice"]];
+  const has = (a, t) => t === "info" ? true : t === "sch" ? hasSchema(a.id) : t === "ntc" ? !!a.notice : t === "racc" ? a.raccordement && a.raccordement.length : t === "inst" ? a.installation && a.installation.length : (a.notes && a.notes.length) || (a.codes && a.codes.length);
   const rowAcc = a => `<button class="row" onclick="go('#/a/${a.id}')"><span class="badge" style="--c:${a.couleur}">${esc(a.marque)}</span><b>${esc(a.nom)}</b> <span class="p">${esc(a.categorie)}</span><small>${esc(a.modeles)}</small></button>`;
 
   window.accList = function (q) {
@@ -2228,6 +2285,11 @@
     app.innerHTML = `<p class="note">Accessoires ${esc(b.marque)} : fiches issues des notices fabricant.</p><div class="list">${accOf(b.marque).map(rowAcc).join("")}</div>`;
   };
 
+  /* Onglet « Notice » : transcription complète + pages d'origine en image */
+  const noticePane = a => {
+    const n = a.notice, k = a.id + "#notice";
+    return `<p class="note"><b>Notice complète</b> : ${esc(n.ref)}</p>` + n.blocs.map(b => `<h2>${esc(b.h)}</h2>` + (b.l ? `<table>` + b.l.map(r => `<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td></tr>`).join("") + `</table>` : `<div class="note"><ol class="plain" style="padding-left:20px;margin:0">${b.p.map(x => `<li style="margin:6px 0">${esc(x)}</li>`).join("")}</ol></div>`)).join("") + `<p class="note">${esc(n.pied)}</p><h2>Pages d'origine</h2>` + schemaPane(k);
+  };
   window.viewAcc = function (id, tab) {
     const a = ACCESSOIRES.find(x => x.id === id); if (!a) return viewAccList();
     setHead(`${a.marque} ${a.nom}`, true);
@@ -2235,6 +2297,7 @@
     let h = `<p class="note">${esc(a.resume)}</p><div class="tabs" role="tablist">` + tabs.map(t => `<button role="tab" aria-selected="${t[0] === tab}" onclick="go('#/a/${a.id}/${t[0]}')">${t[1]}</button>`).join("") + `</div>`;
     if (tab === "info") h += `<div class="set">` + a.specs.map(s => `<div style="padding:11px 14px;border-top:1px solid var(--line)"><div style="font-size:12.5px;color:var(--muted);font-weight:600">${esc(s[0])}</div><div style="font-size:15.5px;margin-top:2px">${esc(s[1])}</div></div>`).join("") + `</div>`;
     if (tab === "sch") h += schemaPane(a.id);
+    if (tab === "ntc") h += noticePane(a);
     if (tab === "racc") h += `<table>` + a.raccordement.map(r => `<tr><td>${esc(r.n)}</td><td><b>${esc(r.label)}</b><br>${esc(r.desc)}</td></tr>`).join("") + `</table>`;
     if (tab === "inst") h += `<div class="note"><ol class="plain" style="padding-left:20px;margin:0">${a.installation.map(s => `<li style="margin:6px 0">${esc(s)}</li>`).join("")}</ol></div>`;
     if (tab === "notes") h += (a.codes ? `<h2>Codes</h2><table>` + a.codes.map(c => `<tr><td>${esc(c[0])}</td><td>${esc(c[1])}</td></tr>`).join("") + `</table>` : "") + (a.notes ? `<div class="note"><ul class="plain">${a.notes.map(n => `<li>${esc(n)}</li>`).join("")}</ul></div>` : "");

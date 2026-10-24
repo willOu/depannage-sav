@@ -42,6 +42,10 @@
     "prastel-easyka": [
       S("prastel-easyka-p02", "Raccordement et programmation", 2, "Notice simplifiée EASYBKA/R : câblage et procédure de programmation.")
     ],
+    "prastel-easyka#notice": [
+      S("prastel-easybk-s1", "Notice simplifiée, page 1 : câblage et codes par défaut", 1, "EASYBKA/R : couleurs des fils, relais principal et auxiliaire, codes d'usine."),
+      S("prastel-easybk-s2", "Notice simplifiée, page 2 : programmation et retour usine", 2, "Modification des codes (programmation, relais 1, relais 2) et retour aux paramètres d'usine.")
+    ],
     "prastel-febo-light": [
       S("prastel-febo-p1", "Notice FEBO-LIGHT", 1, "Bornes 1-2 (230 V), 3-4 (12 V), 3-5 (24 V) et position du cavalier JP1.")
     ],
