@@ -165,6 +165,14 @@ ul.plain li{margin:4px 0}
 .cr .todo b{display:block;font-size:12px;letter-spacing:.8px;color:var(--muted);margin-bottom:2px}
 .empty{color:var(--muted);text-align:center;padding:30px 10px}
 .foot{color:var(--muted);font-size:12px;text-align:center;margin-top:28px}
+.sig{display:flex;align-items:center;justify-content:center;gap:8px;margin:28px 0 8px;color:var(--muted);font-size:12px}
+.sig i{display:flex;gap:3px}.sig i b{width:8px;height:8px;border-radius:2px;display:block}
+#splash{position:fixed;inset:0;z-index:99;background:#9B2424;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;color:#fff;transition:opacity .35s ease}
+#splash.off{opacity:0;pointer-events:none}
+#splash .sq{display:flex;gap:10px}#splash .sq b{width:34px;height:34px;border-radius:7px;display:block}
+#splash h2{margin:0;font-size:40px;letter-spacing:-.5px;color:#fff;text-transform:none}
+#splash small{font-size:12px;letter-spacing:1.4px;color:#F2D6D6}
+@media (prefers-reduced-motion:reduce){#splash{transition:none}}
 
 .panels{display:flex;flex-wrap:wrap;gap:10px;margin:6px 0 4px}
 .panel{flex:1 1 160px;background:#111;border-radius:12px;padding:8px 6px 4px;border:1px solid var(--line)}
@@ -247,6 +255,7 @@ html{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 </style>
 </head>
 <body>
+<div id="splash" aria-hidden="true"><div class="sq"><b style="background:#6FA8E8"></b><b style="background:#F5A33A"></b><b style="background:#FF6A5E"></b></div><h2>Diag'SAV</h2><small>ESPACS AUTOMATISME</small></div>
 <header id="hdr">
   <div class="top">
     <button class="mark" id="home" title="Accueil" aria-label="Retour à l'accueil" onclick="$('#q').value='';go('#/')"><i></i><i></i><i></i></button>
@@ -661,7 +670,7 @@ function route(){
   window.scrollTo(0, 0);
   if (p[0] === "m") return viewBrand(p[1]);
   if (p[0] === "g") return viewGenre(p[1]);
-  if (p[0] === "c") return viewBoard(p[1], p[2]);
+  if (p[0] === "c"){ viewBoard(p[1], p[2]); app.insertAdjacentHTML("beforeend", `<div class="sig"><i><b style="background:#1F5FA8"></b><b style="background:#E07B00"></b><b style="background:#E5372E"></b></i>Diag'SAV · Espacs Automatisme</div>`); return; } /* SIG */
   if (p[0] === "ma") return viewAccBrand(p[1]);
   if (p[0] === "a") return p[1] ? viewAcc(p[1], p[2]) : viewAccList(); /* ACC */
   if (p[0] === "d") return viewDiag(p[1], p[2]); /* DIAG */
@@ -672,6 +681,9 @@ function route(){
   viewHome();
 }
 addEventListener("hashchange", route);
+/* écran de démarrage : une fois par ouverture de l'appli */
+(function(){ const sp = document.getElementById("splash"); if (!sp) return; let seen = false; try { seen = sessionStorage.getItem("splash") === "1"; sessionStorage.setItem("splash", "1"); } catch (e) {}
+  if (seen) return sp.remove(); setTimeout(() => { sp.classList.add("off"); setTimeout(() => sp.remove(), 400); }, 900); })();
 route();
 
 /* ---------- hors ligne ---------- */

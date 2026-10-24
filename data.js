@@ -192,6 +192,9 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "1.46", date: "2026-10-24", titre: "Écran de démarrage et signature Diag'SAV", items: [
+    "Écran de démarrage Diag'SAV (logo et « Espacs Automatisme » sur fond bordeaux, moins d'une seconde, une fois à chaque ouverture de l'appli) et signature discrète en bas de chaque fiche."
+  ], docs: [] },
   { v: "1.45", date: "2026-10-24", titre: "Nouvelle identité : Diag'SAV", items: [
     "L'appli s'appelle désormais Diag'SAV (anciennement Dépannage SAV), avec une nouvelle icône : les trois carrés bleu, orange, rouge d'Espacs Automatisme sur fond bordeaux, au-dessus de « SAV ». Sur le téléphone, l'ancienne icône est remplacée à la mise à jour ; si elle reste, supprimer l'icône de l'écran d'accueil puis la rajouter."
   ], docs: [] },
