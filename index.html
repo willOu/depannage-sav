@@ -391,6 +391,11 @@ function hotlineHtml(m){
   return `<details class="hot"><summary>☎ Assistance fabricant${l.length ? ` <span>· ${l.length}</span>` : ""}</summary>${body}</details>`;
 }
 
+/* Notices sur le site du fabricant (NOTICES dans data.js) */
+function noticeHtml(id){
+  const l = (typeof NOTICES !== "undefined" && NOTICES[id]) || []; if (!l.length) return "";
+  return `<details class="hot"><summary>📄 Notice sur le site du fabricant <span>· ${l.length}</span></summary>` + l.map(x => { let d = ""; try { d = new URL(x.u).hostname.replace(/^www\./, ""); } catch (e) {} return `<a class="hotl" href="${esc(x.u)}" target="_blank" rel="noopener"><b>${esc(x.t)}</b><small>${esc(d)} · s'ouvre en ligne</small></a>`; }).join("") + `<p class="hotn">Il faut du réseau pour ouvrir ces liens. Le fichier en ligne peut être une édition plus récente que la notice citée dans « Source » : en cas de différence, vérifiez.</p></details>`;
+}
 function viewBrand(id){
   const m = MARQUES.find(x => x.id === id); if (!m) return viewHome();
   setHead(m.nom, true);
@@ -405,7 +410,7 @@ function viewBoard(id, tab){
   setHead(`${m.nom} · ${c.nom}`, true);
   const rec = store.get("recents", []).filter(x => x !== id); rec.unshift(id); store.set("recents", rec.slice(0, 4));
 
-  let h = `<div class="boardhead" style="--c:${m.couleur}"><button class="favbtn" id="fav" aria-pressed="${isFav(id)}" aria-label="Ajouter aux favoris" title="Favori : enregistré dans ce navigateur seulement">${isFav(id) ? "★" : "☆"}</button><h3>${esc(c.nom)}</h3><p>${esc(c.modeles)}</p><p>${esc(c.type)}</p><div class="src">Source : ${esc(c.source)}</div>${hotlineHtml(m)}</div>
+  let h = `<div class="boardhead" style="--c:${m.couleur}"><button class="favbtn" id="fav" aria-pressed="${isFav(id)}" aria-label="Ajouter aux favoris" title="Favori : enregistré dans ce navigateur seulement">${isFav(id) ? "★" : "☆"}</button><h3>${esc(c.nom)}</h3><p>${esc(c.modeles)}</p><p>${esc(c.type)}</p><div class="src">Source : ${esc(c.source)}</div>${hotlineHtml(m)}${noticeHtml(id)}</div>
   <div class="tabs" role="tablist">
     ${[["codes","Codes"],["bornier","Bornier"],["aff","Écran"],["param","Paramètres"],["appr","Apprent."]].concat(window.hasSchema && hasSchema(id) ? [["sch","Schéma"]] : []).map(([k,l]) => `<button role="tab" aria-selected="${tab===k}" onclick="go('#/c/${id}/${k}')">${l}</button>`).join("")}
   </div><div id="pane"></div>`;

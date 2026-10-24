@@ -14,7 +14,151 @@ const DATA_VERSION = "2026-10-20";
 
 /* Journal des modifications — ajouter une entrée en haut à chaque mise à jour.
    docs : nom des notices ajoutées (affichées dans Réglages). */
+/* Liens vers les notices sur le site du fabricant (trouvés par recherche web ; nécessitent du réseau).
+   Seules les fiches dont le lien a été identifié avec certitude y figurent. */
+const NOTICES = {
+ "came-zbx7n": [
+  {
+   "t": "Notice BX-74 / BX-78 (carte ZBX7N)",
+   "u": "https://static.came.com/doc/FA01052M04.pdf"
+  }
+ ],
+ "came-zm3e": [
+  {
+   "t": "Notice ZM3E / ZM3EC / ZM3EP",
+   "u": "https://static.came.com/doc/FA01080M04.pdf"
+  }
+ ],
+ "came-zm3es": [
+  {
+   "t": "Page produit ZM3ES",
+   "u": "https://www.came.com/global/en/products/control-panels-zm3e-002zm3es/"
+  }
+ ],
+ "came-zlj24": [
+  {
+   "t": "Notice ZLJ24",
+   "u": "https://static.came.com/doc/FA01081M04.pdf"
+  }
+ ],
+ "came-za3p": [
+  {
+   "t": "Notice ZA3P",
+   "u": "https://static.came.com/doc/FA01079M04.pdf"
+  }
+ ],
+ "came-zl92": [
+  {
+   "t": "Notice ZL92 (319V21)",
+   "u": "https://static.came.com/doc/319V21.pdf"
+  }
+ ],
+ "nice-rba3": [
+  {
+   "t": "Notice Robus RB400 / RB250HS (IDV0629)",
+   "u": "https://www.niceforyou.com/sites/default/files/upload/manuals/idv0629a01fr.pdf"
+  }
+ ],
+ "nice-robus-r10": [
+  {
+   "t": "Notice Robus RB500HS / RB600 / RB1000 (IDV0620)",
+   "u": "https://www.niceforyou.com/sites/default/files/upload/manuals/idv0620a01fr.pdf"
+  }
+ ],
+ "faac-780d": [
+  {
+   "t": "Page produit 780D",
+   "u": "https://faac.fr/produits/portillons-familiaux/unite-de-controle-et-accessoires-portillons/unite-de-controle/faac-780d-gates/"
+  }
+ ],
+ "faac-e024s": [
+  {
+   "t": "Page produit E024S",
+   "u": "https://faac.fr/produits/portillons-familiaux/unite-de-controle-et-accessoires-portillons/unite-de-controle/faac-e024s-gates/"
+  }
+ ],
+ "roger-b70-2ml": [
+  {
+   "t": "Page produit B70/2ML/BOX",
+   "u": "https://www.rogertechnology.it/en/solutions/categorie/control-units/digital-controller-brushless/series-b70/b702mlbox"
+  }
+ ],
+ "roger-edge1": [
+  {
+   "t": "Page produit EDGE1/BOX",
+   "u": "https://www.rogertechnology.it/en/solutions/categorie/control-units/digital-controller-brushless/series-edge/edge1box"
+  }
+ ],
+ "v2-forteco2500": [
+  {
+   "t": "Manuel FORTECO 2500 (ZIS327, éd. 20/03/2022)",
+   "u": "https://v2home.com/wp-content/uploads/2018/06/FORTECO-2500_ZIS327_20.03.2022-1.pdf"
+  }
+ ],
+ "v2-pd19": [
+  {
+   "t": "Manuel FORTECO (ZIS371, éd. 20/01/2020)",
+   "u": "https://v2home.com/wp-content/uploads/2018/06/FORTECO_ZIS371_20.01.2020.pdf"
+  },
+  {
+   "t": "Manuel AYROS (ZIS332, éd. 22/08/2018)",
+   "u": "https://v2home.com/wp-content/uploads/2018/06/AYROS_ZIS332_22.08.2018.pdf"
+  }
+ ],
+ "v2-ayros1500": [
+  {
+   "t": "Manuel AYROS 1500-I (ZIS442, éd. 28/08/2018)",
+   "u": "https://v2home.com/wp-content/uploads/2018/06/AYROS1500-I_ZIS442_28.08.2018.pdf"
+  }
+ ],
+ "v2-ayros24v": [
+  {
+   "t": "Manuel AYROS 24V (ZIS334, éd. 28/11/2016)",
+   "u": "https://v2home.com/wp-content/uploads/manuali/1480431561_AYROS-24V_ZIS334_28.11.2016.pdf"
+  }
+ ],
+ "v2-heavy1": [
+  {
+   "t": "Manuel HEAVY1 (ZIS354, éd. 12/11/2016)",
+   "u": "https://v2home.com/wp-content/uploads/manuali/1479201041_HEAVY1_Pr.1.2_ZIS354_12_11_2016.pdf"
+  }
+ ],
+ "v2-city1evo": [
+  {
+   "t": "Manuel CITY1-EVO (ZIS644, éd. 09/05/2022)",
+   "u": "https://v2home.com/wp-content/uploads/2018/06/CITY1-EVO_ZIS644_09.05.2022.pdf"
+  }
+ ],
+ "v2-city4evo": [
+  {
+   "t": "Manuel CITY4-EVO (ZIS454, éd. 20/03/2022)",
+   "u": "https://v2home.com/wp-content/uploads/2018/06/CITY4-EVO_ZIS454_20.03.2022.pdf"
+  }
+ ],
+ "v2-city11": [
+  {
+   "t": "Notice CITY11 (IL353, éd. 31/10/2018)",
+   "u": "https://v2home.com/wp-content/uploads/2018/06/CITY11_IL353_31.10.2018.pdf"
+  }
+ ],
+ "afca-starteco4-contacteurs": [
+  {
+   "t": "Notice Startéco 4 v1.14 (doc 363)",
+   "u": "https://afca.fr/documentations/363.Notice_Starteco4-version-1.14-(22-05-17)-version-b.pdf"
+  }
+ ],
+ "afca-flexy2": [
+  {
+   "t": "Notice Flexy 2 (doc 354)",
+   "u": "https://afca.fr/documentations/354-notice-armoire-flexy2.pdf"
+  }
+ ]
+};
+
 const CHANGELOG = [
+  { v: "1.41", date: "2026-10-24", titre: "Liens vers les notices sur le site du fabricant", items: [
+    "Nouvelle rubrique « 📄 Notice sur le site du fabricant » sur 22 fiches (Came, Nice, FAAC, Roger, V2, AFCA) : lien direct vers le PDF ou la page produit officielle. Il faut du réseau pour l'ouvrir. Le fichier en ligne peut être une édition plus récente que celle citée sur la fiche : en cas de différence, la fiche reste celle de la notice indiquée dans « Source »."
+  ], docs: [] },
   { v: "1.40", date: "2026-10-23", titre: "Recherche par symptôme, mode hors ligne vérifié, scan d'étiquette (bêta)", items: [
     "Recherche par symptôme : tapez une phrase (« le portail ne s'ouvre pas », « la LED clignote », « photocellule bloquée ») et l'appli propose, dans « Pannes qui ressemblent », les codes, voyants et symptômes des notices les plus proches, toutes marques confondues. Ce n'est pas un diagnostic : vérifiez sur la fiche.",
     "Mode hors ligne vérifié : la barre d'état indique « ✓ tout est téléchargé (N fichiers) » après avoir comparé le contenu enregistré à la liste complète, complète automatiquement ce qui manque quand il y a du réseau, et affiche « ⚠ incomplet » sinon. Bouton « Vérifier / compléter » dans les réglages.",
