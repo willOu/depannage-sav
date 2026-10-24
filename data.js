@@ -1,5 +1,5 @@
 /* =====================================================================
-   Dépannage SAV — Espacs Automatisme
+   Diag'SAV
    Données techniques par marque / carte électronique.
    Toutes les entrées sont reprises des notices fabricant citées dans
    "source" (reformulées). p: 1 = action complétée par un contrôle
@@ -192,6 +192,9 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "1.54", date: "2026-10-24", titre: "Nom de l'entreprise retiré", items: [
+    "Le nom de l'entreprise n'apparaît plus dans l'appli : écran de démarrage, écran de connexion, signature des fiches et nom de l'appli installée."
+  ], docs: [] },
   { v: "1.53", date: "2026-10-24", titre: "Corrections", items: [
     "Après 14 jours sans réseau, l'appli se rouvre toute seule dès que le réseau revient (avant, il fallait la relancer).",
     "Un compte désactivé voit « Ce compte est désactivé » à la connexion, et non plus « mot de passe incorrect ». Trop d'essais : message clair au lieu d'une déconnexion.",
@@ -217,10 +220,10 @@ const CHANGELOG = [
     "L'écran de démarrage Diag'SAV reste affiché 2,5 secondes avant l'écran principal."
   ], docs: [] },
   { v: "1.46", date: "2026-10-24", titre: "Écran de démarrage et signature Diag'SAV", items: [
-    "Écran de démarrage Diag'SAV (logo et « Espacs Automatisme » sur fond bordeaux, moins d'une seconde, une fois à chaque ouverture de l'appli) et signature discrète en bas de chaque fiche."
+    "Écran de démarrage Diag'SAV (logo sur fond bordeaux, moins d'une seconde, une fois à chaque ouverture de l'appli) et signature discrète en bas de chaque fiche."
   ], docs: [] },
   { v: "1.45", date: "2026-10-24", titre: "Nouvelle identité : Diag'SAV", items: [
-    "L'appli s'appelle désormais Diag'SAV (anciennement Dépannage SAV), avec une nouvelle icône : les trois carrés bleu, orange, rouge d'Espacs Automatisme sur fond bordeaux, au-dessus de « SAV ». Sur le téléphone, l'ancienne icône est remplacée à la mise à jour ; si elle reste, supprimer l'icône de l'écran d'accueil puis la rajouter."
+    "L'appli s'appelle désormais Diag'SAV (anciennement Dépannage SAV), avec une nouvelle icône : les trois carrés bleu, orange, rouge sur fond bordeaux, au-dessus de « SAV ». Sur le téléphone, l'ancienne icône est remplacée à la mise à jour ; si elle reste, supprimer l'icône de l'écran d'accueil puis la rajouter."
   ], docs: [] },
   { v: "1.44", date: "2026-10-24", titre: "Logos Sewosy et JCM Technologies", items: [
     "Les marques d'accessoires Sewosy et JCM Technologies affichent maintenant leur logo sur l'accueil, à la place de la pastille de couleur."

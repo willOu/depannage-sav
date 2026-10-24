@@ -56,7 +56,7 @@
     if (!el) { el = document.createElement("div"); el.id = "login"; document.body.appendChild(el); }
     el.innerHTML = `<form id="lgf" autocomplete="on">
       <div class="sq"><b style="background:#6FA8E8"></b><b style="background:#F5A33A"></b><b style="background:#FF6A5E"></b></div>
-      <h2>Diag'SAV</h2><small>ESPACS AUTOMATISME</small>
+      <h2>Diag'SAV</h2>
       <p class="lgm ${kind || ""}" id="lgm" role="status">${esc(msg || "Connexion réservée aux techniciens.")}</p>
       <input id="lge" type="email" name="email" placeholder="Email" autocomplete="username" required value="${esc((S && S.email) || "")}">
       <input id="lgp" type="password" name="password" placeholder="Mot de passe" autocomplete="current-password" required>

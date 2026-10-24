@@ -4,7 +4,7 @@
   const S = (f, t, p, d) => ({ f: "schemas/" + f + ".webp", t, p, d });
   window.SCHEMAS = {
     "casit-eq2000": [
-      S("casit-eq2000-p6", "Schéma de câblage barres palpeuses et cellules", 6, "Dessin du fascicule technique Espacs (08/01/2006) : barres palpeuses TO / TF sur 14-15 / 14-16, cellules en série sur 17-19 alimentées en 24 V permanent. Le dessin cite une ASO ISK 76, hors notice CASIT.")
+      S("casit-eq2000-p6", "Schéma de câblage barres palpeuses et cellules", 6, "Dessin du fascicule technique (08/01/2006) : barres palpeuses TO / TF sur 14-15 / 14-16, cellules en série sur 17-19 alimentées en 24 V permanent. Le dessin cite une ASO ISK 76, hors notice CASIT.")
     ],
     "casit-eq2006": [
       S("casit-eq2006-p2", "Implantation de la carte et bornier", 2, "Vue de la carte (dip S1 à S3, trimmers, poussoirs PS1-PS3, LED) et tableau des bornes.")

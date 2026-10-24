@@ -274,7 +274,7 @@ html{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 </style>
 </head>
 <body>
-<div id="splash" aria-hidden="true"><div class="sq"><b style="background:#6FA8E8"></b><b style="background:#F5A33A"></b><b style="background:#FF6A5E"></b></div><h2>Diag'SAV</h2><small>ESPACS AUTOMATISME</small></div>
+<div id="splash" aria-hidden="true"><div class="sq"><b style="background:#6FA8E8"></b><b style="background:#F5A33A"></b><b style="background:#FF6A5E"></b></div><h2>Diag'SAV</h2></div>
 <header id="hdr">
   <div class="top">
     <button class="mark" id="home" title="Accueil" aria-label="Retour à l'accueil" onclick="$('#q').value='';go('#/')"><i></i><i></i><i></i></button>
@@ -691,7 +691,7 @@ function route(){
   window.scrollTo(0, 0);
   if (p[0] === "m") return viewBrand(p[1]);
   if (p[0] === "g") return viewGenre(p[1]);
-  if (p[0] === "c"){ viewBoard(p[1], p[2]); app.insertAdjacentHTML("beforeend", `<div class="sig"><i><b style="background:#1F5FA8"></b><b style="background:#E07B00"></b><b style="background:#E5372E"></b></i>Diag'SAV · Espacs Automatisme</div>`); return; } /* SIG */
+  if (p[0] === "c"){ viewBoard(p[1], p[2]); app.insertAdjacentHTML("beforeend", `<div class="sig"><i><b style="background:#1F5FA8"></b><b style="background:#E07B00"></b><b style="background:#E5372E"></b></i>Diag'SAV</div>`); return; } /* SIG */
   if (p[0] === "ma") return viewAccBrand(p[1]);
   if (p[0] === "a") return p[1] ? viewAcc(p[1], p[2]) : viewAccList(); /* ACC */
   if (p[0] === "d") return viewDiag(p[1], p[2]); /* DIAG */
