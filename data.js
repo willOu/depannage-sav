@@ -192,6 +192,9 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "1.59", date: "2026-10-25", titre: "Deux appareils maximum par compte", items: [
+    "Un compte peut être connecté sur 2 appareils à la fois (par exemple téléphone et tablette). Sur un 3e, l'appli propose de déconnecter l'un des deux. « Se déconnecter » libère la place, et un appareil inutilisé depuis 15 jours la libère tout seul."
+  ], docs: [] },
   { v: "1.58", date: "2026-10-25", titre: "Quiz de formation (test)", items: [
     "Nouveau quiz de formation (EN TEST, bouton sur l'accueil) : 10 questions sur les codes erreur et les borniers, toutes marques ou une seule. Les questions et les réponses proposées viennent uniquement des fiches de l'appli ; les erreurs renvoient vers la fiche à revoir."
   ], docs: [] },
