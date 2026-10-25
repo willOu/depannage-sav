@@ -46,10 +46,41 @@
     o.innerHTML = `<div class="cres">${t}</div><p class="hotn">En alternatif, c'est la puissance apparente (cos φ = 1).</p>`;
   }
 
+  /* 4. aide au choix de la motorisation (données : moteurs.js, chaque ligne avec sa source) */
+  function moteur() {
+    const type = document.getElementById("mt_t").value, P = num("mt_p"), L = num("mt_l"), alim = document.getElementById("mt_a").value, out = document.getElementById("mr");
+    document.getElementById("mt_pw").hidden = type === "barriere";
+    document.getElementById("mt_ll").textContent = type === "coulissant" ? "Longueur du portail" : type === "battant" ? "Largeur d'un vantail" : "Longueur de lisse";
+    document.getElementById("mt_pl").textContent = type === "battant" ? "Poids d'un vantail" : "Poids du portail";
+    const besoinP = type !== "barriere";
+    if ((besoinP && !(P > 0)) || (type !== "coulissant" && !(L > 0))) { out.innerHTML = `<p class="hotn">Renseignez ${type === "barriere" ? "la longueur de lisse" : type === "battant" ? "la largeur et le poids du vantail" : "le poids du portail (et sa longueur si vous la connaissez)"}.</p>`; return; }
+    const ok = [], verif = [];
+    (window.MOTEURS || []).filter(m => m.type === type && (!alim || m.alim === alim)).forEach(m => {
+      if (type === "coulissant") {
+        if (m.p === null || m.p < P) return;
+        if (L > 0 && m.l !== null && m.l < L) return;
+        (L > 0 && m.l === null ? verif : ok).push(m);
+      } else if (type === "battant") {
+        if (m.l === null || m.l < L) return;
+        if (m.p !== null && m.p < P) return;
+        (m.p === null ? verif : ok).push(m);
+      } else { if (m.l !== null && m.l >= L) ok.push(m); }
+    });
+    const tri = (a, b) => type === "coulissant" ? a.p - b.p || (a.l || 99) - (b.l || 99) : a.l - b.l || (a.p || 9e9) - (b.p || 9e9);
+    ok.sort(tri); verif.sort(tri);
+    const lim = m => [m.p !== null ? "≤ " + f(m.p, 0) + " kg" : "poids non indiqué", m.l !== null ? "≤ " + f(m.l) + " m" : (type === "coulissant" ? "longueur non indiquée" : "")].filter(Boolean).join(" · ");
+    const ligne = m => { const ch = besoinP && m.p ? Math.round(P / m.p * 100) : null;
+      return `<div class="mot"><div class="mh"><span class="badge" style="--c:var(--blue)">${esc(m.marque)}</span><b>${esc(m.modele)}</b>${m.alim ? `<span class="ma">${esc(m.alim)}</span>` : ""}</div>
+        <div class="ml">${lim(m)}${ch !== null ? ` · <span class="${ch > 85 ? "hi" : ""}">charge ${ch} %</span>` : ""}</div>${m.note ? `<small>${esc(m.note)}</small>` : ""}<small class="src">Source : ${esc(m.src)}</small></div>`; };
+    out.innerHTML = `<div class="cres${ok.length ? " ok" : " ko"}"><b>${ok.length}</b> motorisation${ok.length > 1 ? "s" : ""} dans les limites annoncées${verif.length ? `, <b>${verif.length}</b> à vérifier` : ""}.</div>` +
+      (ok.length ? ok.map(ligne).join("") : `<p class="hotn">Aucune motorisation de la liste ne couvre ces valeurs.</p>`) +
+      (verif.length ? `<h2>À vérifier sur la notice</h2><p class="hotn">${type === "battant" ? "La source ne donne pas de poids maxi pour ces modèles." : "La source ne donne pas de longueur maxi pour ces modèles."}</p>` + verif.map(ligne).join("") : "");
+  }
+
   window.viewCalc = function (onglet) {
     setHead("Calculs rapides", true);
-    const sel = ["chute", "acc", "pui"].includes(onglet) ? onglet : "chute";
-    let h = `<div class="tabs" role="tablist">` + [["chute", "Chute de tension"], ["acc", "Conso. 24 V"], ["pui", "P = U × I"]].map(t => `<button role="tab" aria-selected="${t[0] === sel}" onclick="go('#/calc/${t[0]}')">${t[1]}</button>`).join("") + `</div>`;
+    const sel = ["chute", "acc", "pui", "moteur"].includes(onglet) ? onglet : "chute";
+    let h = `<div class="tabs" role="tablist">` + [["chute", "Chute de tension"], ["moteur", "Choix moteur"], ["acc", "Conso. 24 V"], ["pui", "P = U × I"]].map(t => `<button role="tab" aria-selected="${t[0] === sel}" onclick="go('#/calc/${t[0]}')">${t[1]}</button>`).join("") + `</div>`;
     if (sel === "chute") h += `<div class="cform">
         <label class="cf"><span>Tension</span><select id="cu"><option value="230">230 V monophasé</option><option value="24" selected>24 V</option><option value="12">12 V</option></select></label>
         ${champ("ci", "Courant", "ex. 2", "", "A")}${champ("cp", "ou puissance", "ex. 40", "", "W")}${champ("cl", "Longueur du câble (aller simple)", "ex. 25", "", "m")}
@@ -61,10 +92,17 @@
         <div id="al">${lignesHtml()}</div><button class="mini" id="aadd">＋ Ajouter un accessoire</button>
         <div class="cform">${champ("au", "Tension de la sortie", "24", "24", "V")}${champ("aw", "Puissance disponible sur la carte", "ex. 20", st.get("calc-aw", ""), "W")}${champ("am", "ou courant disponible", "ex. 500", st.get("calc-am", ""), "mA")}</div>
         <div id="ar"></div>`;
+    if (sel === "moteur") h += `<p class="note"><b>Aide indicative.</b> Liste des motorisations dont les limites annoncées par le fabricant couvrent votre portail. Pour un battant, le poids admissible baisse quand le vantail s'allonge : vérifiez toujours l'abaque de la notice. Prévoir de la marge si le portail est lourd à manœuvrer (pente, vent, rail ou gonds fatigués).</p>
+        <div class="cform"><label class="cf"><span>Type</span><select id="mt_t"><option value="coulissant">Portail coulissant</option><option value="battant">Portail battant (par vantail)</option><option value="barriere">Barrière levante</option></select></label>
+        <span id="mt_pw">${champ("mt_p", "<span id=\"mt_pl\">Poids du portail</span>", "ex. 450", "", "kg")}</span>
+        <label class="cf"><span id="mt_ll">Longueur du portail</span><span class="ci"><input id="mt_l" inputmode="decimal" placeholder="ex. 5"><i>m</i></span></label>
+        <label class="cf"><span>Alimentation du moteur</span><select id="mt_a"><option value="">Toutes</option><option value="24 V">24 V</option><option value="230 V">230 V</option><option value="36 V">36 V</option></select></label></div>
+        <div id="mr"></div><p class="hotn">${(window.MOTEURS || []).length} motorisations, reprises des notices reçues et des sites des fabricants (CAME, Nice, FAAC, BFT, Roger, V2, AFCA, ELKA, La Barrière Automatique). Alimentation non précisée par la source : le modèle n'apparaît qu'avec « Toutes ».</p>`;
     if (sel === "pui") h += `<div class="cform">${champ("pu", "Tension U", "ex. 24", "", "V")}${champ("pi", "Courant I", "ex. 0,5", "", "A")}${champ("pp", "Puissance P", "ex. 12", "", "W")}</div><div id="pr"></div>`;
     app.innerHTML = h;
     if (sel === "chute") { app.querySelectorAll("input,select").forEach(e => e.oninput = e.onchange = chute); chute(); }
     if (sel === "pui") { app.querySelectorAll("input").forEach(e => e.oninput = pui); pui(); }
+    if (sel === "moteur") { app.querySelectorAll("input,select").forEach(e => e.oninput = e.onchange = moteur); moteur(); }
     if (sel === "acc") {
       const bind = () => {
         app.querySelectorAll("#al input").forEach(e => e.oninput = () => { lignes[+e.dataset.i][e.dataset.k] = e.value; conso(); });
