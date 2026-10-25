@@ -18829,7 +18829,7 @@ const MARQUES = [
         ]},
         { nom: "Sorties", bornes: [
           { n: "15 · 17", label: "+LAM · COM", desc: "Clignotant 24 V, 10 W max, intermittence 50 % (A5 préclignotement, 78 intermittence)", t: "sortie" },
-          { n: "16 · 15", label: "+ES · COM", desc: "Électroserrure / électroverrouillage 12 V 15 W (tension moyenne) ; la sortie délivre 36 V nominal, 40 V max, modulés à 30 % : l'appareil doit supporter 40 V. Fusible F2 4 A. Paramètres 28-29", t: "sortie" },
+          { n: "16 · 17", label: "+ES · COM", desc: "Contradiction de la notice : le texte donne 16 (+ES) – 15 (COM), alors que 15 est déjà +LAM ; la fig. 2 donne LAM 15, ES 16, COM 17. Électroserrure / électroverrouillage 12 V 15 W (tension moyenne) ; la sortie délivre 36 V nominal, 40 V max, modulés à 30 % : l'appareil doit supporter 40 V. Fusible F2 4 A. Paramètres 28-29", t: "sortie" },
           { n: "18 · 19", label: "COR", desc: "Contact pur : lumière de courtoisie 230 V~ 100 W ou 24 V 40 W (fusible extérieur obligatoire), ou signalisation d'alarme / batterie faible / portail ouvert-fermé selon le par. 18 (seuil batterie par. 85)", t: "sortie" },
           { n: "20 · 21", label: "+24V · COM", desc: "Accessoires 24 V, 20 W (750 mA) avec protection électronique : en surcharge, coupure quelques secondes et « 24V OFF »", t: "alim" },
           { n: "22 · 23", label: "SC · COM", desc: "Voyant portail ouvert 24 V 3 W (A8 00/01), ou alimentation des émetteurs pour le test photocellules (A8 02), ou économie batterie (A8 03 / 04). En test ou économie, plus de voyant possible", t: "sortie" }
@@ -18859,7 +18859,7 @@ const MARQUES = [
         "Boîtiers : F70/IPU36/BOX 330x230x115 mm, 3,9 kg ; F70/IPU36/BOX/SL 380x145x130 mm, donné deux fois dans le tableau avec 4,5 kg puis 4,6 kg (contradiction de la notice).",
         "Coupure réseau pendant une manœuvre : arrêt puis reprise automatique après 2 s sur batterie. Sur batterie, un retard fixe de 1,5 s s'applique même si 25 et 26 sont à 00.",
         "Les sécurités N.F. non installées doivent être shuntées sur COM ou désactivées (50, 51, 53, 54, 73, 74).",
-        "Raccordement de l'onduleur dans le moteur (fig. 8) : +36V, 0V, LNA, LNB, connecteur d'extension RS485, fins de course FC1 (ouverture) / FC2 (fermeture) N.C., électrobloc BDOW / BDUP N.C., phases du moteur. Brancher centrale et moteur sans réseau ni batterie."
+        "Raccordement de l'onduleur dans le moteur (fig. 8) : +36V, 0V, LNA, LNB, connecteur d'extension RS485, fins de course FC1 (ouverture) / FC2 (fermeture) N.C., électrobloc BDDW (électrobloc inséré) / BDUP (déblocage) N.C., phases du moteur. Brancher centrale et moteur sans réseau ni batterie."
       ]
     },
     parametres: {
@@ -18944,7 +18944,7 @@ const MARQUES = [
         ]},
         { nom: "B73/RGB et B73/KEYS", items: [
           { code: "X0", def: "00", titre: "B73/RGB sur MOTEUR 1", valeurs: [["00", "Désactivé."], ["01", "Feu RG (rouge-vert)."], ["02", "Signalisation RGB."]], note: "X1 = MOTEUR 2." },
-          { code: "X2", def: "00", titre: "Mode feu tricolore", valeurs: [["00", "Désactivé."], ["01-06", "Types A à F (fig. 8)."]] },
+          { code: "X2", def: "00", titre: "Mode feu tricolore", valeurs: [["00", "Désactivé."], ["01-06", "Types A à F (fig. 9 ; le texte de la notice renvoie à la « figure 8 », qui est l'onduleur)."]] },
           { code: "X3", def: "00", titre: "Mode signalisation RGB", valeurs: [["00", "Désactivé."], ["01-08", "Types A à H."]] },
           { code: "X4", def: "00", titre: "Changement de couleur en fin d'ouverture", valeurs: [["00", "Couleur de X2/X3."], ["01-05", "Orange à 70-75-80-85-90 %."], ["06-10", "Vert à 70-75-80-85-90 %."]] },
           { code: "X5", def: "00", titre: "Couleur en veille", valeurs: [["00", "Séquence de toutes les couleurs."], ["01-09", "Bleu, jaune, rose, bleu ciel, fuchsia, blanc, orange, violet, rouge."]] },
