@@ -48,6 +48,54 @@
       S("roger-be20-p05", "Dimensions et abaques poids / longueur", 5, "Cotes et diagrammes d'utilisation BE20/200, BE20/200/HS et BE20/400."),
       S("roger-be20-p11", "Raccordements électriques", 11, "Bornier X · Y · Z, câble 3 × 2,5 mm² vers B70/2ML ou EDGE1.")
     ],
+    "roger-dld": [
+      S("roger-dld-p13", "Détecteur : bornes et affichage", 13, "Bornes A1-A2, boucles, relais 11-12-14, 21-22-24, alarme 31-32-34 ; LED."),
+      S("roger-dld-p14", "Fonctions et temporisations", 14, "Fonctions de base, temps, sensibilité, ASB, fréquence, direction, sécurité secteur."),
+      S("roger-dld-p15", "Paramètres (tableau 4.11)", 15, "Mode configuration : toutes les valeurs."),
+      S("roger-dld-p16", "Simulation, défauts, caractéristiques", 16, "Mode simulation, codes E, reset, caractéristiques techniques."),
+      S("roger-dld-boucle-p04", "Pose de la boucle", 4, "Spires selon le périmètre, inductance, distances, coupe de la rainure."),
+      S("roger-dld-boucle-p06", "Fraisage et géométries", 6, "Fraisage de la rainure, géométries selon les véhicules.")
+    ],
+    "roger-bconnect": [
+      S("roger-bconnect-p02", "Module et LED", 2, "LED rouge / verte, bouton reset, centrales compatibles et firmwares minimaux."),
+      S("roger-bconnect-p03", "Connexion au smartphone", 3, "Réseau ROGER-BCON, 192.168.10.1, login installateur, étiquette (clé WPA).")
+    ],
+    "roger-h70el": [
+      S("roger-h70el-p05", "Schéma H70/EL", 5, "Raccordement à la H70/200AC, électroserrure 12 V~ et clignotant 230 V.")
+    ],
+    "roger-bionik": [
+      S("roger-bionik4-p06", "Caractéristiques BI/004", 6, "Tableau technique BIONIK4."),
+      S("roger-bionik4-p05", "Dimensions BI/004", 5, "Encombrement et longueur de lisse."),
+      S("roger-bionik4-p25", "Choix du ressort BI/004", 25, "Ressort selon la lisse BA/68 et les accessoires."),
+      S("roger-bionik4-p26", "Choix du ressort BI/004 (suite)", 26, "Ressort SP/72/01 avec grille, appuis."),
+      S("roger-bionik-p07", "Caractéristiques BI/001PE, BI/004HP, BI/006", 7, "Tableau technique."),
+      S("roger-bionik-p06", "Dimensions BI/001PE, BI/004HP, BI/006", 6, "Encombrements et longueurs de lisse."),
+      S("roger-bionik-p22", "Tension des ressorts", 22, "Trous A-1 / B-2 / C-3 du balancier selon le côté."),
+      S("roger-bionik-p23", "Choix du ressort BI/001PE, BI/004HP, BI/006", 23, "Ressort selon le modèle et les accessoires."),
+      S("roger-bionik8-p06", "Caractéristiques BI/008", 6, "Tableau technique BIONIK8."),
+      S("roger-bionik8-p05", "Dimensions BI/008", 5, "Encombrement et longueur de lisse."),
+      S("roger-bionik8-p25", "Groupe ressorts BI/008", 25, "Montage du jeu SP/85/AS/02 et du curseur."),
+      S("roger-kt240-p1", "Plaque de fondation KT240 (BI/004)", 1, "Cotes et pose de la plaque.")
+    ],
+    "roger-lisses-aled": [
+      S("roger-ba68-p1", "Lisse BA/68/3 – /4", 1, "Montage sur BI/004 (1 mm maxi entre support et armoire)."),
+      S("roger-ba90-p10", "Lisses BA/90 – BA/91", 10, "Compatibilité des raccords, préparation et montage."),
+      S("roger-ba128-p1", "Lisse BA/128/4 (BI/008)", 1, "Préparation et assemblage des deux lisses."),
+      S("roger-aled-p03", "Compatibilité ALED", 3, "Tableau ALED / barrières / lisses, coupe de la bande.")
+    ],
+    "roger-way": [
+      S("roger-way-p05", "Dimensions WAY/004 – /005", 5, "Encombrement de l'armoire et longueur de lisse."),
+      S("roger-way-p06", "Caractéristiques WAY/004 – /005", 6, "Tableau technique."),
+      S("roger-way-p09", "Références et accessoires", 9, "Lisses, ressorts, appuis, plaque KT251, ALED, chargeur."),
+      S("roger-way-p21", "Choix du ressort WAY/004 – /005", 21, "Ressort selon la lisse (coupée ou non) et les accessoires ; appui fixe obligatoire repéré « 1 »."),
+      S("roger-way-p23", "Butées mécaniques", 23, "Réglage des butées d'ouverture et de fermeture (barrière à gauche)."),
+      S("roger-way-p28", "Déblocage", 28, "Clé 230°, avertissements sur l'équilibrage."),
+      S("roger-way006-p05", "Dimensions WAY/006", 5, "Encombrement de l'armoire et longueur de lisse."),
+      S("roger-way006-p06", "Caractéristiques WAY/006", 6, "Tableau technique."),
+      S("roger-way006-p21", "Choix du ressort WAY/006", 21, "BA/91/6 ou 2 × BA/91/3 + JNT/BA/91, ressorts SP/51 ou SP/56/AS/G12."),
+      S("roger-way006-p22", "Tension des ressorts WAY/006", 22, "Trous de fixation du balancier selon la lisse et les accessoires."),
+      S("roger-kt252-p1", "Plaque de fondation KT252 (WAY/006)", 1, "Cotes de la plaque et sens de pose.")
+    ],
     "roger-ayron": [
       S("roger-ayron-p14", "Installation type et abaque", 14, "Câbles conseillés, dimensions et poids maxi selon la longueur."),
       S("roger-ayron-p15", "Caractéristiques", 15, "Tableau AY/250/M et AY/250/S, étiquette."),
@@ -401,6 +449,41 @@
       S("roger-edge1-p117", "Commandes et accessoires", 117, "Début du tableau des contacts."),
       S("roger-edge1-p118", "Commandes et accessoires : bornes", 118, "Tableau des contacts avec le détail de chaque borne et de ses paramètres."),
       S("roger-edge1-p119", "Commandes et accessoires : bornes (suite)", 119, "Suite du tableau des contacts : sécurités, lampes, serrures, récepteur radio, chargeur de batterie.")
+    ],
+    "roger-f70-ipu36": [
+      S("roger-f70-p005", "F70/IPU36/BOX", 5, "Fig. 1 : boîtier, transformateur, fusibles F1 à F4, raccordement des 2 moteurs."),
+      S("roger-f70-p007", "Raccordements et sortie COR", 7, "Fig. 2 et 3 : clignotant, électroserrure, commandes, antenne ; usages de la sortie COR."),
+      S("roger-f70-p008", "Photocellules F4ES / F4S", 8, "Fig. 4 : 1 paire de photocellules synchronisées (cavaliers A / B)."),
+      S("roger-f70-p015", "Onduleur F70/INV36/1", 15, "Fig. 8 : bornier +36V / 0V / LNA / LNB, LED L1M / L2M, fins de course, électrobloc, phases du moteur.")
+    ],
+    "roger-h70-104ac": [
+      S("roger-h70-104ac-p092", "Installation type et câbles conseillés", 92, "Dessin de l'installation et tableau des câbles conseillés."),
+      S("roger-h70-104ac-p006", "Carte H70/104AC", 6, "Fig. 1 : secteur, moteur, condensateur, bornier 11 à 28, connecteurs SB, FC, ENC."),
+      S("roger-h70-104ac-p007", "Carte H70/105AC", 7, "Fig. 2 : bornier, fins de course et encodeur 29 à 35."),
+      S("roger-h70-104ac-p008", "Clignotant, courtoisie, électroserrure", 8, "Fig. 3 à 5 : FIFTHY/230, éclairage 230 V, électroserrure H70/EL (79 99)."),
+      S("roger-h70-104ac-p014", "Remplacement H70/101AC – 103AC", 14, "Fig. 11 : remplacement dans la série H30.")
+    ],
+    "roger-h70-200ac": [
+      S("roger-h70-200ac-p105", "Installation type et câbles conseillés", 105, "Dessin de l'installation et tableau des câbles conseillés."),
+      S("roger-h70-200ac-p008", "Carte et moteurs", 8, "Fig. 1 : secteur, fusible F1, moteurs 1 et 2 avec condensateurs, bornier."),
+      S("roger-h70-200ac-p009", "Bornier commandes et sécurités, électroserrure", 9, "Fig. 2 et 3 : numérotation des bornes 27 à 43, électroserrure H70/EL."),
+      S("roger-h70-200ac-p012", "Fins de course magnétiques et encodeur optique", 12, "Fig. 6 : fins de course magnétiques ; fig. 7 : encodeurs optiques (75 01) et fins de course."),
+      S("roger-h70-200ac-p014", "Encodeur magnétique R21", 14, "Fig. 9 : série R21 à partir de V.1, 75 03 ; gris ENC, noir COM, marron +5V.")
+    ],
+    "roger-b70-2b": [
+      S("roger-b70-2b-p086", "Installation type et câbles conseillés", 86, "Dessin de l'installation et tableau des câbles conseillés."),
+      S("roger-b70-2b-p006", "Carte B70/2B", 6, "Fig. 1 : secteur, fusibles, moteurs M1 / M2, récepteur."),
+      S("roger-b70-2b-p007", "Bornier commandes, sécurités et fins de course", 7, "Fig. 2 : ORO = fin de course d'ouverture, COS2 = fin de course de fermeture."),
+      S("roger-b70-2b-p008", "Fins de course du moteur 1", 8, "Fig. 3 : raccordement des fins de course du moteur 1."),
+      S("roger-b70-2b-p009", "Fins de course de fermeture des 2 moteurs", 9, "Fig. 4 : fins de course de fermeture des moteurs 1 et 2 en série.")
+    ],
+    "roger-b70-1t": [
+      S("roger-b70-1t-p135", "Installation type TW90 et câbles conseillés", 135, "Dessin de l'installation TW90 et tableau des câbles conseillés."),
+      S("roger-b70-1t-p136", "Installation type WAY et câbles conseillés", 136, "Dessin de l'installation de la barrière WAY et tableau des câbles conseillés."),
+      S("roger-b70-1t-p010", "Câblage de la carte dans la WAY", 10, "Fig. 4 : secteur, fusibles, moteur, encodeur, SB, récepteur, B74/BCONNECT et lumières de lisse ALED sur SC / COM."),
+      S("roger-b70-1t-p015", "Bornier commandes et sécurités", 15, "Fig. 7 et 8 : bornier complet avec numérotation du schéma, éclairage de courtoisie et sortie COR."),
+      S("roger-b70-1t-p138", "Commandes et accessoires : bornes", 138, "Tableau des contacts : COR, SC, photocellules, bords sensibles, STOP, antenne, horloge."),
+      S("roger-b70-1t-p139", "Commandes et accessoires : bornes (suite)", 139, "Suite : commandes, clignotant, encodeur, fins de course, SB, récepteur, chargeur de batteries, WiFi.")
     ],
     "roger-ctrl": [
       S("roger-ctrl-p132", "Installation type et câbles conseillés", 132, "Dessin de l'installation complète avec repères et tableau des câbles conseillés (section, longueur maxi)."),

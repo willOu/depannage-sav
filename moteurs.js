@@ -16,7 +16,7 @@
     cameAXO: "came.com, page AXO", cameFROG: "came.com, page FROG", cameFX: "came.com, page FROG-X", cameATI: "came.com, page ATI",
     cameFAST: "Dépliant CAME FAST70 (« vantaux jusqu'à 2,30 m ou 300 kg »)", cameSTY: "came.com, page STYLO",
     faac740: "faac.fr, page 740 / 741", faac746: "faac.fr, page 746 C / 844 C", faacB: "Brochure FAAC « Automatismes pour portails battants »",
-    bftAres: "bft-automation.com (US), famille ARES ULTRA BT A", rwBE: "rogertechnology.it, page BE20/200", rSm: "Notice Roger SMARTY IS131 Rev.12", rBE: "Notice Roger BE20 IS121 Rev.15", rBH: "Notice Roger BH30 IS118 Rev.17", rBG: "Notice Roger BG30 IS141 Rev.19", rBM: "Notice Roger BM30 IS169 Rev.13", rBR: "Notice Roger BR21 / R21 IS301 Rev.03", rBH23: "Notice Roger BH23 IS106 Rev.10", rMo: "Notice Roger MONOS4 IS201 Rev.11", rAy: "Notice Roger AYRON IS239 Rev.01"
+    bftAres: "bft-automation.com (US), famille ARES ULTRA BT A", rwBE: "rogertechnology.it, page BE20/200", rSm: "Notice Roger SMARTY IS131 Rev.12", rBE: "Notice Roger BE20 IS121 Rev.15", rBH: "Notice Roger BH30 IS118 Rev.17", rBG: "Notice Roger BG30 IS141 Rev.19", rBM: "Notice Roger BM30 IS169 Rev.13", rBR: "Notice Roger BR21 / R21 IS301 Rev.03", rBH23: "Notice Roger BH23 IS106 Rev.10", rMo: "Notice Roger MONOS4 IS201 Rev.11", rAy: "Notice Roger AYRON IS239 Rev.01", rBio: "Notices Roger BIONIK IS161, IS185, IS194", rWay: "Notices Roger WAY IS266, IS291"
   };
   const M = (marque, modele, type, alim, p, l, src, note) => ({ marque, modele, type, alim, p, l, src: N[src] || src, note: note || "" });
   window.MOTEURS = [
@@ -129,9 +129,13 @@
     M("La Barrière Automatique", "LBA 7R", "barriere", null, null, 6, "lba"),
     M("La Barrière Automatique", "LBA 74", "barriere", null, null, 4, "lba"),
     M("La Barrière Automatique", "LBA 12", "barriere", null, null, 12, "lba12", "Lisse de 3 à 12 m."),
-    M("Roger", "BIONIK BI/004", "barriere", null, null, 4, "rctrl"),
-    M("Roger", "BIONIK BI/004HP", "barriere", null, null, 4.5, "rctrl"),
-    M("Roger", "BIONIK BI/006", "barriere", null, null, 6, "rctrl", "Réglage prévu pour 4,5 à 6 m."),
-    M("Roger", "BIONIK BI/008", "barriere", null, null, 8, "rctrl")
+    M("Roger", "BIONIK BI/001PE", "barriere", "36 V", null, 3, "rBio", "Lisse jusqu'à 3 m, 8000 cycles / jour, centrale CTRL/P."),
+    M("Roger", "BIONIK BI/004", "barriere", "36 V", null, 4, "rBio", "Lisse jusqu'à 4 m, usage continu."),
+    M("Roger", "BIONIK BI/004HP", "barriere", "36 V", null, 4, "rBio", "Lisse jusqu'à 4 m, super intensif. La notice CTRL (IS88) indique 4,5 m."),
+    M("Roger", "BIONIK BI/006", "barriere", "36 V", null, 6, "rBio", "Lisse jusqu'à 6 m."),
+    M("Roger", "BIONIK BI/008", "barriere", "36 V", null, 8, "rBio", "Lisse jusqu'à 8 m (BA/128/4)."),
+    M("Roger", "WAY/004", "barriere", "24 V", null, 4, "rWay", "Centrale B70/1T."),
+    M("Roger", "WAY/005", "barriere", "24 V", null, 5, "rWay", "Centrale B70/1T."),
+    M("Roger", "WAY/006", "barriere", "24 V", null, 6, "rWay", "Centrale B70/1T. Les limites d'emploi de la notice disent « jusqu'à 5 m ».")
   ];
 })();

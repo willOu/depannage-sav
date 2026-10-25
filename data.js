@@ -192,6 +192,16 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "1.67", date: "2026-10-25", titre: "Roger : cartes B70/1T, B70/2B, H70/200AC, H70/104-105AC et F70/IPU36, barrières WAY et BIONIK", items: [
+    "Nouvelle carte Roger F70/IPU36 (moteurs brushless à onduleur embarqué : NAVI NV/200, SL/180/R) : alarmes moteur et centrale, LED des onduleurs, menus de l'écran, bornier, paramètres, programmation de course et calage.",
+    "Nouvelle carte Roger H70/104AC · H70/105AC (coulissants 230 V H30, M30, G30, R30, E30) : codes, écran, bornier, paramètres, apprentissage.",
+    "Nouvelle carte Roger H70/200AC (moteurs 230 V, R21 et autres) : codes, écran, bornier, encodeurs, fins de course, paramètres, 4 procédures d'apprentissage.",
+    "Nouvelle carte Roger B70/2B (porte basculante, 1 ou 2 moteurs) : codes, écran, bornier avec fins de course, paramètres, apprentissage, veille low power.",
+    "Nouvelle carte Roger B70/1T (coulissant TW90 et barrière WAY) : codes, écran, bornier, paramètres, apprentissage, veille low power.",
+    "Nouvelles fiches Roger : barrières WAY (004, 005, 006), barrières BIONIK (BI/004, BI/001PE, BI/004HP, BI/006, BI/008), lisses BA et lumières ALED, avec ressorts, montage, déblocage et schémas.",
+    "Nouvelles fiches accessoires Roger : détecteur de boucle DLD1/24 – DLD2/24 (avec pose des boucles), module Wi-Fi B74/BCONNECT, module d'électroserrure H70/EL.",
+    "Choix moteur : barrières BIONIK mises à jour, WAY ajoutées."
+  ], docs: ["Roger B70/1T IS271 Rev.08", "Roger B70/2B IS144 Rev.08", "Roger H70/200AC IS304 Rev.01", "Roger H70/104AC – 105AC IS303 Rev.04", "Roger F70/IPU36 IS247 Rev.04", "Roger WAY IS266 Rev.04 et IS291 Rev.02", "Roger BIONIK IS161, IS185, IS194 Rev.13", "Roger BA/68, BA/90-91, BA/128/4, ALED", "Roger KT240, KT252", "Roger DLD IS130", "Roger B74/BCONNECT IS231 Rev.01", "Roger H70/EL IS74"] },
   { v: "1.66", date: "2026-10-25", titre: "Moteurs Roger BG30, BM30, BR21, BH23, MONOS4 et AYRON", items: [
     "Nouvelles fiches Roger (Accessoires → Motorisations) : BG30 (11 modèles), BM30, BR21 / R21 enterrés (caisses FU, leviers, déblocages RL650 / RL651), BH23 et AYRON à bras articulé, vérin MONOS4, avec caractéristiques, raccordement, montage, déblocage et schémas.",
     "Choix moteur : BG30 (course 25 m), BM30 (12 m, 24 V), MONOS4 et AYRON mis à jour ; BR21 / R21 et BH23 ajoutés."
@@ -18706,7 +18716,7 @@ const MARQUES = [
         ]}
       ],
       fusibles: "F1 10 A (ATO257) puissance moteur · F2 4 A (ATO257) électroserrure · F3 3 A (ATO257) accessoires · F4 T2A (5x20) transformateur",
-      notes: [
+      notes: ["Barrières BIONIK : caractéristiques, ressorts, lisses et déblocage dans les fiches accessoires Roger « BIONIK (barrières) » et « Lisses BA et lumières ALED ».", 
         "Sécurités absentes : shunter sur COM ou les désactiver par paramètres 50, 51, 73.",
         "Photocellules conseillées : G90/F4ES ou T90/F4S. Câbles : RX 5 x 0,5 mm², TX 3 x 0,5 mm² (20 m).",
         "Barrières opposées : commandes, photocellules et STOP général sur la MASTER ; bords sensibles et BreakAway sur chaque barrière.",
@@ -18739,6 +18749,1375 @@ const MARQUES = [
         "Barrières opposées : câbler COM-LNA-LNB hors tension (batteries débranchées), A0 11 sur la MASTER, A0 10 sur la SLAVE, 71 sur la MASTER seulement, puis apprentissage sur la MASTER ET sur la SLAVE.",
         "Si la position ouverte ou fermée est modifiée par les butées mécaniques après coup : refaire l'apprentissage.",
         "Si la lisse part dans le mauvais sens : la remettre en position correcte et régler 71."
+      ]
+    }
+  },
+  {
+    id: "roger-f70-ipu36",
+    nom: "F70/IPU36",
+    modeles: "Centrale pour 1 ou 2 moteurs Roger brushless à onduleur embarqué F70/INV36/1 (RS485) : battants NV/200/DX – NV/200/SX (série NAVI), piétonnier réversible SL/180/R. Boîtiers F70/IPU36/BOX et F70/IPU36/BOX/SL ; F70/IPU36/115 pour réseau 115 V 60 Hz",
+    type: "Interface 36 V pour moteurs brushless (le moteur est piloté par son onduleur embarqué) — écran LCD à menus, touches ▲ ▼ ENTER ESC + −",
+    source: "Notice Roger F70/IPU36 IS247 Rev.04 du 04/08/2026, firmware R1.55 (partie française p. 168–216, figures p. 5–17)",
+    codes: [
+      { code: "A_M1 / A_M2 : 1", type: "diag", titre: "Moteur : court-circuit sur les phases", action: "Alarme envoyée par l'onduleur du moteur (menu TEST, lignes A_M1 / A_M2, ou menu alarmes). Vérifier le câble et les phases du moteur." },
+      { code: "A_M1 / A_M2 : 2", type: "diag", titre: "Moteur : surcharge détectée", action: "Vérifier la mécanique (points durs, butées) et les réglages de couple 30/31." },
+      { code: "A_M1 / A_M2 : 3", type: "diag", titre: "Moteur : tension d'alimentation trop faible", action: "Vérifier le réseau (230 V ±10 %), la section et la longueur du câble moteur (4x1,5 mm² 10 m, 4x2,5 20 m, 4x4 30 m), la batterie si fonctionnement sur batterie." },
+      { code: "A_M1 / A_M2 : 4", type: "diag", titre: "Moteur : protection thermique activée", action: "Laisser refroidir ; réduire la fréquence d'utilisation." },
+      { code: "A_M1 / A_M2 : 5", type: "diag", titre: "Moteur : surchauffe détectée", action: "Laisser refroidir ; vérifier les températures M1 / M2 dans le menu de contrôle." },
+      { code: "A_M1 / A_M2 : 6", type: "diag", titre: "Moteur : perte de contrôle", action: "Si elle se reproduit, faire un calage (CALIBRATION) du moteur." },
+      { code: "A_M1 / A_M2 : 7", type: "diag", titre: "Moteur : erreur d'étalonnage du contrôle de courant", action: "Alarme critique : pas de rétablissement automatique de l'onduleur. Contacter le SAV Roger." },
+      { code: "A_M1 / A_M2 : 8", type: "diag", titre: "Moteur : EEPROM endommagée", action: "Mémoire de l'onduleur en défaut." },
+      { code: "A_M1 / A_M2 : 9", type: "diag", titre: "Moteur : erreur EEPROM sur la longueur de course", action: "Refaire la programmation de course." },
+      { code: "A_M1 / A_M2 : 10", type: "diag", titre: "Moteur : erreur EEPROM sur la cartographie actuelle", action: "Erreur mémoire de l'onduleur." },
+      { code: "A_M1 / A_M2 : 11", type: "diag", titre: "Moteur : pas de données de calage (ou corrompues)", action: "Faire un calage du moteur (CALIBRATION)." },
+      { code: "A_M1 / A_M2 : 12", type: "diag", titre: "Encodeur 1 : pas de communication avec l'encodeur", action: "Vérifier l'onduleur et l'encodeur du moteur." },
+      { code: "A_M1 / A_M2 : 13", type: "diag", titre: "Encodeur 2 : erreur transitoire", action: "Sans gravité." },
+      { code: "A_M1 / A_M2 : 14", type: "diag", titre: "Encodeur 3 : erreur grave", action: "Débrancher le câble moteur (4 fils) de la centrale, attendre 10 s, rebrancher et vérifier que l'alarme a disparu." },
+      { code: "A_M1 / A_M2 : 15", type: "diag", titre: "Rotor du moteur bloqué (calage impossible)", action: "Débloquer mécaniquement le moteur et refaire le calage." },
+      { code: "A_M1 / A_M2 : 16", type: "diag", titre: "Calage échoué : position du rotor hors tolérance", action: "Refaire le calage." },
+      { code: "A_M1 / A_M2 : 17", type: "diag", titre: "Aimant d'encodeur absent ou endommagé", action: "Onduleur mal positionné ou mal fixé sur le moteur." },
+      { code: "A_M1 / A_M2 : 18", type: "diag", titre: "Données moteur incompatibles entre onduleur et F70/IPU36", action: "Contacter le SAV Roger." },
+      { code: "A_M1 / A_M2 : 19", type: "diag", titre: "Mauvais modèle de moteur sélectionné", action: "Modèle non géré par l'onduleur : corriger A0 (moteur 1) ou A1 (moteur 2)." },
+      { code: "A_M1 / A_M2 : 20", type: "diag", titre: "Moteur défectueux ou phases non connectées", action: "Vérifier le raccordement des phases du moteur à l'onduleur et l'absence de coupure interne." },
+      { code: "A_IPU : 1 / 2 / 3", type: "diag", titre: "Pas de communication avec l'onduleur 1 / 2 / les deux", action: "Vérifier le câble 4 fils (+36V, 0V, LNA vert, LNB bleu) aux bornes 7-10 / 11-14, sa section et son parcours ; couper et réalimenter la F70/IPU36. LED rouge de l'onduleur : 1 clignotement court lent = pas de communication." },
+      { code: "A_IPU : 4", type: "diag", titre: "Surcharge de la sortie 24 V", action: "« 24V OFF » s'affiche, VL proche de 20 V : réduire la charge (20 W / 750 mA max), chercher un court-circuit ou un accessoire défectueux." },
+      { code: "A_IPU : 5", type: "diag", titre: "Très faible tension d'alimentation", action: "Vérifier le réseau et la batterie." },
+      { code: "A_IPU : 6", type: "diag", titre: "Surcharge du circuit de la résistance de freinage", action: "Vérifier la résistance aux bornes 5-6 (obligatoire pour certains automatismes, ex. SL/180/R)." },
+      { code: "A_IPU : 7", type: "diag", titre: "Défaut de fréquence du réseau", action: "Vérifier l'alimentation (FR affichée dans le menu de contrôle)." },
+      { code: "SEL.MOT", type: "afficheur", titre: "Modèle de moteur incohérent", action: "A0 ou A1 de la F70/IPU36 ne correspond pas au modèle mémorisé dans l'onduleur : ARRÊT forcé. Régler la bonne valeur de A0 (ou A1)." },
+      { code: "INV.FW 1 / 2 / 1-2", type: "afficheur", titre: "Firmware incompatible F70/IPU36 ↔ onduleur F70/INV36/1", action: "Consulter IFW dans le menu IDVER ; mettre à jour l'un des deux avec B74/BCONNECT (paramètre 89)." },
+      { code: "24V OFF", type: "afficheur", titre: "Protection de la sortie 24 V", action: "Surcharge ou court-circuit sur 24 V / SC : la tension est coupée quelques secondes puis rétablie. À éviter : à la longue, cela peut endommager la centrale." },
+      { code: "M. RELEASE", type: "afficheur", titre: "Déblocage ouvert", action: "Poignée de déblocage ouverte (si l'automatisme gère ce contact) : l'automatisme ne démarre pas. État visible dans la page des sécurités (SBL1 / SBL2)." },
+      { code: "ALARM / WARNING", type: "afficheur", titre: "Alarme ou avertissement actif", action: "L'écran revient régulièrement à la page des alarmes. ESC pour naviguer ; l'affichage alterné reprend 10 s après la dernière touche." },
+      { code: "ERR / EE", type: "afficheur", titre: "Erreur de paramètre", action: "Le curseur se place sur le premier paramètre en défaut. Curseur denté = erreur dans la F70/IPU36 ; icône 1 ou 2 = valeur différente de celle de l'onduleur. + ou − affiche la valeur d'usine, puis régler et enregistrer." },
+      { code: "Page sécurités, STOP vide", type: "symptome", titre: "Le portail ne s'ouvre pas et ne se ferme pas", action: "Borne ST (29) non câblée ou non shuntée sur COM, ou alarme qui force un STOP : poser le bouton STOP ou shunter, consulter les alarmes." },
+      { code: "Icône calage", type: "symptome", titre: "Onduleur non calé sur le moteur", action: "Faire une procédure de calage du moteur." },
+      { code: "Icône comm. 1 / 2", type: "symptome", titre: "Communication avec l'onduleur interrompue", action: "Si elle disparaît seule hors mémorisation : perturbations sur le câble, vérifier parcours, longueur et section. Si elle reste : mauvais branchement ou onduleur (ou étage de communication de la F70/IPU36) endommagé ; couper et réalimenter." },
+      { code: "Photocellules qui s'éteignent", type: "symptome", titre: "Les accessoires 24 V s'éteignent quelques secondes", action: "VL proche de 20 V dans le menu de contrôle : surcharge ou court-circuit sur le 24 V, réduire la charge." },
+      { code: "BATT allumée", type: "led", titre: "LED BATT allumée", action: "Batterie branchée à l'envers aux bornes 3-4 : la débrancher immédiatement et corriger." },
+      { code: "L2", type: "led", titre: "LED L2 de la centrale", action: "Éteinte normalement · 1 clignotement lent = ouverture envoyée · 2 = fermeture envoyée · 1 très lent = arrêt envoyé · fixe = calage en cours · rapides répétés = programmation de course." },
+      { code: "L1M rouge (onduleur)", type: "led", titre: "LED rouge de l'onduleur dans le moteur", action: "Clignotement rapide régulier = communication OK · 4 rapides + pause = alarme onduleur (voir les icônes sur la centrale) · 1 court à intervalles lents = pas de communication (centrale bloquée, câble, drivers RS485) · éteinte = calage en cours." },
+      { code: "L2M verte (onduleur)", type: "led", titre: "LED verte de l'onduleur dans le moteur", action: "Éteinte normalement · 1 lent = ouverture reçue · 2 lents = fermeture reçue · 1 très lent = arrêt reçu · fixe = calage en cours · 4 rapides = calage / programmation réussi · 8 rapides = erreur, opération non terminée · rapides répétés = programmation de course en cours." },
+      { code: "L1M + L2M", type: "led", titre: "LED rouge et verte de l'onduleur ensemble", action: "Allumées 1 s = mise sous tension · 4 alternances lentes = bootloader prêt pour une mise à jour · alternance rapide = mise à jour en cours · alternance lente répétée = mise à jour échouée, moteur désactivé jusqu'à une nouvelle mise à jour." }
+    ],
+    afficheur: {
+      intro: "Écran LCD à menus (pas d'afficheur 7 segments). On passe d'une page à l'autre depuis la page d'accueil (nom de la centrale, version FW, cadenas du mot de passe). Les écrans de la notice sont « donnés à titre indicatif » (ils montrent la version R1.50).",
+      autres: [
+        { titre: "Touches", texte: "▲ / ▼ : page ou option précédente / suivante · ENTER : entrer dans le menu, puis dans l'option · + / − : modifier la valeur · ESC : quitter et enregistrer. Écran éteint (veille) : maintenir ▲ et ▼ 5 s. Éviter de couper l'alimentation : l'état de charge de la batterie serait perdu jusqu'au prochain cycle complet." },
+        { titre: "Pages d'état", texte: "Commandes (AP, CH, PP, PED, ORO, RX1, RX2) : case noircie = commande active. Sécurités (ST, COS1, COS2, FT1, FT2 et selon le moteur FA1/FA2, FC1/FC2, SBL1/SBL2, LKU/LKD) : case noircie = au repos, vide = en alarme, nom absent = désactivée par paramètre ; − / + pour faire défiler. Sorties (LAM, ES, SC, COR, LOCK / LOK1) avec STATUS : chiffres qui reviennent à 0 = communication normale, un chiffre fixe ≠ 0 = blocage." },
+        { titre: "Mode TEST", texte: "Ligne CMD : la commande reçue pendant 5 s (le portail ne bouge pas, le clignotant et le voyant s'allument). Ligne SIC : la sécurité la plus prioritaire en alarme. A_IPU, A_M1, A_M2 : numéro d'alarme centrale / moteur 1 / moteur 2 (voir les codes)." },
+        { titre: "INFO et communication", texte: "Valeurs moteur CNT, LUN, RPM… par groupes de 3 (« ---- » si non lues), puis IPUBUS (tension moteurs), IPUAMP (courant), IPU_UP (-- positions connues, 1- M1 inconnue, -2 M2 inconnue, 12 les deux), IPU_OC (-C fermé, CL fermeture, OP ouverture, -O ouvert), IPU_UF (U- tension trop basse, -F surintensité). DAT / INF = % de messages RS485 réussis : une valeur basse et stable indique un problème de câble." },
+        { titre: "Menu alarmes moteurs", texte: "À la mise sous tension : lecture SYST puis INFO (environ 1 s) puis PASS. Sinon l'icône d'alarme s'affiche : ENTER (l'icône clignote, ▲ ▼ pour choisir), ENTER pour la catégorie (MÉMOIRE, ENCODEUR, ONDULEUR), − pour l'acquitter : si l'icône reste, la cause est toujours présente." },
+        { titre: "Menu de contrôle", texte: "FR = fréquence réseau, VL = tension de la sortie +24 V (OFF si protection), températures IPU / M1 / M2. Batterie : VB, icône de charge (réseau présent + B71/BCIPU + batterie sur 3-4), EXT si B71/PBX sur 1-2, LO = batterie sous le seuil du par. 85. Batterie trop faible avec fort courant : 10 s maximum puis déconnexion ; reprise avec le réseau ou à 36 V." },
+        { titre: "Initialisation d'urgence", texte: "INITIALISER : RESET MOT.1 / MOT.2 → MEM (efface la mémoire de l'onduleur : refaire la programmation de course), PAR (paramètres de l'onduleur aux valeurs d'usine, sauf le modèle de moteur), CNT (compteurs), BTL (sauvegardes onduleurs : seulement en cas de remplacement et à la demande de l'assistance), BKY (sauvegarde des B73/KEYS). LIRE PAR. charge dans la F70/IPU36 les paramètres d'un onduleur (remplacement de la centrale) ; ÉCRIRE PAR. les envoie à l'onduleur (remplacement de l'onduleur). Validation par ESC." },
+        { titre: "Mot de passe", texte: "8 chiffres, 00000000 d'usine (= protection OFF). DÉBLOQUER : + / − pour le chiffre, ENTER pour passer au suivant, ESC pour valider. Après 30 min sans toucher une touche, la protection se réactive. Le retour usine par le par. 90 est impossible si un mot de passe est actif." },
+        { titre: "Retour usine", texte: "Maintenir ▲ et ▼ 4 s à la mise sous tension, ou par. 90 avec + et − maintenus (5 s au § 10.2, 4 s au § 12 : la notice se contredit), ou RÉGLAGES > RESET ON (LOG et compteurs conservés). Non réinitialisés par le par. 90 : A0, A1, 28, 29, 60, 61, 70, 71, 72, 86, 87. Attendre que l'icône s'éteigne avant de changer de page." },
+        { titre: "Autres menus", texte: "COM : SERIAL (ACTIVER ON + TARGET B-CONN pour B74/BCONNECT sur le connecteur WIFI ; laisser OFF si rien n'est branché), WIFI, UPDATE. Compteurs, LOG de 250 événements, gestion du temps, IDVER (versions HW / FW), alarmes générales (absence de réseau, sauts de réseau, absence COM RS485, surcharge 24 V) et batterie (courant haut, tension basse) avec compteur RUN / STOP / RESET." }
+      ]
+    },
+    bornier: {
+      groupes: [
+        { nom: "Alimentation", bornes: [
+          { n: "N · L", label: "Réseau", desc: "230 V~ ±10 % 50 Hz (F70/IPU36/115 : 115 V~ ±10 % 60 Hz), câble H07RN-F 2x1,5 (L marron, N bleu). Fusible F4 T2A au primaire du transformateur. Sous ces tolérances, l'automatisme ne fonctionne pas correctement : mesurer la tension", t: "alim" },
+          { n: "1 · 2", label: "SEC", desc: "Secondaire du transformateur (câblé en usine), ou alimentation B71/PBX en respectant la polarité", t: "alim" },
+          { n: "3 · 4", label: "BATT− · BATT+", desc: "Kit batteries B71/BCIPU : 3 x 12 V 4,5 Ah AGM uniquement (code HT421), toujours branchées pour rester chargées ; contrôle au moins tous les 6 mois. Fusible F3 10 A. LED BATT allumée = batterie inversée", t: "alim" },
+          { n: "5 · 6", label: "Résistance de freinage", desc: "Obligatoire pour certains automatismes (ex. SL/180/R), valeur indiquée dans la notice du moteur ; sans elle, risque de dommage à la centrale ou à l'onduleur F70/INV36/1", t: "autre" }
+        ]},
+        { nom: "Moteurs (onduleur embarqué)", bornes: [
+          { n: "7 · 8 · 9 · 10", label: "Moteur 1 : +36V · 0V · LNA · LNB", desc: "RS485 ModBus 115200 bauds. +36V / 0V : 4x1,5 mm² (10 m), 4x2,5 (20 m), 4x4 (30 m) ; LNA (vert) / LNB (bleu) : 0,5 mm² (10 m) ou 1 mm² (30 m). Brancher hors tension réseau et batterie. Fusible F1 20 A", t: "moteur" },
+          { n: "11 · 12 · 13 · 14", label: "Moteur 2 : +36V · 0V · LNA · LNB", desc: "Même raccordement que le moteur 1", t: "moteur" }
+        ]},
+        { nom: "Sorties", bornes: [
+          { n: "15 · 17", label: "+LAM · COM", desc: "Clignotant 24 V, 10 W max, intermittence 50 % (A5 préclignotement, 78 intermittence)", t: "sortie" },
+          { n: "16 · 15", label: "+ES · COM", desc: "Électroserrure / électroverrouillage 12 V 15 W (tension moyenne) ; la sortie délivre 36 V nominal, 40 V max, modulés à 30 % : l'appareil doit supporter 40 V. Fusible F2 4 A. Paramètres 28-29", t: "sortie" },
+          { n: "18 · 19", label: "COR", desc: "Contact pur : lumière de courtoisie 230 V~ 100 W ou 24 V 40 W (fusible extérieur obligatoire), ou signalisation d'alarme / batterie faible / portail ouvert-fermé selon le par. 18 (seuil batterie par. 85)", t: "sortie" },
+          { n: "20 · 21", label: "+24V · COM", desc: "Accessoires 24 V, 20 W (750 mA) avec protection électronique : en surcharge, coupure quelques secondes et « 24V OFF »", t: "alim" },
+          { n: "22 · 23", label: "SC · COM", desc: "Voyant portail ouvert 24 V 3 W (A8 00/01), ou alimentation des émetteurs pour le test photocellules (A8 02), ou économie batterie (A8 03 / 04). En test ou économie, plus de voyant possible", t: "sortie" }
+        ]},
+        { nom: "Sécurités", bornes: [
+          { n: "24 · 23", label: "FT2 · COM", desc: "Photocellules FT2, N.F. ou 8,2 kΩ (par. 57). Usine : 53 00, 54 00, 55 01. Non installées : shunter 24-23 ou laisser 53 et 54 à 00. Conseillées : R90/F4ES, G90/F4ES, T90/F4S", t: "nf" },
+          { n: "25 · 23", label: "FT1 · COM", desc: "Photocellules FT1, N.F. ou 8,2 kΩ. Usine : 50 00, 51 02 (inversion en fermeture), 52 01. Non installées : shunter 25-23 ou régler 50 et 51 à 00", t: "nf" },
+          { n: "26 · 28", label: "COS2 · COM", desc: "Bord sensible COS2, N.F. ou 8,2 kΩ ; désactivé d'usine (74 00)", t: "nf" },
+          { n: "27 · 28", label: "COS1 · COM", desc: "Bord sensible COS1, N.F. ou 8,2 kΩ ; usine 73 03 (N.F., inversion toujours). Non installé : shunter 27-28 ou 73 00", t: "nf" },
+          { n: "29 · 28", label: "ST · COM", desc: "STOP, N.F. ou 8,2 kΩ (par. 57) ; shunté en usine", t: "nf" }
+        ]},
+        { nom: "Commandes", bornes: [
+          { n: "30 · 31", label: "ANT", desc: "Antenne du récepteur embrochable ; antenne extérieure en RG58, 10 m max, sans jonction", t: "autre" },
+          { n: "33 · 32", label: "ORO · COM", desc: "Horloge (N.O.) : ouvre et maintient ouvert tant que le contact est fermé (par. 80)", t: "no" },
+          { n: "34 · 32", label: "AP · COM", desc: "Ouverture (N.O.). Maintenue, elle empêche la fermeture automatique", t: "no" },
+          { n: "35 · 38", label: "CH · COM", desc: "Fermeture (N.O.)", t: "no" },
+          { n: "36 · 38", label: "PP · COM", desc: "Pas-à-pas (N.O.), selon A4", t: "no" },
+          { n: "37 · 38", label: "PED · COM", desc: "Ouverture partielle (N.O.) : vantail 1 en entier sur un battant double, 50 % sur un battant simple (par. 15)", t: "no" },
+          { n: "RECEIVER", label: "Récepteur radio", desc: "PR1 = pas-à-pas (par. 76), PR2 = ouverture partielle (par. 77)", t: "autre" },
+          { n: "WIFI", label: "B74/BCONNECT", desc: "Connecteur du module IP ; activer COM > SERIAL ON, TARGET B-CONN", t: "bus" },
+          { n: "EXP1 · EXP2", label: "B73/KEYS", desc: "Claviers B73/KEYS (par. X7) ; EXP2 seulement si l'automatisme a un moteur 2", t: "bus" }
+        ]}
+      ],
+      fusibles: "F1 20 A circuit moteurs · F2 4 A électroserrure · F3 10 A circuit batterie · F4 T2A primaire du transformateur",
+      notes: [
+        "Puissance absorbée 230 W max, 600 W au démarrage ; par moteur 90 W nominal, 250 W au démarrage. −20 °C à +55 °C, IP54.",
+        "Boîtiers : F70/IPU36/BOX 330x230x115 mm, 3,9 kg ; F70/IPU36/BOX/SL 380x145x130 mm, donné deux fois dans le tableau avec 4,5 kg puis 4,6 kg (contradiction de la notice).",
+        "Coupure réseau pendant une manœuvre : arrêt puis reprise automatique après 2 s sur batterie. Sur batterie, un retard fixe de 1,5 s s'applique même si 25 et 26 sont à 00.",
+        "Les sécurités N.F. non installées doivent être shuntées sur COM ou désactivées (50, 51, 53, 54, 73, 74).",
+        "Raccordement de l'onduleur dans le moteur (fig. 8) : +36V, 0V, LNA, LNB, connecteur d'extension RS485, fins de course FC1 (ouverture) / FC2 (fermeture) N.C., électrobloc BDOW / BDUP N.C., phases du moteur. Brancher centrale et moteur sans réseau ni batterie."
+      ]
+    },
+    parametres: {
+      intro: "Firmware R1.55. Valeur après le code = réglage d'usine. Un paramètre propre au moteur est enregistré à la fois dans la centrale et dans l'onduleur (icône M1 / M2) ; à côté : OK = même valeur dans l'onduleur, E = valeur différente, -- = onduleur non lu.",
+      navigation: [
+        "Depuis l'accueil : ENTER pour entrer dans la page des paramètres.",
+        "+ / − : faire défiler la liste des paramètres ; ENTER puis + / − pour changer la valeur ; ESC pour enregistrer et revenir à la liste.",
+        "Si un mot de passe est actif : le saisir d'abord (menu MOT DE PASSE > DÉBLOQUER).",
+        "Les X0–X7 et Y0–Y7 suivent le 90 dans la liste."
+      ],
+      groupes: [
+        { nom: "Configuration", items: [
+          { code: "A0", def: "01", titre: "Modèle d'automatisme MOTEUR 1", valeurs: [["01", "NV/200/DX – NV/200/SX : battant, IRRÉVERSIBLE."], ["02", "SL/180/R : piétonnier, RÉVERSIBLE."]], note: "Une mauvaise valeur provoque des dysfonctionnements (SEL.MOT). À reconfigurer à la main après un retour usine." },
+          { code: "A1", def: "01", titre: "Modèle d'automatisme MOTEUR 2", valeurs: [["01", "NV/200/DX – NV/200/SX."], ["02", "SL/180/R."]], note: "Comme A0." },
+          { code: "70", def: "02", titre: "Nombre de moteurs", valeurs: [["01", "1 moteur."], ["02", "2 moteurs."]] },
+          { code: "71", def: "01", titre: "Position du MOTEUR 1 (vue de l'intérieur)", valeurs: [["00", "À gauche."], ["01", "À droite."]], note: "Mouvement inversé au test : modifier 71 ou 72. À reconfigurer à la main après un retour usine." },
+          { code: "72", def: "00", titre: "Position du MOTEUR 2 (vue de l'intérieur)", valeurs: [["00", "À gauche."], ["01", "À droite."]] },
+          { code: "60", def: "00", titre: "Fins de course MOTEUR 1", valeurs: [["00", "Désactivés."], ["01", "Ouverture seule."], ["02", "Fermeture seule."], ["03", "Les deux."]], note: "Visible seulement si le moteur a des fins de course internes. 61 = même chose pour le MOTEUR 2." },
+          { code: "63", def: "00", titre: "Freinage MOTEUR 1", valeurs: [["00", "Freinage électrique moteur arrêté désactivé."], ["01", "Activé."]], note: "Visible seulement pour un moteur RÉVERSIBLE ou HIGH-SPEED. 64 = MOTEUR 2." },
+          { code: "65", def: "05", titre: "Espace d'arrêt MOTEUR 1", valeurs: [["01-05", "01 freinage rapide / espace court … 05 freinage doux / espace long."]], note: "66 = MOTEUR 2." },
+          { code: "67", def: "00", titre: "Blocage électrique interne MOTEUR 1", valeurs: [["00", "Désactivé."], ["01", "Électrobloc, capteur position fermée seul."], ["02", "Capteur position ouverte seul."], ["03", "Les deux capteurs."]], note: "Moteur RÉVERSIBLE ou HIGH-SPEED. 68 = MOTEUR 2 (l'index écrit « MOTEUR 21 » pour le 67)." }
+        ]},
+        { nom: "Logique de fonctionnement", items: [
+          { code: "A2", def: "00", titre: "Refermeture automatique après la pause", valeurs: [["00", "Désactivée."], ["01-15", "1 à 15 essais (après une photocellule), puis reste ouvert."], ["99", "Essais illimités."]] },
+          { code: "A3", def: "00", titre: "Refermeture après coupure de courant", valeurs: [["00", "Ne se ferme pas."], ["01", "Si pas entièrement ouvert : fermeture après 5 s de préclignotement, en récupération de position."]] },
+          { code: "A4", def: "00", titre: "Commande pas-à-pas (PP)", valeurs: [["00", "Ouvre-stop-ferme-stop."], ["01", "Copropriété : PP ignoré en ouverture, pause renouvelée par PP (si A2 00 : 1 essai de refermeture automatique)."], ["02", "Copropriété, pause non renouvelée."], ["03", "Ouvre-ferme."], ["04", "Ouvre-ferme-stop-ouvre."]] },
+          { code: "A5", def: "00", titre: "Préclignotement", valeurs: [["00", "Désactivé."], ["01-10", "1 à 10 s avant chaque manœuvre."], ["99", "5 s avant la fermeture seulement."]] },
+          { code: "A6", def: "00", titre: "Copropriété sur PED", valeurs: [["00", "PED en pas-à-pas."], ["01", "PED ignoré pendant l'ouverture."]] },
+          { code: "A7", def: "00", titre: "Homme présent", valeurs: [["00", "Désactivé."], ["01", "AP / CH maintenus."], ["02", "Ouverture semi-automatique, homme présent seulement par CH (bornier ou B73/KEYS) ; radio seulement si configurée en ouverture."]] },
+          { code: "A8", def: "00", titre: "Sortie SC (voyant / test photocellules / économie batterie)", valeurs: [["00", "Voyant éteint fermé, fixe sinon."], ["01", "Clignote lent en ouverture, fixe ouvert, rapide en fermeture ; arrêt intermédiaire : s'éteint 2 fois toutes les 15 s."], ["02", "Test photocellules (fig. 5)."], ["03", "Économie batterie (fig. 6)."], ["04", "Économie batterie + test photocellules."]] },
+          { code: "21", def: "30", titre: "Temps de fermeture automatique", valeurs: [["00-90", "0 à 90 s."], ["92-99", "2 à 9 min."]] },
+          { code: "22", def: "00", titre: "Ouverture sans fermeture automatique", valeurs: [["00", "Désactivé."], ["01", "Par AP."], ["02", "Par PP."], ["03", "Par PED."]], note: "La commande suivante du même type referme." },
+          { code: "23", def: "10", titre: "Fermeture automatique après ouverture piétonne", valeurs: [["00-90", "0 à 90 s."], ["92-99", "2 à 9 min."]] },
+          { code: "15", def: "99", titre: "Ouverture partielle (%)", valeurs: [["15-99", "15 à 99 % de la course."]], note: "Battant double : vantail 1 entier (usine). Battant simple : réglé à 50 %." },
+          { code: "25", def: "03", titre: "Retard du MOTEUR 2 en ouverture", valeurs: [["00-10", "0 à 10 s."]] },
+          { code: "26", def: "05", titre: "Retard du MOTEUR 1 en fermeture", valeurs: [["00-30", "0 à 30 s."]], note: "L'index de la notice dit « retard en ouverture du MOTEUR 1 », le menu dit « en fermeture »." },
+          { code: "49", def: "01", titre: "Essais de refermeture après bord sensible / obstacle", valeurs: [["00", "Aucun."], ["01-03", "1 à 3 essais (seulement depuis l'ouverture complète)."]], note: "Conseillé : ≤ A2." },
+          { code: "76", def: "00", titre: "Canal radio PR1", valeurs: [["00", "Pas-à-pas."], ["01", "Ouverture partielle."], ["02", "Ouverture."], ["03", "Fermeture."], ["04", "Arrêt."], ["05", "Courtoisie tant que la touche est appuyée."], ["06", "Courtoisie ON-OFF."], ["07-10", "PP / partielle / ouverture / fermeture avec confirmation (2e touche sous 2 s)."]], note: "77 (usine 01) = PR2, mêmes valeurs." },
+          { code: "78", def: "00", titre: "Intermittence du clignotant", valeurs: [["00", "Gérée par le clignotant."], ["01", "Lente."], ["02", "Lente en ouverture, rapide en fermeture."]] },
+          { code: "79", def: "60", titre: "Lumière de courtoisie", valeurs: [["00", "Désactivée."], ["01", "Impulsion au début de chaque manœuvre."], ["02", "Pendant la manœuvre."], ["03-90", "3 à 90 s après la manœuvre."], ["92-99", "2 à 9 min."]], note: "Visible seulement si 18 = 00." },
+          { code: "18", def: "00", titre: "Fonction de la sortie COR", valeurs: [["00", "Courtoisie (par. 79)."], ["01", "Fermé si centrale OK, ouvert en alarme."], ["02", "Ouvert si batterie faible (par. 85) ou BTLO."], ["03", "Fermé si batterie faible ou BTLO."], ["04", "Fermé si pas entièrement ouvert."], ["05", "Fermé si pas entièrement fermé."]] },
+          { code: "80", def: "00", titre: "Contact horloge ORO", valeurs: [["00", "Ouvre et reste ouvert, commandes ignorées."], ["01", "Commandes acceptées ; la fonction se réactive à l'ouverture complète."]] },
+          { code: "81", def: "00", titre: "Fermeture / ouverture garantie", valeurs: [["00", "Désactivée."], ["01", "Fermeture garantie après le temps 82 (préclignotement 5 s)."], ["02", "Fermeture / ouverture garantie après arrêt PP ou détection d'obstacle."]], note: "Inactive après STOP, bord sensible dans le même sens, fin des essais A2 ou position perdue. 82 (usine 03) : 02-90 s, 92-99 = 2 à 9 min." },
+          { code: "88", def: "00", titre: "Cycles de test", valeurs: [["00", "Désactivé."], ["15-90", "Ouverture toutes les 15 à 90 s."], ["91-99", "Toutes les 1 à 9 min."]], note: "Régler A2 et 21 pour la fermeture." }
+        ]},
+        { nom: "Mouvement et forces", items: [
+          { code: "A9", def: "08", titre: "Ralentissement MOTEUR 1 en ouverture", valeurs: [["01-10", "01 près de la butée … 10 très en avance."]], note: "10 = MOTEUR 2 en ouverture ; 11 / 12 = MOTEUR 1 / 2 en fermeture (usine 08)." },
+          { code: "13", def: "10", titre: "Contrôle de position VANTAIL 1 ouvert / fermé", valeurs: [["01-30", "Nombre de tours moteur."]], note: "Visible sans fins de course. Trop bas : inversion sur les butées. 14 = vantail 2." },
+          { code: "19", def: "00", titre: "Anticipation de l'arrêt MOTEUR 1 en ouverture", valeurs: [["00", "Arrêt sur la butée."], ["01-25", "1 à 25 tours avant l'ouverture complète."]], note: "20 = MOTEUR 2." },
+          { code: "27", def: "03", titre: "Temps d'inversion après bord sensible / obstacle", valeurs: [["00-60", "0 à 60 s."]] },
+          { code: "30", def: "07", titre: "Couple MOTEUR 1", valeurs: [["01-09", "01 −35 %, 02 −25 %, 03 −16 %, 04 −8 %, 05 0 %, 06 +8 %, 07 +16 %, 08 +25 %, 09 +35 %."]], note: "< 03 seulement pour des installations très légères à l'abri du vent. 31 = MOTEUR 2." },
+          { code: "32", def: "15", titre: "Sensibilité aux obstacles MOTEUR 1", valeurs: [["01-10", "Couple faible (si 11-16 ne conviennent pas)."], ["11-16", "Couple moyen, conseillé."], ["17", "70 %, 1 s (bord sensible obligatoire)."], ["18", "80 %, 2 s (bord obligatoire)."], ["19", "100 %, 2 s (bord obligatoire)."], ["20", "100 %, 3 s (bord obligatoire)."]], note: "Refaire l'apprentissage après chaque changement. 33 = MOTEUR 2." },
+          { code: "34", def: "08", titre: "Accélération MOTEUR 1 en ouverture", valeurs: [["01-10", "01 rapide … 10 progressive."]], note: "35 = MOTEUR 2 ouverture ; 36 / 37 = fermeture." },
+          { code: "40", def: "07", titre: "Vitesse MOTEUR 1 en ouverture", valeurs: [["01-10", "Minimale à maximale (selon le moteur)."]], note: "41 = MOTEUR 2 ; 42 / 43 = fermeture." },
+          { code: "44", def: "05", titre: "Vitesse d'approche MOTEUR 1", valeurs: [["01-10", "Max = 75 % de la vitesse minimale de 40-43."]], note: "45 = MOTEUR 2. Espace d'approche : Y0-Y3." },
+          { code: "Y0", def: "10", titre: "Espace d'approche MOTEUR 1 en ouverture", valeurs: [["00-80", "Tours à la vitesse d'approche."]], note: "Y1 = MOTEUR 2 ouverture ; Y2 / Y3 = fermeture." },
+          { code: "Y4", def: "00", titre: "Couple maximal au départ MOTEUR 1", valeurs: [["00", "Désactivé."], ["01", "En ouverture (et en fermeture si position connue et à plus de 2 m de la fermeture)."], ["02", "À chaque démarrage."]], note: "5 s ou environ 65 cm. Moteurs HIGH SPEED / RÉVERSIBLE : poussée de 2 s de toute façon. Y5 = MOTEUR 2." },
+          { code: "Y6", def: "00", titre: "Couple pendant la récupération de position MOTEUR 1", valeurs: [["00", "Selon 30 et 32."], ["01", "30 et 32 + courant maxi appris."], ["02", "70 %, 1 s."], ["03", "80 %, 2 s."], ["04", "100 %, 2 s."], ["05", "100 %, 3 s."]], note: "Si la récupération ne se termine pas, le portail ne reprend pas le fonctionnement normal. Y7 = MOTEUR 2." }
+        ]},
+        { nom: "Électroserrure", items: [
+          { code: "28", def: "00", titre: "Type de serrure", valeurs: [["00", "Normalement non alimentée, 3 s au début de l'ouverture."], ["01", "Ventouse, alimentée portail fermé."], ["02", "Ventouse, alimentée ouvert ou fermé."], ["10-12", "Non alimentée, temporisation 0,5 / 1 / 1,5 s."]], note: "Non réinitialisé par le retour usine." },
+          { code: "29", def: "00", titre: "Électroverrouillage", valeurs: [["00", "Désactivé."], ["01", "Force supplémentaire au MOTEUR 1 près de la butée de fermeture."], ["02", "Force maximale, détection d'obstacle exclue."]], note: "Index : « Activation électroserrure »." },
+          { code: "38", def: "00", titre: "Coup de bélier", valeurs: [["00", "Désactivé."], ["01", "Poussée de fermeture (max 4 s) pour décrocher la serrure."]] }
+        ]},
+        { nom: "Sécurités", items: [
+          { code: "50", def: "00", titre: "FT1 en ouverture", valeurs: [["00", "Désactivée."], ["01", "Arrêt."], ["02", "Inversion immédiate."], ["03", "Stop temporaire."], ["04", "Inversion retardée (ferme une fois libérée)."]], note: "53 (usine 00) = FT2 en ouverture." },
+          { code: "51", def: "02", titre: "FT1 en fermeture", valeurs: [["00", "Désactivée."], ["01", "Arrêt."], ["02", "Inversion immédiate."], ["03", "Stop temporaire."], ["04", "Inversion retardée (ouvre une fois libérée)."]], note: "54 (usine 00) = FT2 en fermeture." },
+          { code: "52", def: "01", titre: "FT1 portail fermé", valeurs: [["00", "Désactivée (55 : ne peut pas s'ouvrir si occultée)."], ["01", "Ouvre sur commande même occultée."], ["02", "L'occultation commande l'ouverture."]], note: "Masqué si A8 = 02, 03 ou 04. 55 (usine 01) = FT2 ; le menu écrit « FT1 » pour le 55." },
+          { code: "56", def: "00", titre: "Fermeture 6 s après passage devant la photocellule", valeurs: [["00", "Désactivée."], ["01", "Après FT1."], ["02", "Après FT2."]], note: "Masqué si A8 = 03 ou 04." },
+          { code: "57", def: "00", titre: "Type de contact FT1 / FT2 / ST", valeurs: [["00", "Tous N.F."], ["01", "FT1 8k2."], ["02", "FT2 8k2."], ["03", "FT1 + FT2 8k2."], ["10", "ST 8k2."], ["11", "FT1 + ST 8k2."], ["12", "FT2 + ST 8k2."], ["13", "Tous 8k2."]] },
+          { code: "58", def: "00", titre: "Test photocellules FT1", valeurs: [["00", "Désactivé."], ["01", "En ouverture."], ["02", "En fermeture."], ["03", "Les deux."]], note: "Visible si A8 = 02 ou 04 ; test 3 s OFF / 3 s ON max. 59 = FT2." },
+          { code: "73", def: "03", titre: "Bord sensible COS1", valeurs: [["00", "Non installé."], ["01", "N.F., inversion en ouverture seulement."], ["02", "8k2, en ouverture seulement."], ["03", "N.F., inversion toujours."], ["04", "8k2, toujours."], ["12", "2 bords 8k2 en parallèle (4k1), en ouverture seulement."], ["14", "2 bords 8k2 en parallèle (4k1), toujours."]] },
+          { code: "74", def: "00", titre: "Bord sensible COS2", valeurs: [["00", "Non installé."], ["01", "N.F., inversion en fermeture seulement."], ["02", "8k2, en fermeture seulement."], ["03", "N.F., toujours."], ["04", "8k2, toujours."], ["12", "2 bords 8k2 (4k1) — la notice écrit « en ouverture seulement »."], ["14", "2 bords 8k2 (4k1), toujours."]] }
+        ]},
+        { nom: "Batterie, entretien, maintenance", items: [
+          { code: "83", def: "00", titre: "Limitations sur batterie", valeurs: [["00", "Aucune (signalisation possible par COR)."], ["01", "Seulement ouverture, ne referme jamais."], ["02", "Texte identique au 01 dans la notice."], ["03", "Seulement fermeture, même avec ORO actif et 80 01."], ["04", "Ferme après 5 s de préclignotement, puis une seule ouverture acceptée."]], note: "Visible si 85 ≠ 00." },
+          { code: "84", def: "00", titre: "Type de batterie / économie", valeurs: [["00", "36 V B71/BCIPU, performances réduites."], ["01", "36 V B71/BCIPU, pleines performances."], ["02", "36 V chargeur externe, réduites."], ["03", "36 V chargeur externe, pleines."]] },
+          { code: "85", def: "00", titre: "Seuil de gestion batterie", valeurs: [["00", "Commandes jusqu'à épuisement (35,4 V : commandes désactivées)."], ["01", "Seuil mini 36,4 V."], ["02", "Intermédiaire 36,8 V."], ["03", "Maxi 37,2 V."]] },
+          { code: "86", def: "00", titre: "Entretien périodique", valeurs: [["00", "Désactivé."], ["01", "Toutes les 87 × 10 h."], ["02", "Toutes les 87 × 100 h."]], note: "Visible seulement avec un mot de passe ≠ 00000000. Alarme : clignotant 1 s / 4 s moteur arrêté ; acquitter avec le mot de passe puis + et − 5 s. Désactivé définitivement après 9990 h. 87 = compteur (01-99)." },
+          { code: "89", def: "00", titre: "Mise à jour firmware", valeurs: [["00", "Réinitialise la F70/IPU36."], ["01", "Onduleur MOTEUR 1."], ["02", "Onduleur MOTEUR 2."], ["03", "B73/KEYS sur EXP1."], ["04", "B73/KEYS sur EXP2."]], note: "Avec B74/BCONNECT et son application web." },
+          { code: "90", def: "00", titre: "Retour aux valeurs d'usine", valeurs: [["RESET", "+ et − maintenus."]], note: "Impossible si mot de passe. Non réinitialisés : A0, A1, 28, 29, 60, 61, 70, 71, 72, 86, 87." }
+        ]},
+        { nom: "B73/RGB et B73/KEYS", items: [
+          { code: "X0", def: "00", titre: "B73/RGB sur MOTEUR 1", valeurs: [["00", "Désactivé."], ["01", "Feu RG (rouge-vert)."], ["02", "Signalisation RGB."]], note: "X1 = MOTEUR 2." },
+          { code: "X2", def: "00", titre: "Mode feu tricolore", valeurs: [["00", "Désactivé."], ["01-06", "Types A à F (fig. 8)."]] },
+          { code: "X3", def: "00", titre: "Mode signalisation RGB", valeurs: [["00", "Désactivé."], ["01-08", "Types A à H."]] },
+          { code: "X4", def: "00", titre: "Changement de couleur en fin d'ouverture", valeurs: [["00", "Couleur de X2/X3."], ["01-05", "Orange à 70-75-80-85-90 %."], ["06-10", "Vert à 70-75-80-85-90 %."]] },
+          { code: "X5", def: "00", titre: "Couleur en veille", valeurs: [["00", "Séquence de toutes les couleurs."], ["01-09", "Bleu, jaune, rose, bleu ciel, fuchsia, blanc, orange, violet, rouge."]] },
+          { code: "X6", def: "00", titre: "Délai avant veille RGB", valeurs: [["00", "Pas de veille."], ["01-20", "30 s, 60 s, 90 s, 2 min … 10 min."]] },
+          { code: "X7", def: "00", titre: "Clavier B73/KEYS", valeurs: [["00", "Désactivé."], ["01", "EXP1."], ["02", "EXP2."], ["03", "EXP1 et EXP2."]] }
+        ]}
+      ]
+    },
+    apprentissage: {
+      avant: [
+        "Les onduleurs sont calés sur leur moteur en usine : la CALIBRATION (calage de l'encodeur) ne se fait que si l'onduleur a été remplacé. La PROGRAMMATION DE COURSE est, elle, toujours à faire.",
+        "Régler A0 / A1 (modèle de moteur), 70 (nombre de moteurs), 71 / 72 (position gauche / droite).",
+        "Shunter ou désactiver les sécurités absentes (50, 51, 53, 54, 73, 74) ; vérifier les pages d'état et le mode TEST.",
+        "Si un mot de passe est actif, le débloquer."
+      ],
+      etapes: [
+        "Menu PROGRAMME : AUTOPROG = programmation guidée pas à pas (messages à l'écran, éventuellement déblocage manuel demandé).",
+        "Ou PROG. DE COURSE : choisir MOT1, MOT2 ou ALL (les deux), ENTER maintenu 2 s (« VOUS POUVEZ SEUL. SAUVER UNE FOIS »).",
+        "Suivre l'écran : FERMER LES VANTAUX, BLOQUER MOTEURS, confirmer « FERME », puis ENTER : PROGRAM. MOT1 RUN, avec PM1 / PM2 = OPEN, PAUS, CLOS.",
+        "Fin : PASS (réussi) ou FAIL. LED verte de l'onduleur : 4 clignotements rapides = réussi, 8 = erreur.",
+        "CALIBRATION (après remplacement d'onduleur) : MOT1 ou MOT2, DÉBLOCAGE MOT1 puis confirmation, CALIBR. MOT1 RUN → PASS avec FM1 = OK_A (succès direct) ou OK_B (rotor bloqué au premier essai, rotation inverse : moteur pas débloqué ou problème de rotor). Les réducteurs réversibles sans déblocage demandent quand même de débloquer. Puis programmer la course.",
+        "Saisir la date d'installation (mois / année) quand elle est demandée. ESC en cours de route : sortie sans rien enregistrer."
+      ],
+      apres: [
+        "Contrôler le sens de rotation (sinon 71 ou 72), les commandes, la course et les ralentissements, les sécurités, le test photocellules, la batterie (couper le réseau).",
+        "Couper réseau et batterie puis remettre : vérifier la récupération de position complète en ouverture et en fermeture (lente, clignotant 3 s allumé / 1,5 s éteint ; ne rien commander avant la fin).",
+        "Après un déblocage, ramener les vantaux à leur position d'origine ; débloqué en position intermédiaire, la position est perdue et une récupération est nécessaire. Avec fins de course (60 / 61), la position est retrouvée dès qu'un fin de course est atteint.",
+        "Mesurer les forces d'impact (EN 12453 / EN 12445) et ajuster vitesses et couples."
+      ]
+    }
+  },
+  {
+    id: "roger-h70-104ac",
+    nom: "H70/104AC · H70/105AC",
+    modeles: "1 moteur asynchrone 230 V (115 V) : H70/104AC intégrée aux coulissants H30, M30, G30, R30, E30 (et portes basculantes) — H70/105AC en boîtier séparé (H70/105AC/BOX), coulissants. Remplace les H70/101AC et H70/103AC (HW05)",
+    type: "1 moteur 230 V monophasé, commande par triac — afficheur 4 chiffres, touches UP / DOWN / + / − / PROG / TEST",
+    source: "Notice Roger H70/104AC – H70/105AC IS303 Rev.04, firmware r2.00 (HW05)",
+    codes: [
+      { code: "r2.00", type: "afficheur", titre: "Version du firmware", action: "Affichée 3 s à la mise sous tension, puis l'afficheur montre l'état des commandes et sécurités." },
+      { code: "xx EE", type: "afficheur", titre: "Erreur de paramètre (ex. 15EE, 21EE)", action: "Le paramètre indiqué a une valeur incorrecte : la corriger et l'enregistrer. La centrale reconnaît aussi le type de fins de course branché et signale un paramètre 72 incorrect." },
+      { code: "synC", type: "afficheur", titre: "Défaut d'extraction de la synchronisation réseau", action: "Contacter le service après-vente Roger." },
+      { code: "APPE", type: "afficheur", titre: "Apprentissage non terminé", action: "TEST appuyé par erreur ou sécurité en alarme : TEST, vérifier les sécurités et leurs branchements, refaire l'apprentissage." },
+      { code: "StbY", type: "afficheur", titre: "Passage en veille (≤ 0,5 W)", action: "Normal après le temps L1 (20 min d'usine) : afficheur éteint, LED POWER clignote lentement, sortie SC coupée. Réveil : PROG, TEST ou commande radio (Acti)." },
+      { code: "Acti", type: "afficheur", titre: "Sortie de veille", action: "Normal : la sortie SC réalimente les photocellules." },
+      { code: "POWER éteinte", type: "led", titre: "LED POWER éteinte", action: "Pas d'alimentation, fusible F1 (6,3 A) grillé (remplacer hors tension) ou surcharge sur le 24 V : vérifier les branchements de la sortie SC." },
+      { code: "POWER clignote", type: "led", titre: "LED POWER clignote lentement", action: "Veille (L1). PROG, TEST ou une commande radio la réveille." },
+      { code: "Mauvaise manœuvre", type: "symptome", titre: "Le portail ne fait pas la manœuvre souhaitée", action: "Fils du moteur inversés : la notice dit d'inverser deux fils sur la borne X-Y-Z ou Z-Y-X (bornes du moteur AP-CM-CH sur cette carte)." },
+      { code: "Flash HS", type: "symptome", titre: "Le clignotant ne fonctionne pas", action: "Lampe / LED grillée ou fils débranchés (LAM, contact pur 230 V 40 W)." },
+      { code: "Voyant HS", type: "symptome", titre: "Le voyant portail ouvert ne marche pas", action: "Ampoule grillée ou fils débranchés (SC – COM). Avec la veille active (L1 ≠ 00), A8 n'accepte que 00 et 02." },
+      { code: "Portée radio faible", type: "symptome", titre: "La télécommande porte peu", action: "Installer l'antenne à l'extérieur (RG58, 10 m max). Remplacer les piles des émetteurs." },
+      { code: "00", type: "test", titre: "TEST : aucune sécurité en alarme", action: "Aucune sécurité en alarme et aucun fin de course activé." },
+      { code: "Sb", type: "test", titre: "TEST : poignée de déverrouillage ouverte (H70/104AC)", action: "Refermer la poignée, clé en position fermée ; vérifier le contact SB." },
+      { code: "18", type: "test", titre: "TEST : contact STOP ouvert", action: "Installer un bouton STOP (N.F.) ou shunter ST (18) avec COM (13) (shunté d'usine)." },
+      { code: "17", type: "test", titre: "TEST : bord sensible COS1 ouvert", action: "Vérifier le branchement. Inutilisé : 73 00 ou shunter COS1 (17) avec COM (13)." },
+      { code: "16", type: "test", titre: "TEST : bord sensible COS2 ouvert", action: "Vérifier le branchement. Inutilisé : 74 00 ou shunter COS2 (16) avec COM (13)." },
+      { code: "15", type: "test", titre: "TEST : photocellule FT1 ouverte", action: "Vérifier le branchement (fig. 9). Inutilisée : 50 00 et 51 00 ou shunter FT1 (15) avec COM (13)." },
+      { code: "14", type: "test", titre: "TEST : photocellule FT2 ouverte", action: "Vérifier le branchement (fig. 9). Inutilisée : 53 00 et 54 00 ou shunter FT2 (14) avec COM (13)." },
+      { code: "FE", type: "test", titre: "TEST : les deux fins de course ouverts ou non raccordés", action: "Vérifier le raccordement des fins de course." },
+      { code: "FA", type: "test", titre: "TEST : sur le fin de course d'ouverture", action: "Normal portail ouvert ; si l'indication est fausse, vérifier 71. Fin de course absent : vérifier le raccordement." },
+      { code: "FC", type: "test", titre: "TEST : sur le fin de course de fermeture", action: "Normal portail fermé ; si l'indication est fausse, vérifier 71. Fin de course absent : vérifier le raccordement." },
+      { code: "PP · CH · AP · PE · Or", type: "test", titre: "TEST : commande active sans action", action: "Contact N.O. défectueux ou bouton / horloge mal raccordé : vérifier le contact avec COM. Ne pas shunter ORO s'il n'est pas utilisé." }
+    ],
+    afficheur: {
+      intro: "En fonctionnement normal, l'afficheur ne montre pas des chiffres mais l'état des entrées : certains segments correspondent chacun à une commande ou à une sécurité.",
+      ecrans: [
+        { nom: "État des commandes", digits: [
+          { seg: { a: "AP", g: "PP", d: "CH" }, dp: "POWER" },
+          { seg: { a: "PED", d: "ORO" }, dp: "ENC" }
+        ]},
+        { nom: "État des sécurités", digits: [
+          { seg: { a: "FT1", g: "COS1", d: "COS2" }, dp: "SB" },
+          { seg: { a: "FT2", e: "FA", c: "FC" }, dp: "STOP" }
+        ]}
+      ],
+      reperes: {
+        AP:    { g: "commande", nom: "Ouverture", repos: "Éteint", detail: "S'allume à la réception d'une commande d'ouverture (borne 25)." },
+        PP:    { g: "commande", nom: "Pas-à-pas", repos: "Éteint", detail: "S'allume à la réception d'une commande pas-à-pas (borne 19 ou radio PR1)." },
+        CH:    { g: "commande", nom: "Fermeture", repos: "Éteint", detail: "S'allume à la réception d'une commande de fermeture (borne 24)." },
+        PED:   { g: "commande", nom: "Ouverture partielle", repos: "Éteint", detail: "S'allume à la réception d'une commande PED (borne 23 ou radio PR2)." },
+        ORO:   { g: "commande", nom: "Horloge", repos: "Éteint", detail: "Allumé tant que le contact horloge (borne 22) est fermé." },
+        POWER: { g: "led", nom: "Alimentation", repos: "Allumé", detail: "Carte alimentée. Clignote lentement en veille." },
+        ENC:   { g: "securite", nom: "Encodeur", repos: "Allumé", detail: "Indication de l'encodeur du moteur (75)." },
+        FT1:   { g: "securite", nom: "Photocellules FT1", repos: "Allumé", detail: "Éteint = faisceau coupé ou non raccordé (bornes 15-13). Clignotant = désactivé." },
+        FT2:   { g: "securite", nom: "Photocellules FT2", repos: "Allumé", detail: "Éteint = faisceau coupé ou non raccordé (bornes 14-13). Clignotant = désactivé." },
+        COS1:  { g: "securite", nom: "Bord sensible COS1", repos: "Allumé", detail: "Éteint = bord actionné ou non raccordé (bornes 17-13). Clignotant = désactivé (73 00, usine)." },
+        COS2:  { g: "securite", nom: "Bord sensible COS2", repos: "Allumé", detail: "Éteint = bord actionné ou non raccordé (bornes 16-13). Clignotant = désactivé (74 00, usine)." },
+        FA:    { g: "securite", nom: "Fin de course d'ouverture", repos: "Allumé", detail: "S'éteint sur le fin de course d'ouverture." },
+        FC:    { g: "securite", nom: "Fin de course de fermeture", repos: "Allumé", detail: "S'éteint sur le fin de course de fermeture." },
+        SB:    { g: "securite", nom: "Déverrouillage (H70/104AC)", repos: "Allumé", detail: "Éteint = poignée de déverrouillage ouverte." },
+        STOP:  { g: "securite", nom: "STOP", repos: "Allumé", detail: "Éteint = contact STOP ouvert (bornes 18-13)." }
+      },
+      regles: [
+        "Commandes : segments normalement ÉTEINTS, ils s'allument quand la commande arrive.",
+        "Sécurités : segments normalement ALLUMÉS. Éteint = en alarme ou non raccordé. Clignotant = désactivé par son paramètre.",
+        "La position exacte des segments ENC et SB est reprise de la figure de la notice : en cas de doute, se fier au mode TEST."
+      ],
+      autres: [
+        { titre: "Mode paramètres", texte: "UP / DOWN font défiler : les 2 chiffres de gauche = numéro du paramètre, les 2 de droite = sa valeur. + / − pour modifier ; la valeur clignote, puis l'afficheur clignote vite quand elle est enregistrée. Modification possible seulement moteur à l'arrêt." },
+        { titre: "Mode TEST (touche TEST)", texte: "Portail en mouvement : TEST = ARRÊT ; un 2e appui passe en TEST. À gauche pendant 5 s : la commande reçue (AP, CH, PP, PE, OR). À droite : le numéro de la borne de la sécurité en alarme, qui clignote (Sb, 18 STOP, 17 COS1, 16 COS2, 15 FT1, 14 FT2) ou FE / FA / FC. Sortie : TEST ; retour seul après 10 s." },
+        { titre: "Veille", texte: "Après le temps L1 (5, 10, 15 ou 20 min, usine 20 min) : consommation ≤ 0,5 W, afficheur éteint, sortie SC coupée (photocellules à alimenter sur SC), LED POWER clignote lentement. L1 00 seulement pour les installations industrielles." },
+        { titre: "Récupération de position", texte: "Après une coupure, un déblocage ou 3 obstacles au même endroit (encodeur actif) : manœuvre de récupération, lente avec encodeur, à vitesse normale sans ; clignotant 3 s allumé / 1,5 s éteint. Ne rien commander avant la fin de l'ouverture. Un fin de course récupère la position immédiatement." },
+        { titre: "Deux coulissants opposés", texte: "Deux centrales reliées par des relais 24 V (non fournis) ; une seule carte radio possible dans A ou B, commandes radio par la sortie COR avec 76 05. Même version de firmware sur les deux." }
+      ]
+    },
+    bornier: {
+      groupes: [
+        { nom: "Puissance", bornes: [
+          { n: "L · N · ⏚", label: "Secteur", desc: "230 V ±10 % 50 Hz (ou 115 V ±10 % 60 Hz, moteur adapté). Câble 3 × 1,5 mm² (15 m max) ou 3 × 2,5 mm² (30 m max). Respecter ligne sur L et neutre sur N. Fusible F1 F6,3 A 250 V (5x20)", t: "alim" },
+          { n: "AP · CM · CH", label: "Moteur", desc: "Moteur asynchrone 230 V, 600 W max, condensateur selon la notice du moteur. H70/104AC : câblé usine. H70/105AC : câble moteur 4 × 1,5 mm² (20 m max) ; fins de course possibles en série (ouverture AP-CM, fermeture CH-CM)", t: "moteur" }
+        ]},
+        { nom: "Sorties", bornes: [
+          { n: "7 COR · 8", label: "Courtoisie / électroserrure", desc: "Contact pur : éclairage 230 V 100 W (115 V 50 W), ou électroserrure 12 V~ 15 VA max avec 79 99", t: "sortie" },
+          { n: "9 · 10 LAM", label: "Clignotant", desc: "Contact pur 230 V 40 W (115 V 25 W) ; préclignotement A5, intermittence 78", t: "sortie" },
+          { n: "11 24V · 13 COM", label: "Accessoires", desc: "24 V, 6 W (300 mA)", t: "alim" },
+          { n: "12 SC · 13 COM", label: "Voyant / photocellules", desc: "Voyant portail ouvert 24 V 2 W (A8), ou alimentation des photocellules (TX et RX) coupée en veille ; test photocellules A8 02 (TX seuls sur SC, seulement avec L1 00)", t: "sortie" }
+        ]},
+        { nom: "Sécurités (N.F.)", bornes: [
+          { n: "15 FT1 · 13 COM", label: "Photocellules FT1", desc: "Usine : 50 00, 51 02 (inversion en fermeture), 52 00 (occultée : n'ouvre pas). Absente : shunter ou 50 00 et 51 00. Photocellules F2ES / F2S", t: "nf" },
+          { n: "14 FT2 · 13 COM", label: "Photocellules FT2", desc: "Usine : 53 03 (arrêt temporaire en ouverture), 54 02 (inversion en fermeture), 55 00. Absente : shunter ou 53 00 et 54 00", t: "nf" },
+          { n: "17 COS1 · 13 COM", label: "Bord sensible COS1", desc: "N.F. ou 8,2 kΩ ; usine 73 00 (désactivé)", t: "nf" },
+          { n: "16 COS2 · 13 COM", label: "Bord sensible COS2", desc: "N.F. ou 8,2 kΩ ; usine 74 00 (désactivé)", t: "nf" },
+          { n: "18 ST · 13 COM", label: "STOP", desc: "N.F., shunté d'usine", t: "nf" },
+          { n: "SB", label: "Contact de déverrouillage (H70/104AC)", desc: "Connecteur câblé usine : poignée ouverte = arrêt, plus de commandes", t: "nf" },
+          { n: "FC (H70/104AC)", label: "Fins de course", desc: "Connecteur câblé usine, mécaniques ou magnétiques ; magnétiques « low power » sur les nouvelles installations", t: "nf" },
+          { n: "32 FC1 · 31 FC2 · 30 24V · 35 COM (H70/105AC)", label: "Fins de course", desc: "Câble 4 × 0,5 mm². 24 V seulement pour les fins de course magnétiques Roger (couper leur connecteur, fig. 8). 71 01 : FC1 ouverture, FC2 fermeture ; 71 00 : l'inverse. Inutilisés : le texte dit NE PAS shunter et désactiver par 72 ; la fig. 8 dit, avec le seul fin de course d'ouverture, de relier l'entrée de fermeture à COM", t: "nf" },
+          { n: "29 +5V · 34 ENC · 35 COM", label: "Encodeur", desc: "Encodeur Roger ; optique activé d'usine (75 dans l'index : 11). Brancher hors tension", t: "nf" }
+        ]},
+        { nom: "Commandes (N.O.)", bornes: [
+          { n: "25 AP · 26 COM", label: "Ouverture", desc: "", t: "no" },
+          { n: "24 CH · 26 COM", label: "Fermeture", desc: "", t: "no" },
+          { n: "19 PP · 13 COM", label: "Pas-à-pas", desc: "Fonctionnement selon A4", t: "no" },
+          { n: "23 PED · 26 COM", label: "Ouverture partielle", desc: "30 % d'usine (15)", t: "no" },
+          { n: "22 ORO · 26 COM", label: "Horloge", desc: "Ouvre et maintient ouvert (80)", t: "no" }
+        ]},
+        { nom: "Radio", bornes: [
+          { n: "20 · 21 ANT", label: "Antenne", desc: "RG58, 10 m max conseillé, sans jonction", t: "autre" },
+          { n: "RECEIVER", label: "Récepteur enfichable", desc: "PR1 pas-à-pas (76), PR2 ouverture partielle (77)", t: "autre" }
+        ]}
+      ],
+      fusibles: "F1 F6,3 A 250 V (5x20) circuit de puissance moteur · alimentation 24 V et logique autoprotégées électroniquement",
+      notes: [
+        "Modifier le branchement des fins de course uniquement hors tension (la centrale reconnaît leur type et vérifie le paramètre 72).",
+        "H70/104AC avec seulement le fin de course d'ouverture : désactiver celui de fermeture par 72 mais ne pas le débrancher (fig. 1).",
+        "COR et LAM peuvent être en 230 V ou en très basse tension, mais pas l'un en 230 V et l'autre en TBTS. Électroserrure par le module H70/EL : seulement en 230 V (fig. 5, 79 99).",
+        "Photocellules F2ES / F2S : depuis HW05, plus de synchronisation 50 Hz de deux paires F2S ; revoir leur position si elle en dépendait.",
+        "Remplacement d'une H70/101AC ou H70/103AC (série H30) : retirer l'ancienne centrale, mettre les deux entretoises fournies, installer la nouvelle ; régler 72 et 75 pour les encodeurs et fins de course standard.",
+        "Sécurités absentes : shunter sur COM ou les désactiver par paramètres 50, 51, 53, 54, 73, 74.",
+        "Caractéristiques : puissance maxi absorbée 650 W ; veille ≤ 0,5 W (1,8 W sans veille) ; −20 °C à +55 °C ; IP00 (IP54 en H70/105AC/BOX) ; carte 98 × 141 × 40 mm, 0,225 kg (boîtier 255 × 200 × 99 mm)."
+      ]
+    },
+    parametres: {
+      intro: "Firmware r2.00. Valeur entre parenthèses = réglage usine (index de la notice). Les paramètres se lisent à tout moment mais ne se modifient que moteur arrêté.",
+      navigation: [
+        "UP ▲ / DOWN ▼ : paramètre suivant / précédent.",
+        "+ / − : modifier la valeur (elle clignote). Maintenir pour défiler vite.",
+        "Enregistrer : attendre quelques secondes ou passer à un autre paramètre avec UP/DOWN. L'écran clignote vite = valeur enregistrée.",
+        "Après modification de 72 ou 75 : couper le secteur, attendre que l'écran s'éteigne, remettre, puis refaire l'apprentissage.",
+        "Si un mot de passe est actif (CP 01), les valeurs sont visibles mais non modifiables : saisir P1–P4 d'abord."
+      ],
+      groupes: [
+        { nom: "Configuration générale", items: [
+          { code: "71", def: "01", titre: "Position du moteur (vue de l'intérieur)", valeurs: [
+            ["00", "Moteur à gauche."], ["01", "Moteur à droite."]],
+            note: "Définit aussi le rôle de FC1 / FC2 sur la H70/105AC." },
+          { code: "72", def: "11", titre: "Fins de course", valeurs: [
+            ["00", "Aucun."], ["01", "Ouverture et fermeture (micro-interrupteur ou magnétique standard)."], ["02", "Ouverture seulement (standard)."], ["11", "Ouverture et fermeture, magnétiques « low power »."], ["12", "Ouverture seulement, « low power »."]] },
+          { code: "75", def: "11", titre: "Encodeur", valeurs: [
+            ["00", "Aucun (contrôle au temps de manœuvre)."], ["01", "Optiques standard (8 impulsions / tour)."], ["02", "Magnétiques (1 impulsion / tour), série E30 seulement."], ["11", "Optiques « low power » (8 impulsions / tour)."]],
+            note: "Le texte de la borne encodeur dit « activé en usine (7501) », l'index donne 11." },
+          { code: "L1", def: "04", titre: "Veille ≤ 0,5 W", valeurs: [
+            ["00", "Désactivée (installations industrielles seulement)."], ["01", "Après 5 min."], ["02", "Après 10 min."], ["03", "Après 15 min."], ["04", "Après 20 min."]] },
+          { code: "30", def: "00", titre: "Filtre anti-perturbations de l'alimentation", valeurs: [
+            ["00", "Désactivé."], ["01", "Filtrage supplémentaire en cas de troubles d'alimentation (groupe électrogène)."]] }
+        ]},
+        { nom: "Logique de fonctionnement", items: [
+          { code: "A2", def: "00", titre: "Refermeture automatique après pause", valeurs: [
+            ["00", "Désactivée."], ["01–15", "1 à 15 tentatives après intervention des photocellules, puis reste ouvert."], ["99", "Tentatives illimitées."]] },
+          { code: "A3", def: "00", titre: "Refermeture après coupure secteur", valeurs: [
+            ["00", "Désactivée."], ["01", "Si pas complètement ouvert : fermeture après 5 s de préclignotement, en récupération de position."]] },
+          { code: "A4", def: "00", titre: "Commande pas-à-pas (PP)", valeurs: [
+            ["00", "Ouvre-stop-ferme-stop…"], ["01", "Copropriété : PP ignoré en ouverture, pause renouvelée."], ["02", "Copropriété : PP ignoré en ouverture, pause non renouvelée."], ["03", "Ouvre-ferme-ouvre-ferme."], ["04", "Ouvre-ferme-stop-ouvre."]] },
+          { code: "A5", def: "00", titre: "Préclignotement", valeurs: [
+            ["00", "Désactivé."], ["01–10", "1 à 10 s avant chaque manœuvre."], ["99", "5 s avant la fermeture seulement."]] },
+          { code: "A6", def: "00", titre: "Copropriété sur PED", valeurs: [
+            ["00", "Désactivée."], ["01", "PED ignoré pendant l'ouverture."]] },
+          { code: "A7", def: "00", titre: "Homme présent", valeurs: [
+            ["00", "Désactivé."], ["01", "Le portail bouge tant que AP ou CH est maintenu."]] },
+          { code: "15", def: "30", titre: "Ouverture partielle (%)", valeurs: [
+            ["15–99", "La notice indique « de 1 % à 99 % »."]] },
+          { code: "21", def: "30", titre: "Temps de fermeture automatique", valeurs: [
+            ["00–90", "0 à 90 s."], ["92–99", "2 à 9 min."]] },
+          { code: "49", def: "00", titre: "Tentatives de refermeture après bord sensible / obstacle", valeurs: [
+            ["00", "Aucune."], ["01–03", "1 à 3 tentatives (≤ A2 conseillé)."]] },
+          { code: "80", def: "00", titre: "Contact horloge", valeurs: [
+            ["00", "Ouvre et reste ouvert, commandes ignorées."], ["01", "Ouvre et reste ouvert, commandes acceptées."]] }
+        ]},
+        { nom: "Temps et mouvement", items: [
+          { code: "11", def: "15", titre: "Espace de ralentissement (%)", valeurs: [
+            ["01–30", "1 à 30 % de la course."]],
+            note: "Sans encodeur : refaire l'apprentissage après chaque modification." },
+          { code: "13", def: "10", titre: "Contrôle de position (avec encodeur, sans fins de course)", valeurs: [
+            ["01–40", "Tours moteur."]],
+            note: "Trop bas : inversion sur les butées." },
+          { code: "16", def: "00", titre: "Temps supplémentaire après inversion (sans encodeur)", valeurs: [
+            ["00", "3 s."], ["01", "6 s (moteurs oléohydrauliques)."]] },
+          { code: "22", def: "20", titre: "Temps de manœuvre (sans encodeur)", valeurs: [
+            ["00–99", "0 à 99 s."]],
+            note: "Influe sur le ralentissement (11)." },
+          { code: "24", def: "00", titre: "Double temps de manœuvre (sans encodeur)", valeurs: [
+            ["00", "Désactivé."], ["01", "Activé."]] },
+          { code: "27", def: "02", titre: "Temps d'inversion après bord sensible / obstacle", valeurs: [
+            ["00–60", "0 à 60 s."]] },
+          { code: "31", def: "05", titre: "Couple pendant la manœuvre", valeurs: [["01–08", "1 mini … 8 maxi (≤ 33)."]] },
+          { code: "32", def: "06", titre: "Couple pendant le ralentissement", valeurs: [["01–08", "1 mini … 8 maxi."]] },
+          { code: "33", def: "08", titre: "Couple maxi d'aide au démarrage", valeurs: [["01–08", "1 mini … 8 maxi."]] },
+          { code: "34", def: "03", titre: "Démarrage progressif", valeurs: [
+            ["00", "Désactivé."], ["01–02", "Lent et progressif."], ["03–04", "Encore plus lent (seulement avec encodeur 75 01 / 02 ; éviter 04 pour un portail lourd)."]] },
+          { code: "35", def: "08", titre: "Couple après bord sensible ou encodeur", valeurs: [["00", "Couple du paramètre 31."], ["01–08", "1 mini … 8 maxi."]] },
+          { code: "36", def: "03", titre: "Durée du couple maxi au démarrage", valeurs: [["00–20", "0 à 20 s."]] },
+          { code: "37", def: "00", titre: "Approche des butées (encodeur 75 01)", valeurs: [["00", "Désactivée."], ["01–05", "Vantail de 0,5 à 2,5 m : couple réduit en fin de course (augmenté en fermeture avec électroserrure)."]] },
+          { code: "41", def: "01", titre: "Ralentissement", valeurs: [["00", "Désactivé."], ["01", "Moyen (maxi pour moteurs 6 pôles)."], ["02", "Maximal (jamais avec moteurs 6 pôles)."]] },
+          { code: "42", def: "60", titre: "Sensibilité obstacles pendant la manœuvre", valeurs: [["01–99", "1 mini … 99 maxi (moins de 60 pour moteurs 6 pôles)."]] },
+          { code: "43", def: "10", titre: "Sensibilité obstacles pendant le ralentissement", valeurs: [["01–99", "1 mini … 99 maxi (moins de 60 pour moteurs 6 pôles)."]] }
+        ]},
+        { nom: "Freinage et électroserrure", items: [
+          { code: "60", def: "01", titre: "Freinage en butée / fin de course", valeurs: [["00", "Désactivé."], ["01", "Activé."]], note: "Présent dans l'index, absent du menu détaillé." },
+          { code: "61", def: "01", titre: "Freinage après photocellules", valeurs: [["00", "Désactivé."], ["01", "Activé."]] },
+          { code: "62", def: "01", titre: "Freinage après STOP", valeurs: [["00", "Désactivé."], ["01", "Activé."]] },
+          { code: "63", def: "01", titre: "Freinage avant inversion", valeurs: [["00", "Désactivé."], ["01", "Activé."]] },
+          { code: "64", def: "05", titre: "Temps de freinage", valeurs: [["01–20", "1 à 20 dixièmes de seconde (valeurs basses conseillées)."]] },
+          { code: "65", def: "08", titre: "Force de freinage", valeurs: [["04–08", "4 mini … 8 maxi, à adapter au moteur."]] },
+          { code: "28", def: "00", titre: "Anticipation de l'électroserrure", valeurs: [["00–02", "0 à 2 s."]], note: "Visible seulement avec 79 99 (la notice écrit « si l'encodeur est activé 79 99 »)." },
+          { code: "29", def: "00", titre: "Durée de l'électroserrure", valeurs: [["00", "Désactivée."], ["01–06", "1 à 6 s (supérieure à 38 si activé)."]], note: "Visible seulement avec 79 99." },
+          { code: "38", def: "00", titre: "Coup de bélier", valeurs: [["00", "Désactivé."], ["01–04", "Poussée en fermeture 1 à 4 s avant chaque ouverture (règle 28 01 et 29 03)."]] }
+        ]},
+        { nom: "Sécurités", items: [
+          { code: "50", def: "00", titre: "FT1 en ouverture", valeurs: [["00", "Désactivée."], ["01", "Arrêt."], ["02", "Inversion immédiate."], ["03", "Arrêt temporaire."], ["04", "Inversion retardée."]] },
+          { code: "51", def: "02", titre: "FT1 en fermeture", valeurs: [["00", "Désactivée."], ["01", "Arrêt."], ["02", "Inversion immédiate."], ["03", "Arrêt temporaire."], ["04", "Inversion retardée."]] },
+          { code: "52", def: "01", titre: "FT1 portail fermé", valeurs: [["00", "Occultée : n'ouvre pas."], ["01", "Ouvre sur commande même occultée."], ["02", "Occultée = commande d'ouverture."]], note: "La description de la borne FT1 indique 52 00 d'usine, l'index 01." },
+          { code: "53", def: "00", titre: "FT2 en ouverture", valeurs: [["00", "Désactivée."], ["01", "Arrêt."], ["02", "Inversion immédiate."], ["03", "Arrêt temporaire."], ["04", "Inversion retardée."]], note: "La description de la borne FT2 indique 53 03 d'usine, l'index 00." },
+          { code: "54", def: "00", titre: "FT2 en fermeture", valeurs: [["00", "Désactivée."], ["01", "Arrêt."], ["02", "Inversion immédiate."], ["03", "Arrêt temporaire."], ["04", "Inversion retardée."]], note: "La description de la borne FT2 indique 54 02 d'usine, l'index 00." },
+          { code: "55", def: "01", titre: "FT2 portail fermé", valeurs: [["00", "Occultée : n'ouvre pas."], ["01", "Ouvre sur commande même occultée."], ["02", "Occultée = commande d'ouverture."]], note: "La description de la borne FT2 indique 55 00 d'usine, l'index 01." },
+          { code: "56", def: "00", titre: "Fermeture 6 s après passage devant les photocellules", valeurs: [["00", "Désactivée."], ["01", "FT1."], ["02", "FT2."]], note: "Visible seulement avec la veille désactivée." },
+          { code: "73", def: "00", titre: "Bord sensible COS1", valeurs: [["00", "Non installé."], ["01", "N.F., inverse en ouverture seulement."], ["02", "8k2, inverse en ouverture seulement."], ["03", "N.F., inverse toujours."], ["04", "8k2, inverse toujours."]] },
+          { code: "74", def: "00", titre: "Bord sensible COS2", valeurs: [["00", "Non installé."], ["01", "N.F., inverse en fermeture seulement."], ["02", "8k2, inverse en fermeture seulement."], ["03", "N.F., inverse toujours."], ["04", "8k2, inverse toujours."]] }
+        ]},
+        { nom: "Sorties et radio", items: [
+          { code: "A8", def: "00", titre: "Sortie SC : voyant / photocellules", valeurs: [
+            ["00", "L1 00 : voyant éteint fermé, fixe en mouvement et ouvert. L1 ≠ 00 : SC alimente les photocellules, coupées en veille."], ["01", "Voyant clignotant (seulement avec L1 00)."], ["02", "Comme 00 + test photocellules."]] },
+          { code: "76 · 77", def: "00 · 01", titre: "Canaux radio PR1 / PR2", valeurs: [
+            ["00", "Pas-à-pas."], ["01", "Ouverture partielle."], ["02", "Ouverture."], ["03", "Fermeture."], ["04", "Arrêt."], ["05", "Sortie COR tant que la touche est maintenue."], ["06", "Sortie COR marche / arrêt."], ["07", "Clignotant tant que la touche est maintenue."], ["08", "Clignotant marche / arrêt."]] },
+          { code: "78", def: "00", titre: "Intermittence du clignotant", valeurs: [["00", "Gérée par le clignotant."], ["01", "Lente."], ["02", "Lente en ouverture, rapide en fermeture."]] },
+          { code: "79", def: "02", titre: "Sortie COR (courtoisie / électroserrure)", valeurs: [
+            ["00", "Désactivée."], ["01", "Impulsion au début de chaque manœuvre."], ["02", "Pendant la manœuvre."], ["03–90", "3 à 90 s après."], ["92–98", "2 à 8 min après."], ["99", "Électroserrure."]] }
+        ]},
+        { nom: "Maintenance et identification", items: [
+          { code: "FA", def: "00", titre: "Retour aux valeurs d'usine", valeurs: [
+            ["+ et − 4 s", "rES- clignote : valeurs usine restaurées."]],
+            note: "La notice dit « à l'exception du paramètre A1 », paramètre qui n'existe pas dans la liste de cette centrale. Impossible si un mot de passe est actif. Autre méthode : à la mise sous tension, maintenir UP et DOWN 4 s." },
+          { code: "n0 – n6", def: "—", titre: "Identification", valeurs: [["n0", "Version HW."], ["n1 · n2", "Année · semaine de production."], ["n3 – n5", "Numéro de série."], ["n6", "Version FW."]] },
+          { code: "o0 · o1", def: "—", titre: "Compteur de manœuvres (× 100)", valeurs: [["Exemple", "01 23 = 12 300 manœuvres."]] },
+          { code: "h0 · h1 / d0 · d1", def: "—", titre: "Heures de manœuvre / jours d'allumage", valeurs: [["Exemple", "01 23 = 123."]] },
+          { code: "P1 – P4 · CP", def: "00", titre: "Mot de passe", valeurs: [
+            ["Activer", "Saisir P1 à P4, aller sur CP, + et − 4 s ; éteindre et rallumer, vérifier CP 01."], ["Déblocage temporaire", "Saisir le mot de passe (CP 00) ; se réactive après 30 min sans touche ou à la remise sous tension."], ["Supprimer", "Mot de passe saisi, P1–P4 à 00, CP + et − 4 s, éteindre et rallumer."]],
+            note: "Mot de passe perdu : assistance Roger." }
+        ]}
+      ]
+    },
+    apprentissage: {
+      avant: [
+        "71 — position du moteur : 01 à droite (usine), 00 à gauche, vue de l'intérieur.",
+        "Homme présent désactivé : A7 00. Butées mécaniques en ouverture et en fermeture.",
+        "Portail en position intermédiaire. TEST : contrôler commandes et sécurités ; shunter ou désactiver celles qui ne sont pas installées (50, 51, 53, 54, 73, 74). TEST doit afficher 00.",
+        "Sans encodeur : régler d'abord 11 (ralentissement). S'écarter du faisceau des photocellules."
+      ],
+      etapes: [
+        "Avec encodeur (M30, H30, R30, G30, E30), avec ou sans fins de course : PROG 4 s (APP-), PROG : A to ; ouverture à la vitesse 41 jusqu'à la butée ou au fin de course ; A to clignote 2 s ; fermeture jusqu'au fin de course de fermeture.",
+        "Avec fins de course, sans encodeur (R30/1209, G30/2205) : PROG 4 s, PROG ; AP1 ; arrêt au fin de course d'ouverture, PA clignote 2 s ; fermeture automatique (CH1) jusqu'au fin de course de fermeture.",
+        "Sans fins de course ni encodeur : PROG 4 s, PROG ; AP1 ; en butée d'ouverture attendre 3–4 s puis PROG (pa clignote 2 s) ; fermeture automatique (CH1) ; en butée de fermeture attendre 3–4 s puis PROG.",
+        "Réussi : retour à l'état des commandes et sécurités."
+      ],
+      apres: [
+        "APPE : TEST pour annuler, vérifier la sécurité en alarme, recommencer.",
+        "Contrôle final : forces selon EN 12453 / EN 12445, récupération de position après coupure, fins de course, déverrouillage (H70/104AC)."
+      ]
+    }
+  },
+  {
+    id: "roger-h70-200ac",
+    nom: "H70/200AC",
+    modeles: "Portail battant ou coulissant 1 ou 2 moteurs asynchrones 230 V (115 V) : R21, H21, R20, M20, H20, H23, R23, E30, MONOS4/220 (MONOS4/200 dans le paramètre A1), R41 — HW05, boîtier H70/200AC/BOX",
+    type: "Moteurs 230 V monophasés, commande par triac — afficheur 4 chiffres, touches UP / DOWN / + / − / PROG / TEST",
+    source: "Notice Roger H70/200AC IS304 Rev.01, firmware r2.00 (HW05)",
+    codes: [
+      { code: "r2.00", type: "afficheur", titre: "Version du firmware", action: "Affichée 3 s à la mise sous tension, puis l'afficheur montre l'état des commandes et sécurités." },
+      { code: "xx EE", type: "afficheur", titre: "Erreur de paramètre (ex. 15EE, 21EE)", action: "Le paramètre indiqué a une valeur incorrecte : la corriger et l'enregistrer." },
+      { code: "synC", type: "afficheur", titre: "Défaut d'extraction de la synchronisation réseau", action: "Contacter le service après-vente Roger." },
+      { code: "APPE", type: "afficheur", titre: "Apprentissage non terminé", action: "TEST appuyé par erreur ou sécurité en alarme : TEST, vérifier les sécurités et leurs branchements, refaire l'apprentissage." },
+      { code: "StbY", type: "afficheur", titre: "Passage en veille (≤ 0,5 W)", action: "Normal après le temps L1 (20 min d'usine) : afficheur éteint, LED POWER clignote lentement, sortie SC coupée. Réveil : PROG, TEST ou commande radio (Acti)." },
+      { code: "Acti", type: "afficheur", titre: "Sortie de veille", action: "Normal : la sortie SC réalimente les photocellules." },
+      { code: "POWER éteinte", type: "led", titre: "LED POWER éteinte", action: "Pas d'alimentation, fusible F1 (6,3 A) grillé (remplacer hors tension) ou surcharge sur le 24 V : vérifier les branchements de la sortie SC." },
+      { code: "POWER clignote", type: "led", titre: "LED POWER clignote lentement", action: "Veille (L1). PROG, TEST ou une commande radio la réveille. Un mot de passe débloqué se réactive en veille." },
+      { code: "Mauvaise manœuvre", type: "symptome", titre: "Le portail ne fait pas la manœuvre souhaitée", action: "Fils du moteur inversés : la notice dit d'inverser deux fils sur la borne X-Y-Z ou Z-Y-X (bornes du moteur AP-CM-CH sur cette carte)." },
+      { code: "Flash HS", type: "symptome", titre: "Le clignotant ne fonctionne pas", action: "Lampe / LED grillée ou fils débranchés (LAM, contact pur 230 V 40 W)." },
+      { code: "Voyant HS", type: "symptome", titre: "Le voyant portail ouvert ne marche pas", action: "Ampoule grillée ou fils débranchés (SC – COM). Avec la veille active (L1 ≠ 00), A8 n'accepte que 00 et 02 : pas de voyant clignotant." },
+      { code: "Portée radio faible", type: "symptome", titre: "La télécommande porte peu", action: "Installer l'antenne à l'extérieur (RG58, 10 m max). Remplacer les piles des émetteurs." },
+      { code: "00", type: "test", titre: "TEST : aucune sécurité en alarme", action: "Aucune sécurité en alarme." },
+      { code: "43 (ou 41)", type: "test", titre: "TEST : contact STOP ouvert", action: "Installer un bouton STOP (N.F.) ou shunter ST avec COM (shunté d'usine)." },
+      { code: "41 (ou 39)", type: "test", titre: "TEST : bord sensible COS1 ouvert", action: "Vérifier le branchement. Inutilisé : 73 00 ou shunter COS1 avec COM. La notice donne 41 au chapitre 9 et 39 au chapitre 14." },
+      { code: "40 (ou 38)", type: "test", titre: "TEST : bord sensible COS2 ouvert", action: "Vérifier le branchement. Inutilisé : 74 00 ou shunter COS2 avec COM. La notice donne 40 au chapitre 9 et 38 au chapitre 14." },
+      { code: "39 (ou 37)", type: "test", titre: "TEST : photocellule FT1 ouverte", action: "Vérifier le branchement. Inutilisée : 50 00 et 51 00 ou shunter FT1 avec COM. La notice donne 39 au chapitre 9 et 37 au chapitre 14." },
+      { code: "38 (ou 36)", type: "test", titre: "TEST : photocellule FT2 ouverte", action: "Vérifier le branchement. Inutilisée : 53 00 et 54 00 ou shunter FT2 avec COM. La notice donne 38 au chapitre 9 et 36 au chapitre 14." },
+      { code: "FE", type: "test", titre: "TEST : au moins 3 fins de course ouverts ou non raccordés", action: "Vérifier le raccordement des fins de course (et le paramètre 72)." },
+      { code: "FA", type: "test", titre: "TEST : portail ouvert / sur les fins de course d'ouverture", action: "Normal portail ouvert ; sinon fin de course d'ouverture non branché." },
+      { code: "FC", type: "test", titre: "TEST : portail fermé / sur les fins de course de fermeture", action: "Normal portail fermé ; sinon fin de course de fermeture non branché." },
+      { code: "F1 / F2", type: "test", titre: "TEST : fins de course du vantail 1 / 2 en erreur", action: "Fins de course du vantail non branchés ou mal branchés : vérifier." },
+      { code: "22 · 23 · 24 · 25 (ou 20 à 23)", type: "test", titre: "TEST : fin de course activé (FCA1, FCC1, FCA2, FCC2)", action: "Chapitre 9 : 22 ouverture moteur 1, 23 fermeture moteur 1, 24 ouverture moteur 2, 25 fermeture moteur 2 ; le tableau du chapitre 14 donne 20 à 23 dans le même ordre. Normal si le vantail est en butée ; sinon vérifier le branchement." },
+      { code: "PP · CH · AP · PE · Or", type: "test", titre: "TEST : commande active sans action", action: "Contact N.O. défectueux ou bouton / horloge mal raccordé : vérifier le contact avec COM. Ne pas shunter ORO s'il n'est pas utilisé." }
+    ],
+    afficheur: {
+      intro: "En fonctionnement normal, l'afficheur ne montre pas des chiffres mais l'état des entrées : certains segments correspondent chacun à une commande ou à une sécurité.",
+      ecrans: [
+        { nom: "État des commandes", digits: [
+          { seg: { a: "AP", g: "PP", d: "CH" }, dp: "POWER" },
+          { seg: { a: "PED", d: "ORO" }, dp: "ENC1" }
+        ]},
+        { nom: "État des sécurités", digits: [
+          { seg: { a: "FT1", g: "COS1", d: "COS2" }, dp: "ENC2" },
+          { seg: { a: "FT2", g: "FCA2", d: "FCC2", e: "FCA1", c: "FCC1" }, dp: "STOP" }
+        ]}
+      ],
+      reperes: {
+        AP:    { g: "commande", nom: "Ouverture", repos: "Éteint", detail: "S'allume à la réception d'une commande d'ouverture." },
+        PP:    { g: "commande", nom: "Pas-à-pas", repos: "Éteint", detail: "S'allume à la réception d'une commande pas-à-pas (bornier ou radio PR1)." },
+        CH:    { g: "commande", nom: "Fermeture", repos: "Éteint", detail: "S'allume à la réception d'une commande de fermeture." },
+        PED:   { g: "commande", nom: "Ouverture partielle", repos: "Éteint", detail: "S'allume à la réception d'une commande PED (bornier ou radio PR2)." },
+        ORO:   { g: "commande", nom: "Horloge", repos: "Éteint", detail: "Allumé tant que le contact horloge est fermé." },
+        POWER: { g: "led", nom: "Alimentation", repos: "Allumé", detail: "Carte alimentée. Clignote lentement en veille. Éteint : pas de tension, fusible F1 grillé ou surcharge 24 V." },
+        ENC1:  { g: "securite", nom: "Encodeur moteur 1", repos: "Selon 75", detail: "Indication de l'encodeur du moteur 1 (encodeurs désactivés d'usine, 75 00)." },
+        ENC2:  { g: "securite", nom: "Encodeur moteur 2", repos: "Selon 75", detail: "Indication de l'encodeur du moteur 2." },
+        FT1:   { g: "securite", nom: "Photocellules FT1", repos: "Allumé", detail: "Éteint = faisceau coupé ou non raccordé. Clignotant = désactivé par paramètre." },
+        FT2:   { g: "securite", nom: "Photocellules FT2", repos: "Allumé", detail: "Éteint = faisceau coupé ou non raccordé. Clignotant = désactivé par paramètre." },
+        COS1:  { g: "securite", nom: "Bord sensible COS1", repos: "Allumé", detail: "Éteint = bord actionné ou non raccordé. Clignotant = désactivé." },
+        COS2:  { g: "securite", nom: "Bord sensible COS2", repos: "Allumé", detail: "Éteint = bord actionné ou non raccordé. Clignotant = désactivé (74 00, usine)." },
+        FCA1:  { g: "securite", nom: "Fin de course ouverture vantail 1", repos: "Allumé", detail: "S'éteint sur le fin de course (si 72 ≠ 00)." },
+        FCC1:  { g: "securite", nom: "Fin de course fermeture vantail 1", repos: "Allumé", detail: "S'éteint sur le fin de course (si 72 ≠ 00)." },
+        FCA2:  { g: "securite", nom: "Fin de course ouverture vantail 2", repos: "Allumé", detail: "S'éteint sur le fin de course (si 72 ≠ 00)." },
+        FCC2:  { g: "securite", nom: "Fin de course fermeture vantail 2", repos: "Allumé", detail: "S'éteint sur le fin de course (si 72 ≠ 00)." },
+        STOP:  { g: "securite", nom: "STOP", repos: "Allumé", detail: "Éteint = contact STOP ouvert." }
+      },
+      regles: [
+        "Commandes : segments normalement ÉTEINTS, ils s'allument quand la commande arrive.",
+        "Sécurités : segments normalement ALLUMÉS. Éteint = en alarme ou non raccordé. Clignotant = désactivé par son paramètre.",
+        "La position exacte des segments ENC1, ENC2 et fins de course est reprise de la figure de la notice : en cas de doute, se fier au mode TEST."
+      ],
+      autres: [
+        { titre: "Mode paramètres", texte: "UP / DOWN font défiler : les 2 chiffres de gauche = numéro du paramètre, les 2 de droite = sa valeur. + / − pour modifier ; la valeur clignote, puis l'afficheur clignote vite quand elle est enregistrée. Modification possible seulement moteur à l'arrêt." },
+        { titre: "Mode TEST (touche TEST)", texte: "Portail en mouvement : TEST = ARRÊT ; un 2e appui passe en TEST. À gauche pendant 5 s : la commande reçue (AP, CH, PP, PE, OR). À droite : le numéro de la borne de la sécurité en alarme, qui clignote, ou FE / FA / FC / F1 / F2. La notice donne deux numérotations : chapitre 9 (43 STOP, 41 COS1, 40 COS2, 39 FT1, 38 FT2, fins de course 22 à 25) et tableau du chapitre 14 (41 STOP, 39 COS1, 38 COS2, 37 FT1, 36 FT2, fins de course 20 à 23). Sortie : TEST ; retour seul après 10 s." },
+        { titre: "Veille", texte: "Après le temps L1 (5, 10, 15 ou 20 min, usine 20 min) : consommation ≤ 0,5 W, afficheur éteint, sortie SC coupée (photocellules à alimenter sur SC), LED POWER clignote lentement. L1 00 seulement pour les installations industrielles." },
+        { titre: "Récupération de position", texte: "Après une coupure, une intervention sur la centrale ou 3 obstacles au même endroit (encodeurs actifs) : manœuvre de récupération, lente avec encodeur, à vitesse normale sans ; clignotant 3 s allumé / 1,5 s éteint. Ne rien commander avant la fin de l'ouverture. Un fin de course récupère la position immédiatement." }
+      ]
+    },
+    bornier: {
+      groupes: [
+        { nom: "Puissance", bornes: [
+          { n: "L · N · ⏚", label: "Secteur", desc: "230 V ±10 % 50 Hz (ou 115 V ±10 % 60 Hz, moteurs adaptés). H05RN-F 3G1,5 (15 m max) ou 3G2,5 (30 m max) : L marron, N bleu, terre jaune/vert. Fusible F1 F6,3 A 250 V (5x20). Borne réservée à l'alimentation", t: "alim" },
+          { n: "AP1 · CM · CH1", label: "Moteur 1", desc: "Moteur asynchrone 230 V, condensateur entre AP1 et CH1 (valeur selon la notice du moteur, type S2 ou S3, fourni par Roger). Fins de course en série possibles : ouverture sur AP1-CM, fermeture sur CH1-CM. 450 W max, câble 4 × 1,5 mm² (20 m max)", t: "moteur" },
+          { n: "AP2 · CM · CH2", label: "Moteur 2", desc: "Idem moteur 1 (fins de course AP2-CM, CH2-CM). Même type de moteur que le 1", t: "moteur" }
+        ]},
+        { nom: "Sorties", bornes: [
+          { n: "12 · 13", label: "COR", desc: "Contact pur, éclairage de courtoisie 230 V 100 W (115 V 50 W) ; fusible extérieur", t: "sortie" },
+          { n: "14 · 15", label: "Clignotant", desc: "Contact pur 230 V 40 W (115 V 25 W) ; préclignotement A5, intermittence 78", t: "sortie" },
+          { n: "46 · 47", label: "ES (électroserrure)", desc: "Contact pur pour alimentation extérieure de l'électroserrure : 12 V~ 15 VA max dans le texte, 12 V~ 16 VA sur la fig. 3 (module H70/EL, seulement en 230 V), « 25 W (contact pur) max 230 V~ » dans les caractéristiques", t: "sortie" },
+          { n: "24V · COM", label: "Accessoires", desc: "24 V, 9 W", t: "alim" },
+          { n: "SC · COM", label: "Voyant / photocellules", desc: "Voyant portail ouvert 24 V 2 W (A8), ou alimentation des photocellules (TX et RX) coupée en veille ; test photocellules A8 02", t: "sortie" }
+        ]},
+        { nom: "Sécurités (N.F.)", bornes: [
+          { n: "FT1 · COM", label: "Photocellules FT1", desc: "Usine : 50 00, 51 02 (inversion en fermeture), 52 01. Absente : shunter ou 50 00 et 51 00. Photocellules F2ES / F2S", t: "nf" },
+          { n: "FT2 · COM", label: "Photocellules FT2", desc: "Usine : 53 00, 54 00 (désactivée), 55 01. Absente : shunter ou 53 00 et 54 00", t: "nf" },
+          { n: "COS1 · COM", label: "Bord sensible COS1", desc: "N.F. ou 8,2 kΩ ; usine 73 03 (N.F., inverse toujours)", t: "nf" },
+          { n: "COS2 · COM", label: "Bord sensible COS2", desc: "N.F. ou 8,2 kΩ ; usine 74 00 (désactivé)", t: "nf" },
+          { n: "ST · COM", label: "STOP", desc: "N.F., shunté d'usine", t: "nf" },
+          { n: "FCA1 · FCC1 · FCA2 · FCC2 · COM", label: "Fins de course à la centrale", desc: "N.F., ouverture / fermeture de chaque moteur. Paramètre 72 ; fins de course magnétiques « low power » conseillés (72 11 / 12) ; ne pas mélanger les types. Fins de course magnétiques (fig. 6) : noir sur COM et rouge sur 24V (alimentation), marron sur FCC, bleu sur FCA", t: "nf" },
+          { n: "+5V · ENC1 · ENC2 · COM", label: "Encodeurs", desc: "Encodeurs moteur 1 / 2 (75 00 d'usine = désactivés). R21 (75 03) : gris sur ENC, noir sur COM, marron sur +5V (fig. 9) ; optiques (75 01) : marron sur ENC, bleu sur COM, rouge sur +5V (fig. 7). Câble 3 × 0,5 mm² (30 m max). Brancher hors tension", t: "nf" }
+        ]},
+        { nom: "Commandes (N.O.)", bornes: [
+          { n: "AP · COM", label: "Ouverture", desc: "", t: "no" },
+          { n: "CH · COM", label: "Fermeture", desc: "", t: "no" },
+          { n: "PP · COM", label: "Pas-à-pas", desc: "Fonctionnement selon A4", t: "no" },
+          { n: "PED · COM", label: "Ouverture partielle", desc: "2 vantaux : ouverture totale du vantail 1 ; 1 vantail : 50 % (15)", t: "no" },
+          { n: "ORO · COM", label: "Horloge", desc: "Ouvre et maintient ouvert (80)", t: "no" }
+        ]},
+        { nom: "Radio", bornes: [
+          { n: "16 · 17 ANT", label: "Antenne", desc: "RG58, 10 m max conseillé, sans jonction", t: "autre" },
+          { n: "RECEIVER", label: "Récepteur enfichable", desc: "PR1 pas-à-pas (76), PR2 ouverture partielle (77)", t: "autre" }
+        ]}
+      ],
+      fusibles: "F1 F6,3 A 250 V (5x20) circuit de puissance moteurs · alimentation 24 V et logique autoprotégées électroniquement",
+      notes: [
+        "Numéros de bornes (schéma de la carte) : 43 ST, 42 COM, 41 COS1, 40 COS2, 39 FT1, 38 FT2, 37 COM, 36 SC, 35 COM, 34 24V, 33 COM, 32 PED, 31 PP, 30 CH, 29 AP, 28 ORO, 27 COM ; bornier fins de course / encodeurs : 26 COM, 25 FCC2, 24 FCA2, 23 FCC1, 22 FCA1, 21 COM, 20 ENC2, 19 ENC1, 18 +5V. Le texte de la notice donne des numéros différents par endroits (ex. FT1 avec « 35(COM) » puis « shunter 37(FT1) – 33(COM) », encodeur 1 « 18 19 20 = +5V ENC1 COM ») ; les bornes sont indiquées ici par leur nom.",
+        "Photocellules F2ES / F2S : depuis HW05 (alimentation continue), plus de synchronisation 50 Hz de deux paires F2S ; revoir leur position si elle en dépendait.",
+        "Remplacement d'une ancienne H70/200AC : compatible avec les encodeurs et fins de course standard si 72 et 75 sont réglés en conséquence.",
+        "Deux coulissants opposés : automatisme A sur AP1-CM-CH1, B sur AP2-CM-CH2 ; pour deux moteurs linéaires opposés, câble de fin de course « LOW POWER ».",
+        "Sécurités absentes : shunter sur COM ou les désactiver par paramètres 50, 51, 53, 54, 73, 74.",
+        "Caractéristiques : puissance maxi absorbée 920 W ; veille ≤ 0,5 W (1,5 W sans veille) ; −20 °C à +55 °C ; IP44 (H70/200AC/BOX) ; carte 137 × 156 × 43 mm, 0,34 kg. Couvercle serré à 1,2 Nm pour l'étanchéité."
+      ]
+    },
+    parametres: {
+      intro: "Firmware r2.00. Valeur entre parenthèses = réglage usine. Les paramètres se lisent à tout moment mais ne se modifient que moteur arrêté.",
+      navigation: [
+        "UP ▲ / DOWN ▼ : paramètre suivant / précédent.",
+        "+ / − : modifier la valeur (elle clignote). Maintenir pour défiler vite.",
+        "Enregistrer : attendre quelques secondes ou passer à un autre paramètre avec UP/DOWN. L'écran clignote vite = valeur enregistrée.",
+        "Après modification de 70, 72 ou 75 : couper le secteur, attendre que l'écran s'éteigne, remettre, puis refaire l'apprentissage.",
+        "Si un mot de passe est actif (CP 01), les valeurs sont visibles mais non modifiables : saisir P1–P4 d'abord."
+      ],
+      groupes: [
+        { nom: "Configuration générale", items: [
+          { code: "A1", def: "00", titre: "Type de moteur", valeurs: [
+            ["00", "Moteur standard (4 pôles) : MONOS4/200 et tous les autres."], ["01", "Moteur lent (6 pôles) : R20/302, R20/502, R21/368, H23/282, R41/832, R41/833."]],
+            note: "Une mauvaise valeur peut causer de graves dommages. Non modifié par le retour usine." },
+          { code: "70", def: "02", titre: "Nombre de moteurs", valeurs: [
+            ["01", "1 moteur."], ["02", "2 moteurs (même type)."]] },
+          { code: "72", def: "00", titre: "Fins de course branchés à la centrale", valeurs: [
+            ["00", "Aucun (ou fins de course en série sur les phases du moteur)."], ["01", "Ouverture et fermeture (micro-interrupteur ou magnétique standard)."], ["02", "Ouverture seulement (standard)."], ["11", "Ouverture et fermeture, magnétiques « low power »."], ["12", "Ouverture seulement, « low power »."]],
+            note: "Ne pas mélanger différents types de fins de course." },
+          { code: "75", def: "00", titre: "Encodeur", valeurs: [
+            ["00", "Aucun (contrôle au temps de manœuvre)."], ["01", "Optiques standard (8 impulsions / tour)."], ["02", "Série E30, magnétiques (1 impulsion / tour)."], ["03", "Série R21 (à partir de V.1), magnétiques (1 impulsion / tour)."], ["11", "Optiques « low power » (8 impulsions / tour)."]] },
+          { code: "L1", def: "04", titre: "Veille ≤ 0,5 W", valeurs: [
+            ["00", "Désactivée (installations industrielles seulement)."], ["01", "Après 5 min."], ["02", "Après 10 min."], ["03", "Après 15 min."], ["04", "Après 20 min."]] },
+          { code: "30", def: "00", titre: "Filtre alimentation par groupe électrogène", valeurs: [
+            ["00", "Désactivé."], ["01", "Filtrage supplémentaire pour fonctionnement sur groupe électrogène."]] }
+        ]},
+        { nom: "Logique de fonctionnement", items: [
+          { code: "A2", def: "00", titre: "Refermeture automatique après pause (depuis ouverture complète)", valeurs: [
+            ["00", "Désactivée."], ["01–15", "1 à 15 tentatives après intervention des photocellules, puis reste ouvert."], ["99", "Tentatives illimitées."]] },
+          { code: "A3", def: "00", titre: "Refermeture après coupure secteur", valeurs: [
+            ["00", "Désactivée."], ["01", "Si pas complètement ouvert : fermeture après 5 s de préclignotement, en récupération de position."]] },
+          { code: "A4", def: "00", titre: "Commande pas-à-pas (PP)", valeurs: [
+            ["00", "Ouvre-stop-ferme-stop…"], ["01", "Copropriété : PP ignoré en ouverture, pause renouvelée."], ["02", "Copropriété : PP ignoré en ouverture, pause non renouvelée."], ["03", "Ouvre-ferme-ouvre-ferme."], ["04", "Ouvre-ferme-stop-ouvre."]],
+            note: "01 / 02 avec A2 00 : une tentative de refermeture (A2 01) est activée automatiquement." },
+          { code: "A5", def: "00", titre: "Préclignotement", valeurs: [
+            ["00", "Désactivé."], ["01–10", "1 à 10 s avant chaque manœuvre."], ["99", "5 s avant la fermeture seulement."]] },
+          { code: "A6", def: "00", titre: "Copropriété sur PED", valeurs: [
+            ["00", "Désactivée."], ["01", "PED ignoré pendant l'ouverture."]] },
+          { code: "A7", def: "00", titre: "Homme présent", valeurs: [
+            ["00", "Désactivé."], ["01", "Le portail bouge tant que AP ou CH est maintenu."]] },
+          { code: "15", def: "99", titre: "Ouverture partielle (%)", valeurs: [
+            ["01–99", "1 à 99 % de la course."]],
+            note: "2 vantaux : ouverture totale du vantail 1 d'usine ; 1 vantail : 50 %." },
+          { code: "21", def: "30", titre: "Temps de fermeture automatique", valeurs: [
+            ["00–90", "0 à 90 s."], ["92–99", "2 à 9 min."]] },
+          { code: "49", def: "00", titre: "Tentatives de refermeture après bord sensible / obstacle", valeurs: [
+            ["00", "Aucune."], ["01–03", "1 à 3 tentatives (≤ A2 conseillé), seulement depuis l'ouverture complète."]] },
+          { code: "80", def: "00", titre: "Contact horloge", valeurs: [
+            ["00", "Ouvre et reste ouvert, commandes ignorées."], ["01", "Ouvre et reste ouvert, commandes acceptées ; horloge réactivée à la réouverture complète."]] }
+        ]},
+        { nom: "Temps de manœuvre et retards", items: [
+          { code: "16", def: "00", titre: "Temps supplémentaire après inversion (sans encodeur)", valeurs: [
+            ["00", "3 s."], ["01", "6 s (conseillé pour moteurs oléohydrauliques)."]] },
+          { code: "22 · 23", def: "04", titre: "Temps de travail ajouté moteur 1 / moteur 2 (sans encodeur)", valeurs: [
+            ["03–10", "Secondes ajoutées au temps appris (pas besoin de refaire l'apprentissage)."]],
+            note: "La notice indique « 03-10 : de 0 à 10 s »." },
+          { code: "24", def: "00", titre: "Double temps de manœuvre (sans encodeur)", valeurs: [
+            ["00", "Désactivé."], ["01", "Activé (temps de travail très longs)."]] },
+          { code: "25", def: "03", titre: "Retard du moteur 2 en ouverture", valeurs: [
+            ["00–10", "La notice indique « de 0 à 30 s »."]] },
+          { code: "26", def: "05", titre: "Retard du moteur 1 en fermeture", valeurs: [
+            ["00–60", "0 à 60 s."]],
+            note: "L'index l'intitule « retard en ouverture du moteur 1 », le menu « en fermeture »." },
+          { code: "27", def: "02", titre: "Temps d'inversion après bord sensible / obstacle", valeurs: [
+            ["00–60", "0 à 60 s."]] }
+        ]},
+        { nom: "Couple, ralentissement, obstacles", items: [
+          { code: "11 · 12", def: "15", titre: "Espace de ralentissement moteur 1 / moteur 2 (%)", valeurs: [
+            ["01–30", "1 à 30 % de la course."]],
+            note: "Sans encodeur : refaire l'apprentissage après chaque modification." },
+          { code: "13 · 14", def: "10", titre: "Contrôle de position vantail 1 / 2 (avec encodeur, sans fins de course)", valeurs: [
+            ["01–40", "Tours moteur."]],
+            note: "Usine 35 si 75 03. Trop bas : inversion sur les butées." },
+          { code: "31", def: "06", titre: "Couple pendant la manœuvre", valeurs: [
+            ["04–08", "4 mini … 8 maxi (≤ 33)."]] },
+          { code: "32", def: "06", titre: "Couple pendant le ralentissement", valeurs: [
+            ["04–08", "4 mini … 8 maxi."]] },
+          { code: "33", def: "08", titre: "Couple maxi d'aide au démarrage", valeurs: [
+            ["01–08", "1 mini … 8 maxi."]] },
+          { code: "34", def: "02", titre: "Démarrage progressif (soft-start)", valeurs: [
+            ["00", "Désactivé."], ["01–02", "Accélération lente et progressive."], ["03–04", "Encore plus lente (seulement avec encodeur ; éviter 04 pour un portail lourd)."]] },
+          { code: "35", def: "08", titre: "Couple après bord sensible ou encodeur", valeurs: [
+            ["00", "Couple du paramètre 31."], ["01–08", "1 mini … 8 maxi."]] },
+          { code: "36", def: "03", titre: "Durée du couple maxi au démarrage", valeurs: [
+            ["00–20", "0 à 20 s."]] },
+          { code: "37", def: "00", titre: "Approche des butées (avec encodeur 75 01)", valeurs: [
+            ["00", "Désactivée."], ["01–05", "Vantail de 0,5 / 1 / 1,5 / 2 / 2,5 m : couple réduit en fin de course (augmenté en fermeture avec électroserrure)."]] },
+          { code: "41", def: "01", titre: "Ralentissement", valeurs: [
+            ["00", "Désactivé."], ["01", "Moyen (maximum pour moteurs 6 pôles)."], ["02", "Maximal, cas extrêmes seulement, jamais avec moteurs 6 pôles."]] },
+          { code: "42", def: "20", titre: "Sensibilité obstacles pendant la manœuvre", valeurs: [
+            ["01–99", "1 mini … 99 maxi (60 maxi avec A1 01)."]] },
+          { code: "43", def: "50", titre: "Sensibilité obstacles pendant le ralentissement", valeurs: [
+            ["01–99", "1 mini … 99 maxi (60 maxi avec A1 01)."]] }
+        ]},
+        { nom: "Freinage et électroserrure", items: [
+          { code: "60", def: "00", titre: "Freinage en butée / fin de course", valeurs: [["00", "Désactivé."], ["01", "Activé."]] },
+          { code: "61", def: "00", titre: "Freinage après photocellules", valeurs: [["00", "Désactivé."], ["01", "Activé."]] },
+          { code: "62", def: "00", titre: "Freinage après STOP", valeurs: [["00", "Désactivé."], ["01", "Activé."]] },
+          { code: "63", def: "00", titre: "Freinage avant inversion", valeurs: [["00", "Désactivé."], ["01", "Activé."]] },
+          { code: "64", def: "05", titre: "Temps de freinage", valeurs: [["01–20", "1 à 20 dixièmes de seconde (valeurs basses conseillées)."]] },
+          { code: "65", def: "08", titre: "Force de freinage", valeurs: [["05–08", "5 mini … 8 maxi."]] },
+          { code: "28", def: "01", titre: "Anticipation de l'électroserrure", valeurs: [["00–02", "0 à 2 s avant la manœuvre."]] },
+          { code: "29", def: "03", titre: "Durée de l'électroserrure", valeurs: [["00", "Désactivée."], ["01–06", "1 à 6 s (supérieure à 38 si activé)."]] },
+          { code: "38", def: "00", titre: "Coup de bélier", valeurs: [["00", "Désactivé."], ["01–04", "Poussée en fermeture de 1 à 4 s avant chaque ouverture (règle 28 01 et 29 03)."]] }
+        ]},
+        { nom: "Sécurités", items: [
+          { code: "50", def: "00", titre: "FT1 en ouverture", valeurs: [
+            ["00", "Désactivée."], ["01", "Arrêt."], ["02", "Inversion immédiate."], ["03", "Arrêt temporaire."], ["04", "Inversion retardée."]] },
+          { code: "51", def: "02", titre: "FT1 en fermeture", valeurs: [
+            ["00", "Désactivée."], ["01", "Arrêt."], ["02", "Inversion immédiate."], ["03", "Arrêt temporaire."], ["04", "Inversion retardée."]] },
+          { code: "52", def: "01", titre: "FT1 portail fermé", valeurs: [
+            ["00", "Occultée : n'ouvre pas."], ["01", "Ouvre sur commande même occultée."], ["02", "Occultée = commande d'ouverture."]] },
+          { code: "53", def: "00", titre: "FT2 en ouverture", valeurs: [
+            ["00", "Désactivée."], ["01", "Arrêt."], ["02", "Inversion immédiate."], ["03", "Arrêt temporaire."], ["04", "Inversion retardée."]] },
+          { code: "54", def: "00", titre: "FT2 en fermeture", valeurs: [
+            ["00", "Désactivée."], ["01", "Arrêt."], ["02", "Inversion immédiate."], ["03", "Arrêt temporaire."], ["04", "Inversion retardée."]] },
+          { code: "55", def: "01", titre: "FT2 portail fermé", valeurs: [
+            ["00", "Occultée : n'ouvre pas."], ["01", "Ouvre sur commande même occultée."], ["02", "Occultée = commande d'ouverture."]],
+            note: "Le menu détaillé intitule ce paramètre « (FT1) », l'index « (FT2) »." },
+          { code: "56", def: "00", titre: "Fermeture 6 s après passage devant les photocellules", valeurs: [
+            ["00", "Désactivée."], ["01", "FT1."], ["02", "FT2."]],
+            note: "Visible seulement avec la veille désactivée." },
+          { code: "73", def: "03", titre: "Bord sensible COS1", valeurs: [
+            ["00", "Non installé."], ["01", "N.F., inverse en ouverture seulement."], ["02", "8k2, inverse en ouverture seulement."], ["03", "N.F., inverse toujours."], ["04", "8k2, inverse toujours."]] },
+          { code: "74", def: "00", titre: "Bord sensible COS2", valeurs: [
+            ["00", "Non installé."], ["01", "N.F., inverse en fermeture seulement."], ["02", "8k2, inverse en fermeture seulement."], ["03", "N.F., inverse toujours."], ["04", "8k2, inverse toujours."]] }
+        ]},
+        { nom: "Sorties et radio", items: [
+          { code: "A8", def: "00", titre: "Sortie SC : voyant / photocellules", valeurs: [
+            ["00", "L1 00 : voyant éteint fermé, fixe en mouvement et ouvert. L1 ≠ 00 : SC alimente les photocellules, coupées en veille."], ["01", "Voyant clignotant lent en ouverture, fixe ouvert, rapide en fermeture (seulement avec L1 00)."], ["02", "Comme 00 + test photocellules."]] },
+          { code: "76 · 77", def: "00 · 01", titre: "Canaux radio PR1 / PR2", valeurs: [
+            ["00", "Pas-à-pas."], ["01", "Ouverture partielle."], ["02", "Ouverture."], ["03", "Fermeture."], ["04", "Arrêt."], ["05", "Courtoisie tant que la touche est maintenue."], ["06", "Courtoisie marche / arrêt."], ["07", "Clignotant tant que la touche est maintenue."], ["08", "Clignotant marche / arrêt."]] },
+          { code: "78", def: "00", titre: "Intermittence du clignotant", valeurs: [
+            ["00", "Gérée par le clignotant."], ["01", "Lente."], ["02", "Lente en ouverture, rapide en fermeture."]] },
+          { code: "79", def: "60", titre: "Éclairage de courtoisie", valeurs: [
+            ["00", "Désactivé."], ["01", "Impulsion au début de chaque manœuvre."], ["02", "Pendant la manœuvre."], ["03–90", "3 à 90 s après."], ["92–99", "2 à 9 min après."]] }
+        ]},
+        { nom: "Maintenance et identification", items: [
+          { code: "FA", def: "00", titre: "Retour aux valeurs d'usine", valeurs: [
+            ["+ et − 4 s", "rES- clignote : valeurs usine restaurées (sauf A1)."]],
+            note: "Impossible si un mot de passe est actif. Autre méthode : à la mise sous tension, avant la version, maintenir UP et DOWN 4 s." },
+          { code: "n0 – n6", def: "—", titre: "Identification", valeurs: [
+            ["n0", "Version HW."], ["n1 · n2", "Année · semaine de production."], ["n3 – n5", "Numéro de série."], ["n6", "Version FW."]] },
+          { code: "o0 · o1", def: "—", titre: "Compteur de manœuvres (× 100)", valeurs: [["Exemple", "01 23 = 12 300 manœuvres."]] },
+          { code: "h0 · h1 / d0 · d1", def: "—", titre: "Heures de manœuvre / jours d'allumage", valeurs: [["Exemple", "01 23 = 123."]] },
+          { code: "P1 – P4 · CP", def: "00", titre: "Mot de passe", valeurs: [
+            ["Activer", "Saisir P1 à P4, aller sur CP, + et − 4 s ; éteindre et rallumer, vérifier CP 01."], ["Déblocage temporaire", "Saisir le mot de passe (CP 00) ; se réactive après 30 min sans touche, en veille ou à la remise sous tension."], ["Supprimer", "Mot de passe saisi, P1–P4 à 00, CP + et − 4 s, éteindre et rallumer."]],
+            note: "Mot de passe perdu : assistance Roger." }
+        ]}
+      ]
+    },
+    apprentissage: {
+      avant: [
+        "A1 — moteur : 00 standard 4 pôles, 01 lent 6 pôles (R20/302, R20/502, R21/368, H23/282, R41/832, R41/833).",
+        "70 — nombre de moteurs (02 d'usine) ; 75 — encodeur ; 72 — fins de course branchés à la centrale.",
+        "Homme présent désactivé : A7 00. Butées mécaniques en ouverture et en fermeture.",
+        "Portail fermé, vantaux contre les butées. TEST : contrôler commandes et sécurités ; shunter ou désactiver celles qui ne sont pas installées (50, 51, 53, 54, 73, 74). TEST doit afficher 00.",
+        "Sans encodeur : régler d'abord 11 et 12 (ralentissement)."
+      ],
+      etapes: [
+        "Avec encodeur (avec ou sans fins de course) : PROG 4 s (APP-), PROG : A to ; le moteur 1 ouvre, le moteur 2 suit après le retard 25 ; en butée ou fin de course, A to clignote 2 s ; puis le moteur 2 ferme, le moteur 1 suit après le retard 26.",
+        "Sans encodeur, avec fins de course ouverture et fermeture (72 01) : PROG 4 s, PROG ; AP1 puis AP2 ; arrêt sur les fins de course d'ouverture (PA clignote 2 s) ; le moteur 2 ferme (CH2) ; appuyer sur PROG au retard voulu pour lancer le moteur 1 (enregistré en 26) ; fin sur les fins de course de fermeture.",
+        "Sans encodeur, fins de course d'ouverture seuls (72 02) : comme ci-dessus, mais appuyer sur PROG dès que le vantail 2 puis le vantail 1 touchent la butée de fermeture.",
+        "Sans encodeur ni fins de course (72 00, ou fins de course en série sur les phases) : appuyer sur PROG quand le vantail 1 puis le vantail 2 touchent la butée d'ouverture ; le moteur 2 ferme seul, PROG au retard voulu pour lancer le moteur 1 ; PROG quand le vantail 2 puis le vantail 1 touchent la butée de fermeture.",
+        "26 00 : les deux moteurs ferment en même temps. Réussi : retour à l'état des commandes et sécurités."
+      ],
+      apres: [
+        "APPE : TEST pour annuler, vérifier la sécurité en alarme, recommencer.",
+        "Sans encodeur : refaire l'apprentissage après toute modification de 11 ou 12.",
+        "Contrôle final : forces selon EN 12453 / EN 12445, récupération de position après coupure, fins de course, déverrouillage."
+      ]
+    }
+  },
+  {
+    id: "roger-b70-2b",
+    nom: "B70/2B",
+    modeles: "Porte basculante 1 vantail, 1 ou 2 moteurs brushless 24 V (BR41/830, BR41/830Q) — boîtier B70/2B/BOX",
+    type: "Porte basculante brushless 24 V sensorless — afficheur 4 chiffres, touches UP / DOWN / + / − / PROG / TEST",
+    source: "Notice Roger B70/2B IS144 Rev.08, firmware b2.00",
+    codes: [
+      { code: "b2.00", type: "afficheur", titre: "Version du firmware", action: "Affichée un court instant à la mise sous tension, puis l'afficheur montre l'état des commandes et sécurités." },
+      { code: "OFSt", type: "afficheur", titre: "Anomalie de tension d'alimentation / initialisation échouée", action: "Couper l'alimentation, attendre 10 s, remettre. Si ça persiste : remplacer la centrale." },
+      { code: "PrOt", type: "afficheur", titre: "Surintensité dans l'onduleur", action: "Appuyer deux fois sur TEST ou donner 3 commandes de suite." },
+      { code: "dAtA", type: "afficheur", titre: "Données de longueur de course erronées", action: "Vérifier la position des fins de course d'ouverture et de fermeture, TEST pour contrôler les sécurités, refaire l'apprentissage." },
+      { code: "Mot 1 / Mot 2", type: "afficheur", titre: "Moteur 1 / moteur 2 non raccordé", action: "Vérifier le câble du moteur indiqué (la notice affiche « 1 » ou « 2 »)." },
+      { code: "FE", type: "afficheur", titre: "Les deux fins de course sont activés", action: "Vérifier le raccordement des fins de course ou un objet dans le fin de course." },
+      { code: "xx EE", type: "afficheur", titre: "Erreur de paramètre (ex. 15EE, 21EE)", action: "Le paramètre indiqué a une valeur incorrecte : la corriger et l'enregistrer." },
+      { code: "btLO", type: "afficheur", titre: "Batteries déchargées", action: "Attendre le retour du secteur. La centrale n'accepte plus de commandes." },
+      { code: "bAtt", type: "afficheur", titre: "Fonctionnement sur batteries", action: "Coupure secteur : la centrale tourne sur batteries (clignotant intermittent) jusqu'au retour du réseau ou jusqu'au seuil bas (btLO). Batteries possibles seulement avec L1 00." },
+      { code: "APPE", type: "afficheur", titre: "Apprentissage non terminé", action: "TEST appuyé par erreur, sécurité en alarme ou chute de tension : vérifier et refaire l'apprentissage." },
+      { code: "APPL", type: "afficheur", titre: "Erreur de longueur de course", action: "Mettre la porte en fermeture complète et recommencer." },
+      { code: "APPC", type: "afficheur", titre: "Erreur de fin de course de fermeture", action: "Vérifier le raccordement et le réglage du fin de course de fermeture (≤ 5 cm de la butée, reste activé jusqu'à la fin)." },
+      { code: "StbY", type: "afficheur", titre: "Passage en veille « low power »", action: "Normal avec L1 ≠ 00 : après 1,5 s l'afficheur s'éteint, sorties SC, LAM et COR coupées. Réveil : commande du bornier, radio, PROG ou TEST (Acti s'affiche)." },
+      { code: "Acti", type: "afficheur", titre: "Réveil après veille « low power »", action: "Normal. Réaction un peu retardée le temps que les photocellules se stabilisent." },
+      { code: "noLP", type: "afficheur", titre: "Le mode « low power » ne s'active pas", action: "B70/MODLP endommagé ou relais bloqué, H93/RX2LP/I défectueux, ou câblage entre les deux défectueux." },
+      { code: "Transfo éteint", type: "symptome", titre: "Transformateur pas alimenté", action: "B70/MODLP endommagé ou relais bloqué, H93/RX2LP/I ou câblage défectueux ; ou fusible F3 grillé (le remplacer hors tension)." },
+      { code: "Mauvaise manœuvre", type: "symptome", titre: "La porte ne fait pas la manœuvre souhaitée", action: "Fils du moteur inversés : échanger deux fils sur X-Y-Z ou Z-Y-X. Les deux moteurs doivent tourner dans le même sens." },
+      { code: "Flash HS", type: "symptome", titre: "Le clignotant ne fonctionne pas", action: "LED grillée ou fils débranchés (bornes 12 +LAM – 11 COM)." },
+      { code: "Voyant HS", type: "symptome", titre: "Le voyant porte ouverte ne marche pas", action: "Ampoule grillée ou fils débranchés (bornes 16 SC – 15 COM). Le voyant ne fonctionne qu'avec L1 00." },
+      { code: "Portée radio faible", type: "symptome", titre: "La télécommande porte peu", action: "Installer l'antenne à l'extérieur (RG58, 10 m max). Remplacer les piles des émetteurs." },
+      { code: "00", type: "test", titre: "TEST : aucune sécurité en alarme", action: "Aucune sécurité en alarme et aucun fin de course activé." },
+      { code: "23", type: "test", titre: "TEST : contact STOP ouvert", action: "Installer un bouton STOP (N.F.) ou shunter ST (23) avec COM (shunté d'usine)." },
+      { code: "21", type: "test", titre: "TEST : bord sensible COS1 ouvert", action: "Vérifier le branchement. Inutilisé : 73 00 ou shunter COS1 (21) avec COM (22)." },
+      { code: "19", type: "test", titre: "TEST : photocellule FT1 ouverte", action: "Vérifier le branchement (fig. 5-6-7). Inutilisée : 50 00 et 51 00 ou shunter FT1 (19) avec COM (15)." },
+      { code: "18", type: "test", titre: "TEST : photocellule FT2 ouverte", action: "Vérifier le branchement. Inutilisée : 53 00 et 54 00 ou shunter FT2 (18) avec COM (15)." },
+      { code: "FE", type: "test", titre: "TEST : les deux fins de course ouverts ou non raccordés", action: "Vérifier le raccordement des fins de course." },
+      { code: "FA", type: "test", titre: "TEST : sur le fin de course d'ouverture", action: "Normal porte ouverte. Sinon fin de course absent ou non raccordé (bornes 27-26)." },
+      { code: "FC", type: "test", titre: "TEST : sur le fin de course de fermeture", action: "Normal porte fermée. Sinon fin de course absent ou non raccordé (bornes 20-22)." },
+      { code: "PP · CH · AP · PE", type: "test", titre: "TEST : commande active sans action", action: "Contact N.O. défectueux ou bouton mal raccordé : vérifier le contact avec COM (32)." },
+      { code: "POWER éteinte", type: "led", titre: "LED POWER éteinte", action: "Pas d'alimentation ou fusible grillé : vérifier le câble, remplacer le fusible hors tension." },
+      { code: "POWER clignote", type: "led", titre: "LED POWER clignote, afficheur éteint", action: "Veille après 30 min sans action (si L1 00) ou veille « low power » (L1 ≠ 00). Une touche ou une commande la rallume." }
+    ],
+    afficheur: {
+      intro: "En fonctionnement normal, l'afficheur ne montre pas des chiffres mais l'état des entrées : certains segments correspondent chacun à une commande ou à une sécurité.",
+      ecrans: [
+        { nom: "État des commandes", digits: [
+          { seg: { a: "AP", g: "PP", d: "CH" }, dp: "POWER" },
+          { seg: { a: "PED" }, dp: null }
+        ]},
+        { nom: "État des sécurités", digits: [
+          { seg: { a: "FT1", g: "COS1" }, dp: null },
+          { seg: { a: "FT2", e: "FA", c: "FC" }, dp: "STOP" }
+        ]}
+      ],
+      reperes: {
+        AP:    { g: "commande", nom: "Ouverture", repos: "Éteint", detail: "S'allume à la réception d'une commande d'ouverture (borne 28)." },
+        PP:    { g: "commande", nom: "Pas-à-pas", repos: "Éteint", detail: "S'allume à la réception d'une commande pas-à-pas (borne 30 ou radio PR1)." },
+        CH:    { g: "commande", nom: "Fermeture", repos: "Éteint", detail: "S'allume à la réception d'une commande de fermeture (borne 29 ou radio PR2)." },
+        PED:   { g: "commande", nom: "Ouverture partielle", repos: "Éteint", detail: "S'allume à la réception d'une commande PED (borne 31)." },
+        POWER: { g: "led", nom: "Alimentation", repos: "Allumé", detail: "Carte alimentée. Clignote en veille (afficheur éteint). Éteint : pas de tension ou fusible grillé." },
+        FT1:   { g: "securite", nom: "Photocellules FT1", repos: "Allumé", detail: "Éteint = faisceau coupé ou non raccordé (bornes 19-15). Clignotant = désactivé par paramètre." },
+        FT2:   { g: "securite", nom: "Photocellules FT2", repos: "Allumé", detail: "Éteint = faisceau coupé ou non raccordé (bornes 18-15). Clignotant = désactivé par paramètre." },
+        COS1:  { g: "securite", nom: "Bord sensible", repos: "Allumé", detail: "Éteint = bord actionné ou non raccordé (bornes 21-22). Clignotant = désactivé (73 00)." },
+        FA:    { g: "securite", nom: "Fin de course d'ouverture", repos: "Allumé", detail: "S'éteint quand la porte est sur le fin de course d'ouverture (bornes 27 ORO – 26)." },
+        FC:    { g: "securite", nom: "Fin de course de fermeture", repos: "Allumé", detail: "S'éteint quand la porte est sur le fin de course de fermeture (bornes 20 COS2 – 22)." },
+        STOP:  { g: "securite", nom: "STOP", repos: "Allumé", detail: "Éteint = contact STOP ouvert (bornes 23-22)." }
+      },
+      regles: [
+        "Commandes : segments normalement ÉTEINTS, ils s'allument quand la commande arrive.",
+        "Sécurités : segments normalement ALLUMÉS. Éteint = en alarme ou non raccordé. Clignotant = désactivé par son paramètre."
+      ],
+      autres: [
+        { titre: "Mode paramètres", texte: "UP / DOWN font défiler : les 2 chiffres de gauche = numéro du paramètre, les 2 de droite = sa valeur. + / − pour modifier ; la valeur clignote, puis l'afficheur clignote vite quand elle est enregistrée. Modification possible seulement moteur à l'arrêt." },
+        { titre: "Mode TEST (touche TEST)", texte: "Porte en mouvement : TEST = ARRÊT ; un 2e appui passe en TEST. À gauche pendant 5 s : la commande reçue (AP, CH, PP, PE, OR). À droite : le numéro de la borne de la sécurité en alarme, qui clignote (23 STOP, 21 COS1, 19 FT1, 18 FT2) ou FE / FA / FC. Sortie : TEST ; retour seul après 10 s." },
+        { titre: "Mode INFO (TEST 5 s, moteur arrêté)", texte: "Défile avec + / − : b2.00 version · Cnt1 / Cnt2 position des moteurs en tours · Ln1 / Ln2 longueur de course · rP1 / rP2 vitesse (tr/min) · AP1 / AP2 courant (001.1 = 1,1 A) · bUS état de l'alimentation (28.5 à 230 V, 25.5 à 207 V, 31.6 à 253 V) · CP1 / CP2 courant de compensation (0 = 0 A … 4 = +3 A) · ASC1 / ASC2 seuil anti-écrasement (AP doit rester inférieur) · TIn1 / TIn2 temps de détection d'obstacle (> 0,3 s) · AbS1 / AbS2 bon état du moteur (< 500 normal ; > 500 câble trop long, de mauvaise section ou problème moteur ; > 2000 moteur bloqué) · UP position connue (UP__) ou en récupération (UP1_) · OC état (OP, CL, -O, -C) · UF sous-tension (U_) ou surintensité (_H). Un seul moteur : seules les valeurs du moteur 1 s'affichent. Quitter : TEST quelques secondes." },
+        { titre: "Veille", texte: "1) Simple : après 30 min sans action, l'afficheur s'éteint, la LED POWER clignote (seulement si L1 00). 2) « Low power » (L1 01 à 04 = 5, 10, 15 ou 20 min, usine 20 min) : consommation ≤ 0,5 W, transformateur coupé par le B70/MODLP, plus de 24 V (pas de récepteur externe, pas de photocellules, pas de batteries). Test immédiat : UP, DOWN, + et − ensemble environ 1,5 s → StbY. L'ouverture du contact OR réveille la centrale et ferme." },
+        { titre: "Récupération de position", texte: "Après une coupure ou un déblocage en position intermédiaire : manœuvre lente, clignotant 3 s allumé / 1,5 s éteint ; ne rien commander tant qu'aucun fin de course n'est atteint. L'activation d'un fin de course récupère la position immédiatement." }
+      ]
+    },
+    bornier: {
+      groupes: [
+        { nom: "Puissance", bornes: [
+          { n: "L · N · ⏚", label: "Secteur", desc: "230 V ±10 % 50/60 Hz, fusible 5x20 T1A (F3). Câble H07RN-F 2G1,5 : L marron, N bleu, terre jaune/vert. Mesurer au voltmètre : hors plage, le brushless fonctionne mal", t: "alim" },
+          { n: "POWER IN", label: "Alim carte", desc: "Arrivée du transformateur ou du chargeur B71/BC (câblé usine)", t: "alim" },
+          { n: "X · Y · Z (M1)", label: "Moteur 1", desc: "Moteur brushless 1 (le plus proche de la centrale). Les deux moteurs doivent tourner dans le même sens ; sens inversé : échanger deux fils", t: "moteur" },
+          { n: "Z · Y · X (M2)", label: "Moteur 2", desc: "Moteur brushless 2 (paramètre 70 02). Même type de moteur que le 1", t: "moteur" }
+        ]},
+        { nom: "Sorties", bornes: [
+          { n: "9 · 10", label: "COR", desc: "Éclairage de courtoisie 24 V 2 × 5 W à LED (H70/COR) ; fusible extérieur", t: "sortie" },
+          { n: "12 +LAM · 11 COM", label: "Clignotant", desc: "24 V, 25 W max, intermittence 50 % (préclignotement A5, intermittence 78)", t: "sortie" },
+          { n: "13 +ES · 11 COM", label: "Électroserrure", desc: "12 V 15 W (Vmoyenne 12 V, Vmax 30 V) ; activer par 29 01", t: "sortie" },
+          { n: "14 +24V · 11 COM", label: "Accessoires", desc: "24 V, 10 W max (400 mA). Coupé en veille low power", t: "alim" },
+          { n: "16 SC · 15 COM", label: "Voyant / test photocellules", desc: "Voyant porte ouverte 24 V 3 W (A8 00 / 01), ou alimentation TX pour test photocellules (A8 02) / économie batteries (A8 03, 04) : plus de voyant possible dans ce cas", t: "sortie" }
+        ]},
+        { nom: "Sécurités et fins de course (N.F.)", bornes: [
+          { n: "19 FT1 · 15 COM", label: "Photocellules FT1", desc: "Usine : 50 00 (ignorée en ouverture), 51 02 (inversion en fermeture), 52 01. Absente : shunter ou 50 00 et 51 00", t: "nf" },
+          { n: "18 FT2 · 15 COM", label: "Photocellules FT2", desc: "Usine : 53 00, 54 00 (désactivée), 55 01. Absente : shunter ou 53 00 et 54 00", t: "nf" },
+          { n: "21 COS1 · 22 COM", label: "Bord sensible", desc: "N.F. ou 8,2 kΩ ; usine 73 01 (N.F.). Absent : shunter ou 73 00", t: "nf" },
+          { n: "23 ST · 22 COM", label: "STOP", desc: "N.F., shunté d'usine. Ouvert = arrêt du mouvement", t: "nf" },
+          { n: "20 COS2 · 22 COM", label: "Fin de course de FERMETURE (FC)", desc: "Fins de course du moteur 1 ; si la porte n'est pas assez rigide, celui du moteur 2 en série. Doit s'activer à 5 cm maxi de la butée et rester activé jusqu'à la fin de la manœuvre ; sinon la porte inverse. Poussée sur la butée : paramètre 14", t: "nf" },
+          { n: "27 ORO · 26 COM", label: "Fin de course d'OUVERTURE (FA)", desc: "La porte doit s'arrêter après son activation, avant la butée d'ouverture ; sinon elle inverse. Refaire l'apprentissage après tout réglage", t: "nf" }
+        ]},
+        { nom: "Commandes (N.O.)", bornes: [
+          { n: "28 AP · 32 COM", label: "Ouverture", desc: "", t: "no" },
+          { n: "29 CH · 32 COM", label: "Fermeture", desc: "", t: "no" },
+          { n: "30 PP · 32 COM", label: "Pas-à-pas", desc: "Fonctionnement selon A4", t: "no" },
+          { n: "31 PED · 32 COM", label: "Ouverture partielle", desc: "50 % d'usine (15)", t: "no" }
+        ]},
+        { nom: "Radio et options", bornes: [
+          { n: "24 ANT · 25", label: "Antenne", desc: "RG58, 10 m max conseillé, sans jonction", t: "autre" },
+          { n: "RECEIVER", label: "Récepteur H93/RX2LP/I", desc: "PR1 pas-à-pas (76), PR2 fermeture (77). Relié au B70/MODLP (3 fils, câblé usine), indispensable au low power ; ne pas le remplacer par un autre récepteur Roger", t: "autre" },
+          { n: "B71/BC", label: "Chargeur de batteries", desc: "2 × 12 V 1,2 Ah à bord (B71/BC/INT) ou 2 × 12 V 4,5 Ah en boîtier extérieur (B71/BC/EXT), AGM seulement. Uniquement avec L1 00. Contrôler au moins tous les 6 mois", t: "alim" }
+        ]}
+      ],
+      fusibles: "F1 15 A (ATO257) circuit de puissance · F2 4 A (ATO257) accessoires · F3 T1A (5x20) secteur",
+      notes: [
+        "Sur cette carte, les bornes ORO et COS2 servent de fins de course d'ouverture et de fermeture, contrairement aux autres centrales Roger.",
+        "Sécurités absentes : shunter sur COM ou les désactiver par paramètres 50, 51, 53, 54, 73.",
+        "Photocellules conseillées : R90/F4ES, G90/F4ES ou T90/F4S (séries F4ES ou F4S).",
+        "Câbles : secteur H07RN-F 2 × 1,5 mm² ; moteurs 3 × 2,5 mm² (10 m max) ou 3 × 4 mm² (30 m max) ; RX 5 × 0,5 mm², TX 3 × 0,5 mm² (20 m max) ; FIFTHY/24 2 × 1 mm² (10 m) ; voyant 2 × 0,5 mm² (10 m).",
+        "Caractéristiques : puissance maxi absorbée 480 W ; moteurs 60 W nominal, 200 W maxi ; veille ≤ 0,5 W (7,7 W sans veille) ; IP54 ; −20 °C à +55 °C ; B70/2B/BOX 330 × 230 × 115 mm, 3,9 kg.",
+        "La notice décrit une commande sensorless des moteurs (sans encodeur)."
+      ]
+    },
+    parametres: {
+      intro: "Firmware b2.00. Valeur entre parenthèses = réglage usine. Les paramètres se lisent à tout moment mais ne se modifient que moteur arrêté.",
+      navigation: [
+        "UP ▲ / DOWN ▼ : paramètre suivant / précédent.",
+        "+ / − : modifier la valeur (elle clignote). Maintenir pour défiler vite.",
+        "Enregistrer : attendre quelques secondes ou passer à un autre paramètre avec UP/DOWN. L'écran clignote vite = valeur enregistrée.",
+        "Si un mot de passe est actif (CP 01), les valeurs sont visibles mais non modifiables : saisir P1–P4 d'abord."
+      ],
+      groupes: [
+        { nom: "Configuration générale", items: [
+          { code: "70", def: "02", titre: "Nombre de moteurs", valeurs: [
+            ["01", "1 moteur."], ["02", "2 moteurs (même type pour les deux)."]],
+            note: "Non modifié par le retour usine." },
+          { code: "13", def: "20", titre: "Position porte fermée", valeurs: [
+            ["01–70", "Nombre de tours moteur après l'activation du fin de course de fermeture."]],
+            note: "Trop élevé : plus de détection d'obstacle dans les 5 derniers cm. Trop bas : réouverture sur la butée de fermeture." },
+          { code: "14", def: "00", titre: "Force de poussée sur la butée de fermeture", valeurs: [
+            ["00–09", "00 = force minimale … 09 = maximale."]],
+            note: "Au fin de course de fermeture, la centrale réduit le couple pour éviter de déformer la porte. À adapter à la porte et à la fixation du moteur." },
+          { code: "29", def: "00", titre: "Électroserrure", valeurs: [
+            ["00", "Désactivée."], ["01", "Active 0,5 s avant la manœuvre pendant 3 s ; aide au réenclenchement en fin de fermeture."]],
+            note: "Non modifié par le retour usine." },
+          { code: "65", def: "05", titre: "Espace d'arrêt du moteur", valeurs: [
+            ["01–05", "01 = freinage rapide, arrêt court … 05 = freinage doux, arrêt plus long."]] },
+          { code: "L0", def: "00", titre: "Communication série", valeurs: [
+            ["00", "Désactivée (fonctionnement normal)."], ["01", "Carte d'acquisition (assistance Roger seulement)."]] },
+          { code: "L1", def: "04", titre: "Veille « low power »", valeurs: [
+            ["00", "Désactivée (obligatoire pour batteries et voyant)."], ["01", "Après 5 min."], ["02", "Après 10 min."], ["03", "Après 15 min."], ["04", "Après 20 min."]],
+            note: "Non modifié par le retour usine." }
+        ]},
+        { nom: "Logique de fonctionnement", items: [
+          { code: "A2", def: "00", titre: "Refermeture automatique après pause (depuis ouverture complète)", valeurs: [
+            ["00", "Désactivée."], ["01–15", "1 à 15 tentatives après intervention des photocellules, puis reste ouverte."], ["99", "Tentatives illimitées."]] },
+          { code: "A3", def: "00", titre: "Refermeture après coupure secteur", valeurs: [
+            ["00", "Désactivée."], ["01", "Si pas complètement ouverte : fermeture après 5 s de préclignotement, en récupération de position."]] },
+          { code: "A4", def: "00", titre: "Commande pas-à-pas (PP)", valeurs: [
+            ["00", "Ouvre-stop-ferme-stop…"], ["01", "Copropriété : PP ignoré en ouverture, pause renouvelée par un nouveau PP."], ["02", "Copropriété : PP ignoré en ouverture, pause non renouvelée."], ["03", "Ouvre-ferme-ouvre-ferme."], ["04", "Ouvre-ferme-stop-ouvre."]],
+            note: "01 / 02 avec A2 00 : une tentative de refermeture (A2 01) est activée automatiquement." },
+          { code: "A5", def: "00", titre: "Préclignotement", valeurs: [
+            ["00", "Désactivé."], ["01–10", "1 à 10 s avant chaque manœuvre."], ["99", "5 s avant la fermeture seulement."]] },
+          { code: "A6", def: "00", titre: "Copropriété sur PED", valeurs: [
+            ["00", "Désactivée (PED en pas-à-pas)."], ["01", "PED ignoré pendant l'ouverture."]] },
+          { code: "A7", def: "00", titre: "Homme présent", valeurs: [
+            ["00", "Désactivé."], ["01", "La porte bouge tant que AP ou CH est maintenu."]] },
+          { code: "15", def: "50", titre: "Ouverture partielle (%)", valeurs: [
+            ["10–85", "10 à 85 % de la course."]] },
+          { code: "21", def: "60", titre: "Temps de fermeture automatique", valeurs: [
+            ["00–90", "0 à 90 s."], ["92–99", "2 à 9 min."]],
+            note: "Renouvelé par le passage devant les photocellules." },
+          { code: "49", def: "01", titre: "Tentatives de refermeture après bord sensible / obstacle", valeurs: [
+            ["00", "Aucune."], ["01–03", "1 à 3 tentatives (valeur ≤ A2 conseillée), seulement depuis l'ouverture complète."]] },
+          { code: "81", def: "00", titre: "Fermeture / ouverture garantie", valeurs: [
+            ["00", "Désactivée (82 masqué)."], ["01", "Fermeture après le temps 82 (préclignotement 5 s)."], ["02", "Après arrêt par détection d'obstacle : refermeture ou réouverture après le temps 82."]],
+            note: "Inactive après STOP, bord sensible, porte ouverte (A2, 49) ou position perdue. 5 chocs au même point ou plus de 20 chocs en 8 min : fonction coupée, moteur en sécurité. Le texte de la valeur 01 est répété au début de la valeur 02 dans la notice." },
+          { code: "82", def: "03", titre: "Délai de la fermeture / ouverture garantie", valeurs: [
+            ["02–90", "2 à 90 s."], ["92–99", "2 à 9 min."]] }
+        ]},
+        { nom: "Mouvement, vitesse et force", items: [
+          { code: "11 · 12", def: "04", titre: "Ralentissement en ouverture (11) / fermeture (12)", valeurs: [
+            ["01–05", "01 = ralentit près du fin de course … 05 = ralentit très tôt."]] },
+          { code: "27", def: "03", titre: "Temps d'inversion après bord sensible / obstacle", valeurs: [
+            ["00–30", "0 à 30 s."]] },
+          { code: "30", def: "07", titre: "Couple moteur", valeurs: [
+            ["01–04", "−35 %, −25 %, −16 %, −8 % (plus sensible)."], ["05", "0 %."], ["06–09", "+8 %, +16 %, +25 %, +35 % (moins sensible)."]],
+            note: "Sous 03 seulement pour des installations très légères sans vent ni froid." },
+          { code: "31", def: "15", titre: "Sensibilité aux obstacles", valeurs: [
+            ["01–10", "Couple faible : 01 mini … 10 maxi."], ["11–18", "Couple moyen (conseillé) : 11 mini … 18 maxi."], ["19", "70 % du couple maxi, 1 s (bord sensible obligatoire)."], ["20", "Couple maxi (bord sensible obligatoire)."]] },
+          { code: "33 · 34", def: "08", titre: "Accélération au départ (ouverture / fermeture)", valeurs: [
+            ["01–10", "01 = rapide … 10 = lente et progressive."]] },
+          { code: "36", def: "00", titre: "Couple maximal d'aide au démarrage", valeurs: [
+            ["00", "Désactivé."], ["01", "En ouverture ; en fermeture seulement si la position est connue et à au moins 0,5 m de la fermeture."], ["02", "À chaque démarrage."]],
+            note: "7 s maxi ou jusqu'à 90 tr/min." },
+          { code: "37", def: "00", titre: "Couple pendant la récupération de position", valeurs: [
+            ["00", "Seulement 30 et 31."], ["01", "30, 31 et courant maxi appris."], ["02", "70 % du couple, 1 s."], ["03", "100 %, 3 s."]] },
+          { code: "40 · 41", def: "05", titre: "Vitesse en ouverture / fermeture", valeurs: [
+            ["01–05", "60 %, 70 %, 80 %, 90 %, 100 %."]] }
+        ]},
+        { nom: "Sécurités", items: [
+          { code: "50", def: "00", titre: "FT1 en ouverture", valeurs: [
+            ["00", "Désactivée."], ["01", "Arrêt."], ["02", "Inversion immédiate."], ["03", "Arrêt temporaire, reprend l'ouverture."], ["04", "Inversion retardée (ferme une fois libérée)."]] },
+          { code: "51", def: "02", titre: "FT1 en fermeture", valeurs: [
+            ["00", "Désactivée."], ["01", "Arrêt."], ["02", "Inversion immédiate."], ["03", "Arrêt temporaire, reprend la fermeture."], ["04", "Inversion retardée (ouvre une fois libérée)."]] },
+          { code: "52", def: "01", titre: "FT1 porte fermée", valeurs: [
+            ["00", "Occultée : n'ouvre pas."], ["01", "Ouvre sur commande même occultée."], ["02", "Occultée = commande d'ouverture (seulement avec L1 00)."]] },
+          { code: "53", def: "00", titre: "FT2 en ouverture", valeurs: [
+            ["00", "Désactivée."], ["01", "Arrêt."], ["02", "Inversion immédiate."], ["03", "Arrêt temporaire."], ["04", "Inversion retardée."]] },
+          { code: "54", def: "00", titre: "FT2 en fermeture", valeurs: [
+            ["00", "Désactivée."], ["01", "Arrêt."], ["02", "Inversion immédiate."], ["03", "Arrêt temporaire."], ["04", "Inversion retardée."]] },
+          { code: "55", def: "01", titre: "FT2 porte fermée", valeurs: [
+            ["00", "Occultée : n'ouvre pas."], ["01", "Ouvre sur commande même occultée."], ["02", "Occultée = commande d'ouverture."]],
+            note: "Le menu détaillé intitule ce paramètre « (FT1) », l'index « (FT2) »." },
+          { code: "56", def: "00", titre: "Fermeture 6 s après passage devant les photocellules", valeurs: [
+            ["00", "Désactivée."], ["01", "FT1."], ["02", "FT2."]],
+            note: "Masqué avec A8 03 ou 04 ; non géré en veille porte ouverte." },
+          { code: "73", def: "01", titre: "Bord sensible", valeurs: [
+            ["00", "Non installé."], ["01", "N.F., inverse en ouverture seulement."], ["02", "8k2, inverse en ouverture seulement."], ["03", "N.F., inverse toujours."], ["04", "8k2, inverse toujours."]],
+            note: "Le texte de la borne 21 dit qu'en usine (73 01) le bord inverse pendant la FERMETURE, le menu dit « uniquement en ouverture ». Repris tels quels." }
+        ]},
+        { nom: "Sorties et radio", items: [
+          { code: "A8", def: "00", titre: "Sortie SC : voyant / test photocellules / économie batteries", valeurs: [
+            ["00", "Voyant éteint fermé, fixe en mouvement et ouvert."], ["01", "Clignote lent en ouverture, fixe ouvert, rapide en fermeture ; s'éteint 2 fois / 15 s à l'arrêt intermédiaire."], ["02", "Test photocellules."], ["03", "Économie batteries."], ["04", "Économie batteries + test photocellules."]],
+            note: "Voyant seulement avec L1 00." },
+          { code: "76 · 77", def: "00 · 03", titre: "Canaux radio PR1 / PR2", valeurs: [
+            ["00", "Pas-à-pas."], ["01", "Ouverture partielle."], ["02", "Ouverture."], ["03", "Fermeture."], ["04", "Arrêt."], ["05", "Courtoisie tant que la touche est maintenue."], ["06", "Courtoisie marche / arrêt."], ["07–10", "Pas / partielle / ouverture / fermeture avec confirmation (2e touche dans les 2 s)."]] },
+          { code: "78", def: "00", titre: "Intermittence du clignotant", valeurs: [
+            ["00", "Gérée par le clignotant."], ["01", "Lente."], ["02", "Lente en ouverture, rapide en fermeture."]] },
+          { code: "79", def: "60", titre: "Éclairage de courtoisie", valeurs: [
+            ["00", "Désactivé."], ["01", "Impulsion au début de chaque manœuvre."], ["02", "Pendant la manœuvre."], ["03–90", "3 à 90 s après la manœuvre."], ["92–99", "2 à 9 min après."]] }
+        ]},
+        { nom: "Maintenance et identification", items: [
+          { code: "FA", def: "00", titre: "Retour aux valeurs d'usine", valeurs: [
+            ["+ et − 4 s", "rES- clignote : valeurs usine restaurées (sauf 29, 70, L1)."]],
+            note: "Impossible si un mot de passe est actif. Autre méthode : à la mise sous tension, avant la version, maintenir UP et DOWN 4 s." },
+          { code: "n0 – n6", def: "—", titre: "Identification", valeurs: [
+            ["n0", "Version HW."], ["n1 · n2", "Année · semaine de production."], ["n3 – n5", "Numéro de série."], ["n6", "Version FW."]] },
+          { code: "o0 · o1", def: "—", titre: "Compteur de manœuvres (× 100)", valeurs: [
+            ["Exemple", "01 23 = 12 300 manœuvres."]] },
+          { code: "h0 · h1 / d0 · d1", def: "—", titre: "Heures de manœuvre / jours d'allumage", valeurs: [
+            ["Exemple", "01 23 = 123."]] },
+          { code: "P1 – P4 · CP", def: "00", titre: "Mot de passe", valeurs: [
+            ["Activer", "Saisir P1 à P4, aller sur CP, + et − 4 s ; éteindre et rallumer, vérifier CP 01."], ["Déblocage temporaire", "Saisir le mot de passe (CP 00) ; se réactive après 30 min sans touche ou à la remise sous tension."], ["Supprimer", "Mot de passe saisi, P1–P4 à 00, CP + et − 4 s, éteindre et rallumer."]],
+            note: "Mot de passe perdu : assistance Roger." }
+        ]}
+      ]
+    },
+    apprentissage: {
+      avant: [
+        "70 — nombre de moteurs : 70 02 (usine) ou 70 01.",
+        "Homme présent désactivé : A7 00.",
+        "TEST : contrôler commandes et sécurités ; shunter ou désactiver celles qui ne sont pas installées (50, 51, 53, 54, 73). TEST doit afficher 00.",
+        "Fins de course réglés, surtout celui de fermeture (≤ 5 cm de la butée, reste activé jusqu'à la fin).",
+        "Les deux moteurs tournent dans le même sens.",
+        "Porte ouverte en position intermédiaire."
+      ],
+      etapes: [
+        "Maintenir PROG 4 s : APP- s'affiche.",
+        "Appuyer de nouveau sur PROG : CLOS s'affiche, la porte se ferme jusqu'à la butée.",
+        "Auto : ouverture à vitesse réduite jusqu'à la butée d'ouverture, court arrêt, Auto clignote.",
+        "Fermeture jusqu'à la butée mécanique de fermeture. Réussi : retour à l'état des commandes et sécurités."
+      ],
+      apres: [
+        "Erreurs : APPE (TEST ou sécurité), APPL (longueur : porte entièrement fermée), APPC (fin de course de fermeture mal réglé) → voir l'onglet Codes et recommencer.",
+        "Refaire l'apprentissage après chaque modification des fins de course.",
+        "Contrôle final : la porte se ferme complètement sans pousser excessivement sur la butée (14) ; tester la récupération de position après coupure ; forces selon EN 12453 / EN 12445."
+      ]
+    }
+  },
+  {
+    id: "roger-b70-1t",
+    nom: "B70/1T",
+    modeles: "Coulissant intégré à la colonne TW90 : TW90/800 · TW90/820 · TW90/600/HS · TW90/620/HS · TW90/800/R · TW90/820/R — barrières WAY/004 · WAY/005 · WAY/006 (+ versions /115)",
+    type: "Coulissant TW90 et barrière WAY, brushless 24 V à encodeur — afficheur 4 chiffres, touches UP / DOWN / + / − / PROG / TEST",
+    source: "Notice Roger B70/1T IS271 Rev.08, firmware r2.10",
+    codes: [
+      { code: "r2.10", type: "afficheur", titre: "Version du firmware", action: "Affichée un court instant à la mise sous tension, puis l'afficheur montre l'état des commandes et sécurités." },
+      { code: "OFSt", type: "afficheur", titre: "Anomalie de tension d'alimentation / initialisation échouée", action: "Couper l'alimentation, attendre 10 s, remettre. Si ça persiste : remplacer la centrale. TEST masque l'erreur pour consulter les paramètres." },
+      { code: "PrOt", type: "afficheur", titre: "Surintensité dans l'onduleur", action: "Appuyer deux fois sur TEST ou donner 3 commandes de suite." },
+      { code: "dAtA", type: "afficheur", titre: "Données de course / étalonnage / moteur", action: "Course : vérifier la position des fins de course (s'ils sont activés), TEST et contrôler les sécurités, refaire l'apprentissage. Étalonnage échoué : attendre que PHAS clignote avant de réarmer la tige de déblocage, refaire l'apprentissage. Peut aussi signaler un moteur non raccordé : vérifier le câble moteur." },
+      { code: "FE", type: "afficheur", titre: "Les deux fins de course sont activés", action: "Vérifier le raccordement des fins de course ou un objet dans le fin de course. Sans fins de course : vérifier 60 00." },
+      { code: "xx EE", type: "afficheur", titre: "Erreur de paramètre (ex. 15EE, 21EE)", action: "Le paramètre indiqué a une valeur incorrecte : la corriger et l'enregistrer." },
+      { code: "EnE1", type: "afficheur", titre: "Encodeur non branché", action: "Vérifier le raccordement de l'encodeur (hors tension). Si ça persiste : remplacer l'encodeur." },
+      { code: "EnE3", type: "afficheur", titre: "Grave dysfonctionnement de l'encodeur", action: "TEST. Si l'erreur revient : éteindre la centrale 5 s puis rallumer. Si ça persiste : remplacer l'encodeur." },
+      { code: "EnE5", type: "afficheur", titre: "Dysfonctionnement de l'encodeur / alimentation insuffisante", action: "TEST ; si ça persiste, remplacer l'encodeur. Saleté, humidité, insectes : couper la tension, nettoyer carte et encodeur. Sur batteries : batteries presque déchargées." },
+      { code: "EnE8", type: "afficheur", titre: "Erreur de calcul de l'encodeur", action: "Refaire l'apprentissage de la course." },
+      { code: "tEMP", type: "afficheur", titre: "Protection thermique de l'onduleur", action: "Le fonctionnement reprend tout seul dans les 2 minutes. En INFO, nPTE compte les interventions : chercher les points durs, vérifier 30 et 31." },
+      { code: "SEnS", type: "afficheur", titre: "Anomalie de la commande moteur", action: "Si ça persiste : remplacer la centrale." },
+      { code: "btLO", type: "afficheur", titre: "Batteries déchargées", action: "Attendre le retour du secteur. La centrale n'accepte plus de commandes." },
+      { code: "bAtt", type: "afficheur", titre: "Fonctionnement sur batteries", action: "Coupure secteur : la centrale tourne sur batteries (clignotant intermittent) jusqu'au retour du réseau ou jusqu'au seuil bas (btLO). Avec le mode low power actif (L1 ≠ 00), bAtt peut apparaître et décharger les batteries : batteries interdites dans ce cas (L1 00)." },
+      { code: "StoP", type: "afficheur", titre: "« StoP » clignotant : dispositif de déblocage ouvert", action: "Réarmer la tige de déblocage et vérifier le raccordement du contact de déblocage (connecteur SB)." },
+      { code: "noPH", type: "afficheur", titre: "Réglage du moteur échoué / anomalie commande moteur / circuit encodeur", action: "Refaire l'apprentissage. Vérifier le câble encodeur-moteur, que la tige de déblocage est tournée, la rotation libre du moteur, la tension secteur et la section du câble. Problème de câble encodeur : couper et remettre l'alimentation, donner une commande ; si noPH ne revient pas, refaire l'apprentissage, sinon assistance Roger. Si ça persiste : remplacer la centrale." },
+      { code: "APPE", type: "afficheur", titre: "Apprentissage non terminé", action: "TEST appuyé par erreur, sécurité en alarme, chute de tension ou 30 / 31 mal réglés : vérifier, régler 30 et 31 selon le poids et la vitesse, refaire l'apprentissage." },
+      { code: "APPL", type: "afficheur", titre: "Erreur de longueur de course", action: "Mettre l'automatisme en fermeture complète (FC si fins de course activés, 60 01) et recommencer. Vérifier le câblage des fins de course ; retour usine puis nouvel apprentissage ; course trop courte : l'augmenter." },
+      { code: "APP", type: "afficheur", titre: "Longueur de course maximale dépassée", action: "Réduire la course. Contacter l'assistance Roger." },
+      { code: "SELF", type: "afficheur", titre: "TW90/800/R – /820/R déplacé à la main sans déblocage, sans secteur ni batterie", action: "Normal pour le réversible. Avec B71/BC : fil rouge [+] sur la borne 5 de POWER IN, fil noir [−] sur la borne 4, sinon la manœuvre manuelle ne se fait pas correctement." },
+      { code: "ALIM", type: "afficheur", titre: "Chargeur de batteries branché à l'envers sur POWER IN", action: "SELF puis ALIM après 5 s, plus aucune commande : inverser les fils (+) et (−) sur POWER IN. TEST masque l'erreur." },
+      { code: "StbY", type: "afficheur", titre: "Passage en veille « low power »", action: "Normal (TW90/800 et /820 avec L1 ≠ 00) : après 1,5 s l'afficheur s'éteint et les sorties SC, LAM et COR sont coupées. Réveil : commande du bornier, radio, PROG ou TEST (Acti s'affiche)." },
+      { code: "noLP", type: "afficheur", titre: "Le mode « low power » ne s'active pas", action: "B70/MODLP endommagé ou relais bloqué, H93/RX2LP/I défectueux, ou câblage H93/RX2LP/I – B70/MODLP défectueux." },
+      { code: "Acti", type: "afficheur", titre: "Réveil après veille « low power »", action: "Normal. La réaction à la commande est un peu retardée le temps que les photocellules se stabilisent." },
+      { code: "ASCC", type: "afficheur", titre: "Téléassistance B74/BCONNECT active", action: "TEST le masque 10 s pour accéder aux paramètres." },
+      { code: "L-ES / L-EM", type: "afficheur", titre: "Fonctionnement d'urgence (B74/BCONNECT) résidentiel / copropriété", action: "Moteur et alarmes de sécurité exclus, mouvement lent à commande maintenue. TEST masque le message 10 s." },
+      { code: "S-ES / S-E", type: "afficheur", titre: "Homme mort d'urgence (A7 03 / A7 04)", action: "Affiché pendant le fonctionnement d'urgence réglé par A7. TEST réinitialise l'affichage quelques secondes." },
+      { code: "Transfo éteint", type: "symptome", titre: "Transformateur coupé par erreur par le B70/MODLP", action: "B70/MODLP endommagé ou relais bloqué, H93/RX2LP/I défectueux, ou câblage entre les deux défectueux." },
+      { code: "Centrale éteinte", type: "symptome", titre: "La centrale est éteinte et ne se rallume pas", action: "Fusible F2 grillé après une surtension : le remplacer par un 2 A." },
+      { code: "Mauvaise manœuvre", type: "symptome", titre: "L'automatisme ne fait pas la manœuvre souhaitée", action: "Paramètre 71 (position d'installation) incorrect : le corriger." },
+      { code: "Flash HS", type: "symptome", titre: "Le clignotant ne fonctionne pas", action: "LED grillée ou fils débranchés : vérifier le circuit LED et les fils (LAM)." },
+      { code: "Voyant HS", type: "symptome", titre: "Le voyant automatisme ouvert ne marche pas", action: "Ampoule grillée ou fils débranchés. Le voyant ne fonctionne qu'avec L1 00 et A8 00 ou 01." },
+      { code: "Portée radio faible", type: "symptome", titre: "La télécommande porte peu, ne marche pas pendant le mouvement", action: "Installer l'antenne à l'extérieur (RG58, 10 m max, sans jonction). Remplacer les piles des émetteurs." },
+      { code: "00", type: "test", titre: "TEST : aucune sécurité en alarme", action: "Aucune sécurité en alarme et aucun fin de course activé." },
+      { code: "Sb", type: "test", titre: "TEST : tige de déverrouillage tournée", action: "Remettre la tige de déverrouillage en position fermée ; vérifier le raccordement au contact de déverrouillage (SB)." },
+      { code: "15", type: "test", titre: "TEST : contact STOP ouvert", action: "Installer un bouton STOP (N.F.) ou shunter ST avec COM (shunté d'usine)." },
+      { code: "13", type: "test", titre: "TEST : bord sensible COS1 ouvert", action: "Vérifier le branchement. Inutilisé : 73 00 ou shunter COS1 avec COM. Non géré sur WAY." },
+      { code: "12", type: "test", titre: "TEST : bord sensible COS2 ouvert", action: "Vérifier le branchement. Inutilisé : 74 00 ou shunter COS2 avec COM." },
+      { code: "11", type: "test", titre: "TEST : photocellule FT1 ouverte", action: "Vérifier le branchement. Inutilisée : 50 00 et 51 00 ou shunter FT1 avec COM." },
+      { code: "10", type: "test", titre: "TEST : photocellule FT2 ouverte", action: "Vérifier le branchement. Inutilisée : 53 00 et 54 00 ou shunter FT2 avec COM." },
+      { code: "FE", type: "test", titre: "TEST : les deux fins de course ouverts ou non raccordés", action: "Vérifier le raccordement. Sans fins de course : 60 00. Fins de course magnétiques installés : le fusible F2 (accessoires) est peut-être grillé." },
+      { code: "FA", type: "test", titre: "TEST : sur le fin de course d'ouverture", action: "Normal si l'automatisme est ouvert ; sinon vérifier 71. Fin de course absent ou non raccordé : vérifier le câblage ou 60 00." },
+      { code: "FC", type: "test", titre: "TEST : sur le fin de course de fermeture", action: "Normal si l'automatisme est fermé ; sinon vérifier 71. Fin de course absent ou non raccordé : vérifier le câblage ou 60 00." },
+      { code: "PP · CH · AP · PE · Or", type: "test", titre: "TEST : commande active sans action", action: "Contact N.O. défectueux ou bouton mal raccordé : vérifier le contact avec COM. ORO ne doit pas être shunté s'il n'est pas utilisé." },
+      { code: "POWER éteinte", type: "led", titre: "LED POWER éteinte", action: "Pas d'alimentation ou fusible grillé : vérifier le câble, remplacer le fusible hors tension." },
+      { code: "POWER clignote", type: "led", titre: "LED POWER clignote, afficheur éteint", action: "Veille après 30 min d'inactivité (si L1 00), ou veille « low power » sur TW90/800 – /820. Une touche ou une commande le rallume." }
+    ],
+    afficheur: {
+      intro: "En fonctionnement normal, l'afficheur ne montre pas des chiffres mais l'état des entrées : certains segments correspondent chacun à une commande ou à une sécurité.",
+      ecrans: [
+        { nom: "État des commandes", digits: [
+          { seg: { a: "AP", g: "PP", d: "CH" }, dp: "POWER" },
+          { seg: { a: "PED", d: "ORO" }, dp: null }
+        ]},
+        { nom: "État des sécurités", digits: [
+          { seg: { a: "FT1", g: "COS1", d: "COS2" }, dp: "SB" },
+          { seg: { a: "FT2", e: "FA", c: "FC" }, dp: "STOP" }
+        ]}
+      ],
+      reperes: {
+        AP:    { g: "commande", nom: "Ouverture", repos: "Éteint", detail: "S'allume à la réception d'une commande d'ouverture." },
+        PP:    { g: "commande", nom: "Pas-à-pas", repos: "Éteint", detail: "S'allume à la réception d'une commande pas-à-pas (bornier ou radio PR1)." },
+        CH:    { g: "commande", nom: "Fermeture", repos: "Éteint", detail: "S'allume à la réception d'une commande de fermeture." },
+        PED:   { g: "commande", nom: "Ouverture partielle", repos: "Éteint", detail: "S'allume à la réception d'une commande PED. Non gérée sur les barrières WAY." },
+        ORO:   { g: "commande", nom: "Horloge", repos: "Éteint", detail: "Allumé tant que le contact horloge est fermé." },
+        POWER: { g: "led", nom: "Alimentation", repos: "Allumé", detail: "Carte alimentée. Clignote en veille (afficheur éteint). Éteint : pas de tension ou fusible grillé." },
+        FT1:   { g: "securite", nom: "Photocellules FT1", repos: "Allumé", detail: "Éteint = faisceau coupé ou non raccordé. Clignotant = désactivé par paramètre." },
+        FT2:   { g: "securite", nom: "Photocellules FT2", repos: "Allumé", detail: "Éteint = faisceau coupé ou non raccordé. Clignotant = désactivé par paramètre." },
+        COS1:  { g: "securite", nom: "Bord sensible COS1", repos: "Allumé", detail: "Éteint = bord actionné ou non raccordé. Clignotant = désactivé (73 00, usine). Non géré sur WAY." },
+        COS2:  { g: "securite", nom: "Bord sensible COS2", repos: "Allumé", detail: "Éteint = bord actionné ou non raccordé. Clignotant = désactivé (74 00, usine)." },
+        FA:    { g: "securite", nom: "Fin de course d'ouverture", repos: "Allumé", detail: "TW90 seulement (non géré sur WAY)." },
+        FC:    { g: "securite", nom: "Fin de course de fermeture", repos: "Allumé", detail: "TW90 seulement (non géré sur WAY)." },
+        SB:    { g: "securite", nom: "Tige de déverrouillage", repos: "Allumé", detail: "Éteint = tige de déverrouillage tournée." },
+        STOP:  { g: "securite", nom: "STOP", repos: "Allumé", detail: "Éteint = contact STOP ouvert." }
+      },
+      regles: [
+        "Commandes : segments normalement ÉTEINTS, ils s'allument quand la commande arrive.",
+        "Sécurités : segments normalement ALLUMÉS. Éteint = en alarme ou non raccordé. Clignotant = désactivé par son paramètre.",
+        "La disposition exacte des segments sur l'afficheur est reprise de la figure de la notice : en cas de doute, se fier au mode TEST."
+      ],
+      autres: [
+        { titre: "Mode paramètres", texte: "UP / DOWN font défiler : les 2 chiffres de gauche = numéro du paramètre, les 2 de droite = sa valeur. + / − pour modifier ; la valeur clignote, puis l'afficheur clignote vite quand elle est enregistrée. Modification possible seulement moteur à l'arrêt." },
+        { titre: "Mode TEST (touche TEST)", texte: "Automatisme en mouvement : TEST = ARRÊT ; un 2e appui passe en TEST. À gauche pendant 5 s : la commande reçue (AP, CH, PP, PE, OR). À droite : le numéro de la borne de la sécurité en alarme, qui clignote (Sb, 15 STOP, 13 COS1, 12 COS2, 11 FT1, 10 FT2) ou FE / FA / FC. Le clignotant et le voyant s'allument 1 s à chaque activation. Sortie : TEST ; retour seul après 10 s." },
+        { titre: "Mode INFO (TEST 5 s, moteur arrêté)", texte: "Défile avec + / − : r2.10 version · CNt position du moteur en tours (0.113 = moteur à gauche 71 00 ; 0113 = à droite 71 01) · Ln longueur de course en tours · rP vitesse (tr/min) · AMP courant moteur (001.1 = 1,1 A) · bUS état de l'alimentation (28.5 à 230 V, 25.5 à 207 V, 31.6 à 253 V) · CMP courant de compensation (0 = 0 A … 4 = +6 A) · ASC seuil anti-écrasement (AMP doit rester inférieur) · TIn temps de détection d'obstacle (≥ 0,3 s) · UP position connue (UP__) ou en récupération (UP1_) · OC état (OP, CL, -O, -C) · UF sous-tension / surcharge (U_) ou surintensité (_H) · nPTE nombre d'interventions de la protection thermique · Hib usage interne Roger. On peut commander l'automatisme en mode INFO. Quitter : TEST quelques secondes." },
+        { titre: "Veille", texte: "1) Simple : après 30 min sans action, l'afficheur s'éteint, la LED POWER clignote (seulement si L1 00). 2) « Low power » (TW90/800 et /820 seulement, L1 01 à 04 = 5, 10, 15 ou 20 min, usine 20 min) : consommation ≤ 0,5 W, transformateur coupé par le B70/MODLP, plus de 24 V (pas de récepteur externe, pas de photocellules, pas de batteries, pas de B74/BCONNECT). Test immédiat : UP, DOWN, + et − ensemble environ 1,5 s → StbY ; noLP après 8 s = échec." },
+        { titre: "Récupération de position", texte: "Après une coupure ou un déblocage en position intermédiaire : manœuvre lente, clignotant 3 s allumé / 1,5 s éteint. Ne rien commander avant la fin. Sans fins de course (60 00) et sur WAY : appui sur les butées mécaniques ; la position est aussi perdue après 3 chocs successifs au même endroit. Le capteur de déverrouillage du TW90 est magnétique : en veille low power il n'est plus alimenté, ne débloquer que hors secteur." }
+      ]
+    },
+    bornier: {
+      groupes: [
+        { nom: "Puissance (câblé usine)", bornes: [
+          { n: "L · N · ⏚", label: "Secteur", desc: "230 V ±10 % 50/60 Hz (115 V sur B70/1T/115), fusible 5x20 T2A (F3). Câble H07RN-F 3G1,5 : L marron, N bleu, terre jaune/vert. Mesurer au voltmètre : hors plage, le brushless fonctionne mal", t: "alim" },
+          { n: "POWER IN 5+ / 4−", label: "Alim carte", desc: "Arrivée du transformateur ou du chargeur B71/BC. Attention à la polarité avec le chargeur (fil rouge + sur 5, noir − sur 4)", t: "alim" },
+          { n: "M (MOTOR)", label: "Moteur", desc: "Moteur brushless ; B72/BRCL sur TW90/600/HS – /620/HS. Si les fils ont été débranchés : refaire l'apprentissage", t: "moteur" },
+          { n: "ENC", label: "Encodeur", desc: "Brancher / débrancher seulement hors tension. Encodeur remplacé : refaire l'apprentissage", t: "moteur" }
+        ]},
+        { nom: "Sorties", bornes: [
+          { n: "6 · 7", label: "COR", desc: "Contact libre : éclairage de courtoisie 230 V 100 W / 24 V 40 W (fusible extérieur obligatoire), ou signalisation selon le paramètre 20 (seulement avec L1 00)", t: "sortie" },
+          { n: "8 · 9", label: "+SC · COM", desc: "TW90 : voyant ouvert 24 V 3 W (A8 00 / 01), ou alimentation TX pour test photocellules (A8 02) / économie batteries (A8 03, 04) : plus de voyant possible dans ce cas. WAY : lumières de lisse ALED/4C, ALED/6C (A8 05 à 09) — fil rouge (ou marron) sur SC, noir (ou bleu) sur COM", t: "sortie" },
+          { n: "LAM · COM", label: "Clignotant", desc: "24 V, 25 W max, intermittence 50 % (préclignotement A5, intermittence 78)", t: "sortie" },
+          { n: "+24V · COM", label: "Accessoires", desc: "24 V, 10 W max. Alimente aussi le B72/BRCL (TW90 High Speed et réversible). Coupé en veille low power", t: "alim" }
+        ]},
+        { nom: "Sécurités (N.F.)", bornes: [
+          { n: "FT1 · COM", label: "Photocellules FT1", desc: "Usine : 50 00 (ignorée en ouverture), 51 02 (inversion en fermeture), 52 01. Absente : shunter ou 50 00 et 51 00. Contact 8,2 kΩ possible (57)", t: "nf" },
+          { n: "FT2 · COM", label: "Photocellules FT2", desc: "Usine : 53 00 et 54 00 (désactivée), 55 01. Absente : shunter ou 53 00 et 54 00", t: "nf" },
+          { n: "COS1 · COM", label: "Bord sensible COS1", desc: "N.F. ou 8,2 kΩ ; usine 73 00 (désactivé). Non géré sur WAY", t: "nf" },
+          { n: "COS2 · COM", label: "Bord sensible COS2", desc: "N.F. ou 8,2 kΩ ; usine 74 00 (désactivé). Sur WAY : seulement 00, 01, 02, agit en fermeture (ouverture complète)", t: "nf" },
+          { n: "ST · COM", label: "STOP", desc: "N.F., shunté d'usine. Ouvert = arrêt du mouvement. Contact 8,2 kΩ possible (57)", t: "nf" },
+          { n: "SB", label: "Contact de déverrouillage", desc: "Connecteur câblé usine : tige de déblocage tournée = arrêt, plus de commandes ; au réarmement, récupération de position", t: "nf" },
+          { n: "FC (connecteur)", label: "Fins de course magnétiques", desc: "TW90 seulement, en option, contacts N.F. ; activer par 60 01. Refaire l'apprentissage à chaque réglage", t: "nf" }
+        ]},
+        { nom: "Commandes (N.O.)", bornes: [
+          { n: "AP · COM", label: "Ouverture", desc: "Maintenue, elle empêche la fermeture automatique", t: "no" },
+          { n: "CH · COM", label: "Fermeture", desc: "", t: "no" },
+          { n: "PP · COM", label: "Pas-à-pas", desc: "Fonctionnement selon A4", t: "no" },
+          { n: "PED · COM", label: "Ouverture partielle", desc: "50 % d'usine (15). Non gérée sur WAY. Avec une horloge : mode GAPT (80)", t: "no" },
+          { n: "ORO · COM", label: "Horloge", desc: "Ouvre et maintient ouvert tant que le contact est fermé (80). Ne pas shunter s'il n'est pas utilisé", t: "no" }
+        ]},
+        { nom: "Radio et options", bornes: [
+          { n: "ANT", label: "Antenne", desc: "RG58, 10 m max conseillé, sans jonction", t: "autre" },
+          { n: "RECEIVER", label: "Récepteur enfichable", desc: "PR1 pas-à-pas (76), PR2 ouverture partielle (77). TW90 : H93/RX2LP/I relié au B70/MODLP (3 fils, câblé usine), indispensable au low power ; ne pas le remplacer par un autre récepteur Roger", t: "autre" },
+          { n: "WIFI", label: "B74/BCONNECT", desc: "Gestion par navigateur ou cloud. Activer L0 01 et désactiver le low power (L1 00)", t: "autre" },
+          { n: "B71/BC", label: "Chargeur de batteries", desc: "2 × 12 V 1,2 Ah à bord (TW90/800, /600/HS, /800/R) ou 2 × 12 V 4,5 Ah en boîtier extérieur ; AGM seulement. Uniquement avec L1 00. Contrôler les batteries au moins tous les 6 mois", t: "alim" }
+        ]}
+      ],
+      fusibles: "F1 15 A (ATO257) circuit moteur · F2 2 A (ATO257) accessoires · F3 T2A (5x20) primaire transformateur",
+      notes: [
+        "Barrières WAY : montage, ressorts, butées et déblocage dans la fiche accessoire Roger « WAY (barrière) ».",
+        "Numéros de bornes : la figure 7 et le texte numérotent 21 COM, 22 ORO, 23 AP, 24 CH, 25 PP, 26 PED, 27 +24V, 28 COM, 29 LAM, alors que les figures 4, 11 à 14 et 16 numérotent 29 LAM, 30 COM, 31 +24V, 32 PED, 33 PP, 34 CH, 35 AP, 36 ORO, 37 COM ; le texte associe aussi FT1 / FT2 à « 30(COM) ». Les bornes sont donc indiquées ici par leur nom.",
+        "Sécurités absentes : shunter sur COM ou les désactiver par paramètres 50, 51, 53, 54, 73, 74 (WAY : 50, 51, 52, 53, 54, 73).",
+        "Photocellules conseillées : séries F4ES ou F4S.",
+        "Câbles TW90 : RX 4 × 0,5 mm², TX 2 × 0,5 mm² (20 m max) ; FIFTHY/24 2 × 1 mm² (10 m max) ; R85/60 3 × 0,5 mm² (20 m) ; H85/TTD – TDS 2 × 0,5 mm² (30 m) ; voyant 2 × 0,5 mm² ; courtoisie 2 × 1 mm² (20 m). WAY : RX 5 × 0,5 mm², TX 3 × 0,5 mm² (20 m) ; H85/DEC 4 × 0,5 mm² ; voyant 2 × 0,5 mm² (10 m) ; lumières de lisse 24 V 6 W, câble fourni."
+      ]
+    },
+    parametres: {
+      intro: "Firmware r2.10. Valeur entre parenthèses = réglage usine. Les paramètres se lisent à tout moment mais ne se modifient que moteur arrêté. Certains ne s'affichent que pour TW90 ou WAY.",
+      navigation: [
+        "UP ▲ / DOWN ▼ : paramètre suivant / précédent.",
+        "+ / − : modifier la valeur (elle clignote). Maintenir pour défiler vite.",
+        "Enregistrer : attendre quelques secondes ou passer à un autre paramètre avec UP/DOWN. L'écran clignote vite = valeur enregistrée.",
+        "Si un mot de passe est actif (CP 01), les valeurs sont visibles mais non modifiables : saisir P1–P4 d'abord."
+      ],
+      groupes: [
+        { nom: "Configuration générale", items: [
+          { code: "A1", def: "selon modèle", titre: "Modèle d'automatisme", valeurs: [
+            ["01", "TW90/800 – TW90/820, irréversible, vantail 800 kg max."],
+            ["02", "TW90/600/HS – TW90/620/HS, High Speed, 600 kg max."],
+            ["03", "TW90/800/R – TW90/820/R, réversible, 800 kg max."],
+            ["04", "WAY/004, lisse jusqu'à 4 m."],
+            ["05", "WAY/005 (lisse jusqu'à 5 m) – WAY/006 (jusqu'à 6 m)."]],
+            note: "Réglé d'usine ; une mauvaise valeur provoque des dysfonctionnements. Non modifié par le retour usine. 02 à 05 désactivent le low power (L1 non affiché). Le chapitre « High Speed » parle aussi de vantaux jusqu'à 1000 ou 1600 kg et le chapitre « Réversible » de 600 kg : repris tels quels." },
+          { code: "71", def: "01", titre: "Position du moteur / de la barrière", valeurs: [
+            ["00", "Moteur à gauche (ouverture à gauche, TW90) / barrière à gauche."], ["01", "Moteur à droite / barrière à droite, passage à gauche (vue côté trappe d'inspection)."]],
+            note: "WAY : changer aussi la position du ou des ressorts et du boîtier de centrale. Non modifié par le retour usine." },
+          { code: "60", def: "00", titre: "Fins de course (TW90 seulement)", valeurs: [
+            ["00", "Désactivés : apprentissage et récupération en appui sur les butées, arrêt réglé par 25 et 26."], ["01", "Fins de course magnétiques activés."]] },
+          { code: "65", def: "05", titre: "Espace d'arrêt du moteur", valeurs: [
+            ["01–05", "01 = freinage rapide, arrêt court … 05 = freinage doux, arrêt plus long."]] },
+          { code: "L0", def: "00", titre: "Communication série", valeurs: [
+            ["00", "Désactivée."], ["01", "Module B74/BCONNECT."], ["02", "Carte de débogage (usage interne)."]],
+            note: "Avec A1 02 ou 03, B74/BCONNECT reste toujours actif (L0 affiche 01)." },
+          { code: "L1", def: "04", titre: "Veille « low power » (TW90/800, /820 seulement)", valeurs: [
+            ["00", "Désactivée (obligatoire pour batteries, B74/BCONNECT, voyant et sortie COR)."], ["01", "Après 5 min."], ["02", "Après 10 min."], ["03", "Après 15 min."], ["04", "Après 20 min."]] }
+        ]},
+        { nom: "Logique de fonctionnement", items: [
+          { code: "A2", def: "00", titre: "Refermeture automatique après pause (depuis ouverture complète)", valeurs: [
+            ["00", "Désactivée."], ["01–15", "1 à 15 tentatives après intervention des photocellules, puis reste ouvert."], ["99", "Tentatives illimitées."]] },
+          { code: "A3", def: "00", titre: "Refermeture après coupure secteur", valeurs: [
+            ["00", "Désactivée."], ["01", "Si pas complètement ouvert : fermeture après 5 s de préclignotement, en récupération de position."]] },
+          { code: "A4", def: "00", titre: "Commande pas-à-pas (PP)", valeurs: [
+            ["00", "Ouvre-stop-ferme-stop…"], ["01", "Copropriété : PP ignoré en ouverture, temps de pause renouvelé par un nouveau PP."], ["02", "Copropriété : PP ignoré en ouverture, temps de pause non renouvelé."], ["03", "Ouvre-ferme-ouvre-ferme."], ["04", "Ouvre-ferme-stop-ouvre."]],
+            note: "01 / 02 avec A2 00 : une tentative de refermeture (A2 01) est activée automatiquement." },
+          { code: "A5", def: "00", titre: "Préclignotement", valeurs: [
+            ["00", "Désactivé."], ["01–10", "1 à 10 s avant chaque manœuvre."], ["99", "5 s avant la fermeture seulement."]] },
+          { code: "A6", def: "00", titre: "Copropriété sur PED (TW90)", valeurs: [
+            ["00", "Désactivée."], ["01", "PED ignoré pendant l'ouverture."]] },
+          { code: "A7", def: "00", titre: "Homme présent", valeurs: [
+            ["00", "Désactivé."], ["01", "AP / CH maintenus."], ["02", "Ouverture semi-automatique, fermeture homme mort par CH du bornier."], ["03", "Urgence résidentiel (S-ES) : AP ouvre complètement, CH ferme seulement depuis l'ouverture complète."], ["04", "Urgence copropriété (S-E) : seulement l'ouverture par AP."]],
+            note: "03 / 04 : photocellules et bords ignorés, STOP et détection de choc gérés ; double impulsion (< 1 s, relâcher, reprendre dans la seconde). Sélecteur à clé à proximité immédiate. Empêche le mode GAPT." },
+          { code: "15", def: "50", titre: "Ouverture partielle (%) (TW90)", valeurs: [
+            ["10–99", "10 à 99 % de la course."]] },
+          { code: "16", def: "10", titre: "Fermeture auto après ouverture partielle (TW90)", valeurs: [
+            ["00–90", "0 à 90 s."], ["92–99", "2 à 9 min."]] },
+          { code: "21", def: "30", titre: "Temps de fermeture automatique", valeurs: [
+            ["00–90", "0 à 90 s."], ["92–99", "2 à 9 min."]],
+            note: "Renouvelé par le passage devant les photocellules." },
+          { code: "22", def: "00", titre: "Ouverture sans fermeture automatique", valeurs: [
+            ["00", "Désactivée."], ["01", "Par AP (un 2e AP ferme)."], ["02", "Par PP."], ["03", "Par PED (non géré sur WAY)."]] },
+          { code: "49", def: "01", titre: "Tentatives de refermeture après bord sensible / obstacle", valeurs: [
+            ["00", "Aucune."], ["01–03", "1 à 3 tentatives (valeur ≤ A2 conseillée), seulement depuis l'ouverture complète."]] },
+          { code: "80", def: "00", titre: "Horloge / mode GAPT (TW90)", valeurs: [
+            ["00", "Horloge : ouvre et reste ouvert, commandes ignorées."], ["01", "Horloge : commandes acceptées, horloge réactivée à la réouverture complète."], ["02", "GAPT (horloge sur PED), AP et CH refusés."], ["03", "GAPT, seulement AP accepté."], ["04", "GAPT, AP et CH acceptés."]],
+            note: "02 à 04 non disponibles sur WAY ; 03 / 04 empêchent l'homme présent ; en GAPT, ORO n'est pas géré." },
+          { code: "81", def: "00", titre: "Fermeture / ouverture garantie", valeurs: [
+            ["00", "Désactivée (82 masqué)."], ["01", "Fermeture garantie après le temps 82 (préclignotement 5 s)."], ["02", "Fermeture et ouverture garanties (après arrêt par PP ou détection d'obstacle)."]] },
+          { code: "82", def: "03", titre: "Délai de la fermeture / ouverture garantie", valeurs: [
+            ["02–90", "2 à 90 s."], ["92–99", "2 à 9 min."]] }
+        ]},
+        { nom: "Mouvement, vitesse et force", items: [
+          { code: "11 · 12", def: "04", titre: "Ralentissement en ouverture (11) / fermeture (12)", valeurs: [
+            ["01–05", "01 = ralentit près de la butée … 05 = ralentit très tôt."]],
+            note: "12 : seulement High Speed, réversible et WAY (sur TW90/800 – /820, 11 règle les deux)." },
+          { code: "13 · 14", def: "05", titre: "Approche à vitesse constante (ouverture / fermeture)", valeurs: [
+            ["05–40", "TW90 : 05 ≈ 15 cm, 10 ≈ 30 cm, 40 ≈ 120 cm. WAY : 05 ≈ 0,5°, 40 ≈ 4° (≈ 28 cm avec lisse de 4 m, ≈ 35 cm avec 5 m)."]],
+            note: "Vitesse de l'approche : 42. Pour les 10 derniers degrés (WAY) : 13 et 14 à 10." },
+          { code: "23 · 24", def: "03", titre: "Tolérance sur les butées d'ouverture / fermeture", valeurs: [
+            ["01–05", "01 = tolérance minimale … 05 = maximale (tours de rotor)."]],
+            note: "Visible sans fins de course (60 00) ou sur WAY (garder la valeur usine). 23 ≤ 25 et 24 ≤ 26. L'index de la notice inverse les deux (23 = fermeture, 24 = ouverture), le menu dit 23 = ouverture, 24 = fermeture." },
+          { code: "25 · 26", def: "03", titre: "Avance sur l'arrêt d'ouverture / fermeture (TW90 sans fins de course)", valeurs: [
+            ["01–15", "01 = avance minimale … 15 = maximale (tours de rotor)."]],
+            note: "Pour environ 3 cm : 04 (TW90/800 – /820), 03 (HS), 02 (réversible). Garder au moins 3 cm avant la butée." },
+          { code: "27", def: "03", titre: "Temps d'inversion après bord sensible / obstacle", valeurs: [
+            ["00–60", "0 à 60 s."]],
+            note: "Non visible sur WAY (inversion toujours jusqu'à l'ouverture totale)." },
+          { code: "30", def: "05", titre: "Couple moteur", valeurs: [
+            ["01–04", "−35 %, −25 %, −16 %, −8 % (plus sensible)."], ["05", "Usine."], ["06–09", "+8 %, +16 %, +25 %, +35 % (moins sensible)."]],
+            note: "Sous 03 seulement pour des installations très légères sans vent ni froid." },
+          { code: "31", def: "15", titre: "Sensibilité aux obstacles", valeurs: [
+            ["01–10", "Couple faible : 01 force d'impact mini … 10 maxi."], ["11–16", "Couple moyen (conseillé) : 11 mini … 16 maxi."], ["17", "70 % du couple, 1 s (bord sensible obligatoire)."], ["18", "80 %, 2 s (bord obligatoire)."], ["19", "Couple maxi, 3 s (bord obligatoire)."], ["20", "Couple maxi, 5 s (bord obligatoire)."]] },
+          { code: "33 · 34", def: "04", titre: "Accélération au départ (ouverture / fermeture)", valeurs: [
+            ["01–05", "01 = rapide … 05 = lente et progressive."]],
+            note: "34 : seulement High Speed, réversible et WAY." },
+          { code: "36", def: "00", titre: "Couple maximal d'aide au démarrage", valeurs: [
+            ["00", "Désactivé."], ["01", "En ouverture (et en fermeture à plus de 2 m de la fermeture si la position est connue)."], ["02", "À chaque démarrage."]],
+            note: "5 s maxi ou ≈ 65 cm (TW90) / 5° de lisse (WAY). High Speed et WAY : démarrage de 2 s toujours actif." },
+          { code: "37", def: "01", titre: "Couple pendant la récupération de position", valeurs: [
+            ["00", "Seulement 30 et 31."], ["01", "30, 31 et courant maxi appris."], ["02", "70 % du couple, 1 s."], ["03", "80 %, 2 s."], ["04", "100 %, 3 s."], ["05", "100 %, 5 s."]] },
+          { code: "40 · 41", def: "05", titre: "Vitesse en ouverture / fermeture", valeurs: [
+            ["01–05", "TW90/800 : 6 à 12 m/min · TW90/600/HS : 6 à 25 m/min · TW90/800/R : 6 à 18 m/min · WAY/004 : 90° en 4 s (mini) à 11 s (maxi) · WAY/005 – /006 : 90° en 5 s à 17 s (valeurs telles qu'écrites)."]],
+            note: "41 : seulement High Speed, réversible et WAY." },
+          { code: "42", def: "03", titre: "Vitesse d'approche en fin de manœuvre", valeurs: [
+            ["01–08", "TW90/800 et HS : 250 à 600 tr/min (pas de 50) ; réversible : moitié ; WAY : divisé par 10."]],
+            note: "Indicatif : TW90/800 ≈ 2–5 m/min, HS ≈ 3–8 m/min, réversible ≈ 2–6 m/min, WAY 10° en 1 à 2,2 s." }
+        ]},
+        { nom: "Sécurités", items: [
+          { code: "50", def: "00", titre: "FT1 en ouverture", valeurs: [
+            ["00", "Désactivée."], ["01", "Arrêt."], ["02", "Inversion immédiate."], ["03", "Arrêt temporaire, reprend l'ouverture."], ["04", "Inversion retardée (ferme une fois libérée)."]] },
+          { code: "51", def: "02", titre: "FT1 en fermeture", valeurs: [
+            ["00", "Désactivée."], ["01", "Arrêt."], ["02", "Inversion immédiate."], ["03", "Arrêt temporaire, reprend la fermeture."], ["04", "Inversion retardée (ouvre une fois libérée)."]] },
+          { code: "52", def: "01", titre: "FT1 avec automatisme fermé", valeurs: [
+            ["00", "Occultée : n'ouvre pas."], ["01", "Ouvre sur commande même occultée."], ["02", "Occultée = commande d'ouverture (seulement avec L1 00)."]],
+            note: "Masqué avec A8 02, 03 ou 04." },
+          { code: "53", def: "00", titre: "FT2 en ouverture", valeurs: [
+            ["00", "Désactivée."], ["01", "Arrêt."], ["02", "Inversion immédiate."], ["03", "Arrêt temporaire."], ["04", "Inversion retardée."]] },
+          { code: "54", def: "00", titre: "FT2 en fermeture", valeurs: [
+            ["00", "Désactivée."], ["01", "Arrêt."], ["02", "Inversion immédiate."], ["03", "Arrêt temporaire."], ["04", "Inversion retardée."]] },
+          { code: "55", def: "01", titre: "FT2 avec automatisme fermé", valeurs: [
+            ["00", "Occultée : n'ouvre pas."], ["01", "Ouvre sur commande même occultée."], ["02", "Occultée = commande d'ouverture."]],
+            note: "Le menu détaillé intitule ce paramètre « (FT1) », l'index « (FT2) ». Masqué avec A8 02, 03 ou 04." },
+          { code: "56", def: "00", titre: "Fermeture après passage devant les photocellules", valeurs: [
+            ["00", "Désactivée."], ["01", "FT1 : fermeture 6 s après."], ["02", "FT2 : fermeture 6 s après."], ["03", "FT1 : fermeture immédiate (depuis l'ouverture complète)."], ["04", "FT2 : fermeture immédiate."]],
+            note: "Masqué avec A8 03 ou 04 ; non géré si l'automatisme est en veille ouvert." },
+          { code: "57", def: "00", titre: "Contacts N.F. ou 8,2 kΩ sur FT1 / FT2 / ST", valeurs: [
+            ["00", "Tous N.F."], ["01", "FT1 8k2."], ["02", "FT2 8k2."], ["03", "FT1 et FT2 8k2."], ["10", "ST 8k2."], ["11", "FT1 et ST 8k2."], ["12", "FT2 et ST 8k2."], ["13", "FT1, FT2 et ST 8k2."]] },
+          { code: "73", def: "00", titre: "Bord sensible COS1 (non visible sur WAY)", valeurs: [
+            ["00", "Non installé."], ["01", "N.F., inverse en ouverture seulement."], ["02", "8k2, inverse en ouverture seulement."], ["03", "N.F., inverse toujours."], ["04", "8k2, inverse toujours."], ["12", "Deux bords 8k2 en parallèle (4k1), inverse en ouverture."], ["14", "Deux bords 8k2 en parallèle, inverse toujours."]] },
+          { code: "74", def: "00", titre: "Bord sensible COS2", valeurs: [
+            ["00", "Non installé."], ["01", "N.F., inverse en fermeture seulement."], ["02", "8k2, inverse en fermeture seulement."], ["03", "N.F., inverse toujours."], ["04", "8k2, inverse toujours."], ["12", "Deux bords 8k2 en parallèle (4k1), inverse en fermeture."], ["14", "Deux bords 8k2 en parallèle, inverse toujours."]],
+            note: "WAY : 00, 01, 02 seulement ; agit en fermeture et rouvre complètement." }
+        ]},
+        { nom: "Sorties, radio, batteries", items: [
+          { code: "A8", def: "00", titre: "Sortie SC : voyant / test photocellules / économie batteries / lumières de lisse WAY", valeurs: [
+            ["00", "Voyant éteint fermé, fixe en mouvement et ouvert."], ["01", "Clignote lent en ouverture, fixe ouvert, rapide en fermeture ; s'éteint 2 fois / 15 s à l'arrêt intermédiaire."], ["02", "Test photocellules."], ["03", "Économie batteries."], ["04", "Économie batteries + test photocellules."], ["05", "WAY : lumières de lisse toujours allumées."], ["06", "WAY : allumées à l'arrêt, clignotantes en mouvement."], ["07", "WAY : brève intermittence à l'arrêt, clignotantes en mouvement."], ["08", "WAY : brève intermittence fermée ou arrêtée, clignotantes en mouvement, éteintes ouverte."], ["09", "WAY : comme 08 mais fixes ouverte."]],
+            note: "Voyant seulement avec L1 00." },
+          { code: "20", def: "00", titre: "Sortie COR", valeurs: [
+            ["00", "Éclairage de courtoisie (79)."], ["01", "Fermé si la centrale fonctionne, ouvert en alarme."], ["02", "Ouvert sur batterie faible (85) ou btLO."], ["03", "Fermé sur batterie faible ou btLO."], ["04", "Fermé si pas complètement ouvert."], ["05", "Fermé si pas complètement fermé."]],
+            note: "Seulement avec L1 00. Le texte des valeurs 03 à 05 est ambigu dans la notice." },
+          { code: "76 · 77", def: "00 · 01", titre: "Canaux radio PR1 / PR2", valeurs: [
+            ["00", "Pas-à-pas."], ["01", "Ouverture partielle."], ["02", "Ouverture."], ["03", "Fermeture."], ["04", "Arrêt."], ["05", "Courtoisie tant que la touche est maintenue."], ["06", "Courtoisie marche / arrêt."], ["07–10", "Pas / partielle / ouverture / fermeture avec confirmation (2e touche dans les 2 s)."]] },
+          { code: "78", def: "00", titre: "Intermittence du clignotant", valeurs: [
+            ["00", "Gérée par le clignotant."], ["01", "Lente."], ["02", "Lente en ouverture, rapide en fermeture."]] },
+          { code: "79", def: "60", titre: "Éclairage de courtoisie", valeurs: [
+            ["00", "Désactivé."], ["01", "Impulsion au début de chaque manœuvre."], ["02", "Pendant la manœuvre."], ["03–90", "3 à 90 s après la manœuvre."], ["92–99", "2 à 9 min après."]] },
+          { code: "85", def: "03", titre: "Gestion du fonctionnement sur batterie", valeurs: [
+            ["00", "Commandes acceptées jusqu'à décharge complète."], ["01", "Seuil mini (22 V avec B71/BC ; 24,6 V avec B71/PBX)."], ["02", "Seuil intermédiaire (23 V ; 25 V)."], ["03", "Seuil maxi (24 V ; 25,4 V)."]] },
+          { code: "86", def: "00", titre: "Limitations sur batterie (si 85 ≠ 00)", valeurs: [
+            ["00", "Aucune (signal possible par COR)."], ["01", "Après 30 s sous le seuil : ouverture seulement, ne referme jamais."], ["02", "Ouvre seul (préclignotement 5 s), puis seulement la fermeture."], ["03", "Seulement la fermeture, même avec ORO actif et 80 01."], ["04", "Ferme seul (préclignotement 5 s), puis seulement l'ouverture."], ["05", "30 s après la coupure : ouvre et reste ouvert jusqu'au retour du courant."]] },
+          { code: "87", def: "00", titre: "Type de batterie", valeurs: [
+            ["00", "2 × 12 V avec B71/BC, performances réduites."], ["01", "B71/BC, pleines performances."], ["02", "B71/PBX extérieur, performances réduites."], ["03", "B71/PBX, pleines performances."]] }
+        ]},
+        { nom: "Maintenance et identification", items: [
+          { code: "FA", def: "00", titre: "Retour aux valeurs d'usine", valeurs: [
+            ["+ et − 4 s", "rES- clignote : valeurs usine restaurées (sauf A1, 60, 71, 86, 87, L0, L1)."]],
+            note: "Impossible si un mot de passe est actif. Autre méthode : à la mise sous tension, avant la version, maintenir UP et DOWN 4 s." },
+          { code: "n0 – n6", def: "—", titre: "Identification", valeurs: [
+            ["n0", "Version HW."], ["n1 · n2", "Année · semaine de production."], ["n3 – n5", "Numéro de série."], ["n6", "Version FW."]] },
+          { code: "o · o0 · o1", def: "—", titre: "Compteur de manœuvres (× 100)", valeurs: [
+            ["Exemple", "01 23 45 = 1 234 500 manœuvres."]] },
+          { code: "h0 · h1 / d0 · d1", def: "—", titre: "Heures de manœuvre / jours d'allumage", valeurs: [
+            ["Exemple", "01 23 = 123."]] },
+          { code: "P1 – P4 · CP", def: "00", titre: "Mot de passe", valeurs: [
+            ["Activer", "Saisir P1 à P4, aller sur CP, + et − 4 s ; éteindre et rallumer, vérifier CP 01."], ["Déblocage temporaire", "Saisir le mot de passe (CP 00) ; se réactive après 30 min sans touche ou à la remise sous tension."], ["Supprimer", "Mot de passe saisi, P1–P4 à 00, CP + et − 4 s, éteindre et rallumer."]],
+            note: "Mot de passe perdu : assistance Roger." }
+        ]}
+      ]
+    },
+    apprentissage: {
+      avant: [
+        "A1 — modèle : 01 TW90/800 – /820 · 02 TW90/600/HS – /620/HS · 03 TW90/800/R – /820/R · 04 WAY/004 · 05 WAY/005 – /006.",
+        "71 — position : TW90 7100 ouverture à gauche, 7101 ouverture à droite (usine, vue de l'intérieur) ; WAY 7101 barrière à droite, passage à gauche (usine, vue côté trappe).",
+        "TW90 avec fins de course (60 01) : les régler pour un arrêt un peu avant la butée mécanique. WAY : vérifier l'équilibrage du ressort et les butées mécaniques ; graisser les articulations (graisse au lithium RS/GR2/100).",
+        "Homme présent désactivé : A7 00. Automatisme en position fermée (WAY : lisse fermée et déblocage réenclenché).",
+        "TEST : contrôler commandes et sécurités ; shunter ou désactiver celles qui ne sont pas installées (TW90 : 50, 51, 53, 54, 60, 73, 74 ; WAY : 50, 51, 52, 53, 54, 73).",
+        "TEST affiche FC (fins de course) ou 00 : prêt. dAtA : TEST 1 clic puis apprentissage. Un n° de borne : régler la sécurité d'abord."
+      ],
+      etapes: [
+        "Maintenir PROG 4 s : APP- s'affiche.",
+        "TW90 : relever le levier de déverrouillage. WAY : ouvrir le volet et tourner la clé de 230° sens horaire (une lisse courte sans accessoires peut se soulever).",
+        "PHAS s'affiche après quelques secondes : la centrale règle le moteur. Attendre que PHA5 clignote (réglage réussi).",
+        "TW90 : abaisser le levier de déverrouillage. WAY : ramener la lisse en fermeture complète à la main et rebloquer.",
+        "FOtO s'affiche (TW90, si une photocellule est active) : s'écarter du faisceau dans les 5 s.",
+        "A to : ouverture à faible vitesse jusqu'au fin de course ou à la butée d'ouverture, court arrêt, A to clignote.",
+        "Fermeture jusqu'au fin de course ou à la butée de fermeture. Réussi : retour à l'état des commandes et sécurités (TW90 sans fins de course : recul du nombre de tours réglé en 26)."
+      ],
+      apres: [
+        "Erreurs : noPH (réglage moteur échoué), APPE (TEST ou sécurité), APPL / APP (longueur) → voir l'onglet Codes et recommencer.",
+        "TW90 : garder au moins 3 cm entre le point d'arrêt et la butée mécanique (avec fins de course : déplacer le fin de course et refaire l'apprentissage ; sans : augmenter 26, ajuster 25).",
+        "Contrôle final : StoP doit clignoter quand on ouvre le déverrouillage ; tester la récupération de position après coupure ; WAY : vérifier l'équilibrage de la lisse ; low power : tester avec les 4 touches."
       ]
     }
   }

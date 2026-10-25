@@ -3052,7 +3052,7 @@
       "Arrêts mécaniques obligatoires : en ouverture, tourner l'excentrique hexagonal [1] dans l'une des 6 positions et bloquer avec la vis [2] ; en fermeture, visser / dévisser le boulon [3].",
       "Vent fort : les limites d'utilisation peuvent être réduites. Avec le groupe leviers LT300 (125°), les limites de poids sont plus basses (zone * de l'abaque).",
       "Électroserrure conseillée si le vantail dépasse 2,5 m (vantail normal), 2 m (vantail plein) ou 2 m de hauteur.",
-      "Raccordements et apprentissage : fiche EDGE1 (BR21) ; la H70/200AC (R21) n'a pas de fiche dans l'appli."
+      "Raccordements et apprentissage : fiche EDGE1 (BR21) ou fiche H70/200AC (R21, encodeur réglé 75 03)."
     ],
     "notes": [
       "Déblocage (sans tension, batteries débranchées, moteur arrêté). RL650 : retirer le bouchon, introduire le levier, le tourner d'environ 120° vers le centre du portail, déplacer le portail ; pour rebloquer, portail ouvert, ramener le levier vers les gonds en position initiale et refermer le bouchon. RL651 : introduire la clé, la tourner d'environ 90° vers le centre du portail sans la retirer, tirer le levier jusqu'à l'ouverture complète, déplacer le portail ; pour rebloquer, ramener le levier, clé 90° vers les gonds, refermer. Le raccrochage se fait seul aux manœuvres suivantes.",
@@ -3349,6 +3349,585 @@
       "L'étiquette d'exemple (AY/250/M) indique 160 W et S3 35 %, le tableau 150 W et usage intensif.",
       "Déblocage extérieur RL673 (option) : ouvrir le couvercle, passer le cordon métallique gainé dans la fente rectangulaire du KT249 et les guide-câbles, assembler selon la notice de l'accessoire, relier à une poignée existante (non fournie), vérifier et refermer.",
       "La notice ne décrit pas la manœuvre de déblocage manuel à la clé."
+    ]
+  },
+  {
+    "id": "roger-way",
+    "nom": "WAY (barrière)",
+    "marque": "Roger",
+    "couleur": "#5b4aa8",
+    "categorie": "Barrière levante brushless (motorisation)",
+    "modeles": "WAY/004 · WAY/005 · WAY/006 (+ versions /115) — centrale B70/1T — lisses BA/68/3, BA/68/4, BA/75/5 (WAY/004 – /005), BA/91/6 ou 2 × BA/91/3 + JNT/BA/91 (WAY/006)",
+    "source": "Notices Roger WAY/004 – WAY/005 IS266 Rev.04, WAY/006 IS291 Rev.02, plaque KT252 IS283 Rev.00 (versions françaises)",
+    "resume": "Barrière brushless 24 V irréversible avec centrale B70/1T et encodeur magnétique 4096 PPR, usage intensif. WAY/004 : lisse jusqu'à 4 m · WAY/005 : jusqu'à 5 m · WAY/006 : jusqu'à 6 m. Livrée pour une installation à DROITE (vue côté trappe d'inspection).",
+    "specs": [
+      [
+        "Alimentation",
+        "230 V~ 50/60 Hz ; 115 V~ 50/60 Hz (versions /115) · moteur 24 V~ fréquence variable (FOC avec encodeur)"
+      ],
+      [
+        "Puissance maxi / de démarrage",
+        "180 W / 305 W"
+      ],
+      [
+        "Couple",
+        "Démarrage 140 Nm · maxi 56 Nm (S3 70 %, à 1500 tr/min) · nominal 49 Nm (S1, à 1500 tr/min)"
+      ],
+      [
+        "Temps de manœuvre",
+        "WAY/004 : 4 – 11 s · WAY/005 : 5 – 17 s · WAY/006 : 6 – 18 s"
+      ],
+      [
+        "Lisse",
+        "WAY/004 : jusqu'à 4 m · WAY/005 : jusqu'à 5 m · WAY/006 : jusqu'à 6 m"
+      ],
+      [
+        "Cycles",
+        "500 000 testés (lisses 4 et 5 m, ou 6 m, à 20 °C ; pas la valeur maxi) · par jour : WAY/004 4500, WAY/005 2800, WAY/006 2400 · usage intensif"
+      ],
+      [
+        "Protection, température, bruit",
+        "IP44 · −20 °C à +55 °C · < 70 dB(A)"
+      ],
+      [
+        "Poids",
+        "WAY/004 40 kg · WAY/005 44 kg · WAY/006 50 kg"
+      ],
+      [
+        "Déblocage",
+        "Clé trilobée, 230° · force 10 N"
+      ],
+      [
+        "Dimensions",
+        "Hauteur 1010 mm (axe de lisse à 870 mm) · WAY/004 – /005 : 325 × 211 mm, profondeur avec moyeu 347 mm, lisse ≤ 2870 / 3870 / 5000 mm · WAY/006 : 428 × 212 mm, lisse ≤ 5850 mm"
+      ],
+      [
+        "Ressorts",
+        "WAY/004 – /005 : SP/48/G10 (marron, Ø48), SP/51/G10 (orange, Ø51), SP/56/G10 (violet, Ø56) · WAY/006 : SP/51/AS/G12 (orange) ou SP/56/AS/G12 (violet), jeux de 2 ressorts"
+      ],
+      [
+        "Plaque de fondation",
+        "KT251 (WAY/004 – /005) · KT252 (WAY/006)"
+      ]
+    ],
+    "raccordement": [
+      {
+        "n": "L · N · ⏚",
+        "label": "Alimentation",
+        "desc": "Câble à double isolation 3 × 2,5 mm² d'après la notice de la barrière (la notice B70/1T conseille H07RN-F 3 × 1,5 mm²). Passer par le presse-câble caoutchouc à gauche du boîtier de centrale : L marron, N bleu, terre jaune / vert ; bloquer avec les serre-câbles fournis. Interrupteur omnipolaire (≥ 3 mm), disjoncteur et protection contre la surintensité en amont."
+      },
+      {
+        "n": "Trappe",
+        "label": "Terre de la trappe",
+        "desc": "Ne pas débrancher le câble de terre de la trappe d'inspection ; la remettre en place câble de terre branché."
+      },
+      {
+        "n": "SC · COM",
+        "label": "Lumières de lisse ALED/4C – ALED/6C",
+        "desc": "Sur la B70/1T : rouge (ou marron) sur SC, noir (ou bleu) sur COM ; mode d'allumage par le paramètre A8 (05 à 09)."
+      },
+      {
+        "n": "Centrale",
+        "label": "B70/1T",
+        "desc": "Commandes, sécurités, paramètres et apprentissage : voir la fiche de la carte B70/1T (A1 = 04 WAY/004, 05 WAY/005 – /006)."
+      }
+    ],
+    "installation": [
+      "Contrôles : matériel en bon état, limites d'emploi respectées, encombrement libre, socle béton fait dans les règles, à niveau et propre.",
+      "Plaque de fondation : fouille 1 m × 1 m × 0,4 m remplie de béton armé ; monter les 4 pattes d'ancrage (écrou inférieur vissé jusqu'au bout du filetage, cote minimale Z 40 mm) ; noyer la plaque au ras de la surface, parfaitement à niveau, gaines sortant de quelques cm au centre. Attention au sens de pose : le côté inspection doit être accessible depuis l'intérieur du site. Sur surface existante : 4 chevilles à expansion (non fournies). Trous supplémentaires A pour plus d'adhérence (2 sur KT251, 5 sur KT252).",
+      "Armoire : retirer rondelles et écrous des pattes, ouvrir la trappe (clé 90° sens horaire) sans débrancher son câble de terre, poser l'armoire sur la plaque (pattes dans les 4 trous), orienter, remettre rondelles et écrous et serrer fermement.",
+      "Installation à gauche : débloquer, tourner le balancier (fig. 7), déplacer la butée mécanique, rebloquer ; changer aussi la position du ressort et de la centrale, et le paramètre 71.",
+      "Lisse : débloquer, tourner le balancier jusqu'à la butée pour poser la lisse à l'horizontale, rebloquer ; couvercle d'arbre [B] dans le moyeu [A] jusqu'à la butée, graisser les vis M12 × 160 (M14 × 160 sur WAY/006) à la graisse EP lithium ; retirer capuchon [E], support [G], caoutchouc [H] et profilé [I] sur au moins 250 mm (WAY/004) ou 400 mm (WAY/005, /006) ; collier [M] dans la lisse, glisser la lisse dans le support et la fixer avec les vis M8 [O] ; couvercle plastique [P] et collier [M] avec vis 4,2 × 13 ; remonter profilé, caoutchouc, support (vis 2,9 × 19) et capuchon (vis 4,2 × 13).",
+      "Ressort : débloquer, lisse verticale (ouverture totale), choisir le ressort selon le tableau (lisse, coupe, accessoires), partie colorée vers le haut, crochet sur la structure fixe, vis M10 × 40 dans l'œillet du tendeur et dans le trou adapté du balancier (rondelles, écrou autobloquant M10) ; graisser articulations et extrémités (EP lithium, RS/GR2/100).",
+      "Équilibrage : amener la lisse à 45° à la main et la lâcher. Elle monte : réduire la tension ; elle descend : l'augmenter (desserrer les écrous [A], tourner le ressort [B] sens antihoraire pour diminuer, horaire pour augmenter), puis serrer fermement. Graisser légèrement le ressort contre la rouille ; siliconer le passage des câbles à la base.",
+    "Appui fixe obligatoire (repère « 1 » du tableau des ressorts) pour la lisse seule et avec grille : BA/68/4, BA/75/5, BA/91/6 et 2 × BA/91/3 ; jamais avec l'appui mobile.",
+      "Butées mécaniques : débloquer, régler l'ouverture [AP] et la fermeture [CH] complètes avec les butées, rebloquer (figure 13 = barrière à gauche ; à droite, faire symétrique).",
+      "Raccordements et apprentissage : voir la fiche B70/1T."
+    ],
+    "notes": [
+      "Déblocage (hors tension, barrière arrêtée, lisse en position FERMÉE, personne dans le rayon d'action) : tourner la trappe cache-serrure, introduire la clé et la tourner de 230° sens horaire, déplacer la lisse à la main. Rebloquer : clé 230° sens antihoraire, la retirer, refermer la trappe. Si la lisse a été modifiée ou mal équilibrée, elle peut monter ou descendre brusquement au déblocage.",
+      "Ressorts WAY/006 : si l'un des deux ressorts casse, remplacer l'ensemble des deux.",
+      "Entretien conseillé au moins tous les 6 mois : serrage des vis, verres des photocellules (chiffon humide, sans solvant), graissage EP lithium des articulations, raccordements, déblocage, lisse, végétation ; puis sécurités, détection d'obstacles, absence de risque de soulèvement, forces (EN 12445).",
+      "Longueur de lisse : le chapitre « Limites d'emploi » dit « jusqu'à 5 m » dans les deux notices, y compris celle du WAY/006 (lisse jusqu'à 6 m).",
+      "Temps de manœuvre WAY/006 : 6 – 18 s dans la notice de la barrière ; la notice B70/1T donne 90° en 5 à 17 s pour WAY/005 – /006 (paramètres 40 / 41).",
+      "Le texte anglais des ressorts indique « purple – Ø65 » au lieu de Ø56.",
+      "Accessoires : appuis fixes BAFS/01 à /04 (plaque KT231), appui mobile BAMS/01 (rallonge BAMS/01/EXT), grille BARK/02 (2 m), bandes réfléchissantes R99/BASB20, chargeur B71/BC, graisse RS/GR2/100."
+    ]
+  },
+  {
+    "id": "roger-bionik",
+    "nom": "BIONIK (barrières)",
+    "marque": "Roger",
+    "couleur": "#5b4aa8",
+    "categorie": "Barrière levante brushless (motorisation)",
+    "modeles": "BI/004 (BIONIK4) · BI/001PE · BI/004HP · BI/006 · BI/008 (BIONIK8) — versions /115 et /IS (inox AISI 304) — centrale CTRL intégrée",
+    "source": "Notices Roger BI/004 IS161 Rev.13, BI/004HP – BI/006 – BI/001PE IS185 Rev.13, BI/008 IS194 Rev.13, plaque KT240 IS171 Rev.04 (versions françaises)",
+    "resume": "Barrières brushless 36 V avec centrale CTRL et encodeur absolu intégrés, livrées pour une installation à DROITE (vue côté trappe d'inspection). Lisse jusqu'à 3 m (BI/001PE), 4 m (BI/004, BI/004HP), 6 m (BI/006) ou 8 m (BI/008).",
+    "specs": [
+      [
+        "Alimentation",
+        "230 V~ 50/60 Hz ±10 % (115 V~ sur les versions /115) · moteur 36 V~ · accessoires 24 V="
+      ],
+      [
+        "Puissance de démarrage",
+        "BI/004 220 W · BI/001PE 450 W · BI/004HP 220 W · BI/006 220 W · BI/008 300 W"
+      ],
+      [
+        "Courant moteur",
+        "BI/004 0 – 15 A · BI/001PE, BI/004HP, BI/006 max 15 A · BI/008 0 – 18 A"
+      ],
+      [
+        "Couple",
+        "BI/004 0 – 200 Nm · BI/001PE et BI/004HP 10 – 200 Nm · BI/006 10 – 300 Nm · BI/008 10 – 400 Nm"
+      ],
+      [
+        "Temps d'ouverture / fermeture",
+        "BI/004 : 2 – 6 s (lisse 3 m), 3 – 6 s (lisse 4 m) · BI/001PE 2 – 4 s · BI/004HP 3 – 6 s · BI/006 4 – 8 s · BI/008 9 – 29 s"
+      ],
+      [
+        "Cycles par jour (24 h)",
+        "BI/004 5000 · BI/001PE 8000 · BI/004HP 5000 · BI/006 4000 · BI/008 2500 (essais internes à +25 °C avec la lisse maxi, pas des valeurs maxi)"
+      ],
+      [
+        "Usage",
+        "BI/004 continu · BI/001PE, BI/004HP, BI/006, BI/008 super intensif"
+      ],
+      [
+        "Protection, température, bruit",
+        "IP54 · −20 °C à +55 °C · < 70 dB(A)"
+      ],
+      [
+        "Déblocage",
+        "BI/004 : clé à cylindre standard, 90° · BI/001PE, /004HP, /006 : cylindre européen · BI/008 : cylindre DIN ; ces trois-là : 2 tours complets · force < 1,6 Nm"
+      ],
+      [
+        "Centrale",
+        "CTRL (BI/004 à partir du firmware r3.25 ; BI/001PE : CTRL/P)"
+      ],
+      [
+        "Batteries",
+        "Kit BI/BAT/KIT avec chargeur BI/BCHP en option"
+      ],
+      [
+        "Dimensions",
+        "BI/004 : hauteur 1203 mm (axe de lisse 890 mm), 280 × 210 mm, lisse ≤ 3000 / 4000 mm · BI/001PE, /004HP, /006 : hauteur 1237 mm (axe 900, lisse à 845 mm du sol), 380 × 270 mm, lisse ≤ 2850 / 3850 / 5850 mm · BI/008 : hauteur 1237 mm, 492 × 270 mm, lisse ≤ 8000 mm"
+      ],
+      [
+        "Ressorts",
+        "BI/004 : SP/48/G14 (marron), SP/48/01 (vert), SP/61/01 (bleu), SP/72/01 (rouge) · BI/001PE, /004HP, /006 : SP/61/01 (bleu), SP/72/01 (rouge), SP/83/01 (jaune), SP/85/01 (gris) · BI/008 : jeu SP/85/AS/02"
+      ],
+      [
+        "Lisses",
+        "BI/004 : BA/68/3, BA/68/4 · BI/001PE, /004HP, /006 : BA/91/3, BA/91/4, BA/91/6 (anciennes BA/90/…) · BI/008 : BA/128/4 (2 × 4,1 m assemblées = 8,2 m)"
+      ]
+    ],
+    "raccordement": [
+      {
+        "n": "L · N · ⏚",
+        "label": "Alimentation",
+        "desc": "Câble à double isolation 3 × 2,5 mm² par le passe-câble caoutchouc à gauche du boîtier de centrale : L marron, N bleu, terre jaune / vert ; bloquer avec les serre-câbles fournis. Gaine entrant d'au moins 50 mm par les trous de la plaque. Interrupteur omnipolaire (≥ 3 mm), disjoncteur et protection contre la surintensité en amont."
+      },
+      {
+        "n": "FT1 / FT2",
+        "label": "Photocellules",
+        "desc": "F4ES (G90/F4ES sur BI/001PE, /004HP, /006, /008) des deux côtés de l'armoire, à 50 ou 100 cm ; bornes COM-FT1 / FT2 de la centrale."
+      },
+      {
+        "n": "LIGHT",
+        "label": "Clignotant de tête",
+        "desc": "BI/BLED (BI/004), BI/BLED/6, BI/BLED/8 : préinstallé dans la tête, connecteur sur la borne LIGHT de la centrale."
+      },
+      {
+        "n": "±BATTERY",
+        "label": "Kit batteries",
+        "desc": "Fils rouge, noir et bleu sur les batteries ; +BATTERY fil rouge, −BATTERY fil noir ; carte BI/BCHP dans son connecteur."
+      },
+      {
+        "n": "Centrale",
+        "label": "CTRL",
+        "desc": "Commandes, sécurités, paramètres et apprentissage : voir la fiche de la carte CTRL."
+      }
+    ],
+    "installation": [
+      "Contrôles : matériel en bon état, limites d'emploi respectées, encombrement libre, socle béton fait dans les règles, à niveau et propre.",
+      "Plaque de fondation : fouille 1 m × 1 m × 0,4 m (BI/008 : 1,5 m × 1 m × 0,5 m) remplie de béton armé ; pattes d'ancrage montées (écrou inférieur jusqu'au bout du filetage, cote Z mini 40 mm) ; plaque au ras du sol, parfaitement à niveau, gaines sortant de quelques cm au centre ; côté inspection accessible depuis l'intérieur du site. Sur surface existante : 4 chevilles à expansion (6 sur BI/008). BI/004 : plaque KT240.",
+      "Armoire : retirer rondelles et écrous, ouvrir la trappe (clé 90° sens horaire), poser l'armoire (pattes dans les trous à anneau), orienter, remettre rondelles et écrous et serrer fermement.",
+      "Installation à gauche : débloquer, tourner le balancier, déplacer la butée mécanique, rebloquer ; ressort et paramètre 71 à adapter.",
+      "Lisse BI/004 (BA/68) : balancier en butée pour lisse horizontale ; support de lisse [C] sur le vilebrequin [D] avec 1 mm maxi entre support et armoire ; vis TCEI M8 × 35 [E1-E3] serrées fort ; lisse fixée par vis M8 × 20 [P] (profil N retiré d'au moins 200 mm).",
+      "Lisse BI/001PE – /004HP – /006 (BA/91) : base de support [A] sur la bride [C] (vis M10 × 35), joint M2 entièrement dans la lisse, bague [L], lisse dans son logement, bandes de jonction [F] avec vis M10 × 20, couvercle alu [G] avec vis M8 inox [H].",
+      "Lisse BI/008 (BA/128/4) : voir la fiche « Lisses et lumières ALED ».",
+      "Ressort (BI/004, BI/001PE, /004HP, /006) : lisse verticale, ressort choisi selon le tableau, partie colorée en haut, fixé au balancier (BI/004 : trous SX1 / SX2 ouverture à gauche, DX2 / DX3 à droite ; HP / 006 : trous A-1 = plus tendu, C-3 = moins tendu) et à la traverse ; graisser au lithium (RS/GR2/100).",
+      "Ressorts BI/008 (SP/85/AS/02) : curseur CU1 ou CU2 (pas 26 / 24 mm) sur le balancier, plus à l'extérieur si la lisse est plus lourde ; ressorts sur la traverse (trou A pour lisse lourde). Ne pas démonter le roulement [S] (3 éléments).",
+      "Équilibrage : lisse à 45°, la lâcher. Elle monte : réduire la tension ; elle descend : l'augmenter (écrous [A], tourner le ressort ; BI/008 : traverse [B] vers le haut = plus tendu). Serrer, graisser légèrement le ressort, siliconer le passage des câbles.",
+      "Lisse ≥ 4 m : appui fixe BAFS ou appui mobile BAMS obligatoire (BI/004HP, /006, /008) ; certaines configurations imposent l'appui BAFS/05 à aimant (voir tableaux des ressorts).",
+      "Butées mécaniques : débloquer, régler ouverture [AP] et fermeture [CH] complètes, rebloquer.",
+      "Déblocage côté opposé (BI/001PE, /004HP, /006, /008) : déplaçable ; à barrière bloquée, le bouchon VERT des goupilles doit être tourné vers la trappe d'inspection, sinon il est mal monté."
+    ],
+    "notes": [
+      "Déblocage (hors tension, lisse FERMÉE, personne dans le rayon d'action). BI/004 : ouvrir la trappe cache-serrure, clé 90° sens horaire, ouvrir entièrement la trappe de déverrouillage, déplacer la lisse ; rebloquer en refermant la trappe (clé 90° sens horaire, attention aux doigts), puis clé 90° sens antihoraire, retirer, refermer. BI/001PE, /004HP, /006, /008 : clé 2 tours complets sens antihoraire pour débloquer, 2 tours sens horaire pour rebloquer. Lisse modifiée ou mal équilibrée : elle peut monter ou descendre brusquement.",
+      "BI/006 : en zone très ventée ou en usage super intensif avec accessoires (grille, appui mobile, aimant) ou sans accessoires au-delà de 500 cycles / jour, utiliser l'articulation JNT/BA/91.",
+      "BI/008 : la description des modèles parle de « barrière jusqu'à 4 m » alors que les limites d'emploi et le tableau indiquent jusqu'à 8 m. Repris tels quels.",
+      "BI/004 : le texte du réglage de tension indique le sens horaire pour réduire la tension avec les ressorts /01, mais le sens antihoraire pour réduire avec le ressort SP/48/G14.",
+      "Le modèle BI/001PE n'apparaît pas dans le paramètre A1 de la fiche CTRL (notice IS88) ; il utilise la centrale CTRL/P.",
+      "Entretien au moins tous les 6 mois : serrage, graissage EP lithium, raccordements, déblocage, lisse ; puis sécurités, détection d'obstacles, absence de risque de soulèvement, forces (EN 12445).",
+      "Accessoires : appuis fixes BAFS/01 à /05, appui mobile BAMS/01 (rallonge /EXT), grille BARK/02, bandes R99/BASB20, lumières ALED, barre DIN KT239 (BI/008)."
+    ]
+  },
+  {
+    "id": "roger-lisses-aled",
+    "nom": "Lisses BA et lumières ALED",
+    "marque": "Roger",
+    "couleur": "#5b4aa8",
+    "categorie": "Accessoires de barrière (lisses, lumières)",
+    "modeles": "BA/68/3 · BA/68/4 (BI/004, WAY/004) · BA/90/3 – /4 – /6 et BA/91/3 – /4 – /6 (BIONIK, WAY/006) · BA/128/4 (BI/008) · ALED/4C, /6C, /8C, /12C (+ /RGB)",
+    "source": "Notices Roger BA/68 IS168 Rev.02, BA/90 – BA/91 IS93 Rev.07, BA/128/4 IS197 Rev.00, ALED IS92 Rev.09 (versions françaises)",
+    "resume": "Montage des lisses elliptiques en aluminium sur les barrières BIONIK et WAY, et des bandes LED de lisse ALED (rouges ou RGB).",
+    "specs": [
+      [
+        "BA/68/3 – /4",
+        "Lisse elliptique aluminium 90 × 39,6 mm, pour BI/004 et WAY/004"
+      ],
+      [
+        "BA/90 / BA/91",
+        "Anciens codes BA/90/3, /4, /6 (BIONIK seulement), nouveaux BA/91/3, /4, /6 (BIONIK et WAY) ; raccords de support différents (tableau de compatibilité) ; WAY/006 : lisse à partir de la version V2"
+      ],
+      [
+        "BA/128/4",
+        "Deux lisses de 4,1 m (D1, D2) assemblées par le joint M1 : 8,2 m, pour BI/008"
+      ],
+      [
+        "ALED",
+        "24 V ±10 % · IP54 · −20 °C à +55 °C · coupe possible tous les 1000 mm"
+      ],
+      [
+        "Puissance ALED",
+        "4C 4 W (RGB 14 W) · 6C 5 W (RGB 21 W) · 8C 7 W (RGB 28 W) · 12C 10 W (RGB 42 W) ; RGB = 3 couleurs allumées ensemble, diviser par 3 pour le rouge ou le vert seul"
+      ],
+      [
+        "Longueur / poids ALED",
+        "4C 4500 mm, 0,22 kg (RGB 0,32) · 6C 7500 mm, 0,29 kg (0,39) · 8C 9500 mm, 0,37 kg (0,47) · 12C 13500 mm, 0,52 kg (0,62)"
+      ]
+    ],
+    "raccordement": [
+      {
+        "n": "+LUCI · COM",
+        "label": "ALED sur BIONIK (CTRL)",
+        "desc": "Fil marron (ou rouge) sur +LUCI, bleu (ou noir) sur COM ; mode d'allumage par le paramètre 79 de la centrale."
+      },
+      {
+        "n": "SC · COM",
+        "label": "ALED sur WAY (B70/1T)",
+        "desc": "Fil marron (ou rouge) sur SC, bleu (ou noir) sur COM ; mode d'allumage par le paramètre A8."
+      },
+      {
+        "n": "RGB",
+        "label": "ALED/…/RGB",
+        "desc": "Raccordement par le module B73/LTM (voir sa notice)."
+      }
+    ],
+    "installation": [
+      "Toujours débloquer la barrière, tourner le balancier pour mettre la lisse à l'horizontale, puis rebloquer avant de monter la lisse.",
+      "Recoupe BA/90 (BIONIK) : dévisser les 3 vis [A], retirer les bouchons [B], la goupille [C] et le caoutchouc [D] ; raccourcir lisse, caoutchouc et protection LED côté support ; remonter. BA/91 : raccourcir la protection LED N1 et le caoutchouc P1 de 265 mm côté support (après avoir retiré bouchon et bride) ; recoupe : vis [A], bouchon [B], 4 vis [C] et couvercle [D], protection LED [E] et caoutchouc [F] à raccourcir côté support.",
+      "BA/128/4 : retirer bouchon Q1 et bride R1 (à ne plus utiliser), raccourcir la protection LED N1 et le caoutchouc P1 de 285 mm côté support et couper l'excédent de caoutchouc à l'autre bout ; N2 et P2 ne se coupent pas. Joint M1 enfoncé de 375 mm dans D1, 10 vis autotaraudeuses (5 dessus, 5 dessous, tous les 60 mm), D2 sur l'autre moitié, même fixation. Socle [A] sur la bride [C] (8 vis M12 × 30), joint M2 entièrement dans la lisse + 10 vis, bague [I], lisse dans le support, bride acier [F] (8 vis M10 × 20 + 4 vis autotaraudeuses), N1 puis N2, P1 puis P2, couvercle alu [G] (6 vis M8 inox), bride R2 et bouchon Q2.",
+      "ALED : raccourcir si besoin (retirer le terminal noir [A], couper sur les contacts +24V / GND, jamais sur A – B, recoller le terminal au silicone). BIONIK4 / WAY : enfiler la bande dans le profilé PVC, plier l'excédent dans le profilé alu (collier [G]), passer le câble par le trou central du support et ressortir côté opposé au moteur. BIONIK1 / 4HP / 6 : LED orientées vers l'extérieur dans les deux profilés transparents, caoutchouc adhésif au coude. BA/75/5 : retirer la partie du rabat côté plaque de recouvrement.",
+      "Test : barrière débloquée, manœuvrer la lisse à la main et vérifier que le câble ne se tend pas ; contrôler toutes les LED en mouvement. Entretien tous les 6 mois."
+    ],
+    "notes": [
+      "Compatibilité ALED (tableau de la notice) : ALED/4C avec BI/004, BI/004HP, BI/001PE, WAY/004 et lisses BA/68/3, BA/68/4, BA/91/3, BA/91/4 ; ALED/6C avec BI/006, BI/001PE, WAY/005, WAY/006 et BA/75/5, BA/90/3, BA/91/6 ; ALED/8C avec BI/004, BI/004HP, BI/008 et BA/90/4, BA/128/4 ; ALED/12C avec BI/006 et BA/90/6. Voir le schéma pour le détail RGB.",
+      "Le tableau ALED indique l'ALED/4C pour BI/001PE et l'ALED/6C pour BI/001PE également. Repris tel quel.",
+      "Deux colliers de support de lisse existent (ancien / nouveau code) : identifier le bon raccord avec le tableau de compatibilité de la notice BA/90 – BA/91."
+    ]
+  },
+  {
+    "id": "roger-dld",
+    "nom": "DLD1/24 · DLD2/24 (détecteur de boucle)",
+    "marque": "Roger",
+    "couleur": "#5b4aa8",
+    "categorie": "Détecteur de boucle magnétique (rail DIN)",
+    "modeles": "DLD1/24 (1 boucle) · DLD2/24 (2 boucles) — boucles d'induction",
+    "source": "Notice Roger DLD1/24 – DLD2/24 IS130 Rev.00 (version française) et « Pose de boucles » IS130 Rev.00 FR",
+    "resume": "Détecteur de boucle inductive sur rail DIN pour portails industriels, barrières et parkings : une boucle posée dans le sol détecte les véhicules (masses métalliques), pas les personnes. Écran LCD, touches Mode (Sim1) et Data (Sim2), mode simulation avec mesure de l'inductance.",
+    "specs": [
+      [
+        "Alimentation",
+        "24 V AC/DC : 24 V AC −20 % à +10 % (2 VA max) ou 24 V DC −10 % à +20 % (1,5 W max) · version LVAC : 100 à 240 V AC ±10 % 50/60 Hz (2,9 VA max)"
+      ],
+      [
+        "Inductance de boucle",
+        "20 à 1000 µH maxi, idéal 80 à 300 µH"
+      ],
+      [
+        "Câble boucle – détecteur",
+        "20 à 40 µH : 100 m max en 1,5 mm² · > 40 µH : 200 m max en 1,5 mm² · torsadé au moins 20 fois par mètre"
+      ],
+      [
+        "Résistance de boucle",
+        "< 8 Ω câble d'alimentation compris"
+      ],
+      [
+        "Relais",
+        "Sortie boucle : 240 V AC 2 A / 30 V DC 1 A (AC-1) · alarme : 40 V AC/DC 0,3 A (AC-1)"
+      ],
+      [
+        "Boîtier",
+        "22,5 × 94 × 88 mm, rail DIN EN 50 022, bornes enfichables, IP20, −20 °C à +60 °C, humidité < 95 % sans condensation"
+      ],
+      [
+        "Fréquence",
+        "20 à 150 kHz selon la boucle ; 4 réglages F1 à F4 pour éviter la diaphonie"
+      ],
+      [
+        "Boucle (spires)",
+        "Périmètre 3–6 m : 5 spires · 6–10 m : 4 · 10–20 m : 3 · 20–25 m : 2 ; largeur ≥ 0,8 m ; rapport des côtés 1:1 à 4:1"
+      ]
+    ],
+    "raccordement": [
+      {
+        "n": "A1 · A2",
+        "label": "Alimentation",
+        "desc": "Selon la tension indiquée sur le côté de l'appareil (24 V AC/DC ou 100–240 V AC)."
+      },
+      {
+        "n": "L3 · L4",
+        "label": "Boucle (DLD1/24)",
+        "desc": "Câble torsadé au moins 20 fois par mètre. Sur DLD2/24 : boucle 1 sur L3-L4, boucle 2 sur L5-L6."
+      },
+      {
+        "n": "11 · 12 · 14",
+        "label": "Relais sortie 1",
+        "desc": "11 commun, 12 NF, 14 NO."
+      },
+      {
+        "n": "21 · 22 · 24",
+        "label": "Relais sortie 2",
+        "desc": "21 commun, 22 NF, 24 NO (sortie 2 activée par la fonction 8 sur l'appareil 1 boucle, sortie de la boucle 2 sur DLD2/24)."
+      },
+      {
+        "n": "31 · 32 · 34",
+        "label": "Relais d'alarme (option)",
+        "desc": "31 commun, 32 NF, 34 NO."
+      }
+    ],
+    "installation": [
+      "Boucle : rainure de 5 à 8 mm de large et 30 à 55 mm de profondeur (toron 1,5 mm², gaine nylon si bitume chaud), coins fraisés à 45° ou percés, rainure propre et sèche ; poser le fil, mesurer l'inductance avec le détecteur (mode simulation) avant de sceller ; après séchage, résistance d'isolement > 10 MΩ sous 250 V.",
+      "Distances : armatures béton ≥ 5 cm (le plus possible), objets métalliques mobiles ≥ 1 m, fixes ≥ 0,5 m ; câble d'alimentation blindé près d'autres câbles, de lignes haute tension ou sur grande distance (blindage à la terre d'un seul côté, la boucle elle-même n'est jamais blindée).",
+      "Inductance approximative : L (µH) ≈ U × (N² + N), U = périmètre en m, N = spires ; ajouter environ 1 à 1,5 µH par mètre de câble d'alimentation.",
+      "Géométrie : boucle aussi large ou un peu moins large que le véhicule le plus large à détecter ; deux-roues : trapèze ou parallélogramme peu profond ; espaces exigus (près d'une porte métallique) : boucle en 8 ; logique de direction : 2 boucles, distance entre boucles ≤ 0,5 × longueur du véhicule.",
+      "Sous pavés : boucle préfabriquée dans un caniveau 15 × 15 mm dans le lit de sable, mesurer résistances et inductance, sceller, remettre sable et pavés (ne pas fraiser les pavés).",
+      "Détecteur : rail DIN dans l'armoire ; « Mode » une fois pour entrer en configuration, « Data » pour changer la valeur (voir tableau 4.11)."
+    ],
+    "codes": [
+      [
+        "E001 / E002",
+        "Coupure de la boucle 1 / boucle 2."
+      ],
+      [
+        "E011 / E012",
+        "Court-circuit de la boucle 1 / boucle 2."
+      ],
+      [
+        "E101",
+        "Sous-tension."
+      ],
+      [
+        "E102",
+        "Surtension."
+      ],
+      [
+        "E201 / E202",
+        "Erreur de mémoire."
+      ],
+      [
+        "E301 / E302",
+        "Boucle 1 / boucle 2 trop grande."
+      ],
+      [
+        "E311 / E312",
+        "Boucle 1 / boucle 2 trop petite."
+      ],
+      [
+        "Journal",
+        "Les 5 derniers défauts : appui bref sur « Data » pour les faire défiler (1 = le plus récent) ; « Data » 4 s efface le journal."
+      ],
+      [
+        "LED",
+        "Rouge + vert : démarrage · vert : en service · rouge + vert : configuration · vert clignotant : boucle occupée · rouge clignotant : défaut · rouge + vert clignotant : simulation."
+      ],
+      [
+        "Reset 1",
+        "« Mode » 2 s : réinitialisation de la ou des boucles."
+      ],
+      [
+        "Reset 2",
+        "« Mode » + « Data » 8 s : retour aux réglages d'usine (sauf le journal) et réinitialisation des boucles."
+      ]
+    ],
+    "notes": [
+      "Réglages (fonction : valeurs, usine *) : 0 fonction de base (1 portails*, 2 barrières, 3 courant de repos, 4 logique de direction, 0 boucle 2 désactivée) · 1 temps (∞* présence, temporisation de démarrage, de coupure, impulsion à l'occupation / à la libération, présence limitée) · 2 unité de temps (0,1 s, 1 s*, 1 min, 1 h) · 3 facteur 1* à 99 · 4 sensibilité 1 (faible) à 9 (forte), usine 4 · 5 ASB augmentation automatique de sensibilité (désactivée* / activée, utile pour les timons de remorque) · 6 fréquence F1 à F4* · 7 logique de direction (les deux*, 2 vers 1, 1 vers 2) · 8 sortie 2 (désactivée / activée) · 9 sécurité défaillance secteur (inactive* / places de parking ; avec 9 = 1 la sensibilité est limitée à 1–5). Détail : schéma « Paramètres ».",
+      "Mode simulation : Sim1 et Sim2 ensemble 2 s ; permet de simuler l'occupation des boucles, d'activer les relais et l'alarme, et d'afficher l'inductance de chaque boucle en µH ; quitter : 2 s.",
+      "Défauts fréquents : véhicules non détectés (sensibilité trop faible, pas assez de spires, câble enroulé au lieu d'être raccourci, diaphonie) ; détection sans véhicule (câble non torsadé ou non blindé, fil qui bouge, métal ou perturbations proches) ; défauts par temps de pluie (isolement ≤ 1 MΩ ou jonction non étanche : remplacer) ; diaphonie entre détecteurs : fréquences différentes ou nombre de spires différent, ou détecteur 2 canaux.",
+      "Le document « Pose de boucles » écrit « 1 à 1,5 H par mètre » et « entre 80 et 300 H » (unité µH manquante) ; la notice du détecteur donne 80 à 300 µH."
+    ]
+  },
+  {
+    "id": "roger-bconnect",
+    "nom": "B74/BCONNECT (module Wi-Fi)",
+    "marque": "Roger",
+    "couleur": "#5b4aa8",
+    "categorie": "Module Wi-Fi de programmation des centrales Roger",
+    "modeles": "B74/BCONNECT — pour B70/1DC (FW P2.30 et +), B70/1DCHP (P2.30), B70/1T (r1.00), B70/1THP (r1.00), B70/2ML (P1.05), EDGE1 (P4.30), F70/IPU36 (R1.50), CTRL (P4.30)",
+    "source": "Notice Roger B74/BCONNECT IS231 Rev.01 (version française)",
+    "resume": "Module Wi-Fi enfiché sur la centrale (connecteur EXP ou WIFI) : il crée un point d'accès Wi-Fi pour régler, diagnostiquer et mettre à jour la centrale depuis un smartphone, une tablette ou un PC (navigateur, 192.168.10.1), en direct ou par le cloud.",
+    "specs": [
+      [
+        "Alimentation",
+        "5 V DC (par la centrale), 80 mA"
+      ],
+      [
+        "Wi-Fi",
+        "802.11 b/g/n, 2412 à 2484 MHz, WPA / WPA2 / WEP / TKIP / AES"
+      ],
+      [
+        "Température, dimensions",
+        "−20 °C à +55 °C · 14 × 43 × 34 mm · 0,02 kg emballé"
+      ],
+      [
+        "Réseau",
+        "ROGER-BCON-[adresse MAC] · clé WPA au dos du module · adresse 192.168.10.1"
+      ],
+      [
+        "Mot de passe installateur d'usine",
+        "bconn1234 (à changer à la première occasion)"
+      ]
+    ],
+    "raccordement": [
+      {
+        "n": "EXP / WIFI",
+        "label": "Connecteur de la centrale",
+        "desc": "Insérer le module dans le bon sens, centrale sous tension (pas besoin de couper). Attendre quelques secondes la création du point d'accès. Vérifier le firmware minimal de la centrale : la présence du connecteur ne suffit pas."
+      },
+      {
+        "n": "Paramètre",
+        "label": "Activation sur la centrale",
+        "desc": "Selon la centrale (ex. B70/1T : L0 01 et veille low power désactivée L1 00)."
+      }
+    ],
+    "installation": [
+      "Connexion directe (P2P) : activer le Wi-Fi du téléphone, choisir le réseau ROGER-BCON-[MAC], saisir la clé WPA du dos du module, ouvrir un navigateur à l'adresse 192.168.10.1 : page « commande à distance » (ouvrir, fermer, piéton, état du portail, secteur ou batterie).",
+      "Espace installateur : LOGIN en bas à droite, mot de passe (usine bconn1234). Changer le mot de passe : Connexion → modifier le mot de passe. Oublié : Connexion → modifier le mot de passe → mot de passe oublié → questions de sécurité.",
+      "Réseau externe (cloud) : espace installateur → Configuration B-CONNECT → Recherche réseaux → choisir le Wi-Fi et saisir son mot de passe ; la LED verte fixe confirme la connexion au routeur et au cloud.",
+      "Mot de passe de la centrale : Centre de contrôle → Gestion des mots de passe contrôleur → saisir → Enregistrer (paramètres visibles mais non modifiables) ; pour déverrouiller : saisir le mot de passe → DÉVERROUILLER LA CENTRALE (bouton vert). L'installateur est tenu de définir un mot de passe sur la centrale.",
+      "Mise à jour d'une centrale : télécharger le fichier « .chx » depuis l'espace B2B Roger (B-CONNECT → Mise à jour centrale), se connecter en P2P, espace installateur → MISE À JOUR CENTRALE → choisir le fichier → Envoyer (il va dans la mémoire du module ; effacer d'anciens .chx si besoin) → le choisir dans la liste → Mettre à jour la centrale. La centrale est indisponible pendant la mise à jour puis redémarre.",
+      "Mise à jour du module : module relié à Internet depuis au moins 60 s, Configuration B-CONNECT → « Version pouvant être mise à jour » → Mettre à jour ; le module redémarre.",
+      "Mouvement d'urgence (depuis l'espace installateur) : homme présent, vitesse réduite, détection d'obstacles plus sensible, clignotement spécial ; L-ES résidentiel (fermé – ouverture – ouvert – fermeture – fermé), L-EM copropriété (ouverture seulement)."
+    ],
+    "codes": [
+      [
+        "LED rouge 0,5 s / 8 s",
+        "Le module communique avec la centrale."
+      ],
+      [
+        "LED rouge 0,5 s / 0,5 s",
+        "Mise à jour du firmware de la centrale en cours."
+      ],
+      [
+        "LED rouge 1 s / 1 s",
+        "Transfert du fichier de mise à jour vers la mémoire du module."
+      ],
+      [
+        "LED verte fixe",
+        "Connecté au routeur et au cloud."
+      ],
+      [
+        "LED verte 0,5 s / 8 s",
+        "Connecté au routeur."
+      ],
+      [
+        "LED verte 1 s / 1 s",
+        "Mise à jour du module en cours."
+      ],
+      [
+        "Bouton RESET",
+        "Réinitialisation temporaire : coupe le point d'accès Wi-Fi et redémarre le module ; refaire la connexion P2P si besoin."
+      ],
+      [
+        "Mot de passe réseau non reconnu",
+        "Ressaisir la clé Wi-Fi (WPA-KEY)."
+      ],
+      [
+        "Page incomplète",
+        "Trop de rechargements : effacer l'historique et le cache du téléphone, se reconnecter."
+      ],
+      [
+        "L-ES / L-EM",
+        "Mouvement d'urgence résidentiel / copropriété actif."
+      ]
+    ],
+    "notes": [
+      "Le texte de la notice cite « BT70/1THP », la figure indique « B70/1THP ».",
+      "Sur la B70/1T, avec A1 02 ou 03 (TW90 High Speed ou réversible), le B74/BCONNECT reste toujours actif (voir la fiche B70/1T)."
+    ]
+  },
+  {
+    "id": "roger-h70el",
+    "nom": "H70/EL (alimentation électroserrure)",
+    "marque": "Roger",
+    "couleur": "#5b4aa8",
+    "categorie": "Module d'alimentation d'électroserrure 12 V~",
+    "modeles": "H70/EL — pour centrale H70/200AC (aussi utilisé avec H70/104AC – 105AC selon leur notice)",
+    "source": "Notice Roger H70/EL IS74 Rev.00 (version anglaise, pas de version française)",
+    "resume": "Module à fixer dans le boîtier de la H70/200AC : il alimente une électroserrure 12 V~ (16 VA max) et permet de raccorder et protéger un clignotant 230 V (R92/LR1, R92/LR2). Seulement en réseau 230 V.",
+    "specs": [
+      [
+        "Alimentation",
+        "230 V~ 50 Hz, 350 mA max"
+      ],
+      [
+        "Électroserrure",
+        "12 V~, 16 VA max"
+      ],
+      [
+        "Clignotant",
+        "230 V~ 50 Hz, 40 W max"
+      ],
+      [
+        "Fusibles",
+        "F1 T1A (transformateur et clignotant) · F2 T2A (électroserrure)"
+      ],
+      [
+        "Température, protection, dimensions",
+        "−20 °C à +60 °C · IP00 · 63 × 101 × 40 mm, 465 g"
+      ]
+    ],
+    "raccordement": [
+      {
+        "n": "1 N · 2 L",
+        "label": "Entrée 230 V",
+        "desc": "Alimentation du module."
+      },
+      {
+        "n": "3 · 4",
+        "label": "Sortie 230 V~ (clignotant)",
+        "desc": "OUTPUT 230 Vac vers le clignotant R92/LR1 ou R92/LR2, protégé par F1 (fig. 1)."
+      },
+      {
+        "n": "5 · 6",
+        "label": "Contact de commande du clignotant",
+        "desc": "Reliées aux bornes 12-13 (contact COR) de la H70/200AC, qui commutent le clignotant ; sur la fig. 3, 4 est relié à 5 et le contact se trouve entre 5 et 6."
+      },
+      {
+        "n": "7 à 10",
+        "label": "Sortie 12 V~ (électroserrure)",
+        "desc": "Électroserrure 12 V~ 16 VA, protégée par F2 ; commande par le contact ES (46-47) de la H70/200AC (voir schéma)."
+      }
+    ],
+    "installation": [
+      "Fixer le module avec les vis dans le boîtier de la H70/200AC à l'emplacement prévu (fig. 2).",
+      "Raccorder la centrale, l'électroserrure et éventuellement le clignotant selon le schéma (fig. 1).",
+      "Ne pas utiliser avec un automatisme alimenté en 115 V (notes des notices H70/200AC et H70/104AC)."
+    ],
+    "notes": [
+      "Les numéros de bornes de sortie sont lus sur le schéma de la notice (pas de texte détaillé)."
     ]
   }
   ];
