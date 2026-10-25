@@ -192,6 +192,10 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "1.64", date: "2026-10-25", titre: "Signaler une erreur sur une fiche", items: [
+    "En bas de chaque fiche (cartes et accessoires) : « ⚑ Signaler une erreur sur cette fiche ». Le message part au SAV avec la fiche et l'onglet concernés ; sans réseau, il attend et part au retour du réseau.",
+    "Réglages → « Mes signalements » : suivi (en attente, corrigé, non retenu) et réponse du SAV. Administration → « Signalements » pour les traiter."
+  ], docs: [] },
   { v: "1.63", date: "2026-10-25", titre: "Choix moteur : Roger Technology en premier", items: [
     "Dans « Choix moteur », les motorisations Roger Technology sont proposées en premier, avant les autres marques."
   ], docs: [] },

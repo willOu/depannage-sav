@@ -199,6 +199,12 @@ ul.plain li{margin:4px 0}
 #aadd{margin-top:8px}
 #mr h2.prio{color:var(--brand)}.mot{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-top:8px}.mot .mh{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.mot .ma{font-size:12px;color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:0 6px}
 .mot .ml{margin-top:4px;font-size:14.5px}.mot .ml .hi{color:#E07B00;font-weight:700}.mot small{display:block;color:var(--muted);font-size:12.5px;margin-top:3px}.mot small.src{font-size:11.5px}
+details.sig{margin-top:18px;border:1px dashed var(--line);border-radius:12px;padding:0 12px}details.sig>summary{cursor:pointer;padding:12px 0;color:var(--muted);font-size:14px;font-weight:600;list-style:none}details.sig>summary::-webkit-details-marker{display:none}
+.sigb textarea,.sgin{width:100%;box-sizing:border-box;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-size:15px;margin-top:4px}
+.sgl{border-top:1px solid var(--line);padding:10px 0}.sgl.adm{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-top:8px}.sgl a{color:var(--ink);text-decoration:none}
+.sgl small{display:block;color:var(--muted);font-size:12px}.sgl p{margin:6px 0 0;font-size:14.5px;line-height:1.45}.sgrep{color:#2e9d57}
+.sgs{display:inline-block;margin-left:6px;font-size:11px;font-weight:700;border-radius:6px;padding:1px 6px;background:var(--chip)}.sgs.nouveau,.sgs.att{background:#E07B00;color:#fff}.sgs.corrige{background:#2e9d57;color:#fff}.sgs.rejete{background:#6b6461;color:#fff}
+.sga{display:flex;gap:8px;margin-top:8px}
 .srow{display:flex;width:100%;justify-content:space-between;align-items:center;gap:10px;padding:13px 14px;border:0;border-top:1px solid var(--line);background:none;color:var(--ink);font:inherit;font-size:15.5px;text-align:left;cursor:pointer}
 .srow i{font-style:normal;color:var(--muted);font-size:20px;line-height:1}
 .set .rr{display:flex;align-items:center;gap:10px}
@@ -374,6 +380,7 @@ html{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 <script src="cmp.js"></script> <!-- CMP -->
 <script src="quiz.js"></script> <!-- QUIZ -->
 <script src="admin.js"></script> <!-- ADMIN -->
+<script src="signal.js"></script> <!-- SIG -->
 <script src="moteurs.js"></script> <!-- MOTEURS -->
 <script src="calc.js"></script> <!-- CALC -->
 <script src="sympt.js"></script> <!-- SYMPT -->
@@ -745,6 +752,7 @@ function viewSettings(){
       <p class="hotn">L'accès est vérifié à chaque ouverture avec du réseau ; sans réseau, il reste valable 14 jours.</p>`;
   /* 2. Messages du SAV */
   if (window.SYNC) h += SYNC.messagesHtml(); /* SYNC */
+  if (window.sigMesHtml) h += sigMesHtml(); /* SIG */
   /* 3. Préférences */
   h += `<h2>Préférences</h2><div class="set"><div class="row"><span>Thème</span><div class="seg2">
       <button aria-pressed="${th==="dark"}" onclick="setTheme('dark')">Sombre</button><button aria-pressed="${th==="light"}" onclick="setTheme('light')">Clair</button></div></div>
@@ -817,13 +825,14 @@ function route(){
   window.scrollTo(0, 0);
   if (p[0] === "m") return viewBrand(p[1]);
   if (p[0] === "g") return viewGenre(p[1]);
-  if (p[0] === "c"){ viewBoard(p[1], p[2]); app.insertAdjacentHTML("beforeend", `<div class="sig"><i><b style="background:#1F5FA8"></b><b style="background:#E07B00"></b><b style="background:#E5372E"></b></i>Diag'SAV</div>`); return; } /* SIG */
+  if (p[0] === "c"){ viewBoard(p[1], p[2]); if (window.sigBouton && findBoard(p[1])) app.insertAdjacentHTML("beforeend", sigBouton("carte", p[1], p[2] || "codes")); /* SIG */ app.insertAdjacentHTML("beforeend", `<div class="sig"><i><b style="background:#1F5FA8"></b><b style="background:#E07B00"></b><b style="background:#E5372E"></b></i>Diag'SAV</div>`); return; } /* SIG */
   if (p[0] === "ma") return viewAccBrand(p[1]);
   if (p[0] === "a") return p[1] ? viewAcc(p[1], p[2]) : viewAccList(); /* ACC */
   if (p[0] === "d") return viewDiag(p[1], p[2]); /* DIAG */
   if (p[0] === "scan") return viewScan(); /* SCAN */
   if (p[0] === "quiz") return viewQuiz(p[1]); /* QUIZ */
   if (p[0] === "techs") return viewTechs(); /* ADMIN */
+  if (p[0] === "signalements") return viewSignalements(p[1]); /* SIG */
   if (p[0] === "calc") return viewCalc(p[1]); /* CALC */
   if (p[0] === "cmp") return viewCmp(p[1] && p[1] !== "-" ? decodeURIComponent(p[1]) : "", p[2] ? decodeURIComponent(p[2]) : ""); /* CMP */
   if (p[0] === "stats") return SYNC.viewStats(p[1]); /* SYNC */
