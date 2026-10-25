@@ -16,7 +16,7 @@
     cameAXO: "came.com, page AXO", cameFROG: "came.com, page FROG", cameFX: "came.com, page FROG-X", cameATI: "came.com, page ATI",
     cameFAST: "Dépliant CAME FAST70 (« vantaux jusqu'à 2,30 m ou 300 kg »)", cameSTY: "came.com, page STYLO",
     faac740: "faac.fr, page 740 / 741", faac746: "faac.fr, page 746 C / 844 C", faacB: "Brochure FAAC « Automatismes pour portails battants »",
-    bftAres: "bft-automation.com (US), famille ARES ULTRA BT A", rwBE: "rogertechnology.it, page BE20/200"
+    bftAres: "bft-automation.com (US), famille ARES ULTRA BT A", rwBE: "rogertechnology.it, page BE20/200", rSm: "Notice Roger SMARTY IS131 Rev.12", rBE: "Notice Roger BE20 IS121 Rev.15", rBH: "Notice Roger BH30 IS118 Rev.17"
   };
   const M = (marque, modele, type, alim, p, l, src, note) => ({ marque, modele, type, alim, p, l, src: N[src] || src, note: note || "" });
   window.MOTEURS = [
@@ -49,9 +49,10 @@
     M("BFT", "ARES ULTRA BT A 1500", "coulissant", "24 V", 1500, null, "bftAres", "Valeur de la version UL (site BFT États-Unis)."),
     M("Roger", "BM30/300/HS", "coulissant", null, 400, null, "r1dc"),
     M("Roger", "BM30/400", "coulissant", null, 500, null, "r1dc"),
-    M("Roger", "BH30/603 · /604 (et /HS, /503/HS, /504/HS)", "coulissant", null, 600, null, "r1dc"),
-    M("Roger", "BH30/804/R (réversible)", "coulissant", null, 800, null, "r1dc"),
-    M("Roger", "BH30/803 · /804", "coulissant", null, 1000, null, "r1dc"),
+    M("Roger", "BH30/603/HS · /604/HS (et /115)", "coulissant", "24 V", 600, 20, "rBH", "Longueur : course maxi. Moteur alimenté en 24 V~ par la centrale B70/1DC intégrée (réseau 230 V~)."),
+    M("Roger", "BH30/603 · /604 · /503/HS · /504/HS", "coulissant", null, 600, null, "r1dc"),
+    M("Roger", "BH30/804/R (réversible)", "coulissant", "24 V", 800, 20, "rBH", "Longueur : course maxi. Moteur alimenté en 24 V~ par la centrale intégrée."),
+    M("Roger", "BH30/803 · /804 (et /803/115)", "coulissant", "24 V", 1000, 20, "rBH", "Longueur : course maxi. Moteur alimenté en 24 V~ par la centrale intégrée."),
     M("Roger", "BG30/804/HS", "coulissant", "36 V", 800, null, "r1hp", "La notice indique aussi 1500 kg à un endroit (p. 131)."),
     M("Roger", "BG30/1000/HS", "coulissant", "36 V", 1000, null, "r1hp"),
     M("Roger", "BG30/1400/R (réversible)", "coulissant", "36 V", 1400, null, "r1hp"),
@@ -100,7 +101,14 @@
     M("FAAC", "770N (230 V / 24 V)", "battant", null, 500, 2, "faacB", "Enterré. 3,5 m avec électroserrure."),
     M("FAAC", "S800 ENC / S800H ENC", "battant", null, 800, 4, "faacB", "Enterré hydraulique (CBAC : 2 m)."),
     M("Roger", "Série AYRON", "battant", null, null, 2.5, "r2ml", "High Speed, bras articulé."),
-    M("Roger", "BE20/200", "battant", "24 V", null, 3, "r2ml", "La page BE20/200 du site Roger indique 2,8 m."),
+    M("Roger", "BE20/200", "battant", "24 V", 300, 2.8, "rBE", "La notice de la centrale B70/2ML indique « jusqu'à 3 m »."),
+    M("Roger", "BE20/210/HS", "battant", "36 V", 300, 2.5, "rBE", "High Speed. L'abaque de la notice le nomme BE20/200/HS."),
+    M("Roger", "BE20/400", "battant", "36 V", 400, 4, "rBE"),
+    M("Roger", "SMARTY4/HS", "battant", "36 V", 400, 4, "rSm", "High Speed, irréversible, centrale EDGE1."),
+    M("Roger", "SMARTY5R5 (réversible)", "battant", "36 V", 500, 5, "rSm", "Centrale EDGE1. Encodeur absolu d'usine."),
+    M("Roger", "SMARTY5", "battant", "36 V", 600, 5, "rSm", "Irréversible, centrale EDGE1."),
+    M("Roger", "SMARTY7R (réversible)", "battant", "36 V", 1000, 7, "rSm", "Centrale EDGE1. Encodeur absolu d'usine."),
+    M("Roger", "SMARTY7", "battant", "36 V", 1400, 7, "rSm", "Irréversible, centrale EDGE1."),
     M("Roger", "MONOS4", "battant", null, null, 4, "r2ml"),
     /* ---------- barrières (longueur de lisse) ---------- */
     M("ELKA", "P 2500", "barriere", null, null, 2.5, "elkaP"), M("ELKA", "P 3000", "barriere", null, null, 3, "elkaP"),

@@ -192,6 +192,11 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "1.65", date: "2026-10-25", titre: "Moteurs Roger : SMARTY, BE20, BH30, Master/Slave, bords CS", items: [
+    "Nouvelles fiches Roger (Accessoires → Motorisations et Sécurités) : SMARTY, BE20 et BH30 (caractéristiques modèle par modèle, raccordement, montage, déblocage, abaques et schémas), MASTER / SLAVE pour deux portails coulissants opposés (B70/1DC, B70/1DCHP), série CS (bords sensibles filaires et radio, récepteur CS/RX).",
+    "Choix moteur : SMARTY (5 modèles), BE20 (3 modèles) et BH30 avec poids et longueurs des notices Roger.",
+    "Les fiches des cartes B70/1DC, B70/1DCHP, B70/2ML et EDGE1 renvoient vers ces fiches."
+  ], docs: ["Roger SMARTY IS131 Rev.12", "Roger BE20 IS121 Rev.15", "Roger BH30 IS118 Rev.17", "Roger KT214 IS151 Rev.01", "Roger MASTER/SLAVE IS305 Rev.00", "Roger Série CS IS310 Rev.00"] },
   { v: "1.64", date: "2026-10-25", titre: "Signaler une erreur sur une fiche", items: [
     "En bas de chaque fiche (cartes et accessoires) : « ⚑ Signaler une erreur sur cette fiche ». Le message part au SAV avec la fiche et l'onglet concernés ; sans réseau, il attend et part au retour du réseau.",
     "Réglages → « Mes signalements » : suivi (en attente, corrigé, non retenu) et réponse du SAV. Administration → « Signalements » pour les traiter."
@@ -13489,7 +13494,7 @@ const MARQUES = [
         ]}
       ],
       fusibles: "F1 15 A (ATO257) circuit moteur · F2 2 A (ATO257) accessoires · F3 T2A (5x20) primaire transformateur",
-      notes: [
+      notes: ["Moteurs BH30 : caractéristiques et montage (plaque, crémaillère, fins de course) dans la fiche accessoire Roger « BH30 (série) ».", "Deux portails coulissants opposés : voir la fiche accessoire Roger « MASTER / SLAVE (B70/1DC, B70/1DCHP) » (notice IS305).", 
         "Sécurités absentes : shunter sur COM ou les désactiver par paramètres 50, 51, 53, 54, 73, 74.",
         "Photocellules conseillées : séries F4ES ou F4S.",
         "Câbles : photocellules RX 4 x 0,5 mm², TX 2 x 0,5 mm² (20 m max) ; clignotant FIFTHY/24 2 x 1 mm² (10 m max)."
@@ -15773,7 +15778,7 @@ const MARQUES = [
         }
       ],
       "fusibles": "F1 20 A (ATO257) circuit de puissance des moteurs · F2 T2A (ATO257) primaire du transformateur · F3 3 A (5x20) alimentation des accessoires",
-      "notes": [
+      "notes": ["Deux portails coulissants opposés : voir la fiche accessoire Roger « MASTER / SLAVE (B70/1DC, B70/1DCHP) » (notice IS305).", 
         "Sécurités absentes : shunter sur COM (30 pour FT1 / FT2, 16 pour COS1 / COS2 / ST) ou les désactiver par les paramètres 50, 51, 53, 54, 73, 74. La carte ne se déplace pas avec une sécurité ouverte.",
         "Puissance absorbée nominale : BG30/1603-1604 185 W · 2203-2204 150 W · 1003-1004/HS 180 W · 1404/R 160 W · 1804/HS 150 W · 1504/HS 155 W · 803-804/HS 185 W. Puissance de démarrage de 470 W à 650 W selon le modèle.",
         "Puissances max : clignotant 25 W, courtoisie 100 W (230 V~) / 40 W (24 V), voyant portail ouvert 3 W, accessoires 20 W. Température de fonctionnement −20 à +55 °C.",
@@ -16155,7 +16160,7 @@ const MARQUES = [
         ]}
       ],
       fusibles: "F1 F3,15 A (5x20) accessoires · F2 F15 A (5x20) circuit de puissance moteurs · F3 T1 A (5x20) primaire transformateur",
-      notes: [
+      notes: ["Moteurs BE20 : caractéristiques, raccordement et montage dans la fiche accessoire Roger « BE20 (série) ».", 
         "Sécurités absentes : shunter sur COM ou les désactiver par paramètres 50, 51, 53, 54, 73.",
         "Même type de moteur obligatoire sur les deux vantaux.",
         "Photocellules conseillées : R90/F4ES, G90/F4ES ou T90/F4S.",
@@ -18307,7 +18312,7 @@ const MARQUES = [
         }
       ],
       "fusibles": "F1 20 A (ATO257) puissance moteurs · F2 4 A (ATO257) électroserrure · F3 3 A (ATO257) accessoires · F4 T2A (5x20) transformateur",
-      "notes": [
+      "notes": ["Moteurs SMARTY et BE20 : caractéristiques, raccordement et montage dans les fiches accessoires Roger « SMARTY (série) » et « BE20 (série) ».", 
         "Sécurités absentes : shunter sur COM ou les désactiver par paramètres 50, 51, 53, 54, 73, 74.",
         "Même type de moteur obligatoire sur les deux vantaux.",
         "Photocellules conseillées : R90/F4ES, G90/F4ES ou T90/F4S.",

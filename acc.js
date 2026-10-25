@@ -2200,6 +2200,515 @@
         "La notice indique le même temps de 7 min entre deux activations pour le TBX et pour l'autotest (« directive R&TTE »).",
         "Fabricant cité dans la notice : JCM Technologies, S.A."
       ]
+    },
+    {
+      "id": "roger-smarty",
+      "nom": "SMARTY (série)",
+      "marque": "Roger",
+      "couleur": "#5b4aa8",
+      "categorie": "Motoréducteur battant brushless à vérin (motorisation)",
+      "modeles": "SMARTY5 · SMARTY5R5 (réversible) · SMARTY7 · SMARTY7R (réversible) · SMARTY4/HS (High Speed) — centrale EDGE1",
+      "source": "Notice Roger SMARTY IS131 Rev.12 (version française)",
+      "resume": "Vérin électromécanique brushless basse tension (36 V) pour portail battant, usage super intensif, encodeur absolu (d'usine sur les réversibles, à ajouter sur les irréversibles). Vantaux jusqu'à 4, 5 ou 7 m selon le modèle. Se commande avec la centrale EDGE1.",
+      "specs": [
+        [
+          "Alimentation moteur",
+          "36 V~ (brushless), tous modèles"
+        ],
+        [
+          "Type",
+          "SMARTY5, SMARTY7, SMARTY4/HS : irréversibles · SMARTY5R5, SMARTY7R : réversibles (déverrouillage présent même en réversible)"
+        ],
+        [
+          "Poids maxi du vantail",
+          "SMARTY5 600 kg · SMARTY5R5 500 kg · SMARTY7 1400 kg · SMARTY7R 1000 kg · SMARTY4/HS 400 kg"
+        ],
+        [
+          "Longueur maxi du vantail",
+          "SMARTY5 / 5R5 : 5 m · SMARTY7 / 7R : 7 m · SMARTY4/HS : 4 m"
+        ],
+        [
+          "Puissance nominale",
+          "200 W"
+        ],
+        [
+          "Poussée",
+          "SMARTY5 600 – 7000 N · 5R5 600 – 6500 N · 7 600 – 7000 N · 7R 600 – 6500 N · 4/HS 600 – 4500 N"
+        ],
+        [
+          "Vitesse / temps d'ouverture",
+          "SMARTY5 1,6 – 1 cm/s, 25 – 40 s · 5R5 1,8 – 1,2 cm/s, 20 – 40 s · 7 et 7R 1,6 – 1 cm/s, 35 – 50 s · 4/HS 2 – 1 cm/s, 15 – 25 s"
+        ],
+        [
+          "Course",
+          "SMARTY5, 5R5 et 4/HS : max 370 · SMARTY7 et 7R : max 520 (unité non précisée dans le tableau)"
+        ],
+        [
+          "Usage",
+          "Intensif, 1000 cycles par jour (24 h sans arrêt)"
+        ],
+        [
+          "Protection, température",
+          "IP44 · −20 °C à +55 °C"
+        ],
+        [
+          "Poids de l'opérateur",
+          "SMARTY5 11,7 kg · 5R5 11,7 kg · 7 12,2 kg · 7R 13,2 kg · 4/HS 11,7 kg"
+        ]
+      ],
+      "raccordement": [
+        {
+          "n": "X · Y · Z",
+          "label": "Moteur → centrale EDGE1",
+          "desc": "Câble 3 × 2,5 mm² (jusqu'à 10 m) ou 3 × 4 mm² (jusqu'à 30 m). Bornier X, Y, Z dans le moteur. Le raccordement à la terre N'EST PAS nécessaire pour le SMARTY."
+        },
+        {
+          "n": "Encodeur",
+          "label": "Encodeur absolu",
+          "desc": "Réversibles (5R5, 7R) : installé en usine. Irréversibles : fixer l'encodeur sur le moteur, passer et bloquer son câble, le brancher en parallèle aux phases du moteur, puis l'activer au paramètre 71 01 et refaire l'apprentissage de la course."
+        },
+        {
+          "n": "EDGE1",
+          "label": "Alimentation de la centrale",
+          "desc": "H07RN-F 2 × 1,5 mm² (installation type de la notice). Interrupteur omnipolaire (ouverture des contacts ≥ 3 mm) et différentiel 0,03 A en amont."
+        },
+        {
+          "n": "Accessoires",
+          "label": "Câbles conseillés (installation type)",
+          "desc": "Photocellules F4ES / F4S : TX 3 × 0,5 mm², RX 5 × 0,5 mm² (20 m max) · clignotant FIFTHY/24 2 × 1 mm² (10 m max) · antenne 50 Ω RG58 (10 m max) · sélecteur R85/60 3 × 0,5 mm² (20 m max) · clavier H85/TTD – H85/TDS 2 × 0,5 mm² (30 m max)."
+        }
+      ],
+      "installation": [
+        "Contrôles : portail robuste, gonds graissés, mouvement fluide et régulier sur toute la course. Butées mécaniques du portail en ouverture et en fermeture obligatoires.",
+        "Étrier arrière : le placer sur le pilier selon le modèle, la place disponible et l'angle d'ouverture voulu, en respectant les cotes du tableau de la notice (onglet Schéma). [A] et [B] doivent rester compatibles avec la course utile du piston ; si [A] + [B] dépasse la course maxi, raccourcir l'étrier arrière (réduire [B]).",
+        "Pour un mouvement régulier, [A] et [B] doivent dépasser la cote [G] d'au moins 20 à 30 mm ([G] calculée pour un vantail de 60 mm d'épaisseur).",
+        "Piliers en maçonnerie : étriers adaptés avec chevilles et vis ; piliers en fer : souder l'étrier. Le piston se monte à droite comme à gauche, sa pointe converge vers le vantail ; vérifier en ouvrant à la main qu'il ne heurte ni le vantail ni le pilier.",
+        "Portail fermé : placer l'étrier avant en respectant les cotes [D] et [E] et le fixer à niveau sur le vantail.",
+        "Fixer le piston aux deux étriers en graissant les points de rotation ; manœuvrer à la main et vérifier une course régulière sans frottement.",
+        "Arrêts mécaniques internes (sécurité supplémentaire aux butées du portail) : retirer le bouchon [A] et le couvercle [B] de la vis de traction ; portail en ouverture maxi, régler le fermoir d'ouverture [C] ; même opération en fermeture avec [D]. Livrés desserrés : même non utilisés, ils doivent toujours être serrés (voir la notice).",
+        "Raccorder le moteur à l'EDGE1 (bornes X, Y, Z) puis faire les réglages et l'essai selon le manuel de l'EDGE1 (onglet de la carte EDGE1)."
+      ],
+      "notes": [
+        "Déblocage manuel (sans tension secteur, batteries débranchées, moteur arrêté) : tourner la trappe cache-serrure, introduire la clé et la tourner de 90° dans le sens horaire, ouvrir entièrement la trappe de déblocage, déplacer les vantaux à la main. Pour rebloquer : abaisser la trappe avec la clé introduite (attention aux doigts), tourner la clé de 90° en sens inverse, la retirer et refermer la trappe.",
+        "Garder la poignée de déblocage fermée hors besoin : ouverte longtemps, elle laisse entrer eau, insectes et saletés.",
+        "Entretien (au moins tous les 6 mois, sans tension ni batteries, portail déverrouillé) : état et oxydation des pièces, serrage des vis, nettoyage et graissage des axes, charnières et vis d'entraînement, glissement régulier, déverrouillage, sécurités, détection d'obstacles, forces conformes à l'EN 12445.",
+        "Sécurité : la notice recommande une serrure électrique au-delà de 2,5 m de vantail normal, 2 m de vantail plein ou 2 m de hauteur, et indique qu'en zone de fortes rafales de vent les limites d'utilisation peuvent être réduites (abaques poids / longueur de la notice, onglet Schéma).",
+        "Étiquette : IN = numéro progressif dans l'année ; BC = année (2 premiers chiffres) et semaine (2 derniers) de fabrication.",
+        "Photocellules : le tableau de l'installation type indique TX 3 × 0,5 mm² et RX 5 × 0,5 mm², mais le schéma de la même page porte « 5x0.5-TX » et « 3x0.5-RX » ; la fiche de la centrale B70/1DC indique RX 4 × 0,5 mm² et TX 2 × 0,5 mm². Valeurs reprises sans être tranchées."
+      ]
+    },
+    {
+      "id": "roger-be20",
+      "nom": "BE20 (série)",
+      "marque": "Roger",
+      "couleur": "#5b4aa8",
+      "categorie": "Motoréducteur battant brushless à vérin (motorisation)",
+      "modeles": "BE20/200 (centrale B70/2ML) · BE20/210/HS, High Speed (EDGE1) · BE20/400 (EDGE1), selon le tableau technique ; la page Raccordements cite « B70/2ML ou EDGE1 »",
+      "source": "Notice Roger BE20 IS121 Rev.15 (version française)",
+      "resume": "Vérin électromécanique brushless basse tension, irréversible, avec encodeur natif, usage super intensif, pour portail battant. Vantaux jusqu'à 2,8 m (BE20/200), 2,5 m (BE20/210/HS) ou 4 m (BE20/400). Centrale B70/2ML pour le BE20/200, EDGE1 pour les deux autres (tableau technique).",
+      "specs": [
+        [
+          "Alimentation moteur",
+          "BE20/200 : 24 V~ · BE20/210/HS : 36 V~ · BE20/400 : 36 V~"
+        ],
+        [
+          "Type",
+          "Irréversible, encodeur natif à bord"
+        ],
+        [
+          "Poids maxi du vantail",
+          "BE20/200 300 kg · BE20/210/HS 300 kg · BE20/400 400 kg"
+        ],
+        [
+          "Longueur maxi du vantail",
+          "BE20/200 2,8 m · BE20/210/HS 2,5 m · BE20/400 4 m"
+        ],
+        [
+          "Puissance nominale",
+          "200 W"
+        ],
+        [
+          "Poussée",
+          "BE20/200 et 210/HS : 100 – 2200 N · BE20/400 : 100 – 2800 N"
+        ],
+        [
+          "Vitesse / temps d'ouverture",
+          "BE20/200 1 – 1,66 cm/s, 15 – 25 s · 210/HS 3 cm/s, 10 – 15 s · 400 1 – 1,66 cm/s, 17 – 26 s"
+        ],
+        [
+          "Course (arrêts mécaniques intégrés)",
+          "BE20/200 et 210/HS : 400 mm · BE20/400 : 550 mm"
+        ],
+        [
+          "Usage",
+          "Intensif (au couple nominal) · 1000 cycles par jour (200, 210/HS), 800 (400)"
+        ],
+        [
+          "Protection, température",
+          "IP44 · −20 °C à +55 °C"
+        ],
+        [
+          "Poids de l'opérateur",
+          "5,5 kg (200, 210/HS) · 6,2 kg (400)"
+        ]
+      ],
+      "raccordement": [
+        {
+          "n": "X · Y · Z",
+          "label": "Moteur → centrale",
+          "desc": "Câble 3 × 2,5 mm² (jusqu'à 10 m) ou 3 × 4 mm² (jusqu'à 30 m) vers la B70/2ML ou l'EDGE1. Le raccordement à la terre N'EST PAS nécessaire."
+        },
+        {
+          "n": "Centrale",
+          "label": "Alimentation",
+          "desc": "H07RN-F 2 × 1,5 mm² (installation type de la notice)."
+        },
+        {
+          "n": "Accessoires",
+          "label": "Câbles conseillés (installation type)",
+          "desc": "Photocellules F4ES / F4S : TX 3 × 0,5 mm², RX 5 × 0,5 mm² (20 m max) · clignotant FIFTHY/24 2 × 1 mm² (10 m max) · antenne RG58 (10 m max) · sélecteur R85/60 3 × 0,5 mm² (20 m max) · clavier H85/TTD – H85/TDS 2 × 0,5 mm² (30 m max)."
+        }
+      ],
+      "installation": [
+        "Contrôles : portail robuste, gonds graissés, mouvement fluide sur toute la course ; butées mécaniques du portail en ouverture et en fermeture obligatoires.",
+        "Étrier arrière sur le pilier selon le modèle et l'angle voulu, cotes du tableau de la notice (calculées pour un vantail de 40 mm d'épaisseur). [A] et [B] compatibles avec la course utile du piston ; si [A] + [B] dépasse la course maxi, raccourcir l'étrier arrière (réduire [B]).",
+        "Maçonnerie : étriers et chevilles adaptés ; fer : souder l'étrier. Le piston se monte à droite ou à gauche, pointe vers le vantail.",
+        "Portail fermé : étrier avant aux cotes [D] et [E], fixé à niveau sur le vantail. Fixer le piston aux étriers en graissant les points de rotation et vérifier à la main une course sans frottement.",
+        "Arrêts mécaniques internes : retirer le bouchon [A], dévisser les vis [B], retirer le couvercle [C] ; régler le fermoir d'ouverture [D] portail ouvert au maxi, puis celui de fermeture [E]. Livrés desserrés : ils doivent toujours être serrés.",
+        "Raccordement et essai : voir le manuel de la B70/2ML ou de l'EDGE1 (onglets des cartes)."
+      ],
+      "notes": [
+        "Longueur maxi BE20/200 : 2,8 m dans cette notice (et sur le site Roger) ; la notice de la centrale B70/2ML indique « vantaux jusqu'à 3 m ». Les deux valeurs sont reprises sans être tranchées.",
+        "Déblocage manuel (sans tension, batteries débranchées, moteur arrêté) : trappe cache-serrure, clé 90° sens horaire, ouvrir entièrement la trappe de déblocage, déplacer les vantaux. Rebloquer : abaisser la trappe avec la clé (attention aux doigts), clé 90° sens inverse, retirer, refermer.",
+        "Entretien : structure et fixations, oxydation, serrage des vis, graissage des axes et gonds, mouvement régulier, sécurités, détection d'obstacles, forces conformes à l'EN 12445.",
+        "Abaques poids / longueur des trois modèles : onglet Schéma (page « Dimensions et diagramme d'utilisation »). Le tableau technique nomme le modèle rapide « BE20/210/HS » et l'abaque « BE20/200/HS » : les deux noms sont repris tels quels."
+      ]
+    },
+    {
+      "id": "roger-bh30",
+      "nom": "BH30 (série)",
+      "marque": "Roger",
+      "couleur": "#5b4aa8",
+      "categorie": "Motoréducteur coulissant brushless (motorisation)",
+      "modeles": "BH30/803 · BH30/804 · BH30/803/115 · BH30/603/HS · BH30/604/HS · BH30/603/HS/115 · BH30/804/R (réversible) — centrale B70/1DC ; base de fixation KT214",
+      "source": "Notice Roger BH30 IS118 Rev.17 (version française) ; base de fixation KT214 : notice IS151 Rev.01",
+      "resume": "Motoréducteur brushless basse tension pour portail coulissant, encodeur natif, centrale numérique à bord (B70/1DC). Vantail jusqu'à 1000 kg (803/804), 600 kg (603/604 HS) ou 800 kg (804/R réversible), course jusqu'à 20 m.",
+      "specs": [
+        [
+          "Alimentation réseau",
+          "230 V~ 50/60 Hz ; versions /115 : 115 V~ 50/60 Hz ; BH30/804/R : 230 V~"
+        ],
+        [
+          "Tension fournie au moteur",
+          "24 V~, fréquence variable (commande FOC avec encodeur haute résolution)"
+        ],
+        [
+          "Type",
+          "803 / 804 / 603/HS / 604/HS : irréversibles · 804/R : réversible"
+        ],
+        [
+          "Poids maxi du vantail",
+          "803 / 804 : 1000 kg · 603/HS / 604/HS : 600 kg · 804/R : 800 kg"
+        ],
+        [
+          "Longueur de course maxi",
+          "20 m"
+        ],
+        [
+          "Puissance absorbée nominale / démarrage",
+          "110 / 340 W (803-804) · 100 / 310 W (HS) · 105 / 315 W (804/R)"
+        ],
+        [
+          "Force",
+          "Démarrage 880 / 400 / 610 N · maxi (S3 40 %) 420 / 170 / 270 N · nominale (S1 100 %) 190 / 210 / 135 N (803-804 / HS / 804/R)"
+        ],
+        [
+          "Vitesse de coulissement",
+          "7,4 – 12 m/min (803-804) · 10 – 25 m/min (HS) · 7,4 – 18 m/min (804/R)"
+        ],
+        [
+          "Consommation en veille",
+          "≤ 0,5 W"
+        ],
+        [
+          "Usage",
+          "Intensif (à la force nominale) · 300 000 cycles testés en interne (essai sur portail de 5 m à 20 °C, ce n'est pas la valeur maxi)"
+        ],
+        [
+          "Protection, température",
+          "IP44 · −20 °C à +55 °C"
+        ],
+        [
+          "Poids de l'opérateur, déblocage",
+          "803 : 12,3 kg · 804 : 12,5 kg · 603/HS : 12,1 kg · 604/HS : 12,6 kg · 804/R : 12,6 kg · force à appliquer au déblocage : 130 N"
+        ]
+      ],
+      "raccordement": [
+        {
+          "n": "L · N · ⏚",
+          "label": "Alimentation secteur",
+          "desc": "Câble H07RN-F 3G1,5 mm² : L (marron), N (bleu), terre (jaune / vert). Dégainer seulement au niveau de la borne et bloquer avec le serre-câble. Interrupteur omnipolaire (≥ 3 mm) et différentiel 0,03 A en amont."
+        },
+        {
+          "n": "Tension",
+          "label": "Contrôle au voltmètre",
+          "desc": "La tension secteur doit être de 230 V~ (115 V~) ± 10 % ; sinon l'automatisme ne peut pas fonctionner correctement."
+        },
+        {
+          "n": "Séparation",
+          "label": "Câblage",
+          "desc": "Secteur 230 V~ et accessoires 24 V (SELV) sur des parcours séparés ; câbles à double isolement ; passer les câbles par le passe-câble fourni (eau, humidité, insectes)."
+        },
+        {
+          "n": "Accessoires",
+          "label": "Câbles conseillés (installation type)",
+          "desc": "Photocellules F4ES / F4S : TX 3 × 0,5 mm², RX 5 × 0,5 mm² (20 m max) · clignotant FIFTHY/24 2 × 1 mm² (10 m max) · antenne RG58 (10 m max) · R85/60 3 × 0,5 mm² (20 m max) · H85/TTD – H85/TDS 2 × 0,5 mm² (30 m max) · bord sensible · récepteur radio CS/RX. Raccordements et essai : manuel de la B70/1DC."
+        }
+      ],
+      "installation": [
+        "Contrôles : structure solide, vantail stable (pas de déraillement ni de chute latérale), rail fixé au sol sans irrégularités, roues en bon état et graissées ; moteur déverrouillé, le portail ne doit pas bouger seul quelle que soit sa position.",
+        "Plaque de fondation : plateforme béton avec plaque noyée, à niveau et propre, aux cotes de la figure ; respecter les cotes entre plaque [B] et crémaillère [A]. Visser les 4 écrous 10MA sur les tirants, les passer dans la plaque et les bloquer. Gaines électriques par le trou de droite (vue face interne). Base de fixation KT214 : 320 × 174 mm, entraxe 85 / 150 / 85 mm (onglet Schéma).",
+        "Motoréducteur : retirer le couvercle (vis puis tirer vers le haut), vérifier que les 6 pieds de réglage ne dépassent pas ; joints O-Ring sur les vis M10 × 40 dans les angles, écrous M10 ; poser le BH30 sur les 4 tirants, régler horizontalement (glissement sur la plaque) et verticalement (6 pieds) en tenant compte de la crémaillère ; remettre le couvercle.",
+        "Crémaillère module 4 : moteur débloqué, portail ouvert, poser la crémaillère sur le pignon et la fixer sur toute la longueur en faisant coulisser le portail ; vérifier à la main un coulissement sans frottement, puis rebloquer le moteur.",
+        "Fins de course : portail en ouverture complète puis en fermeture complète, fixer les brides sur la crémaillère. Mécaniques : R = droit, L = gauche. Magnétiques : flèches vers le centre de la crémaillère ; l'aimant se règle de 8 mm maxi ; 10 mm au maximum entre aimant et brides de fin de course.",
+        "Après quelques manœuvres, ajuster les brides pour que le portail s'arrête 40 à 80 mm avant la butée mécanique (variable selon poids, frottements, centrale, météo). Ne jamais laisser le portail aller en butée.",
+        "Raccordements et apprentissage : voir la fiche de la carte B70/1DC."
+      ],
+      "notes": [
+        "Déblocage manuel (sans tension secteur, batteries débranchées, moteur arrêté) : trappe cache-serrure, clé 90° sens horaire, ouvrir entièrement la trappe de déblocage, déplacer le vantail. Rebloquer : abaisser la trappe avec la clé (attention aux doigts), clé 90° sens inverse, retirer, refermer.",
+        "Deux portails coulissants opposés : voir la fiche « MASTER / SLAVE (B70/1DC, B70/1DCHP) ».",
+        "Versions 115 V : l'en-tête du tableau technique indique « BH30/803/115 » et « BH30/603/HS/115 », la note (*) du même tableau « BH30/803/HS/115 – BH30/603/HS/115 ». Repris tels quels.",
+        "Déblocage : la version française est suivie ici ; la version italienne décrit la rotation de la clé autrement (refermer la trappe en tournant la clé de 90° dans le sens horaire, puis antihoraire). À vérifier sur l'appareil.",
+        "Étiquette : IN = numéro progressif dans l'année ; BC = année (2 premiers chiffres) et semaine (2 derniers) de fabrication.",
+        "Photocellules : cette notice indique TX 3 × 0,5 mm² et RX 5 × 0,5 mm² ; la fiche de la centrale B70/1DC indique RX 4 × 0,5 mm² et TX 2 × 0,5 mm². Les deux valeurs sont reprises sans être tranchées."
+      ]
+    },
+    {
+      "id": "roger-master-slave",
+      "nom": "MASTER / SLAVE (B70/1DC, B70/1DCHP)",
+      "marque": "Roger",
+      "couleur": "#5b4aa8",
+      "categorie": "Mode MASTER / SLAVE : deux portails coulissants opposés (liaison RS485)",
+      "modeles": "Centrales B70/1DC (BH30, BM30) et B70/1DCHP (BG30) à partir du firmware P3.00 ; gestion n7 = 13",
+      "source": "Notice Roger MASTER/SLAVE IS305 Rev.00 (19/03/2026), version française",
+      "resume": "Pour deux portails coulissants opposés, chacun avec sa centrale : commandes et sécurités centralisées sur la MASTER (un seul récepteur radio, embroché sur la MASTER), réglages et apprentissage des deux centrales depuis la MASTER (mode PARTAGE À DISTANCE). Liaison RS485 COM · LNA · LNB entre les deux centrales.",
+      "specs": [
+        [
+          "Centrales compatibles",
+          "B70/1DC (BH30, BM30) et B70/1DCHP (BG30), firmware P3.00 ou plus. En P2.30 / P2.35 : mise à jour par B74/BCONNECT, puis vérifier L0 = 01 et L1 = 00."
+        ],
+        [
+          "Paramètres à contrôler",
+          "60, 88 et 89 sur 00 ; A0 selon le rôle (ci-dessous)"
+        ],
+        [
+          "A0 (liaison RS485)",
+          "00 fonctionnement seul · 01 MASTER · 02 SLAVE avec copie des paramètres de la MASTER · 03 SLAVE avec paramètres indépendants"
+        ],
+        [
+          "Appairage",
+          "Même série (ex. BG30 + BG30, même de modèles différents) ou séries différentes (ex. BG30 + BH30) si firmwares identiques ou compatibles ; entre séries différentes : SLAVE obligatoirement en A0 = 03, réglages faits sur la SLAVE, pas de modification de paramètres ni d'INFO en partage à distance"
+        ],
+        [
+          "88 (activation cyclique, tests)",
+          "00 désactivée · 01 – 90 : commande d'ouverture toutes les 1 à 90 s (après un cycle complet) · 91 – 99 : toutes les 1 à 9 min. Régler la fermeture automatique (A2 et 21)."
+        ],
+        [
+          "89 (B74/BCONNECT)",
+          "00 désactivé · 01 : sur la MASTER, affichage / modification des paramètres SLAVE et sauvegarde des paramètres SLAVE dans le B-CONNECT. Remettre 89 = 00 ensuite."
+        ]
+      ],
+      "raccordement": [
+        {
+          "n": "COM · LNA · LNB",
+          "label": "Liaison RS485",
+          "desc": "Relier COM, LNA et LNB de la MASTER à COM, LNA et LNB de la SLAVE (schéma de la notice, onglet Schéma)."
+        },
+        {
+          "n": "Commandes",
+          "label": "Sur la MASTER seulement",
+          "desc": "PED, PP, CH, AP, ORO et le récepteur radio embrochable : uniquement sur la MASTER (bornes barrées sur la SLAVE dans le schéma de la notice). La commande PED n'actionne que la MASTER (selon le paramètre 15)."
+        },
+        {
+          "n": "ST",
+          "label": "STOP",
+          "desc": "Un STOP sur chaque centrale : celui de la MASTER bloque les deux automatismes, celui de la SLAVE ne bloque que la SLAVE."
+        },
+        {
+          "n": "FT1 / FT2",
+          "label": "Photocellules",
+          "desc": "Photocellules du passage : sur la MASTER. Celles du côté aveugle de la SLAVE peuvent aller sur la SLAVE (activées par ses paramètres 50 à 52) ; dans ce cas, brancher aussi celles du côté aveugle de la MASTER sur la même entrée (FT1 ou FT2) de la MASTER."
+        },
+        {
+          "n": "Sur la SLAVE",
+          "label": "Raccordés localement",
+          "desc": "Le clignotant de l'automatisme SLAVE et ses bords sensibles."
+        }
+      ],
+      "installation": [
+        "Mettre les deux centrales au firmware P3.00 ou plus ; régler 60, 88 et 89 sur 00 ; A0 = 01 sur la MASTER, A0 = 02 (copie) ou 03 (indépendante) sur la SLAVE.",
+        "Avec A0 = 02, chaque réglage de la MASTER est recopié sur la SLAVE, sauf A0, les paramètres 50 à 55 (photocellules SLAVE désactivées) et 71 (mis à l'opposé de la MASTER). Ces paramètres restent réglables sur la SLAVE : 11, 12, 20, 30, 31, 33, 34, 40, 41, 42, 50 à 55, 71, 73, 74. Conseil de la notice : après la première installation, passer la SLAVE en A0 = 03 pour éviter les recopies par erreur.",
+        "PARTAGE À DISTANCE : sur la MASTER, appuyer brièvement sur ▲ et ▼ ensemble, « SLAV » s'affiche 2 s ; le nom du paramètre clignote et les valeurs modifiées sont enregistrées sur la SLAVE. Même appui pour revenir (« MAST »). Désactivation automatique après 5 min sans modification.",
+        "Apprentissage de la SLAVE (séparé de celui de la MASTER) depuis la MASTER : SLAVE en fermeture complète, activer le partage (« SLAV »), maintenir PROG 4 s sur la MASTER.",
+        "Automatismes avec fin de course, SLAVE pas complètement fermée (fin de course de fermeture non atteint) : rAPL sur la MASTER, APP.L sur la SLAVE. Fermée : rAPP (MASTER) / APP- (SLAVE).",
+        "Actionner le déverrouillage de la SLAVE : rPHA / PHAS. Échec : rnoP / noPh. Réussite : l'écran clignote vite, refermer la poignée de la SLAVE et tourner la clé, l'ouverture démarre (rA t / A to), puis la fermeture.",
+        "Fin réussie : rdon sur la MASTER, la SLAVE revient à l'état des entrées. Échec : rAPE, rAPL, rAP ou rAPS (MASTER) / APP.E, APP.L, APP. ou APP.S (SLAVE). En cas de blocage, sortir par TEST ou STOP et recommencer au début."
+      ],
+      "codes": [
+        [
+          "SrcH",
+          "Mise sous tension : la MASTER cherche la SLAVE sur la ligne RS485 (environ 2 s), en alternance avec COM1 jusqu'à la connexion. Avec A0 = 02 sur la SLAVE, la MASTER lui envoie alors ses paramètres."
+        ],
+        [
+          "COM1",
+          "Pas de communication MASTER / SLAVE : automatismes arrêtés en STOP ; si la coupure ne dure que quelques secondes, ils repartent seuls au retour de la communication."
+        ],
+        [
+          "COM2",
+          "A0 mal réglé : la centrale est en MASTER alors que l'autre l'est déjà. Affiché 5 s, puis A0 est forcé à 00 (mode désactivé) : régler A0 à 02 ou 03."
+        ],
+        [
+          "COM3",
+          "Firmwares différents : le partage à distance n'est pas utilisable (mettre les deux à la même version) ; la commande centralisée du mouvement et des sécurités reste active."
+        ],
+        [
+          "nC",
+          "TEST : pas de communication RS485 entre les deux centrales."
+        ],
+        [
+          "Point décimal",
+          "2e chiffre en partant de la gauche allumé (affichage commandes / sécurités) : communication présente. Éteint avec celui de ST : communication absente (STOP forcé)."
+        ],
+        [
+          "StA · rStA",
+          "INFO : état de la centrale MASTER / SLAVE (assistance technique, affiché sur la MASTER)."
+        ],
+        [
+          "ErrL · ErrC",
+          "INFO : nombre d'interruptions / d'erreurs de communication RS485 (câblage critique, trop long ou près de câbles de puissance). Remis à zéro à la mise sous tension ou par ▼ pendant l'affichage."
+        ]
+      ],
+      "notes": [
+        "Comportement : une sécurité de la MASTER agit aussi sur la SLAVE ; une sécurité de la SLAVE (si activée) agit aussi sur la MASTER. La fermeture automatique ne démarre que lorsque les deux sont en ouverture complète. Le vantail SLAVE suit toujours la MASTER : pas de commande manuelle séparée.",
+        "Déverrouillage : seul l'automatisme déverrouillé perd sa position. Déverrouiller la MASTER bloque aussi la SLAVE ; déverrouiller la SLAVE laisse la MASTER fonctionner (si aucune photocellule n'est raccordée et activée sur la SLAVE).",
+        "TEST : les commandes ne s'affichent que sur la MASTER ; une sécurité en alarme raccordée à l'autre centrale s'affiche avec les points décimaux allumés.",
+        "INFO et compteurs (o, o0, o1, H0, H1, d0, d1) de la SLAVE consultables sur la MASTER en partage à distance (TEST 4 s pour INFO).",
+        "Mot de passe : à enregistrer sur la MASTER, il protège aussi la SLAVE.",
+        "B74/BCONNECT sur la MASTER : pas de retour usine, de restauration, d'INFO, d'alarmes ni de mise à jour firmware de la SLAVE (il faut un B-CONNECT sur la SLAVE pour cela).",
+        "Codes COM2 et COM3 : la fiche de la carte B70/1DC (notice IS117) les décrit autrement (« deux centrales MASTER » et « erreur de transfert des paramètres ») que cette notice IS305. Les deux versions sont reprises sans être tranchées."
+      ]
+    },
+    {
+      "id": "roger-cs",
+      "nom": "Série CS (bords sensibles)",
+      "marque": "Roger",
+      "couleur": "#5b4aa8",
+      "categorie": "Bord sensible (barres palpeuses filaires et radio, récepteur CS/RX)",
+      "modeles": "CS/PAS (passif) · CS/STD/MC (mécanique, contact N.F.) · CS/STD/RS (résistif 8,2 kΩ, filaire) · CS/STD/RSTX (résistif 8,2 kΩ, radio) + récepteur CS/RX ; longueurs 1600, 2000, 2500 mm",
+      "source": "Notice Roger Série CS IS310 Rev.00 (11/03/2026), version française",
+      "resume": "Bords sensibles de sécurité Roger pour portes et portails automatiques : filaires (mécanique N.F. ou résistif 8,2 kΩ) ou radio (émetteur résistif à piles + récepteur CS/RX 868 MHz, jusqu'à 4 émetteurs). Raccordement sur COM – COS1 / COS2 des centrales Roger.",
+      "specs": [
+        [
+          "Alimentation",
+          "CS/STD/MC et CS/STD/RS : 24 Vdc · CS/STD/RSTX : 2 piles AA 1,5 V · CS/RX : 12 – 24 V ac/dc (SELV)"
+        ],
+        [
+          "Contact",
+          "CS/STD/MC : N.F. · CS/STD/RS : 8,2 kΩ (N.O.) (valeurs du tableau technique)"
+        ],
+        [
+          "Radio",
+          "868 MHz (RSTX et RX) · portée 12 m (colonne RSTX) · classe radio 3 et cycle d'utilisation < 1 % (colonne CS/RX)"
+        ],
+        [
+          "CS/RX",
+          "Courant maxi 150 mA · contact relais 1 A · jusqu'à 4 émetteurs CS/STD/RSTX (2 canaux COS1 / COS2)"
+        ],
+        [
+          "Température",
+          "CS/STD/RSTX : −20 °C à +55 °C · CS/RX : −10 °C à +55 °C"
+        ],
+        [
+          "Protection",
+          "CS/STD/RS et RSTX : IP65 · CS/RX : IP55"
+        ],
+        [
+          "Dimensions",
+          "Profil 61 × 37 mm, longueurs 1600, 2000, 2500 mm · CS/RX : 159 × 41,4 × 28,7 mm"
+        ]
+      ],
+      "raccordement": [
+        {
+          "n": "COM · COS1 (COS2)",
+          "label": "CS/STD/MC et CS/STD/RS",
+          "desc": "Raccorder le bord aux bornes COM – COS1 (ou COS2) de la centrale. À la détection d'un obstacle, l'automatisme inverse la manœuvre : voir les paramètres 73 et 74 de la centrale."
+        },
+        {
+          "n": "1 · 2 (émetteur)",
+          "label": "CS/STD/RSTX",
+          "desc": "Barre résistive raccordée aux bornes 1 et 2 de la carte de l'émetteur."
+        },
+        {
+          "n": "CS/RX 1 · 2",
+          "label": "Alimentation du récepteur",
+          "desc": "Vers COM et 24V de la centrale Roger (12 – 24 V ac/dc SELV)."
+        },
+        {
+          "n": "CS/RX 3 · 4",
+          "label": "Sortie bord 1",
+          "desc": "Vers COM et COS1 de la centrale."
+        },
+        {
+          "n": "CS/RX 5 · 6",
+          "label": "Sortie bord 2",
+          "desc": "Si besoin, vers COM et COS2 de la centrale."
+        }
+      ],
+      "installation": [
+        "CS/PAS : couper le bord par le bas à la longueur voulue, surface de fixation plane et propre, fixer les brides (vis non fournies), installer le bord sur les brides.",
+        "CS/STD/MC : couper le bord par le bas (400 mm maximum), fixer les brides, installer le bord en faisant attention à la sortie des câbles.",
+        "CS/STD/RS et CS/STD/RSTX : ouvrir la tête supérieure et retirer la barre résistive ; couper le caoutchouc par le bas et la barre résistive (longueur L − L1) ; retirer le circuit résistif, éliminer les chutes, réassembler (attention au sens de la barre résistive) ; fixer les brides et installer le bord. RSTX : retirer la pellicule de protection des piles (n'utiliser que le type de piles indiqué).",
+        "CS/RX : le fixer sur la structure de l'automatisme (vis non fournies).",
+        "Appairage d'un émetteur : alimenter le CS/RX (LD3 verte allumée). Bord COS1 : appuyer sur P1 du récepteur (LD5 clignote, bip bref), puis maintenir P1 de l'émetteur : LD1 rouge s'allume puis s'éteint et LD2 verte s'allume ; relâcher : LD2 clignote, LD5 s'allume sur le récepteur avec un bip. Bord COS2 : même chose avec P2 du récepteur (LD4). Répéter pour d'autres émetteurs (4 maximum).",
+        "Effacement : maintenir P1 (canal COS1) ou P2 (canal COS2) du récepteur jusqu'au bip long, un canal à la fois. Pour remplacer un émetteur, n'effacer que son canal puis refaire l'appairage.",
+        "Contrôle : forces du vantail conformes aux normes EN 12453 et EN 12445 ; vérifier régulièrement la sécurité en appuyant sur le bord pendant une ouverture et une fermeture."
+      ],
+      "codes": [
+        [
+          "LD3 verte allumée",
+          "Récepteur CS/RX alimenté."
+        ],
+        [
+          "LD5 verte allumée",
+          "Bord COS1 actif."
+        ],
+        [
+          "LD4 verte allumée",
+          "Bord COS2 actif."
+        ],
+        [
+          "LD2 verte clignotante",
+          "Mémorisation d'un émetteur en cours."
+        ],
+        [
+          "LD1 rouge clignotante + buzzer intermittent",
+          "Piles faibles."
+        ],
+        [
+          "LD1 rouge allumée, LD4 et LD5 éteintes",
+          "Intervention du bord sensible."
+        ],
+        [
+          "LD1, LD4 et LD5 clignotantes",
+          "Défaut de transmission."
+        ]
+      ],
+      "notes": [
+        "N'utiliser les bords CS et le récepteur CS/RX qu'avec des produits Roger Technology.",
+        "Déclaration de conformité (04/05/2016) : EN 12978:2003+A1:2009 cat. 2 PL « d », EN ISO 13849-1 et 13849-2.",
+        "Fin de vie : à désinstaller par un technicien qualifié ; ne pas jeter avec les déchets ménagers.",
+        "Coupe de la barre résistive (RS, RSTX) : la version italienne dit « par la partie supérieure », une phrase de la version française dit « par la partie inférieure ». Repris sans être tranché : suivre le schéma (onglet Schéma)."
+      ]
     }
   ];
   window.ACCESSOIRES = ACCESSOIRES;

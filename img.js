@@ -39,6 +39,31 @@
     "sewosy-k1000": [
       S("sewosy-k1000-p02", "Caractéristiques et raccordement", 2, "Tableau des caractéristiques, couleurs des fils (relais 1 et 2, boutons poussoirs, contact magnétique) et signification des bips.")
     ],
+    "roger-smarty": [
+      S("roger-smarty-p05", "Dimensions et abaques poids / longueur", 5, "Cotes du vérin et diagrammes d'utilisation des cinq modèles (limites réduites en zone de fortes rafales)."),
+      S("roger-smarty-p11", "Raccordements électriques", 11, "Câble 3 × 2,5 mm² vers l'EDGE1, terre non nécessaire."),
+      S("roger-smarty-p12", "Bornier X · Y · Z et encodeur absolu", 12, "Raccordement du moteur et montage de l'encodeur sur les modèles irréversibles.")
+    ],
+    "roger-be20": [
+      S("roger-be20-p05", "Dimensions et abaques poids / longueur", 5, "Cotes et diagrammes d'utilisation BE20/200, BE20/200/HS et BE20/400."),
+      S("roger-be20-p11", "Raccordements électriques", 11, "Bornier X · Y · Z, câble 3 × 2,5 mm² vers B70/2ML ou EDGE1.")
+    ],
+    "roger-bh30": [
+      S("roger-bh30-p05", "Dimensions et installation type", 5, "Cotes du BH30 et tableau des câbles conseillés."),
+      S("roger-bh30-p09", "Crémaillère et fins de course", 9, "Fixation de la crémaillère module 4 et des brides de fin de course mécaniques / magnétiques."),
+      S("roger-bh30-p10", "Fins de course magnétiques", 10, "Distances aimant / capteur et arrêt 40 à 80 mm avant la butée."),
+      S("roger-kt214-p1", "Base de fixation KT214", 1, "Plaque 320 × 174 mm pour séries H30 et BH30 (notice IS151 Rev.01).")
+    ],
+    "roger-master-slave": [
+      S("roger-ms-p03", "Raccordement MASTER / SLAVE", 3, "Liaison RS485 COM · LNA · LNB, commandes sur la MASTER, STOP et photocellules des deux côtés."),
+      S("roger-ms-p04", "Partage à distance et photocellules", 4, "Affichages SLAV / MAST, point de communication RS485, répartition des photocellules (détails A, B, C).")
+    ],
+    "roger-cs": [
+      S("roger-cs-p02", "Dimensions des profils", 2, "CS/PAS, CS/STD/MC, CS/STD/RS, CS/STD/RSTX-RX : profil 61 × 37 mm."),
+      S("roger-cs-p03", "Montage CS/PAS et CS/STD/MC", 3, "Coupe (400 mm maxi pour le MC), brides, raccordement COM – COS1."),
+      S("roger-cs-p04", "Montage CS/STD/RS et RSTX", 4, "Coupe du caoutchouc et de la barre résistive, réassemblage."),
+      S("roger-cs-p05", "Émetteur RSTX et récepteur CS/RX", 5, "Cartes, boutons P1 / P2, LED et raccordement du récepteur.")
+    ],
     "prastel-easyka": [
       S("prastel-easyka-p02", "Raccordement et programmation", 2, "Notice simplifiée EASYBKA/R : câblage et procédure de programmation.")
     ],
