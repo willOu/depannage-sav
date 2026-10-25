@@ -70,11 +70,16 @@
     ok.sort(tri); verif.sort(tri);
     const lim = m => [m.p !== null ? "≤ " + f(m.p, 0) + " kg" : "poids non indiqué", m.l !== null ? "≤ " + f(m.l) + " m" : (type === "coulissant" ? "longueur non indiquée" : "")].filter(Boolean).join(" · ");
     const ligne = m => { const ch = besoinP && m.p ? Math.round(P / m.p * 100) : null;
-      return `<div class="mot"><div class="mh"><span class="badge" style="--c:var(--blue)">${esc(m.marque)}</span><b>${esc(m.modele)}</b>${m.alim ? `<span class="ma">${esc(m.alim)}</span>` : ""}</div>
+      return `<div class="mot"><div class="mh"><span class="badge" style="--c:${m.marque === "Roger" ? "var(--brand)" : "var(--blue)"}">${esc(m.marque)}</span><b>${esc(m.modele)}</b>${m.alim ? `<span class="ma">${esc(m.alim)}</span>` : ""}</div>
         <div class="ml">${lim(m)}${ch !== null ? ` · <span class="${ch > 85 ? "hi" : ""}">charge ${ch} %</span>` : ""}</div>${m.note ? `<small>${esc(m.note)}</small>` : ""}<small class="src">Source : ${esc(m.src)}</small></div>`; };
+    /* Roger Technology en premier : marque posée en priorité par l'entreprise */
+    const PRIO = "Roger", estP = m => m.marque === PRIO;
+    const okP = ok.filter(estP), vP = verif.filter(estP), okA = ok.filter(m => !estP(m)), vA = verif.filter(m => !estP(m));
+    const pourquoi = type === "battant" ? "poids maxi non indiqué par la source" : "longueur maxi non indiquée par la source";
+    const bloc = (l, v) => l.map(ligne).join("") + (v.length ? `<p class="hotn">À vérifier sur la notice (${pourquoi}) :</p>` + v.map(ligne).join("") : "");
     out.innerHTML = `<div class="cres${ok.length ? " ok" : " ko"}"><b>${ok.length}</b> motorisation${ok.length > 1 ? "s" : ""} dans les limites annoncées${verif.length ? `, <b>${verif.length}</b> à vérifier` : ""}.</div>` +
-      (ok.length ? ok.map(ligne).join("") : `<p class="hotn">Aucune motorisation de la liste ne couvre ces valeurs.</p>`) +
-      (verif.length ? `<h2>À vérifier sur la notice</h2><p class="hotn">${type === "battant" ? "La source ne donne pas de poids maxi pour ces modèles." : "La source ne donne pas de longueur maxi pour ces modèles."}</p>` + verif.map(ligne).join("") : "");
+      `<h2 class="prio">★ Roger Technology</h2>` + (okP.length || vP.length ? bloc(okP, vP) : `<p class="hotn">Aucun moteur Roger de la liste ne convient (ou ses limites ne sont pas encore dans l'appli).</p>`) +
+      (okA.length || vA.length ? `<h2>Autres marques</h2>` + bloc(okA, vA) : (ok.length ? "" : `<p class="hotn">Aucune motorisation de la liste ne couvre ces valeurs.</p>`));
   }
 
   window.viewCalc = function (onglet) {

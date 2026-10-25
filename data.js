@@ -192,6 +192,9 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "1.63", date: "2026-10-25", titre: "Choix moteur : Roger Technology en premier", items: [
+    "Dans « Choix moteur », les motorisations Roger Technology sont proposées en premier, avant les autres marques."
+  ], docs: [] },
   { v: "1.62", date: "2026-10-25", titre: "Aide au choix du moteur", items: [
     "Calculs rapides → « Choix moteur » : selon le type (coulissant, battant, barrière), le poids et la longueur, la liste des motorisations dont les limites annoncées par le fabricant conviennent, avec le taux de charge et la source de chaque valeur. Les cas incomplets ou contradictoires dans les sources sont signalés « à vérifier »."
   ], docs: ["Pages et dépliants CAME (BX, BXV, BK, AXO, FROG, FROG-X, ATI, FAST70, STYLO)", "Pages et brochure FAAC (740/741, 746/844, battants)", "BFT ARES ULTRA BT A (site US)", "Roger BE20/200 (site)"] },
