@@ -36,7 +36,7 @@
     const app = matchMedia && matchMedia("(display-mode: standalone)").matches ? "appli" : nav;
     return (os + (app ? " · " + app : "")).slice(0, 80);
   };
-  let PLEIN = [];
+  let PLEIN = [], PROV = false, MDP_SAISI = "";
   /* le technicien doit être actif ; l'appareil doit être l'un de ses 2 appareils autorisés.
      Renvoie le nom (ou "ok"), "non", "plein" (2 autres appareils déjà connectés) ou "net". */
   async function autorise(tok, liberer) {
@@ -50,7 +50,7 @@
     }
     if (!r.ok) return r.status === 401 || r.status === 403 ? "non" : "net";
     const j = r.j || {};
-    if (j.statut === "ok") return j.nom || "ok";
+    if (j.statut === "ok") { PROV = j.provisoire === true; return j.nom || "ok"; }
     if (j.statut === "plein") { PLEIN = Array.isArray(j.appareils) ? j.appareils : []; return "plein"; }
     return "non";
   }
@@ -97,9 +97,38 @@
       const a = await autorise(S.access_token);
       if (a === "net") { b.disabled = false; m.className = "lgm bad"; m.textContent = "Vérification impossible : réessayez avec du réseau."; S = null; save(null); return; }
       if (a === "non") { S = null; save(null); b.disabled = false; m.className = "lgm bad"; m.textContent = "Ce compte n'est pas autorisé à utiliser Diag'SAV."; return; }
+      MDP_SAISI = pw;
       if (a === "plein") { b.disabled = false; return choixAppareil(); }
+      if (PROV) return choixMdp(a);
       reussi(a);
     };
+  }
+  /* mot de passe provisoire (créé ou réinitialisé par le SAV) : le technicien choisit le sien avant d'entrer */
+  function choixMdp(a) {
+    const f = document.getElementById("lgf");
+    f.innerHTML = `<div class="sq"><b style="background:#6FA8E8"></b><b style="background:#F5A33A"></b><b style="background:#FF6A5E"></b></div><h2>Diag'SAV</h2>
+      <p class="lgm" id="lgm">Bienvenue ! Choisissez votre mot de passe personnel (8 caractères minimum). Le mot de passe provisoire ne servira plus.</p>
+      <input id="lgn1" type="password" placeholder="Nouveau mot de passe" autocomplete="new-password" minlength="8" required>
+      <input id="lgn2" type="password" placeholder="Confirmer le mot de passe" autocomplete="new-password" minlength="8" required>
+      <button id="lgb" type="submit">Enregistrer et continuer</button>`;
+    f.onsubmit = async ev => {
+      ev.preventDefault();
+      const m = document.getElementById("lgm"), b = document.getElementById("lgb"), p1 = document.getElementById("lgn1").value, p2 = document.getElementById("lgn2").value;
+      m.className = "lgm bad";
+      if (p1.length < 8) { m.textContent = "8 caractères minimum."; return; }
+      if (p1 !== p2) { m.textContent = "Les deux mots de passe sont différents."; return; }
+      if (p1 === MDP_SAISI) { m.textContent = "Choisissez un mot de passe différent du provisoire."; return; }
+      b.disabled = true; m.className = "lgm"; m.textContent = "Enregistrement…";
+      const r = await changer(S.access_token, MDP_SAISI, p1);
+      if (!r.ok) { b.disabled = false; m.className = "lgm bad"; m.textContent = r.erreur; return; }
+      MDP_SAISI = ""; PROV = false; reussi(a);
+    };
+  }
+  async function changer(tok, ancien, nouveau) {
+    const r = await call("/functions/v1/mon-mot-de-passe", { method: "POST", headers: H(tok), body: JSON.stringify({ ancien, nouveau }) }, 15000);
+    if (r.net) return { ok: false, erreur: "Pas de réseau : réessayez." };
+    if (!r.ok) return { ok: false, erreur: (r.j && r.j.erreur) || "Changement impossible pour le moment." };
+    return { ok: true };
   }
   function reussi(a) { S.lastOk = Date.now(); if (a !== "ok") S.nom = a; save(S); ouvrir(); setTimeout(() => dispatchEvent(new Event("auth-ok")), 0); }
   const fd = d => { try { return new Date(d).toLocaleDateString("fr-FR", { day: "numeric", month: "short" }) + " à " + new Date(d).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }); } catch (e) { return ""; } };
@@ -117,6 +146,7 @@
       const a = await autorise(S.access_token, btn.dataset.id);
       if (a === "plein") return choixAppareil();
       if (a === "net" || a === "non") { const em = S && S.email; S = em ? { email: em } : null; save(S); return ecran(a === "net" ? "Pas de réseau : réessayez." : "Ce compte n'est pas autorisé à utiliser Diag'SAV.", "bad"); }
+      if (PROV) return choixMdp(a);
       reussi(a);
     });
     document.getElementById("lgx").onclick = () => { const em = S && S.email; S = em ? { email: em } : null; save(S); ecran(); };
@@ -168,6 +198,13 @@
     },
     pret: () => !!(S && S.access_token && !document.documentElement.classList.contains("locked")),
     nom: () => (S && S.nom) || "",
+    /* Réglages : changer son mot de passe (l'ancien est revérifié côté serveur) */
+    async changerMdp(ancien, nouveau) {
+      if (!S || !S.access_token) return { ok: false, erreur: "Non connecté." };
+      let r = await changer(S.access_token, ancien, nouveau);
+      if (!r.ok && /Session invalide/.test(r.erreur || "")) { const v = await verifier(); if (v === "ok") r = await changer(S.access_token, ancien, nouveau); }
+      return r;
+    },
     async deconnecter() {
       let reste = 0;
       try { if (window.SYNC && SYNC.vider) reste = await Promise.race([SYNC.vider(), new Promise(r => setTimeout(() => r(-1), 6000))]); } catch (e) {}

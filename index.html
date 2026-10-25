@@ -186,7 +186,7 @@ ul.plain li{margin:4px 0}
 .qzr{text-align:center;padding:18px 0 6px}.qzr .big{font-size:48px;font-weight:800}.qzr small{display:block;color:var(--muted);margin-top:4px}
 .tmsg{line-height:1.5}.tid{display:grid;gap:4px;margin:8px 0;font-family:ui-monospace,monospace;font-size:14px}.tid span{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:6px 8px;overflow-wrap:anywhere}
 .tpw{display:flex;gap:6px;align-items:center}.tpw input{flex:1;min-width:0;font-family:ui-monospace,monospace}
-.tb2{display:inline-block;font-size:11px;font-weight:700;border-radius:6px;padding:1px 6px;margin-left:4px;vertical-align:middle}.tb2.ad{background:#1F5FA8;color:#fff}.tb2.off{background:#E5372E;color:#fff}
+.tb2{display:inline-block;font-size:11px;font-weight:700;border-radius:6px;padding:1px 6px;margin-left:4px;vertical-align:middle}.tb2.ad{background:#1F5FA8;color:#fff}.tb2.off{background:#E5372E;color:#fff}.tb2.pv{background:#E07B00;color:#fff}
 .secb .row.tcol{flex-direction:column;align-items:stretch}.tdev{display:flex;justify-content:space-between;align-items:center;gap:8px}.tdev small{display:block;color:var(--muted);font-size:12px}
 .mini.rouge{border-color:#E5372E;color:#E5372E}.muted{color:var(--muted)}
 .cform{display:grid;gap:10px;margin-top:10px}.cf{display:grid;gap:4px;font-size:13px;color:var(--muted);font-weight:600}
@@ -733,6 +733,11 @@ function viewSettings(){
   /* 1. Compte */
   if (window.AUTH_ACTIF) h += `<h2>Compte</h2><div class="set"><div class="row"><span>Connecté</span><span class="mono">${esc(AUTH.nom() || AUTH.email() || "—")}</span></div>
       <div class="row"><span>Accès hors ligne</span><span class="mono">${AUTH.joursRestants()} j restants</span></div>
+      <details class="grp" id="cmdp"><summary>Changer mon mot de passe</summary><div class="secb">
+        <input id="ma0" type="password" placeholder="Mot de passe actuel" autocomplete="current-password">
+        <input id="ma1" type="password" placeholder="Nouveau mot de passe (8 caractères minimum)" autocomplete="new-password">
+        <input id="ma2" type="password" placeholder="Confirmer le nouveau mot de passe" autocomplete="new-password">
+        <button class="dbtn" id="mab">Changer le mot de passe</button><p class="hotn" id="mar"></p></div></details>
       <button class="srow" onclick="if(confirm('Se déconnecter de Diag\\'SAV ?'))AUTH.deconnecter()"><span>Se déconnecter</span><i>›</i></button></div>
       <p class="hotn">L'accès est vérifié à chaque ouverture avec du réseau ; sans réseau, il reste valable 14 jours.</p>`;
   /* 2. Messages du SAV */
@@ -762,6 +767,18 @@ function viewSettings(){
       <p class="foot">En cas de doute, la notice livrée avec le matériel fait foi.</p>`;
   app.innerHTML = h;
   if (window.SYNC) SYNC.brancherReglages(); /* SYNC */
+  const mab = $("#mab"); /* changer mon mot de passe */
+  if (mab) mab.onclick = async () => {
+    const a0 = $("#ma0").value, a1 = $("#ma1").value, a2 = $("#ma2").value, out = $("#mar");
+    if (!a0) { out.textContent = "⚠ Saisissez votre mot de passe actuel."; return; }
+    if (a1.length < 8) { out.textContent = "⚠ Nouveau mot de passe : 8 caractères minimum."; return; }
+    if (a1 !== a2) { out.textContent = "⚠ Les deux nouveaux mots de passe sont différents."; return; }
+    mab.disabled = true; out.textContent = "Enregistrement…";
+    const r = await AUTH.changerMdp(a0, a1);
+    mab.disabled = false;
+    if (r.ok) { ["#ma0", "#ma1", "#ma2"].forEach(s => $(s).value = ""); out.textContent = "✓ Mot de passe changé. Utilisez-le à votre prochaine connexion."; }
+    else out.textContent = "⚠ " + r.erreur;
+  };
   const sv = $("#swv");
   if ("caches" in window) caches.keys().then(k => { sv.textContent = k.length ? k.sort().pop().replace("sav-", "") : "pas encore enregistré"; }).catch(() => sv.textContent = "—");
   else sv.textContent = "non pris en charge";

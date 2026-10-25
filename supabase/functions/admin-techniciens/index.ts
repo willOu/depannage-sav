@@ -56,7 +56,7 @@ Deno.serve(async (req: Request) => {
   try {
     switch (b.action) {
       case "liste": {
-        const { data: t, error } = await db.from("techniciens").select("email, nom, actif, admin, cree_le").order("nom", { ascending: true });
+        const { data: t, error } = await db.from("techniciens").select("email, nom, actif, admin, cree_le, mdp_provisoire").order("nom", { ascending: true });
         if (error) throw error;
         const { data: ap } = await db.from("appareils").select("email, device_id, nom, vu_le").order("vu_le", { ascending: false });
         // dernière consultation de chacun (une requête par technicien : équipe réduite, pas de limite de lignes)
@@ -89,7 +89,7 @@ Deno.serve(async (req: Request) => {
           const { error } = await db.auth.admin.createUser({ email, password: b.mot_de_passe as string, email_confirm: true });
           if (error) throw error;
         }
-        const { error: ei } = await db.from("techniciens").insert({ email, nom, actif: true, admin: b.admin === true });
+        const { error: ei } = await db.from("techniciens").insert({ email, nom, actif: true, admin: b.admin === true, mdp_provisoire: true }); // à changer à la première connexion
         if (ei) throw ei;
         return rep(200, { ok: true });
       }
@@ -114,6 +114,7 @@ Deno.serve(async (req: Request) => {
         if (!ex) return rep(404, { erreur: "Compte introuvable" });
         const { error } = await db.auth.admin.updateUserById(ex.id, { password: b.mot_de_passe as string });
         if (error) throw error;
+        await db.from("techniciens").update({ mdp_provisoire: true }).eq("email", email); // à changer à la prochaine connexion
         return rep(200, { ok: true });
       }
       case "liberer": {

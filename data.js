@@ -192,6 +192,10 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "1.61", date: "2026-10-25", titre: "Chacun choisit son mot de passe", items: [
+    "À la première connexion, le mot de passe donné par le SAV est provisoire : le technicien choisit le sien avant d'entrer dans l'appli. Idem après une réinitialisation par le SAV.",
+    "Réglages → Compte → « Changer mon mot de passe » : à tout moment, avec le mot de passe actuel."
+  ], docs: [] },
   { v: "1.60", date: "2026-10-25", titre: "Calculs rapides et gestion des techniciens", items: [
     "Calculs rapides (accueil) : chute de tension et section de câble minimale, consommation des accessoires 24 V comparée à ce que la carte peut fournir, et P = U × I. Formules et hypothèses affichées.",
     "Administration : écran « Techniciens et appareils » pour créer un compte (mot de passe généré, identifiants à copier), désactiver ou réactiver un technicien, donner les droits administrateur, changer un mot de passe et libérer un appareil."
