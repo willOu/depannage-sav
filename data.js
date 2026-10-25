@@ -192,6 +192,10 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "1.60", date: "2026-10-25", titre: "Calculs rapides et gestion des techniciens", items: [
+    "Calculs rapides (accueil) : chute de tension et section de câble minimale, consommation des accessoires 24 V comparée à ce que la carte peut fournir, et P = U × I. Formules et hypothèses affichées.",
+    "Administration : écran « Techniciens et appareils » pour créer un compte (mot de passe généré, identifiants à copier), désactiver ou réactiver un technicien, donner les droits administrateur, changer un mot de passe et libérer un appareil."
+  ], docs: [] },
   { v: "1.59", date: "2026-10-25", titre: "Deux appareils maximum par compte", items: [
     "Un compte peut être connecté sur 2 appareils à la fois (par exemple téléphone et tablette). Sur un 3e, l'appli propose de déconnecter l'un des deux. « Se déconnecter » libère la place, et un appareil inutilisé depuis 15 jours la libère tout seul."
   ], docs: [] },

@@ -144,6 +144,7 @@
       if (!estAdmin()) return "";
       const ms = messages();
       return `<h2>Administration</h2><div class="set">
+        <button class="srow" onclick="go('#/techs')"><span>👥 Techniciens et appareils</span><i>›</i></button>
         <button class="srow" onclick="go('#/stats')"><span>📊 Statistiques de consultation</span><i>›</i></button>
         <details class="grp in" id="pubd"><summary>✉️ Publier un message</summary><div class="secb">
         <input id="mt" maxlength="120" placeholder="Titre (ex. Nouvelle notice Came ajoutée)">
