@@ -192,6 +192,10 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "1.66", date: "2026-10-25", titre: "Moteurs Roger BG30, BM30, BR21, BH23, MONOS4 et AYRON", items: [
+    "Nouvelles fiches Roger (Accessoires → Motorisations) : BG30 (11 modèles), BM30, BR21 / R21 enterrés (caisses FU, leviers, déblocages RL650 / RL651), BH23 et AYRON à bras articulé, vérin MONOS4, avec caractéristiques, raccordement, montage, déblocage et schémas.",
+    "Choix moteur : BG30 (course 25 m), BM30 (12 m, 24 V), MONOS4 et AYRON mis à jour ; BR21 / R21 et BH23 ajoutés."
+  ], docs: ["Roger BG30 IS141 Rev.19", "Roger BM30 IS169 Rev.13", "Roger BR21 / R21 IS301 Rev.03", "Roger BH23 IS106 Rev.10", "Roger MONOS4 IS201 Rev.11", "Roger AYRON IS239 Rev.01"] },
   { v: "1.65", date: "2026-10-25", titre: "Moteurs Roger : SMARTY, BE20, BH30, Master/Slave, bords CS", items: [
     "Nouvelles fiches Roger (Accessoires → Motorisations et Sécurités) : SMARTY, BE20 et BH30 (caractéristiques modèle par modèle, raccordement, montage, déblocage, abaques et schémas), MASTER / SLAVE pour deux portails coulissants opposés (B70/1DC, B70/1DCHP), série CS (bords sensibles filaires et radio, récepteur CS/RX).",
     "Choix moteur : SMARTY (5 modèles), BE20 (3 modèles) et BH30 avec poids et longueurs des notices Roger.",
@@ -13494,7 +13498,7 @@ const MARQUES = [
         ]}
       ],
       fusibles: "F1 15 A (ATO257) circuit moteur · F2 2 A (ATO257) accessoires · F3 T2A (5x20) primaire transformateur",
-      notes: ["Moteurs BH30 : caractéristiques et montage (plaque, crémaillère, fins de course) dans la fiche accessoire Roger « BH30 (série) ».", "Deux portails coulissants opposés : voir la fiche accessoire Roger « MASTER / SLAVE (B70/1DC, B70/1DCHP) » (notice IS305).", 
+      notes: ["Moteurs BM30 : caractéristiques et montage (plaque, crémaillère, fins de course) dans la fiche accessoire Roger « BM30 (série) ».", "Moteurs BH30 : caractéristiques et montage (plaque, crémaillère, fins de course) dans la fiche accessoire Roger « BH30 (série) ».", "Deux portails coulissants opposés : voir la fiche accessoire Roger « MASTER / SLAVE (B70/1DC, B70/1DCHP) » (notice IS305).", 
         "Sécurités absentes : shunter sur COM ou les désactiver par paramètres 50, 51, 53, 54, 73, 74.",
         "Photocellules conseillées : séries F4ES ou F4S.",
         "Câbles : photocellules RX 4 x 0,5 mm², TX 2 x 0,5 mm² (20 m max) ; clignotant FIFTHY/24 2 x 1 mm² (10 m max)."
@@ -15778,7 +15782,7 @@ const MARQUES = [
         }
       ],
       "fusibles": "F1 20 A (ATO257) circuit de puissance des moteurs · F2 T2A (ATO257) primaire du transformateur · F3 3 A (5x20) alimentation des accessoires",
-      "notes": ["Deux portails coulissants opposés : voir la fiche accessoire Roger « MASTER / SLAVE (B70/1DC, B70/1DCHP) » (notice IS305).", 
+      "notes": ["Moteurs BG30 : caractéristiques modèle par modèle et montage (plaque, crémaillère, fins de course) dans la fiche accessoire Roger « BG30 (série) ».", "Deux portails coulissants opposés : voir la fiche accessoire Roger « MASTER / SLAVE (B70/1DC, B70/1DCHP) » (notice IS305).", 
         "Sécurités absentes : shunter sur COM (30 pour FT1 / FT2, 16 pour COS1 / COS2 / ST) ou les désactiver par les paramètres 50, 51, 53, 54, 73, 74. La carte ne se déplace pas avec une sécurité ouverte.",
         "Puissance absorbée nominale : BG30/1603-1604 185 W · 2203-2204 150 W · 1003-1004/HS 180 W · 1404/R 160 W · 1804/HS 150 W · 1504/HS 155 W · 803-804/HS 185 W. Puissance de démarrage de 470 W à 650 W selon le modèle.",
         "Puissances max : clignotant 25 W, courtoisie 100 W (230 V~) / 40 W (24 V), voyant portail ouvert 3 W, accessoires 20 W. Température de fonctionnement −20 à +55 °C.",
@@ -16160,7 +16164,7 @@ const MARQUES = [
         ]}
       ],
       fusibles: "F1 F3,15 A (5x20) accessoires · F2 F15 A (5x20) circuit de puissance moteurs · F3 T1 A (5x20) primaire transformateur",
-      notes: ["Moteurs BE20 : caractéristiques, raccordement et montage dans la fiche accessoire Roger « BE20 (série) ».", 
+      notes: ["Vérin MONOS4 : caractéristiques, cotes et raccordement dans la fiche accessoire Roger « MONOS4 ».", "AYRON : caractéristiques, cotes des bras, arrêts mécaniques et raccordement dans la fiche accessoire Roger « AYRON ».", "Moteurs BE20 : caractéristiques, raccordement et montage dans la fiche accessoire Roger « BE20 (série) ».", 
         "Sécurités absentes : shunter sur COM ou les désactiver par paramètres 50, 51, 53, 54, 73.",
         "Même type de moteur obligatoire sur les deux vantaux.",
         "Photocellules conseillées : R90/F4ES, G90/F4ES ou T90/F4S.",
@@ -18312,7 +18316,9 @@ const MARQUES = [
         }
       ],
       "fusibles": "F1 20 A (ATO257) puissance moteurs · F2 4 A (ATO257) électroserrure · F3 3 A (ATO257) accessoires · F4 T2A (5x20) transformateur",
-      "notes": ["Moteurs SMARTY et BE20 : caractéristiques, raccordement et montage dans les fiches accessoires Roger « SMARTY (série) » et « BE20 (série) ».", 
+      "notes": [
+        "Moteurs à bras BH23 : caractéristiques, cotes et arrêts mécaniques dans la fiche accessoire Roger « BH23 ».",
+        "Moteurs enterrés BR21 : caractéristiques, caisse FU, raccordement (blanc Z, vert Y, rouge X) et déblocage dans la fiche accessoire Roger « BR21 / R21 ».","Moteurs SMARTY et BE20 : caractéristiques, raccordement et montage dans les fiches accessoires Roger « SMARTY (série) » et « BE20 (série) ».", 
         "Sécurités absentes : shunter sur COM ou les désactiver par paramètres 50, 51, 53, 54, 73, 74.",
         "Même type de moteur obligatoire sur les deux vantaux.",
         "Photocellules conseillées : R90/F4ES, G90/F4ES ou T90/F4S.",

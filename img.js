@@ -48,6 +48,44 @@
       S("roger-be20-p05", "Dimensions et abaques poids / longueur", 5, "Cotes et diagrammes d'utilisation BE20/200, BE20/200/HS et BE20/400."),
       S("roger-be20-p11", "Raccordements électriques", 11, "Bornier X · Y · Z, câble 3 × 2,5 mm² vers B70/2ML ou EDGE1.")
     ],
+    "roger-ayron": [
+      S("roger-ayron-p14", "Installation type et abaque", 14, "Câbles conseillés, dimensions et poids maxi selon la longueur."),
+      S("roger-ayron-p15", "Caractéristiques", 15, "Tableau AY/250/M et AY/250/S, étiquette."),
+      S("roger-ayron-p17", "Cotes d'installation", 17, "Bras LT336, LT337, LT338 et plaques KT218 / KT249."),
+      S("roger-ayron-p20", "Arrêts mécaniques", 20, "Réglage des butées en ouverture et fermeture."),
+      S("roger-ayron-p22", "Raccordement B70/2ML", 22, "Secteur, moteurs X · Y · Z et bornier accessoires.")
+    ],
+    "roger-bh23": [
+      S("roger-bh23-p04", "Caractéristiques et abaque", 4, "Tableau technique, dimensions et poids maxi selon la longueur."),
+      S("roger-bh23-p05", "Installation type", 5, "Câbles conseillés."),
+      S("roger-bh23-p06", "Cotes d'installation", 6, "Bras court LT302 (tableau 1) et bras à glissière LT338 (tableau 2)."),
+      S("roger-bh23-p11", "Arrêts mécaniques et raccordement", 11, "Réglage des arrêts (moteur à gauche) et passage du câble.")
+    ],
+    "roger-monos4": [
+      S("roger-monos4-p05", "Dimensions et abaque", 5, "Encombrement et poids maxi selon la longueur du vantail."),
+      S("roger-monos4-p06", "Installation type", 6, "Câbles conseillés."),
+      S("roger-monos4-p07", "Cotes d'installation", 7, "Tableau A, B, C, D, E, F et angle maxi (course 400 mm)."),
+      S("roger-monos4-p10", "Raccordement", 10, "Passage et branchement du câble 3 × 2,5 mm².")
+    ],
+    "roger-br21": [
+      S("roger-br21-p09", "Dimensions", 9, "Caisse de fondation et motoréducteur BR21 / R21."),
+      S("roger-br21-p10", "Abaque poids / longueur", 10, "Poids maxi selon la longueur du vantail, avec et sans leviers LT300."),
+      S("roger-br21-p12", "Pose de la caisse", 12, "Caisse de fondation : cotes et mise en place."),
+      S("roger-br21-p16", "Arrêts mécaniques", 16, "Excentrique hexagonal en ouverture, boulon en fermeture."),
+      S("roger-br21-p17", "Raccordement BR21 → EDGE1", 17, "Blanc Z, vert Y, rouge X."),
+      S("roger-br21-p19", "Raccordement R21 → H70/200AC et déblocage", 19, "Commun gris au neutre, condensateur ; déblocages RL650 / RL651.")
+    ],
+    "roger-bm30": [
+      S("roger-bm30-p05", "Dimensions et installation type", 5, "Cotes du BM30 et tableau des câbles conseillés."),
+      S("roger-bm30-p06", "Plaque de fondation", 6, "Contrôles préliminaires et pose de la plaque de fondation."),
+      S("roger-bm30-p09", "Fixation de la crémaillère", 9, "Crémaillère module 4 et jeu pignon / crémaillère."),
+      S("roger-bm30-p10", "Fins de course", 10, "Brides R / L, fins de course magnétiques (8 mm, 10 mm maxi) et arrêt 40 à 80 mm avant la butée.")
+    ],
+    "roger-bg30": [
+      S("roger-bg30-p06", "Dimensions et installation type", 6, "Cotes du BG30 et tableau des câbles conseillés."),
+      S("roger-bg30-p10", "Crémaillère et fins de course", 10, "Fixation de la crémaillère module 4 et des brides de fin de course mécaniques / magnétiques."),
+      S("roger-bg30-p11", "Fins de course magnétiques", 11, "Distances aimant / capteur et arrêt 40 à 80 mm avant la butée.")
+    ],
     "roger-bh30": [
       S("roger-bh30-p05", "Dimensions et installation type", 5, "Cotes du BH30 et tableau des câbles conseillés."),
       S("roger-bh30-p09", "Crémaillère et fins de course", 9, "Fixation de la crémaillère module 4 et des brides de fin de course mécaniques / magnétiques."),

@@ -2709,7 +2709,648 @@
         "Fin de vie : à désinstaller par un technicien qualifié ; ne pas jeter avec les déchets ménagers.",
         "Coupe de la barre résistive (RS, RSTX) : la version italienne dit « par la partie supérieure », une phrase de la version française dit « par la partie inférieure ». Repris sans être tranché : suivre le schéma (onglet Schéma)."
       ]
-    }
+    },
+  {
+    "id": "roger-bg30",
+    "nom": "BG30 (série)",
+    "marque": "Roger",
+    "couleur": "#5b4aa8",
+    "categorie": "Motoréducteur coulissant brushless (motorisation)",
+    "modeles": "BG30/1603 · BG30/1604 · BG30/2203 · BG30/2204 · BG30/1003/HS · BG30/1004/HS · BG30/1404/R (réversible) · BG30/1804/HS · BG30/1504/HS · BG30/803/HS · BG30/804/HS (+ versions /115) — centrale B70/1DCHP",
+    "source": "Notice Roger BG30 IS141 Rev.19 (version française)",
+    "resume": "Motoréducteur brushless basse tension (36 V) pour portail coulissant lourd, encodeur natif, centrale numérique B70/1DCHP à bord. Vantail de 800 à 2200 kg selon le modèle, course jusqu'à 25 m. Modèles en …03 : fin de course mécanique à microrupteur ; en …04 : fin de course magnétique.",
+    "specs": [
+      [
+        "Alimentation réseau",
+        "230 V~ 50/60 Hz ; 115 V~ 50/60 Hz pour les versions /115"
+      ],
+      [
+        "Tension fournie au moteur",
+        "36 V~, fréquence variable (commande FOC avec encodeur haute résolution)"
+      ],
+      [
+        "Type",
+        "Irréversibles, sauf BG30/1404/R réversible · HS = High Speed"
+      ],
+      [
+        "Fin de course",
+        "…03 (1603, 2203, 1003/HS, 803/HS) : mécanique à microrupteur · …04 (1604, 2204, 1004/HS, 1404/R, 1804/HS, 1504/HS, 804/HS) : magnétique"
+      ],
+      [
+        "Poids maxi du vantail",
+        "1603/1604 : 1600 kg · 2203/2204 : 2200 kg · 1003/1004 HS : 1000 kg · 1404/R : 1400 kg · 1804/HS : 1800 kg · 1504/HS : 1500 kg · 803/804 HS : 800 kg"
+      ],
+      [
+        "Longueur de course maxi",
+        "25 m"
+      ],
+      [
+        "Vitesse de coulissement",
+        "1603/1604 et 2203/2204 : 5,7 – 12 m/min · 1003/1004 HS : 5,7 – 20 · 1404/R : 5,7 – 17 · 1804/HS : 5,7 – 20 · 1504/HS : 5,7 – 25 · 803/804 HS : 5,7 – 30 m/min"
+      ],
+      [
+        "Puissance absorbée nominale / démarrage",
+        "1603-1604 185 / 530 W · 2203-2204 150 / 570 W · 1003-1004 HS 180 / 590 W · 1404/R 160 / 540 W · 1804/HS 150 / 600 W · 1504/HS 155 / 550 W · 803-804 HS 185 / 620 W"
+      ],
+      [
+        "Force de démarrage",
+        "1770 / 2400 / 1170 / 1150 / 1540 / 1190 / 1080 N (même ordre)"
+      ],
+      [
+        "Force maxi (S3 40 %) / nominale (S1 100 %)",
+        "650 / 340 N · 850 / 310 N · 350 / 210 N · 460 / 290 N · 440 / 210 N · 380 / 250 N · 300 / 230 N (même ordre)"
+      ],
+      [
+        "Pignon de sortie",
+        "Z17 module 4 (1603-1604, 2203-2204, 1003-1004 HS, 1404/R, 1804/HS) · Z20 module 4 (1504/HS, 803-804 HS), d'après la disposition du tableau"
+      ],
+      [
+        "Pente maximale admissible",
+        "0,5 %"
+      ],
+      [
+        "Usage, cycles",
+        "Intensif (à la force nominale) · 500 000 cycles testés en interne (portail de 5 m à 20 °C, ce n'est pas la valeur maxi)"
+      ],
+      [
+        "Consommation en veille, protection, température",
+        "≤ 0,5 W · IP44 · −20 °C à +55 °C · < 70 dB(A)"
+      ],
+      [
+        "Poids de l'opérateur",
+        "1603 13,6 · 1604 13,8 · 2203 14 · 2204 14,3 · 1003/HS 13,8 · 1004/HS 13,3 · 1404/R 14,3 · 1804/HS 14,4 · 1504/HS 14,5 · 803/HS 14,7 · 804/HS 14,2 kg"
+      ],
+      [
+        "Déblocage",
+        "Force à appliquer : 155 N"
+      ]
+    ],
+    "raccordement": [
+      {
+        "n": "L · N · ⏚",
+        "label": "Alimentation secteur",
+        "desc": "Câble H07RN-F 3G1,5 mm² : L (marron), N (bleu), terre (jaune / vert). Dégainer seulement au niveau de la borne et bloquer avec le serre-câble. Interrupteur omnipolaire (≥ 3 mm) et différentiel 0,03 A en amont."
+      },
+      {
+        "n": "Tension",
+        "label": "Contrôle au voltmètre",
+        "desc": "La tension secteur doit être de 230 V~ (115 V~) ± 10 % ; sinon l'automatisme ne peut pas fonctionner correctement."
+      },
+      {
+        "n": "Séparation",
+        "label": "Câblage",
+        "desc": "Secteur 230 V~ et accessoires 24 V (SELV) sur des parcours séparés ; câbles à double isolement ; passer les câbles par le passe-câble fourni."
+      },
+      {
+        "n": "Accessoires",
+        "label": "Câbles conseillés (installation type)",
+        "desc": "Photocellules F4ES / F4S : TX 3 × 0,5 mm², RX 5 × 0,5 mm² (20 m max) · clignotant FIFTHY/24 2 × 1 mm² (10 m max) · antenne RG58 (10 m max) · R85/60 3 × 0,5 mm² (20 m max) · H85/TTD – H85/TDS 2 × 0,5 mm² (30 m max) · bord sensible · récepteur radio CS/RX. Raccordements et essai : manuel de la B70/1DCHP."
+      }
+    ],
+    "installation": [
+      "Contrôles : structure solide, vantail stable (pas de déraillement ni de chute latérale), rail fixé au sol sans irrégularités, roues en bon état et graissées ; moteur déverrouillé, le portail ne doit pas bouger seul quelle que soit sa position. Pente maximale admissible : 0,5 %.",
+      "Plaque de fondation : plateforme béton avec plaque noyée, à niveau et propre, aux cotes de la figure ; respecter les cotes entre plaque [B] et crémaillère [A]. Visser les 4 écrous 12MA sur les tirants, les passer dans la plaque et les bloquer. Gaines électriques par le trou de droite (vue face interne). L'automatisme se monte à droite ou à gauche.",
+      "Motoréducteur : retirer le couvercle (vis puis tirer vers le haut), vérifier que les 6 pieds de réglage ne dépassent pas ; joints O-Ring sur les vis M10 × 40 dans les angles, écrous M10 ; poser le BG30 sur les 4 tirants, régler horizontalement (glissement sur la plaque) et verticalement (6 pieds) en tenant compte de la crémaillère ; serrer les écrous M12 (clé fixe de 19) ; remettre le couvercle.",
+      "Crémaillère module 4 : moteur débloqué, portail ouvert, poser la crémaillère sur le pignon et la fixer sur toute la longueur en faisant coulisser le portail ; vérifier à la main un coulissement sans frottement, puis rebloquer le moteur.",
+      "Fins de course : portail en ouverture complète puis en fermeture complète, fixer les brides sur la crémaillère dans le bon sens. Mécaniques : R = droit, L = gauche. Magnétiques : flèches vers le centre de la crémaillère ; l'aimant se règle de 8 mm maxi ; 10 mm au maximum entre aimant et brides.",
+      "Après quelques manœuvres, ajuster les brides pour que le portail s'arrête 40 à 80 mm avant la butée mécanique (variable selon poids, frottements, centrale, météo). Ne jamais laisser le portail aller en butée.",
+      "Raccordements et apprentissage : voir la fiche de la carte B70/1DCHP."
+    ],
+    "notes": [
+      "Déblocage manuel (sans tension secteur, batteries débranchées, moteur arrêté) : tourner la trappe cache-serrure, introduire la clé et la tourner de 90° sens horaire, ouvrir entièrement la trappe de déblocage, déplacer le vantail. Rebloquer : abaisser la trappe avec la clé introduite (attention aux doigts), clé 90° sens inverse, la retirer et refermer la trappe.",
+      "Noms des modèles : cette notice utilise BG30/1603, 1604, 2203, 2204, 1003/HS, 1004/HS, 1404/R, 1804/HS, 1504/HS, 803/HS, 804/HS ; la notice de la centrale B70/1DCHP (IS142) parle de BG30/1600, 2200, 1000/HS, 1400/R, 1800/HS, 1500/HS (ou 1504/HS) et 804/HS. Repris tels quels.",
+      "Versions 115 V citées par la note (*) du tableau : BG30/1603/HS/115, 2203/HS/115, 1003/HS/115, 803/HS/115, 804/HS/115.",
+      "Deux portails coulissants opposés : voir la fiche « MASTER / SLAVE (B70/1DC, B70/1DCHP) ».",
+      "Étiquette : IN = numéro progressif dans l'année ; BC = année (2 premiers chiffres) et semaine (2 derniers) de fabrication."
+    ]
+  },
+  {
+    "id": "roger-bm30",
+    "nom": "BM30 (série)",
+    "marque": "Roger",
+    "couleur": "#5b4aa8",
+    "categorie": "Motoréducteur coulissant brushless (motorisation)",
+    "modeles": "BM30/403 · BM30/303/HS · BM30/304/HS (+ versions /115) — centrale B70/1DC",
+    "source": "Notice Roger BM30 IS169 Rev.13 (version française)",
+    "resume": "Motoréducteur brushless basse tension (24 V) irréversible pour portail coulissant jusqu'à 500 kg (BM30/403) ou 400 kg en High Speed (BM30/303/HS, /304/HS), encodeur natif, centrale numérique B70/1DC à bord, course jusqu'à 12 m.",
+    "specs": [
+      [
+        "Alimentation réseau",
+        "230 V~ 50/60 Hz ; 115 V~ 50/60 Hz pour BM30/403/115 et BM30/303/HS/115"
+      ],
+      [
+        "Tension fournie au moteur",
+        "24 V~, fréquence variable (commande FOC avec encodeur haute résolution)"
+      ],
+      [
+        "Type",
+        "Irréversible (les trois modèles) · HS = High Speed"
+      ],
+      [
+        "Fin de course",
+        "BM30/403 et BM30/303/HS : mécanique · BM30/304/HS : magnétique (voir Notes, la description varie selon la langue)"
+      ],
+      [
+        "Poids maxi du vantail",
+        "BM30/403 : 500 kg · BM30/303/HS et /304/HS : 400 kg"
+      ],
+      [
+        "Longueur de course maxi",
+        "12 m"
+      ],
+      [
+        "Vitesse de coulissement",
+        "BM30/403 : 7,4 – 12 m/min · BM30/303/HS et /304/HS : 10 – 20 m/min"
+      ],
+      [
+        "Puissance maxi absorbée / de démarrage",
+        "BM30/403 : 140 / 240 W · HS : 140 / 210 W"
+      ],
+      [
+        "Force de démarrage",
+        "BM30/403 : 610 N · HS : 280 N"
+      ],
+      [
+        "Force maxi (S3 40 %)",
+        "BM30/403 : 300 N (à 1200 tr/min) · HS : 120 N (à 1100 tr/min)"
+      ],
+      [
+        "Force nominale (S1 100 %)",
+        "BM30/403 : 135 N (à 1200 tr/min) · HS : 145 N (à 750 tr/min)"
+      ],
+      [
+        "Pignon de sortie",
+        "Z15 module 4"
+      ],
+      [
+        "Pente maximale admissible",
+        "0,5 %"
+      ],
+      [
+        "Usage, cycles",
+        "Intensif (à la force nominale) · 200 000 cycles testés en interne (portail de 5 m à 20 °C, ce n'est pas la valeur maxi)"
+      ],
+      [
+        "Consommation en veille, protection, température",
+        "≤ 0,5 W · IP44 · −20 °C à +55 °C · < 70 dB(A)"
+      ],
+      [
+        "Dimensions",
+        "290 (H) × 250 (L) × 165 (P) mm"
+      ],
+      [
+        "Poids de l'opérateur",
+        "BM30/403 : 11,3 kg · HS : 10,8 kg"
+      ],
+      [
+        "Déblocage",
+        "Force à appliquer : 130 N"
+      ]
+    ],
+    "raccordement": [
+      {
+        "n": "L · N · ⏚",
+        "label": "Alimentation secteur",
+        "desc": "Câble H07RN-F 3G1,5 mm² : L (marron), N (bleu), terre (jaune / vert). Dégainer seulement au niveau de la borne et bloquer avec le serre-câble. Interrupteur omnipolaire (≥ 3 mm) et différentiel 0,03 A en amont."
+      },
+      {
+        "n": "Tension",
+        "label": "Contrôle au voltmètre",
+        "desc": "La tension secteur doit être de 230 V~ (115 V~) ± 10 % ; sinon l'automatisme ne peut pas fonctionner de manière efficace."
+      },
+      {
+        "n": "Séparation",
+        "label": "Câblage",
+        "desc": "Secteur 230 V~ et accessoires 24 V (SELV) sur des parcours séparés ; câbles à double isolement, bloqués par des colliers (non fournis) ; passer les câbles par le passe-câble fourni."
+      },
+      {
+        "n": "Accessoires",
+        "label": "Câbles conseillés (installation type)",
+        "desc": "Photocellules F4ES / F4S : TX 3 × 0,5 mm², RX 5 × 0,5 mm² (20 m max) · clignotant FIFTHY/24 2 × 1 mm² (10 m max) · antenne 50 Ω RG58 (10 m max) · R85/60 3 × 0,5 mm² (20 m max) · H85/TTD – H85/TDS 2 × 0,5 mm² (30 m max) · bord sensible · récepteur radio CS/RX. Raccordements et essai : manuel de la B70/1DC."
+      }
+    ],
+    "installation": [
+      "Contrôles : structure solide, vantail stable (pas de déraillement ni de chute latérale), rail solidement fixé au sol sans irrégularités et pente ≤ 0,5 %, roues en bon état et lubrifiées ; butées mécaniques d'arrêt en ouverture et fermeture fixées au sol avec élément élastique (caoutchouc) ; moteur déverrouillé, le portail ne doit pas bouger seul quelle que soit sa position.",
+      "Plaque de fondation : visser les 4 écrous 10MA sur les tirants fournis sur toute la longueur du filetage, introduire les tirants dans les 4 trous de la plaque et les bloquer. Plateforme béton avec plaque noyée, à niveau et propre, aux cotes de la figure ; respecter les cotes entre plaque [B] et crémaillère [A]. Gaines électriques par le trou de droite (vue face interne). L'automatisme se monte à droite ou à gauche.",
+      "Motoréducteur : dévisser les vis du couvercle et le retirer vers le haut ; vérifier que les 6 pieds de réglage ne dépassent pas de la base ; joints O-Ring sur les vis M8 × 40 dans les angles, bloquées par écrous M8 ; poser le BM30 sur les 4 tirants (desserrer les écrous de la plaque si besoin) ; réglage horizontal en le faisant coulisser sur les ouvertures de la plaque, réglage vertical selon la crémaillère ; serrer les écrous surélevés M8.",
+      "Crémaillère module 4 : moteur débloqué, portail en ouverture, poser la crémaillère sur le pignon et la fixer sur toute la longueur en faisant coulisser le portail (élément de raccord conseillé entre deux pièces). Jeu entre pignon et crémaillère : « au moins 1/2 mm » dans le texte français, 1 – 2 mm dans les autres langues et sur la figure 5 ; régler la hauteur du moteur ou de la crémaillère si besoin. Vérifier à la main un coulissement sans frottement, puis bloquer définitivement le moteur.",
+      "Fins de course : portail en ouverture complète puis en fermeture complète, fixer les brides sur la crémaillère dans le bon sens. Mécaniques : R = droit, L = gauche. Magnétiques : flèches vers le centre de la crémaillère ; l'aimant se règle de 8 mm maxi en desserrant les deux vis ; 10 mm au maximum entre aimant et brides.",
+      "Après quelques manœuvres, ajuster les brides pour que le portail s'arrête 40 à 80 mm avant la butée mécanique (variable selon poids, frottements, centrale, météo). Ne jamais laisser le portail aller en butée.",
+      "Raccordements et apprentissage : voir la fiche de la carte B70/1DC."
+    ],
+    "notes": [
+      "Déblocage manuel (sans tension secteur, batteries débranchées, moteur arrêté) : tourner la trappe cache-serrure, introduire la clé et la tourner de 90° sens horaire, ouvrir entièrement la trappe de déblocage, déplacer le vantail. Rebloquer : abaisser la trappe avec la clé introduite (attention aux doigts), clé 90° sens inverse, la retirer et refermer la trappe.",
+      "Type de fin de course, la notice se contredit selon la langue : BM30/403 « fin de course magnétique » en italien mais « mécanique » en anglais, allemand, français, espagnol et portugais ; BM30/304/HS « finecorsa meccanico » en italien, « magnétique » dans les autres langues (le français dit « magnétique à microrupteur »). La fiche suit la version française.",
+      "Noms des modèles : cette notice utilise BM30/403, /303/HS et /304/HS ; la notice de la centrale B70/1DC parle de BM30/400 et BM30/300/HS (paramètre A1 = 04 / 05).",
+      "Vitesse High Speed : la notice BM30 donne 10 – 20 m/min ; le paramètre 40 de la B70/1DC indique 10 → 24 m/min pour le High Speed. Repris tels quels.",
+      "Deux portails coulissants opposés : voir la fiche « MASTER / SLAVE (B70/1DC, B70/1DCHP) ».",
+      "Étiquette : IN = numéro progressif dans l'année ; BC = année (2 premiers chiffres) et semaine (2 derniers) de fabrication."
+    ]
+  },
+  {
+    "id": "roger-br21",
+    "nom": "BR21 / R21 (série, enterré)",
+    "marque": "Roger",
+    "couleur": "#5b4aa8",
+    "categorie": "Motoréducteur enterré pour portail battant (motorisation)",
+    "modeles": "Brushless 36 V : BR21/351 · BR21/351/HS · BR21/361 · BR21/361/HS · BR21/362 (centrale EDGE1) — 230 V : R21/351 · R21/351SUB · R21/361 · R21/362 · R21/362SUB (centrale H70/200AC) — caisses FU100 à FU103",
+    "source": "Notice Roger BR21 / R21 / FU IS301 Rev.03 (version française)",
+    "resume": "Motoréducteur enterré irréversible pour portail battant, posé dans une caisse de fondation FU. BR21 : brushless 36 V avec encodeur, centrale EDGE1. R21 : 230 V~, centrale H70/200AC. 351 = câble de 2 m, 361/362 = câble de 10 m, 362 = version tandem à double roulement, SUB = résistant à l'eau.",
+    "specs": [
+      [
+        "Alimentation réseau",
+        "BR21 : 230 V~ 50 Hz ; 115 V~ 60 Hz · R21 : 230 V~ 50 Hz"
+      ],
+      [
+        "Tension moteur",
+        "BR21 : 36 V~ fréquence variable (FOC, sensorless) · R21 : 230 V~ avec régulation de tension (TRIAC)"
+      ],
+      [
+        "Type",
+        "Irréversible (toutes versions)"
+      ],
+      [
+        "Longueur maxi du vantail",
+        "BR21/351 et /361 : 4,5 m · BR21/351/HS et /361/HS : 3 m · BR21/362 : 5 m · R21 (toutes) : 3,5 m"
+      ],
+      [
+        "Poids maxi du vantail",
+        "BR21/351 et /361 : 800 kg · BR21 HS : 400 kg · BR21/362 : 1000 kg · R21 : non indiqué dans le tableau (voir l'abaque poids / longueur)"
+      ],
+      [
+        "Temps d'ouverture",
+        "BR21 standard et 362 : 19 – 29 s · BR21 HS : 10 – 25 s · R21 : 18 s (90° en 18 s)"
+      ],
+      [
+        "Couple de démarrage",
+        "BR21 standard et 362 : 350 Nm · BR21 HS : 280 Nm · R21 : 450 Nm"
+      ],
+      [
+        "Couple maxi (S3)",
+        "BR21 standard et 362 : 315 Nm (S3 60 %, 3,5 °/s) · BR21 HS : 190 Nm (S3 70 %, 6,3 °/s)"
+      ],
+      [
+        "Couple nominal",
+        "BR21 standard et 362 : 160 Nm (5,2 °/s) · BR21 HS : 140 Nm (7,3 °/s) · R21 : 300 Nm (S2 240 s et S3 25 %)"
+      ],
+      [
+        "Puissance",
+        "BR21 : démarrage 265 W (HS 295 W), nominale 150 W (HS 160 W) · R21 : démarrage 690 W, nominale absorbée 520 W"
+      ],
+      [
+        "Ouverture standard",
+        "R21 : 105° · leviers en option : LT300 125°, LT301 / LT301/R 360°, LT300/90SX – /90DX 103°"
+      ],
+      [
+        "Cycles",
+        "BR21 : 500 000 testés (vantail 2,5 m, 20 °C), 1300 cycles / jour, usage intensif · R21 : 30 000 testés (vantail 3,5 m, 20 °C) · ce ne sont pas des valeurs maxi"
+      ],
+      [
+        "Protection, température, bruit",
+        "IP67 · −20 °C à +55 °C · < 70 dB(A) · R21 : thermoprotection moteur 150 °C"
+      ],
+      [
+        "Poids de l'opérateur",
+        "BR21/351 12,1 · 351/HS 12,3 · 361 13,7 · 361/HS 13,9 · 362 14,4 kg · R21/351 13,1 · 351SUB 13,6 · 361 14 · 362 14,9 · 362SUB 15,1 kg"
+      ],
+      [
+        "Déblocage",
+        "Force 130 N · système RL650 (levier) ou RL651 (clé personnalisée) à acheter séparément ; levier long RL663"
+      ],
+      [
+        "Dimensions",
+        "Moteur 354 × 224 × 144 mm (entraxe fixations 238 × 200) · caisse 415 × 340 mm, hauteur 166 mm (221 avec le levier)"
+      ]
+    ],
+    "raccordement": [
+      {
+        "n": "Z · Y · X",
+        "label": "BR21 → EDGE1 (moteur brushless)",
+        "desc": "Fil blanc → Z, vert → Y, rouge → X. La notice indique qu'il n'est pas nécessaire de raccorder la terre."
+      },
+      {
+        "n": "COM · F1 · F2",
+        "label": "R21 → H70/200AC (230 V)",
+        "desc": "Gris = commun (COM), noir = phase 1, marron = phase 2, jaune / vert = terre, condensateur entre les deux phases. Le commun (gris) doit être relié au neutre de l'alimentation."
+      },
+      {
+        "n": "Câble",
+        "label": "Câble moteur",
+        "desc": "Interdit de couper le câble du moteur (risque d'humidité) : le raccorder dans une boîte de dérivation extérieure, connexion étanche obligatoire si elle est enterrée. Câble non remplaçable (voir pièces détachées). Le protéger sur toute sa longueur, de la caisse jusqu'à la centrale ; fixer les conducteurs près des bornes et ne les dénuder qu'au niveau des bornes."
+      },
+      {
+        "n": "Encodeur",
+        "label": "R21 avec encodeur R21/ENC/2 ou /10",
+        "desc": "Voir la notice de l'encodeur ; deux conduits séparés, un pour le 230 V et un pour la très basse tension (SELV) de l'encodeur."
+      }
+    ],
+    "installation": [
+      "Contrôles : structure solide, gonds bien graissés, mouvement fluide sans frottements ; toujours une butée mécanique d'arrêt en ouverture et en fermeture fixée au sol, avec élément élastique (caoutchouc).",
+      "Caisse de fondation (droite ou gauche indifféremment) : préparer l'excavation ; axe de la caisse aligné sur la charnière du portail ; prévoir l'évacuation d'eau (un mauvais drainage peut endommager le moteur) et un conduit pour les câbles ; noyer la caisse dans le béton parfaitement à niveau, bord supérieur 5 à 6 mm au-dessus du sol ; respecter les cotes entre caisse et pilier.",
+      "Portail : souder soigneusement le levier [3] au vantail, aligné sur la charnière supérieure (pas près des trous filetés du support de déverrouillage [4]) ; graisser les axes de rotation de la caisse ; monter le levier d'entraînement [1], la bille [2] puis la bride [3] soudée au portail.",
+      "Moteur : nettoyer le fond de la caisse (terre, ciment), dévisser écrous et rondelles des axes, poser le motoréducteur en respectant le sens et le type d'installation, le fixer avec écrous et rondelles.",
+      "Arrêts mécaniques obligatoires : en ouverture, tourner l'excentrique hexagonal [1] dans l'une des 6 positions et bloquer avec la vis [2] ; en fermeture, visser / dévisser le boulon [3].",
+      "Vent fort : les limites d'utilisation peuvent être réduites. Avec le groupe leviers LT300 (125°), les limites de poids sont plus basses (zone * de l'abaque).",
+      "Électroserrure conseillée si le vantail dépasse 2,5 m (vantail normal), 2 m (vantail plein) ou 2 m de hauteur.",
+      "Raccordements et apprentissage : fiche EDGE1 (BR21) ; la H70/200AC (R21) n'a pas de fiche dans l'appli."
+    ],
+    "notes": [
+      "Déblocage (sans tension, batteries débranchées, moteur arrêté). RL650 : retirer le bouchon, introduire le levier, le tourner d'environ 120° vers le centre du portail, déplacer le portail ; pour rebloquer, portail ouvert, ramener le levier vers les gonds en position initiale et refermer le bouchon. RL651 : introduire la clé, la tourner d'environ 90° vers le centre du portail sans la retirer, tirer le levier jusqu'à l'ouverture complète, déplacer le portail ; pour rebloquer, ramener le levier, clé 90° vers les gonds, refermer. Le raccrochage se fait seul aux manœuvres suivantes.",
+      "Centrale EDGE1 : paramètre A1 = 04 pour BR21/351-361-362, 10 pour BR21/351-361/HS (voir la fiche EDGE1).",
+      "BR21 : la notice dit qu'il n'est pas nécessaire de raccorder la terre, mais le schéma montre un repère de terre (TERRA / GROUND) sur le moteur. Repris tel quel.",
+      "Un code R21/351SC est cité (cotes et montage du portail « à ne pas considérer pour R21/351SC ») mais n'apparaît pas dans la liste des produits.",
+      "Poids maxi : les abaques montrent un poids admissible qui baisse avec la longueur du vantail (ex. BR21/351 : 800 kg jusqu'à environ 1,5 m) ; se référer au schéma « Abaque » plutôt qu'au seul maximum.",
+      "Accessoires compatibles BR21 et R21 : caisses FU100 (acier zingué à froid), FU101 (zingué à chaud), FU102 (zingué à chaud + couvercle inox AISI 304), FU103 (tout inox AISI 304) ; LT327/SC pignon ¾ Z13 d'adaptation avec pignon ¾ Z16 ; RL650/R déblocage levier renforcé.",
+      "Étiquette : IN = numéro progressif dans l'année ; BC = année et semaine de fabrication."
+    ]
+  },
+  {
+    "id": "roger-bh23",
+    "nom": "BH23 (bras articulé)",
+    "marque": "Roger",
+    "couleur": "#5b4aa8",
+    "categorie": "Motoréducteur à bras articulé pour portail battant (motorisation)",
+    "modeles": "BH23/282 · BH23/252/HS — centrale EDGE1",
+    "source": "Notice Roger BH23 IS106 Rev.10 (version française)",
+    "resume": "Motoréducteur brushless 36 V à bras articulé, irréversible, encodeur natif, pour portail battant jusqu'à 2,8 m (BH23/282) ou 2,5 m en High Speed (BH23/252/HS), arrêts mécaniques réglables en ouverture et en fermeture, bras courts en version standard.",
+    "specs": [
+      [
+        "Alimentation moteur",
+        "36 V~ (centrale EDGE1)"
+      ],
+      [
+        "Type",
+        "Irréversible"
+      ],
+      [
+        "Longueur maxi du vantail",
+        "BH23/282 : 2,8 m · BH23/252/HS : 2,5 m"
+      ],
+      [
+        "Poids maxi du vantail",
+        "BH23/282 : 300 kg · BH23/252/HS : 250 kg (baisse avec la longueur, voir l'abaque)"
+      ],
+      [
+        "Puissance nominale",
+        "160 W"
+      ],
+      [
+        "Couple de démarrage / nominal",
+        "BH23/282 : 280 / 150 Nm · BH23/252/HS : 230 / 120 Nm"
+      ],
+      [
+        "Vitesse",
+        "BH23/282 : 1,9 – 1 cm/s · BH23/252/HS : 4 – 1,5 cm/s (valeurs telles qu'écrites)"
+      ],
+      [
+        "Temps d'ouverture",
+        "BH23/282 : 12 – 20 s · BH23/252/HS : 10 – 18 s"
+      ],
+      [
+        "Cycles testés",
+        "BH23/282 : 1900 · BH23/252/HS : 1200 (portail de 2,5 m à +25 °C, ce n'est pas la valeur maxi)"
+      ],
+      [
+        "Usage, protection, température",
+        "Intensif (au couple nominal) · IP44 · −20 °C à +55 °C · < 70 dB(A)"
+      ],
+      [
+        "Dimensions, poids",
+        "284 (H) × 230 × 190 mm · BH23/282 12,1 kg · BH23/252/HS 12 kg"
+      ],
+      [
+        "Déblocage",
+        "Force 130 N · déblocage extérieur par cordon RL671 en option"
+      ]
+    ],
+    "raccordement": [
+      {
+        "n": "Moteur",
+        "label": "Câble BH23 → EDGE1",
+        "desc": "3 × 2,5 mm² (10 m maxi) ou 3 × 4 mm² (30 m maxi) d'après le tableau ; le schéma de raccordement (fig. 8) indique « 4x2.5 ». Raccordement et essai : voir la fiche EDGE1. Poser le bouchon fourni sur le trou opposé au passage des câbles."
+      },
+      {
+        "n": "⏚",
+        "label": "Terre",
+        "desc": "La notice indique qu'il n'est pas nécessaire de raccorder la terre."
+      },
+      {
+        "n": "EDGE1",
+        "label": "Alimentation de la centrale",
+        "desc": "H07RN-F 2 × 1,5 mm²."
+      },
+      {
+        "n": "Accessoires",
+        "label": "Câbles conseillés (installation type)",
+        "desc": "Photocellules F4ES / F4S : TX 3 × 0,5 mm², RX 5 × 0,5 mm² (20 m max) · FIFTHY/24 2 × 1 mm² (10 m max) · antenne 50 Ω RG58 (10 m max) · R85/60 3 × 0,5 mm² (20 m max) · H85/TTD – H85/TDS 2 × 0,5 mm² (30 m max) · bord sensible · récepteur CS/RX."
+      }
+    ],
+    "installation": [
+      "Étrier arrière KT209 : à niveau, aux cotes des tableaux ; chevilles et vis adaptées sur pilier maçonné, soudé sur pilier en fer.",
+      "Étrier avant KT218 : portail entièrement fermé, en respectant les cotes, si possible au centre du portail et au niveau d'une traverse solide, à niveau avec le vantail.",
+      "Ne pas souder les étriers avec l'actionneur monté (les courants de soudage peuvent l'endommager).",
+      "Bras court LT302 (tableau 1) : A 130 / B 50 → 90° … A 300 / B 250 → 110°, 350 à 450 mm entre pilier et fixation, ouverture maxi 170°. Bras à glissière LT338 (tableau 2) : non compatible avec le BH23/252/HS, voir sa notice. Voir le schéma « Cotes d'installation ».",
+      "Moteur : montage à droite ou à gauche (orientation fig. 4), fixé sur KT209 avec les vis fournies ; assembler les bras articulés et les fixer sur KT218 en lubrifiant les points de rotation ; vérifier à la main une course régulière sans frottements.",
+      "Arrêts mécaniques : retirer le carter, portail en ouverture maxi, régler l'arrêt d'ouverture contre la butée intérieure [A] ; idem en fermeture ; serrer fortement les vis et vérifier que le portail fonctionne librement. Les butées au sol en ouverture et fermeture doivent toujours être présentes.",
+      "Raccordements et apprentissage : fiche EDGE1 (paramètre A1 = 03 pour BH23/282, 09 pour BH23/252/HS)."
+    ],
+    "notes": [
+      "Déblocage manuel (sans tension secteur, batteries débranchées, moteur arrêté) : tourner la trappe cache-serrure, introduire la clé et la tourner de 90° sens horaire, ouvrir entièrement la trappe de déblocage, déplacer le vantail à la main. Rebloquer : abaisser la trappe avec la clé introduite (attention aux doigts), clé 90° sens inverse, la retirer et refermer la trappe.",
+      "Déblocage extérieur RL671 (option) : passer le cordon métallique gainé dans l'anneau de l'axe de déverrouillage, le sortir par le trou opposé au câble d'alimentation et le relier à une poignée (non fournie).",
+      "Le paragraphe « Arrêts mécaniques » parle de « fermoirs mécaniques intérieurs au piston » alors que le BH23 est un moteur à bras articulé. Repris tel quel.",
+      "Cycles testés 1900 / 1200 : valeurs telles qu'indiquées dans le tableau."
+    ]
+  },
+  {
+    "id": "roger-monos4",
+    "nom": "MONOS4 (vérin)",
+    "marque": "Roger",
+    "couleur": "#5b4aa8",
+    "categorie": "Vérin brushless pour portail battant (motorisation)",
+    "modeles": "MONOS4 — centrale B70/2ML",
+    "source": "Notice Roger MONOS4 IS201 Rev.11 (version française)",
+    "resume": "Vérin brushless basse tension (24 V) irréversible, encodeur natif, pour portail battant jusqu'à 4 m et 450 kg (poids admissible décroissant avec la longueur), course 400 mm. Sans fins de course ni butées internes : butées au sol obligatoires.",
+    "specs": [
+      [
+        "Alimentation",
+        "Réseau 230 V~ · moteur brushless 24 V~"
+      ],
+      [
+        "Type",
+        "Irréversible"
+      ],
+      [
+        "Longueur / poids maxi du vantail",
+        "4 m · 450 kg (abaque : environ 450 kg à 1 m, 300 kg à 2,5 m, 200 kg à 4 m)"
+      ],
+      [
+        "Puissance nominale",
+        "200 W"
+      ],
+      [
+        "Poussée",
+        "2200 N"
+      ],
+      [
+        "Vitesse",
+        "2,10 – 1,14 cm/s"
+      ],
+      [
+        "Temps d'ouverture",
+        "19 – 35 s (indicatif, dépend de l'installation)"
+      ],
+      [
+        "Course",
+        "400 mm (« arrêts mécaniques intégrés » d'après le tableau, voir Notes)"
+      ],
+      [
+        "Cycles testés",
+        "700"
+      ],
+      [
+        "Usage, protection, température",
+        "Intensif (au couple nominal) · IP44 · −20 °C à +55 °C · < 70 dB(A)"
+      ],
+      [
+        "Dimensions, poids",
+        "Fermé 818 mm (entraxe 775), ouvert 1207 mm (entraxe 1165) · hauteur 178 mm · largeur 111 mm · 5,1 kg"
+      ]
+    ],
+    "raccordement": [
+      {
+        "n": "Moteur",
+        "label": "Câble MONOS4 → B70/2ML",
+        "desc": "3 × 2,5 mm² (10 m maxi) ou 3 × 4 mm² (30 m maxi). Dévisser les 4 vis inférieures et retirer le couvercle, dévisser le passe-câble, passer le câble et le brancher au connecteur sous la coque supérieure."
+      },
+      {
+        "n": "⏚",
+        "label": "Terre",
+        "desc": "La notice dit qu'il n'est pas nécessaire de brancher la terre pour la mise en marche du MONOS4, et aussi « si nécessaire, raccorder l'automatisme à une installation de terre efficace »."
+      },
+      {
+        "n": "B70/2ML",
+        "label": "Alimentation de la centrale",
+        "desc": "H07RN-F 2 × 1,5 mm² ; interrupteur omnipolaire (≥ 3 mm) et différentiel 0,03 A en amont."
+      },
+      {
+        "n": "Accessoires",
+        "label": "Câbles conseillés (installation type)",
+        "desc": "Photocellules F4ES / F4S : TX 3 × 0,5 mm², RX 5 × 0,5 mm² (20 m max) · FIFTHY/24 2 × 1 mm² (10 m max) · R85/60 3 × 0,5 mm² (20 m max) · H85/TTD – H85/TDS 2 × 0,5 mm² (30 m max) · bord sensible · récepteur CS/RX. Raccordements et essai : manuel B70/2ML."
+      }
+    ],
+    "installation": [
+      "Contrôles : portail robuste, gonds graissés, mouvement fluide sans frottements. Butée mécanique d'arrêt au sol en ouverture et en fermeture obligatoire, avec élément élastique (caoutchouc).",
+      "Cotes (course maxi 400 mm, vantail de 60 mm d'épaisseur pour la cote F) : A 110 / B 180 → 95° … A 160 / B 150 → 110° ; E 50, F 80 ; voir le schéma « Cotes d'installation ». A + B compatibles avec la course (sinon raccourcir l'étrier arrière, donc B) ; A et B supérieures à F d'au moins 20 à 30 mm.",
+      "Hauteur de fixation définie, étrier arrière à niveau (chevilles sur maçonnerie, soudé sur fer) ; piston débloqué, portail fermé, poser l'étrier avant aux cotes D et E, à niveau avec le vantail.",
+      "Laisser une réserve de course de 30 mm en fermeture et 15 mm en ouverture pour que la tige ne vienne pas en butée dans le tube.",
+      "Montage à droite ou à gauche ; fixer le piston aux étriers en lubrifiant les points de rotation, vis serrées en laissant le jeu nécessaire (0,3 à 0,5 mm sur le schéma) ; la pointe du piston converge vers le vantail ; vérifier à la main qu'il ne heurte ni le vantail ni le pilier et que la course est régulière.",
+      "Raccordements et apprentissage : fiche B70/2ML."
+    ],
+    "notes": [
+      "Déblocage manuel (sans tension secteur, batteries débranchées, moteur arrêté) : tourner la trappe cache-serrure, introduire la clé et la tourner de 90° sens horaire, ouvrir entièrement la trappe de déblocage, déplacer le vantail à la main. Rebloquer : abaisser la trappe avec la clé introduite (attention aux doigts), clé 90° sens inverse, la retirer et refermer la trappe.",
+      "Centrale : la notice MONOS4 indique la B70/2ML ; la notice de l'EDGE1 cite aussi le MONOS4 (paramètre A1 = 11 « BE20/400 ou MONOS4 »). Les deux sont repris tels quels.",
+      "Butées : la notice dit que le MONOS4 n'a ni fins de course électriques ni butées mécaniques internes, mais le tableau indique « Course (arrêts mécaniques intégré) 400 mm ». Prévoir de toute façon les butées au sol.",
+      "Électroserrure conseillée si le vantail dépasse 2,5 m (vantail normal), 2 m (vantail plein) ou 2 m de hauteur.",
+      "Entretien périodique : vérifier portail, fixations, oxydation, serrage des vis, lubrifier axes et gonds, contrôler sécurités, détection d'obstacles et limitation des forces (EN 12445)."
+    ]
+  },
+  {
+    "id": "roger-ayron",
+    "nom": "AYRON (bras articulé)",
+    "marque": "Roger",
+    "couleur": "#5b4aa8",
+    "categorie": "Motoréducteur à bras articulé pour portail battant (motorisation)",
+    "modeles": "AY/250/M (avec centrale B70/2ML intégrée) · AY/250/S (sans centrale) — bras vendus à part : LT336 court, LT337 long, LT338 à glissière",
+    "source": "Notice Roger AYRON IS239 Rev.01 (version française)",
+    "resume": "Motoréducteur brushless High Speed 24 V à bras articulé, irréversible, encodeur natif, pour portail battant jusqu'à 2,5 m, arrêts mécaniques en ouverture et en fermeture. Le AY/250/M contient la centrale B70/2ML (il pilote le AY/250/S du 2e vantail). Livrés sans bras articulés.",
+    "specs": [
+      [
+        "Alimentation moteur",
+        "24 V (centrale B70/2ML intégrée au AY/250/M, réseau 230 V)"
+      ],
+      [
+        "Type",
+        "Irréversible, High Speed"
+      ],
+      [
+        "Longueur maxi du vantail",
+        "2,5 m"
+      ],
+      [
+        "Poids maxi du vantail",
+        "Non indiqué dans le tableau ; abaque : environ 250 kg jusqu'à 1 m, environ 120 kg à 2,5 m"
+      ],
+      [
+        "Puissance maxi absorbée / démarrage",
+        "150 W / 350 W"
+      ],
+      [
+        "Couple",
+        "50 – 200 Nm"
+      ],
+      [
+        "Vitesse",
+        "4 – 1,5 tr/min"
+      ],
+      [
+        "Temps d'ouverture à 90°",
+        "10 à 18 s"
+      ],
+      [
+        "Cycles par jour",
+        "800 (24 h sans arrêt) · usage intensif"
+      ],
+      [
+        "Protection, température, bruit",
+        "IP43 · −20 °C à +55 °C · < 70 dB(A)"
+      ],
+      [
+        "Dimensions, poids",
+        "270 (H, + 60 mm sous le moteur) × 245 × 189 mm · AY/250/M 11,1 kg · AY/250/S 8,4 kg"
+      ],
+      [
+        "Déblocage extérieur",
+        "Kit à cordon RL673 en option"
+      ]
+    ],
+    "raccordement": [
+      {
+        "n": "L · N · ⏚",
+        "label": "Secteur (dans le AY/250/M)",
+        "desc": "Câble 3 × 1,5 mm² 230 V vers le bornier secteur avec fusible F3. Voir Notes pour la terre."
+      },
+      {
+        "n": "X · Y · Z",
+        "label": "Moteurs sur la B70/2ML",
+        "desc": "Moteur du AY/250/M et moteur du AY/250/S (2e vantail) sur les deux borniers X · Y · Z de la carte ; câble 3 × 2,5 mm² vers le AY/250/S."
+      },
+      {
+        "n": "Bouchon",
+        "label": "Passage des câbles",
+        "desc": "Poser le bouchon fourni sur le trou opposé à celui du passage des câbles."
+      },
+      {
+        "n": "Accessoires",
+        "label": "Câbles conseillés (installation type)",
+        "desc": "Photocellules TX 3 × 0,5 mm², RX 5 × 0,5 mm² · clignotant LED 2 × 1 mm² + antenne RG58 · sélecteur à clé 3 × 0,5 mm². Raccordements et essai : fiche B70/2ML."
+      }
+    ],
+    "installation": [
+      "Contrôles : portail robuste, gonds graissés, mouvement fluide sans frottements ; butée mécanique au sol en ouverture et en fermeture avec élément élastique (caoutchouc).",
+      "Étrier arrière KT249 à niveau aux cotes des tableaux (chevilles et vis sur maçonnerie ; soudé ou chevillé sur acier). Portail fermé, étrier avant KT218 à niveau, si possible au centre du portail et sur une traverse solide.",
+      "Ne pas souder les étriers avec l'actionneur monté.",
+      "Cotes : bras court LT336 (350 à 450 mm, A 130 / B 50 – 120 → 90° … A 250 / B 250 → 105°), bras long LT337 (650 à 900 mm, jusqu'à 120° avec A 250 / B 0), bras à glissière LT338 (C 300 à 440). Ouverture maxi 170° pour les bras articulés. Voir le schéma « Cotes d'installation ».",
+      "Moteur : montage à droite ou à gauche (fig. 4), fixé sur KT249 avec les vis fournies ; assembler les bras articulés et les fixer sur KT218 en lubrifiant les points de rotation ; vérifier à la main une course régulière.",
+      "Arrêts mécaniques (exemple moteur GAUCHE) : portail en ouverture maxi, visser la butée (A) à gauche du levier dans les trous les plus proches du KT249, réglage fin par les vis (B1) du levier qui doit toucher la butée ; idem en fermeture avec la butée (C) à droite du levier ; vérifier, serrer les grains (D) qui bloquent les vis (B1-B2), revisser le couvercle (E) et l'enjoliveur (F).",
+      "Raccordements et apprentissage : fiche B70/2ML (paramètre A1 = 01 série AYRON)."
+    ],
+    "notes": [
+      "Mise à la terre : la version française est écrite « il n'est nécessaire effectuer la liaison à la terre » (phrase ambiguë) ; les versions italienne, anglaise, allemande, espagnole et portugaise disent qu'elle est nécessaire avec la B70/2ML. Repris tels quels.",
+      "L'étiquette d'exemple (AY/250/M) indique 160 W et S3 35 %, le tableau 150 W et usage intensif.",
+      "Déblocage extérieur RL673 (option) : ouvrir le couvercle, passer le cordon métallique gainé dans la fente rectangulaire du KT249 et les guide-câbles, assembler selon la notice de l'accessoire, relier à une poignée existante (non fournie), vérifier et refermer.",
+      "La notice ne décrit pas la manœuvre de déblocage manuel à la clé."
+    ]
+  }
   ];
   window.ACCESSOIRES = ACCESSOIRES;
   const TABS = [["info", "Infos"], ["racc", "Raccord."], ["inst", "Installation"], ["sch", "Schéma"], ["notes", "Notes"], ["ntc", "Notice"]];
