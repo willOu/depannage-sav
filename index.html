@@ -440,16 +440,16 @@ function viewHome(){
   const nb = g => BOARDS.filter(x => genreOf(x.c) === g).length;
   let h = (window.SYNC ? SYNC.accueilHtml() : "") + `<div class="q">Quel automatisme avez-vous devant vous ?</div><div class="gen">` + GENRES.filter(g => nb(g[0])).map(g =>
     `<button onclick="go('#/g/${g[0]}')">${g[3]}${g[1]}<small>${nb(g[0])} carte${nb(g[0])>1?"s":""}</small></button>`).join("") + `</div>`;
+  h += `<h2>Ou par marque</h2><div class="bchips">` + MARQUES.map(m =>
+    m.sanslogo ? `<button class="bchip" style="--c:${m.couleur}" onclick="go('#/m/${m.id}')"><i></i>${esc(m.nom)}</button>` : `<button class="bchip logo" aria-label="${esc(m.nom)}" onclick="go('#/m/${m.id}')"><img src="icons/marques/${m.id}.png" alt="${esc(m.nom)}" height="${({afca:52,casit:36,dea:40,elka:40,doitrand:32,opera:34})[m.id]||28}"></button>`).join("") + accBrandsOnly().map(b => b.logo ? `<button class="bchip logo" aria-label="${esc(b.nom)}" onclick="go('#/ma/${b.slug}')"><img src="icons/marques/${b.slug}.png" alt="${esc(b.nom)}" height="${b.slug==="opera"?34:28}"></button>` : `<button class="bchip" style="--c:${b.couleur}" onclick="go('#/ma/${b.slug}')"><i></i>${esc(b.nom)}</button>`).join("") + `</div>`;
+  const favs = getFavs().map(x => findBoard(x) ? rowBoard(findBoard(x)) : (window.rowAccFav ? rowAccFav(x) : "")).filter(Boolean);
+  h += `<h2>★ Mes favoris</h2>` + (favs.length ? `<div class="list">` + favs.join("") + `</div>` : `<p class="note">Aucun favori. Ouvrez une fiche (carte ou accessoire) et touchez l'étoile ★ pour la retrouver ici.</p>`) + `<p class="hotn">${esc(FAV_NOTE)}</p>`;
   h += `<button class="dbtn" onclick="go('#/d')">Diagnostic guidé : trouver la panne en quelques questions<small><b>EN TEST</b> · peut contenir des erreurs ou mal fonctionner</small></button>`; /* DIAG */
   h += `<button class="dbtn" onclick="go('#/a')">Accessoires : gyrophares, radio, photocellules…<small>${ACCESSOIRES.length} fiche${ACCESSOIRES.length>1?"s":""} par famille · rubrique en construction</small></button>`; /* ACC */
   h += `<button class="dbtn" onclick="go('#/calc')">Calculs rapides : chute de tension, choix du moteur, conso 24 V<small>formules et hypothèses affichées</small></button>`; /* CALC */
   h += `<button class="dbtn" onclick="go('#/quiz')">Quiz de formation : codes erreur et borniers<small><b>EN TEST</b> · 10 questions tirées des fiches</small></button>`; /* QUIZ */
   h += `<button class="dbtn" onclick="go('#/cmp')">Comparateur de borniers : remplacer une carte par une autre<small>bornes des deux cartes rangées par fonction · aide indicative</small></button>`; /* CMP */
   h += `<button class="dbtn" onclick="go('#/scan')">Scanner une étiquette : photographier la plaque de l'armoire<small><b>BÊTA</b> · lecture automatique du texte, peut se tromper</small></button>`; /* SCAN */
-  h += `<h2>Ou par marque</h2><div class="bchips">` + MARQUES.map(m =>
-    m.sanslogo ? `<button class="bchip" style="--c:${m.couleur}" onclick="go('#/m/${m.id}')"><i></i>${esc(m.nom)}</button>` : `<button class="bchip logo" aria-label="${esc(m.nom)}" onclick="go('#/m/${m.id}')"><img src="icons/marques/${m.id}.png" alt="${esc(m.nom)}" height="${({afca:52,casit:36,dea:40,elka:40,doitrand:32,opera:34})[m.id]||28}"></button>`).join("") + accBrandsOnly().map(b => b.logo ? `<button class="bchip logo" aria-label="${esc(b.nom)}" onclick="go('#/ma/${b.slug}')"><img src="icons/marques/${b.slug}.png" alt="${esc(b.nom)}" height="${b.slug==="opera"?34:28}"></button>` : `<button class="bchip" style="--c:${b.couleur}" onclick="go('#/ma/${b.slug}')"><i></i>${esc(b.nom)}</button>`).join("") + `</div>`;
-  const favs = getFavs().map(x => findBoard(x) ? rowBoard(findBoard(x)) : (window.rowAccFav ? rowAccFav(x) : "")).filter(Boolean);
-  h += `<h2>★ Mes favoris</h2>` + (favs.length ? `<div class="list">` + favs.join("") + `</div>` : `<p class="note">Aucun favori. Ouvrez une fiche (carte ou accessoire) et touchez l'étoile ★ pour la retrouver ici.</p>`) + `<p class="hotn">${esc(FAV_NOTE)}</p>`;
   if (recents.length){
     h += `<h2>Dernières consultées</h2><div class="list">` + recents.map(rowBoard).join("") + `</div>`;
   }

@@ -192,6 +192,9 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "1.68", date: "2026-10-26", titre: "Accueil réorganisé", items: [
+    "Page d'accueil : les logos des marques sont maintenant juste sous les trois types de matériel (coulissant, battant, barrière), puis les favoris, puis le reste (diagnostic guidé, accessoires, calculs, quiz, comparateur, scanner, dernières consultées)."
+  ], docs: [] },
   { v: "1.67", date: "2026-10-25", titre: "Roger : cartes B70/1T, B70/2B, H70/200AC, H70/104-105AC et F70/IPU36, barrières WAY et BIONIK", items: [
     "Nouvelle carte Roger F70/IPU36 (moteurs brushless à onduleur embarqué : NAVI NV/200, SL/180/R) : alarmes moteur et centrale, LED des onduleurs, menus de l'écran, bornier, paramètres, programmation de course et calage.",
     "Nouvelle carte Roger H70/104AC · H70/105AC (coulissants 230 V H30, M30, G30, R30, E30) : codes, écran, bornier, paramètres, apprentissage.",
