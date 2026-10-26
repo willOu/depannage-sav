@@ -4202,7 +4202,7 @@
         {
           "n": "Boîte de dérivation",
           "label": "Bornier interne (IP66)",
-          "desc": "Moteur (2 phases + commun), fins de course ouverture / fermeture + commun, LED + commun, clignotant / beeper, pressostat, électrovanne via stabilisateur (230 V vers 24 Vdc)."
+          "desc": "Vers l'Elpro S40 (fig. 14) : moteur 16 (commun), 17 et 18 (phases) ; fins de course 11 (ouverture), 12 (fermeture), 13 (commun) ; pressostat 1-2 ; LED 53, commun 52, clignotant / beeper 51 ; stabilisateur de l'électrovanne sur 22-23."
         },
         {
           "n": "Elpro S40 22-23",

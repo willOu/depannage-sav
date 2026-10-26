@@ -199,13 +199,13 @@
     ],
     "came-zn8": [
       S("came-zn8-p18", "Carte ZN8", 18, "Repères 1 à 26, fusibles ligne / carte / accessoires."),
-      S("came-zn8-p20", "Signalisation, alimentation, commandes", 20, "10-E, 10-E3, 10-5, L-N, 10-11, bornes 1 à 7, S1-GND, A-B."),
-      S("came-zn8-p21", "Photocellules", 21, "DELTA et DIR / DELTA-S sur 10 TS 2 CX CY CZ CK."),
-      S("came-zn8-p22", "Bords sensibles", 22, "C1 à C13, bords DFWN, contact NF ou 8K2."),
-      S("came-zn8-p23", "Paires de bords, RIO, CLOCK", 23, "Bords en série ou en parallèle, modules sans fil et minuterie.")
+      S("came-zn8-p20", "Alimentation et signalisation", 20, "L-N, 10-11, 10-E, 10-E3, 10-5."),
+      S("came-zn8-p21", "Dispositifs de commande", 21, "1-2 à 2-7, S1-GND, A-B, R700 / R800, AF, antenne."),
+      S("came-zn8-p22", "Photocellules", 22, "C1 à C4 et C13, avec ou sans test."),
+      S("came-zn8-p23", "Bords sensibles", 23, "Bord seul ou paire de bords, en série ou en parallèle.")
     ],
     "cardin-sl4024": [
-      S("cardin-sl4024-p07", "Carte électronique (fig. 12)", 7, "Bornier 1 à 30, fusibles F1 à F3, LED L1 à L8, touches PROG / SEL / MEMO / DEL."),
+      S("cardin-sl4024-p07", "Descriptif de la carte (fig. 12)", 7, "Bornier 1 à 30, fusibles F1 à F3, LED L1 à L8, touches PROG / SEL / MEMO / DEL."),
       S("cardin-sl4024-p13", "Schéma de l'installation type", 13, "Câblage des accessoires sur le bornier.")
     ],
     "fadini-elpro37": [
@@ -215,7 +215,7 @@
     ],
     "fadini-elpro13exp": [
       S("fadini-elpro13-p42", "Carte Elpro 13 exp", 42, "Bornier 1 à 25, fusibles F1 à F5, LED, dip, trimmers."),
-      S("fadini-elpro13-p44", "Schéma Combi 740 + Elpro 13 exp", 44, "Fig. 22 : moteurs, photocellules, sélecteur, radio, clignotant.")
+      S("fadini-elpro13-p44", "Puissance et fonctions", 44, "Moteurs, clignotant, alimentation (16 à 25) ; automatique, piéton, coup de bélier, pas à pas, horloge.")
     ],
     "fadini-elpro-s40": [
       S("fadini-s40-p10", "Carte Elpro S40", 10, "Bornier 1 à 66, fusibles, LED L1 à L15, dip, T1 / T2."),
@@ -232,11 +232,12 @@
     ],
     "fadini-combi740": [
       S("fadini-combi740-p34", "Composants du Combi 740", 34, "Vérin, centrale, déverrouillage, caisson (fig. 1 et 2)."),
-      S("fadini-combi740-p45", "Réglages", 45, "Force de poussée (vis rouge / verte), frein, régulateur d'écoulement.")
+      S("fadini-combi740-p45", "Schéma Combi 740 + Elpro 13 exp", 45, "Fig. 22 : moteurs, photocellules, sélecteur, radio, clignotant."),
+      S("fadini-combi740-p46", "Réglages", 46, "Force de poussée (vis rouge / verte), frein, régulateur d'écoulement (fig. 23 à 25).")
     ],
     "fadini-talos": [
-      S("fadini-talos-p11", "Branchements vers l'Elpro S40", 11, "Câble multipolaire, accessoires de la borne."),
-      S("fadini-talos-p12", "Bornier de la boîte de dérivation", 12, "Moteur, fins de course, LED, électrovanne, pressostat.")
+      S("fadini-talos-p11", "Bornier de la boîte de dérivation", 11, "Fig. 14 : moteur, fins de course, LED, clignotant / beeper, pressostat, électrovanne vers l'Elpro S40."),
+      S("fadini-talos-p12", "Premières manœuvres", 12, "Fig. 15-16 : fins de course 11-12-13, stabilisateur sur 22-23, contrôle L8 / L9.")
     ],
     "cardin-cdr842": [
       S("cardin-cdr842-p06", "Figures CDR842A / CDR852A", 6, "Dimensions, montage, centrage (test point), exemples d'installation, fig. 6 : bornier récepteur (6 C, 5 NA, 4 NC, 3 0V, 2 12V, 1 24V) et émetteur (4 24V, 3 12V, 2-1 0V)."),

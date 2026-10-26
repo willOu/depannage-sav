@@ -55542,7 +55542,7 @@ const MARQUES = [
       "Deux paires de cellules : émetteurs et récepteurs croisés, sauf cellules avec fonction SYNC (LS 41).",
       "Désactiver l'auto-test des cellules seulement si les sécurités sont de catégorie 3.",
       "Barre palpeuse déclenchée : inversion pendant 1 s puis arrêt.",
-      "T5 : 500 kg, 20 cycles/jour · T8 : 800 kg, 40 % · T10 : 1000 kg, 40–60 % · T15 : 1500 kg, 60 % · 230 V AC 50 Hz · 1,6 / 1,9 / 2,2 A · 11 m/min (Z20M4) ou 9 m/min (Z16M4) · 20 / 25 / 30 Nm · −20 à +40 °C, IP44."
+      "T5 : 500 kg, 20 cycles/jour · T8 : 800 kg, 40 % · T10 : 1000 kg, 40–60 % · T15 : 1500 kg, 60 % (encadré du modèle ; le tableau donne 40–60 % pour T10 et T15) · 230 V AC 50 Hz · 1,6 / 1,9 / 2,2 A · 11 m/min (Z20M4) ou 9 m/min (Z16M4) · 20 / 25 / 30 Nm · −20 à +40 °C, IP44."
     ]
   },
   "parametres": {
@@ -56470,7 +56470,7 @@ const MARQUES = [
               ],
               [
                 "fermeture automatique",
-                "1–255 s par pas de 1"
+                "1–255 s par pas de 1 (menu) ; les écrans des réglages de base indiquent « Durée : 5–255 s »"
               ]
             ]
           },
