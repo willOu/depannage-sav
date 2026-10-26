@@ -36,9 +36,9 @@
     const app = matchMedia && matchMedia("(display-mode: standalone)").matches ? "appli" : nav;
     return (os + (app ? " · " + app : "")).slice(0, 80);
   };
-  let PLEIN = [], PROV = false, MDP_SAISI = "";
-  /* le technicien doit être actif ; l'appareil doit être l'un de ses 2 appareils autorisés.
-     Renvoie le nom (ou "ok"), "non", "plein" (2 autres appareils déjà connectés) ou "net". */
+  let PLEIN = [], PROV = false, MDP_SAISI = "", MAXA = 2;
+  /* le technicien doit être actif ; l'appareil doit être l'un de ses appareils autorisés (2, ou 5 pour un administrateur).
+     Renvoie le nom (ou "ok"), "non", "plein" (maximum d'appareils déjà connectés) ou "net". */
   async function autorise(tok, liberer) {
     const r = await call("/rest/v1/rpc/acces", { method: "POST", headers: H(tok), body: JSON.stringify({ appareil: DEV, nom_appareil: devNom(), liberer: liberer || null }) });
     if (r.net) return "net";
@@ -50,6 +50,7 @@
     }
     if (!r.ok) return r.status === 401 || r.status === 403 ? "non" : "net";
     const j = r.j || {};
+    if (j.max > 0) MAXA = j.max;
     if (j.statut === "ok") { PROV = j.provisoire === true; return j.nom || "ok"; }
     if (j.statut === "plein") { PLEIN = Array.isArray(j.appareils) ? j.appareils : []; return "plein"; }
     return "non";
@@ -136,7 +137,7 @@
   function choixAppareil() {
     const f = document.getElementById("lgf");
     f.innerHTML = `<div class="sq"><b style="background:#6FA8E8"></b><b style="background:#F5A33A"></b><b style="background:#FF6A5E"></b></div><h2>Diag'SAV</h2>
-      <p class="lgm bad" id="lgm">Ce compte est déjà connecté sur 2 appareils (maximum).</p>
+      <p class="lgm bad" id="lgm">Ce compte est déjà connecté sur ${MAXA} appareils (maximum).</p>
       <p class="lgn" style="white-space:normal">Pour vous connecter ici, déconnectez l'un d'eux :</p>` +
       PLEIN.map(x => `<button type="button" class="lgd" data-id="${esc(x.id)}"><b>${esc(x.nom || "Appareil")}</b><small>dernière utilisation le ${esc(fd(x.vu))}</small></button>`).join("") +
       `<button type="button" id="lgx" class="lgd2">Annuler</button>`;
@@ -164,7 +165,7 @@
       const v = await verifier();
       if (v === "ok") { if (document.documentElement.classList.contains("locked")) ouvrir(); }
       else if (v === "refus") verrou("Votre accès a été désactivé. Contactez le SAV.");
-      else if (v === "plein") verrou("Ce compte a été connecté sur un autre appareil (2 maximum). Reconnectez-vous pour utiliser celui-ci.");
+      else if (v === "plein") verrou("Ce compte a été connecté sur un autre appareil (" + MAXA + " maximum). Reconnectez-vous pour utiliser celui-ci.");
       else if (v === "expire") verrou("Session expirée : reconnectez-vous.");
       else if (v === "net" && horsDelai()) { ecran("Plus de vérification depuis plus de " + MAX_HORS_LIGNE_JOURS + " jours : connectez-vous au réseau pour continuer (l'appli se rouvrira toute seule).", "bad"); }
     } finally { busy = false; }
@@ -178,7 +179,7 @@
       if (S && S.refresh_token && !horsDelai()) { ouvrir(); reverif(true); }
       else if (S && S.refresh_token) { /* délai dépassé : il faut vérifier avant d'ouvrir */
         ecran("Vérification de votre accès…");
-        verifier().then(v => { if (v === "ok") ouvrir(); else if (v === "net") ecran("Plus de vérification depuis plus de " + MAX_HORS_LIGNE_JOURS + " jours : connectez-vous au réseau pour continuer (l'appli se rouvrira toute seule).", "bad"); else verrou(v === "refus" ? "Votre accès a été désactivé. Contactez le SAV." : v === "plein" ? "Ce compte a été connecté sur un autre appareil (2 maximum). Reconnectez-vous pour utiliser celui-ci." : "Session expirée : reconnectez-vous."); });
+        verifier().then(v => { if (v === "ok") ouvrir(); else if (v === "net") ecran("Plus de vérification depuis plus de " + MAX_HORS_LIGNE_JOURS + " jours : connectez-vous au réseau pour continuer (l'appli se rouvrira toute seule).", "bad"); else verrou(v === "refus" ? "Votre accès a été désactivé. Contactez le SAV." : v === "plein" ? "Ce compte a été connecté sur un autre appareil (" + MAXA + " maximum). Reconnectez-vous pour utiliser celui-ci." : "Session expirée : reconnectez-vous."); });
       } else ecran();
       document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible" && started && S && Date.now() - (S.lastOk || 0) > REVERIF_MS) reverif(true); });
       addEventListener("online", () => { if (S) reverif(true); });
@@ -191,7 +192,7 @@
       let r = await call(path, { ...o, headers: h(S.access_token) });
       if (!r.net && r.status === 401 && S && S.refresh_token) {
         const v = await verifier();
-        if (v !== "ok") { if (v === "refus") verrou("Votre accès a été désactivé. Contactez le SAV."); else if (v === "plein") verrou("Ce compte a été connecté sur un autre appareil (2 maximum). Reconnectez-vous pour utiliser celui-ci."); else if (v === "expire") verrou("Session expirée : reconnectez-vous."); return { ok: false, status: 401 }; }
+        if (v !== "ok") { if (v === "refus") verrou("Votre accès a été désactivé. Contactez le SAV."); else if (v === "plein") verrou("Ce compte a été connecté sur un autre appareil (" + MAXA + " maximum). Reconnectez-vous pour utiliser celui-ci."); else if (v === "expire") verrou("Session expirée : reconnectez-vous."); return { ok: false, status: 401 }; }
         r = await call(path, { ...o, headers: h(S.access_token) });
       }
       return r;

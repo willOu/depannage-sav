@@ -192,6 +192,9 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "1.72", date: "2026-10-26", titre: "Administrateurs : 5 appareils", items: [
+    "Les administrateurs peuvent maintenant être connectés sur 5 appareils en même temps (2 pour les techniciens). Les messages de connexion et la page Techniciens affichent le bon maximum."
+  ], docs: [] },
   { v: "1.71", date: "2026-10-26", titre: "CAME BXV et BKV, Cardin SL4024, Fadini, Tousek PULL", items: [
     "Nouvelles cartes CAME : BXV (carte intégrée, codes E1 à E18, menus F / U / A) et ZN8 des BKV (messages, menus, procédure guidée).",
     "Nouvelle carte Cardin : programmateur SL4024 (PRG850) avec afficheur 7 segments, LED, bornier 1 à 30, programmation par étapes.",
