@@ -196,7 +196,7 @@ const CHANGELOG = [
     "Nouvelle marque CARDIN dans les cartes : programmateur SLX1524 (carte CS1392A, moteur 24 V avec encodeur) : messages de l'afficheur, LED, bornier 1 à 31, menus, programmation de la course, codes radio, manœuvre d'urgence, batterie.",
     "Nouvelle fiche Cardin SLX (Accessoires → Motorisations) : SLX824CB, SLX1024REV, SLX1524CB, SLX3024CB, SLX24DRACO, avec caractéristiques, pose, déverrouillage et schémas.",
     "Choix moteur : coulissants Cardin SLX ajoutés."
-  ], docs: ["Cardin ZVL534.00 (100/SLX1524)", "Cardin SLX V1.40 (ZVE572)"] },
+  ], docs: ["Cardin ZVL534.00 (100/SLX1524)", "Cardin SLX ZVL607.01 (pages françaises ZVE572)"] },
   { v: "1.69", date: "2026-10-26", titre: "Photocellules Cardin CDR842A / CDR852A", items: [
     "Nouvelle fiche accessoire Cardin CDR842A · CDR852A (Accessoires → Sécurités) : caractéristiques, bornier émetteur et récepteur, centrage au testeur, LED, schémas."
   ], docs: ["Cardin CDR842-852A ZVL448.03", "Fiche produit Cardin CDR842A"] },
@@ -54503,7 +54503,7 @@ const MARQUES = [
       { code: "ERREUR DIR", type: "afficheur", titre: "Erreur de direction de l'encodeur", action: "Le portail va dans le sens inverse de celui attendu : contrôler le branchement de l'alimentation du moteur (bornes 1-2)." },
       { code: "ERREUR SENS", type: "afficheur", titre: "Erreur du senseur de courant", action: "Moteur arrêté : problème sur le senseur de courant de la carte." },
       { code: "INT. BORD", type: "afficheur", titre: "Intervention du bord de sécurité", action: "Inversion brève, arrêt 3 min, puis reprise dans le sens initial après 10 s de préannonce." },
-      { code: "INT. SENSEUR", type: "afficheur", titre: "Intervention du senseur de courant (obstacle)", action: "Inversion d'environ 10 cm, arrêt 3 min, puis reprise dans le sens initial après 10 s de préannonce. Si trop sensible : augmenter le niveau du SENSEUR COURANT (menu MOUVEMENT)." },
+      { code: "INT. SENSEUR", type: "afficheur", titre: "Intervention du senseur de courant (obstacle)", action: "Inversion d'environ 10 cm (§ Senseur de courant), arrêt 3 min, puis reprise dans le sens initial après 10 s de préannonce. Le tableau des alarmes de la notice reprend pour INT. SENSEUR le texte du bord de sécurité (« inverse… pour quelques instants »). Si trop sensible : augmenter le niveau du SENSEUR COURANT (menu MOUVEMENT)." },
       { code: "Moteur débrayé", type: "afficheur", titre: "Moteur débrayé", action: "Réembrayer : la carte fait un repositionnement à la commande suivante." },
       { code: "PAUSE", type: "afficheur", titre: "Pause avant refermeture automatique", action: "Normal en mode automatique : compte à rebours affiché ; une photocellule relance le temps. TB pendant la pause annule la refermeture." },
       { code: "CODE DÉJÀ MÉM.", type: "afficheur", titre: "Canal déjà mémorisé", action: "Ce canal de l'émetteur est déjà en mémoire." },
@@ -54531,7 +54531,7 @@ const MARQUES = [
         { nom: "Alimentation", bornes: [
           { n: "N · ⏚ · L", label: "Réseau 230 Vac", desc: "Bornier séparé à 3 voies, passage par le presse-étoupe en bas à droite. Câble 2 x 1,5 mm² + terre, T min. 85 °C, sans aluminium ni étamage. Interrupteur omnipolaire (ouverture ≥ 3 mm) en amont", t: "alim" },
           { n: "J2", label: "Secondaire transformateur", desc: "Transformateur toroïdal séparé, cosses Faston", t: "alim" },
-          { n: "J1", label: "Batterie", desc: "Batterie NiMH 24 V (pièce 999540 uniquement) sur la carte chargeur BC ; LED L2 allumée = batterie inversée", t: "alim" }
+          { n: "J1", label: "Batterie", desc: "Batterie NiMH 24 V (pièce 999540 uniquement) ; LED L2 allumée = batterie inversée. La charge est gérée par la carte chargeur BC", t: "alim" }
         ]},
         { nom: "Moteur et encodeur", bornes: [
           { n: "1 · 2", label: "MOT", desc: "Moteur 24 Vdc : 1 + (rouge), 2 − (noir) sur le schéma. Pour inverser le sens de rotation, intervertir 1 et 2", t: "moteur" },
@@ -54626,7 +54626,7 @@ const MARQUES = [
       avant: [
         "Butées mécaniques en ouverture et en fermeture obligatoires.",
         "Sécurités au repos et carte sur secteur (programmation impossible sur batterie).",
-        "Régler d'abord OPTIONS (montage moteur, logique), SÉCURITÉ (contacts 8,2 kΩ) et MOUVEMENT > SELECTION MOTEUR."
+        "Régler d'abord OPTIONS (montage moteur, logique), SÉCURITÉ (contacts 8,2 kΩ) et MOUVEMENT > SELECTION MOTEUR. La notice parle une fois du « menu Mémorisations » pour le montage droite / gauche, qui se trouve en fait dans OPTIONS."
       ],
       etapes: [
         "PROG/OK 4 s : CYCLE D'AUTO PROGRAMMATION ; le comptage du temps de pause démarre (PAUSE clignote).",

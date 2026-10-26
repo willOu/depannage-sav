@@ -186,7 +186,7 @@
       S("cardin-slx-p18", "Ancrage SLX24DRACO", 18, "Fig. 6 à 8 : plaque, plot, crémaillère, déverrouillage à levier."),
       S("cardin-slx-p19", "Ancrage SLX3024 – 1524 – 1024REV – 824", 19, "Fig. 9 à 11 : plaque, crémaillère, déverrouillage SLX3024."),
       S("cardin-slx-p20", "Déverrouillage SLX1524 / SLX824, branchement", 20, "Fig. 12 : déverrouillage à vis ; alimentation 230 Vac ; maintenance."),
-      S("cardin-slx-p05", "Schéma électrique (V1.40)", 5, "Carte de la notice V1.40 (fusibles 15 A / 4 A, J1 à J5, M1)."),
+      S("cardin-slx-p05", "Schéma électrique (ZVL607.01)", 5, "Carte de la notice ZVL607.01 (fusibles 15 A / 4 A, J1 à J5, M1)."),
     ],
     "cardin-slx1524": [
       S("cardin-slx1524-p05", "Schéma électrique de la carte", 5, "Bornier 1 à 31, fusibles F1 à F4, J1 à J3, MM, R1, P1 à P3 ; raccordement LP, LS, photocellules, sélecteur, TB, bord, antenne."),

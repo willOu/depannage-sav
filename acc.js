@@ -4032,7 +4032,7 @@
       "couleur": "#b3122b",
       "categorie": "Motoréducteur coulissant 24 Vdc (motorisation)",
       "modeles": "SLX824CB (800 kg) · SLX1024REV (1000 kg, réversible) · SLX1524CB (1500 kg) · SLX3024CB (3000 kg) · SLX24DRACO (1000 kg, rapide)",
-      "source": "Notice Cardin SLX1524 – SLX1524CB – SLX3024 – SLX3024CB – SLX24DRACO V1.40 (ZVE572, mod. 04-09-2017), pages françaises 16 à 20, caractéristiques p. 36, schéma p. 5",
+      "source": "Notice Cardin SLX ZVL607.01 (01-02-2017, mod. 16-12-2020 ; pages françaises ZVE572 mod. 04-09-2017) : SLX3024 – SLX3024CB, SLX1524 – SLX1524CB, SLX1024REV, SLX824 – SLX824CB, SLX24DRACO ; pages françaises 16 à 20, caractéristiques p. 36, schéma p. 5",
       "resume": "Motoréducteurs 24 Vdc pour portails coulissants, avec programmateur électronique intégré (puissance, logique, chargeur de batterie, récepteur radio) alimenté par un transformateur toroïdal séparé. La programmation et le fonctionnement sur batterie sont dans la notice logicielle MULTI-ECU ZVL608 livrée avec l'automatisme (non fournie ici). Pour la carte décrite dans l'ancienne notice ZVL534, voir la carte CARDIN « Programmateur SLX1524 ».",
       "specs": [
         [

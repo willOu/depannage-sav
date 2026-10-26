@@ -16,7 +16,7 @@
     cameAXO: "came.com, page AXO", cameFROG: "came.com, page FROG", cameFX: "came.com, page FROG-X", cameATI: "came.com, page ATI",
     cameFAST: "Dépliant CAME FAST70 (« vantaux jusqu'à 2,30 m ou 300 kg »)", cameSTY: "came.com, page STYLO",
     faac740: "faac.fr, page 740 / 741", faac746: "faac.fr, page 746 C / 844 C", faacB: "Brochure FAAC « Automatismes pour portails battants »",
-    bftAres: "bft-automation.com (US), famille ARES ULTRA BT A", rwBE: "rogertechnology.it, page BE20/200", rSm: "Notice Roger SMARTY IS131 Rev.12", rBE: "Notice Roger BE20 IS121 Rev.15", rBH: "Notice Roger BH30 IS118 Rev.17", rBG: "Notice Roger BG30 IS141 Rev.19", rBM: "Notice Roger BM30 IS169 Rev.13", rBR: "Notice Roger BR21 / R21 IS301 Rev.03", rBH23: "Notice Roger BH23 IS106 Rev.10", rMo: "Notice Roger MONOS4 IS201 Rev.11", rAy: "Notice Roger AYRON IS239 Rev.01", rBio: "Notices Roger BIONIK IS161, IS185, IS194", rWay: "Notices Roger WAY IS266, IS291", cSlx: "Notice Cardin SLX V1.40 (ZVE572)"
+    bftAres: "bft-automation.com (US), famille ARES ULTRA BT A", rwBE: "rogertechnology.it, page BE20/200", rSm: "Notice Roger SMARTY IS131 Rev.12", rBE: "Notice Roger BE20 IS121 Rev.15", rBH: "Notice Roger BH30 IS118 Rev.17", rBG: "Notice Roger BG30 IS141 Rev.19", rBM: "Notice Roger BM30 IS169 Rev.13", rBR: "Notice Roger BR21 / R21 IS301 Rev.03", rBH23: "Notice Roger BH23 IS106 Rev.10", rMo: "Notice Roger MONOS4 IS201 Rev.11", rAy: "Notice Roger AYRON IS239 Rev.01", rBio: "Notices Roger BIONIK IS161, IS185, IS194", rWay: "Notices Roger WAY IS266, IS291", cSlx: "Notice Cardin SLX ZVL607.01"
   };
   const M = (marque, modele, type, alim, p, l, src, note) => ({ marque, modele, type, alim, p, l, src: N[src] || src, note: note || "" });
   window.MOTEURS = [
