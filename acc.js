@@ -4103,6 +4103,131 @@
         "Garantie 24 mois ou 50 000 manœuvres si l'entretien est documenté : crémaillère, jeu 1-2 mm, graissage (lubrifiant −20 à +70 °C), charge des batteries.",
         "Usage limité à 70 % (pas d'utilisation continue)."
       ]
+    },
+    {
+      "id": "fadini-combi740",
+      "nom": "Combi 740",
+      "marque": "Fadini",
+      "couleur": "#1b5e9e",
+      "categorie": "Vérin hydraulique enterré pour portail battant (motorisation)",
+      "modeles": "Combi 740 à 110° ou 175°, Droite (Dx) ou Gauche (Sx) ; versions Normale (N), avec Verrouillage bidirectionnel (BB), avec Frein, avec Régulateur d'écoulement ; caisson zingué ou inox",
+      "source": "Notice Fadini Combi 740 (07-2012), pages françaises 33 à 48",
+      "resume": "Automatisme hydraulique enterré sous le vantail (l'arbre remplace la charnière basse), centrale hydraulique intégrée, moteur 230 V monophasé. Programmateur conseillé : Elpro 13 exp (voir la carte Fadini).",
+      "specs": [
+        [
+          "Moteur",
+          "230 V ±10 % 50 Hz biphasé classe H · 0,18 kW (0,25 CV) rendus · 250 W absorbés · 1,2 A · condensateur 12,5 µF · 1350 tr/min · service S3"
+        ],
+        [
+          "Hydraulique",
+          "Pompe P3 0,85 l/min · pression moyenne 1 MPa (10 bar), max 3 MPa (30 bar) · huile Oil Fadini · −20 °C à +80 °C"
+        ],
+        [
+          "Mouvement",
+          "110° en 18 s ou 175° en 28 s · couple 250–400 Nm · piston Ø 75 mm, course 52 mm"
+        ],
+        [
+          "Service (110°)",
+          "Cycle 18 s ouverture – 30 s pause – 18 s fermeture – 30 s pause : 37 cycles/heure"
+        ],
+        [
+          "Vantail",
+          "700 kg à 1,0 m · 400 kg à 2,0 m · 300 kg à 3,0 m · 250 kg à 4,0 m (fig. 7) ; texte des données : 350 kg à 2,8 m"
+        ],
+        [
+          "Divers",
+          "IP67 · 27 kg avec accessoires · 475 x 305 x 130 mm · câble 4 x 1 mm² de 2,50 m"
+        ]
+      ],
+      "raccordement": [
+        {
+          "n": "Câble 4 x 1 mm²",
+          "label": "Moteur",
+          "desc": "Rouge = phase, rouge = phase, bleu = commun, jaune-vert = terre (fig. 20). Essai direct : condensateur 12,5 µF entre les deux phases ; inverser les phases pour changer le sens."
+        },
+        {
+          "n": "Elpro 13 exp",
+          "label": "Programmateur",
+          "desc": "M1 sur 16-17-18, M2 sur 19-20-21 (16 et 19 = communs) ; alimentation en câble 1 mm² jusqu'à 50 m."
+        }
+      ],
+      "installation": [
+        "Caisson enterré au niveau du sol fini, aligné avec la charnière supérieure (trou intérieur du caisson) ; deux caissons alignés au cordeau ; drainage vers l'extérieur ; gaine Ø 20–25 mm vers le programmateur.",
+        "Retirer la charnière basse : l'arbre du Combi sert de pivot. Pivot bas préparatoire possible avant la pose du vérin.",
+        "Souder sur le vantail, dans l'axe de la charnière haute, le déverrouillage d'urgence (cote A = 80 mm), la plaque avec bague carrée (A = 42 mm) ou la bague seule (A = 30 mm), l'arbre étant 5° à 10° avant sa fin de course.",
+        "Butées au sol obligatoires en fermeture et en ouverture (environ 5° avant la fin de course de l'arbre), posées avant toute manœuvre.",
+        "110° : Combi Droite avec déverrouillage Droite ; 175° : Combi Droite avec déverrouillage Gauche (et inversement). Fixation par 2 écrous E13, guidé par les fentes du caisson.",
+        "Serrure électrique obligatoire au-delà de 2,0 m de vantail (Normal ou Verrouillage) ; version Normale à 110° : toujours avec serrure ; frein conseillé au-delà de 2,5 m ; régulateur d'écoulement pour les vantaux de 4 à 5 m.",
+        "Force de poussée : retirer le carter des vannes. Vis rouge = fermeture, vis verte = ouverture ; sens horaire = plus de force.",
+        "Frein (version avec frein) : ralentissement sur les ~40 derniers cm ; sens horaire = plus lent. Régulateur d'écoulement : vitesse du vantail dans les deux sens.",
+        "Manœuvre manuelle : clé du déverrouillage d'urgence, ou levier de déverrouillage du vérin (toujours refermé en fonctionnement normal)."
+      ],
+      "notes": [
+        "Étiquette : 180 W, 1,3 A, 30 atm, −25 °C à +80 °C ; tableau des données : 250 W absorbés, 1,2 A, −20 °C à +80 °C (contradiction de la notice).",
+        "Entretien : automatisme hydraulique au moins tous les 6 mois, électronique et sécurités une fois par mois."
+      ]
+    },
+    {
+      "id": "fadini-talos",
+      "nom": "Talos",
+      "marque": "Fadini",
+      "couleur": "#1b5e9e",
+      "categorie": "Borne escamotable hydraulique (motorisation)",
+      "modeles": "Talos 9450 / 9460 / 9470 / 9480 (cylindre 4 mm, 500 à 800 mm, 320 000 J ; HRC 420 000 J) · Talos 9651 / 9661 / 9671 / 9681 (12 mm, 450 000 J ; HRC 550 000 J) · inox 304 / 316 en 4 mm seulement",
+      "source": "Notice Fadini Talos (partie française, pages 1 à 20)",
+      "resume": "Borne cylindrique Ø 275 mm entièrement escamotable, centrale hydraulique intégrée 230 V, 9 LED jaune ambre. Programmateur Elpro S40 (voir la carte Fadini). Options : électrovanne (descente en cas de coupure), pressostat anti-obstacle, beeper, chauffage.",
+      "specs": [
+        [
+          "Cylindre",
+          "Acier Fe 360 Ø 275 mm, 4 ou 12 mm d'épaisseur ; HRC : 40 cm restent dans le coffrage (20 cm en standard)"
+        ],
+        [
+          "Alimentation",
+          "230 V 50 Hz ; électrovanne en 24 Vdc avec stabilisateur ; condensateur 30 µF déjà câblé dans la boîte de dérivation"
+        ],
+        [
+          "Câble vers l'Elpro S40",
+          "FG 70R 12 x 1,5 mm² (standard ou 2 options) ou 16 x 1,5 mm² (3 options), 50 m max ; terre séparée (16 mm² conseillé en lieu public)"
+        ],
+        [
+          "Pressostat",
+          "Réglé en usine à 15 kg minimum"
+        ],
+        [
+          "Chauffage",
+          "Se déclenche sous 5 °C"
+        ]
+      ],
+      "raccordement": [
+        {
+          "n": "Boîte de dérivation",
+          "label": "Bornier interne (IP66)",
+          "desc": "Moteur (2 phases + commun), fins de course ouverture / fermeture + commun, LED + commun, clignotant / beeper, pressostat, électrovanne via stabilisateur (230 V vers 24 Vdc)."
+        },
+        {
+          "n": "Elpro S40 22-23",
+          "label": "Électrovanne",
+          "desc": "Stabilisateur obligatoire entre la sortie électrovanne 22-23 et l'électrovanne, un par borne."
+        },
+        {
+          "n": "Elpro S40 A-B",
+          "label": "Condensateur",
+          "desc": "Cylindre 4 mm : ne pas ajouter de condensateur. Cylindre 12 mm : ajouter 20 µF sur A-B."
+        }
+      ],
+      "installation": [
+        "Fouille selon fig. 5 ; gaine Ø 50 mm vers l'Elpro S40 ; drainage (50 l doivent s'écouler en moins de 30–40 min, sinon pompe immergée).",
+        "Sortir la borne du coffrage perdu au treuil (débrancher d'abord la terre du coffrage), sceller le coffrage 1–2 cm au-dessus du revêtement, béton jusqu'à 5–10 cm de la surface, 7 jours de prise.",
+        "Remettre la borne : la plaque de la centrale doit porter à plat sur le fond du coffrage ; centrer la plaque de couverture (vis M10 graissées).",
+        "Mise en service borne baissée : L8 doit être ÉTEINTE et L9 ALLUMÉE (sinon inverser les fils 11 et 12 sur l'Elpro S40) ; à la première commande la borne doit monter, sinon couper et inverser les fils du moteur. Une borne à la fois.",
+        "Pressostat : vis M5, clé hexagonale de 6 ; sens horaire = seuil plus élevé.",
+        "Déverrouillage : clé à empreinte triangulaire, sens antihoraire, la borne descend sous la main ; resserrer en sens horaire. Elle ne remonte que sur commande avec le courant.",
+        "Cylindre 4 mm (acier ou inox) avec électrovanne : finir la descente au pied jusqu'au sol."
+      ],
+      "notes": [
+        "Photocellules à 80 cm minimum de la borne (fig. 11) ; boucles magnétiques pré-assemblées de 6 m ou 12 m avec détecteur deux canaux.",
+        "Hauteur de fouille P de 1000 à 1500 mm selon hauteur et version (fig. 5)."
+      ]
     }
   ];
   window.ACCESSOIRES = ACCESSOIRES;
