@@ -192,6 +192,11 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "1.70", date: "2026-10-26", titre: "Cardin : carte SLX1524 et motoréducteurs SLX", items: [
+    "Nouvelle marque CARDIN dans les cartes : programmateur SLX1524 (carte CS1392A, moteur 24 V avec encodeur) : messages de l'afficheur, LED, bornier 1 à 31, menus, programmation de la course, codes radio, manœuvre d'urgence, batterie.",
+    "Nouvelle fiche Cardin SLX (Accessoires → Motorisations) : SLX824CB, SLX1024REV, SLX1524CB, SLX3024CB, SLX24DRACO, avec caractéristiques, pose, déverrouillage et schémas.",
+    "Choix moteur : coulissants Cardin SLX ajoutés."
+  ], docs: ["Cardin ZVL534.00 (100/SLX1524)", "Cardin SLX V1.40 (ZVE572)"] },
   { v: "1.69", date: "2026-10-26", titre: "Photocellules Cardin CDR842A / CDR852A", items: [
     "Nouvelle fiche accessoire Cardin CDR842A · CDR852A (Accessoires → Sécurités) : caractéristiques, bornier émetteur et récepteur, centrage au testeur, LED, schémas."
   ], docs: ["Cardin CDR842-852A ZVL448.03", "Fiche produit Cardin CDR842A"] },
@@ -54476,6 +54481,166 @@ const MARQUES = [
         ]
       }
     }
+  ]
+},
+/* ------------------------------------------------------------------ */
+{
+  id: "cardin", nom: "CARDIN", couleur: "#b3122b",
+  cartes: [
+  {
+    id: "cardin-slx1524",
+    nom: "Programmateur SLX1524 (carte CS1392A)",
+    modeles: "Carte intégrée des motoréducteurs coulissants 24 V Cardin 100/SLX1524 (sélection moteur SLX1524 / SLX324), avec récepteur 433,92 MHz rolling code (émetteurs S449) et chargeur de batterie",
+    type: "Portail coulissant, 1 moteur 24 Vdc avec encodeur — afficheur LCD, touches P1 ◀ / P2 PROG/OK / P3 ▶",
+    source: "Notice Cardin ZVL534.00 « 24Vdc Motors 100/SLX1524 » (26-02-2013, mod. 16-01-2014), pages françaises 22 à 29 et schéma p. 5",
+    codes: [
+      { code: "PROGRAM", type: "afficheur", titre: "« PROGRAM » clignote", action: "Le système n'est pas programmé : entrer en programmation et faire la programmation de la course (PROG/OK 4 s)." },
+      { code: "HORS POS.", type: "afficheur", titre: "Position perdue", action: "Un repositionnement automatique va être fait : n'importe quelle commande (TA, TC, TAL ou TD) le lance. Arrive après un reset de la carte, une manœuvre d'urgence ou une batterie vide." },
+      { code: "STOP PROG", type: "afficheur", titre: "Programmation / repositionnement interrompu", action: "Une sécurité (FI, FS, CP) s'est activée pendant la programmation de l'encodeur ou le repositionnement, ou coupure de courant pendant la programmation. La manœuvre reprend seule quand les sécurités reviennent au repos." },
+      { code: "ERREUR SÉC.", type: "afficheur", titre: "Erreur au test des sécurités", action: "Vérifier que chaque sécurité passe en alarme (symbole en noir sur fond blanc) devant un obstacle. Sinon remplacer le dispositif, ou shunter l'entrée et désactiver son test (menu OPTIONS)." },
+      { code: "ERREUR MOT", type: "afficheur", titre: "Le moteur ne réagit pas", action: "Contrôler les connexions et les fusibles F3 et F4, puis relancer une manœuvre. Si le moteur ne démarre toujours pas : problème mécanique du moteur ou carte." },
+      { code: "ERREUR ENC", type: "afficheur", titre: "Erreur de comptage de l'encodeur", action: "En utilisation normale : problème sur les signaux de l'encodeur. Vérifier les fils (bornes 3 à 6) et lancer le repositionnement." },
+      { code: "ERREUR DIR", type: "afficheur", titre: "Erreur de direction de l'encodeur", action: "Le portail va dans le sens inverse de celui attendu : contrôler le branchement de l'alimentation du moteur (bornes 1-2)." },
+      { code: "ERREUR SENS", type: "afficheur", titre: "Erreur du senseur de courant", action: "Moteur arrêté : problème sur le senseur de courant de la carte." },
+      { code: "INT. BORD", type: "afficheur", titre: "Intervention du bord de sécurité", action: "Inversion brève, arrêt 3 min, puis reprise dans le sens initial après 10 s de préannonce." },
+      { code: "INT. SENSEUR", type: "afficheur", titre: "Intervention du senseur de courant (obstacle)", action: "Inversion d'environ 10 cm, arrêt 3 min, puis reprise dans le sens initial après 10 s de préannonce. Si trop sensible : augmenter le niveau du SENSEUR COURANT (menu MOUVEMENT)." },
+      { code: "Moteur débrayé", type: "afficheur", titre: "Moteur débrayé", action: "Réembrayer : la carte fait un repositionnement à la commande suivante." },
+      { code: "PAUSE", type: "afficheur", titre: "Pause avant refermeture automatique", action: "Normal en mode automatique : compte à rebours affiché ; une photocellule relance le temps. TB pendant la pause annule la refermeture." },
+      { code: "CODE DÉJÀ MÉM.", type: "afficheur", titre: "Canal déjà mémorisé", action: "Ce canal de l'émetteur est déjà en mémoire." },
+      { code: "CODE NON MÉMOR.", type: "afficheur", titre: "Canal non mémorisé", action: "Effacement impossible : ce canal n'est pas en mémoire." },
+      { code: "S1–S4 clignotent", type: "symptome", titre: "Symbole TB / FI / FS / CP clignotant", action: "Sécurité en alarme ou contact N.F. non shunté : faire un pont sur les entrées N.F. inutilisées (et désactiver leur test) ou vérifier le dispositif. Avec 8,2 kΩ : régler le type de contact dans le menu SÉCURITÉ." },
+      { code: "Clignoteur 2 s / 10 s", type: "symptome", titre: "Clignoteur et lampe témoin : 2 s allumés, 10 s éteints", action: "Carte bloquée (ERREUR ENC, Hors pos., moteur débrayé ou ERREUR MOT) : une commande TA, TC, TAL ou TD lance le repositionnement (fermeture lente jusqu'à la butée, 2 fois). PROG ou TB l'interrompt." },
+      { code: "Lent sur batterie", type: "symptome", titre: "Le portail est plus lent", action: "Normal sur batterie (tension moteur plus faible). La programmation est impossible sur batterie." },
+      { code: "L1 éteinte", type: "led", titre: "LED verte L1 (mise sous tension) éteinte", action: "Vérifier les fusibles et le branchement de l'alimentation au primaire du transformateur." },
+      { code: "L2 allumée", type: "led", titre: "LED L2 allumée", action: "Batterie branchée à l'envers : inverser tout de suite le branchement." },
+      { code: "L3", type: "led", titre: "LED L3 du chargeur de batterie (carte BC)", action: "Éteinte : pas de batterie ou fonctionnement sur batterie (chargeur inactif 10 s après la mise sous tension) · clignotements courts : batterie branchée ou retirée · clignotements longs toutes les 2 s : charge de maintien · fixe : en charge (16 h max)." },
+      { code: "B1 (bips)", type: "led", titre: "Avertisseur sonore B1 (mémorisation par radio)", action: "Bip 1 s : récepteur sélectionné · bip 5 s : récepteur non concerné, ou sortie de la procédure · 2 bips de 0,5 s : code mémorisé · 10 bips très courts : mémoire pleine." }
+    ],
+    afficheur: {
+      intro: "Afficheur LCD (LCD1). Écran d'accueil : PROGRAM / état, symboles TB FI FS CP (sécurités) et TA TD TC TAL (commandes), nombre de manœuvres, modèle, version firmware, date-heure et symbole d'alimentation (réseau ou batterie 100 / 75 / 50 / 25 / 0 %).",
+      autres: [
+        { titre: "Lecture des symboles", texte: "TB, FI, FS, CP allumés = sécurité au repos ; clignotant = en alarme. TA, TC, TAL, TD apparaissent quand la commande arrive." },
+        { titre: "Touches", texte: "P1 / P3 (flèches) : naviguer, régler le contraste ; P2 PROG/OK : modifier ou confirmer. Une flèche depuis l'accueil ouvre le menu principal : OPTIONS, SÉCURITÉ, MOUVEMENT, AFFICHEUR, CALENDRIER, CODES RADIO. Les deux flèches ensemble : choix de la langue." },
+        { titre: "Fonctionnement", texte: "PAUSE, AUTO PROG, OUVERTURE, STOP OUVERTURE, FERMETURE, STOP FERMETURE." },
+        { titre: "Repositionnement", texte: "Après débrayage, reset, manœuvre d'urgence ou batterie vide : à la commande suivante, fermeture lente jusqu'à la butée (2 fois) ; avec TA, la récupération se fait en ouverture. Aucune commande acceptée pendant ce temps, les sécurités bloquent tant qu'elles sont en alarme. Après un déverrouillage manuel, donner 3 commandes ou plus pour que le portail se recale sur les butées." },
+        { titre: "Manœuvre d'urgence", texte: "Désactivée d'usine. Cavalier J3 sur ENABLE : EMRG1 / EMRG2 (bornes 30-31, commun 29) commandent le moteur en homme présent, sans la logique ni les sécurités. Moteur monté à gauche : EMRG1 ferme, EMRG2 ouvre ; à droite : l'inverse. Relâcher avant la butée. Ensuite « Hors pos. » et repositionnement." }
+      ]
+    },
+    bornier: {
+      groupes: [
+        { nom: "Alimentation", bornes: [
+          { n: "N · ⏚ · L", label: "Réseau 230 Vac", desc: "Bornier séparé à 3 voies, passage par le presse-étoupe en bas à droite. Câble 2 x 1,5 mm² + terre, T min. 85 °C, sans aluminium ni étamage. Interrupteur omnipolaire (ouverture ≥ 3 mm) en amont", t: "alim" },
+          { n: "J2", label: "Secondaire transformateur", desc: "Transformateur toroïdal séparé, cosses Faston", t: "alim" },
+          { n: "J1", label: "Batterie", desc: "Batterie NiMH 24 V (pièce 999540 uniquement) sur la carte chargeur BC ; LED L2 allumée = batterie inversée", t: "alim" }
+        ]},
+        { nom: "Moteur et encodeur", bornes: [
+          { n: "1 · 2", label: "MOT", desc: "Moteur 24 Vdc : 1 + (rouge), 2 − (noir) sur le schéma. Pour inverser le sens de rotation, intervertir 1 et 2", t: "moteur" },
+          { n: "3 · 4", label: "ENCODER Bl-Gr", desc: "Signaux encodeur", t: "moteur" },
+          { n: "5 · 6", label: "ENCODER Gy-Yw", desc: "Signaux encodeur", t: "moteur" },
+          { n: "7", label: "LCK", desc: "Non connectée", t: "autre" }
+        ]},
+        { nom: "Sorties", bornes: [
+          { n: "8", label: "CMN", desc: "Commun", t: "autre" },
+          { n: "9 · 10", label: "LC / CH2", desc: "Contact sec N.O. (relais C-NO), 30 Vac/dc 1 A max : éclairage de zone (alimentation séparée) ou 2e canal radio, au choix dans OPTIONS. Interdit de le relier à un circuit > 30 V", t: "sortie" },
+          { n: "11 · 12", label: "CMN · LP", desc: "Clignoteur 24 Vdc : 25 W en intermittent (50 %), 12,5 W en continu", t: "sortie" },
+          { n: "13", label: "LS", desc: "Lampe témoin 24 Vdc 3 W (avec CMN)", t: "sortie" },
+          { n: "14 · 15", label: "CMN · CTRL 24 Vdc", desc: "Sortie des dispositifs externes contrôlés : alimentée seulement pendant les manœuvres (économie de batterie). Y brancher émetteurs ET récepteurs des photocellules pour le test FI / FS. Somme des sorties 15 et 17 ≤ 10 W", t: "alim" },
+          { n: "16 · 17", label: "CMN · OUT 24 Vdc", desc: "Sortie dispositifs externes permanente (ex. récepteur radio externe). Somme 15 + 17 ≤ 10 W", t: "alim" }
+        ]},
+        { nom: "Commandes (N.O.)", bornes: [
+          { n: "18", label: "TA", desc: "Ouverture", t: "no" },
+          { n: "19", label: "TC", desc: "Fermeture", t: "no" },
+          { n: "20", label: "TAL", desc: "Ouverture partielle (piétons)", t: "no" },
+          { n: "21", label: "TD", desc: "Commande séquentielle (ouvre-ferme ou ouvre-stop-ferme, menu OPTIONS)", t: "no" },
+          { n: "22", label: "CMN", desc: "Commun", t: "autre" }
+        ]},
+        { nom: "Sécurités (N.F. ou 8,2 kΩ, menu SÉCURITÉ)", bornes: [
+          { n: "23", label: "TB", desc: "Blocage : interrompt le cycle jusqu'à une nouvelle commande", t: "nf" },
+          { n: "24", label: "CP", desc: "Bord de sécurité : inversion en fermeture comme en ouverture", t: "nf" },
+          { n: "25", label: "FS", desc: "Photocellule de stop : bloque la manœuvre ; au retour au repos, reprise en fermeture après la pause (mode automatique seulement)", t: "nf" },
+          { n: "26", label: "FI", desc: "Photocellule d'inversion en fermeture", t: "nf" }
+        ]},
+        { nom: "Antenne et urgence", bornes: [
+          { n: "27 · 28", label: "Antenne", desc: "27 âme, 28 masse. Antenne ANS400 en RG58 50 Ω, 15 m max", t: "autre" },
+          { n: "29 · 30 · 31", label: "CMN · EMRG1 · EMRG2", desc: "Boutons N.O. de manœuvre d'urgence (cavalier J3 sur ENABLE)", t: "no" }
+        ]}
+      ],
+      fusibles: "Lames type automobile (58 V max) : F1 moteur, F2 4 A circuit 24 V, F3 moteur sur batterie, F4 4 A circuit 24 V sur batterie. F1 et F3 : 15 A dans le texte, « 10 » sur le schéma de la carte (contradiction de la notice)",
+      notes: [
+        "FAIRE UN PONT SUR TOUS LES CONTACTS N.F. INUTILISÉS et désactiver le test correspondant (FI, FS).",
+        "Aucun point de la carte n'est en 230 V : très basse tension de sécurité uniquement.",
+        "Test FI / FS activé : environ 1 s entre la commande et le départ du portail.",
+        "Module mémoire MM (300 codes, EEPROM) amovible : peut être remis sur une carte neuve, dans le sens de la fig. 2. Récepteur R1 433 MHz pour émetteurs S449. J3 : manœuvre d'urgence.",
+        "Batterie : contrôle tous les 6 mois ; batterie vide pendant une coupure = position perdue (ne pas laisser la carte hors tension plus de 2 jours). Contrôle : portail fermé, couper le réseau, l'afficheur doit indiquer plus de 90 %, puis au moins 22 Vdc en manœuvre. Charge 16 h max ; remplacement conseillé tous les 3 ans."
+      ]
+    },
+    parametres: {
+      intro: "Menus de l'afficheur LCD. La notice ne donne pas de valeurs d'usine, sauf le montage moteur (à gauche, vu de l'intérieur).",
+      navigation: [
+        "Flèche depuis l'accueil : menu principal ; flèches pour se déplacer ; PROG/OK pour modifier puis confirmer ; SORTIE pour revenir.",
+        "Les deux flèches ensemble depuis l'accueil : langue.",
+        "Les temps ne se programment pas sur batterie ; il faut le réseau et les sécurités au repos."
+      ],
+      groupes: [
+        { nom: "OPTIONS", items: [
+          { code: "TOUCHE DYNAMIQUE", def: "—", titre: "Commande séquentielle TD", valeurs: [["OUVRE-FERME", ""], ["OUVRE-STOP-FE", "Ouvre-stop-ferme."]], note: "Change aussi le comportement de TAL." },
+          { code: "REF. AUTOMATIQUE", def: "—", titre: "Refermeture automatique", valeurs: [["ON", "Mode automatique."], ["OFF", "Semi-automatique."]] },
+          { code: "PRÉANNONCE", def: "—", titre: "Préavis du clignoteur", valeurs: [["ON / OFF", ""]] },
+          { code: "CLIGNOTEUR", def: "—", titre: "Sortie LP", valeurs: [["FIXE", ""], ["CLIGNOTANT", ""]] },
+          { code: "LAMPE TÉMOIN", def: "—", titre: "Sortie LS", valeurs: [["FIXE", ""], ["CLIGNOTANTE", "Lente en ouverture, rapide en fermeture, fixe arrêté non fermé, éteinte fermé."]] },
+          { code: "PHOTOCELLULES INV.", def: "—", titre: "Mode de FI", valeurs: [["EN FERMETURE", "FI n'agit qu'en fermeture (inversion)."], ["AUSSI EN STOP", "FI en alarme portail arrêté : aucune commande acceptée, même l'ouverture."]] },
+          { code: "TEST SUR FI", def: "—", titre: "Test des photocellules FI", valeurs: [["ON / OFF", "ON : émetteur et récepteur sur CTRL 24 Vdc (borne 15)."]] },
+          { code: "TEST SUR FS", def: "—", titre: "Test des photocellules FS", valeurs: [["ON / OFF", "Idem."]] },
+          { code: "MONTAGE MOTEUR", def: "GAUCHE", titre: "Côté du moteur (vu de l'intérieur)", valeurs: [["GAUCHE", "Montage d'usine."], ["DROITE", ""]] },
+          { code: "HOMME-MORT", def: "—", titre: "Homme présent", valeurs: [["ON / OFF", ""]] },
+          { code: "MEMO RADIO", def: "—", titre: "Mémorisation des émetteurs par radio", valeurs: [["ON / OFF", ""]] },
+          { code: "SORTIE LC/CH2", def: "—", titre: "Fonction des bornes 9-10", valeurs: [["CANAL RADIO", "2e canal radio."], ["ÉCLAIRAGE DE ZONE", "Fermeture temporisée du contact."]] }
+        ]},
+        { nom: "SÉCURITÉ", items: [
+          { code: "CONTACT TB / FI / FS / CP", def: "—", titre: "Type de contact de chaque entrée", valeurs: [["NF", ""], ["8K2", "8,2 kΩ."]] }
+        ]},
+        { nom: "MOUVEMENT", items: [
+          { code: "SELECTION MOTEUR", def: "—", titre: "Modèle de moteur", valeurs: [["SLX1524", ""], ["SLX324", ""]], note: "À régler avant la programmation de la course." },
+          { code: "SENSEUR COURANT", def: "—", titre: "Seuil de détection d'obstacle", valeurs: [["1", "Absorption du moteur + 2 A."], ["2", "+ 3 A."], ["3", "+ 4 A."], ["4", "+ 5 A."], ["5", "+ 6 A."]], note: "Pendant le repositionnement, le seuil peut passer au couple maximal, puis revient à la consigne." },
+          { code: "OUVERTURE PARTIELLE", def: "—", titre: "Ouverture piétonne", valeurs: [["1...9", "1 à 9 m."]] },
+          { code: "DIST. BUTEE. FERM.", def: "—", titre: "Distance d'arrêt avant la butée de fermeture", valeurs: [["1...9", "Environ 0 à 6 cm."]], note: "Le menu indique « PAS 1...9 », le texte « de 0 à 9 »." },
+          { code: "DIST. BUTÉE OUV.", def: "—", titre: "Distance d'arrêt avant la butée d'ouverture", valeurs: [["1...9", "Environ 0 à 6 cm."]] },
+          { code: "TEMPS DE PAUSE", def: "—", titre: "Pause avant refermeture", valeurs: [["2...240 s", "Maintenir la flèche pour défiler vite."]] },
+          { code: "RESET PARAMÈTRES", def: "—", titre: "Retour aux paramètres d'usine", valeurs: [["OK", ""]] }
+        ]},
+        { nom: "AFFICHEUR · CALENDRIER", items: [
+          { code: "CONTRASTE", def: "—", titre: "Contraste", valeurs: [["0...63", ""]] },
+          { code: "RÉTROÉCLAIRAGE", def: "—", titre: "Rétroéclairage", valeurs: [["TOUJOURS ON / 60 / 30 SEC.", ""]] },
+          { code: "RÉGLAGE HEURE / DATE", def: "—", titre: "Horloge", valeurs: [["hh:mm / jj-mm-aa", ""]] },
+          { code: "RÉGLAGE ÉVÉNEMENTS", def: "—", titre: "Événements programmés", valeurs: [["ÉVÉNEMENT n", "Jours, heures, commande (ex. LU-DI 08-10 TA)."], ["ÉVÉNEMENTS ON/OFF", ""]], note: "Un canal radio réglé sur « événements on/off » les active (clignotement 6 s) ou les désactive (3 s)." }
+        ]},
+        { nom: "CODES RADIO", items: [
+          { code: "MÉMORISATION", def: "—", titre: "Ajouter un canal", valeurs: [["", "PROG/OK (ACTIVATION 1), appuyer sur le canal de l'émetteur (ACTIVATION 2), le même canal une 2e fois : CODE MÉMORISÉ. Un autre canal annule."]] },
+          { code: "EFFACEMENT", def: "—", titre: "Supprimer un canal", valeurs: [["", "Même procédure : CODE EFFACÉ."]] },
+          { code: "EFFACEMENT TOTAL", def: "—", titre: "Vider la mémoire", valeurs: [["", "PROG/OK, confirmer OK (flèche = sortir). À faire avant la première mémorisation."]] },
+          { code: "FONCTION CANAUX", def: "—", titre: "Fonction des canaux A, B, C, D", valeurs: [["", "Ouverture, fermeture, ouverture partielle, commande séquentielle, sortie CH2, blocage, événements on/off."]] }
+        ]}
+      ]
+    },
+    apprentissage: {
+      avant: [
+        "Butées mécaniques en ouverture et en fermeture obligatoires.",
+        "Sécurités au repos et carte sur secteur (programmation impossible sur batterie).",
+        "Régler d'abord OPTIONS (montage moteur, logique), SÉCURITÉ (contacts 8,2 kΩ) et MOUVEMENT > SELECTION MOTEUR."
+      ],
+      etapes: [
+        "PROG/OK 4 s : CYCLE D'AUTO PROGRAMMATION ; le comptage du temps de pause démarre (PAUSE clignote).",
+        "Appuyer sur PROG au temps de pause voulu (2 à 240 s) : le portail s'ouvre lentement.",
+        "En butée d'ouverture, il referme de quelques cm puis rouvre pour repérer la butée ; puis il ferme et fait de même en butée de fermeture.",
+        "Il fait ensuite une ouverture et une fermeture complètes à vitesse normale pour régler le senseur de courant, enregistre et quitte la programmation."
+      ],
+      apres: [
+        "Si l'opération n'a pas abouti, refaire la programmation.",
+        "Mémoriser les émetteurs (CODES RADIO) après un effacement total ; MÉMO RADIO possible ensuite hors menus (bouton intérieur d'un émetteur déjà mémorisé).",
+        "Le senseur de courant ne dispense pas des photocellules et autres sécurités exigées par les normes."
+      ]
+    }
+  }
   ]
 }
 ];

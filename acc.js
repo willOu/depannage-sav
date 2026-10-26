@@ -4024,6 +4024,85 @@
           "Centrage fin correct."
         ]
       ]
+    },
+    {
+      "id": "cardin-slx",
+      "nom": "SLX (série)",
+      "marque": "CARDIN",
+      "couleur": "#b3122b",
+      "categorie": "Motoréducteur coulissant 24 Vdc (motorisation)",
+      "modeles": "SLX824CB (800 kg) · SLX1024REV (1000 kg, réversible) · SLX1524CB (1500 kg) · SLX3024CB (3000 kg) · SLX24DRACO (1000 kg, rapide)",
+      "source": "Notice Cardin SLX1524 – SLX1524CB – SLX3024 – SLX3024CB – SLX24DRACO V1.40 (ZVE572, mod. 04-09-2017), pages françaises 16 à 20, caractéristiques p. 36, schéma p. 5",
+      "resume": "Motoréducteurs 24 Vdc pour portails coulissants, avec programmateur électronique intégré (puissance, logique, chargeur de batterie, récepteur radio) alimenté par un transformateur toroïdal séparé. La programmation et le fonctionnement sur batterie sont dans la notice logicielle MULTI-ECU ZVL608 livrée avec l'automatisme (non fournie ici). Pour la carte décrite dans l'ancienne notice ZVL534, voir la carte CARDIN « Programmateur SLX1524 ».",
+      "specs": [
+        [
+          "Modèles",
+          "SLX824CB · SLX1024REV · SLX1524CB · SLX3024CB · SLX24DRACO"
+        ],
+        [
+          "Alimentation",
+          "230 Vac · courant 0,9 / 0,9 / 0,9 / 1,1 / 1,7 A · puissance 200 / 200 / 200 / 250 / 380 W"
+        ],
+        [
+          "Moteur",
+          "24 Vdc (37 Vdc maximum d'après la description technique) · 110 / 110 / 130 / 160 / 250 W · 3 / 3 / 3,5 / 4,5 / 10 A"
+        ],
+        [
+          "Vitesse",
+          "13 / 13 / 9,5 / 8 / 30 m/min"
+        ],
+        [
+          "Couple maxi",
+          "57 / 60 / 74 / 90 / 44 Nm"
+        ],
+        [
+          "Facteur de marche",
+          "70 % (SLX24DRACO : 50 %)"
+        ],
+        [
+          "Poids de portail",
+          "SLX824 800 kg · SLX1024REV 1000 kg · SLX1524 1500 kg · SLX3024 3000 kg · SLX24DRACO 1000 kg"
+        ],
+        [
+          "Récepteur intégré",
+          "433,92 / 868,3 MHz · 4 canaux · 8 fonctions · 300 / 1000 codes"
+        ],
+        [
+          "Environnement",
+          "−20 °C à +55 °C · IP44 · bruit ≤ 75 dB"
+        ]
+      ],
+      "raccordement": [
+        {
+          "n": "N · ⏚ · L",
+          "label": "Alimentation 230 Vac",
+          "desc": "Bornier séparé à 3 voies, passage par le presse-étoupe en bas à droite du circuit. Câble caoutchouc 60245 IEC 57 (ex. 3 x 1,5 mm² H05RN-F), T min. 85 °C ; interrupteur omnipolaire (≥ 3 mm) en amont."
+        },
+        {
+          "n": "MOT · ENCODER",
+          "label": "Moteur et encodeur",
+          "desc": "Câblés sur la carte (schéma p. 5) ; détails des bornes : notice MULTI-ECU ZVL608."
+        }
+      ],
+      "installation": [
+        "Contrôles avant pose : portail lisse jusqu'à 2,5 m ou protégé (photocellules, barre palpeuse), jeu ≤ 15 mm entre parties fixes et mobiles, rail stable et horizontal, espace libre de 50 mm devant le portail fermé, butée d'ouverture indispensable, butées anti-déraillement obligatoires.",
+        "Moteur monté d'usine à gauche (vu de l'intérieur) ; pour la droite, régler « Montage Moteur » (notice MULTI-ECU ZVL608).",
+        "Plot béton de 350 mm de profondeur, dépassant de 25 mm du sol ; pattes de scellement vissées à la plaque, dépassant de 50 mm (écrous M12) ; câbles par le trou B ; plaque de niveau et propre.",
+        "Poser le moteur sur les 4 tiges, le fixer avec 4 écrous et rondelles, régler la hauteur avec les 4 vis sans tête.",
+        "Crémaillère : moteur débrayé, poser chaque élément sur le pignon et le fixer ; jeu pignon-crémaillère 1-2 mm (le poids du portail ne doit pas reposer sur le moteur).",
+        "Déverrouillage SLX1524 / SLX824 : abaisser la protection A, clé B 180° sens horaire, tourner la manette C de plusieurs tours (5-6) sens horaire jusqu'à la butée. Reverrouiller : manette D sens antihoraire, clé sens antihoraire.",
+        "Déverrouillage SLX3024 : pivoter la plaquette, clé un demi-tour sens antihoraire, ouvrir le couvre-manette, manette plusieurs tours sens horaire. SLX24DRACO : clé un demi-tour sens antihoraire = moteur débrayé, commandes inhibées ; sens horaire = embrayé, repositionnement.",
+        "SLX1024REV : réversible, ouverture à la main hors tension avec une poussée d'au moins 35 kg ; une serrure électrique est nécessaire pour verrouiller le vantail fermé.",
+        "Après un déverrouillage manuel, la position encodeur est perdue : donner 3 commandes ou plus pour que le portail se recale sur les butées.",
+        "Accès au coffret : couper l'interrupteur général, desserrer les 2 vis A sur les côtés du couvercle (fig. 11)."
+      ],
+      "notes": [
+        "La description technique parle d'un « système de réduction irréversible avec déverrouillage par clé » pour toute la gamme, alors que le SLX1024REV est réversible.",
+        "Crémaillère : la maintenance demande une section de 20 x 20 mm, les accessoires listés sont en 30 x 20 mm (nylon), 22 x 22 mm et 30 x 12 mm (acier).",
+        "Accessoires : crémaillères nylon CRENY1 (600 kg), CRENY et CREMP (800 kg), acier SLOAC et SLOAC2 (DRACO et jusqu'à 3000 kg).",
+        "Garantie 24 mois ou 50 000 manœuvres si l'entretien est documenté : crémaillère, jeu 1-2 mm, graissage (lubrifiant −20 à +70 °C), charge des batteries.",
+        "Usage limité à 70 % (pas d'utilisation continue)."
+      ]
     }
   ];
   window.ACCESSOIRES = ACCESSOIRES;

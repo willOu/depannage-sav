@@ -181,6 +181,17 @@
       S("cardin-s504-p15", "Récepteur à carte", 15, "Récepteur à carte 2 canaux, cavaliers J1 et SEL CH1 / CH2."),
       S("cardin-s504-p16", "Mini récepteur", 16, "Mini récepteur IP20, bornier à 10 voies.")
     ],
+    "cardin-slx": [
+      S("cardin-slx-p17", "Contrôles et encombrements", 17, "Contrôles avant pose et dimensions SLX3024, SLX1524 / 1024REV / 824, SLX24DRACO."),
+      S("cardin-slx-p18", "Ancrage SLX24DRACO", 18, "Fig. 6 à 8 : plaque, plot, crémaillère, déverrouillage à levier."),
+      S("cardin-slx-p19", "Ancrage SLX3024 – 1524 – 1024REV – 824", 19, "Fig. 9 à 11 : plaque, crémaillère, déverrouillage SLX3024."),
+      S("cardin-slx-p20", "Déverrouillage SLX1524 / SLX824, branchement", 20, "Fig. 12 : déverrouillage à vis ; alimentation 230 Vac ; maintenance."),
+      S("cardin-slx-p05", "Schéma électrique (V1.40)", 5, "Carte de la notice V1.40 (fusibles 15 A / 4 A, J1 à J5, M1)."),
+    ],
+    "cardin-slx1524": [
+      S("cardin-slx1524-p05", "Schéma électrique de la carte", 5, "Bornier 1 à 31, fusibles F1 à F4, J1 à J3, MM, R1, P1 à P3 ; raccordement LP, LS, photocellules, sélecteur, TB, bord, antenne."),
+      S("cardin-slx1524-p27", "Menus, codes radio et alarmes", 27, "Menus CALENDRIER et CODES RADIO, signalisations de fonctionnement et d'alarme."),
+    ],
     "cardin-cdr842": [
       S("cardin-cdr842-p06", "Figures CDR842A / CDR852A", 6, "Dimensions, montage, centrage (test point), exemples d'installation, fig. 6 : bornier récepteur (6 C, 5 NA, 4 NC, 3 0V, 2 12V, 1 24V) et émetteur (4 24V, 3 12V, 2-1 0V)."),
     ],
