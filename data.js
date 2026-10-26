@@ -192,6 +192,9 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "1.69", date: "2026-10-26", titre: "Photocellules Cardin CDR842A / CDR852A", items: [
+    "Nouvelle fiche accessoire Cardin CDR842A · CDR852A (Accessoires → Sécurités) : caractéristiques, bornier émetteur et récepteur, centrage au testeur, LED, schémas."
+  ], docs: ["Cardin CDR842-852A ZVL448.03", "Fiche produit Cardin CDR842A"] },
   { v: "1.68", date: "2026-10-26", titre: "Accueil réorganisé", items: [
     "Page d'accueil : les logos des marques sont maintenant juste sous les trois types de matériel (coulissant, battant, barrière), puis les favoris, puis le reste (diagnostic guidé, accessoires, calculs, quiz, comparateur, scanner, dernières consultées)."
   ], docs: [] },

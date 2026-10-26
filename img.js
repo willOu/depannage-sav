@@ -181,6 +181,9 @@
       S("cardin-s504-p15", "Récepteur à carte", 15, "Récepteur à carte 2 canaux, cavaliers J1 et SEL CH1 / CH2."),
       S("cardin-s504-p16", "Mini récepteur", 16, "Mini récepteur IP20, bornier à 10 voies.")
     ],
+    "cardin-cdr842": [
+      S("cardin-cdr842-p06", "Figures CDR842A / CDR852A", 6, "Dimensions, montage, centrage (test point), exemples d'installation, fig. 6 : bornier récepteur (6 C, 5 NA, 4 NC, 3 0V, 2 12V, 1 24V) et émetteur (4 24V, 3 12V, 2-1 0V)."),
+    ],
     "cardin-s449": [
       S("cardin-s449-p49", "Récepteur sous coffret", 49, "Récepteur RCQ449 : bornier à 14 voies, boutons P1 / P2, cavaliers."),
       S("cardin-s449-p50", "Récepteur à carte", 50, "Récepteur à carte RSQ449, connexions et cavaliers."),

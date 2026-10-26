@@ -3929,7 +3929,102 @@
     "notes": [
       "Les numéros de bornes de sortie sont lus sur le schéma de la notice (pas de texte détaillé)."
     ]
-  }
+  },
+    {
+      "id": "cardin-cdr842",
+      "nom": "CDR842A · CDR852A",
+      "marque": "CARDIN",
+      "couleur": "#b3122b",
+      "categorie": "Photocellules (barrière infrarouge modulé en applique)",
+      "modeles": "CDR842A (portée 15 m extérieur / 30 m intérieur) · CDR852A (60 m, avec réglage de sensibilité) — boîtier aluminium IP66",
+      "source": "Notice Cardin CDR842-852A ZVL448.03 (10-07-2003), partie française p. 3 et figures p. 6 ; fiche produit Cardin CDR842A",
+      "resume": "Paire émetteur (projecteur) + récepteur à infrarouge modulé, sortie par double relais en série. Optique orientable sur rotule autobloquante. Alignée : LED de l'émetteur allumée et LED du récepteur éteinte ; désalignée ou faisceau coupé : LED du récepteur allumée.",
+      "specs": [
+        [
+          "Alimentation",
+          "12-24 V ac/dc"
+        ],
+        [
+          "Consommation",
+          "12 V : récepteur 45 mA + émetteur 50 mA · 24 V : récepteur 50 mA + émetteur 58 mA"
+        ],
+        [
+          "Portée",
+          "CDR842A : 30 m à l'intérieur, 15 m à l'extérieur · CDR852A : 60 m en toutes conditions"
+        ],
+        [
+          "Sortie",
+          "Double relais avec contacts en série · 28 W dc / 60 VA ac en charge résistive, 30 V ac/dc max"
+        ],
+        [
+          "Émission",
+          "Infrarouge 950 nm, modulation 6,75 kHz (CDR842A) / 6,10 kHz (CDR852A)"
+        ],
+        [
+          "Câble TX ↔ RX",
+          "0,2 mm² minimum (Ø 0,5 mm, AWG 24), 100 m maximum"
+        ],
+        [
+          "Orientation",
+          "Horizontale 90°, verticale ±30°"
+        ],
+        [
+          "Température, protection",
+          "−10 °C à +55 °C (notice) · IP66"
+        ]
+      ],
+      "raccordement": [
+        {
+          "n": "RX 1 · 2 · 3",
+          "label": "Récepteur : 24V · 12V · 0V",
+          "desc": "Alimentation 24 V sur 1-3 ou 12 V sur 2-3."
+        },
+        {
+          "n": "RX 4 · 5 · 6",
+          "label": "Récepteur : NC · NA · C",
+          "desc": "Contact du relais (fig. 6) : C = 6, NA = 5, NC = 4."
+        },
+        {
+          "n": "TX 1 · 2 · 3 · 4",
+          "label": "Émetteur : 0V · 0V · 12V · 24V",
+          "desc": "Alimentation 24 V sur 4 et 0 V, ou 12 V sur 3 et 0 V."
+        }
+      ],
+      "installation": [
+        "Émetteur et récepteur face à face, même axe et même hauteur en principe ; désaxés ou à des hauteurs différentes possible grâce à la rotule (fig. 5).",
+        "Plusieurs paires : deux récepteurs du même côté peuvent voir le même émetteur. Pour l'éviter, alterner émetteurs et récepteurs à bonne distance (600 mm minimum dans les parties italienne et anglaise).",
+        "Percer avec le gabarit fourni, séparer le couvercle de la base, fixer la base (vis et chevilles), passer les câbles par le presse-étoupe (trou A, étanche IP66 avec le bon tube) ou par l'arrière (trou B défonçable + joint) ; câbler le bornier (fig. 6).",
+        "Alimenter et centrer : orienter l'optique jusqu'à ce que la LED du récepteur s'éteigne. Les écrous de la rotule sont autobloquants : ni serrer ni desserrer.",
+        "Centrage fin (CDR842A) : testeur calibre 2 V dc sur le TEST POINT du récepteur (polarité marquée sur la carte), orienter jusqu'à lire entre 0,9 et 1 V dc.",
+        "CDR852A : sensibilité livrée au minimum (potentiomètre ; sens horaire = moins sensible). Mettre la sensibilité au minimum de lecture, orienter pour le signal maximal, puis corriger la sensibilité jusqu'à lire 1 à 1,5 V dc. Sensibilité élevée à courte distance = déclenchement retardé du relais.",
+        "Vérifier le joint, accrocher le couvercle en haut de la base, le rabattre en tournant, serrer à fond les deux vis six pans creux."
+      ],
+      "notes": [
+        "Distance entre paires : la partie française écrit « min. 600 m », les parties italienne et anglaise « 600 mm ».",
+        "Exemples d'installation : la partie française renvoie à la fig. 3, les autres langues à la fig. 5.",
+        "Température : −10…+55 °C dans la notice, −20…+55 °C dans la fiche produit Cardin.",
+        "Fiche produit : orientation horizontale « ±90° », la notice dit « 90° ». La fiche cite aussi les CDR841 / CDR851 (boîtier IP55), non décrites dans cette notice.",
+        "Repère du potentiomètre de sensibilité (CDR852A) : « C » au § réglages, « A » au § centrage (fig. 3)."
+      ],
+      "codes": [
+        [
+          "LED émetteur allumée",
+          "Émetteur alimenté."
+        ],
+        [
+          "LED récepteur éteinte",
+          "Faisceau reçu, cellules alignées."
+        ],
+        [
+          "LED récepteur allumée",
+          "Cellules non alignées ou faisceau coupé."
+        ],
+        [
+          "Test point 0,9 à 1 V (842A) / 1 à 1,5 V (852A)",
+          "Centrage fin correct."
+        ]
+      ]
+    }
   ];
   window.ACCESSOIRES = ACCESSOIRES;
   const TABS = [["info", "Infos"], ["racc", "Raccord."], ["inst", "Installation"], ["sch", "Schéma"], ["notes", "Notes"], ["ntc", "Notice"]];
