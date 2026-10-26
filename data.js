@@ -7211,7 +7211,7 @@ const MARQUES = [
           { code: "F38", def: "25 %", titre: "Point de ralentissement en fermeture", valeurs: [["10-60 %", ""]] },
           { code: "F54", def: "0", titre: "Sens d'ouverture", valeurs: [["0", "Vers la gauche."], ["1", "Vers la droite."]] },
           { code: "A1", def: "—", titre: "Type de moteur", valeurs: [["1", "400 kg."], ["2", "600 kg."], ["3", "800 kg."], ["4", "1000 kg."]] },
-          { code: "A3", def: "OFF", titre: "Auto-apprentissage de la course", valeurs: [["ON", "Lance l'apprentissage."]] },
+          { code: "A3", def: "—", titre: "Auto-apprentissage de la course", valeurs: [["ON", "Lance l'apprentissage."]] },
           { code: "A4", def: "OFF", titre: "Remise à zéro des paramètres", valeurs: [["ON", "Valeurs par défaut, course effacée."]] },
           { code: "A5", def: "—", titre: "Comptage des manœuvres", valeurs: [["001 / 010 / 100 / 999", "100 / 1000 / 10 000 / 99 900 manœuvres."], ["CSI", "Intervention d'entretien."]] },
           { code: "A6", def: "—", titre: "Couple moteur", valeurs: [["1-5", "Minimum à maximum."]] }
@@ -55108,9 +55108,9 @@ const MARQUES = [
           { n: "5", label: "Ferme (N.O.)", desc: "", t: "no" },
           { n: "6", label: "Arrêt (N.F.)", desc: "Sans boîte à boutons : ponter 3-6", t: "nf" },
           { n: "7", label: "Contact radio (N.O.)", desc: "Fonction selon dip A2 et A5", t: "no" },
-          { n: "Piéton", label: "Ouverture piétonne (N.O.)", desc: "Contact avec le commun ; temps par le trimmer PIETONNE (1–45 s)", t: "no" },
+          { n: "P-P", label: "Ouverture piétonne (N.O.)", desc: "Bornier séparé à 2 bornes à côté de L0 ; temps par le trimmer PIETONNE (1–45 s)", t: "no" },
           { n: "8 · 9 · 10", label: "Fins de course (N.F.)", desc: "Sur la carte : 8 Fc.F., 9 commun, 10 Fc.O. Sans fins de course : ponter 8, 9 et 10", t: "nf" },
-          { n: "32 · 33 · 34", label: "Listeaux de sécurité", desc: "Fermeture et ouverture séparés, 33 = commun ; N.F. (en série) ou 8,2 kΩ (en parallèle) selon JA", t: "nf" }
+          { n: "32 · 33 · 34", label: "Listeaux de sécurité", desc: "32 = commun, 33 = listeau en fermeture, 34 = listeau en ouverture ; N.F. (en série) ou 8,2 kΩ (en parallèle) selon JA", t: "nf" }
         ]}
       ],
       fusibles: "F1, F2, F3 = 8 A (réseau) · F4 = 2 A (transformateur et frein électronique) · F5 = 630 mA (clignotant ; « 630A » imprimé dans la notice) · F6 = 2 A (24 V)",
@@ -55271,7 +55271,7 @@ const MARQUES = [
           { n: "22 · 23", label: "Électrovanne", desc: "Alimentation 230 V 50 Hz de l'électrovanne de déblocage", t: "sortie" },
           { n: "16-17-18 · 19-20-21", label: "Moteurs M1 · M2", desc: "16 et 19 = communs ; condensateurs 20 µF (A-B) ; fusibles F1 / F2 = 5 A", t: "moteur" },
           { n: "31-32-33 · 34-35-36", label: "Moteurs M3 · M4", desc: "31 et 34 = communs ; fusibles 6,3 A", t: "moteur" },
-          { n: "51 · 52 · 53", label: "Clignotant / lampe / son", desc: "230 V 100 W max ; 53 = commun (fils de la borne : bleu = commun, marron = lampe, noir = son de mouvement)", t: "sortie" }
+          { n: "51 · 52 · 53", label: "Clignotant / lampe / son", desc: "230 V 100 W max ; 52 = commun. Clignotant externe ou son de mouvement (fil noir) sur 51-52 ; feux / LED de la borne (fil marron) sur 52-53 ; fil bleu = commun", t: "sortie" }
         ]},
         { nom: "Basse tension", bornes: [
           { n: "1 · 2", label: "Photocellules ou boucle magnétique (N.F.)", desc: "", t: "nf" },
