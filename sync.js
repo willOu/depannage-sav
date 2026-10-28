@@ -119,6 +119,25 @@
   addEventListener("auth-out", () => { ["favs", FQ, VQ, MS, LUS, OWNER, "sync-admin"].forEach(st.del); });
   setInterval(() => { if (document.visibilityState === "visible") bientot(10); }, 5 * 60 * 1000);
 
+  /* ---------- présence en ligne : signal toutes les minutes tant que l'appli est affichée ---------- */
+  function ping(absent) {
+    if (!actif() || !AUTH.pret() || navigator.onLine === false || !AUTH.appareil) return;
+    AUTH.api("/rest/v1/rpc/ping", { method: "POST", headers: JSONH, body: JSON.stringify({ appareil: AUTH.appareil(), absent: !!absent }) }).catch(() => {});
+  }
+  addEventListener("auth-ok", () => ping());
+  document.addEventListener("visibilitychange", () => ping(document.visibilityState !== "visible"));
+  setInterval(() => { if (document.visibilityState === "visible") ping(); }, 60 * 1000);
+  /* compteur des personnes en ligne (admin) : rafraîchi toutes les 30 s tant qu'il est affiché */
+  async function majEnLigne() {
+    const el = document.getElementById("enligne"); if (!el) return;
+    const r = await AUTH.api("/rest/v1/rpc/en_ligne", { method: "POST", headers: JSONH, body: "{}" });
+    const el2 = document.getElementById("enligne"); if (!el2) return;
+    if (!r.ok || !r.j) { el2.innerHTML = `<span>🟢 En ligne</span><i class="muted">${r.net ? "pas de réseau" : "indisponible"}</i>`; return; }
+    const l = r.j.liste || [];
+    el2.innerHTML = `<span>🟢 En ligne maintenant : <b>${r.j.n}</b> personne${r.j.n > 1 ? "s" : ""}${l.length ? `<small style="display:block;margin-top:4px;color:var(--mut,#999)">${l.map(x => esc(x.nom) + (x.appareil ? " (" + esc(x.appareil) + ")" : "")).join(" · ")}</small>` : ""}</span>`;
+  }
+  setInterval(majEnLigne, 30 * 1000);
+
   /* avant la déconnexion : envoie ce qui attend ; renvoie le nombre de changements restés en attente */
   async function vider() {
     if (!actif()) return 0;
@@ -144,6 +163,7 @@
       if (!estAdmin()) return "";
       const ms = messages();
       return `<h2>Administration</h2><div class="set">
+        <div class="srow" id="enligne"><span>🟢 En ligne maintenant : …</span></div>
         <button class="srow" onclick="go('#/techs')"><span>👥 Techniciens et appareils</span><i>›</i></button>
         <button class="srow" onclick="go('#/signalements')"><span>⚑ Signalements${window.sigNbNouveaux && sigNbNouveaux() ? ` <span class="tb2 pv">${sigNbNouveaux()} à traiter</span>` : ""}</span><i>›</i></button>
         <button class="srow" onclick="go('#/stats')"><span>📊 Statistiques de consultation</span><i>›</i></button>
@@ -157,6 +177,7 @@
     },
     reglagesHtml() { return this.messagesHtml() + this.adminHtml(); },
     brancherReglages() {
+      majEnLigne();
       const b = document.getElementById("mp"); if (!b) return;
       b.onclick = async () => {
         const titre = document.getElementById("mt").value.trim(), texte = document.getElementById("mx").value.trim(), alerte = document.getElementById("ma").checked, j = +document.getElementById("md").value, out = document.getElementById("mr");

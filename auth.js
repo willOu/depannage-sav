@@ -172,6 +172,7 @@
   }
 
   window.AUTH = {
+    appareil() { return DEV; },
     /* démarre l'appli (cb) une fois l'accès confirmé ; sans réseau, la session gardée suffit dans le délai */
     start(cb) {
       if (!ACCES_REQUIS) { window.AUTH_ACTIF = false; cb(); return; }
