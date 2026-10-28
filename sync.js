@@ -132,7 +132,7 @@
     const el = document.getElementById("enligne"); if (!el) return;
     const r = await AUTH.api("/rest/v1/rpc/en_ligne", { method: "POST", headers: JSONH, body: "{}" });
     const el2 = document.getElementById("enligne"); if (!el2) return;
-    if (!r.ok || !r.j) { el2.innerHTML = `<span>🟢 En ligne</span><i class="muted">${r.net ? "pas de réseau" : "indisponible"}</i>`; return; }
+    if (!r.ok || !r.j || typeof r.j.n !== "number") { el2.innerHTML = `<span>🟢 En ligne</span><i class="muted">${r.net ? "pas de réseau" : "indisponible"}</i>`; return; }
     const l = r.j.liste || [];
     el2.innerHTML = `<span>🟢 En ligne maintenant : <b>${r.j.n}</b> personne${r.j.n > 1 ? "s" : ""}${l.length ? `<small style="display:block;margin-top:4px;color:var(--mut,#999)">${l.map(x => esc(x.nom) + (x.appareil ? " (" + esc(x.appareil) + ")" : "")).join(" · ")}</small>` : ""}</span>`;
   }
