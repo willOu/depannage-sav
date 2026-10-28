@@ -192,6 +192,9 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "1.75", date: "2026-10-28", titre: "Personnes en ligne visibles par tous", items: [
+    "Réglages : tout le monde voit maintenant le nombre de personnes en ligne. Les noms et les appareils restent réservés aux administrateurs."
+  ], docs: [] },
   { v: "1.74", date: "2026-10-28", titre: "Personnes en ligne", items: [
     "Administration (Réglages) : nombre de personnes en ligne en ce moment, avec leurs noms et appareils, mis à jour toutes les 30 secondes. Une personne compte comme en ligne quand l'appli est ouverte à l'écran avec du réseau (signal toutes les minutes)."
   ], docs: [] },

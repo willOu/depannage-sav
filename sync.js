@@ -156,7 +156,7 @@
     messagesHtml() {
       if (!actif()) return "";
       const ms = messages();
-      return `<h2>Messages du SAV</h2>` + (ms.length ? ms.map(m => msgHtml(m, true)).join("") : `<p class="note">Aucun message en cours.</p>`);
+      return (estAdmin() ? "" : `<h2>En ce moment</h2><div class="set"><div class="srow" id="enligne"><span>🟢 En ligne maintenant : …</span></div></div>`) + `<h2>Messages du SAV</h2>` + (ms.length ? ms.map(m => msgHtml(m, true)).join("") : `<p class="note">Aucun message en cours.</p>`);
     },
     /* Réglages : administration (statistiques, publication, messages publiés) */
     adminHtml() {
