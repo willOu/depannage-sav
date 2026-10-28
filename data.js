@@ -192,6 +192,9 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "1.73", date: "2026-10-28", titre: "Détecteurs de boucle BBC Bircher ProLoop", items: [
+    "Nouvelles fiches BBC Bircher ProLoop Lite et ProLoop2 (Accessoires → Détection de véhicule) : bornier, réglages et valeurs d'usine, codes d'erreur E001 à E312, mode simulation, reset."
+  ], docs: ["BBC Bircher ProLoop Lite 354823C (11/18)", "BBC Bircher ProLoop2 265336K (02/21)"] },
   { v: "1.72", date: "2026-10-26", titre: "Administrateurs : 5 appareils", items: [
     "Les administrateurs peuvent maintenant être connectés sur 5 appareils en même temps (2 pour les techniciens). Les messages de connexion et la page Techniciens affichent le bon maximum."
   ], docs: [] },

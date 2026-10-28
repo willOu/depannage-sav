@@ -28,6 +28,17 @@
       S("casit-keqs08-p4", "Implantation de la carte", 4, "Position des dip A / B, trimmers FORZA / V.RALL / BLOCK, boutons CODICI / TEMPI / P, JP1, cavalier AC/DC."),
       S("casit-keqs08-p8", "Raccordement des cellules 24 V", 8, "Cellules 24 V AC et 24 V DC, avec et sans test.")
     ],
+    "bircher-proloop-lite": [
+      S("bircher-proloop-lite-p1", "Présentation et bornier", 1, "Face avant, schéma des bornes (alimentation, boucles L3 à L6, sorties 11-12-14 et 21-22-24)."),
+      S("bircher-proloop-lite-p2", "Fonctions et LED", 2, "Affichage, LED, fonctions de base, temporisations, sensibilité, ASB, fréquence."),
+      S("bircher-proloop-lite-p3", "Tableau des réglages", 3, "Mode configuration, paramètres 0 à 6 et valeurs d'usine.")
+    ],
+    "bircher-proloop2": [
+      S("bircher-proloop2-p1", "Présentation et bornier", 1, "Bornes A à F : alimentation, boucles, sortie alarme 31-32-34, sorties 1 et 2."),
+      S("bircher-proloop2-p2", "Fonctions et sécurité secteur", 2, "LED, fonctions de base, temporisations, logique de direction, sécurité défaillance secteur."),
+      S("bircher-proloop2-p3", "Tableau des réglages", 3, "Paramètres 0 à 9 et A, valeurs d'usine, tableau 4.11b."),
+      S("bircher-proloop2-p4", "Simulation, erreurs, reset", 4, "Mode simulation, codes E001 à E312, Reset 1 et 2, caractéristiques.")
+    ],
     "bircher-rfgate": [
       S("bircher-rfgate-p2", "Dip, émetteur et câblage du récepteur", 2, "Dip de l'émetteur selon le détecteur, passage NC / NO, bornier du récepteur (VCC, COM, OUT, SOUT, TST) et dip 1 à 5 du récepteur."),
       S("bircher-rfgate-p3", "Mise en service et états", 3, "Étapes de mise en service, appairage des émetteurs, tableau des états de contact.")

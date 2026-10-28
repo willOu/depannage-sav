@@ -4228,6 +4228,201 @@
         "Photocellules à 80 cm minimum de la borne (fig. 11) ; boucles magnétiques pré-assemblées de 6 m ou 12 m avec détecteur deux canaux.",
         "Hauteur de fouille P de 1000 à 1500 mm selon hauteur et version (fig. 5)."
       ]
+    },
+    {
+      "id": "bircher-proloop-lite",
+      "nom": "ProLoop Lite",
+      "marque": "BBC Bircher",
+      "couleur": "#b3122f",
+      "categorie": "Détecteur de boucle magnétique (rail DIN)",
+      "modeles": "ProLoop Lite 1 boucle ou 2 boucles, alimentation 24 V DC ou 230 V AC",
+      "source": "Notice BBC Bircher ProLoop Lite 354823C (11/18), français, 4 p.",
+      "resume": "Détecteur de boucle inductive pour portails industriels, barrières et parkings : écran LCD, touches « Mode » et « Data », LED d'information, 1 ou 2 sorties relais.",
+      "specs": [
+        [
+          "Alimentation",
+          "24 V DC −10 % / +20 %, 1,5 W max · ou 230 V AC ±10 % 50 Hz, 2,9 VA max (selon la plaque signalétique)"
+        ],
+        [
+          "Boucle",
+          "20 à 1000 µH (idéal 80 à 300 µH) · câble 1,5 mm² : 100 m max à 20–40 µH, 200 m max au-delà de 40 µH · < 8 Ω"
+        ],
+        [
+          "Relais de sortie",
+          "240 V AC max 2 A · 30 V DC 1 A (AC-1)"
+        ],
+        [
+          "Divers",
+          "22,5 x 92 x 85 mm · IP20 · −20 à +60 °C (stockage −40 à +70 °C) · humidité < 95 % sans condensation"
+        ]
+      ],
+      "raccordement": [
+        {
+          "n": "1 · 2",
+          "label": "Alimentation",
+          "desc": "A1 (~ / +) et A2 (~ / −), tension selon la plaque."
+        },
+        {
+          "n": "L3 · L4",
+          "label": "Boucle 1",
+          "desc": "Fils torsadés."
+        },
+        {
+          "n": "L5 · L6",
+          "label": "Boucle 2",
+          "desc": "Appareil à 2 boucles."
+        },
+        {
+          "n": "11 · 12 · 14",
+          "label": "Sortie 1",
+          "desc": "11 commun, 12 NF, 14 NO."
+        },
+        {
+          "n": "21 · 22 · 24",
+          "label": "Sortie 2",
+          "desc": "21 commun, 22 NF, 24 NO."
+        }
+      ],
+      "installation": [
+        "Montage sur rail DIN 35 mm (EN 50022), bornes enfichables codées.",
+        "Fils de boucle torsadés au moins 20 fois par mètre ; résistance de boucle < 8 Ω câble compris.",
+        "Mode configuration : taper une fois sur « Mode » (sur un appareil à 2 boucles, une 2e fois pour la boucle 2), « Data » change la valeur, « Mode » passe à la fonction suivante ; retour au mode travail : « Mode » maintenu 1 s.",
+        "Reset 1 (réinitialisation des boucles) : « Mode » maintenu 2 s."
+      ],
+      "codes": [
+        [
+          "LED rouge + verte",
+          "Phase de démarrage."
+        ],
+        [
+          "LED verte fixe",
+          "En marche."
+        ],
+        [
+          "LED verte clignotante",
+          "Sortie 1 et/ou 2 activée."
+        ],
+        [
+          "LED rouge clignotante",
+          "Dysfonctionnement ; l'écran alterne « A » (mode travail) et « E »."
+        ]
+      ],
+      "notes": [
+        "Paramètres (* = usine) : 0 fonction de base (1 portes et portails*, 2 barrières, 3 courant de repos) · 1 fonction temps (∞*, temporisation de démarrage, d'arrêt, impulsion à l'occupation, à la libération, présence maximale) · 2 unité (0,1 s, 1 s*, 1 min, 1 h) · 3 facteur 1–99 (1*) ; temps = unité x facteur · 4 sensibilité S1 (faible) à S9 (forte), S4* · 5 ASB (augmentation automatique de sensibilité, ex. timons de remorque) : désactivée* / activée · 6 fréquence F1 à F4, F4*.",
+        "Plusieurs détecteurs proches : leur donner des fréquences différentes.",
+        "La notice ne donne pas de codes d'erreur détaillés (affichage « E » seulement)."
+      ]
+    },
+    {
+      "id": "bircher-proloop2",
+      "nom": "ProLoop2",
+      "marque": "BBC Bircher",
+      "couleur": "#b3122f",
+      "categorie": "Détecteur de boucle magnétique (rail DIN)",
+      "modeles": "ProLoop2 DIN 1 boucle ou 2 boucles, 1 ou 2 relais + relais d'alarme en option ; alimentation 24ACDC ou LVAC (100–240 V AC)",
+      "source": "Notice BBC Bircher ProLoop2 265336K (02/21), français, 4 p.",
+      "resume": "Détecteur de boucle inductive pour portails industriels, barrières, parkings et bornes escamotables : écran LCD, touches Mode / Data (Sim1 / Sim2), mode simulation avec mesure d'inductance, journal des 5 dernières erreurs.",
+      "specs": [
+        [
+          "Alimentation",
+          "24ACDC : 24 V AC −20 % / +10 % 50/60 Hz 2 W max, ou 24 V DC −10 % / +20 % 1,5 W max · LVAC : 100–240 V AC ±10 % 50/60 Hz, 2,9 W max"
+        ],
+        [
+          "Boucle",
+          "20 à 1000 µH (idéal 80 à 300 µH) · câble 1,5 mm² : 100 m max à 20–40 µH, 200 m max au-delà de 40 µH · < 8 Ω"
+        ],
+        [
+          "Relais",
+          "Boucle : AC-1 240 V AC 2 A, DC-1 30 V DC 1 A · alarme : 40 V AC 0,3 A / 40 V DC 0,3 A"
+        ],
+        [
+          "Divers",
+          "22,5 x 94 x 88 mm · IP20 · −20 à +60 °C · humidité < 95 % sans condensation"
+        ]
+      ],
+      "raccordement": [
+        {
+          "n": "1 · 2",
+          "label": "Alimentation",
+          "desc": "A1 / A2, tension indiquée sur le côté de l'appareil. Version 24 V : très basse tension de sécurité (SELV)."
+        },
+        {
+          "n": "L3 · L4",
+          "label": "Boucle 1",
+          "desc": "Fils torsadés."
+        },
+        {
+          "n": "L5 · L6",
+          "label": "Boucle 2",
+          "desc": "Appareil à 2 boucles."
+        },
+        {
+          "n": "11 · 12 · 14",
+          "label": "Sortie 1",
+          "desc": "11 commun, 12 NF, 14 NO."
+        },
+        {
+          "n": "21 · 22 · 24",
+          "label": "Sortie 2",
+          "desc": "21 commun, 22 NF, 24 NO."
+        },
+        {
+          "n": "31 · 32 · 34",
+          "label": "Sortie alarme (option)",
+          "desc": "31 commun, 32 NF, 34 NO."
+        }
+      ],
+      "installation": [
+        "Montage sur rail DIN 35 mm (EN 50022), bornes enfichables codées.",
+        "Fils de boucle torsadés au moins 20 fois par mètre ; résistance de boucle < 8 Ω câble compris.",
+        "Mode configuration : taper une fois sur « Mode » (sur un appareil à 2 boucles, une 2e fois pour la boucle 2), « Data » change la valeur, « Mode » passe à la fonction suivante ; retour au mode travail : « Mode » maintenu 1 s.",
+        "Reset 1 (réinitialisation des boucles) : « Mode » maintenu 2 s.",
+        "Reset 2 (configuration d'usine, sauf journal d'erreurs) : « Mode » + « Data » maintenus 8 s.",
+        "Mode simulation : « Sim1 » + « Sim2 » 2 s (boucles raccordées obligatoires) : simuler boucle libre / occupée (L0 / L1), forcer les relais (00 / 01, A0 / A1), lire l'inductance de chaque boucle en µH. Sortie : « Sim1 » 2 s."
+      ],
+      "codes": [
+        [
+          "E001 / E002",
+          "Interruption de la boucle 1 / 2."
+        ],
+        [
+          "E011 / E012",
+          "Court-circuit de la boucle 1 / 2."
+        ],
+        [
+          "E101",
+          "Sous-tension."
+        ],
+        [
+          "E102",
+          "Surtension."
+        ],
+        [
+          "E201 / E202",
+          "Erreur de mémoire."
+        ],
+        [
+          "E301 / E302",
+          "Boucle 1 / 2 trop grande."
+        ],
+        [
+          "E311 / E312",
+          "Boucle 1 / 2 trop petite."
+        ],
+        [
+          "Journal",
+          "5 dernières erreurs : appuis courts sur « Data » ; « Data » 4 s efface le journal."
+        ],
+        [
+          "LED",
+          "Rouge + vert : démarrage ou configuration · vert : en service · vert clignotant : boucle occupée · rouge clignotant : défaut · rouge + vert clignotant : simulation."
+        ]
+      ],
+      "notes": [
+        "Paramètres (* = usine) : 0 fonction de base (1 portails*, 2 barrières, 3 courant de repos, 4 logique de direction sur 2 boucles ; 0 désactive la boucle 2) · 1 fonction temps (∞*, temporisation de démarrage, de coupure, impulsion à l'occupation, à la libération, présence limitée) · 2 unité (0,1 s, 1 s*, 1 min, 1 h) · 3 facteur 1–99 (1*) · 4 sensibilité 1 à 9 (4*) · 5 ASB désactivée* / activée · 6 fréquence F1 à F4 (F4*) · 7 logique de direction (les deux*, boucle 2 vers 1, boucle 1 vers 2) · 8 sortie 2 · 9 sécurité défaillance secteur (inactive* / P1 parkings et bornes escamotables : sensibilité limitée de 1 à 5, et ASB doit être désactivée).",
+        "En cas d'erreur : 1 portail → relais de sortie retombe ; 2 barrière → relais s'enclenche ; 3 courant de repos et 4 logique de direction → relais retombent. Le relais d'alarme retombe toujours.",
+        "Sortie 2 (paramètre 8) : appareil 1 boucle 2 relais → active* ; appareil 2 boucles avec boucle 2 désactivée → inactive* (tableau 4.11b)."
+      ]
     }
   ];
   window.ACCESSOIRES = ACCESSOIRES;
