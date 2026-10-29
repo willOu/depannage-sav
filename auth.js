@@ -84,8 +84,17 @@
       <input id="lge" type="email" name="email" placeholder="Email" autocomplete="username" required value="${esc((S && S.email) || "")}">
       <input id="lgp" type="password" name="password" placeholder="Mot de passe" autocomplete="current-password" required>
       <button id="lgb" type="submit">Se connecter</button>
+      <button id="lgo" type="button" class="lgo">Mot de passe oublié ?</button>
       <p class="lgn">Une seule connexion, avec du réseau.</p><p class="lgv">Version ${typeof APP_V !== "undefined" ? esc(APP_V) : "—"}</p></form>`;
     document.documentElement.classList.add("locked");
+    document.getElementById("lgo").onclick = async () => {
+      const m = document.getElementById("lgm"), email = document.getElementById("lge").value.trim().toLowerCase();
+      if (!/^[a-z0-9._%+'-]+@[a-z0-9-]+(\.[a-z0-9-]+)+$/.test(email)) { m.className = "lgm bad"; m.textContent = "Saisissez d'abord votre email, puis touchez « Mot de passe oublié ? »."; return; }
+      const r = await call("/rest/v1/rpc/mdp_oublie", { method: "POST", headers: H(), body: JSON.stringify({ p_email: email }) });
+      if (r.net) { m.className = "lgm bad"; m.textContent = "Pas de réseau : la demande demande du réseau."; return; }
+      if (!r.ok) { m.className = "lgm bad"; m.textContent = r.status === 429 ? "Trop d'essais : patientez quelques minutes." : "Demande impossible pour le moment. Réessayez."; return; }
+      m.className = "lgm ok"; m.textContent = "Demande envoyée. Si ce compte existe, le SAV vous transmettra un mot de passe provisoire.";
+    };
     document.getElementById("lgf").onsubmit = async ev => {
       ev.preventDefault();
       const m = document.getElementById("lgm"), b = document.getElementById("lgb"), email = document.getElementById("lge").value.trim().toLowerCase(), pw = document.getElementById("lgp").value;

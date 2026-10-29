@@ -134,7 +134,7 @@
     const el2 = document.getElementById("enligne"); if (!el2) return;
     if (!r.ok || !r.j || typeof r.j.n !== "number") { el2.innerHTML = `<span>🟢 En ligne</span><i class="muted">${r.net ? "pas de réseau" : "indisponible"}</i>`; return; }
     const l = r.j.liste || [];
-    el2.innerHTML = `<span>🟢 En ligne maintenant : <b>${r.j.n}</b> personne${r.j.n > 1 ? "s" : ""}${l.length ? `<small style="display:block;margin-top:4px;color:var(--mut,#999)">${l.map(x => esc(x.nom) + (x.appareil ? " (" + esc(x.appareil) + ")" : "")).join(" · ")}</small>` : ""}</span>`;
+    el2.innerHTML = `<span>🟢 En ligne maintenant : <b>${r.j.n}</b> personne${r.j.n > 1 ? "s" : ""}${r.j.mdp ? `<small style="display:block;margin-top:4px">🔑 ${r.j.mdp} demande${r.j.mdp > 1 ? "s" : ""} de mot de passe oublié</small>` : ""}${l.length ? `<small style="display:block;margin-top:4px;color:var(--mut,#999)">${l.map(x => esc(x.nom) + (x.appareil ? " (" + esc(x.appareil) + ")" : "")).join(" · ")}</small>` : ""}</span>`;
   }
   setInterval(majEnLigne, 30 * 1000);
 

@@ -5,6 +5,7 @@
 //   modifier     { email, nom?, actif?, admin? }
 //   mot_de_passe { email, mot_de_passe }
 //   liberer      { email, device_id }
+//   ignorer      { email }   (efface une demande « mot de passe oublié »)
 // Le compte appelant est vérifié avec son propre jeton ; la clé de service ne quitte jamais le serveur.
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
@@ -58,6 +59,7 @@ Deno.serve(async (req: Request) => {
       case "liste": {
         const { data: t, error } = await db.from("techniciens").select("email, nom, actif, admin, cree_le, mdp_provisoire").order("nom", { ascending: true });
         if (error) throw error;
+        const { data: dm } = await db.from("demandes_mdp").select("email, demande_le");
         const { data: ap } = await db.from("appareils").select("email, device_id, nom, vu_le").order("vu_le", { ascending: false });
         // dernière consultation de chacun (une requête par technicien : équipe réduite, pas de limite de lignes)
         const der: Record<string, string> = {};
@@ -71,6 +73,7 @@ Deno.serve(async (req: Request) => {
             ...x,
             appareils: (ap || []).filter((a) => (a.email || "").toLowerCase() === x.email.toLowerCase()).map((a) => ({ id: a.device_id, nom: a.nom, vu: a.vu_le })),
             derniere: der[x.email] || null,
+            demande_mdp: (dm || []).find((d) => d.email === x.email.toLowerCase())?.demande_le || null,
           })),
         });
       }
@@ -115,6 +118,12 @@ Deno.serve(async (req: Request) => {
         const { error } = await db.auth.admin.updateUserById(ex.id, { password: b.mot_de_passe as string });
         if (error) throw error;
         await db.from("techniciens").update({ mdp_provisoire: true }).eq("email", email); // à changer à la prochaine connexion
+        await db.from("demandes_mdp").delete().eq("email", email);
+        return rep(200, { ok: true });
+      }
+      case "ignorer": {
+        if (!mailOk(email)) return rep(400, { erreur: "Email invalide" });
+        await db.from("demandes_mdp").delete().eq("email", email);
         return rep(200, { ok: true });
       }
       case "liberer": {

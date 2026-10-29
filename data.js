@@ -192,6 +192,11 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "1.76", date: "2026-10-29", titre: "Mot de passe oublié", items: [
+    "Page de connexion : bouton « Mot de passe oublié ? » (saisir son email puis toucher le bouton)",
+    "Les administrateurs voient la demande dans Réglages et dans Techniciens et appareils (étiquette « Mdp oublié »), puis génèrent un mot de passe provisoire à transmettre",
+    "Aucun email envoyé : la réponse est la même que le compte existe ou non"
+  ], docs: [] },
   { v: "1.75", date: "2026-10-28", titre: "Personnes en ligne visibles par tous", items: [
     "Réglages : tout le monde voit maintenant le nombre de personnes en ligne. Les noms et les appareils restent réservés aux administrateurs."
   ], docs: [] },
