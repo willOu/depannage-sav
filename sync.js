@@ -72,6 +72,22 @@
     q.push({ e: moi(), genre, item_id: String(item).slice(0, 120), onglet: onglet ? String(onglet).slice(0, 20) : null, vu_le: new Date().toISOString() });
     st.set(VQ, q.slice(-400)); bientot();
   }
+  /* recherche sans aucun résultat : enregistrée pour l'administrateur (quelles notices manquent). Attend 3 s sans changement de saisie,
+     ignore les saisies trop courtes ou qui ressemblent à un email ou un numéro, et une même saisie n'est comptée qu'une fois par 10 minutes. */
+  let videT = 0; const videVu = {};
+  function vide(q) {
+    clearTimeout(videT);
+    q = String(q || "").trim().toLowerCase().replace(/\s+/g, " ").slice(0, 120);
+    if (!actif() || q.length < 3 || /@/.test(q) || /\d{7,}/.test(q.replace(/[\s.\-]/g, ""))) return;
+    videT = setTimeout(() => {
+      let cur = ""; try { const m = /^#\/s\/(.*)$/.exec(location.hash); cur = m ? decodeURIComponent(m[1]).trim().toLowerCase().replace(/\s+/g, " ") : ""; } catch (e) {}
+      if (cur !== q) return; /* l'utilisateur est parti ou a modifié sa saisie */
+      const now = Date.now(); if (videVu[q] && now - videVu[q] < 10 * 60e3) return; videVu[q] = now;
+      const l = st.get(VQ, []);
+      l.push({ e: moi(), genre: "recherche_vide", item_id: q, onglet: null, vu_le: new Date().toISOString() });
+      st.set(VQ, l.slice(-400)); bientot();
+    }, 3000);
+  }
   async function envoyerVues() {
     const e = moi(), lim = Date.now() - 29 * 864e5;
     let q = st.get(VQ, []).filter(v => v.e === e && Date.parse(v.vu_le) > lim);
@@ -146,7 +162,7 @@
   }
   window.SYNC = {
     vider,
-    fav: favOp, vue, messages, estAdmin,
+    fav: favOp, vue, vide, messages, estAdmin,
     lu(id) { const l = st.get(LUS, []); if (!l.includes(id)) l.push(id); st.set(LUS, l); if (typeof route === "function") route(); },
     nonLus() { const l = st.get(LUS, []); return messages().filter(m => !l.includes(m.id)); },
     /* bandeau de l'accueil : messages non lus */
@@ -212,6 +228,7 @@
       const tab = (titre, rows, vide) => `<h2>${titre}</h2>` + (rows.length ? `<table class="stt">${rows.join("")}</table>` : `<p class="note">${vide}</p>`);
       app.innerHTML = seg + `<p class="note"><b>${s.total}</b> consultation${s.total > 1 ? "s" : ""} sur ${jours} jours. Les consultations faites hors ligne arrivent au retour du réseau.</p>` +
         tab("Fiches les plus consultées", (s.items || []).map(x => { const [n, h] = nom(x); return `<tr${h ? ` style="cursor:pointer" data-h="${esc(h)}" onclick="go(this.dataset.h)"` : ""}><td>${esc(n)}<small>${x.genre === "carte" ? "Carte" : "Accessoire"} · ${x.techs} technicien${x.techs > 1 ? "s" : ""}</small></td><td class="n">${x.n}</td></tr>`; }), "Aucune consultation pour l'instant.") +
+        tab("Recherches sans résultat (notices à ajouter ?)", (s.sans_resultat || []).map(x => `<tr><td>${esc(x.q)}<small>${x.techs} technicien${x.techs > 1 ? "s" : ""} · dernière le ${fdate(x.dernier)}</small></td><td class="n">${x.n}</td></tr>`), "Aucune recherche sans résultat sur la période.") +
         tab("Recherches les plus fréquentes", (s.recherches || []).map(x => `<tr style="cursor:pointer" data-h="${esc("#/s/" + encodeURIComponent(x.q))}" onclick="go(this.dataset.h)"><td>${esc(x.q)}</td><td class="n">${x.n}</td></tr>`), "Aucune recherche enregistrée.") +
         tab("Diagnostics guidés aboutis", (s.diag || []).map(x => `<tr><td>${esc(x.item_id)}</td><td class="n">${x.n}</td></tr>`), "Aucun diagnostic terminé.") +
         tab("Par technicien", (s.techniciens || []).map(x => `<tr><td>${esc(x.nom)}<small>dernière consultation ${fdate(x.dernier)}</small></td><td class="n">${x.n}</td></tr>`), "—");

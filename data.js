@@ -192,6 +192,11 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "1.78", date: "2026-10-29", titre: "Recherches sans résultat et diagnostic guidé relié aux fiches", items: [
+    "Administrateurs : dans Statistiques, nouvelle liste « Recherches sans résultat » (ce que les techniciens ont cherché sans rien trouver, avec le nombre de fois et de personnes) pour savoir quelles notices ajouter. Seul le texte tapé est gardé, pas de lien avec un nom dans cette liste ; les saisies qui ressemblent à un email ou un numéro sont ignorées",
+    "Diagnostic guidé : en fin de parcours, on cherche sa marque ou sa carte et on ouvre directement ses codes ou son bornier",
+    "Recherche sans résultat : bouton pour passer au diagnostic guidé"
+  ], docs: [] },
   { v: "1.77", date: "2026-10-29", titre: "CAME ZLX24 et STYLO-ME, logos Fadini et Tousek", items: [
     "Carte CAME ZLX24MA / ZLX24MR (battant 24 V, BUS CXN) : codes d'erreur E1 à E25, bornier avec câblage de chaque moteur (STYLO-ME, STYLO-RME, FTX, FAST-70, AXI, AXO, A3024N, FROG-A24 / A24E, F1024, ATS…), menu complet F / U / A / H / b, mise en service et schémas de la notice",
     "Fiche accessoire CAME STYLO-ME (bras articulé STYLO-BS ou rail STYLO-BD) : données, poids du vantail selon la largeur, raccordement ZL92, montage et déblocage",

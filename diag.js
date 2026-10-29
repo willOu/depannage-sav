@@ -277,7 +277,9 @@ function viewDiag(sid, pathStr) {
     if (window.SYNC) SYNC.vue("diag", (r.t.titre + " → " + x.titre).slice(0, 120)); /* SYNC */
     h += `<div class="dres"><div class="dk">Cause probable</div><h2>${esc(x.titre)}</h2><p>${esc(x.cause)}</p>
       <div class="dk">À faire</div><ol class="steps">${x.actions.map(a => `<li>${esc(a)}</li>`).join("")}</ol></div>`;
-    h += `<div class="dlinks">` + x.liens.map(l => `<button class="row" onclick="go('${l[1]}')">${esc(l[0])}</button>`).join("") +
+    h += `<div class="dpick"><div class="dk">Ouvrir la fiche de votre carte</div>
+      <input id="dpk" type="search" name="carte" inputmode="search" autocomplete="off" placeholder="Marque ou modèle (ex. Roger, ZN8, BXV)" aria-label="Chercher la carte de votre installation"><div id="dpl"></div></div>`;
+    h += `<div class="dlinks">` + x.liens.filter(l => l[1] && l[1] !== "#/").map(l => `<button class="row" onclick="go('${l[1]}')">${esc(l[0])}</button>`).join("") +
       `<button class="row" onclick="go('#/d/${sid}')">Recommencer</button><button class="row" onclick="go('#/d')">Autre problème</button></div>
       <p class="note">Fonction en test : en cas de doute, la notice de la carte fait foi. Couper l'alimentation avant toute intervention sur la carte.</p>`;
   } else {
@@ -285,6 +287,14 @@ function viewDiag(sid, pathStr) {
       `<button class="row" onclick="go('${base}/${path.concat(i).join("-")}')">${esc(o[0])}</button>`).join("") + `</div>`;
   }
   app.innerHTML = h;
+  const pk = document.getElementById("dpk");
+  if (pk) pk.oninput = () => { /* choix de la carte : mène directement à ses codes ou à son bornier */
+    const ws = norm(pk.value).split(" ").filter(Boolean), out = document.getElementById("dpl");
+    if (!ws.length) { out.innerHTML = ""; return; }
+    const hits = BOARDS.filter(({ m, c }) => { const t = norm(`${m.nom} ${m.alias || ""} ${c.nom} ${c.modeles}`), tc = t.replace(/ /g, ""); return ws.every(w => t.includes(w) || tc.includes(w)); }).slice(0, 8);
+    out.innerHTML = hits.length ? hits.map(({ m, c }) => `<div class="row dpr"><span><span class="badge" style="--c:${m.couleur}">${esc(m.nom)}</span><b>${esc(c.nom)}</b></span>
+      <span><button class="mini" onclick="go('#/c/${c.id}/codes')">Codes</button><button class="mini" onclick="go('#/c/${c.id}/bornier')">Bornier</button></span></div>`).join("") : `<p class="note">Aucune carte ne correspond.</p>`;
+  };
 }
 window.viewDiag = viewDiag;
 })();
