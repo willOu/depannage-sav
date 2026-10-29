@@ -4423,6 +4423,100 @@
         "En cas d'erreur : 1 portail → relais de sortie retombe ; 2 barrière → relais s'enclenche ; 3 courant de repos et 4 logique de direction → relais retombent. Le relais d'alarme retombe toujours.",
         "Sortie 2 (paramètre 8) : appareil 1 boucle 2 relais → active* ; appareil 2 boucles avec boucle 2 désactivée → inactive* (tableau 4.11b)."
       ]
+    },
+    {
+      "id": "came-stylo-me",
+      "nom": "STYLO-ME",
+      "marque": "Came",
+      "couleur": "#1f5fa8",
+      "categorie": "Motoréducteur à bras articulé pour portail battant (motorisation)",
+      "modeles": "STYLO-ME avec bras articulé STYLO-BS ou bras coulissant sur rail STYLO-BD ; armoire ZL92 (ou ZLX24MA / MR, voir la carte)",
+      "source": "Manuel CAME STYLO-ME 119DV11 v1.0 (03/2010), pages 4 à 15",
+      "resume": "Motoréducteur 24 V DC à encodeur pour portails battants, lieux privés et copropriétés, même en usage intensif. Deux versions de bras : articulé (STYLO-BS) ou coulissant sur rail (STYLO-BD). Déblocage manuel à clé.",
+      "specs": [
+        [
+          "Vantail (largeur / poids)",
+          "0,8 m : 150 kg · 1,2 m : 125 kg · 1,8 m : 100 kg"
+        ],
+        [
+          "Alimentation",
+          "Armoire 230 V AC 50/60 Hz · moteur 24 V DC (la notice écrit « 24V DC 50/60Hz »)"
+        ],
+        [
+          "Absorption max. / puissance",
+          "5 A · 48 W"
+        ],
+        [
+          "Couple maximal",
+          "100 Nm (« Coppia massima » dans le texte français)"
+        ],
+        [
+          "Temps d'ouverture (90°)",
+          "Réglable"
+        ],
+        [
+          "Réduction",
+          "1/531"
+        ],
+        [
+          "Service",
+          "Intensif · IP54 · −20 °C à +55 °C"
+        ],
+        [
+          "Poids du motoréducteur",
+          "— (la ligne « Poids : kg » est vide dans la notice)"
+        ],
+        [
+          "Dimensions",
+          "Corps 437,5 mm de haut ; 80 et 106 mm de côté (dessin p. 5). STYLO-BD : rail 650 mm"
+        ],
+        [
+          "Garantie",
+          "24 mois sauf altérations"
+        ]
+      ],
+      "raccordement": [
+        {
+          "n": "Armoire ZL92",
+          "label": "Moteur 1 (retardé à l'ouverture)",
+          "desc": "M1 · N1 · ENC1 · EB1 (notice p. 15). Bornier du motoréducteur sous la calotte inférieure : EB, ENC, N, M."
+        },
+        {
+          "n": "Armoire ZL92",
+          "label": "Moteur 2 (retardé à la fermeture)",
+          "desc": "M2 · N2 · ENC2 · EB2."
+        },
+        {
+          "n": "ZLX24MA / MR",
+          "label": "Autre armoire (notice FA01885)",
+          "desc": "M → M1 (M2), N → N1 (N2), E → ENC1 (ENC2), EB → EB1 (EB2). Voir la carte ZLX24, type de moteur A1 = 1."
+        },
+        {
+          "n": "Câbles",
+          "label": "Sections (notice)",
+          "desc": "Armoire 230 V : 3G x 1,5 mm² (< 10 m), 3G x 2,5 (10 à 20 m), 3G x 4 (20 à 30 m). Moteur 24 V : 4G x 1,5 mm² jusqu'à 20 m, 4G x 2,5 de 20 à 30 m. Clignotant : 2 x 0,5 / 2 x 1 / 2 x 1,5. Photocellules : TX 2 x 0,5, RX 4 x 0,5. Accessoires : 2 x 0,5 (2 x 1 de 20 à 30 m). Commandes et sécurités : 2 x 0,5. Antenne RG58, 10 m maxi."
+        }
+      ],
+      "installation": [
+        "Contrôles préalables : disjoncteur omnipolaire avec plus de 3 mm entre contacts ; tuyau de drainage contre les stagnations ; raccordements du boîtier (continuité de protection) avec isolation supplémentaire ; structure du portail solide, charnières en bon état, aucun frottement ; butée mécanique d'arrêt en ouverture et en fermeture.",
+        "Prévoir des tubes annelés vers la boîte de dérivation (leur nombre dépend de l'installation et des accessoires).",
+        "STYLO-BS : repérer les axes, fixer la bride du motoréducteur au mur ou au pilier et la bride du bras au portail (p. 9). Exemples de cotes p. 6 : bras pour 90°, « i = 300 mm max avec ouverture de 90° » ; un exemple va jusqu'à 120° max.",
+        "STYLO-BD : poser la bride du motoréducteur et le rail de guidage aux cotes du dessin (p. 7 : A 40 à 100, C 0 à 150 ; ouverture 135° max) ; percer et tarauder à M8 (ou entretoises filetées Ø 11 mm), fixer le rail par vis à tête cylindrique (p. 10).",
+        "Assembler le bras articulé (deux demi-bras, boulons fournis, pivots lubrifiés) ou, pour le BD, le patin de coulissage sur le bras de transmission puis dans le rail.",
+        "Enlever la calotte inférieure, fixer le motoréducteur à la bride avec les quatre vis fournies, fixer la calotte supérieure.",
+        "STYLO-BS (5a) : bras articulé sur l'arbre (vis et rondelle), débloquer le motoréducteur, ouvrir le vantail, fixer le bras par ses boulons, boucher le trou avec le cache.",
+        "STYLO-BD (5b) : bras droit sur l'arbre, cache fixé par ses vis.",
+        "STYLO-BD : débloquer, vantail à l'ouverture maximale, butée mécanique d'ouverture contre le patin ; vantail fermé, butée de fermeture contre le patin ; bouchons et caches aux deux bouts du rail.",
+        "Ouvrir la calotte inférieure, faire le raccordement électrique, refermer la calotte.",
+        "Déblocage : couper l'alimentation, ouvrir le volet de protection du déblocage, introduire la clé et la tourner."
+      ],
+      "notes": [
+        "Le tableau « Mode d'emploi » donne le poids maximal selon la largeur du vantail : 150 kg à 0,8 m, 125 kg à 1,2 m, 100 kg à 1,8 m. Ces valeurs expliquent les « 100 kg » et « 150 kg » vus ailleurs chez CAME.",
+        "Notice de 2010 : l'armoire citée est la ZL92. La déclaration de conformité cite la directive machines 98/37/CE.",
+        "Entretien : l'utilisateur nettoie les photocellules et vérifie les sécurités, tous les 6 mois (registre dans la notice). Graisser les articulations si vibrations ou grincements. Couper l'alimentation avant tout entretien.",
+        "Dépannage de la notice : portail n'ouvre ni ne ferme → alimentation, piles de l'émetteur, bouton stop ou sélecteur bloqué, sinon assistance. Ouvre mais ne ferme pas → photocellules sollicitées (propres, en état). Clignotant muet → lampe grillée.",
+        "Vérifier avant remise à l'utilisateur : conformité EN 12453 (essai d'impact), sécurités et déblocage manuel."
+      ]
     }
   ];
   window.ACCESSOIRES = ACCESSOIRES;

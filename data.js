@@ -192,6 +192,12 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "1.77", date: "2026-10-29", titre: "CAME ZLX24 et STYLO-ME, logos Fadini et Tousek", items: [
+    "Carte CAME ZLX24MA / ZLX24MR (battant 24 V, BUS CXN) : codes d'erreur E1 à E25, bornier avec câblage de chaque moteur (STYLO-ME, STYLO-RME, FTX, FAST-70, AXI, AXO, A3024N, FROG-A24 / A24E, F1024, ATS…), menu complet F / U / A / H / b, mise en service et schémas de la notice",
+    "Fiche accessoire CAME STYLO-ME (bras articulé STYLO-BS ou rail STYLO-BD) : données, poids du vantail selon la largeur, raccordement ZL92, montage et déblocage",
+    "Poids du STYLO-ME dans le comparateur de moteurs : 150 / 125 / 100 kg selon la largeur (la notice lève la contradiction vue sur came.com)",
+    "Logos Fadini et Tousek sur l'accueil"
+  ], docs: ["Manuel CAME ZLX24MA / ZLX24MR FA01885-FR (08/2022)", "Manuel CAME STYLO-ME 119DV11 (03/2010)"] },
   { v: "1.76", date: "2026-10-29", titre: "Mot de passe oublié", items: [
     "Page de connexion : bouton « Mot de passe oublié ? » (saisir son email puis toucher le bouton)",
     "Les administrateurs voient la demande dans Réglages et dans Techniciens et appareils (étiquette « Mdp oublié »), puis génèrent un mot de passe provisoire à transmettre",
@@ -7413,6 +7419,219 @@ const MARQUES = [
         "Ralentissements placés à environ 60 cm des butées, quelle que soit la longueur.",
         "Erreur calibrage : retirer l'obstacle et recommencer.",
         "Après toute modification de vitesse ou de ralentissement, la carte réapprend les absorptions à la manœuvre complète suivante."
+      ]
+    }
+  },
+  {
+    id: "came-zlx24",
+    nom: "ZLX24MA / ZLX24MR",
+    modeles: "Armoires CAME ZLX24MA (230 V AC, 801QA-0050) et ZLX24MR (120 V AC, 801QA-0070) pour portail battant 1 ou 2 vantaux 24 V : STYLO-ME, STYLO-RME, FTX, FAST-70, AXI, AXO, A1824, FERNI / FERNI-V, A3024N / A5024N, FROG-A24 / A24E, ATS, F1024, F4024E / EP",
+    type: "Battant 24 V — afficheur, touches ESC / < > / ENTER, BUS CXN, fonctions F",
+    source: "Manuel CAME ZLX24MA / ZLX24MR FA01885-FR (08/2022)",
+    codes: [
+      { code: "E1", type: "afficheur", titre: "Erreur de réglage du moteur M1", action: "La notice ne donne que le libellé. Contrôler le moteur M1 et son câblage, puis refaire l'auto-apprentissage (A3).", p: 1 },
+      { code: "E2", type: "afficheur", titre: "Erreur de réglage du moteur M2", action: "Idem pour le moteur M2.", p: 1 },
+      { code: "E3", type: "afficheur", titre: "Signal encodeur non détecté", action: "Contrôler le câble de l'encodeur (ENC1 / ENC2, ou + E −) et le moteur. Si le moteur n'a pas d'encodeur, voir F11.", p: 1 },
+      { code: "E4", type: "afficheur", titre: "Test des sécurités échoué", action: "Photocellules testées par F5 qui ne répondent pas : contrôler le raccordement par la borne TS et les photocellules.", p: 1 },
+      { code: "E7", type: "afficheur", titre: "Erreur de temps de fonctionnement", action: "La notice ne donne que le libellé. Contrôler la mécanique, les fins de course et refaire l'auto-apprentissage.", p: 1 },
+      { code: "E9", type: "afficheur", titre: "Obstacles consécutifs détectés en fermeture", action: "Retirer l'obstacle ; voir la sensibilité F34 / F35." },
+      { code: "E10", type: "afficheur", titre: "Obstacles consécutifs détectés en ouverture", action: "Retirer l'obstacle ; voir la sensibilité F34 / F35." },
+      { code: "E11", type: "afficheur", titre: "Erreur maximum obstacles", action: "Nombre maximal d'obstacles consécutifs atteint : retirer les obstacles." },
+      { code: "E12", type: "afficheur", titre: "Tension d'alimentation du moteur absente ou insuffisante", action: "Contrôler l'alimentation secteur, le fusible de ligne et le transformateur.", p: 1 },
+      { code: "E13", type: "afficheur", titre: "Erreur sur les entrées de fin de course, ou les deux butées ouvertes", action: "Contrôler les fins de course (FC / FA), leur câblage et les fonctions F72 / F73." },
+      { code: "E15", type: "afficheur", titre: "Émetteur incompatible", action: "Vérifier le décodage radio (U4)." },
+      { code: "E17", type: "afficheur", titre: "Le système sans fil ne communique pas", action: "Contrôler la carte d'interface RIO CONN et les dispositifs sans fil.", p: 1 },
+      { code: "E18", type: "afficheur", titre: "Le système sans fil n'est pas configuré", action: "Configurer les dispositifs sans fil (F65 à F68)." },
+      { code: "E24", type: "afficheur", titre: "Communication ou mauvais fonctionnement d'un dispositif de sécurité BUS", action: "Pendant une manœuvre : contrôler les photocellules BUS (état avec H4) et leur câblage.", p: 1 },
+      { code: "E25", type: "afficheur", titre: "Erreur de configuration des adresses des dispositifs BUS", action: "Régler l'adresse de chaque dispositif BUS (micro-interrupteurs), sans doublon ; contrôler avec H4." },
+      { code: "A1 qui défile", type: "afficheur", titre: "Type de moteur non configuré", action: "Configurer A1 avant de modifier d'autres paramètres." },
+      { code: "A3 qui défile", type: "afficheur", titre: "Auto-apprentissage de la course à faire", action: "L'armoire n'accepte aucune commande de mouvement, sauf le test moteur A2." },
+      { code: "SEr", type: "afficheur", titre: "Entretien nécessaire", action: "Nombre de manœuvres (F58) atteint : faire l'entretien puis remettre à zéro le comptage partiel (A5 > Par)." },
+      { code: "SER", type: "afficheur", titre: "Auto-apprentissage terminé, encodeur désactivé", action: "Affiché en fin d'apprentissage sans encodeur (encodeur virtuel)." },
+      { code: "CLr", type: "afficheur", titre: "Utilisateur supprimé ou comptage remis à zéro", action: "Confirmation de U2 (utilisateur) ou de la remise à zéro du comptage partiel (A5)." },
+      { code: "CL1 · CL2 · OP2 · OP1", type: "afficheur", titre: "Étapes de l'auto-apprentissage", action: "Dans l'ordre : fermeture de M1, fermeture de M2, ouverture de M2, ouverture de M1." },
+      { code: "Voyant 10-5 : 3 + 3 clignotements chaque heure", type: "led", titre: "Entretien nécessaire", action: "Même signalisation que SEr (voyant passage ouvert, F10)." }
+    ],
+    afficheur: {
+      intro: "Afficheur de programmation et de signalisation. Les menus F (fonctions), U (utilisateurs), A (réglages moteur), H (version, mot de passe, BUS) et b (dispositifs BUS) se parcourent avec les touches.",
+      autres: [
+        { titre: "Touches", texte: "ESC : sortir du menu, annuler, revenir à la page précédente. < > : naviguer, augmenter ou diminuer une valeur. ENTER : entrer, confirmer, et afficher le pourcentage d'ouverture des moteurs pendant une manœuvre (1 appui M1, 2 appuis M2, 3 appuis retour). Hors menu, ESC arrête le portail et < > l'ouvrent / le ferment." },
+        { titre: "Mise en service", texte: "Dans l'ordre : A1 (type de moteur), F46 (nombre de moteurs), A2 (essai moteur : > ouvre M2, < ouvre M1, sinon inverser M et N sur la borne), F2, F3, F72 et F73 (fins de course), A8 (puissance), puis A3 (auto-apprentissage). Après la mise sous tension, la première manœuvre est toujours une ouverture : la laisser se terminer." },
+        { titre: "Mot de passe", texte: "H3 : mot de passe de 4 chiffres demandé pour entrer dans le menu. Mot de passe perdu : réinitialiser la carte (ci-dessous)." },
+        { titre: "Réinitialisation", texte: "Couper l'alimentation et attendre l'extinction, maintenir < et > en remettant sous tension jusqu'à [ON/OFF], choisir ON, ENTER. Supprime tous les utilisateurs et les données d'étalonnage." },
+        { titre: "RàZ paramètres (A4)", texte: "Remet les réglages d'usine sauf : utilisateurs, temporisations, nombre et type de moteur, adresse CRP, fonction des entrées de fin de course, vitesse RSE, mot de passe et auto-apprentissage de la course." },
+        { titre: "Memory Roll", texte: "Hors tension pour la poser ou l'enlever. F50 sauvegarde et F51 lit les utilisateurs, la synchronisation et la configuration (visibles seulement carte insérée)." },
+        { titre: "État des dispositifs BUS (H4)", texte: "b = photocellules (1 à 8), d = sélecteurs (1 à 7), L = clignotants (1 à 2), i = module I/O (1 à 2), puis l'état : o en fonction, c en fonction avec signal d'alarme, F en panne, || adresse en conflit, - ne communique pas ou absent. Exemple : b1.o." },
+        { titre: "Encodeur virtuel", texte: "Sans encodeur (ou F11 OFF), la course est gérée par un encodeur virtuel : toujours faire l'auto-apprentissage. Précision réduite sur les points de ralentissement, de rapprochement et la détection d'obstacle ; avec AST au ralentissement désactivé (F35), un obstacle est interprété comme une butée de fin de course." }
+      ]
+    },
+    bornier: {
+      groupes: [
+        { nom: "Alimentation", bornes: [
+          { n: "L · N", label: "Réseau", desc: "ZLX24MA : 230 V AC · ZLX24MR : 120 V AC, 50/60 Hz. Fusible de ligne 3,15 A F (MA) ou 4 A F (MR). Câble 3G x 1,5 mm² jusqu'à 20 m, 3G x 2,5 mm² de 20 à 30 m (valeurs données pour 230 V)", t: "alim" },
+          { n: "10 · 11", label: "Alimentation accessoires", desc: "26 V AC, 20 W max (24 V DC, 10 + et 11 −, sur batteries). Fusible accessoires 1,6 A F", t: "alim" }
+        ]},
+        { nom: "Moteurs (borniers R1 = M1, R2 = M2)", bornes: [
+          { n: "M1 · N1 · ENC1 · EB1 · +VB", label: "Moteur M1 (retardé à l'ouverture)", desc: "Câblage selon le moteur : voir le tableau ci-dessous. Avec un seul moteur, le brancher sur M2", t: "moteur" },
+          { n: "M2 · N2 · ENC2 · EB2 · +VB", label: "Moteur M2 (retardé à la fermeture)", desc: "Idem", t: "moteur" },
+          { n: "STYLO-ME", label: "Moteur → carte", desc: "M → M1 (M2) · N → N1 (N2) · E → ENC1 (ENC2) · EB → EB1 (EB2)", t: "moteur" },
+          { n: "STYLO-RME", label: "Moteur → carte", desc: "M → M1 · N → N1 · E → ENC1 (idem côté M2)", t: "moteur" },
+          { n: "ATS · AXO · FTX · FAST-70 · AMICO · AXI", label: "Moteur → carte", desc: "M → M1 · N → N1 · ENC → ENC1 (idem côté M2)", t: "moteur" },
+          { n: "A3024N · A5024N", label: "Moteur → carte", desc: "M → M1 · N → N1 · R → ENC1 (idem côté M2)", t: "moteur" },
+          { n: "FROG-A24E · FERNI · FERNI-V · F4024E · F4024EP", label: "Moteur → carte", desc: "M → M1 · N → N1 ; encodeur : + → [+ / FC1], E → [E1 / FA1], − → [− / F] (côté M2 : FC2 / FA2 / F)", t: "moteur" },
+          { n: "FROG-A24", label: "Moteur → carte", desc: "M → M1 · N → N1 ; ralentissement : F → [− / F], FA → [E1 / FA1], FC → [+ / FC1] (côté M2 : FC2 / FA2 / F)", t: "moteur" },
+          { n: "F1024", label: "Moteur → carte", desc: "M → M1 · N → N1 ; RC → [+ / FC1], FA → [E1 / FA1], F → [− / F] ; le fil R est relié à F (pont dessiné sur la notice). Côté M2 identique", t: "moteur" },
+          { n: "Sans encodeur", label: "Moteur → carte", desc: "M → M1 · N → N1 (idem côté M2)", t: "moteur" },
+          { n: "+ / FC1 · E1 / FA1 · − / F (et côté 2)", label: "Fins de course, ralentissement ou encodeur", desc: "Fonction choisie par F72 ; type des entrées par F73 (moteur général seulement)", t: "nf" },
+          { n: "EB1 · +VB / EB2 · +VB", label: "Serrure électrique ou électro-aimant", desc: "12 V AC/DC, 15 W max (F17)", t: "sortie" }
+        ]},
+        { nom: "Signalisation", bornes: [
+          { n: "10 · E", label: "Clignotant", desc: "26 V AC, 10 W max", t: "sortie" },
+          { n: "10 · E3", label: "Lampe supplémentaire", desc: "26 V AC, 10 W max (F18)", t: "sortie" },
+          { n: "10 · 5", label: "Témoin d'état de l'automatisme", desc: "26 V AC, 3 W max (F10)", t: "sortie" }
+        ]},
+        { nom: "Commandes", bornes: [
+          { n: "1 · 2", label: "Arrêt total (NF)", desc: "Arrête le portail et désactive la fermeture automatique. Utilisé : l'activer en programmation (F1)", t: "nf" },
+          { n: "2 · 3", label: "Ouverture (NO)", desc: "Obligatoire avec F6 (action maintenue)", t: "no" },
+          { n: "2 · 3P", label: "Ouverture partielle ou piétons (NO)", desc: "Réglée par F36", t: "no" },
+          { n: "2 · 4", label: "Fermeture (NO)", desc: "Obligatoire avec F6 (action maintenue)", t: "no" },
+          { n: "2 · 7", label: "Pas-à-pas / séquentielle (NO)", desc: "Selon F7", t: "no" },
+          { n: "Antenne", label: "Antenne", desc: "Câble RG58 (jusqu'à 5 m)", t: "autre" }
+        ]},
+        { nom: "Sécurités", bornes: [
+          { n: "2 · CX", label: "Entrée CX (NF)", desc: "Photocellules ou bord sensible, fonction choisie par F2", t: "nf" },
+          { n: "2 · CY", label: "Entrée CY (NF)", desc: "Fonction choisie par F3", t: "nf" },
+          { n: "10 · TS", label: "Alimentation testée", desc: "Émetteurs des photocellules, pour le test des sécurités (F5)", t: "alim" }
+        ]},
+        { nom: "BUS et connecteurs", bornes: [
+          { n: "BUS", label: "BUS CXN", desc: "2 fils non polarisés, 15 V DC, 15 W. Seulement des accessoires BUS CAME. Câble FROR 2 x 1 mm², 50 m maxi par segment, 150 m au total, non blindé", t: "bus" },
+          { n: "CRP", label: "Connexion CRP", desc: "Câble UTP CAT5 jusqu'à 1000 m (adresse F56)", t: "bus" },
+          { n: "Connecteurs", label: "Memory Roll, CAME KEY, RSE, RIO CONN, carte radio AF", desc: "Cartes enfichables : mettre hors tension avant de les poser ou de les enlever", t: "bus" }
+        ]}
+      ],
+      fusibles: "Ligne 3,15 A F (ZLX24MA) ou 4 A F (ZLX24MR) · carte 1,6 A T · accessoires 1,6 A F",
+      notes: [
+        "Photocellules DELTA, DIR / DELTA-S et DXR / DLX : raccordement standard ou avec test de sécurité (émetteur sur TS, F5). Bord sensible DFWN sur 10, TS, 2, CX, CY. Plusieurs paires : voir la notice de l'accessoire.",
+        "Câbles : clignotant et photocellules TX 2 x 0,5 mm², photocellules RX 4 x 0,5 mm², serrure 12 V 2 x 1 mm² jusqu'à 20 m (2 x 1,5 mm² de 20 à 30 m). Encodeur : câble FRORPU 3 x 0,5 mm² ou câble CAME 801XA-0020.",
+        "Dispositifs BUS CXN maximum : 7 sélecteurs, 8 paires de photocellules, 2 interfaces, 2 clignotants (consommation en CXN Unit, tableau interactif par QR code dans la notice).",
+        "Données : 360 W, veille 3 W, alimentation de la carte 26 V AC, thermo-protection du transformateur 120 °C, IP54, classe I, -20 / +55 °C, 20 cycles par heure, 20 cycles consécutifs, durée de vie moyenne indicative 100 000 cycles.",
+        "Contradiction de la notice : le titre parle de motoréducteurs 24 V, le tableau des données donne « alimentation moteur 36 DC ». La notice ne tranche pas.",
+        "À vérifier : la notice câble le fil EB du STYLO-ME sur la borne EB1 (EB2), et la serrure électrique sur EB1 · +VB (EB2 · +VB). Elle n'explique pas comment les deux se partagent la borne.",
+        "Options : carte de recharge batterie RLB (002RLB), module RGSM001 (806SA-0010), module SMA (009SMA)."
+      ]
+    },
+    parametres: {
+      intro: "Valeurs d'usine de la notice FA01885-FR. Certaines fonctions n'apparaissent que selon le moteur (F45 STYLO-ME / RME, F72 et F73 avec fins de course) ou la carte enfichée (F50 / F51 Memory Roll, F65 à F68 RIO CONN, b1 à b43 dispositifs BUS).",
+      navigation: [
+        "ENTER pour entrer dans les menus, < > pour choisir ou changer la valeur, ENTER pour confirmer, ESC pour sortir ou annuler."
+      ],
+      groupes: [
+        { nom: "Moteur et mise en service", items: [
+          { code: "A1", def: "12", titre: "Type de moteur", valeurs: [["0", "Générique."], ["1", "STYLO-ME."], ["2", "STYLO-RME."], ["3", "FTX."], ["4", "FAST-70."], ["5", "AXI."], ["6", "A1824."], ["7", "FERNI."], ["8", "FERNI-V."], ["9", "AXO."], ["10", "A3024N / A5024N."], ["11", "FROG-A24."], ["12", "FROG-A24E (valeur d'usine)."], ["13", "ATS."], ["14", "F1024."], ["15", "F4024E."], ["16", "F4024EP."]], note: "À régler avant tout autre paramètre." },
+          { code: "F46", def: "2", titre: "Nombre de moteurs", valeurs: [["2", "Deux moteurs."], ["1", "Un moteur : il utilise la sortie M2."]] },
+          { code: "A2", def: "—", titre: "Essai moteur", valeurs: [[">", "Ouvre le vantail M2."], ["<", "Ouvre le vantail M1."]], note: "Mouvement tant que la touche reste enfoncée, à vitesse réduite. Mauvais sens : inverser M et N sur la borne." },
+          { code: "A3", def: "—", titre: "Auto-apprentissage de la course", valeurs: [["OFF", "Annule."], ["ON", "Lance l'opération."]] },
+          { code: "A4", def: "—", titre: "RàZ paramètres", valeurs: [["OFF", "Annule."], ["ON", "Remet les réglages d'usine (liste dans la fiche Afficheur)."]] },
+          { code: "A5", def: "—", titre: "Comptage des manœuvres", valeurs: [["Tot", "Manœuvres totales depuis l'installation."], ["Par", "Manœuvres depuis le dernier entretien ; ENTER remet à zéro (Clr)."]], note: "Nombre affiché x 100." },
+          { code: "A8", def: "2", titre: "Puissance moteur (moteur général A1 = 0)", valeurs: [["1", "Minimum, jusqu'à 120 W."], ["2", "Moyenne, jusqu'à 200 W."], ["3", "Maximale, au-delà de 200 W."]] },
+          { code: "F72", def: "2", titre: "Fonction fin de course (moteurs qui en ont)", valeurs: [["OFF", "Désactivés."], ["1", "Fin de course à l'ouverture et à la fermeture."], ["2", "Ralentissement."], ["3", "Fin de course à l'ouverture, ralentissement à la fermeture."]], note: "Après modification, refaire l'auto-apprentissage (A3). En ralentissement, les points sont réglés automatiquement à la fin de l'apprentissage." },
+          { code: "F73", def: "0", titre: "Type des entrées FC / FA (moteur général A1 = 0, F72 actif)", valeurs: [["0", "N.O."], ["1", "N.F."], ["2", "N.F. pour FA, N.O. pour FC."]], note: "Avec un moteur précis, c'est le type prévu par ce moteur qui compte." }
+        ]},
+        { nom: "Entrées et commandes", items: [
+          { code: "F1", def: "OFF", titre: "Arrêt total (1-2)", valeurs: [["OFF", ""], ["ON", "Entrée active (NF) : toute commande est désactivée quand elle est ouverte."]] },
+          { code: "F2", def: "OFF", titre: "Entrée CX", valeurs: [["OFF", ""], ["C1", "Réouverture en fermeture (photocellules)."], ["C2", "Refermeture en ouverture (photocellules)."], ["C3", "Arrêt partiel (seulement avec fermeture automatique)."], ["C4", "Attente obstacle (photocellules)."], ["C7", "Réouverture en fermeture (bords sensibles)."], ["C8", "Refermeture en ouverture (bords sensibles)."], ["C13", "Réouverture en fermeture avec fermeture immédiate après le passage, même portail à l'arrêt."], ["r7", "Réouverture en fermeture (bord sensible résistif 8K2)."], ["r8", "Refermeture en ouverture (bord sensible 8K2)."], ["2r7", "Réouverture en fermeture (paire de bords 8K2)."], ["2r8", "Refermeture en ouverture (paire de bords 8K2)."]] },
+          { code: "F3", def: "OFF", titre: "Entrée CY", valeurs: [["OFF / C1 / C2 / C3 / C4 / C7 / C8 / C13 / r7 / r8 / 2r7 / 2r8", "Comme F2."]] },
+          { code: "F5", def: "OFF", titre: "Test des sécurités", valeurs: [["OFF", ""], ["1", "CX."], ["2", "CY."], ["3", "CX + CY."]], note: "Photocellules à raccorder par la borne TS." },
+          { code: "F6", def: "OFF", titre: "Action maintenue", valeurs: [["OFF", ""], ["ON", "Le mouvement s'arrête au relâchement ; désactive les autres commandes. Un dispositif d'ouverture et un de fermeture sont obligatoires."]] },
+          { code: "F7", def: "0", titre: "Commande 2-7", valeurs: [["0", "Pas-à-pas : ouverture puis fermeture."], ["1", "Séquentielle : ouverture, arrêt, fermeture, arrêt."]] },
+          { code: "F9", def: "OFF", titre: "Obstacle avec moteur arrêté", valeurs: [["OFF", ""], ["ON", "Portail immobile si une sécurité détecte un obstacle (fermé, ouvert ou après arrêt total)."]] },
+          { code: "F83", def: "OFF", titre: "Mode sans obstacle", valeurs: [["OFF", "Inversion pour obstacle."], ["ON", "Sur obstacle (AST ou bord sensible), le vantail recule du nécessaire pour libérer l'obstacle puis s'arrête."]] }
+        ]},
+        { nom: "Sorties, serrure et temps", items: [
+          { code: "F10", def: "0", titre: "Voyant passage ouvert (10-5)", valeurs: [["0", "Allumé en mouvement et ouvert."], ["1", "Clignote toutes les 0,5 s en ouverture, fixe ouvert, toutes les 1 s en fermeture, éteint fermé."]] },
+          { code: "F11", def: "ON", titre: "Encodeur", valeurs: [["ON", ""], ["OFF", "Encodeur désactivé (encodeur virtuel)."]], note: "Seulement pour les moteurs avec encodeur." },
+          { code: "F13", def: "OFF", titre: "Poussée en fermeture", valeurs: [["OFF", ""], ["1", "Minimum."], ["2", "Moyenne."], ["3", "Maximum."]], note: "Pousse les vantaux contre la butée pendant 1 s." },
+          { code: "F16", def: "OFF", titre: "Coup de bélier", valeurs: [["OFF", ""], ["ON", "Avant chaque manœuvre, les vantaux poussent contre la butée pour faciliter le déblocage de la serrure."]] },
+          { code: "F17", def: "OFF", titre: "Serrure électrique", valeurs: [["OFF", ""], ["1", "Portail fermé."], ["2", "Portail ouvert."], ["3", "Portail ouvert et fermé."], ["4", "Continuer."], ["5", "Électro-aimant 24 V."]], note: "Électro-aimant : activé à l'arrêt du moteur, désactivé pendant la manœuvre." },
+          { code: "F18", def: "OFF", titre: "Lampe supplémentaire (10-E3)", valeurs: [["OFF", ""], ["1", "Lampe cycle : allumée pendant toute la manœuvre."], ["2", "Lampe d'accueil : allumée au départ et après la manœuvre pendant F25."]] },
+          { code: "F19", def: "OFF", titre: "Fermeture automatique", valeurs: [["OFF", ""], ["1-180", "Secondes."]], note: "Inactive après un obstacle, un arrêt total, un défaut de tension ou une erreur." },
+          { code: "F20", def: "10", titre: "Fermeture automatique après ouverture partielle ou piétonne", valeurs: [["OFF", ""], ["1-180", "Secondes."]], note: "La notice donne OFF puis « par défaut 10 ». Doit être désactivée en mode copropriété." },
+          { code: "F21", def: "OFF", titre: "Temps de préclignotement", valeurs: [["OFF", ""], ["1-10", "Secondes."]] },
+          { code: "F23", def: "2", titre: "Retard à l'ouverture de M1", valeurs: [["OFF", ""], ["1-10", "Secondes."]], note: "La notice donne OFF puis « par défaut 2 »." },
+          { code: "F24", def: "2", titre: "Retard à la fermeture de M2", valeurs: [["OFF", ""], ["1-25", "Secondes."]], note: "La notice donne OFF puis « par défaut 2 »." },
+          { code: "F25", def: "60", titre: "Temps d'accueil (lampe d'accueil)", valeurs: [["60-180", "Secondes."]] },
+          { code: "F58", def: "OFF", titre: "Configuration de l'entretien", valeurs: [["OFF", ""], ["1-500", "Nombre de manœuvres x 100 avant l'avis d'entretien."]], note: "Avis : SEr à l'écran et 3 + 3 clignotements chaque heure sur le voyant passage ouvert." }
+        ]},
+        { nom: "Vitesses, ralentissements, sensibilité", items: [
+          { code: "F28", def: "70 %", titre: "Vitesse de M1", valeurs: [["40-100 %", "De la vitesse maximale."]] },
+          { code: "F29", def: "70 %", titre: "Vitesse de M2", valeurs: [["40-100 %", ""]] },
+          { code: "F30", def: "40 %", titre: "Vitesse de ralentissement de M1", valeurs: [["10-50 %", ""]], note: "Utilisée seulement si F37 ou F38 est actif. Stylo ME / RME : il peut falloir réduire la tension minimale (F45)." },
+          { code: "F31", def: "40 %", titre: "Vitesse de ralentissement de M2", valeurs: [["10-50 %", ""]], note: "Utilisée seulement si F41 ou F42 est actif. Même remarque pour Stylo ME / RME." },
+          { code: "F34", def: "100 %", titre: "Contrôle AST pendant la course", valeurs: [["10-100 %", "10 % = poussée minimale, haute sensibilité ; 100 % = poussée maximale, faible sensibilité."]] },
+          { code: "F35", def: "100 %", titre: "Contrôle AST au ralentissement", valeurs: [["10-100 %", "Idem. Utilisé seulement si un point de ralentissement est actif."]] },
+          { code: "F36", def: "100 %", titre: "Ouverture partielle", valeurs: [["10-100 %", "Un vantail : pourcentage de la course. Deux vantaux : pourcentage de M2. 100 % = ouverture piétonne."]] },
+          { code: "F37", def: "OFF", titre: "Point de ralentissement à l'ouverture de M1", valeurs: [["OFF", ""], ["1-50 %", "De la course."]] },
+          { code: "F38", def: "OFF", titre: "Point de ralentissement à la fermeture de M1", valeurs: [["OFF", ""], ["1-50 %", ""]] },
+          { code: "F39", def: "8,0 %", titre: "Rapprochement à l'ouverture de M1", valeurs: [["0,5-25,0 %", ""]] },
+          { code: "F40", def: "8,0 %", titre: "Rapprochement à la fermeture de M1", valeurs: [["0,5-25,0 %", ""]] },
+          { code: "F41", def: "OFF", titre: "Point de ralentissement à l'ouverture de M2", valeurs: [["OFF", ""], ["1-50 %", ""]] },
+          { code: "F42", def: "OFF", titre: "Point de ralentissement à la fermeture de M2", valeurs: [["OFF", ""], ["1-50 %", ""]] },
+          { code: "F43", def: "8,0 %", titre: "Rapprochement à l'ouverture de M2", valeurs: [["0,5-25,0 %", ""]] },
+          { code: "F44", def: "8,0 %", titre: "Rapprochement à la fermeture de M2", valeurs: [["0,5-25,0 %", ""]] },
+          { code: "F45", def: "OFF", titre: "Réduction de vitesse (STYLO-ME et STYLO-RME seulement)", valeurs: [["OFF", ""], ["1-50 %", "Réduit la tension minimale appliquée au moteur."]] }
+        ]},
+        { nom: "Utilisateurs et radio", items: [
+          { code: "U1", def: "—", titre: "Nouvel utilisateur (250 max)", valeurs: [["1", "Pas-à-pas."], ["2", "Séquentielle."], ["3", "Ouverture."], ["4", "Ouverture partielle ou piétons."], ["6", "Relais du module BUS 1 (sortie 2)."], ["7", "Relais du module BUS 2 (sortie 2)."]], note: "ENTER puis envoyer le code (10 s). La liste de la notice n'a pas de valeur 5." },
+          { code: "U2", def: "OFF", titre: "Supprimer un utilisateur", valeurs: [["ON", "Choisir le numéro (1 à 250) ou actionner l'émetteur, ENTER : CLr."]] },
+          { code: "U3", def: "OFF", titre: "Supprimer tous les utilisateurs", valeurs: [["OFF", "Annule."], ["ON", "Exécute."]] },
+          { code: "U4", def: "1", titre: "Décodage radio", valeurs: [["1", "Tous les décodages."], ["2", "Rolling code."], ["3", "TW Key Block."]], note: "Choisir rolling code ou TW Key Block efface les émetteurs déjà mémorisés." },
+          { code: "U8", def: "OFF", titre: "Auto-apprentissage rolling", valeurs: [["OFF", ""], ["ON", "Mémorise un nouvel émetteur rolling code à partir d'un émetteur déjà mémorisé."]] }
+        ]},
+        { nom: "Connexions, sans fil et système", items: [
+          { code: "F50", def: "OFF", titre: "Sauvegarde des données (Memory Roll)", valeurs: [["ON", "Exécute."]] },
+          { code: "F51", def: "OFF", titre: "Lecture des données (Memory Roll)", valeurs: [["ON", "Exécute."]] },
+          { code: "F56", def: "1", titre: "Adresse CRP", valeurs: [["1-254", "Une adresse unique par carte si plusieurs automatismes sont sur le même BUS CRP."]] },
+          { code: "F63", def: "6", titre: "Vitesse RSE", valeurs: [["2", "4800 bps."], ["3", "9600 bps."], ["4", "14400 bps."], ["5", "19200 bps."], ["6", "38400 bps."], ["7", "57600 bps."], ["8", "115200 bps."]] },
+          { code: "F65 / F66", def: "OFF", titre: "RIO ED T1 et T2 (bord sans fil)", valeurs: [["OFF", ""], ["P0", "Arrêt total."], ["P7", "Réouverture en fermeture."], ["P8", "Refermeture en ouverture."]], note: "Apparaît seulement avec la carte RIO CONN." },
+          { code: "F67 / F68", def: "OFF", titre: "RIO PH T1 et T2 (photocellule sans fil)", valeurs: [["OFF", ""], ["P1", "Réouverture en fermeture."], ["P2", "Refermeture en ouverture."], ["P3", "Arrêt partiel (avec fermeture automatique)."], ["P4", "Attente obstacle."], ["P13", "Réouverture en fermeture avec fermeture immédiate après le passage."]], note: "Apparaît seulement avec la carte RIO CONN." },
+          { code: "H1", def: "—", titre: "Version firmware", valeurs: [["< >", "Version de la carte afficheur, puis de la carte de contrôle."]] },
+          { code: "H3", def: "OFF", titre: "Mot de passe", valeurs: [["OFF", ""], ["ON", "Mot de passe de 4 chiffres (touches et ENTER) demandé pour entrer dans le menu."]] },
+          { code: "H4", def: "—", titre: "État des dispositifs BUS", valeurs: [["b1.x … b8.x", "Photocellules BUS."], ["d1.x … d7.x", "Sélecteurs BUS."], ["L1.x … L2.x", "Clignotants BUS."], ["i1.x … i2.x", "Modules I/O BUS."]], note: "Voir la fiche Afficheur pour les états." }
+        ]},
+        { nom: "Dispositifs BUS CXN", items: [
+          { code: "b1 à b8", def: "OFF", titre: "Photocellules BUS (paire 1 à 8, selon son micro-interrupteur)", valeurs: [["OFF", ""], ["C1", "Réouverture en fermeture."], ["C2", "Refermeture en ouverture."], ["C3", "Arrêt partiel (avec fermeture automatique)."], ["C4", "Attente obstacle."], ["C13", "Réouverture avec fermeture immédiate après le passage."], ["C23", "Commande ouverture."], ["C24", "Commande fermeture."]] },
+          { code: "b11 / b12 · I1 / I2", def: "OFF", titre: "Entrées du module I/O BUS 1 / 2", valeurs: [["OFF", ""], ["C0", "Arrêt total (entrée utilisée normalement fermée)."], ["r7", "Réouverture en fermeture (bord 8K2)."], ["r8", "Refermeture en ouverture (bord 8K2)."], ["C22", "Ouverture partielle."], ["C23", "Ouverture."], ["C24", "Fermeture."], ["C27", "Pas-à-pas."], ["C28", "Séquentielle."]] },
+          { code: "b11 / b12 · o1", def: "0", titre: "Sortie témoin du module I/O", valeurs: [["0", "Voyant passage ouvert (F10)."], ["1", "Lampe cycle."], ["2", "Lampe d'accueil (F25)."]] },
+          { code: "b11 / b12 · o2", def: "0", titre: "Sortie relais du module I/O", valeurs: [["0", "Bistable."], ["1-180", "Allumé pendant ce nombre de secondes (par défaut 1)."]] },
+          { code: "b21 à b27 · rIG / LEF", def: "—", titre: "Sélecteur à clé BUS (1 à 7), clé à droite (rIG) ou à gauche (LEF)", valeurs: [["0", "Pas-à-pas."], ["1", "Séquentielle."], ["2", "Ouverture."], ["3", "Fermeture."], ["4", "Ouverture partielle."], ["5", "Stop."], ["7", "Relais module BUS 1."], ["8", "Relais module BUS 2."]], note: "La liste de la notice n'a pas de valeur 6." },
+          { code: "b40 · L1", def: "8", titre: "Clignotant BUS : couleur pendant la fermeture automatique", valeurs: [["OFF", ""], ["1-8", "1 blanc, 2 jaune, 3 orange, 4 rouge, 5 violet, 6 bleu, 7 bleu ciel, 8 vert."]] },
+          { code: "b40 · L2", def: "4", titre: "Clignotant BUS : couleur en ouverture", valeurs: [["1-8", "Mêmes couleurs ; rouge par défaut."]] },
+          { code: "b40 · L3", def: "4", titre: "Clignotant BUS : couleur en fermeture", valeurs: [["1-8", "Mêmes couleurs ; rouge par défaut."]] },
+          { code: "b40 · L4", def: "1", titre: "Clignotant BUS : couleur du préclignotement", valeurs: [["1-8", "Mêmes couleurs ; blanc par défaut."]] },
+          { code: "b40 · L5", def: "OFF", titre: "Clignotant BUS : couleur de signalisation des erreurs", valeurs: [["OFF", ""], ["1-8", "Mêmes couleurs."]], note: "Active après l'envoi d'une commande." },
+          { code: "b43", def: "OFF", titre: "Couleur de l'avis d'entretien (clignotants et sélecteurs BUS)", valeurs: [["OFF", ""], ["1-8", "Mêmes couleurs."]], note: "Demande F58. Avec CAME KEY, toujours mettre le firmware de la carte à jour." }
+        ]}
+      ]
+    },
+    apprentissage: {
+      avant: [
+        "Câbler le ou les moteurs (voir le tableau du bornier). Un seul moteur : le brancher sur M2 et régler F46 = 1.",
+        "Régler A1 (type de moteur) et F46. Si A1 défile à l'écran, c'est qu'il n'est pas encore réglé.",
+        "A2 essai moteur : > ouvre M2, < ouvre M1. Si un vantail part dans le mauvais sens, inverser M et N sur la borne.",
+        "Régler F2 / F3 selon les sécurités raccordées (OFF si rien), F72 / F73 si fins de course, A8 si moteur général.",
+        "Zone de manœuvre dégagée."
+      ],
+      etapes: [
+        "A3 Auto-apprentissage de la course : ON puis ENTER. La notice ne détaille pas les étapes avec encodeur.",
+        "Sans encodeur (encodeur virtuel) : l'armoire doit détecter chaque butée et l'afficher dans l'ordre CL1, CL2, OP2, OP1. Si elle ne la détecte pas, refaire la manœuvre à la main : fermeture de M1 (CL1), ENTER quand le vantail touche la butée ; fermeture de M2 (CL2), ENTER ; ouverture de M2 (OP2), ENTER ; ouverture de M1 (OP1), ENTER.",
+        "L'écran affiche le symbole d'apprentissage terminé puis SER (encodeur désactivé)."
+      ],
+      apres: [
+        "Après la mise sous tension, la première manœuvre est toujours une ouverture : la laisser se terminer.",
+        "Première manœuvre à vue, photocellules actives, y compris avec la télécommande. ESC ou le bouton STOP en cas d'anomalie, de bruit ou de vibration suspecte.",
+        "Contrôler les dispositifs de signalisation, de sécurité et de protection, et le déblocage manuel.",
+        "Après un changement de F72 (fins de course ou ralentissement), refaire l'auto-apprentissage.",
+        "Avant de fermer le couvercle, sceller l'entrée des câbles (insectes, humidité)."
       ]
     }
   }
@@ -55077,7 +55296,7 @@ const MARQUES = [
 },
 /* ------------------------------------------------------------------ */
 {
-  id: "fadini", nom: "Fadini", couleur: "#1b5e9e", sanslogo: true,
+  id: "fadini", nom: "Fadini", couleur: "#1b5e9e",
   cartes: [
   {
     id: "fadini-elpro37",
@@ -55342,7 +55561,7 @@ const MARQUES = [
 },
 /* ------------------------------------------------------------------ */
 {
-  id: "tousek", nom: "Tousek", couleur: "#c8102e", sanslogo: true,
+  id: "tousek", nom: "Tousek", couleur: "#c8102e",
   cartes: [
 {
   "id": "tousek-pull-t",
