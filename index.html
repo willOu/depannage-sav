@@ -413,11 +413,12 @@ function setTheme(t){ applyTheme(t); store.set("theme", t); if (location.hash ==
 $("#theme").onclick = () => setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
 
 const APP_V = CHANGELOG[0].v;
+const DATA_DATE = CHANGELOG[0].date; /* date des données = date de la dernière nouveauté (plus rien à mettre à jour à la main) */
 const fdate = d => d.split("-").reverse().join("/");
 /* statut réseau */
 function status(){
   const e = $("#status"); if (!e || e.dataset.upd) return;
-  e.innerHTML = `<i class="sdot"></i><span>${navigator.onLine ? "" : "Hors ligne · "}Version <b>${APP_V}</b> · données du <b>${fdate(DATA_VERSION)}</b> · <span id="offs">vérification du mode hors ligne…</span></span>`;
+  e.innerHTML = `<i class="sdot"></i><span>${navigator.onLine ? "" : "Hors ligne · "}Version <b>${APP_V}</b> · données du <b>${fdate(DATA_DATE)}</b> · <span id="offs">vérification du mode hors ligne…</span></span>`;
   e.onclick = () => go("#/reglages");
   offlineState();
 }
@@ -760,7 +761,7 @@ function viewSettings(){
       <div class="row"><span>Fiches en favori</span><span class="rr"><span class="mono">${nf}</span>${nf ? `<button class="mini" onclick="if(confirm('Effacer tous vos favoris ?')){getFavs().forEach(x=>window.SYNC&&SYNC.fav(x,false));store.set('favs',[]);viewSettings();}">Effacer</button>` : ""}</span></div></div>
       <p class="hotn">${esc(FAV_NOTE)}</p>`;
   /* 4. Hors ligne et version */
-  h += `<h2>Hors ligne et version</h2><div class="set"><div class="row"><span>Version de l'appli</span><span class="mono">v${APP_V}</span></div><div class="row"><span>Données</span><span class="mono">${fdate(DATA_VERSION)}</span></div>
+  h += `<h2>Hors ligne et version</h2><div class="set"><div class="row"><span>Version de l'appli</span><span class="mono">v${APP_V}</span></div><div class="row"><span>Données</span><span class="mono">${fdate(DATA_DATE)}</span></div>
       <div class="row"><span>Hors ligne</span><span class="mono" id="swv">…</span></div>
       <button class="srow" id="swb"><span>Vérifier / compléter le téléchargement</span><i>›</i></button></div>
       <p class="hotn" id="swd">Vérification du mode hors ligne…</p>`;

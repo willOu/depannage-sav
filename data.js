@@ -5,12 +5,12 @@
    "source" (reformulées). p: 1 = action complétée par un contrôle
    terrain de base (pas mot pour mot dans la notice).
    Pour ajouter une carte : copier un bloc { id, nom, ... } et l'adapter,
-   puis augmenter DATA_VERSION (sinon les téléphones gardent l'ancienne).
+   puis ajouter l'entrée CHANGELOG (la date « données du » en découle).
    VERSION DE L'APPLI : chaque nouveauté ajoute une entrée en tête du CHANGELOG avec v: "1.N+1"
    (la première entrée donne le numéro affiché partout : accueil, en-tête, Réglages).
    ===================================================================== */
 
-const DATA_VERSION = "2026-10-20";
+const DATA_VERSION = "2026-10-29"; /* ancien repère, plus affiché : voir DATA_DATE (index.html) */
 
 /* Journal des modifications — ajouter une entrée en haut à chaque mise à jour.
    docs : nom des notices ajoutées (affichées dans Réglages). */
