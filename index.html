@@ -743,11 +743,12 @@ function viewSettings(){
   /* 1. Compte */
   if (window.AUTH_ACTIF) h += `<h2>Compte</h2><div class="set"><div class="row"><span>Connecté</span><span class="mono">${esc(AUTH.nom() || AUTH.email() || "—")}</span></div>
       <div class="row"><span>Accès hors ligne</span><span class="mono">${AUTH.joursRestants()} j restants</span></div>
-      <details class="grp" id="cmdp"><summary>Changer mon mot de passe</summary><div class="secb">
+      <details class="grp" id="cmdp"><summary>Changer mon mot de passe</summary><form class="secb" onsubmit="return false" autocomplete="on">
+        <input type="email" name="username" value="${esc(AUTH.email() || "")}" autocomplete="username" readonly tabindex="-1" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
         <input id="ma0" type="password" placeholder="Mot de passe actuel" autocomplete="current-password">
         <input id="ma1" type="password" placeholder="Nouveau mot de passe (8 caractères minimum)" autocomplete="new-password">
         <input id="ma2" type="password" placeholder="Confirmer le nouveau mot de passe" autocomplete="new-password">
-        <button class="dbtn" id="mab">Changer le mot de passe</button><p class="hotn" id="mar"></p></div></details>
+        <button class="dbtn" id="mab">Changer le mot de passe</button><p class="hotn" id="mar"></p></form></details>
       <button class="srow" onclick="if(confirm('Se déconnecter de Diag\\'SAV ?'))AUTH.deconnecter()"><span>Se déconnecter</span><i>›</i></button></div>
       <p class="hotn">L'accès est vérifié à chaque ouverture avec du réseau ; sans réseau, il reste valable 14 jours.</p>`;
   /* 2. Messages du SAV */
