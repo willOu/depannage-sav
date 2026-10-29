@@ -210,9 +210,9 @@
     ],
     "came-zlx24": [
       S("came-zlx24-p06", "Description des parties", 6, "Repères 1 à 22 : fusibles, borniers, afficheur, connecteurs Memory Roll / CAME KEY / RSE / RIO CONN / AF, transformateur."),
-      S("came-zlx24-p13", "Alimentation et serrures", 13, "L-N, 10-11, E, E3, 5 ; serrures 12 V sur R1 / R2 (EB1+VB, EB2+VB) et puissances maximales."),
-      S("came-zlx24-p14", "Moteurs avec encodeur", 14, "FROG-A24E / FERNI / F4024E (+ E −) ; ATS / AXO / FTX / FAST-70 / AMICO / AXI (ENC)."),
-      S("came-zlx24-p15", "STYLO-RME, STYLO-ME, A3024N / A5024N", 15, "M, N, E (et EB pour STYLO-ME) sur M1 N1 ENC1 EB1 ; A3024N : R sur ENC1."),
+      S("came-zlx24-p13", "Sorties accessoires et serrures", 13, "Sortie accessoires 10-11, serrures 12 V sur R1 / R2 (EB1+VB, EB2+VB), tableau des puissances maximales (le raccordement L-N est en page 12)."),
+      S("came-zlx24-p14", "Moteurs avec encodeur", 14, "FROG-A24E / FERNI / FERNI-V / F4024E / F4024EP (+ E −, côté M2 M et N croisés) ; ATS / AXO / FTX / FAST-70 / AMICO / AXI (ENC, schéma droit)."),
+      S("came-zlx24-p15", "STYLO-RME, STYLO-ME, A3024N / A5024N", 15, "M, N, E (et EB pour STYLO-ME) sur M1 N1 ENC1 EB1 ; côté M2, M et N sont croisés (N sur M2) pour STYLO-RME et STYLO-ME ; A3024N : R sur ENC1 (schéma droit)."),
       S("came-zlx24-p16", "FROG-A24, F1024, moteurs sans encodeur", 16, "Ralentissement F / FA / FC sur les bornes FC1 FA1 F ; sans encodeur : M et N seulement."),
       S("came-zlx24-p19", "Dispositifs de commande", 19, "1-2 (stop NF), 2-3, 2-3P, 2-4, 2-7 et antenne."),
       S("came-zlx24-p21", "Photocellules DELTA et DIR / DELTA-S", 21, "Raccordement standard et avec test de sécurité (TS)."),

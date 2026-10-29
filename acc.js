@@ -4489,7 +4489,7 @@
         {
           "n": "ZLX24MA / MR",
           "label": "Autre armoire (notice FA01885)",
-          "desc": "M → M1 (M2), N → N1 (N2), E → ENC1 (ENC2), EB → EB1 (EB2). Voir la carte ZLX24, type de moteur A1 = 1."
+          "desc": "Côté M1 : M → M1, N → N1, E → ENC1, EB → EB1. Côté M2 : N → M2, M → N2 (croisé sur le schéma de cette notice), E → ENC2, EB → EB2. Voir la carte ZLX24, type de moteur A1 = 1. Le schéma ZL92 de la présente notice est droit des deux côtés (M2 N2 ENC2 EB2) : les deux notices ne disent pas la même chose."
         },
         {
           "n": "Câbles",
@@ -4506,7 +4506,7 @@
         "Enlever la calotte inférieure, fixer le motoréducteur à la bride avec les quatre vis fournies, fixer la calotte supérieure.",
         "STYLO-BS (5a) : bras articulé sur l'arbre (vis et rondelle), débloquer le motoréducteur, ouvrir le vantail, fixer le bras par ses boulons, boucher le trou avec le cache.",
         "STYLO-BD (5b) : bras droit sur l'arbre, cache fixé par ses vis.",
-        "STYLO-BD : débloquer, vantail à l'ouverture maximale, butée mécanique d'ouverture contre le patin ; vantail fermé, butée de fermeture contre le patin ; bouchons et caches aux deux bouts du rail.",
+        "STYLO-BD : mettre les bouchons et les cache-trous aux deux bouts du rail ; débloquer, vantail à l'ouverture maximale, butée mécanique d'ouverture contre le patin ; vantail fermé, butée de fermeture contre le patin.",
         "Ouvrir la calotte inférieure, faire le raccordement électrique, refermer la calotte.",
         "Déblocage : couper l'alimentation, ouvrir le volet de protection du déblocage, introduire la clé et la tourner."
       ],

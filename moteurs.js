@@ -14,7 +14,7 @@
     lba: "Instructions de service La Barrière Automatique LBA 4 / 6 / 7 (2017)", lba12: "Dossier La Barrière Automatique LBA 12 (COAT010027)",
     cameBX: "came.com, page BX", cameBXV: "came.com, page BXV", cameBK: "Dépliant CAME BK (KADFRABE18, 2019)", cameGam: "came.com, page Automatismes de portails (maxi de la gamme)",
     cameAXO: "came.com, page AXO", cameFROG: "came.com, page FROG", cameFX: "came.com, page FROG-X", cameATI: "came.com, page ATI",
-    cameFAST: "Dépliant CAME FAST70 (« vantaux jusqu'à 2,30 m ou 300 kg »)", cameSTY: "Notice CAME STYLO-ME 119DV11 (03/2010)",
+    cameFAST: "Dépliant CAME FAST70 (« vantaux jusqu'à 2,30 m ou 300 kg »)", cameSTY: "Notice CAME STYLO-ME 119DV11 (03/2010)", cameSTYR: "came.com, page STYLO",
     faac740: "faac.fr, page 740 / 741", faac746: "faac.fr, page 746 C / 844 C", faacB: "Brochure FAAC « Automatismes pour portails battants »",
     bftAres: "bft-automation.com (US), famille ARES ULTRA BT A", rwBE: "rogertechnology.it, page BE20/200", rSm: "Notice Roger SMARTY IS131 Rev.12", rBE: "Notice Roger BE20 IS121 Rev.15", rBH: "Notice Roger BH30 IS118 Rev.17", rBG: "Notice Roger BG30 IS141 Rev.19", rBM: "Notice Roger BM30 IS169 Rev.13", rBR: "Notice Roger BR21 / R21 IS301 Rev.03", rBH23: "Notice Roger BH23 IS106 Rev.10", rMo: "Notice Roger MONOS4 IS201 Rev.11", rAy: "Notice Roger AYRON IS239 Rev.01", rBio: "Notices Roger BIONIK IS161, IS185, IS194", rWay: "Notices Roger WAY IS266, IS291", cSlx: "Notice Cardin SLX ZVL607.01", cSl4: "Notice Cardin SL4024 ZVL317.04", fCombi: "Notice Fadini Combi 740 (07-2012)", tPull: "Notice Tousek PULL T5-T15 (2016)", tPull24: "Notice Tousek PULL T24 (2016)"
   };
@@ -85,7 +85,8 @@
     M("CAME", "ATI 3 m (A3000A, A3106, A3024N)", "battant", null, null, 3, "cameATI", "Poids contradictoire sur la page CAME : 400 kg (fiche produit) ou 800 kg (tableau des limites)."),
     M("CAME", "ATI 5 m (A5000, A5000A, A5024N)", "battant", null, null, 5, "cameATI", "Poids contradictoire sur la page CAME : 400 kg (fiche produit) ou 1000 kg (tableau des limites)."),
     M("CAME", "FAST70 (gamme)", "battant", null, 300, 2.3, "cameFAST", "« Jusqu'à 2,30 m ou 300 kg » : pas les deux à la fois, voir l'abaque."),
-    M("CAME", "STYLO-ME / STYLO-RME", "battant", "24 V", null, 1.8, "cameSTY", "Poids selon la largeur (notice STYLO-ME 119DV11) : 150 kg à 0,8 m, 125 kg à 1,2 m, 100 kg à 1,8 m. Poids du moteur absent de la notice."),
+    M("CAME", "STYLO-ME", "battant", "24 V", null, 1.8, "cameSTY", "Poids selon la largeur (notice 119DV11) : 150 kg à 0,8 m, 125 kg à 1,2 m, 100 kg à 1,8 m. Poids du moteur absent de la notice."),
+    M("CAME", "STYLO-RME", "battant", "24 V", null, 1.8, "cameSTYR", "Poids contradictoire chez CAME : 100 kg (page STYLO) ou 150 kg (page d'ensemble). Non couvert par la notice STYLO-ME."),
     M("FAAC", "390", "battant", null, null, 1.8, "faacB", "Bras articulé. 3 m avec électroserrure (la brochure indique aussi 3,2 m dans son tableau)."),
     M("FAAC", "392", "battant", "24 V", null, 2, "faacB", "Bras articulé. 2,5 m avec électroserrure."),
     M("FAAC", "412", "battant", null, null, 1.8, "faacB"),
