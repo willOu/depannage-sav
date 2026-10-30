@@ -192,6 +192,9 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "1.79", date: "2026-10-30", titre: "Connexion plus fiable au réveil de l'appareil", items: [
+    "Au retour de veille, l'appli renouvelait la session plusieurs fois en même temps (un renouvellement par appel au serveur, et par onglet ouvert). Elle n'en fait plus qu'un, partagé entre les appels et entre les onglets, et renouvelle le jeton avant qu'il expire au lieu d'attendre le refus du serveur"
+  ], docs: [] },
   { v: "1.78", date: "2026-10-29", titre: "Recherches sans résultat et diagnostic guidé relié aux fiches", items: [
     "Administrateurs : dans Statistiques, nouvelle liste « Recherches sans résultat » (ce que les techniciens ont cherché sans rien trouver, avec le nombre de fois et de personnes) pour savoir quelles notices ajouter. Seul le texte tapé est gardé, pas de lien avec un nom dans cette liste ; les saisies qui ressemblent à un email ou un numéro sont ignorées",
     "Diagnostic guidé : en fin de parcours, on cherche sa marque ou sa carte et on ouvre directement ses codes ou son bornier",

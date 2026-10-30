@@ -57,11 +57,23 @@
   }
 
   /* vérifie la session : "ok" | "net" | "refus" | "expire" */
-  async function verifier() {
+  /* une seule vérification à la fois : au réveil de l'appareil, plusieurs appels reçoivent 401 en même temps ;
+     ils attendent tous le même renouvellement du jeton au lieu d'en lancer chacun un (et de revérifier l'appareil plusieurs fois) */
+  let verifEnCours = null;
+  function verifier() {
+    if (!verifEnCours) verifEnCours = verifier_().finally(() => { verifEnCours = null; });
+    return verifEnCours;
+  }
+  /* entre onglets : un seul renouvellement à la fois (verrou du navigateur), et un onglet reprend le jeton déjà renouvelé par un autre */
+  const verifier_ = () => navigator.locks && navigator.locks.request ? navigator.locks.request("diagsav-verif", verifier__) : verifier__();
+  async function verifier__() {
     if (!S || !S.refresh_token) return "expire";
+    const L = load();
+    if (L && L.email === S.email && L.access_token && L.refresh_token && L.refresh_token !== S.refresh_token) { S = { ...S, ...L }; if (!expireBientot()) return "ok"; }
     const r = await call("/auth/v1/token?grant_type=refresh_token", { method: "POST", headers: H(), body: JSON.stringify({ refresh_token: S.refresh_token }) });
     if (r.net) return "net";
     if (!r.ok) return r.status >= 500 || r.status === 408 || r.status === 429 ? "net" : (r.j && /ban/i.test(JSON.stringify(r.j)) ? "refus" : "expire");
+    if (!r.j || !r.j.access_token || !r.j.refresh_token) return "net"; /* réponse illisible : on réessaiera plus tard */
     S = { ...tokens(r.j), lastOk: S.lastOk }; save(S);
     const a = await autorise(S.access_token);
     if (a === "net") return "net";
@@ -71,6 +83,8 @@
     setTimeout(() => dispatchEvent(new Event("auth-ok")), 0);
     return "ok";
   }
+  /* expiration du jeton d'accès (champ exp du JWT), avec 60 s de marge */
+  const expireBientot = () => { try { const p = JSON.parse(atob(S.access_token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/"))); return !p.exp || p.exp * 1000 - Date.now() < 60e3; } catch (e) { return false; } };
   const horsDelai = () => !S || !S.lastOk || (Date.now() - S.lastOk) > MAX_HORS_LIGNE_JOURS * 864e5;
 
   /* ---------- écran de connexion ---------- */
@@ -199,9 +213,13 @@
     async api(path, opt) {
       if (!S || !S.access_token) return { ok: false, status: 401 };
       const o = opt || {}, h = t => ({ ...H(t), ...(o.headers || {}) });
-      let r = await call(path, { ...o, headers: h(S.access_token) });
+      if (verifEnCours) await verifEnCours; /* un renouvellement est déjà en route : attendre le nouveau jeton */
+      else if (expireBientot() && S.refresh_token && navigator.onLine !== false) await verifier(); /* jeton périmé (appareil en veille) : le renouveler avant l'appel */
+      if (!S || !S.access_token) return { ok: false, status: 401 };
+      const jeton = S.access_token;
+      let r = await call(path, { ...o, headers: h(jeton) });
       if (!r.net && r.status === 401 && S && S.refresh_token) {
-        const v = await verifier();
+        const v = S.access_token !== jeton ? "ok" : await verifier(); /* déjà renouvelé par un autre appel : réessayer directement */
         if (v !== "ok") { if (v === "refus") verrou("Votre accès a été désactivé. Contactez le SAV."); else if (v === "plein") verrou("Ce compte a été connecté sur un autre appareil (" + MAXA + " maximum). Reconnectez-vous pour utiliser celui-ci."); else if (v === "expire") verrou("Session expirée : reconnectez-vous."); return { ok: false, status: 401 }; }
         r = await call(path, { ...o, headers: h(S.access_token) });
       }
