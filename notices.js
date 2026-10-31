@@ -1041,11 +1041,11 @@ window.NOTICES_PDF = {
 "m": 0
 },
 {
-"f": "notices/manu-000100.pdf",
+"f": "notices/manu-000100-r2.pdf",
 "t": "Manuel utilisateur ELECTRADROP",
 "p": 12,
 "pt": 36,
-"ko": 2187,
+"ko": 2318,
 "m": 0
 }
 ],
@@ -1219,12 +1219,12 @@ window.NOTICES_PDF = {
 ],
 "roger-cs": [
 {
-"f": "notices/serie-cs-istruzioni-is310-rev00-a5.pdf",
+"f": "notices/serie-cs-istruzioni-is310-rev00-a5-r2.pdf",
 "t": "Notice Roger Série CS IS310 Rev.00",
-"p": 16,
+"p": 9,
 "pt": 16,
-"ko": 912,
-"m": 1
+"ko": 837,
+"m": 0
 }
 ],
 "roger-bg30": [
@@ -1279,12 +1279,12 @@ window.NOTICES_PDF = {
 ],
 "roger-ayron": [
 {
-"f": "notices/ayron-istruzioni-is239-rev01.pdf",
+"f": "notices/ayron-istruzioni-is239-rev01-r2.pdf",
 "t": "Notice Roger AYRON IS239 Rev.01",
-"p": 24,
+"p": 14,
 "pt": 24,
-"ko": 984,
-"m": 1
+"ko": 853,
+"m": 0
 }
 ],
 "roger-way": [
@@ -1357,11 +1357,11 @@ window.NOTICES_PDF = {
 "m": 0
 },
 {
-"f": "notices/ba-90-ba-91-istruzioni-aste-bionik-is93-rev07-a4.pdf",
+"f": "notices/ba-90-ba-91-istruzioni-aste-bionik-is93-rev07-a4-r2.pdf",
 "t": "Lisses BA/90 – BA/91 IS93",
-"p": 14,
+"p": 8,
 "pt": 14,
-"ko": 1099,
+"ko": 987,
 "m": 0
 },
 {
@@ -1401,21 +1401,21 @@ window.NOTICES_PDF = {
 ],
 "roger-bconnect": [
 {
-"f": "notices/b74-bconnect-istruzioni-is231-rev01-a5.pdf",
+"f": "notices/b74-bconnect-istruzioni-is231-rev01-a5-r2.pdf",
 "t": "Notice Roger B74/BCONNECT IS231 Rev.01",
-"p": 16,
+"p": 7,
 "pt": 16,
-"ko": 976,
-"m": 1
+"ko": 825,
+"m": 0
 }
 ],
 "cardin-cdr842": [
 {
-"f": "notices/notice-photocellule-cardin-842a-1.pdf",
+"f": "notices/notice-photocellule-cardin-842a-1-r2.pdf",
 "t": "CDR842-852A ZVL448.03",
-"p": 4,
+"p": 2,
 "pt": 6,
-"ko": 351,
+"ko": 312,
 "m": 0
 },
 {
