@@ -192,6 +192,12 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "1.81", date: "2026-10-31", titre: "Nouvel onglet « Notice PDF »", items: [
+    "Sur 127 cartes et fiches, un onglet « Notice PDF » donne la notice du fabricant, réduite aux pages en français (plus les pages de schémas communes à toutes les langues)",
+    "Lecture dans l'appli, page par page, avec zoom ; touchez une page pour l'agrandir. Bouton « Enregistrer » pour l'ouvrir avec le lecteur PDF du téléphone",
+    "Chaque notice se télécharge à la première ouverture, puis reste disponible sans réseau sur le téléphone ; elle n'est pas supprimée lors des mises à jour de l'appli",
+    "Quelques notices Roger, Cardin, Casit et Intratone mélangent les langues sur chaque page : elles sont gardées en entier et c'est indiqué"
+  ], docs: [] },
   { v: "1.80", date: "2026-10-31", titre: "Cardin MULTI-ECU : coulissants SL, barrières EL et battants BL / HL", items: [
     "Trois cartes Cardin tirées de la notice logicielle MULTI-ECU ZVL608 : programmateur des coulissants SL (SLX, SLi, DRACO), des barrières ELDOM et des battants / enterrés BL / HL",
     "Pour chacune : bornier propre à la série, fusibles, messages de l'afficheur (ERREUR MOT, ENC, DIR, SENSEUR, INT. BORD…), LED, menus complets avec les valeurs par défaut de la notice, programmation de la course, manœuvre d'urgence, maître-esclave, multi-décodage S449 / S504 et contrôle de la batterie",

@@ -229,6 +229,17 @@ details.grp>summary small{display:block;font-weight:400;font-size:12.5px;color:v
 .msg p{margin:6px 0 0;font-size:14px;line-height:1.45}
 .msg button{margin-top:8px;border:1px solid var(--line);background:var(--chip);color:var(--ink);border-radius:10px;padding:6px 12px;font:inherit;font-size:13.5px;cursor:pointer}
 .mini{border:1px solid var(--line);background:var(--chip);color:var(--ink);border-radius:10px;padding:6px 12px;font:inherit;font-size:13.5px;cursor:pointer;flex:none}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:42px;padding:8px 16px;border-radius:10px;border:1px solid var(--brand);background:var(--brand);color:#fff;font:inherit;font-weight:700;font-size:15px;text-decoration:none;cursor:pointer}
+.btn.sec{background:var(--card);color:var(--ink);border-color:var(--line)}
+.pdfc{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-top:10px;padding:12px 14px;border:1px solid var(--line);border-left:5px solid var(--brand);border-radius:14px;background:var(--card)}
+.pdft{display:grid;gap:3px;min-width:0;flex:1 1 220px}.pdft b{overflow-wrap:anywhere}.pdft small{color:var(--muted);font-size:12.5px}
+.pdft .pdfm{color:var(--ink)}.pdfst.ok{color:#2ea043;font-weight:600}
+.pdfb{display:flex;gap:8px;flex-wrap:wrap}
+.pdfbar{display:flex;gap:8px;align-items:center;padding:8px 0;background:var(--bg)}.pdfbar span{min-width:56px;text-align:center;font-weight:700}.pdfbar a{margin-left:auto}
+.ppages{overflow-x:auto;display:grid;gap:10px;justify-items:start}
+.ppage{position:relative;background:#fff;border:1px solid var(--line);border-radius:6px;width:max-content;max-width:none;min-width:100%}
+.ppage canvas{display:block;cursor:zoom-in}
+.pnum{position:absolute;right:6px;bottom:6px;background:rgba(0,0,0,.55);color:#fff;font-size:11px;padding:2px 6px;border-radius:6px}
 .adm .row,.note .row{display:flex;justify-content:space-between;align-items:center;gap:10px}
 .note .row{padding:6px 0;border-top:1px solid var(--line)}
 .note input,.note textarea,.note select{width:100%;box-sizing:border-box;margin-top:8px;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-size:15px}
@@ -373,6 +384,8 @@ html{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 <script src="diag.js"></script> <!-- DIAG -->
 <script src="ask.js"></script> <!-- ASK -->
 <script src="img.js"></script> <!-- SCH -->
+<script src="notices.js"></script> <!-- PDF -->
+<script src="npdf.js"></script> <!-- PDF -->
 <script src="acc.js"></script> <!-- ACC -->
 
 <script src="data.js"></script>
@@ -533,7 +546,7 @@ function viewBoard(id, tab){
 
   let h = `<div class="boardhead" style="--c:${m.couleur}"><button class="favbtn" id="fav" aria-pressed="${isFav(id)}" aria-label="Ajouter aux favoris" title="Favori : enregistré dans ce navigateur seulement">${isFav(id) ? "★" : "☆"}</button><h3>${esc(c.nom)}</h3><p>${esc(c.modeles)}</p><p>${esc(c.type)}</p><div class="src">Source : ${esc(c.source)}</div>${hotlineHtml(m)}${noticeHtml(id)}</div>
   <div class="tabs" role="tablist">
-    ${[["codes","Codes"],["bornier","Bornier"],["aff","Écran"],["param","Paramètres"],["appr","Apprent."]].concat(window.hasSchema && hasSchema(id) ? [["sch","Schéma"]] : []).map(([k,l]) => `<button role="tab" aria-selected="${tab===k}" onclick="go('#/c/${id}/${k}')">${l}</button>`).join("")}
+    ${[["codes","Codes"],["bornier","Bornier"],["aff","Écran"],["param","Paramètres"],["appr","Apprent."]].concat(window.hasSchema && hasSchema(id) ? [["sch","Schéma"]] : []).concat(window.hasPdf && hasPdf(id) ? [["pdf","Notice PDF"]] : []).map(([k,l]) => `<button role="tab" aria-selected="${tab===k}" onclick="go('#/c/${id}/${k}')">${l}</button>`).join("")}
   </div><div id="pane"></div>`;
   app.innerHTML = h;
   const fb = $("#fav");
@@ -547,6 +560,7 @@ function viewBoard(id, tab){
   const pane = $("#pane");
 
   if (tab === "sch"){ pane.innerHTML = schemaPane(id); return; } /* SCH */
+  if (tab === "pdf"){ pane.innerHTML = pdfPane(id); return; } /* PDF */
   if (tab === "codes"){
     const SEV = [["erreur","Erreurs · à corriger","er"],["symptome","Symptômes","sy"],["afficheur","Codes de l'afficheur","af"],["flash","Clignotant","af"],["led","Voyants (LED)","af"],["diag","Entrées activées · diagnostic","di"],["test","Mode TEST","te"]];
     let first = true, p = "";
@@ -836,6 +850,7 @@ function route(){
   if (p[0] === "ma") return viewAccBrand(p[1]);
   if (p[0] === "a") return p[1] ? viewAcc(p[1], p[2]) : viewAccList(); /* ACC */
   if (p[0] === "d") return viewDiag(p[1], p[2]); /* DIAG */
+  if (p[0] === "pdf") return viewPdf(p[1], p[2]); /* PDF */
   if (p[0] === "scan") return viewScan(); /* SCAN */
   if (p[0] === "quiz") return viewQuiz(p[1]); /* QUIZ */
   if (p[0] === "techs") return viewTechs(); /* ADMIN */
