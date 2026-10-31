@@ -42,7 +42,7 @@
     setHead(n.t, true);
     app.innerHTML = `<div class="pdfbar"><button class="btn sec" id="pzm" aria-label="Réduire">−</button><span id="pzv">100 %</span><button class="btn sec" id="pzp" aria-label="Agrandir">+</button><a class="btn sec" href="${esc(n.f)}" download>Enregistrer</a></div>
       <p class="note" id="pmsg">Chargement de la notice (${mo(n.ko)})…</p><div id="ppages" class="ppages"></div>
-      <p class="note">Touchez une page pour l'agrandir (pincement ou + / −).</p>`;
+      <p class="note">Touchez une page pour l'ouvrir en plein écran : faites défiler les pages de haut en bas, zoom avec + / − ou double-touche.</p>`;
     let pdf;
     try {
       const [L, buf] = await Promise.all([chargeLib(), fetch(n.f).then(r => { if (!r.ok) throw new Error("http"); return r.arrayBuffer(); }, () => { throw new Error("reseau"); })]);
@@ -94,18 +94,74 @@
     };
     document.getElementById("pzp").onclick = () => { const i = ZS.indexOf(zoom); if (i < ZS.length - 1) { zoom = ZS[i + 1]; majZoom(); } };
     document.getElementById("pzm").onclick = () => { const i = ZS.indexOf(zoom); if (i > 0) { zoom = ZS[i - 1]; majZoom(); } };
-    async function agrandir(i) {
-      if (!window.schemaOpen || !window.SCHEMAS) return;
-      const page = await pdf.getPage(i);
-      const v1 = page.getViewport({ scale: 1 });
-      const v = page.getViewport({ scale: Math.min(4, 2400 / v1.width) });
-      const c = document.createElement("canvas"); c.width = Math.floor(v.width); c.height = Math.floor(v.height);
-      await page.render({ canvasContext: c.getContext("2d"), viewport: v }).promise;
-      c.toBlob(b => {
-        const old = SCHEMAS.__pdf && SCHEMAS.__pdf[0]; if (old) URL.revokeObjectURL(old.f);
-        SCHEMAS.__pdf = [{ f: URL.createObjectURL(b), t: `${n.t} — page ${i}`, p: i, d: "" }];
-        schemaOpen("__pdf", 0);
-      }, "image/jpeg", 0.85);
-    }
+    const agrandir = i => plein(pdf, i, jeton);
   };
+
+  /* Plein écran : toutes les pages à la suite, défilement vertical, zoom − / + ou double-touche, ‹ › page précédente / suivante */
+  async function plein(pdf, depart, jeton) {
+    const N = pdf.numPages;
+    const o = document.createElement("div"); o.className = "schv"; o.id = "pdfv";
+    o.innerHTML = `<div class="schb"><button id="pvp" aria-label="Page précédente">‹</button><span id="pvt">${depart} / ${N}</span><button id="pvn" aria-label="Page suivante">›</button><button id="pvm" aria-label="Zoom moins">−</button><button id="pvz" aria-label="Zoom plus">+</button><button id="pvx" aria-label="Fermer">✕</button></div><div class="schc" id="pvc"></div>`;
+    document.body.appendChild(o); document.body.style.overflow = "hidden";
+    const box = o.querySelector("#pvc");
+    let zoom = 1, ferme = false;
+    const p1 = (await pdf.getPage(1)).getViewport({ scale: 1 });
+    const ratios = new Map();
+    const larg = () => box.clientWidth * zoom;
+    const haut = k => Math.round(larg() * (ratios.get(k) || p1.height / p1.width));
+    const pages = [];
+    for (let k = 1; k <= N; k++) {
+      const d = document.createElement("div"); d.className = "pvp"; d.dataset.n = k;
+      d.style.width = larg() + "px"; d.style.height = haut(k) + "px";
+      box.appendChild(d); pages.push(d);
+    }
+    const rendus = new Map();
+    async function rendre(d) {
+      const k = +d.dataset.n, w = larg();
+      if (rendus.get(k) === w) return; rendus.set(k, w);
+      const page = await pdf.getPage(k);
+      const v1 = page.getViewport({ scale: 1 });
+      ratios.set(k, v1.height / v1.width);
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const sc = Math.min((w * dpr) / v1.width, 4000 / v1.width);
+      const v = page.getViewport({ scale: sc });
+      const c = document.createElement("canvas"); c.width = Math.floor(v.width); c.height = Math.floor(v.height);
+      c.style.width = w + "px"; c.style.height = Math.round(w * v1.height / v1.width) + "px";
+      await page.render({ canvasContext: c.getContext("2d"), viewport: v }).promise;
+      if (ferme || rendus.get(k) !== w) { c.width = 0; c.height = 0; return; }
+      const old = d.querySelector("canvas"); if (old) { old.width = 0; old.height = 0; old.remove(); }
+      d.style.width = c.style.width; d.style.height = c.style.height; d.appendChild(c);
+    }
+    const liberer = d => { rendus.delete(+d.dataset.n); const c = d.querySelector("canvas"); if (c) { c.width = 0; c.height = 0; c.remove(); } };
+    const io = new IntersectionObserver(es => es.forEach(e => e.isIntersecting ? rendre(e.target) : liberer(e.target)), { root: box, rootMargin: "1200px 0px" });
+    pages.forEach(d => io.observe(d));
+    const actuelle = () => { const t = box.scrollTop + box.clientHeight / 3; let k = 1; for (const d of pages) { if (d.offsetTop <= t) k = +d.dataset.n; else break; } return k; };
+    const aller = k => { k = Math.max(1, Math.min(N, k)); box.scrollTop = pages[k - 1].offsetTop; };
+    box.addEventListener("scroll", () => { o.querySelector("#pvt").textContent = `${actuelle()} / ${N}`; }, { passive: true });
+    const setZ = z => {
+      z = Math.max(1, Math.min(4, z)); if (z === zoom) return;
+      const k = actuelle(), dans = (box.scrollTop - pages[k - 1].offsetTop) / Math.max(1, pages[k - 1].offsetHeight);
+      const fx = (box.scrollLeft + box.clientWidth / 2) / Math.max(1, box.scrollWidth);
+      zoom = z;
+      pages.forEach(d => { const c = d.querySelector("canvas"); d.style.width = larg() + "px"; d.style.height = haut(+d.dataset.n) + "px"; if (c) { c.style.width = d.style.width; c.style.height = d.style.height; } });
+      box.scrollTop = pages[k - 1].offsetTop + dans * pages[k - 1].offsetHeight;
+      box.scrollLeft = fx * box.scrollWidth - box.clientWidth / 2;
+      pages.forEach(d => { const r = d.getBoundingClientRect(); if (r.bottom > -1200 && r.top < innerHeight + 1200) rendre(d); });
+    };
+    o.querySelector("#pvz").onclick = () => setZ(zoom + 0.5);
+    o.querySelector("#pvm").onclick = () => setZ(zoom - 0.5);
+    o.querySelector("#pvp").onclick = () => aller(actuelle() - 1);
+    o.querySelector("#pvn").onclick = () => aller(actuelle() + 1);
+    box.ondblclick = () => setZ(zoom >= 2 ? 1 : 2.5);
+    const fermer = () => {
+      if (ferme) return; ferme = true; io.disconnect();
+      pages.forEach(liberer); o.remove(); document.body.style.overflow = "";
+      removeEventListener("popstate", fermer); removeEventListener("keydown", esc_); removeEventListener("hashchange", fermer);
+    };
+    const esc_ = e => { if (e.key === "Escape") o.querySelector("#pvx").click(); };
+    o.querySelector("#pvx").onclick = () => { if (history.state && history.state.pdfv) history.back(); else fermer(); };
+    try { history.pushState({ pdfv: 1 }, "", location.href); } catch (e) {}
+    addEventListener("popstate", fermer); addEventListener("keydown", esc_); addEventListener("hashchange", fermer);
+    requestAnimationFrame(() => aller(depart));
+  }
 })();
