@@ -187,6 +187,30 @@
     "locinox-electradrop": [
       S("locinox-electradrop-p2", "Câblage ELECTRADROP-E / E-P", 2, "Fils signal, alimentation et sortie de position, relais externe, chronogrammes (signal continu ou impulsionnel).")
     ],
+    "cardin-ecu-sl": [
+      S("cardin-ecu-sl-p88", "Schéma de la carte SL (CS1392A)", 88, "Carte des coulissants SLX / SLi / DRACO : fusibles F1 à F4 (30 A sur DRACO), J1 à J6, afficheur D1, touches P1-P3, module mémoire M1, bornes 1 à 33 et légende."),
+      S("cardin-ecu-sl-p89", "Branchement du bornier SL", 89, "Description des bornes 1 à 33, notes sur les sorties 24 Vdc et les contacts N.F."),
+      S("cardin-ecu-p94", "Fenêtre initiale de l'afficheur", 94, "Symboles des sécurités et des commandes, alimentation secteur ou batterie."),
+      S("cardin-ecu-p117", "Manœuvre d'urgence et maître-esclave", 117, "EMRG1 / EMRG2 selon le côté de montage, branchement croisé B / C des modules MODCA."),
+      S("cardin-ecu-p125", "Batterie et signalisations d'alarme (1/2)", 125, "LED L3 du chargeur, vérification de la batterie, PROGRAM, HORS POS, STOP PROG."),
+      S("cardin-ecu-p126", "Signalisations d'alarme (2/2)", 126, "ERREUR SÉC, MOT, ENC, DIR, SENSEUR, INT. BORD, INT. SENSEUR, MOT. DEVERR.")
+    ],
+    "cardin-ecu-el": [
+      S("cardin-ecu-el-p90", "Schéma de la carte EL (CS1470B)", 90, "Carte des barrières ELDOM : fusibles F1 à F4 (versions USA), J1 à J5, afficheur D1, module mémoire MM, bornes 1 à 34 et légende."),
+      S("cardin-ecu-el-p91", "Branchement du bornier EL", 91, "Description des bornes 1 à 34 (TA1 / TA2, TC1 / TC2, AUX1 / AUX2, feux de lisse)."),
+      S("cardin-ecu-p94", "Fenêtre initiale de l'afficheur", 94, "Symboles des sécurités et des commandes, alimentation secteur ou batterie."),
+      S("cardin-ecu-p117", "Manœuvre d'urgence et maître-esclave", 117, "EMRG1 / EMRG2 selon le côté de montage, branchement croisé B / C des modules MODCA."),
+      S("cardin-ecu-p125", "Batterie et signalisations d'alarme (1/2)", 125, "LED L3 du chargeur, vérification de la batterie, PROGRAM, HORS POS, STOP PROG."),
+      S("cardin-ecu-p126", "Signalisations d'alarme (2/2)", 126, "ERREUR SÉC, MOT, ENC, DIR, SENSEUR, INT. BORD, INT. SENSEUR, MOT. DEVERR.")
+    ],
+    "cardin-ecu-bl": [
+      S("cardin-ecu-bl-p92", "Schéma de la carte BL / HL (CS1422A)", 92, "Carte des battants : deux moteurs M1 / M2 avec encodeurs 4 fils (code couleur des fils), fusibles F1 à F4, J1 à J5, bornes 1 à 31 et légende."),
+      S("cardin-ecu-bl-p93", "Branchement du bornier BL / HL", 93, "Description des bornes, serrure ELS (borne 8), notes sur les sorties 24 Vdc et les contacts N.F."),
+      S("cardin-ecu-p94", "Fenêtre initiale de l'afficheur", 94, "Symboles des sécurités et des commandes, alimentation secteur ou batterie."),
+      S("cardin-ecu-p117", "Manœuvre d'urgence", 117, "EMRG1 / EMRG2 et serrure électrique non gérée en urgence (le maître-esclave de la même page ne concerne que SL / EL)."),
+      S("cardin-ecu-p125", "Batterie et signalisations d'alarme (1/2)", 125, "LED L3 du chargeur, vérification de la batterie, PROGRAM, HORS POS, STOP PROG."),
+      S("cardin-ecu-p126", "Signalisations d'alarme (2/2)", 126, "ERREUR SÉC, MOT, ENC, DIR, SENSEUR, INT. BORD, INT. SENSEUR.")
+    ],
     "cardin-s504": [
       S("cardin-s504-p14", "Récepteur sous coffret", 14, "Bornier, cavaliers, boutons MEMO / DEL et LED."),
       S("cardin-s504-p15", "Récepteur à carte", 15, "Récepteur à carte 2 canaux, cavaliers J1 et SEL CH1 / CH2."),

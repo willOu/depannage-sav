@@ -4033,7 +4033,7 @@
       "categorie": "Motoréducteur coulissant 24 Vdc (motorisation)",
       "modeles": "SLX824CB (800 kg) · SLX1024REV (1000 kg, réversible) · SLX1524CB (1500 kg) · SLX3024CB (3000 kg) · SLX24DRACO (1000 kg, rapide)",
       "source": "Notice Cardin SLX ZVL607.01 (01-02-2017, mod. 16-12-2020 ; pages françaises ZVE572 mod. 04-09-2017) : SLX3024 – SLX3024CB, SLX1524 – SLX1524CB, SLX1024REV, SLX824 – SLX824CB, SLX24DRACO ; pages françaises 16 à 20, caractéristiques p. 36, schéma p. 5",
-      "resume": "Motoréducteurs 24 Vdc pour portails coulissants, avec programmateur électronique intégré (puissance, logique, chargeur de batterie, récepteur radio) alimenté par un transformateur toroïdal séparé. La programmation et le fonctionnement sur batterie sont dans la notice logicielle MULTI-ECU ZVL608 livrée avec l'automatisme (non fournie ici). Pour la carte décrite dans l'ancienne notice ZVL534, voir la carte CARDIN « Programmateur SLX1524 ».",
+      "resume": "Motoréducteurs 24 Vdc pour portails coulissants, avec programmateur électronique intégré (puissance, logique, chargeur de batterie, récepteur radio) alimenté par un transformateur toroïdal séparé. La programmation, les bornes et le fonctionnement sur batterie sont sur la carte CARDIN « Programmateur MULTI-ECU coulissants SL » (notice logicielle ZVL608). Pour la carte décrite dans l'ancienne notice ZVL534, voir la carte CARDIN « Programmateur SLX1524 ».",
       "specs": [
         [
           "Modèles",
@@ -4081,12 +4081,12 @@
         {
           "n": "MOT · ENCODER",
           "label": "Moteur et encodeur",
-          "desc": "Câblés sur la carte (schéma p. 5) ; détails des bornes : notice MULTI-ECU ZVL608."
+          "desc": "Câblés sur la carte (schéma p. 5) ; détails des bornes : carte CARDIN « Programmateur MULTI-ECU coulissants SL »."
         }
       ],
       "installation": [
         "Contrôles avant pose : portail lisse jusqu'à 2,5 m ou protégé (photocellules, barre palpeuse), jeu ≤ 15 mm entre parties fixes et mobiles, rail stable et horizontal, espace libre de 50 mm devant le portail fermé, butée d'ouverture indispensable, butées anti-déraillement obligatoires.",
-        "Moteur monté d'usine à gauche (vu de l'intérieur) ; pour la droite, régler « Montage Moteur » (notice MULTI-ECU ZVL608).",
+        "Moteur monté d'usine à gauche (vu de l'intérieur) ; pour la droite, régler « Montage Moteur » (menu OPTIONS, carte MULTI-ECU coulissants SL).",
         "Plot béton de 350 mm de profondeur, dépassant de 25 mm du sol ; pattes de scellement vissées à la plaque, dépassant de 50 mm (écrous M12) ; câbles par le trou B ; plaque de niveau et propre.",
         "Poser le moteur sur les 4 tiges, le fixer avec 4 écrous et rondelles, régler la hauteur avec les 4 vis sans tête.",
         "Crémaillère : moteur débrayé, poser chaque élément sur le pignon et le fixer ; jeu pignon-crémaillère 1-2 mm (le poids du portail ne doit pas reposer sur le moteur).",
