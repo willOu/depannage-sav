@@ -192,6 +192,12 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "1.89", date: "2026-11-01", titre: "Astuces terrain partagées", items: [
+    "Sur chaque fiche (carte ou accessoire), un bloc « 💡 Astuces terrain » : les astuces de l'équipe, avec le nom de l'auteur, lisibles même sans réseau",
+    "« Proposer une astuce » : le technicien écrit son astuce ; sans réseau, elle part au retour du réseau",
+    "Administrateur : Réglages > Administration > Astuces terrain pour publier (texte corrigeable), refuser avec une réponse, retirer ou supprimer",
+    "Le technicien suit ses propositions dans Réglages > Mes astuces"
+  ], docs: [] },
   { v: "1.88", date: "2026-11-01", titre: "5 nouveaux thèmes de couleur", items: [
     "Réglages > Thème : en plus de Sombre et Clair, Bleu acier, Plein soleil (contraste fort pour l'extérieur), Nuit d'astreinte (noir et ambre, n'éblouit pas), Ardoise et Chantier (noir et jaune)",
     "Le thème choisi reste sur le téléphone ; le bouton ◐ en haut repasse en Sombre ou Clair",

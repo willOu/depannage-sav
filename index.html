@@ -381,6 +381,10 @@ html{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 .nsrh{display:grid;gap:2px;margin-bottom:6px}.nsrh small{color:var(--muted);font-size:12.5px}.nsrh .badge{justify-self:start}
 .nsrp{display:flex;gap:10px;align-items:flex-start;width:100%;text-align:left;margin-top:6px;padding:9px 10px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit;font-size:14px;cursor:pointer}
 .nsrp .pill{flex:none;font:700 13px ui-monospace,Menlo,monospace;padding:3px 7px;border-radius:7px;background:var(--chip)}
+.ast{margin:10px 0;border:1px solid var(--line);border-left:5px solid #e0a800;border-radius:14px;background:var(--card)}
+.ast>summary{padding:11px 14px;font-weight:700;cursor:pointer}.ast>summary span{color:var(--muted);font-weight:500}
+.astb{padding:0 14px 12px}.astl{padding:9px 0;border-top:1px solid var(--line)}.astl p{margin:0 0 3px;white-space:pre-wrap}.astl small{color:var(--muted);font-size:12.5px}
+.astn{margin-top:8px}.astn>summary{cursor:pointer;color:var(--brand);font-weight:700;padding:6px 0}.astn textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px;background:var(--bg);color:var(--ink);font:inherit}
 .cr.vise{outline:3px solid #ffd54a;outline-offset:2px}.ntcb{display:block;margin-top:10px}
 .nsrp>span:last-child{min-width:0;overflow-wrap:anywhere}.nsrp mark{background:#ffd54a;color:#000;border-radius:3px;padding:0 1px}
 .nsrm{display:block;margin-top:6px;color:var(--muted);font-size:13px}.nsrm a{color:var(--brand);font-weight:700}.pvp{position:relative;margin:0 auto 8px;background:#fff;box-shadow:0 0 0 1px #ccc}.pvp canvas{display:block}
@@ -418,6 +422,7 @@ html{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 <script src="quiz.js"></script> <!-- QUIZ -->
 <script src="admin.js"></script> <!-- ADMIN -->
 <script src="signal.js"></script> <!-- SIG -->
+<script src="astuce.js"></script> <!-- AST -->
 <script src="moteurs.js"></script> <!-- MOTEURS -->
 <script src="calc.js"></script> <!-- CALC -->
 <script src="sympt.js"></script> <!-- SYMPT -->
@@ -812,6 +817,7 @@ function viewSettings(){
   /* 2. Messages du SAV */
   if (window.SYNC) h += SYNC.messagesHtml(); /* SYNC */
   if (window.sigMesHtml) h += sigMesHtml(); /* SIG */
+  if (window.astuceMesHtml) h += astuceMesHtml(); /* AST */
   /* 3. Préférences */
   const sk = store.get("theme", "dark");
   h += `<h2>Préférences</h2><div class="set"><div class="row"><span>Thème</span></div><div class="skins">` + SKINS.map(k => `<button class="skin" aria-pressed="${sk === k[0]}" onclick="setTheme('${k[0]}')"><i><b style="background:${k[3]}"></b><b style="background:${k[4]}"></b><b style="background:${k[5]}"></b></i>${esc(k[1])}</button>`).join("") + `</div>
@@ -884,15 +890,16 @@ function route(){
   window.scrollTo(0, 0);
   if (p[0] === "m") return viewBrand(p[1]);
   if (p[0] === "g") return viewGenre(p[1]);
-  if (p[0] === "c"){ viewBoard(p[1], p[2], p[3] ? decodeURIComponent(p[3]) : ""); if (window.sigBouton && findBoard(p[1])) app.insertAdjacentHTML("beforeend", sigBouton("carte", p[1], p[2] || "codes")); /* SIG */ app.insertAdjacentHTML("beforeend", `<div class="sig"><i><b style="background:#1F5FA8"></b><b style="background:#E07B00"></b><b style="background:#E5372E"></b></i>Diag'SAV</div>`); return; } /* SIG */
+  if (p[0] === "c"){ viewBoard(p[1], p[2], p[3] ? decodeURIComponent(p[3]) : ""); try { const bh = app.querySelector(".boardhead"); if (bh && window.astuceHtml && findBoard(p[1])) bh.insertAdjacentHTML("afterend", astuceHtml("carte", p[1])); } catch (e) {} /* AST */ if (window.sigBouton && findBoard(p[1])) app.insertAdjacentHTML("beforeend", sigBouton("carte", p[1], p[2] || "codes")); /* SIG */ app.insertAdjacentHTML("beforeend", `<div class="sig"><i><b style="background:#1F5FA8"></b><b style="background:#E07B00"></b><b style="background:#E5372E"></b></i>Diag'SAV</div>`); return; } /* SIG */
   if (p[0] === "ma") return viewAccBrand(p[1]);
-  if (p[0] === "a") return p[1] ? viewAcc(p[1], p[2]) : viewAccList(); /* ACC */
+  if (p[0] === "a"){ if (!p[1]) return viewAccList(); viewAcc(p[1], p[2]); try { const bh = app.querySelector(".boardhead"); if (bh && window.astuceHtml && (window.ACCESSOIRES || []).some(x => x.id === p[1])) bh.insertAdjacentHTML("afterend", astuceHtml("accessoire", p[1])); } catch (e) {} return; } /* ACC AST */
   if (p[0] === "d") return viewDiag(p[1], p[2]); /* DIAG */
   if (p[0] === "pdf") return viewPdf(p[1], p[2], p[3], p[4] ? decodeURIComponent(p.slice(4).join("/")) : ""); /* PDF */
   if (p[0] === "scan") return viewScan(); /* SCAN */
   if (p[0] === "quiz") return viewQuiz(p[1]); /* QUIZ */
   if (p[0] === "techs") return viewTechs(); /* ADMIN */
   if (p[0] === "signalements") return viewSignalements(p[1]); /* SIG */
+  if (p[0] === "astuces") return viewAstuces(p[1]); /* AST */
   if (p[0] === "calc") return viewCalc(p[1]); /* CALC */
   if (p[0] === "cmp") return viewCmp(p[1] && p[1] !== "-" ? decodeURIComponent(p[1]) : "", p[2] ? decodeURIComponent(p[2]) : ""); /* CMP */
   if (p[0] === "stats") return SYNC.viewStats(p[1]); /* SYNC */
