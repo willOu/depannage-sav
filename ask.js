@@ -88,7 +88,7 @@
       } else if (r.k === "b") {
         h += `<div class="ahit" onclick="go('#/c/${r.c.id}/bornier')"><div class="ak">Borne</div><div>${ctxOf(r.m, r.c)}<br><b>${esc(r.t.n)} · ${esc(r.t.label)}</b> — ${esc(r.t.desc)}</div></div>`;
       } else {
-        h += `<div class="ahit" onclick="go('#/c/${r.c.id}/codes')"><div class="ak">Code</div><div>${ctxOf(r.m, r.c)}<br><b>${esc(r.x.code)} · ${esc(r.x.titre)}</b></div></div>`;
+        h += `<div class="ahit" onclick="go('#/c/${r.c.id}/codes/${esc(encodeURIComponent(r.x.code).replace(/'/g, "%27"))}')"><div class="ak">Code</div><div>${ctxOf(r.m, r.c)}<br><b>${esc(r.x.code)} · ${esc(r.x.titre)}</b></div></div>`;
       }
     });
     if (!h) return "";

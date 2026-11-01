@@ -192,6 +192,10 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "1.86", date: "2026-11-01", titre: "Codes : ouverture directe et lien vers la notice", items: [
+    "Dans la recherche, toucher un code ouvre la fiche directement sur ce code (déplié et encadré), au lieu du haut de l'onglet Codes",
+    "Sous chaque code, un bouton « Chercher dans la notice PDF » ouvre la notice à la page où ce code apparaît"
+  ], docs: [] },
   { v: "1.85", date: "2026-11-01", titre: "Recherche dans le texte des notices", items: [
     "La recherche cherche aussi dans le texte des 149 notices PDF : un mot, une phrase ou un code (« temps de pause », « E07 », « fin de course ») donne la notice, la page et un extrait avec le mot surligné",
     "Touchez l'extrait : la notice s'ouvre en plein écran directement à cette page",

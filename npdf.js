@@ -271,6 +271,28 @@
     if (b) b.onclick = () => { b.insertAdjacentHTML("beforebegin", res.slice(N0).map(bloc).join("")); b.remove(); };
     return res.length;
   };
+  /* depuis un code de la fiche : ouvre la notice à la page où ce code apparaît (pages qui reprennent aussi les mots du titre en premier) */
+  window.noticeGoto = async function (id, code, btn) {
+    const lab = btn ? btn.textContent : "";
+    if (btn) { btn.disabled = true; btn.textContent = "Recherche dans la notice…"; }
+    try {
+      const idx = await chargeTexte();
+      const docs = idx.filter(d => d.items.some(x => x.id === id));
+      const res = chercher(docs, code);
+      let titre = "";
+      try { const b = typeof BOARDS !== "undefined" && BOARDS.find(x => x.c.id === id); const c = b && b.c.codes.find(x => x.code === code); titre = c ? c.titre : ""; } catch (e) {}
+      const mt = normL(titre).split(/[^a-z0-9]+/).filter(w => w.length >= 4);
+      let best = null;
+      res.forEach(r => r.pages.forEach(pg => {
+        const t = r.doc.pages[pg.i].n; const sc = pg.sc + 5 * mt.filter(w => t.includes(w)).length;
+        if (!best || sc > best.sc) best = { sc, r, i: pg.i };
+      }));
+      if (best) { const it = best.r.doc.items.find(x => x.id === id); go(`#/pdf/${id}/${it.k}/${best.i + 1}`); return; }
+      if (btn) { btn.textContent = `« ${code} » n'apparaît pas dans le texte de la notice`; }
+    } catch (e) {
+      if (btn) { btn.disabled = false; btn.textContent = "Texte de la notice indisponible sans réseau (ouvrez l'appli une fois avec du réseau)"; }
+    }
+  };
   /* charge le texte en arrière-plan quand l'appli démarre avec du réseau, pour que la recherche marche ensuite hors ligne */
   addEventListener("load", () => setTimeout(() => { if (navigator.onLine !== false) chargeTexte().catch(() => {}); }, 8000));
 

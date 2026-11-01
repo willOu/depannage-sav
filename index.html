@@ -367,6 +367,7 @@ html{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 .nsrh{display:grid;gap:2px;margin-bottom:6px}.nsrh small{color:var(--muted);font-size:12.5px}.nsrh .badge{justify-self:start}
 .nsrp{display:flex;gap:10px;align-items:flex-start;width:100%;text-align:left;margin-top:6px;padding:9px 10px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit;font-size:14px;cursor:pointer}
 .nsrp .pill{flex:none;font:700 13px ui-monospace,Menlo,monospace;padding:3px 7px;border-radius:7px;background:var(--chip)}
+.cr.vise{outline:3px solid #ffd54a;outline-offset:2px}.ntcb{display:block;margin-top:10px}
 .nsrp>span:last-child{min-width:0;overflow-wrap:anywhere}.nsrp mark{background:#ffd54a;color:#000;border-radius:3px;padding:0 1px}
 .nsrm{display:block;margin-top:6px;color:var(--muted);font-size:13px}.nsrm a{color:var(--brand);font-weight:700}.pvp{position:relative;margin:0 auto 8px;background:#fff;box-shadow:0 0 0 1px #ccc}.pvp canvas{display:block}
 #pvc{background:#555}
@@ -545,7 +546,7 @@ function viewBrand(id){
 }
 
 let paramOpen = "";
-function viewBoard(id, tab){
+function viewBoard(id, tab, sel){
   const b = findBoard(id); if (!b) return viewHome();
   const { m, c } = b;
   tab = tab || "codes";
@@ -575,11 +576,14 @@ function viewBoard(id, tab){
     SEV.forEach(([t, nom, k]) => {
       const list = c.codes.filter(x => x.type === t); if (!list.length) return;
       p += `<div class="sec" style="--sv:var(--s-${k})"><i></i>${nom} <span>· ${list.length}</span></div><div class="list" style="--sv:var(--s-${k})">` + list.map(x => {
-        const open = first ? " open" : ""; first = false;
-        return `<details class="cr ${k==="er"?"er":""}"${open}><summary><span class="pill">${esc(x.code)}</span><span class="rt">${esc(x.titre)}</span><span class="chev">›</span></summary><div class="todo"><b>À FAIRE${x.p ? " · contrôle de base" : ""}</b>${esc(x.action)}</div></details>`;
+        const vise = sel && x.code === sel;
+        const open = (sel ? vise : first) ? " open" : ""; first = false;
+        const ntc = window.hasPdf && hasPdf(id) ? `<button class="mini ntcb" onclick="noticeGoto('${id}', ${esc(JSON.stringify(x.code))}, this)">📄 Chercher « ${esc(x.code)} » dans la notice PDF</button>` : "";
+        return `<details class="cr ${k==="er"?"er":""}${vise ? " vise" : ""}"${open}><summary><span class="pill">${esc(x.code)}</span><span class="rt">${esc(x.titre)}</span><span class="chev">›</span></summary><div class="todo"><b>À FAIRE${x.p ? " · contrôle de base" : ""}</b>${esc(x.action)}${ntc}</div></details>`;
       }).join("") + `</div>`;
     });
     pane.innerHTML = p + `<p class="note"><b>Contrôle de base</b> = action complétée par une vérification terrain classique ; le reste suit la notice.</p>`;
+    if (sel){ const v = pane.querySelector(".cr.vise"); if (v) setTimeout(() => v.scrollIntoView({ block: "center" }), 60); }
   }
   if (tab === "bornier"){
     const all = c.bornier.groupes.flatMap(g => g.bornes);
@@ -743,11 +747,11 @@ function viewSearch(q){
   try { /* SYMPT */
     const sl = window.symptList ? symptList(q, 6) : [];
     if (sl.length) h += `<h2>Pannes qui ressemblent</h2><p class="note">Recherche par symptôme : entrées des notices proches de votre phrase. Ce n'est pas un diagnostic, vérifiez sur la fiche.</p><div class="list">` + sl.map(r =>
-      `<div onclick="go('#/c/${r.c.id}/codes')" style="cursor:pointer">${codeCard(r.x, `<span class="badge" style="--c:${r.m.couleur}">${esc(r.m.nom)}</span>${esc(r.c.nom)}`, q)}</div>`).join("") + `</div>`;
+      `<div onclick="go('#/c/${r.c.id}/codes/${esc(encodeURIComponent(r.x.code).replace(/'/g, "%27"))}')" style="cursor:pointer">${codeCard(r.x, `<span class="badge" style="--c:${r.m.couleur}">${esc(r.m.nom)}</span>${esc(r.c.nom)}`, q)}</div>`).join("") + `</div>`;
   } catch (e) {}
   if (boards.length) h += `<h2>Cartes</h2><div class="list">${boards.map(rowBoard).join("")}</div>`;
   if (codes.length) h += `<h2>Codes et signalisations (${codes.length})</h2><div class="list">` + codes.slice(0, 60).map(r =>
-    `<div onclick="go('#/c/${r.id}/codes')" style="cursor:pointer">${codeCard(r.x, r.ctx, q)}</div>`).join("") + `</div>`;
+    `<div onclick="go('#/c/${r.id}/codes/${esc(encodeURIComponent(r.x.code).replace(/'/g, "%27"))}')" style="cursor:pointer">${codeCard(r.x, r.ctx, q)}</div>`).join("") + `</div>`;
   if (terms.length) h += `<h2>Bornes (${terms.length})</h2><table>` + terms.slice(0, 40).map(r =>
     `<tr style="--tc:var(--t-${r.t.t});cursor:pointer" onclick="go('#/c/${r.id}/bornier')"><td>${nw(r.t.n)}</td><td>${r.ctx}<br><b>${highlight(r.t.label,q)}</b> — ${highlight(r.t.desc,q)}</td></tr>`).join("") + `</table>`;
   if (params.length) h += `<h2>Paramètres (${params.length})</h2><table>` + params.slice(0, 40).map(r =>
@@ -857,7 +861,7 @@ function route(){
   window.scrollTo(0, 0);
   if (p[0] === "m") return viewBrand(p[1]);
   if (p[0] === "g") return viewGenre(p[1]);
-  if (p[0] === "c"){ viewBoard(p[1], p[2]); if (window.sigBouton && findBoard(p[1])) app.insertAdjacentHTML("beforeend", sigBouton("carte", p[1], p[2] || "codes")); /* SIG */ app.insertAdjacentHTML("beforeend", `<div class="sig"><i><b style="background:#1F5FA8"></b><b style="background:#E07B00"></b><b style="background:#E5372E"></b></i>Diag'SAV</div>`); return; } /* SIG */
+  if (p[0] === "c"){ viewBoard(p[1], p[2], p[3] ? decodeURIComponent(p[3]) : ""); if (window.sigBouton && findBoard(p[1])) app.insertAdjacentHTML("beforeend", sigBouton("carte", p[1], p[2] || "codes")); /* SIG */ app.insertAdjacentHTML("beforeend", `<div class="sig"><i><b style="background:#1F5FA8"></b><b style="background:#E07B00"></b><b style="background:#E5372E"></b></i>Diag'SAV</div>`); return; } /* SIG */
   if (p[0] === "ma") return viewAccBrand(p[1]);
   if (p[0] === "a") return p[1] ? viewAcc(p[1], p[2]) : viewAccList(); /* ACC */
   if (p[0] === "d") return viewDiag(p[1], p[2]); /* DIAG */
