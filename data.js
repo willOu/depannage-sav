@@ -192,6 +192,10 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "1.84", date: "2026-11-01", titre: "Notices PDF en qualité d'origine", items: [
+    "Les images des notices (schémas scannés, photos, dessins) sont maintenant celles du fichier du fabricant, sans recompression : plus de perte de netteté. Seules les pages en français ont été retirées des autres langues",
+    "Les notices déjà ouvertes se retéléchargent une fois à la prochaine ouverture avec du réseau"
+  ], docs: [] },
   { v: "1.83", date: "2026-11-01", titre: "Notice PDF plus nette", items: [
     "Les pages sont dessinées plus finement, surtout les grandes feuilles (fiches CAME ZM3E, ZBX6…) dont le texte est petit",
     "En plein écran, le pincement à deux doigts zoome vraiment (jusqu'à 6 fois) : la page est redessinée nette au lieu d'être simplement agrandie",

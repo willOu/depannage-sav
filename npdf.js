@@ -3,7 +3,7 @@
    Lecteur : pdf.js (Mozilla, build « legacy » 6.2.108) hébergé avec l'appli dans vendor/pdfjs, gardé en cache après le premier usage. */
 (function () {
   const BASE = new URL("vendor/pdfjs/", location.href).href;
-  const CACHE = "sav-notices-1";
+  const CACHE = "sav-notices-2";
   const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const list = id => (window.NOTICES_PDF && NOTICES_PDF[id]) || [];
   const mo = ko => ko < 1024 ? Math.max(1, Math.round(ko)) + " Ko" : (ko / 1024).toFixed(1).replace(".", ",") + " Mo";

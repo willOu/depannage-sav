@@ -67,7 +67,7 @@ window.NOTICES_PDF = {
 "t": "Notice Came 319LR07 v1.0",
 "p": 9,
 "pt": 40,
-"ko": 2680,
+"ko": 2696,
 "m": 0
 }
 ],
@@ -77,7 +77,7 @@ window.NOTICES_PDF = {
 "t": "Notice Came 319LR36 v2.0",
 "p": 7,
 "pt": 28,
-"ko": 572,
+"ko": 601,
 "m": 0
 }
 ],
@@ -97,7 +97,7 @@ window.NOTICES_PDF = {
 "t": "Notice Came 319LR23",
 "p": 7,
 "pt": 28,
-"ko": 290,
+"ko": 296,
 "m": 0
 }
 ],
@@ -125,7 +125,7 @@ window.NOTICES_PDF = {
 "t": "Notice Came 319LR24 v1.0",
 "p": 9,
 "pt": 28,
-"ko": 571,
+"ko": 572,
 "m": 0
 }
 ],
@@ -135,7 +135,7 @@ window.NOTICES_PDF = {
 "t": "Notice Came 319LR25",
 "p": 9,
 "pt": 28,
-"ko": 545,
+"ko": 547,
 "m": 0
 }
 ],
@@ -155,7 +155,7 @@ window.NOTICES_PDF = {
 "t": "Manuel CAME BXV FA01294-FR",
 "p": 32,
 "pt": 32,
-"ko": 5830,
+"ko": 5906,
 "m": 0
 }
 ],
@@ -165,7 +165,7 @@ window.NOTICES_PDF = {
 "t": "Manuel CAME BKV FA01274-FR",
 "p": 52,
 "pt": 52,
-"ko": 9210,
+"ko": 9229,
 "m": 0
 }
 ],
@@ -185,7 +185,7 @@ window.NOTICES_PDF = {
 "t": "Notice Nice IS0307A01MMD",
 "p": 30,
 "pt": 212,
-"ko": 970,
+"ko": 1089,
 "m": 0
 }
 ],
@@ -195,7 +195,7 @@ window.NOTICES_PDF = {
 "t": "Robus 600R10 / 1000R10 / 500HSR10 (IDV0620)",
 "p": 36,
 "pt": 36,
-"ko": 3084,
+"ko": 3120,
 "m": 0
 },
 {
@@ -203,7 +203,7 @@ window.NOTICES_PDF = {
 "t": "Ancienne notice Robus 600 / 1000",
 "p": 28,
 "pt": 28,
-"ko": 928,
+"ko": 1841,
 "m": 0
 }
 ],
@@ -213,7 +213,7 @@ window.NOTICES_PDF = {
 "t": "746 ER / 780D Rév. B (la carte suit la Rév. E, non fournie)",
 "p": 18,
 "pt": 18,
-"ko": 1073,
+"ko": 1075,
 "m": 0
 }
 ],
@@ -233,7 +233,7 @@ window.NOTICES_PDF = {
 "t": "Notice FAAC 732642 Rev. E",
 "p": 16,
 "pt": 16,
-"ko": 1552,
+"ko": 1602,
 "m": 0
 }
 ],
@@ -243,7 +243,7 @@ window.NOTICES_PDF = {
 "t": "MERAK BT A (D814459)",
 "p": 34,
 "pt": 99,
-"ko": 3852,
+"ko": 3897,
 "m": 0
 },
 {
@@ -251,7 +251,7 @@ window.NOTICES_PDF = {
 "t": "DEIMOS ULTRA BT A 400 / 600 (D811980)",
 "p": 13,
 "pt": 22,
-"ko": 1004,
+"ko": 1005,
 "m": 0
 }
 ],
@@ -261,7 +261,7 @@ window.NOTICES_PDF = {
 "t": "Notice BFT D814283 0AR00_11",
 "p": 51,
 "pt": 126,
-"ko": 6549,
+"ko": 6595,
 "m": 0
 }
 ],
@@ -271,7 +271,7 @@ window.NOTICES_PDF = {
 "t": "DEIMOS ULTRA BT A 400 / 600 (D811980)",
 "p": 13,
 "pt": 22,
-"ko": 1004,
+"ko": 1005,
 "m": 0
 }
 ],
@@ -281,7 +281,7 @@ window.NOTICES_PDF = {
 "t": "Notice BFT D812161 00100_04",
 "p": 20,
 "pt": 72,
-"ko": 1904,
+"ko": 1911,
 "m": 0
 }
 ],
@@ -291,7 +291,7 @@ window.NOTICES_PDF = {
 "t": "Notice Roger IS117 Rev.30, firmware P3.00",
 "p": 62,
 "pt": 292,
-"ko": 3494,
+"ko": 3495,
 "m": 0
 }
 ],
@@ -301,7 +301,7 @@ window.NOTICES_PDF = {
 "t": "Notice Roger IS142 Rev.23",
 "p": 54,
 "pt": 276,
-"ko": 5361,
+"ko": 5362,
 "m": 0
 }
 ],
@@ -311,7 +311,7 @@ window.NOTICES_PDF = {
 "t": "Notice Roger IS240 Rev.15, firmware P2.05",
 "p": 47,
 "pt": 236,
-"ko": 3511,
+"ko": 3512,
 "m": 0
 }
 ],
@@ -331,7 +331,7 @@ window.NOTICES_PDF = {
 "t": "Notice Roger IS88 Rev.28, firmware P4.35",
 "p": 58,
 "pt": 300,
-"ko": 8102,
+"ko": 8103,
 "m": 0
 }
 ],
@@ -341,7 +341,7 @@ window.NOTICES_PDF = {
 "t": "Notice Roger F70/IPU36 IS247 Rev.04 du 04/08/2026, firmware R1.55",
 "p": 76,
 "pt": 424,
-"ko": 4785,
+"ko": 4786,
 "m": 0
 }
 ],
@@ -361,7 +361,7 @@ window.NOTICES_PDF = {
 "t": "Notice Roger H70/200AC IS304 Rev.01, firmware r2.00",
 "p": 45,
 "pt": 248,
-"ko": 2997,
+"ko": 2998,
 "m": 0
 }
 ],
@@ -381,7 +381,7 @@ window.NOTICES_PDF = {
 "t": "Notice Roger B70/1T IS271 Rev.08, firmware r2.10",
 "p": 64,
 "pt": 316,
-"ko": 4669,
+"ko": 4670,
 "m": 0
 }
 ],
@@ -391,7 +391,7 @@ window.NOTICES_PDF = {
 "t": "Notice AFCA Startéco 3 V1.6",
 "p": 18,
 "pt": 18,
-"ko": 1103,
+"ko": 1853,
 "m": 0
 }
 ],
@@ -401,7 +401,7 @@ window.NOTICES_PDF = {
 "t": "Notice AFCA Startéco 3 2 moteurs V4.1",
 "p": 20,
 "pt": 20,
-"ko": 1065,
+"ko": 4736,
 "m": 0
 }
 ],
@@ -411,7 +411,7 @@ window.NOTICES_PDF = {
 "t": "Startéco 4 (n° 363)",
 "p": 37,
 "pt": 37,
-"ko": 1899,
+"ko": 1903,
 "m": 0
 },
 {
@@ -419,7 +419,7 @@ window.NOTICES_PDF = {
 "t": "Startéco 4 version 1.14 (22-05-17)",
 "p": 39,
 "pt": 39,
-"ko": 2953,
+"ko": 3464,
 "m": 0
 }
 ],
@@ -429,7 +429,7 @@ window.NOTICES_PDF = {
 "t": "FORTECO 2500 ZIS327 (2018)",
 "p": 31,
 "pt": 108,
-"ko": 1823,
+"ko": 2116,
 "m": 0
 },
 {
@@ -437,7 +437,7 @@ window.NOTICES_PDF = {
 "t": "FORTECO 2500-I ZIS327 (2022)",
 "p": 31,
 "pt": 212,
-"ko": 1867,
+"ko": 1871,
 "m": 0
 }
 ],
@@ -447,7 +447,7 @@ window.NOTICES_PDF = {
 "t": "AYROS ZIS332",
 "p": 31,
 "pt": 212,
-"ko": 1833,
+"ko": 1835,
 "m": 0
 },
 {
@@ -455,7 +455,7 @@ window.NOTICES_PDF = {
 "t": "FORTECO ZIS371",
 "p": 31,
 "pt": 212,
-"ko": 1944,
+"ko": 1946,
 "m": 0
 },
 {
@@ -481,7 +481,7 @@ window.NOTICES_PDF = {
 "t": "Manuel V2 AYROS 1500-I",
 "p": 31,
 "pt": 212,
-"ko": 1692,
+"ko": 1694,
 "m": 0
 }
 ],
@@ -491,7 +491,7 @@ window.NOTICES_PDF = {
 "t": "AYROS 24V ZIS334",
 "p": 33,
 "pt": 256,
-"ko": 1826,
+"ko": 1828,
 "m": 0
 },
 {
@@ -519,7 +519,7 @@ window.NOTICES_PDF = {
 "t": "Notice AFCA FORTECO Pass",
 "p": 28,
 "pt": 28,
-"ko": 3716,
+"ko": 4334,
 "m": 0
 }
 ],
@@ -529,7 +529,7 @@ window.NOTICES_PDF = {
 "t": "Notice AFCA STARTINDUS version 1.11",
 "p": 20,
 "pt": 20,
-"ko": 1061,
+"ko": 3380,
 "m": 0
 }
 ],
@@ -539,7 +539,7 @@ window.NOTICES_PDF = {
 "t": "Notice AFCA Start RM V3.1",
 "p": 16,
 "pt": 16,
-"ko": 673,
+"ko": 4141,
 "m": 0
 }
 ],
@@ -549,7 +549,7 @@ window.NOTICES_PDF = {
 "t": "Notice AFCA START-ONE version 2.0",
 "p": 62,
 "pt": 62,
-"ko": 8734,
+"ko": 9111,
 "m": 0
 }
 ],
@@ -569,7 +569,7 @@ window.NOTICES_PDF = {
 "t": "Notice V2 CITY11",
 "p": 10,
 "pt": 52,
-"ko": 159,
+"ko": 160,
 "m": 0
 }
 ],
@@ -579,7 +579,7 @@ window.NOTICES_PDF = {
 "t": "Notice simplifiée AFCA City 5",
 "p": 8,
 "pt": 8,
-"ko": 454,
+"ko": 4127,
 "m": 0
 }
 ],
@@ -609,7 +609,7 @@ window.NOTICES_PDF = {
 "t": "Notice AFCA Startéco 4-2M réversible",
 "p": 35,
 "pt": 35,
-"ko": 4411,
+"ko": 4451,
 "m": 0
 }
 ],
@@ -619,7 +619,7 @@ window.NOTICES_PDF = {
 "t": "Notice CASIT EQ2000",
 "p": 6,
 "pt": 6,
-"ko": 456,
+"ko": 480,
 "m": 0
 }
 ],
@@ -629,7 +629,7 @@ window.NOTICES_PDF = {
 "t": "Notice CASIT EQ2006 R1.4",
 "p": 14,
 "pt": 14,
-"ko": 606,
+"ko": 655,
 "m": 0
 }
 ],
@@ -639,7 +639,7 @@ window.NOTICES_PDF = {
 "t": "Notice CASIT EQ2009 R1.0",
 "p": 14,
 "pt": 14,
-"ko": 626,
+"ko": 648,
 "m": 0
 }
 ],
@@ -649,7 +649,7 @@ window.NOTICES_PDF = {
 "t": "Notice CASIT EQ212 R1.7 / R1.8",
 "p": 4,
 "pt": 4,
-"ko": 1928,
+"ko": 1931,
 "m": 0
 }
 ],
@@ -659,7 +659,7 @@ window.NOTICES_PDF = {
 "t": "Notice CASIT KEQ013 Rev. 06 du 09/06/2021",
 "p": 32,
 "pt": 32,
-"ko": 3013,
+"ko": 3504,
 "m": 0
 }
 ],
@@ -669,7 +669,7 @@ window.NOTICES_PDF = {
 "t": "Notice CASIT KEQ405 / EQ405 Rev. 00 du 10/03/2011",
 "p": 8,
 "pt": 8,
-"ko": 360,
+"ko": 382,
 "m": 0
 }
 ],
@@ -679,7 +679,7 @@ window.NOTICES_PDF = {
 "t": "Notice CASIT KEQS08-R",
 "p": 20,
 "pt": 20,
-"ko": 1367,
+"ko": 1380,
 "m": 0
 }
 ],
@@ -727,7 +727,7 @@ window.NOTICES_PDF = {
 "t": "Partie 1 : installation",
 "p": 59,
 "pt": 59,
-"ko": 2541,
+"ko": 2838,
 "m": 0
 },
 {
@@ -735,7 +735,7 @@ window.NOTICES_PDF = {
 "t": "Partie 2 : logique de commande",
 "p": 51,
 "pt": 51,
-"ko": 883,
+"ko": 975,
 "m": 0
 }
 ],
@@ -745,7 +745,7 @@ window.NOTICES_PDF = {
 "t": "Partie 1 : installation",
 "p": 48,
 "pt": 48,
-"ko": 1822,
+"ko": 2009,
 "m": 0
 },
 {
@@ -753,7 +753,7 @@ window.NOTICES_PDF = {
 "t": "Partie 2 : logique de commande",
 "p": 62,
 "pt": 62,
-"ko": 869,
+"ko": 960,
 "m": 0
 }
 ],
@@ -763,7 +763,7 @@ window.NOTICES_PDF = {
 "t": "Instructions de service LBA 4 / 6 / 7",
 "p": 68,
 "pt": 68,
-"ko": 3729,
+"ko": 4868,
 "m": 0
 },
 {
@@ -771,7 +771,7 @@ window.NOTICES_PDF = {
 "t": "Automate Siemens LOGO",
 "p": 6,
 "pt": 6,
-"ko": 99,
+"ko": 109,
 "m": 0
 }
 ],
@@ -781,7 +781,7 @@ window.NOTICES_PDF = {
 "t": "Instructions de service LBA 4 / 6 / 7",
 "p": 68,
 "pt": 68,
-"ko": 3729,
+"ko": 4868,
 "m": 0
 }
 ],
@@ -791,7 +791,7 @@ window.NOTICES_PDF = {
 "t": "ONE-C version 2023",
 "p": 39,
 "pt": 39,
-"ko": 1104,
+"ko": 1146,
 "m": 0
 },
 {
@@ -799,7 +799,7 @@ window.NOTICES_PDF = {
 "t": "ONE-C carte barrière (ancienne)",
 "p": 26,
 "pt": 26,
-"ko": 743,
+"ko": 1431,
 "m": 0
 }
 ],
@@ -819,7 +819,7 @@ window.NOTICES_PDF = {
 "t": "Notice Cardin SL4024 ZVL317.04",
 "p": 15,
 "pt": 15,
-"ko": 791,
+"ko": 891,
 "m": 1
 }
 ],
@@ -889,7 +889,7 @@ window.NOTICES_PDF = {
 "t": "Notice Tousek PULL T5 / T8 / T10 / T15",
 "p": 32,
 "pt": 32,
-"ko": 2247,
+"ko": 2252,
 "m": 0
 }
 ],
@@ -899,7 +899,7 @@ window.NOTICES_PDF = {
 "t": "Notice Tousek PULL T24 / T24speed",
 "p": 32,
 "pt": 32,
-"ko": 2016,
+"ko": 2018,
 "m": 0
 }
 ],
@@ -909,7 +909,7 @@ window.NOTICES_PDF = {
 "t": "Notice FAAC 732568 Rev. E",
 "p": 13,
 "pt": 13,
-"ko": 877,
+"ko": 1033,
 "m": 0
 }
 ],
@@ -949,7 +949,7 @@ window.NOTICES_PDF = {
 "t": "Notice OPTEX OVS-02",
 "p": 39,
 "pt": 39,
-"ko": 5170,
+"ko": 5172,
 "m": 0
 }
 ],
@@ -969,7 +969,7 @@ window.NOTICES_PDF = {
 "t": "Notice Casit CS2 micro NC-NO",
 "p": 16,
 "pt": 16,
-"ko": 1288,
+"ko": 1309,
 "m": 1
 }
 ],
@@ -1009,7 +1009,7 @@ window.NOTICES_PDF = {
 "t": "EASYKA – EASYBKA",
 "p": 10,
 "pt": 20,
-"ko": 990,
+"ko": 1018,
 "m": 0
 },
 {
@@ -1041,7 +1041,7 @@ window.NOTICES_PDF = {
 "m": 0
 },
 {
-"f": "notices/manu-000100-r2.pdf",
+"f": "notices/manu-000100.pdf",
 "t": "Manuel utilisateur ELECTRADROP",
 "p": 12,
 "pt": 36,
@@ -1075,7 +1075,7 @@ window.NOTICES_PDF = {
 "t": "Notice technique Intratone V233-6019-AA « Centrale 1 porte »",
 "p": 13,
 "pt": 112,
-"ko": 13468,
+"ko": 13811,
 "m": 0
 }
 ],
@@ -1085,7 +1085,7 @@ window.NOTICES_PDF = {
 "t": "Notice Intratone « Centrale de gestion 2 portes » V233-5001-BA",
 "p": 11,
 "pt": 67,
-"ko": 859,
+"ko": 1287,
 "m": 0
 }
 ],
@@ -1105,7 +1105,7 @@ window.NOTICES_PDF = {
 "t": "Notice Intratone « Carte relais / module de transmission GPRS Mini HF » V233-000",
 "p": 8,
 "pt": 8,
-"ko": 601,
+"ko": 953,
 "m": 1
 }
 ],
@@ -1135,7 +1135,7 @@ window.NOTICES_PDF = {
 "t": "Notice AFCA Barre palpeuse Sécuris profil BC² et BI²",
 "p": 4,
 "pt": 4,
-"ko": 1836,
+"ko": 1954,
 "m": 0
 }
 ],
@@ -1175,7 +1175,7 @@ window.NOTICES_PDF = {
 "t": "Notice Roger SMARTY IS131 Rev.12",
 "p": 22,
 "pt": 22,
-"ko": 1653,
+"ko": 1686,
 "m": 1
 }
 ],
@@ -1185,7 +1185,7 @@ window.NOTICES_PDF = {
 "t": "Notice Roger BE20 IS121 Rev.15",
 "p": 20,
 "pt": 20,
-"ko": 1118,
+"ko": 1119,
 "m": 1
 }
 ],
@@ -1195,7 +1195,7 @@ window.NOTICES_PDF = {
 "t": "BH30 IS118",
 "p": 24,
 "pt": 24,
-"ko": 2051,
+"ko": 2129,
 "m": 1
 },
 {
@@ -1219,11 +1219,11 @@ window.NOTICES_PDF = {
 ],
 "roger-cs": [
 {
-"f": "notices/serie-cs-istruzioni-is310-rev00-a5-r2.pdf",
+"f": "notices/serie-cs-istruzioni-is310-rev00-a5.pdf",
 "t": "Notice Roger Série CS IS310 Rev.00",
 "p": 9,
 "pt": 16,
-"ko": 837,
+"ko": 849,
 "m": 0
 }
 ],
@@ -1233,7 +1233,7 @@ window.NOTICES_PDF = {
 "t": "Notice Roger BG30 IS141 Rev.19",
 "p": 24,
 "pt": 24,
-"ko": 1313,
+"ko": 1397,
 "m": 1
 }
 ],
@@ -1243,7 +1243,7 @@ window.NOTICES_PDF = {
 "t": "Notice Roger BM30 IS169 Rev.13",
 "p": 20,
 "pt": 20,
-"ko": 1887,
+"ko": 1964,
 "m": 1
 }
 ],
@@ -1263,7 +1263,7 @@ window.NOTICES_PDF = {
 "t": "Notice Roger BH23 IS106 Rev.10",
 "p": 20,
 "pt": 20,
-"ko": 1419,
+"ko": 1420,
 "m": 1
 }
 ],
@@ -1273,17 +1273,17 @@ window.NOTICES_PDF = {
 "t": "Notice Roger MONOS4 IS201 Rev.11",
 "p": 20,
 "pt": 20,
-"ko": 1524,
+"ko": 1568,
 "m": 1
 }
 ],
 "roger-ayron": [
 {
-"f": "notices/ayron-istruzioni-is239-rev01-r2.pdf",
+"f": "notices/ayron-istruzioni-is239-rev01.pdf",
 "t": "Notice Roger AYRON IS239 Rev.01",
 "p": 14,
 "pt": 24,
-"ko": 853,
+"ko": 854,
 "m": 0
 }
 ],
@@ -1293,7 +1293,7 @@ window.NOTICES_PDF = {
 "t": "WAY/004 – WAY/005 IS266",
 "p": 36,
 "pt": 36,
-"ko": 6305,
+"ko": 6306,
 "m": 1
 },
 {
@@ -1301,7 +1301,7 @@ window.NOTICES_PDF = {
 "t": "WAY/006 IS291",
 "p": 36,
 "pt": 36,
-"ko": 6653,
+"ko": 6654,
 "m": 1
 },
 {
@@ -1319,7 +1319,7 @@ window.NOTICES_PDF = {
 "t": "BIONIK4 IS161",
 "p": 48,
 "pt": 48,
-"ko": 10477,
+"ko": 10530,
 "m": 1
 },
 {
@@ -1327,7 +1327,7 @@ window.NOTICES_PDF = {
 "t": "BI/004HP – BI/006 – BI/001PE IS185",
 "p": 48,
 "pt": 48,
-"ko": 5064,
+"ko": 5137,
 "m": 1
 },
 {
@@ -1335,7 +1335,7 @@ window.NOTICES_PDF = {
 "t": "BIONIK8 IS194",
 "p": 52,
 "pt": 52,
-"ko": 4964,
+"ko": 10962,
 "m": 1
 },
 {
@@ -1357,11 +1357,11 @@ window.NOTICES_PDF = {
 "m": 0
 },
 {
-"f": "notices/ba-90-ba-91-istruzioni-aste-bionik-is93-rev07-a4-r2.pdf",
+"f": "notices/ba-90-ba-91-istruzioni-aste-bionik-is93-rev07-a4.pdf",
 "t": "Lisses BA/90 – BA/91 IS93",
 "p": 8,
 "pt": 14,
-"ko": 987,
+"ko": 1049,
 "m": 0
 },
 {
@@ -1377,7 +1377,7 @@ window.NOTICES_PDF = {
 "t": "Feux de lisse ALED IS92",
 "p": 18,
 "pt": 30,
-"ko": 3061,
+"ko": 3180,
 "m": 0
 }
 ],
@@ -1395,23 +1395,23 @@ window.NOTICES_PDF = {
 "t": "Pose de boucles IS130",
 "p": 8,
 "pt": 8,
-"ko": 217,
+"ko": 226,
 "m": 0
 }
 ],
 "roger-bconnect": [
 {
-"f": "notices/b74-bconnect-istruzioni-is231-rev01-a5-r2.pdf",
+"f": "notices/b74-bconnect-istruzioni-is231-rev01-a5.pdf",
 "t": "Notice Roger B74/BCONNECT IS231 Rev.01",
 "p": 7,
 "pt": 16,
-"ko": 825,
+"ko": 827,
 "m": 0
 }
 ],
 "cardin-cdr842": [
 {
-"f": "notices/notice-photocellule-cardin-842a-1-r2.pdf",
+"f": "notices/notice-photocellule-cardin-842a-1.pdf",
 "t": "CDR842-852A ZVL448.03",
 "p": 2,
 "pt": 6,
@@ -1423,7 +1423,7 @@ window.NOTICES_PDF = {
 "t": "Fiche produit CDR842A",
 "p": 2,
 "pt": 2,
-"ko": 82,
+"ko": 85,
 "m": 0
 }
 ],
@@ -1433,7 +1433,7 @@ window.NOTICES_PDF = {
 "t": "Notice Cardin SLX ZVL607.01",
 "p": 10,
 "pt": 36,
-"ko": 629,
+"ko": 638,
 "m": 0
 }
 ],
@@ -1463,7 +1463,7 @@ window.NOTICES_PDF = {
 "t": "Notice BBC Bircher ProLoop Lite 354823C",
 "p": 4,
 "pt": 4,
-"ko": 384,
+"ko": 424,
 "m": 0
 }
 ],
