@@ -192,6 +192,12 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "1.91", date: "2026-11-01", titre: "Ajout de notices PDF depuis l'appli (administrateur)", items: [
+    "Réglages > Administration > « Ajouter une notice PDF » : on choisit la fiche, on dépose le PDF du fabricant, l'appli coche les pages en français (miniatures pour vérifier et ajuster), puis la notice est ajoutée",
+    "La notice apparaît dans l'onglet « Notice PDF » de la fiche et dans la recherche dans les notices, pour toute l'équipe ; elle reste disponible hors ligne après la première ouverture",
+    "Les notices ajoutées sont stockées en privé (accès réservé aux comptes de l'équipe) et peuvent être supprimées depuis la même page",
+    "Pages scannées (sans texte) : elles s'affichent mais ne sont pas trouvées par la recherche"
+  ], docs: [] },
   { v: "1.90", date: "2026-11-01", titre: "Dépannage par photo de l'afficheur", items: [
     "Nouveau mode « Afficheur / code » dans le scan (accueil, et bouton « 📷 Lire le code sur l'afficheur » dans l'onglet Codes) : on photographie l'afficheur, l'appli lit le code et propose la fiche du code, déplié",
     "Afficheurs à segments (LED, LCD) : lecture intégrée à l'appli, qui marche sans réseau ; afficheurs à texte : moteur de lecture téléchargé une fois",

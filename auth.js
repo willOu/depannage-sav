@@ -209,6 +209,18 @@
       addEventListener("online", () => { if (S) reverif(true); });
     },
     email: () => (S && S.email) || "",
+    /* appel authentifié qui renvoie la réponse brute (fichiers du stockage : PDF, JSON), jeton renouvelé si besoin */
+    async brut(path, opt, ms) {
+      if (!S || !S.access_token) return null;
+      if (verifEnCours) await verifEnCours; else if (expireBientot() && S.refresh_token && navigator.onLine !== false) await verifier();
+      const o = opt || {};
+      const go = () => { const c = new AbortController(), t = setTimeout(() => c.abort(), ms || 60000); return fetch(URL_ + path, { ...o, signal: c.signal, headers: { apikey: KEY, Authorization: "Bearer " + S.access_token, ...(o.headers || {}) } }).finally(() => clearTimeout(t)); };
+      try {
+        let r = await go();
+        if (r.status === 401 || r.status === 400 && /jwt/i.test(await r.clone().text())) { if ((await verifier()) === "ok") r = await go(); }
+        return r;
+      } catch (e) { return null; }
+    },
     /* appel authentifié à Supabase (renouvelle le jeton une fois s'il a expiré) ; renvoie { ok, status, j } ou { net: true } */
     async api(path, opt) {
       if (!S || !S.access_token) return { ok: false, status: 401 };

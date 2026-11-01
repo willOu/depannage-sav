@@ -385,6 +385,9 @@ html{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 .ast>summary{padding:11px 14px;font-weight:700;cursor:pointer}.ast>summary span{color:var(--muted);font-weight:500}
 .astb{padding:0 14px 12px}.astl{padding:9px 0;border-top:1px solid var(--line)}.astl p{margin:0 0 3px;white-space:pre-wrap}.astl small{color:var(--muted);font-size:12.5px}
 .astn{margin-top:8px}.astn>summary{cursor:pointer;color:var(--brand);font-weight:700;padding:6px 0}.astn textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px;background:var(--bg);color:var(--ink);font:inherit}
+.nagr{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;margin:8px 0}
+.nap{display:grid;gap:4px;padding:6px;border:2px solid var(--line);border-radius:10px;background:var(--card);font-size:12px;cursor:pointer}
+.nap.fr{border-color:#2ea043}.nap canvas{width:100%;height:auto;background:#fff;border-radius:4px;min-height:80px}.nap span{display:flex;gap:5px;align-items:center}
 .cr.vise{outline:3px solid #ffd54a;outline-offset:2px}.ntcb{display:block;margin-top:10px}
 .nsrp>span:last-child{min-width:0;overflow-wrap:anywhere}.nsrp mark{background:#ffd54a;color:#000;border-radius:3px;padding:0 1px}
 .nsrm{display:block;margin-top:6px;color:var(--muted);font-size:13px}.nsrm a{color:var(--brand);font-weight:700}.pvp{position:relative;margin:0 auto 8px;background:#fff;box-shadow:0 0 0 1px #ccc}.pvp canvas{display:block}
@@ -412,6 +415,7 @@ html{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 <script src="ask.js"></script> <!-- ASK -->
 <script src="img.js"></script> <!-- SCH -->
 <script src="notices.js"></script> <!-- PDF -->
+<script src="najout.js"></script> <!-- PDF ajoutées -->
 <script src="npdf.js"></script> <!-- PDF -->
 <script src="acc.js"></script> <!-- ACC -->
 
@@ -900,6 +904,7 @@ function route(){
   if (p[0] === "techs") return viewTechs(); /* ADMIN */
   if (p[0] === "signalements") return viewSignalements(p[1]); /* SIG */
   if (p[0] === "astuces") return viewAstuces(p[1]); /* AST */
+  if (p[0] === "notices-admin") return viewNoticesAdmin(); /* PDF ajoutées */
   if (p[0] === "calc") return viewCalc(p[1]); /* CALC */
   if (p[0] === "cmp") return viewCmp(p[1] && p[1] !== "-" ? decodeURIComponent(p[1]) : "", p[2] ? decodeURIComponent(p[2]) : ""); /* CMP */
   if (p[0] === "stats") return SYNC.viewStats(p[1]); /* SYNC */

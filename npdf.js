@@ -17,22 +17,25 @@
     const l = list(id);
     setTimeout(() => l.forEach(async (n, k) => {
       const el = document.getElementById("pdfst" + k); if (!el) return;
-      const ok = await enCache(n.f);
+      const ok = n.sb && window.NAJOUT ? await NAJOUT.enCache(n) : await enCache(n.f);
       el.textContent = ok ? "✓ Disponible hors ligne sur cet appareil" : "À télécharger : il faut du réseau à la première ouverture";
       el.className = "pdfst" + (ok ? " ok" : "");
     }), 0);
     return `<p class="note">Notice du fabricant, <b>pages en français seulement</b> (plus les pages de schémas communes à toutes les langues). Elle se télécharge à la première ouverture, puis reste disponible sans réseau sur ce téléphone.</p>` +
       l.map((n, k) => `<div class="pdfc"><div class="pdft"><b>${esc(n.t)}</b><small>${n.p} page${n.p > 1 ? "s" : ""}${n.pt > n.p ? ` (sur ${n.pt} dans l'original)` : ""} · ${mo(n.ko)}</small>${n.m ? `<small class="pdfm">Notice multilingue : le français y est mélangé aux autres langues, elle est gardée en entier.</small>` : ""}<small id="pdfst${k}" class="pdfst">…</small></div>
-        <div class="pdfb"><button class="btn" onclick="go('#/pdf/${esc(id)}/${k}')">Lire</button><a class="btn sec" href="${esc(n.f)}" download>Enregistrer</a></div></div>`).join("") +
+        <div class="pdfb"><button class="btn" onclick="go('#/pdf/${esc(id)}/${k}')">Lire</button>${enreg(id, k, n)}</div></div>`).join("") +
       `<p class="note">En cas de doute, la notice livrée avec le matériel fait foi.</p>`;
   };
 
   let lib = null;
+  /* bouton « Enregistrer » : lien direct pour les notices de l'appli, téléchargement authentifié pour celles ajoutées par l'admin */
+  const enreg = (id, k, n) => n.sb ? `<button class="btn sec" onclick="NAJOUT.enregistrer('${esc(id)}', ${k}, this)">Enregistrer</button>` : `<a class="btn sec" href="${esc(n.f)}" download>Enregistrer</a>`;
   function chargeLib() {
     if (!lib) lib = import(BASE + "pdf.min.mjs").then(L => { L.GlobalWorkerOptions.workerSrc = BASE + "pdf.worker.min.mjs"; return L; }).catch(e => { lib = null; throw e; });
     return lib;
   }
 
+  window.chargePdfJs = chargeLib;
   let courant = 0;
   window.viewPdf = async function (id, k, pageVoulue, cherche) {
     const n = list(id)[+k || 0];
@@ -40,12 +43,12 @@
     if (!n) { go("#/"); return; }
     const jeton = ++courant;
     setHead(n.t, true);
-    app.innerHTML = `<div class="pdfbar"><button class="btn sec" id="pzm" aria-label="Réduire">−</button><span id="pzv">100 %</span><button class="btn sec" id="pzp" aria-label="Agrandir">+</button><a class="btn sec" href="${esc(n.f)}" download>Enregistrer</a></div>
+    app.innerHTML = `<div class="pdfbar"><button class="btn sec" id="pzm" aria-label="Réduire">−</button><span id="pzv">100 %</span><button class="btn sec" id="pzp" aria-label="Agrandir">+</button>${enreg(id, +k || 0, n)}</div>
       <p class="note" id="pmsg">Chargement de la notice (${mo(n.ko)})…</p><div id="ppages" class="ppages"></div>
       <p class="note">Touchez une page pour l'ouvrir en plein écran : faites défiler les pages de haut en bas, zoom avec + / − ou double-touche.</p>`;
     let pdf;
     try {
-      const [L, buf] = await Promise.all([chargeLib(), fetch(n.f).then(r => { if (!r.ok) throw new Error("http"); return r.arrayBuffer(); }, () => { throw new Error("reseau"); })]);
+      const [L, buf] = await Promise.all([chargeLib(), (n.sb && window.NAJOUT ? NAJOUT.octets(n) : fetch(n.f).then(r => { if (!r.ok) throw new Error("http"); return r.arrayBuffer(); }, () => { throw new Error("reseau"); }))]);
       if (jeton !== courant) return;
       pdf = await L.getDocument({ data: new Uint8Array(buf), wasmUrl: BASE + "wasm/", standardFontDataUrl: BASE + "standard_fonts/", iccUrl: BASE + "iccs/" }).promise;
     } catch (e) {
@@ -237,12 +240,20 @@
   let texte = null;
   const nchar = c => { const r = c.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase(); return r.length === 1 ? r : (r[0] || " "); };
   const normL = t => { let o = ""; for (const c of t) o += c.length === 1 ? nchar(c) : "  ".slice(0, c.length); return o; };
+  const parFichierAj = () => { const o = {}; Object.entries(window.NOTICES_PDF || {}).forEach(([id, l]) => l.forEach((n, k) => { if (n.sb) (o[n.f] = o[n.f] || []).push({ id, k, n }); })); return o; };
+  window.noticeTexteReset = () => { texte = null; };
   function chargeTexte() {
     if (!texte) texte = fetch(TEXTE).then(r => { if (!r.ok) throw new Error("http"); return r.json(); }).then(T => {
       const idx = [];
       const parFichier = {};
       Object.entries(window.NOTICES_PDF || {}).forEach(([id, l]) => l.forEach((n, k) => { (parFichier[n.f] = parFichier[n.f] || []).push({ id, k, n }); }));
       Object.entries(T).forEach(([f, pages]) => { if (parFichier[f]) idx.push({ f, items: parFichier[f], pages: pages.map(t => ({ t, n: normL(t) })) }); });
+      return idx;
+    }).then(async idx => {
+      /* notices ajoutées par l'admin : texte gardé sur le téléphone après le premier chargement */
+      if (window.NAJOUT) for (const [f, items] of Object.entries(parFichierAj())) {
+        try { const pages = await NAJOUT.texte(items[0].n); if (Array.isArray(pages) && pages.length) idx.push({ f, items, pages: pages.map(t => ({ t: String(t || ""), n: normL(String(t || "")) })) }); } catch (e) {}
+      }
       return idx;
     }).catch(e => { texte = null; throw e; });
     return texte;
