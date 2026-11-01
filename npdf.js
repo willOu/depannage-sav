@@ -34,7 +34,7 @@
   }
 
   let courant = 0;
-  window.viewPdf = async function (id, k) {
+  window.viewPdf = async function (id, k, pageVoulue) {
     const n = list(id)[+k || 0];
     const app = document.getElementById("app");
     if (!n) { go("#/"); return; }
@@ -95,6 +95,9 @@
     document.getElementById("pzp").onclick = () => { const i = ZS.indexOf(zoom); if (i < ZS.length - 1) { zoom = ZS[i + 1]; majZoom(); } };
     document.getElementById("pzm").onclick = () => { const i = ZS.indexOf(zoom); if (i > 0) { zoom = ZS[i - 1]; majZoom(); } };
     const agrandir = i => plein(pdf, i, jeton);
+    /* ouverte depuis la recherche : directement en plein écran à la page trouvée */
+    const pv = parseInt(pageVoulue, 10);
+    if (pv >= 1 && pv <= pdf.numPages) { const d = box.children[pv - 1]; if (d) d.scrollIntoView(); plein(pdf, pv, jeton); }
   };
 
   /* Plein écran : toutes les pages à la suite, défilement vertical, zoom − / + ou double-touche, ‹ › page précédente / suivante */
@@ -173,4 +176,102 @@
     addEventListener("popstate", fermer); addEventListener("keydown", esc_); addEventListener("hashchange", fermer);
     requestAnimationFrame(() => aller(depart));
   }
+
+  /* ---------- recherche dans le texte des notices ----------
+     Texte de chaque page extrait à l'avance (notices-texte-1.json, lecture optique pour les pages scannées),
+     gardé en cache sur le téléphone : la recherche marche sans réseau. */
+  const TEXTE = "notices-texte-1.json";
+  let texte = null;
+  const nchar = c => { const r = c.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase(); return r.length === 1 ? r : (r[0] || " "); };
+  const normL = t => { let o = ""; for (const c of t) o += c.length === 1 ? nchar(c) : "  ".slice(0, c.length); return o; };
+  function chargeTexte() {
+    if (!texte) texte = fetch(TEXTE).then(r => { if (!r.ok) throw new Error("http"); return r.json(); }).then(T => {
+      const idx = [];
+      const parFichier = {};
+      Object.entries(window.NOTICES_PDF || {}).forEach(([id, l]) => l.forEach((n, k) => { (parFichier[n.f] = parFichier[n.f] || []).push({ id, k, n }); }));
+      Object.entries(T).forEach(([f, pages]) => { if (parFichier[f]) idx.push({ f, items: parFichier[f], pages: pages.map(t => ({ t, n: normL(t) })) }); });
+      return idx;
+    }).catch(e => { texte = null; throw e; });
+    return texte;
+  }
+  const nomItem = id => {
+    try { const b = typeof BOARDS !== "undefined" && BOARDS.find(x => x.c.id === id); if (b) return { m: b.m.nom, c: b.m.couleur, nom: b.c.nom }; } catch (e) {}
+    const a = (window.ACCESSOIRES || []).find(x => x.id === id); return a ? { m: a.marque, c: a.couleur, nom: a.nom } : { m: "", c: "#888", nom: id };
+  };
+  function chercher(idx, q) {
+    /* mots séparés par les espaces ; « 8,2 », « 24v », « e3 » restent entiers ; ponctuation retirée aux bords */
+    let mots = normL(q).split(/\s+/).map(w => w.replace(/^[^a-z0-9°ω]+|[^a-z0-9°ω]+$/g, "")).filter(Boolean);
+    if (mots.length > 1) mots = mots.filter(w => w.length >= 2 || /\d/.test(w));
+    if (!mots.length) return [];
+    const exprs = mots.map(w => w.length <= 3 ? new RegExp("(^|[^a-z0-9,.])" + w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "(?![a-z0-9]|[,.][0-9])") : null);
+    const phrase = mots.join(" ");
+    const res = [];
+    idx.forEach(doc => {
+      const pages = [];
+      doc.pages.forEach((p, i) => {
+        if (!p.n) return;
+        if (!mots.every((w, j) => exprs[j] ? exprs[j].test(p.n) : p.n.includes(w))) return;
+        let sc = mots.length > 1 && p.n.includes(phrase) ? 20 : 0;
+        mots.forEach(w => { let k = -1, c = 0; while ((k = p.n.indexOf(w, k + 1)) >= 0 && c < 10) c++; sc += c; });
+        pages.push({ i, sc });
+      });
+      if (pages.length) { pages.sort((a, b) => b.sc - a.sc); res.push({ doc, pages, best: pages[0].sc }); }
+    });
+    res.sort((a, b) => b.best - a.best || b.pages.length - a.pages.length);
+    return res.map(r => Object.assign(r, { mots, phrase }));
+  }
+  function extrait(p, mots, phrase) {
+    let k = mots.length > 1 ? p.n.indexOf(phrase) : -1;
+    if (k < 0) k = p.n.indexOf(mots[0]);
+    if (k < 0) k = 0;
+    const a = Math.max(0, k - 70), b = Math.min(p.t.length, k + 150);
+    let h = esc(p.t.slice(a, b)), seg = p.n.slice(a, b);
+    /* surligne chaque mot (positions identiques entre texte normalisé et original) */
+    const marks = [];
+    const bord = (j, l) => !/[a-z0-9]/.test(seg[j - 1] || " ") && !/[a-z0-9]/.test(seg[j + l] || " ");
+    if (mots.length > 1) { let j = -1; while ((j = seg.indexOf(phrase, j + 1)) >= 0) marks.push([j, j + phrase.length]); }
+    mots.forEach(w => { let j = -1; while ((j = seg.indexOf(w, j + 1)) >= 0) if (w.length > 3 || bord(j, w.length)) marks.push([j, j + w.length]); });
+    if (marks.length) {
+      marks.sort((x, y) => x[0] - y[0]);
+      const t = p.t.slice(a, b); let o = "", last = 0;
+      marks.forEach(([x, y]) => { if (x < last) return; o += esc(t.slice(last, x)) + "<mark>" + esc(t.slice(x, y)) + "</mark>"; last = y; });
+      h = o + esc(t.slice(last));
+    }
+    return (a > 0 ? "… " : "") + h + (b < p.t.length ? " …" : "");
+  }
+  let rechercheN = 0;
+  window.noticeSearch = async function (q, el) {
+    const moi = ++rechercheN;
+    if (!el) return 0;
+    el.innerHTML = `<h2>Dans les notices PDF</h2><p class="note">Recherche dans le texte des notices…</p>`;
+    let idx;
+    try { idx = await chargeTexte(); } catch (e) {
+      if (moi === rechercheN) el.innerHTML = `<h2>Dans les notices PDF</h2><p class="note">Le texte des notices n'est pas encore sur ce téléphone : ouvrez l'appli une fois avec du réseau.</p>`;
+      return -1;
+    }
+    if (moi !== rechercheN) return -1;
+    const res = chercher(idx, q);
+    if (!res.length) { el.innerHTML = ""; return 0; }
+    const nbP = res.reduce((s, r) => s + r.pages.length, 0);
+    const bloc = r => {
+      const it = r.doc.items[0], ni = nomItem(it.id), autres = r.doc.items.length - 1;
+      return `<div class="nsr"><div class="nsrh"><span class="badge" style="--c:${esc(ni.c)}">${esc(ni.m)}</span><b>${esc(it.n.t)}</b><small>${esc(ni.nom)}${autres > 0 ? ` (+ ${autres} autre${autres > 1 ? "s" : ""} fiche${autres > 1 ? "s" : ""})` : ""} · ${r.pages.length} page${r.pages.length > 1 ? "s" : ""}</small></div>` +
+        r.pages.slice(0, 3).map(pg => `<button class="nsrp" onclick="go('#/pdf/${esc(it.id)}/${it.k}/${pg.i + 1}')"><span class="pill">p. ${pg.i + 1}</span><span>${extrait(r.doc.pages[pg.i], r.mots, r.phrase)}</span></button>`).join("") +
+        (r.pages.length > 3 ? `<small class="nsrm">Autres pages : ${r.pages.slice(3, 15).map(pg => `<a href="#/pdf/${esc(it.id)}/${it.k}/${pg.i + 1}">${pg.i + 1}</a>`).join(" · ")}${r.pages.length > 15 ? " …" : ""}</small>` : "") + `</div>`;
+    };
+    const N0 = 8;
+    el.innerHTML = `<h2>Dans les notices PDF (${nbP} page${nbP > 1 ? "s" : ""}, ${res.length} notice${res.length > 1 ? "s" : ""})</h2><p class="note">Touchez un extrait pour ouvrir la notice à cette page. Le texte des pages scannées a été lu automatiquement : il peut manquer des mots.</p>` +
+      res.slice(0, N0).map(bloc).join("") + (res.length > N0 ? `<button class="dbtn" id="nsrplus">Voir les ${res.length - N0} autres notices</button>` : "");
+    /* raccourci en haut des résultats quand la section des notices est loin en bas */
+    const app = el.parentNode;
+    if (app && el.offsetTop > innerHeight * 0.8) { const old = app.querySelector("#nsjump"); if (old) old.remove();
+      app.insertAdjacentHTML("afterbegin", `<button class="mini" id="nsjump" style="margin-top:12px">📄 ${nbP} page${nbP > 1 ? "s" : ""} trouvée${nbP > 1 ? "s" : ""} dans les notices PDF ↓</button>`);
+      app.querySelector("#nsjump").onclick = () => el.scrollIntoView({ behavior: "smooth" }); }
+    const b = el.querySelector("#nsrplus");
+    if (b) b.onclick = () => { b.insertAdjacentHTML("beforebegin", res.slice(N0).map(bloc).join("")); b.remove(); };
+    return res.length;
+  };
+  /* charge le texte en arrière-plan quand l'appli démarre avec du réseau, pour que la recherche marche ensuite hors ligne */
+  addEventListener("load", () => setTimeout(() => { if (navigator.onLine !== false) chargeTexte().catch(() => {}); }, 8000));
+
 })();

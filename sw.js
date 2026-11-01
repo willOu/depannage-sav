@@ -1,8 +1,9 @@
 /* Service worker — tout est mis en cache à l'installation.
    Après modification de data.js ou index.html, augmenter VERSION. */
-const VERSION = "sav-2026-11-01-02";
+const VERSION = "sav-2026-11-01-03";
 const OCR = "sav-ocr-1";
 const NTC = "sav-notices-2"; /* notices PDF : gardées d'une version à l'autre */
+const TXT = "notices-texte-1.json"; /* texte des notices pour la recherche (changer le nom s'il change) */
 const FILES = ["./", "index.html", "data.js", "diag.js", "ask.js", "acc.js", "img.js", "notices.js", "npdf.js", "auth.js", "sync.js", "cmp.js", "quiz.js", "admin.js", "signal.js", "moteurs.js", "calc.js", "sympt.js", "scan.js", "manifest.webmanifest",
   "icons/icon-192.png", "icons/icon-512.png", "icons/icon-maskable-512.png", "icons/apple-touch-icon.png",
   "icons/marques/came.png", "icons/marques/fadini.png", "icons/marques/tousek.png", "icons/marques/nice.png", "icons/marques/faac.png", "icons/marques/bft.png", "icons/marques/roger.png", "icons/marques/afca.png", "icons/marques/casit.png", "icons/marques/optex.png", "icons/marques/cardin.png", "icons/marques/doitrand.png", "icons/marques/intratone.png", "icons/marques/locinox.png", "icons/marques/lba.png", "icons/marques/prastel.png", "icons/marques/dea.png", "icons/marques/theben.png", "icons/marques/elka.png", "icons/marques/opera.png", "icons/marques/bbc-bircher.png", "icons/marques/sewosy.png", "icons/marques/jcm-technologies.png",
@@ -10,7 +11,9 @@ const FILES = ["./", "index.html", "data.js", "diag.js", "ask.js", "acc.js", "im
   ];
 
 self.addEventListener("install", e => {
-  e.waitUntil(caches.open(VERSION).then(c => c.addAll(FILES.map(f => new Request(f, { cache: "reload" })))).then(() => self.skipWaiting()));
+  e.waitUntil(caches.open(VERSION).then(c => c.addAll(FILES.map(f => new Request(f, { cache: "reload" }))))
+    .then(() => caches.open(NTC)).then(async c => { const k = new URL(TXT, self.registration.scope).href; if (!(await c.match(k))) await c.add(k).catch(() => {}); }) /* texte des notices, gardé d'une version à l'autre */
+    .then(() => self.skipWaiting()));
 });
 self.addEventListener("activate", e => {
   e.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== VERSION && k !== OCR && k !== NTC).map(k => caches.delete(k))))
@@ -38,7 +41,7 @@ self.addEventListener("fetch", e => {
   if (e.request.method !== "GET" || u.origin !== location.origin) return;
   /* notices PDF et lecteur pdf.js : cache d'abord (téléchargés une fois, gardés hors ligne d'une version à l'autre),
      réponse entière même si le lecteur demande une plage. Changer le nom du fichier (ou NTC) si un fichier est remplacé. */
-  if (/\/(notices\/[^/]+\.pdf|vendor\/pdfjs\/.+)$/i.test(u.pathname)){
+  if (/\/(notices\/[^/]+\.pdf|vendor\/pdfjs\/.+|notices-texte-\d+\.json)$/i.test(u.pathname)){
     e.respondWith(caches.open(NTC).then(async c => {
       const k = u.origin + u.pathname;
       const hit = await c.match(k); if (hit) return hit;

@@ -192,6 +192,12 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "1.85", date: "2026-11-01", titre: "Recherche dans le texte des notices", items: [
+    "La recherche cherche aussi dans le texte des 149 notices PDF : un mot, une phrase ou un code (« temps de pause », « E07 », « fin de course ») donne la notice, la page et un extrait avec le mot surligné",
+    "Touchez l'extrait : la notice s'ouvre en plein écran directement à cette page",
+    "Fonctionne sans réseau : le texte des notices est gardé sur le téléphone (environ 8 Mo, téléchargé une fois)",
+    "Les pages scannées ont été lues automatiquement : quelques mots peuvent manquer sur ces pages"
+  ], docs: [] },
   { v: "1.84", date: "2026-11-01", titre: "Notices PDF en qualité d'origine", items: [
     "Les images des notices (schémas scannés, photos, dessins) sont maintenant celles du fichier du fabricant, sans recompression : plus de perte de netteté. Seules les pages en français ont été retirées des autres langues",
     "Les notices déjà ouvertes se retéléchargent une fois à la prochaine ouverture avec du réseau"
