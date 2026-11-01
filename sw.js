@@ -1,6 +1,6 @@
 /* Service worker — tout est mis en cache à l'installation.
    Après modification de data.js ou index.html, augmenter VERSION. */
-const VERSION = "sav-2026-10-31-04";
+const VERSION = "sav-2026-11-01-01";
 const OCR = "sav-ocr-1";
 const NTC = "sav-notices-1"; /* notices PDF : gardées d'une version à l'autre */
 const FILES = ["./", "index.html", "data.js", "diag.js", "ask.js", "acc.js", "img.js", "notices.js", "npdf.js", "auth.js", "sync.js", "cmp.js", "quiz.js", "admin.js", "signal.js", "moteurs.js", "calc.js", "sympt.js", "scan.js", "manifest.webmanifest",

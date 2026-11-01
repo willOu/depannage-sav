@@ -192,6 +192,11 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "1.83", date: "2026-11-01", titre: "Notice PDF plus nette", items: [
+    "Les pages sont dessinées plus finement, surtout les grandes feuilles (fiches CAME ZM3E, ZBX6…) dont le texte est petit",
+    "En plein écran, le pincement à deux doigts zoome vraiment (jusqu'à 6 fois) : la page est redessinée nette au lieu d'être simplement agrandie",
+    "La double-touche zoome à l'endroit touché"
+  ], docs: [] },
   { v: "1.82", date: "2026-10-31", titre: "Notice PDF : défilement en plein écran", items: [
     "En touchant une page de la notice, on l'ouvre en plein écran et on fait défiler toutes les pages de haut en bas (ou de bas en haut), avec le numéro de page affiché, les flèches ‹ › pour sauter d'une page, le zoom − / + ou la double-touche"
   ], docs: [] },

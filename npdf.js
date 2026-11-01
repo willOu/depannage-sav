@@ -60,7 +60,7 @@
     document.getElementById("pmsg").textContent = `${pdf.numPages} page${pdf.numPages > 1 ? "s" : ""} · disponible hors ligne sur ce téléphone.`;
     const box = document.getElementById("ppages");
     let zoom = 1;
-    const ZS = [1, 1.5, 2, 3];
+    const ZS = [1, 1.5, 2, 3, 4];
     const largeur = () => Math.max(280, box.clientWidth) * zoom;
     const rendus = new Map();
     for (let i = 1; i <= pdf.numPages; i++) {
@@ -73,7 +73,7 @@
       if (rendus.get(i) === w) return; rendus.set(i, w);
       const page = await pdf.getPage(i);
       const v1 = page.getViewport({ scale: 1 });
-      const dpr = Math.min(window.devicePixelRatio || 1, 2.5);
+      const dpr = Math.min(window.devicePixelRatio || 1, 3);
       const v = page.getViewport({ scale: (w / v1.width) * dpr });
       const c = document.createElement("canvas"); c.width = Math.floor(v.width); c.height = Math.floor(v.height);
       c.style.width = w + "px"; c.style.height = Math.floor(v.height / dpr) + "px";
@@ -122,8 +122,9 @@
       const page = await pdf.getPage(k);
       const v1 = page.getViewport({ scale: 1 });
       ratios.set(k, v1.height / v1.width);
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      const sc = Math.min((w * dpr) / v1.width, 4000 / v1.width);
+      const dpr = Math.min(window.devicePixelRatio || 1, 3);
+      const cible = Math.max(w * dpr, Math.min(1600, w * 3));
+      const sc = Math.min(cible / v1.width, Math.sqrt(8e6 / (v1.width * v1.height)));
       const v = page.getViewport({ scale: sc });
       const c = document.createElement("canvas"); c.width = Math.floor(v.width); c.height = Math.floor(v.height);
       c.style.width = w + "px"; c.style.height = Math.round(w * v1.height / v1.width) + "px";
@@ -138,21 +139,29 @@
     const actuelle = () => { const t = box.scrollTop + box.clientHeight / 3; let k = 1; for (const d of pages) { if (d.offsetTop <= t) k = +d.dataset.n; else break; } return k; };
     const aller = k => { k = Math.max(1, Math.min(N, k)); box.scrollTop = pages[k - 1].offsetTop; };
     box.addEventListener("scroll", () => { o.querySelector("#pvt").textContent = `${actuelle()} / ${N}`; }, { passive: true });
-    const setZ = z => {
-      z = Math.max(1, Math.min(4, z)); if (z === zoom) return;
-      const k = actuelle(), dans = (box.scrollTop - pages[k - 1].offsetTop) / Math.max(1, pages[k - 1].offsetHeight);
-      const fx = (box.scrollLeft + box.clientWidth / 2) / Math.max(1, box.scrollWidth);
+    let tRendu = 0;
+    const rendreVisibles = () => pages.forEach(d => { const r = d.getBoundingClientRect(); if (r.bottom > -1200 && r.top < innerHeight + 1200) rendre(d); });
+    const setZ = (z, cx, cy) => {
+      z = Math.max(1, Math.min(6, z)); if (Math.abs(z - zoom) < 0.01) return;
+      cx = cx == null ? box.clientWidth / 2 : cx; cy = cy == null ? box.clientHeight / 2 : cy;
+      const ax = (box.scrollLeft + cx) / zoom, ay = (box.scrollTop + cy) / zoom;
       zoom = z;
       pages.forEach(d => { const c = d.querySelector("canvas"); d.style.width = larg() + "px"; d.style.height = haut(+d.dataset.n) + "px"; if (c) { c.style.width = d.style.width; c.style.height = d.style.height; } });
-      box.scrollTop = pages[k - 1].offsetTop + dans * pages[k - 1].offsetHeight;
-      box.scrollLeft = fx * box.scrollWidth - box.clientWidth / 2;
-      pages.forEach(d => { const r = d.getBoundingClientRect(); if (r.bottom > -1200 && r.top < innerHeight + 1200) rendre(d); });
+      box.scrollLeft = ax * zoom - cx; box.scrollTop = ay * zoom - cy;
+      o.querySelector("#pvt").textContent = `${actuelle()} / ${N}`;
+      clearTimeout(tRendu); tRendu = setTimeout(rendreVisibles, 250);
     };
+    /* pincement à deux doigts : le zoom est recalculé et la page redessinée nette (pas un simple agrandissement flou) */
+    let pince = null;
+    const dist = t => Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
+    box.addEventListener("touchstart", e => { if (e.touches.length === 2) { const r = box.getBoundingClientRect(); pince = { d: dist(e.touches), z: zoom, cx: (e.touches[0].clientX + e.touches[1].clientX) / 2 - r.left, cy: (e.touches[0].clientY + e.touches[1].clientY) / 2 - r.top }; } }, { passive: true });
+    box.addEventListener("touchmove", e => { if (pince && e.touches.length === 2) { e.preventDefault(); setZ(pince.z * dist(e.touches) / pince.d, pince.cx, pince.cy); } }, { passive: false });
+    box.addEventListener("touchend", e => { if (e.touches.length < 2) pince = null; }, { passive: true });
     o.querySelector("#pvz").onclick = () => setZ(zoom + 0.5);
     o.querySelector("#pvm").onclick = () => setZ(zoom - 0.5);
     o.querySelector("#pvp").onclick = () => aller(actuelle() - 1);
     o.querySelector("#pvn").onclick = () => aller(actuelle() + 1);
-    box.ondblclick = () => setZ(zoom >= 2 ? 1 : 2.5);
+    box.ondblclick = e => { const r = box.getBoundingClientRect(); setZ(zoom >= 2 ? 1 : 2.5, e.clientX - r.left, e.clientY - r.top); };
     const fermer = () => {
       if (ferme) return; ferme = true; io.disconnect();
       pages.forEach(liberer); o.remove(); document.body.style.overflow = "";
