@@ -251,9 +251,11 @@
       return idx;
     }).then(async idx => {
       /* notices ajoutées par l'admin : texte gardé sur le téléphone après le premier chargement */
+      let manque = false;
       if (window.NAJOUT) for (const [f, items] of Object.entries(parFichierAj())) {
-        try { const pages = await NAJOUT.texte(items[0].n); if (Array.isArray(pages) && pages.length) idx.push({ f, items, pages: pages.map(t => ({ t: String(t || ""), n: normL(String(t || "")) })) }); } catch (e) {}
+        try { const pages = await NAJOUT.texte(items[0].n); if (Array.isArray(pages) && pages.length) idx.push({ f, items, pages: pages.map(t => ({ t: String(t || ""), n: normL(String(t || "")) })) }); } catch (e) { manque = true; }
       }
+      if (manque) setTimeout(() => { texte = null; }, 0); /* texte d'une notice ajoutée pas encore disponible : on réessaiera à la prochaine recherche */
       return idx;
     }).catch(e => { texte = null; throw e; });
     return texte;

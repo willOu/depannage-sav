@@ -14,6 +14,8 @@
     const N = window.NOTICES_PDF = window.NOTICES_PDF || {};
     Object.keys(N).forEach(id => { N[id] = N[id].filter(n => !n.sb); if (!N[id].length) delete N[id]; });
     st.get(K, []).slice().reverse().forEach(r => {
+      if (!/^[a-z0-9-]+$/.test(r.fiche_id || "") || !/^[a-z0-9-]+\.pdf$/.test(r.chemin || "")) return; /* identifiants contrôlés (aussi vérifiés par la base) */
+      if (!Object.prototype.hasOwnProperty.call(N, r.fiche_id) && r.fiche_id in N) return;
       (N[r.fiche_id] = N[r.fiche_id] || []).push({ f: "sb/" + r.chemin, t: r.titre, p: r.pages, pt: r.pages_original, ko: r.ko, m: 0, sb: r.chemin, tx: r.texte_chemin || "", aid: r.id });
     });
   }
@@ -24,7 +26,12 @@
     const r = await AUTH.api("/rest/v1/notices_ajoutees?select=id,genre,fiche_id,titre,chemin,texte_chemin,pages,pages_original,ko,cree_le&order=cree_le.desc&limit=500", {});
     if (r.ok && Array.isArray(r.j)) {
       const av = JSON.stringify(st.get(K, [])); st.set(K, r.j); fusion();
-      if (av !== JSON.stringify(r.j) && window.noticeTexteReset) noticeTexteReset();
+      if (av !== JSON.stringify(r.j)) {
+        if (window.noticeTexteReset) noticeTexteReset();
+        /* notices supprimées par l'admin : on libère la place sur ce téléphone */
+        try { const gard = new Set(r.j.flatMap(x => [x.chemin, x.texte_chemin]).filter(Boolean).map(cle)), c = await caches.open(CACHE);
+          for (const q of await c.keys()) if (q.url.includes("/__notices-ajoutees/") && !gard.has(q.url)) await c.delete(q); } catch (e) {}
+      }
     }
   }
   addEventListener("auth-ok", () => setTimeout(sync, 2500));
@@ -115,7 +122,8 @@
       const r = L.find(x => x.id === Number(b.dataset.id)); if (!r || !confirm("Supprimer cette notice pour toute l'équipe ?")) return;
       b.disabled = true;
       const fs = [r.chemin].concat(r.texte_chemin ? [r.texte_chemin] : []);
-      await AUTH.brut("/storage/v1/object/notices", { method: "DELETE", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ prefixes: fs }) });
+      const sup = await AUTH.brut("/storage/v1/object/notices", { method: "DELETE", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ prefixes: fs }) });
+      if (!sup || !sup.ok) { b.disabled = false; alert(sup ? "Suppression des fichiers refusée : réessayez." : "Pas de réseau."); return; }
       const d = await AUTH.api("/rest/v1/notices_ajoutees?id=eq." + r.id, { method: "DELETE", headers: { Prefer: "return=minimal" } });
       if (!d.ok) { b.disabled = false; alert(d.net ? "Pas de réseau." : "Suppression refusée."); return; }
       try { const c = await caches.open(CACHE); fs.forEach(x => c.delete(cle(x))); } catch (e) {}
@@ -192,7 +200,10 @@
       const avecTexte = !!(r && r.ok);
       s("Enregistrement…");
       const ins = await AUTH.api("/rest/v1/notices_ajoutees", { method: "POST", headers: { "Content-Type": "application/json", Prefer: "return=minimal" }, body: JSON.stringify({ genre, fiche_id: fiche, titre: titre.slice(0, 160), chemin, texte_chemin: avecTexte ? tchemin : null, pages: idx.length, pages_original: doc.pages.length, ko: Math.round(pdfBytes.length / 1024), ajoute_par: AUTH.email() }) });
-      if (!ins.ok) { await AUTH.brut("/storage/v1/object/notices", { method: "DELETE", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ prefixes: [chemin, tchemin] }) }); throw new Error(ins.net ? "pas de réseau" : "enregistrement refusé"); }
+      if (!ins.ok) {
+        const sup = await AUTH.brut("/storage/v1/object/notices", { method: "DELETE", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ prefixes: [chemin, tchemin] }) });
+        throw new Error((ins.net ? "pas de réseau" : "enregistrement refusé") + (sup && sup.ok ? "" : " ; fichiers envoyés non supprimés (" + chemin + "), à effacer dans le stockage Supabase"));
+      }
       try { const c = await caches.open(CACHE); await c.put(cle(chemin), new Response(new Blob([pdfBytes]), { headers: { "Content-Type": "application/pdf" } })); } catch (e) {}
       await sync();
       $("#nag").innerHTML = `<p class="note">✓ Notice ajoutée (${idx.length} pages) : <a href="${genre === "carte" ? "#/c/" : "#/a/"}${esc(fiche)}/pdf">voir sur la fiche</a>. Elle apparaîtra chez les techniciens à leur prochaine connexion avec du réseau.</p>`;

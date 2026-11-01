@@ -28,9 +28,10 @@
   };
 
   /* ---------- synchronisation ---------- */
-  let enCours = false;
+  let enCours = false, encore = false;
   async function sync() {
-    if (enCours || !actif() || navigator.onLine === false) return;
+    if (enCours) { encore = true; return; } /* une synchro tourne déjà : on la relance à la fin (astuce envoyée entre-temps) */
+    if (!actif() || navigator.onLine === false) return;
     if (!AUTH.pret()) { setTimeout(sync, 3000); return; }
     enCours = true;
     try {
@@ -49,7 +50,7 @@
         if (n.ok && Array.isArray(n.j)) { chg = chg || st.get(NB, 0) !== n.j.length; st.set(NB, n.j.length); }
       }
       if (chg) rafraichir();
-    } catch (e) {} finally { enCours = false; }
+    } catch (e) {} finally { enCours = false; if (encore) { encore = false; setTimeout(sync, 0); } }
   }
   addEventListener("auth-ok", () => setTimeout(sync, 2000));
   addEventListener("load", () => setTimeout(sync, 4000)); /* session déjà ouverte : pas toujours d'événement auth-ok */
@@ -77,6 +78,7 @@
     const q = st.get(Q, []); q.push({ e: moi(), t: Date.now() + Math.random(), genre, fiche_id: id, texte: txt.slice(0, 1000) }); st.set(Q, q);
     t.value = ""; out.textContent = "✓ Merci ! Envoyée pour validation : elle apparaîtra ici une fois validée.";
     await sync();
+    for (let i = 0; i < 20 && enCours; i++) await new Promise(r => setTimeout(r, 250));
     if (st.get(Q, []).some(x => x.e === moi())) out.textContent = "✓ Enregistrée : elle partira au retour du réseau, puis sera validée par l'administrateur.";
   };
 

@@ -201,7 +201,7 @@
       const t = inp.value.trim(), carte = sel.value, r = t ? codeMatch(t, carte) : [];
       try { sessionStorage.setItem("aff-carte", carte); } catch (e) {}
       const lien = x => "#/c/" + x.c.id + "/codes/" + encodeURIComponent(x.x.code).replace(/'/g, "%27");
-      $("#afr").innerHTML = !t ? "" : r.length ? `<h2>Codes correspondants</h2><div class="list">` + r.map(x => `<button class="row" onclick="go('${lien(x)}')"><span class="badge" style="--c:${x.m.couleur}">${esc(x.m.nom)}</span><b>${esc(x.x.code)} · ${esc(x.x.titre)}</b><small>${esc(x.c.nom)}${x.sc < 3 && x.sc < 13 ? " · lecture approchée" : ""}</small></button>`).join("") + `</div>`
+      $("#afr").innerHTML = !t ? "" : r.length ? `<h2>Codes correspondants</h2><div class="list">` + r.map(x => `<button class="row" onclick="go('${lien(x)}')"><span class="badge" style="--c:${x.m.couleur}">${esc(x.m.nom)}</span><b>${esc(x.x.code)} · ${esc(x.x.titre)}</b><small>${esc(x.c.nom)}${x.sc % 10 < 3 ? " · lecture approchée" : ""}</small></button>`).join("") + `</div>`
         : `<p class="empty">Aucun code connu ne correspond à « ${esc(t)} »${carte ? " sur cette carte" : ""}.<br>Vérifiez le code ou <a href="#/s/${encodeURIComponent(t)}">lancez la recherche normale</a> (elle cherche aussi dans les notices PDF).</p>`;
     };
     inp.oninput = show; sel.onchange = show;
@@ -221,11 +221,12 @@
         st("Chargement du moteur de lecture (première fois : quelques secondes)…");
         const w = await loadOcr(m => st("Lecture : " + m));
         await w.setParameters({ tessedit_char_whitelist: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-.", tessedit_pageseg_mode: "7" });
-        for (const inv of [false, true]) {
-          const c = await prepAff(f, inv); const { data } = await w.recognize(c);
-          (data.text || "").split(/\s+/).map(x => x.replace(/[^A-Za-z0-9.-]/g, "")).filter(x => x.length >= 1 && x.length <= 8).forEach(x => lus.push(x));
-        }
-        await w.setParameters({ tessedit_char_whitelist: "", tessedit_pageseg_mode: "3" }); /* retour aux réglages du scan d'étiquette */
+        try {
+          for (const inv of [false, true]) {
+            const c = await prepAff(f, inv); const { data } = await w.recognize(c);
+            (data.text || "").split(/\s+/).map(x => x.replace(/[^A-Za-z0-9.-]/g, "")).filter(x => x.length >= 1 && x.length <= 8).forEach(x => lus.push(x));
+          }
+        } finally { await w.setParameters({ tessedit_char_whitelist: "", tessedit_pageseg_mode: "6" }).catch(() => {}); } /* retour aux réglages par défaut (scan d'étiquette), même en cas d'échec */
         const carte = sel.value;
         /* garde la lecture qui correspond à un code connu, sinon la plus longue */
         const conn = lus.find(x => codeMatch(x, carte).some(r => r.sc >= 2 && (!carte || r.c.id === carte))) || lus.sort((a, b) => b.length - a.length)[0] || "";
