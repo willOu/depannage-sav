@@ -192,6 +192,11 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "1.87", date: "2026-11-01", titre: "Notice PDF : mot cherché surligné en jaune", items: [
+    "Depuis la recherche ou le bouton « Chercher dans la notice PDF » d'un code, la notice s'ouvre à la page et le mot cherché y est surligné en jaune ; l'affichage se place directement dessus",
+    "Le surlignage suit le zoom ; il apparaît aussi sur les autres pages où le mot se trouve",
+    "Pages scannées (sans texte dans le PDF) : la page s'ouvre mais le mot ne peut pas être surligné, un message le signale"
+  ], docs: [] },
   { v: "1.86", date: "2026-11-01", titre: "Codes : ouverture directe et lien vers la notice", items: [
     "Dans la recherche, toucher un code ouvre la fiche directement sur ce code (déplié et encadré), au lieu du haut de l'onglet Codes",
     "Sous chaque code, un bouton « Chercher dans la notice PDF » ouvre la notice à la page où ce code apparaît"

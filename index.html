@@ -362,7 +362,7 @@ html{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 .schb button{min-width:44px;height:44px;border:1px solid #555;border-radius:10px;background:#222;color:#fff;font-size:20px}
 .schc{flex:1;overflow:auto;touch-action:pan-x pan-y pinch-zoom;background:#fff}
 .schc img{display:block;width:100%;height:auto}
-#pvc{touch-action:pan-x pan-y}
+#pvc{touch-action:pan-x pan-y}.pvh{position:absolute;background:rgba(255,213,0,.45);outline:2px solid rgba(230,160,0,.9);border-radius:2px;pointer-events:none;mix-blend-mode:multiply}.pvn{position:absolute;left:8px;right:8px;top:8px;padding:8px 10px;background:#222;color:#fff;border-radius:8px;font-size:13px}
 .nsr{margin-top:10px;padding:10px 12px;border:1px solid var(--line);border-radius:14px;background:var(--card)}
 .nsrh{display:grid;gap:2px;margin-bottom:6px}.nsrh small{color:var(--muted);font-size:12.5px}.nsrh .badge{justify-self:start}
 .nsrp{display:flex;gap:10px;align-items:flex-start;width:100%;text-align:left;margin-top:6px;padding:9px 10px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit;font-size:14px;cursor:pointer}
@@ -865,7 +865,7 @@ function route(){
   if (p[0] === "ma") return viewAccBrand(p[1]);
   if (p[0] === "a") return p[1] ? viewAcc(p[1], p[2]) : viewAccList(); /* ACC */
   if (p[0] === "d") return viewDiag(p[1], p[2]); /* DIAG */
-  if (p[0] === "pdf") return viewPdf(p[1], p[2], p[3]); /* PDF */
+  if (p[0] === "pdf") return viewPdf(p[1], p[2], p[3], p[4] ? decodeURIComponent(p.slice(4).join("/")) : ""); /* PDF */
   if (p[0] === "scan") return viewScan(); /* SCAN */
   if (p[0] === "quiz") return viewQuiz(p[1]); /* QUIZ */
   if (p[0] === "techs") return viewTechs(); /* ADMIN */

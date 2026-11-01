@@ -34,7 +34,7 @@
   }
 
   let courant = 0;
-  window.viewPdf = async function (id, k, pageVoulue) {
+  window.viewPdf = async function (id, k, pageVoulue, cherche) {
     const n = list(id)[+k || 0];
     const app = document.getElementById("app");
     if (!n) { go("#/"); return; }
@@ -94,14 +94,14 @@
     };
     document.getElementById("pzp").onclick = () => { const i = ZS.indexOf(zoom); if (i < ZS.length - 1) { zoom = ZS[i + 1]; majZoom(); } };
     document.getElementById("pzm").onclick = () => { const i = ZS.indexOf(zoom); if (i > 0) { zoom = ZS[i - 1]; majZoom(); } };
-    const agrandir = i => plein(pdf, i, jeton);
+    const agrandir = i => plein(pdf, i, jeton, "");
     /* ouverte depuis la recherche : directement en plein écran à la page trouvée */
     const pv = parseInt(pageVoulue, 10);
-    if (pv >= 1 && pv <= pdf.numPages) { const d = box.children[pv - 1]; if (d) d.scrollIntoView(); plein(pdf, pv, jeton); }
+    if (pv >= 1 && pv <= pdf.numPages) { const d = box.children[pv - 1]; if (d) d.scrollIntoView(); plein(pdf, pv, jeton, cherche || ""); }
   };
 
   /* Plein écran : toutes les pages à la suite, défilement vertical, zoom − / + ou double-touche, ‹ › page précédente / suivante */
-  async function plein(pdf, depart, jeton) {
+  async function plein(pdf, depart, jeton, cherche) {
     const N = pdf.numPages;
     const o = document.createElement("div"); o.className = "schv"; o.id = "pdfv";
     o.innerHTML = `<div class="schb"><button id="pvp" aria-label="Page précédente">‹</button><span id="pvt">${depart} / ${N}</span><button id="pvn" aria-label="Page suivante">›</button><button id="pvm" aria-label="Zoom moins">−</button><button id="pvz" aria-label="Zoom plus">+</button><button id="pvx" aria-label="Fermer">✕</button></div><div class="schc" id="pvc"></div>`;
@@ -135,6 +135,59 @@
       if (ferme || rendus.get(k) !== w) { c.width = 0; c.height = 0; return; }
       const old = d.querySelector("canvas"); if (old) { old.width = 0; old.height = 0; old.remove(); }
       d.style.width = c.style.width; d.style.height = c.style.height; d.appendChild(c);
+      surligner(k, page, v1, d);
+    }
+    /* surlignage jaune des mots cherchés, à partir du texte de la page PDF (pas possible sur les pages scannées sans texte) */
+    const faits = new Set();
+    let premier = false;
+    const VIDES = new Set(["de", "du", "la", "le", "les", "des", "et", "en", "un", "une", "au", "aux", "a", "l", "d"]);
+    async function surligner(k, page, v1, d) {
+      if (!cherche || faits.has(k)) return; faits.add(k);
+      let tc; try { tc = await page.getTextContent(); } catch (e) { return; }
+      if (ferme) return;
+      const mots0 = normL(cherche).split(/\s+/).map(w => w.replace(/^[^a-z0-9°ω]+|[^a-z0-9°ω]+$/g, "")).filter(Boolean);
+      const phrase = mots0.join(" ");
+      const mots = mots0.length > 1 ? mots0.filter(w => !VIDES.has(w)) : mots0;
+      const items = tc.items.filter(it => it.str && it.str.trim());
+      const nItems = items.map(it => normL(it.str));
+      const avecPhrase = mots0.length > 1 && nItems.some(t => t.includes(phrase));
+      const termes = avecPhrase ? [phrase] : mots;
+      const bord = (t, j, l) => !/[a-z0-9]/.test(t[j - 1] || " ") && !/[a-z0-9]/.test(t[j + l] || " ");
+      const rects = [];
+      items.forEach((it, n) => {
+        const t = nItems[n], tr = it.transform, L = t.length; if (!L) return;
+        const h = Math.hypot(tr[2], tr[3]) || it.height || 8, w = it.width || 0;
+        const lu = Math.hypot(tr[0], tr[1]) || 1, ux = tr[0] / lu, uy = tr[1] / lu; /* direction de la ligne (texte tourné compris) */
+        const lv = Math.hypot(tr[2], tr[3]) || 1, vx = tr[2] / lv, vy = tr[3] / lv;
+        const pt = (a, b) => v1.convertToViewportPoint(tr[4] + ux * a + vx * b, tr[5] + uy * a + vy * b);
+        termes.forEach(m => {
+          let j = -1;
+          while ((j = t.indexOf(m, j + 1)) >= 0) {
+            if (m.length <= 3 && !bord(t, j, m.length)) continue;
+            const a0 = w * j / L, a1 = w * (j + m.length) / L;
+            const P = [pt(a0, -h * 0.25), pt(a1, -h * 0.25), pt(a0, h * 0.95), pt(a1, h * 0.95)];
+            const xs = P.map(q => q[0]), ys = P.map(q => q[1]);
+            rects.push([Math.min(...xs), Math.min(...ys), Math.max(...xs) - Math.min(...xs), Math.max(...ys) - Math.min(...ys)]);
+          }
+        });
+      });
+      rects.forEach(([x, y, w, h]) => {
+        const e = document.createElement("i"); e.className = "pvh";
+        e.style.left = (x / v1.width * 100) + "%"; e.style.top = (y / v1.height * 100) + "%";
+        e.style.width = (w / v1.width * 100) + "%"; e.style.height = (h / v1.height * 100) + "%";
+        d.appendChild(e);
+      });
+      /* page d'arrivée : on centre le premier mot surligné */
+      if (k === depart && rects.length && !premier) {
+        premier = true;
+        const y = Math.min(...rects.map(r => r[1]));
+        box.scrollTop = d.offsetTop + (y / v1.height) * d.offsetHeight - box.clientHeight / 3;
+      }
+      if (k === depart && !rects.length) {
+        const n = document.createElement("div"); n.className = "pvn";
+        n.textContent = "Mot non repéré sur cette page (page scannée ou texte découpé) : cherchez-le à l'œil.";
+        d.appendChild(n); setTimeout(() => n.remove(), 5000);
+      }
     }
     const liberer = d => { rendus.delete(+d.dataset.n); const c = d.querySelector("canvas"); if (c) { c.width = 0; c.height = 0; c.remove(); } };
     const io = new IntersectionObserver(es => es.forEach(e => e.isIntersecting ? rendre(e.target) : liberer(e.target)), { root: box, rootMargin: "1200px 0px" });
@@ -256,9 +309,10 @@
     const bloc = r => {
       const it = r.doc.items[0], ni = nomItem(it.id), autres = r.doc.items.length - 1;
       return `<div class="nsr"><div class="nsrh"><span class="badge" style="--c:${esc(ni.c)}">${esc(ni.m)}</span><b>${esc(it.n.t)}</b><small>${esc(ni.nom)}${autres > 0 ? ` (+ ${autres} autre${autres > 1 ? "s" : ""} fiche${autres > 1 ? "s" : ""})` : ""} · ${r.pages.length} page${r.pages.length > 1 ? "s" : ""}</small></div>` +
-        r.pages.slice(0, 3).map(pg => `<button class="nsrp" onclick="go('#/pdf/${esc(it.id)}/${it.k}/${pg.i + 1}')"><span class="pill">p. ${pg.i + 1}</span><span>${extrait(r.doc.pages[pg.i], r.mots, r.phrase)}</span></button>`).join("") +
-        (r.pages.length > 3 ? `<small class="nsrm">Autres pages : ${r.pages.slice(3, 15).map(pg => `<a href="#/pdf/${esc(it.id)}/${it.k}/${pg.i + 1}">${pg.i + 1}</a>`).join(" · ")}${r.pages.length > 15 ? " …" : ""}</small>` : "") + `</div>`;
+        r.pages.slice(0, 3).map(pg => `<button class="nsrp" onclick="go('#/pdf/${esc(it.id)}/${it.k}/${pg.i + 1}/${qh}')"><span class="pill">p. ${pg.i + 1}</span><span>${extrait(r.doc.pages[pg.i], r.mots, r.phrase)}</span></button>`).join("") +
+        (r.pages.length > 3 ? `<small class="nsrm">Autres pages : ${r.pages.slice(3, 15).map(pg => `<a href="#/pdf/${esc(it.id)}/${it.k}/${pg.i + 1}/${qh}">${pg.i + 1}</a>`).join(" · ")}${r.pages.length > 15 ? " …" : ""}</small>` : "") + `</div>`;
     };
+    const qh = esc(encodeURIComponent(q).replace(/'/g, "%27"));
     const N0 = 8;
     el.innerHTML = `<h2>Dans les notices PDF (${nbP} page${nbP > 1 ? "s" : ""}, ${res.length} notice${res.length > 1 ? "s" : ""})</h2><p class="note">Touchez un extrait pour ouvrir la notice à cette page. Le texte des pages scannées a été lu automatiquement : il peut manquer des mots.</p>` +
       res.slice(0, N0).map(bloc).join("") + (res.length > N0 ? `<button class="dbtn" id="nsrplus">Voir les ${res.length - N0} autres notices</button>` : "");
@@ -287,7 +341,7 @@
         const t = r.doc.pages[pg.i].n; const sc = pg.sc + 5 * mt.filter(w => t.includes(w)).length;
         if (!best || sc > best.sc) best = { sc, r, i: pg.i };
       }));
-      if (best) { const it = best.r.doc.items.find(x => x.id === id); go(`#/pdf/${id}/${it.k}/${best.i + 1}`); return; }
+      if (best) { const it = best.r.doc.items.find(x => x.id === id); go(`#/pdf/${id}/${it.k}/${best.i + 1}/${encodeURIComponent(code)}`); return; }
       if (btn) { btn.textContent = `« ${code} » n'apparaît pas dans le texte de la notice`; }
     } catch (e) {
       if (btn) { btn.disabled = false; btn.textContent = "Texte de la notice indisponible sans réseau (ouvrez l'appli une fois avec du réseau)"; }
