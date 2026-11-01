@@ -192,6 +192,11 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "1.88", date: "2026-11-01", titre: "5 nouveaux thèmes de couleur", items: [
+    "Réglages > Thème : en plus de Sombre et Clair, Bleu acier, Plein soleil (contraste fort pour l'extérieur), Nuit d'astreinte (noir et ambre, n'éblouit pas), Ardoise et Chantier (noir et jaune)",
+    "Le thème choisi reste sur le téléphone ; le bouton ◐ en haut repasse en Sombre ou Clair",
+    "Réglages : la ligne « Hors ligne » affiche de nouveau la version enregistrée (elle montrait le nom du cache des notices)"
+  ], docs: [] },
   { v: "1.87", date: "2026-11-01", titre: "Notice PDF : mot cherché surligné en jaune", items: [
     "Depuis la recherche ou le bouton « Chercher dans la notice PDF » d'un code, la notice s'ouvre à la page et le mot cherché y est surligné en jaune ; l'affichage se place directement dessus",
     "Le surlignage suit le zoom ; il apparaît aussi sur les autres pages où le mot se trouve",

@@ -21,6 +21,20 @@
   --bg:#0f0e0e; --card:#1b1918; --ink:#f3eeeb; --muted:#a59d99; --line:#2e2a28; --chip:#262321;
   --s-er:#ff6a6a;--s-sy:#f0963a;--s-af:#a59d99;--s-di:#6aa6ec;--s-te:#a78bfa;--t-sortie:#9aa3af; --t-autre:#a59d99;
 }
+/* thèmes de couleur (data-skin) ; data-theme garde la base claire / sombre */
+:root[data-skin="acier"]{--brand:#1f4e79;--brand-2:#163a5a;--bg:#eef2f6;--card:#ffffff;--ink:#132233;--muted:#5b6b7c;--line:#d6dee7;--chip:#e4ebf2}
+:root[data-skin="soleil"]{--brand:#000000;--brand-2:#000000;--bg:#ffffff;--card:#ffffff;--ink:#000000;--muted:#333333;--line:#000000;--chip:#eeeeee}
+:root[data-skin="astreinte"]{--brand:#1a1205;--brand-2:#000000;--bg:#000000;--card:#0d0d0d;--ink:#ffd27a;--muted:#b08a45;--line:#2a2010;--chip:#1a1408}
+:root[data-skin="ardoise"]{--brand:#0f766e;--brand-2:#0b5a54;--bg:#111827;--card:#1f2937;--ink:#e5e7eb;--muted:#9ca3af;--line:#374151;--chip:#273244}
+:root[data-skin="chantier"]{--brand:#f5c400;--brand-2:#c99f00;--bg:#121212;--card:#1e1e1e;--ink:#f5f5f5;--muted:#b5b5b5;--line:#333333;--chip:#2a2a2a}
+:root[data-skin="soleil"] .cr,:root[data-skin="soleil"] .boardhead,:root[data-skin="soleil"] .set{border-width:2px}
+:root[data-skin="chantier"] header,:root[data-skin="chantier"] header .back,:root[data-skin="chantier"] header h1,:root[data-skin="chantier"] #status,:root[data-skin="chantier"] #status a{color:#111!important}
+:root[data-skin="chantier"] header .iconbtn{background:rgba(0,0,0,.12);color:#111}
+:root[data-skin="chantier"] .tabs [aria-selected="true"],:root[data-skin="chantier"] .seg2 button[aria-pressed="true"],:root[data-skin="chantier"] .btn:not(.sec),:root[data-skin="chantier"] .skin[aria-pressed="true"]{color:#111!important}
+.skins{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px;padding:10px 14px 14px}
+.skin{display:grid;gap:6px;justify-items:center;padding:8px 6px;border:2px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);font-size:13px;font-weight:600;cursor:pointer}
+.skin[aria-pressed="true"]{border-color:var(--brand);background:var(--brand);color:#fff}
+.skin i{display:flex;width:100%;height:26px;border-radius:7px;overflow:hidden;border:1px solid rgba(128,128,128,.4)}.skin i b{flex:1}
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-text-size-adjust:100%}
 button{font:inherit;color:inherit}
@@ -430,10 +444,19 @@ const store = {
 };
 
 /* thème : sombre par défaut (parkings) */
-function applyTheme(t){ document.documentElement.dataset.theme = t; }
+/* thèmes : [clé, nom, base claire/sombre, couleur de bandeau, fond, carte] */
+const SKINS = [["dark","Sombre","dark","#9B2424","#0f0e0e","#1b1918"],["light","Clair","light","#9B2424","#f4f1ef","#ffffff"],
+  ["acier","Bleu acier","light","#1f4e79","#eef2f6","#ffffff"],["soleil","Plein soleil","light","#000000","#ffffff","#eeeeee"],
+  ["astreinte","Nuit d'astreinte","dark","#1a1205","#000000","#ffd27a"],["ardoise","Ardoise","dark","#0f766e","#111827","#1f2937"],["chantier","Chantier","dark","#f5c400","#121212","#1e1e1e"]];
+function applyTheme(t){
+  const k = SKINS.find(x => x[0] === t) || SKINS[0];
+  document.documentElement.dataset.theme = k[2];
+  if (k[0] === "dark" || k[0] === "light") delete document.documentElement.dataset.skin; else document.documentElement.dataset.skin = k[0];
+  const m = document.querySelector('meta[name="theme-color"]'); if (m) m.content = k[3];
+}
 applyTheme(store.get("theme", "dark"));
 function setTheme(t){ applyTheme(t); store.set("theme", t); if (location.hash === "#/reglages") viewSettings(); }
-$("#theme").onclick = () => setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
+$("#theme").onclick = () => setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark"); /* bouton rapide : sombre / clair classiques */
 
 const APP_V = CHANGELOG[0].v;
 const DATA_DATE = CHANGELOG[0].date; /* date des données = date de la dernière nouveauté (plus rien à mettre à jour à la main) */
@@ -790,8 +813,8 @@ function viewSettings(){
   if (window.SYNC) h += SYNC.messagesHtml(); /* SYNC */
   if (window.sigMesHtml) h += sigMesHtml(); /* SIG */
   /* 3. Préférences */
-  h += `<h2>Préférences</h2><div class="set"><div class="row"><span>Thème</span><div class="seg2">
-      <button aria-pressed="${th==="dark"}" onclick="setTheme('dark')">Sombre</button><button aria-pressed="${th==="light"}" onclick="setTheme('light')">Clair</button></div></div>
+  const sk = store.get("theme", "dark");
+  h += `<h2>Préférences</h2><div class="set"><div class="row"><span>Thème</span></div><div class="skins">` + SKINS.map(k => `<button class="skin" aria-pressed="${sk === k[0]}" onclick="setTheme('${k[0]}')"><i><b style="background:${k[3]}"></b><b style="background:${k[4]}"></b><b style="background:${k[5]}"></b></i>${esc(k[1])}</button>`).join("") + `</div>
       <div class="row"><span>Fiches en favori</span><span class="rr"><span class="mono">${nf}</span>${nf ? `<button class="mini" onclick="if(confirm('Effacer tous vos favoris ?')){getFavs().forEach(x=>window.SYNC&&SYNC.fav(x,false));store.set('favs',[]);viewSettings();}">Effacer</button>` : ""}</span></div></div>
       <p class="hotn">${esc(FAV_NOTE)}</p>`;
   /* 4. Hors ligne et version */
@@ -827,7 +850,7 @@ function viewSettings(){
     else out.textContent = "⚠ " + r.erreur;
   };
   const sv = $("#swv");
-  if ("caches" in window) caches.keys().then(k => { sv.textContent = k.length ? k.sort().pop().replace("sav-", "") : "pas encore enregistré"; }).catch(() => sv.textContent = "—");
+  if ("caches" in window) caches.keys().then(k => { k = k.filter(x => /^sav-\d{4}-/.test(x)); sv.textContent = k.length ? k.sort().pop().replace("sav-", "") : "pas encore enregistré"; }).catch(() => sv.textContent = "—");
   else sv.textContent = "non pris en charge";
   const chk = rep_ => { $("#swd").textContent = "Vérification…"; offlineInfo(rep_).then(o => { $("#swd").textContent = (o.ok ? "✓ " : "⚠ ") + o.txt; status(); }); };
   $("#swb").onclick = () => chk(true); chk(false);
