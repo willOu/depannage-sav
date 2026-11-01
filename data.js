@@ -192,6 +192,12 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "1.90", date: "2026-11-01", titre: "Dépannage par photo de l'afficheur", items: [
+    "Nouveau mode « Afficheur / code » dans le scan (accueil, et bouton « 📷 Lire le code sur l'afficheur » dans l'onglet Codes) : on photographie l'afficheur, l'appli lit le code et propose la fiche du code, déplié",
+    "Afficheurs à segments (LED, LCD) : lecture intégrée à l'appli, qui marche sans réseau ; afficheurs à texte : moteur de lecture téléchargé une fois",
+    "On choisit la carte (la dernière consultée est proposée) : ses codes passent en premier. Le code lu reste modifiable, et on peut aussi le taper",
+    "Le mode « Étiquette / carte » (photo de la plaque pour trouver la fiche) reste disponible"
+  ], docs: [] },
   { v: "1.89", date: "2026-11-01", titre: "Astuces terrain partagées", items: [
     "Sur chaque fiche (carte ou accessoire), un bloc « 💡 Astuces terrain » : les astuces de l'équipe, avec le nom de l'auteur, lisibles même sans réseau",
     "« Proposer une astuce » : le technicien écrit son astuce ; sans réseau, elle part au retour du réseau",

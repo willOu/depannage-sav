@@ -501,7 +501,7 @@ function viewHome(){
   h += `<button class="dbtn" onclick="go('#/calc')">Calculs rapides : chute de tension, choix du moteur, conso 24 V<small>formules et hypothèses affichées</small></button>`; /* CALC */
   h += `<button class="dbtn" onclick="go('#/quiz')">Quiz de formation : codes erreur et borniers<small><b>EN TEST</b> · 10 questions tirées des fiches</small></button>`; /* QUIZ */
   h += `<button class="dbtn" onclick="go('#/cmp')">Comparateur de borniers : remplacer une carte par une autre<small>bornes des deux cartes rangées par fonction · aide indicative</small></button>`; /* CMP */
-  h += `<button class="dbtn" onclick="go('#/scan')">Scanner une étiquette : photographier la plaque de l'armoire<small><b>BÊTA</b> · lecture automatique du texte, peut se tromper</small></button>`; /* SCAN */
+  h += `<button class="dbtn" onclick="go('#/scan')">Dépannage par photo : l'étiquette ou l'afficheur de la carte<small><b>BÊTA</b> · photographiez la plaque pour trouver la fiche, ou l'afficheur pour ouvrir le code d'erreur</small></button>`; /* SCAN */
   if (recents.length){
     h += `<h2>Dernières consultées</h2><div class="list">` + recents.map(rowBoard).join("") + `</div>`;
   }
@@ -610,7 +610,7 @@ function viewBoard(id, tab, sel){
         return `<details class="cr ${k==="er"?"er":""}${vise ? " vise" : ""}"${open}><summary><span class="pill">${esc(x.code)}</span><span class="rt">${esc(x.titre)}</span><span class="chev">›</span></summary><div class="todo"><b>À FAIRE${x.p ? " · contrôle de base" : ""}</b>${esc(x.action)}${ntc}</div></details>`;
       }).join("") + `</div>`;
     });
-    pane.innerHTML = p + `<p class="note"><b>Contrôle de base</b> = action complétée par une vérification terrain classique ; le reste suit la notice.</p>`;
+    pane.innerHTML = `<button class="mini" style="margin:4px 0 6px" onclick="try{sessionStorage.setItem('aff-carte','${id}')}catch(e){};go('#/scan/afficheur')">📷 Lire le code sur l'afficheur (photo)</button>` + p + `<p class="note"><b>Contrôle de base</b> = action complétée par une vérification terrain classique ; le reste suit la notice.</p>`;
     if (sel){ const v = pane.querySelector(".cr.vise"); if (v) setTimeout(() => v.scrollIntoView({ block: "center" }), 60); }
   }
   if (tab === "bornier"){
@@ -895,7 +895,7 @@ function route(){
   if (p[0] === "a"){ if (!p[1]) return viewAccList(); viewAcc(p[1], p[2]); try { const bh = app.querySelector(".boardhead"); if (bh && window.astuceHtml && (window.ACCESSOIRES || []).some(x => x.id === p[1])) bh.insertAdjacentHTML("afterend", astuceHtml("accessoire", p[1])); } catch (e) {} return; } /* ACC AST */
   if (p[0] === "d") return viewDiag(p[1], p[2]); /* DIAG */
   if (p[0] === "pdf") return viewPdf(p[1], p[2], p[3], p[4] ? decodeURIComponent(p.slice(4).join("/")) : ""); /* PDF */
-  if (p[0] === "scan") return viewScan(); /* SCAN */
+  if (p[0] === "scan") return viewScan(p[1]); /* SCAN */
   if (p[0] === "quiz") return viewQuiz(p[1]); /* QUIZ */
   if (p[0] === "techs") return viewTechs(); /* ADMIN */
   if (p[0] === "signalements") return viewSignalements(p[1]); /* SIG */
