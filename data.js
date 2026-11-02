@@ -192,6 +192,9 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "1.92", date: "2026-11-02", titre: "Correction d'affichage", items: [
+    "« Signaler une erreur sur cette fiche » : le champ de texte s'affiche de nouveau sur toute la largeur (il était serré à droite sur téléphone)"
+  ], docs: [] },
   { v: "1.91", date: "2026-11-01", titre: "Ajout de notices PDF depuis l'appli (administrateur)", items: [
     "Réglages > Administration > « Ajouter une notice PDF » : on choisit la fiche, on dépose le PDF du fabricant, l'appli coche les pages en français (miniatures pour vérifier et ajuster), puis la notice est ajoutée",
     "La notice apparaît dans l'onglet « Notice PDF » de la fiche et dans la recherche dans les notices, pour toute l'équipe ; elle reste disponible hors ligne après la première ouverture",

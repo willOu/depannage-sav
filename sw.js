@@ -1,6 +1,6 @@
 /* Service worker — tout est mis en cache à l'installation.
    Après modification de data.js ou index.html, augmenter VERSION. */
-const VERSION = "sav-2026-11-01-11";
+const VERSION = "sav-2026-11-02-01";
 const OCR = "sav-ocr-1";
 const NTC = "sav-notices-2"; /* notices PDF : gardées d'une version à l'autre */
 const TXT = "notices-texte-1.json"; /* texte des notices pour la recherche (changer le nom s'il change) */
