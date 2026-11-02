@@ -381,6 +381,9 @@ html{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 .nsrh{display:grid;gap:2px;margin-bottom:6px}.nsrh small{color:var(--muted);font-size:12.5px}.nsrh .badge{justify-self:start}
 .nsrp{display:flex;gap:10px;align-items:flex-start;width:100%;text-align:left;margin-top:6px;padding:9px 10px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit;font-size:14px;cursor:pointer}
 .nsrp .pill{flex:none;font:700 13px ui-monospace,Menlo,monospace;padding:3px 7px;border-radius:7px;background:var(--chip)}
+.note-p{margin:10px 0;border:1px solid var(--line);border-left:5px solid #6d8cff;border-radius:14px;background:var(--card)}
+.note-p>summary{padding:11px 14px;font-weight:700;cursor:pointer}.note-p>summary span{color:var(--muted);font-weight:500}
+.note-pb{padding:0 14px 12px}.note-pb textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px;background:var(--bg);color:var(--ink);font:inherit;resize:vertical}
 .ast{margin:10px 0;border:1px solid var(--line);border-left:5px solid #e0a800;border-radius:14px;background:var(--card)}
 .ast>summary{padding:11px 14px;font-weight:700;cursor:pointer}.ast>summary span{color:var(--muted);font-weight:500}
 .astb{padding:0 14px 12px}.astl{padding:9px 0;border-top:1px solid var(--line)}.astl p{margin:0 0 3px;white-space:pre-wrap}.astl small{color:var(--muted);font-size:12.5px}
@@ -427,6 +430,7 @@ html{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 <script src="admin.js"></script> <!-- ADMIN -->
 <script src="signal.js"></script> <!-- SIG -->
 <script src="astuce.js"></script> <!-- AST -->
+<script src="notes.js"></script> <!-- NOTES -->
 <script src="moteurs.js"></script> <!-- MOTEURS -->
 <script src="calc.js"></script> <!-- CALC -->
 <script src="sympt.js"></script> <!-- SYMPT -->
@@ -457,6 +461,10 @@ const store = {
 const SKINS = [["dark","Sombre","dark","#9B2424","#0f0e0e","#1b1918"],["light","Clair","light","#9B2424","#f4f1ef","#ffffff"],
   ["acier","Bleu acier","light","#1f4e79","#eef2f6","#ffffff"],["soleil","Plein soleil","light","#000000","#ffffff","#eeeeee"],
   ["astreinte","Nuit d'astreinte","dark","#1a1205","#000000","#ffd27a"],["ardoise","Ardoise","dark","#0f766e","#111827","#1f2937"],["chantier","Chantier","dark","#f5c400","#121212","#1e1e1e"]];
+/* taille du texte : agrandit toute l'interface (lecture dehors, avec des gants) */
+const TAILLES = [["n", "Normale", 1], ["g", "Grande", 1.12], ["tg", "Très grande", 1.25]];
+function applyTaille(k){ const t = TAILLES.find(x => x[0] === k) || TAILLES[0]; document.documentElement.style.zoom = t[2] === 1 ? "" : t[2]; document.documentElement.dataset.taille = t[0]; }
+function setTaille(k){ applyTaille(k); store.set("taille", k); if (location.hash === "#/reglages") viewSettings(); }
 function applyTheme(t){
   const k = SKINS.find(x => x[0] === t) || SKINS[0];
   document.documentElement.dataset.theme = k[2];
@@ -464,6 +472,7 @@ function applyTheme(t){
   const m = document.querySelector('meta[name="theme-color"]'); if (m) m.content = k[3];
 }
 applyTheme(store.get("theme", "dark"));
+applyTaille(store.get("taille", "n"));
 function setTheme(t){ applyTheme(t); store.set("theme", t); if (location.hash === "#/reglages") viewSettings(); }
 $("#theme").onclick = () => setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark"); /* bouton rapide : sombre / clair classiques */
 
@@ -774,6 +783,7 @@ function viewSearch(q){
   });
   codes.sort((a, b) => b.exact - a.exact);
   let h = "";
+  try { if (window.noteSearchHtml) h += noteSearchHtml(q); } catch (e) {} /* NOTES */
   try { const al = window.accList ? accList(q) : ""; if (al) h += `<h2>Accessoires</h2><div class="list">${al}</div>`; } catch (e) {} /* ACC */
   try { if (window.askAnswer && words.length >= 2) h += askAnswer(q); } catch (e) {} /* ASK */
   try { /* SYMPT */
@@ -822,9 +832,11 @@ function viewSettings(){
   if (window.SYNC) h += SYNC.messagesHtml(); /* SYNC */
   if (window.sigMesHtml) h += sigMesHtml(); /* SIG */
   if (window.astuceMesHtml) h += astuceMesHtml(); /* AST */
+  if (window.noteMesHtml) h += noteMesHtml(); /* NOTES */
   /* 3. Préférences */
   const sk = store.get("theme", "dark");
-  h += `<h2>Préférences</h2><div class="set"><div class="row"><span>Thème</span></div><div class="skins">` + SKINS.map(k => `<button class="skin" aria-pressed="${sk === k[0]}" onclick="setTheme('${k[0]}')"><i><b style="background:${k[3]}"></b><b style="background:${k[4]}"></b><b style="background:${k[5]}"></b></i>${esc(k[1])}</button>`).join("") + `</div>
+  const tl = store.get("taille", "n");
+  h += `<h2>Préférences</h2><div class="set"><div class="row"><span>Taille du texte</span><div class="seg2">${TAILLES.map(t => `<button aria-pressed="${tl === t[0]}" onclick="setTaille('${t[0]}')">${t[1]}</button>`).join("")}</div></div><div class="row"><span>Thème</span></div><div class="skins">` + SKINS.map(k => `<button class="skin" aria-pressed="${sk === k[0]}" onclick="setTheme('${k[0]}')"><i><b style="background:${k[3]}"></b><b style="background:${k[4]}"></b><b style="background:${k[5]}"></b></i>${esc(k[1])}</button>`).join("") + `</div>
       <div class="row"><span>Fiches en favori</span><span class="rr"><span class="mono">${nf}</span>${nf ? `<button class="mini" onclick="if(confirm('Effacer tous vos favoris ?')){getFavs().forEach(x=>window.SYNC&&SYNC.fav(x,false));store.set('favs',[]);viewSettings();}">Effacer</button>` : ""}</span></div></div>
       <p class="hotn">${esc(FAV_NOTE)}</p>`;
   /* 4. Hors ligne et version */
@@ -894,9 +906,9 @@ function route(){
   window.scrollTo(0, 0);
   if (p[0] === "m") return viewBrand(p[1]);
   if (p[0] === "g") return viewGenre(p[1]);
-  if (p[0] === "c"){ viewBoard(p[1], p[2], p[3] ? decodeURIComponent(p[3]) : ""); try { const bh = app.querySelector(".boardhead"); if (bh && window.astuceHtml && findBoard(p[1])) bh.insertAdjacentHTML("afterend", astuceHtml("carte", p[1])); } catch (e) {} /* AST */ if (window.sigBouton && findBoard(p[1])) app.insertAdjacentHTML("beforeend", sigBouton("carte", p[1], p[2] || "codes")); /* SIG */ app.insertAdjacentHTML("beforeend", `<div class="sig"><i><b style="background:#1F5FA8"></b><b style="background:#E07B00"></b><b style="background:#E5372E"></b></i>Diag'SAV</div>`); return; } /* SIG */
+  if (p[0] === "c"){ viewBoard(p[1], p[2], p[3] ? decodeURIComponent(p[3]) : ""); try { const bh = app.querySelector(".boardhead"); if (bh && window.astuceHtml && findBoard(p[1])) bh.insertAdjacentHTML("afterend", astuceHtml("carte", p[1])); } catch (e) {} /* AST */ try { const ap = app.querySelector(".ast") || app.querySelector(".boardhead"); if (ap && window.noteHtml && findBoard(p[1])) { ap.insertAdjacentHTML("afterend", noteHtml("carte", p[1])); noteBrancher("carte", p[1]); } } catch (e) {} /* NOTES */ if (window.sigBouton && findBoard(p[1])) app.insertAdjacentHTML("beforeend", sigBouton("carte", p[1], p[2] || "codes")); /* SIG */ app.insertAdjacentHTML("beforeend", `<div class="sig"><i><b style="background:#1F5FA8"></b><b style="background:#E07B00"></b><b style="background:#E5372E"></b></i>Diag'SAV</div>`); return; } /* SIG */
   if (p[0] === "ma") return viewAccBrand(p[1]);
-  if (p[0] === "a"){ if (!p[1]) return viewAccList(); viewAcc(p[1], p[2]); try { const bh = app.querySelector(".boardhead"); if (bh && window.astuceHtml && (window.ACCESSOIRES || []).some(x => x.id === p[1])) bh.insertAdjacentHTML("afterend", astuceHtml("accessoire", p[1])); } catch (e) {} return; } /* ACC AST */
+  if (p[0] === "a"){ if (!p[1]) return viewAccList(); viewAcc(p[1], p[2]); try { const bh = app.querySelector(".boardhead"); if (bh && window.astuceHtml && (window.ACCESSOIRES || []).some(x => x.id === p[1])) bh.insertAdjacentHTML("afterend", astuceHtml("accessoire", p[1])); } catch (e) {} try { const ap = app.querySelector(".ast") || app.querySelector(".boardhead"); if (ap && window.noteHtml && (window.ACCESSOIRES || []).some(x => x.id === p[1])) { ap.insertAdjacentHTML("afterend", noteHtml("accessoire", p[1])); noteBrancher("accessoire", p[1]); } } catch (e) {} return; } /* ACC AST NOTES */
   if (p[0] === "d") return viewDiag(p[1], p[2]); /* DIAG */
   if (p[0] === "pdf") return viewPdf(p[1], p[2], p[3], p[4] ? decodeURIComponent(p.slice(4).join("/")) : ""); /* PDF */
   if (p[0] === "scan") return viewScan(p[1]); /* SCAN */

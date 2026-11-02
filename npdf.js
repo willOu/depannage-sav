@@ -109,6 +109,7 @@
     const o = document.createElement("div"); o.className = "schv"; o.id = "pdfv";
     o.innerHTML = `<div class="schb"><button id="pvp" aria-label="Page précédente">‹</button><span id="pvt">${depart} / ${N}</span><button id="pvn" aria-label="Page suivante">›</button><button id="pvm" aria-label="Zoom moins">−</button><button id="pvz" aria-label="Zoom plus">+</button><button id="pvx" aria-label="Fermer">✕</button></div><div class="schc" id="pvc"></div>`;
     document.body.appendChild(o); document.body.style.overflow = "hidden";
+    const zr = parseFloat(document.documentElement.style.zoom) || 1; if (zr !== 1) o.style.zoom = 1 / zr; /* « taille du texte » : le plein écran garde sa taille normale */
     const box = o.querySelector("#pvc");
     let zoom = 1, ferme = false;
     const p1 = (await pdf.getPage(1)).getViewport({ scale: 1 });

@@ -192,6 +192,11 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "1.93", date: "2026-11-02", titre: "Notes personnelles et taille du texte", items: [
+    "Sur chaque fiche (carte ou accessoire), un bloc « 📝 Mes notes » : vos notes, enregistrées automatiquement pendant la saisie, sans réseau. Elles restent sur ce téléphone et ne sont visibles que par vous (pas envoyées au SAV, pas partagées avec un autre compte)",
+    "Vos notes sortent aussi dans la recherche (« Mes notes ») et sont regroupées dans Réglages > Mes notes",
+    "Réglages > Taille du texte : Normale, Grande ou Très grande, pour lire dehors ou avec des gants (le plein écran des notices garde sa taille)"
+  ], docs: [] },
   { v: "1.92", date: "2026-11-02", titre: "Correction d'affichage", items: [
     "« Signaler une erreur sur cette fiche » : le champ de texte s'affiche de nouveau sur toute la largeur (il était serré à droite sur téléphone)"
   ], docs: [] },
