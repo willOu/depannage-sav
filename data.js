@@ -192,6 +192,12 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "1.94", date: "2026-11-02", titre: "Notes synchronisées avec le compte", items: [
+    "Vos notes personnelles suivent maintenant votre compte : écrites sur un téléphone, vous les retrouvez sur vos autres appareils connectés avec le même compte",
+    "Toujours privées : seul vous pouvez les lire, le SAV et l'administrateur ne les voient pas",
+    "Toujours utilisables sans réseau : la note est enregistrée tout de suite sur le téléphone et envoyée au compte dès que le réseau revient. Une note effacée sur un appareil disparaît aussi des autres",
+    "Les notes déjà écrites sur ce téléphone sont envoyées au compte automatiquement à la première connexion"
+  ] },
   { v: "1.93", date: "2026-11-02", titre: "Notes personnelles et taille du texte", items: [
     "Sur chaque fiche (carte ou accessoire), un bloc « 📝 Mes notes » : vos notes, enregistrées automatiquement pendant la saisie, sans réseau. Elles restent sur ce téléphone et ne sont visibles que par vous (pas envoyées au SAV, pas partagées avec un autre compte)",
     "Vos notes sortent aussi dans la recherche (« Mes notes ») et sont regroupées dans Réglages > Mes notes",
