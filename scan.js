@@ -116,6 +116,18 @@
       for (let j = 0; j < N; j++) { a[j] = hi[j] >= tH ? 1 : 0; b[j] = lo[j] <= tL ? 1 : 0; }
       for (const on of [a, b]) for (const sh of [0, 0.1, 0.2, -0.1]) { const r = decoder(on, W, H, sh); if (r) { r.score -= q * 0.4; res.push(r); } } /* à lecture égale, le seuil le plus strict gagne */
     }
+    /* segments fantômes (segments éteints visibles) ou cadre autour de l'écran : seuil d'Otsu sur le quart le plus
+       sombre (LCD) ou le plus lumineux (LED, VFD) de l'image, pour ne garder que les segments vraiment allumés */
+    for (const clair of [false, true]) {
+      const src = clair ? hi : lo, lim = clair ? pct(hi, 0.25) : pctBas(lo, 0.25), dedans = v => clair ? v >= lim : v <= lim;
+      const h = new Array(256).fill(0); let n = 0, som = 0;
+      for (let j = 0; j < N; j++) if (dedans(src[j])) { h[src[j] | 0]++; n++; som += src[j] | 0; }
+      let best = -1, t = -1, w0 = 0, s0 = 0;
+      for (let v = 0; v < 255; v++) { w0 += h[v]; s0 += v * h[v]; if (!w0 || w0 === n) continue; const m0 = s0 / w0, m1 = (som - s0) / (n - w0), bc = w0 * (n - w0) * (m0 - m1) * (m0 - m1); if (bc > best) { best = bc; t = v; } }
+      if (t < 0) continue;
+      const on = new Uint8Array(N); let nb = 0; for (let j = 0; j < N; j++) { on[j] = (clair ? src[j] > t : src[j] <= t) ? 1 : 0; nb += on[j]; }
+      if (nb > N * 0.003 && nb < N * 0.15) for (const sh of [0, 0.1, 0.2, -0.1]) { const r = decoder(on, W, H, sh); if (r) { r.score -= 0.03 * 0.4; res.push(r); } }
+    }
     res.sort((x, y) => y.score - x.score);
     return res[0] || { texte: "", score: 0 };
   };
@@ -143,16 +155,18 @@
       const cw = x1 - x0 + 1;
       /* hauteur réelle du caractère */
       let cy0 = y1, cy1 = y0; for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) if (on[y * W + x]) { if (y < cy0) cy0 = y; if (y > cy1) cy1 = y; }
-      const ch = cy1 - cy0 + 1;
-      if (ch < bh * 0.3) { if (cw < bh * 0.2 && cy0 > y0 + bh * 0.6) txt += "."; continue; } /* point ou bruit */
+      const ch0 = cy1 - cy0 + 1;
+      if (ch0 < bh * 0.3) { if (cw < bh * 0.2 && cy0 > y0 + bh * 0.6) txt += "."; continue; } /* point ou bruit */
       tot++;
-      if (cw < ch * 0.3) {
+      if (cw < ch0 * 0.3) {
         const ligne = y => { for (let x = x0; x <= x1; x++) if (on[y * W + x]) return true; return false; };
         let ya = cy0, yb = cy1; while (ya > 0 && ligne(ya - 1)) ya--; while (yb < H - 1 && ligne(yb + 1)) yb++;
         const hx = yb - ya + 1; /* hauteur réelle du trait, au-delà de la bande */
-        if (href && (hx > href * 1.2 || ch < href * 0.6)) { tot--; continue; } /* trait du cadre, pas un chiffre */
-        txt += !href || ch > href * 0.75 ? "1" : "i"; ok++; pos.push([txt.length - 1, x0, x1, 1]); continue;
+        if (href && (hx > href * 1.2 || ch0 < href * 0.6)) { tot--; continue; } /* trait du cadre, pas un chiffre */
+        txt += !href || ch0 > href * 0.75 ? "1" : "i"; ok++; pos.push([txt.length - 1, x0, x1, 1]); continue;
       }
+      /* minuscules en demi-hauteur (r, o, c, n, u…) : segments repérés sur la hauteur des autres caractères */
+      let ch = ch0; if (href && ch < href * 0.75 && cy1 > y0 + bh * 0.6) { cy0 = Math.max(0, cy1 - href + 1); ch = cy1 - cy0 + 1; }
       const z = (fx0, fx1, fy0, fy1) => { let n = 0, t = 0; for (let y = Math.round(cy0 + fy0 * ch); y < cy0 + fy1 * ch; y++) for (let x = Math.round(x0 + fx0 * cw); x < x0 + fx1 * cw; x++) { t++; n += on[y * W + x]; } return t ? n / t : 0; };
       const seg = { a: z(.3, .7, 0, .14), b: z(.75, 1, .15, .42), c: z(.75, 1, .58, .85), d: z(.3, .7, .86, 1), e: z(0, .25, .58, .85), f: z(0, .25, .15, .42), g: z(.3, .7, .43, .57) };
       let rempl = 0; for (let y = cy0; y <= cy1; y++) for (let x = x0; x <= x1; x++) rempl += on[y * W + x];

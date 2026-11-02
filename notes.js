@@ -31,7 +31,8 @@
           ? await AUTH.api("/rest/v1/notes_perso?on_conflict=user_id,cle", { method: "POST", headers: { ...JS, Prefer: "resolution=merge-duplicates,return=minimal" }, body: JSON.stringify({ email: moi, cle: k, texte: n.t.slice(0, 4000), maj_le: new Date(n.d || d).toISOString() }) })
           : await AUTH.api("/rest/v1/notes_perso?cle=eq." + encodeURIComponent(k), { method: "DELETE", headers: { Prefer: "return=minimal" } });
         if (r.net || (!r.ok && (r.status >= 500 || r.status === 401 || r.status === 429))) return; /* on réessaiera */
-        const a = attente(); if (a[k] === d) { delete a[k]; setAttente(a); } /* envoyé (ou refusé définitivement) */
+        if (!r.ok) continue; /* refusée par le serveur : la note reste sur le téléphone (jamais effacée) et sera retentée */
+        const a = attente(); if (a[k] === d) { delete a[k]; setAttente(a); } /* envoyée */
       }
       try { localStorage.setItem(KI(), "1"); } catch (e) {}
       /* 2. réception : notes écrites sur un autre appareil, ou supprimées ailleurs */

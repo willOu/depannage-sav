@@ -59,7 +59,8 @@
         : "Impossible d'ouvrir la notice dans l'appli. Essayez « Enregistrer » pour l'ouvrir avec le lecteur PDF du téléphone.";
       return;
     }
-    if (jeton !== courant) return;
+    /* on a quitté la notice pendant son chargement : rien à afficher */
+    if (jeton !== courant || !document.getElementById("pmsg") || !/^#\/pdf\//.test(location.hash)) { try { pdf.destroy(); } catch (e) {} return; }
     document.getElementById("pmsg").textContent = `${pdf.numPages} page${pdf.numPages > 1 ? "s" : ""} · disponible hors ligne sur ce téléphone.`;
     const box = document.getElementById("ppages");
     let zoom = 1;
@@ -243,12 +244,16 @@
   const normL = t => { let o = ""; for (const c of t) o += c.length === 1 ? nchar(c) : "  ".slice(0, c.length); return o; };
   const parFichierAj = () => { const o = {}; Object.entries(window.NOTICES_PDF || {}).forEach(([id, l]) => l.forEach((n, k) => { if (n.sb) (o[n.f] = o[n.f] || []).push({ id, k, n }); })); return o; };
   window.noticeTexteReset = () => { texte = null; };
+  /* notices multilingues gardées en entier : une page nettement dans une autre langue ne sort pas dans la recherche */
+  const MFR = new Set("le la les des du et est pour une un dans sur avec par pas que qui sont ou au aux ne cette ce".split(" "));
+  const MET = new Set("il di della per con che gli dei sono the and of to is with for der die und das mit ist nicht von los las el del para por con que em os da do na com uma não przy jest się nie oraz dla lub het van een voor zijn".split(" "));
+  function etrangere(n) { if (/(^|[^a-z])fr\s?[-–]\s/.test(n)) return false; /* légendes « FR - … » : page commune à toutes les langues */ let fr = 0, et = 0; n.split(/[^a-z]+/).forEach(w => { if (MFR.has(w)) fr++; else if (MET.has(w)) et++; }); return fr < 6 && et >= 15; } /* quasiment aucun mot français : page entièrement dans une autre langue */
   function chargeTexte() {
     if (!texte) texte = fetch(TEXTE).then(r => { if (!r.ok) throw new Error("http"); return r.json(); }).then(T => {
       const idx = [];
       const parFichier = {};
       Object.entries(window.NOTICES_PDF || {}).forEach(([id, l]) => l.forEach((n, k) => { (parFichier[n.f] = parFichier[n.f] || []).push({ id, k, n }); }));
-      Object.entries(T).forEach(([f, pages]) => { if (parFichier[f]) idx.push({ f, items: parFichier[f], pages: pages.map(t => ({ t, n: normL(t) })) }); });
+      Object.entries(T).forEach(([f, pages]) => { if (parFichier[f]) idx.push({ f, items: parFichier[f], pages: pages.map(t => { const n = normL(t); return { t, n, etr: parFichier[f].some(x => x.n.m) && etrangere(n) }; }) }); });
       return idx;
     }).then(async idx => {
       /* notices ajoutées par l'admin : texte gardé sur le téléphone après le premier chargement */
@@ -276,7 +281,7 @@
     idx.forEach(doc => {
       const pages = [];
       doc.pages.forEach((p, i) => {
-        if (!p.n) return;
+        if (!p.n || p.etr) return;
         if (!mots.every((w, j) => exprs[j] ? exprs[j].test(p.n) : p.n.includes(w))) return;
         let sc = mots.length > 1 && p.n.includes(phrase) ? 20 : 0;
         mots.forEach(w => { let k = -1, c = 0; while ((k = p.n.indexOf(w, k + 1)) >= 0 && c < 10) c++; sc += c; });

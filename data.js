@@ -192,6 +192,13 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "1.95", date: "2026-11-02", titre: "Corrections après test complet de l'appli", items: [
+    "Notes : une note refusée par le serveur reste sur le téléphone (elle pouvait être effacée à la synchronisation suivante) et sera renvoyée plus tard",
+    "Lecture de l'afficheur en photo : meilleure lecture des écrans LCD où les segments éteints restent visibles en gris, des écrans entourés d'un cadre, et des lettres minuscules (r, o, n…)",
+    "Recherche dans les notices multilingues : les pages entièrement dans une autre langue ne sortent plus dans les résultats",
+    "Thèmes sombres : les numéros de page « Autres pages » de la recherche, les numéros d'assistance et les titres de rubriques du diagnostic étaient trop sombres (invisibles en Nuit d'astreinte)",
+    "Notice PDF : plus d'erreur quand on quitte une notice avant la fin de son chargement"
+  ] },
   { v: "1.94", date: "2026-11-02", titre: "Notes synchronisées avec le compte", items: [
     "Vos notes personnelles suivent maintenant votre compte : écrites sur un téléphone, vous les retrouvez sur vos autres appareils connectés avec le même compte",
     "Toujours privées : seul vous pouvez les lire, le SAV et l'administrateur ne les voient pas",
