@@ -1486,5 +1486,35 @@ window.NOTICES_PDF = {
 "ko": 1208,
 "m": 0
 }
+],
+"came-zbx7n": [
+{
+"f": "notices/came-fa02214-fr.pdf",
+"t": "Notice Came FA02214-FR (BX704 / BX708)",
+"p": 32,
+"pt": 32,
+"ko": 12325,
+"m": 0
+}
+],
+"came-zbx74": [
+{
+"f": "notices/came-fa00127-fr.pdf",
+"t": "Notice Came FA00127-FR (BX-74 / BX-78)",
+"p": 24,
+"pt": 24,
+"ko": 4441,
+"m": 0
+}
+],
+"nice-rba3": [
+{
+"f": "notices/nice-idv0629a01fr.pdf",
+"t": "Robus RB400 / RB250HS (IDV0629)",
+"p": 32,
+"pt": 36,
+"ko": 10776,
+"m": 0
+}
 ]
 };

@@ -1,9 +1,9 @@
 /* Service worker — tout est mis en cache à l'installation.
    Après modification de data.js ou index.html, augmenter VERSION. */
-const VERSION = "sav-2026-11-02-04";
+const VERSION = "sav-2026-11-05-01";
 const OCR = "sav-ocr-1";
 const NTC = "sav-notices-2"; /* notices PDF : gardées d'une version à l'autre */
-const TXT = "notices-texte-1.json"; /* texte des notices pour la recherche (changer le nom s'il change) */
+const TXT = "notices-texte-2.json"; /* texte des notices pour la recherche (changer le nom s'il change) */
 const FILES = ["./", "index.html", "data.js", "diag.js", "ask.js", "acc.js", "img.js", "notices.js", "najout.js", "npdf.js", "auth.js", "sync.js", "cmp.js", "quiz.js", "admin.js", "signal.js", "astuce.js", "notes.js", "moteurs.js", "calc.js", "sympt.js", "scan.js", "manifest.webmanifest",
   "icons/icon-192.png", "icons/icon-512.png", "icons/icon-maskable-512.png", "icons/apple-touch-icon.png",
   "icons/marques/came.png", "icons/marques/fadini.png", "icons/marques/tousek.png", "icons/marques/nice.png", "icons/marques/faac.png", "icons/marques/bft.png", "icons/marques/roger.png", "icons/marques/afca.png", "icons/marques/casit.png", "icons/marques/optex.png", "icons/marques/cardin.png", "icons/marques/doitrand.png", "icons/marques/intratone.png", "icons/marques/locinox.png", "icons/marques/lba.png", "icons/marques/prastel.png", "icons/marques/dea.png", "icons/marques/theben.png", "icons/marques/elka.png", "icons/marques/opera.png", "icons/marques/bbc-bircher.png", "icons/marques/sewosy.png", "icons/marques/jcm-technologies.png",
@@ -17,7 +17,8 @@ self.addEventListener("install", e => {
 });
 self.addEventListener("activate", e => {
   e.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== VERSION && k !== OCR && k !== NTC).map(k => caches.delete(k))))
-    .then(() => self.clients.claim()));
+    .then(() => caches.open(NTC)).then(async c => { for (const r of await c.keys()) if (/notices-texte-\d+\.json$/.test(r.url) && !r.url.endsWith("/" + TXT)) await c.delete(r); }) /* ancien texte des notices */
+    .catch(() => {}).then(() => self.clients.claim()));
 });
 /* Réseau d'abord (3 s max) pour avoir toujours la dernière version ; cache si pas de réseau. */
 /* Vérification / réparation du téléchargement hors ligne (demandée par la page) */

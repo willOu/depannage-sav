@@ -192,6 +192,16 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "1.96", date: "2026-11-05", titre: "3 notices ajoutées", items: [
+    "Came ZBX7N : notice FA02214 (BX704 / BX708), lisible dans l'onglet Notice et dans la recherche",
+    "Came ZBX74 / ZBX78 : notice de l'automatisme FA00127 (BX-74 / BX-78), qui reprend la carte, les dip-switch et la programmation",
+    "Nice RBA3 (Robus RB400 / RB250HS) : notice IDV0629 (pages blanches retirées)",
+    "Roger H70/EL : pas de notice en français chez le fabricant, la fiche reste sans PDF"
+  ], docs: [
+    "Notice Came FA02214-FR (03/2025)",
+    "Notice Came FA00127-FR v1 (05/2015)",
+    "Notice Nice IDV0629A01FR (31/01/2019)"
+  ] },
   { v: "1.95", date: "2026-11-02", titre: "Corrections après test complet de l'appli", items: [
     "Notes : une note refusée par le serveur reste sur le téléphone (elle pouvait être effacée à la synchronisation suivante) et sera renvoyée plus tard",
     "Lecture de l'afficheur en photo : meilleure lecture des écrans LCD où les segments éteints restent visibles en gris, des écrans entourés d'un cadre, et des lettres minuscules (r, o, n…)",
@@ -748,7 +758,7 @@ const MARQUES = [
     nom: "ZBX74 / ZBX78",
     modeles: "BX-74 · BX-78 (ancienne carte à dip-switch)",
     type: "Coulissant 230 V — dip-switch + touches CH1/CH2",
-    source: "Notice Came 119BU56 v1.0 (01/2008)",
+    source: "Notice Came 119BU56 v1.0 (01/2008) · notice de l'automatisme FA00127-FR v1 (05/2015)",
     codes: [
       { code: "PROG rapide", type: "led", titre: "LED PROG clignote rapidement", action: "Carte jamais programmée : faire la programmation de la course (onglet Apprentissage). Après programmation, la LED reste éteinte." },
       { code: "LED clignote", type: "led", titre: "LED de signalisation clignote au repos", action: "Un contact de sécurité NF est ouvert : 1-2 (stop), 2-C1 ou 2-C3. Contrôler le dispositif ou le dip correspondant (9, 7, 8)." },
@@ -793,7 +803,7 @@ const MARQUES = [
         "Rangée de 10 : dip 4, 7, 8 et 9 sur ON. Rangée de 4 : dip 3 sur OFF (lecteur optique actif).",
         "Maintenir CH1 jusqu'à ce que la LED rouge clignote (environ 3 s).",
         "Le portail fait une fermeture complète puis une ouverture complète.",
-        "LED fixe = course enregistrée.",
+        "LED fixe = course enregistrée (la notice FA00127 dit aussi qu'après programmation la LED PROG « restera éteinte » : la notice se contredit, se fier à la fin du cycle fermeture + ouverture).",
         "Remettre les dip-switch dans leur position de fonctionnement."
       ],
       apres: [

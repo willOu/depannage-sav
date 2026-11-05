@@ -236,9 +236,9 @@
   }
 
   /* ---------- recherche dans le texte des notices ----------
-     Texte de chaque page extrait à l'avance (notices-texte-1.json, lecture optique pour les pages scannées),
+     Texte de chaque page extrait à l'avance (notices-texte-2.json, lecture optique pour les pages scannées),
      gardé en cache sur le téléphone : la recherche marche sans réseau. */
-  const TEXTE = "notices-texte-1.json";
+  const TEXTE = "notices-texte-2.json";
   let texte = null;
   const nchar = c => { const r = c.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase(); return r.length === 1 ? r : (r[0] || " "); };
   const normL = t => { let o = ""; for (const c of t) o += c.length === 1 ? nchar(c) : "  ".slice(0, c.length); return o; };
@@ -351,7 +351,10 @@
     try {
       const idx = await chargeTexte();
       const docs = idx.filter(d => d.items.some(x => x.id === id));
-      const res = chercher(docs, code);
+      /* « 4 clignot. » (abrégé sur la fiche) = « 4 clignotements » dans la notice ; « L1+L2 » : chercher L1 et L2 sur la même page */
+      let q = code; const mc = /^(\d+)\s*clignot/i.exec(code); if (mc) q = mc[1] + " clignotements";
+      let res = chercher(docs, q);
+      if (!res.length) { const q2 = code.replace(/[^A-Za-z0-9,]+/g, " ").trim(); if (q2 && q2 !== q) { res = chercher(docs, q2); q = q2; } }
       let titre = "";
       try { const b = typeof BOARDS !== "undefined" && BOARDS.find(x => x.c.id === id); const c = b && b.c.codes.find(x => x.code === code); titre = c ? c.titre : ""; } catch (e) {}
       const mt = normL(titre).split(/[^a-z0-9]+/).filter(w => w.length >= 4);
@@ -360,7 +363,7 @@
         const t = r.doc.pages[pg.i].n; const sc = pg.sc + 5 * mt.filter(w => t.includes(w)).length;
         if (!best || sc > best.sc) best = { sc, r, i: pg.i };
       }));
-      if (best) { const it = best.r.doc.items.find(x => x.id === id); go(`#/pdf/${id}/${it.k}/${best.i + 1}/${encodeURIComponent(code)}`); return; }
+      if (best) { const it = best.r.doc.items.find(x => x.id === id); go(`#/pdf/${id}/${it.k}/${best.i + 1}/${encodeURIComponent(q)}`); return; }
       if (btn) { btn.textContent = `« ${code} » n'apparaît pas dans le texte de la notice`; }
     } catch (e) {
       if (btn) { btn.disabled = false; btn.textContent = "Texte de la notice indisponible sans réseau (ouvrez l'appli une fois avec du réseau)"; }
