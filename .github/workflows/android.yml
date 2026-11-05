@@ -1,0 +1,31 @@
+# Compile l'appli Android (APK non signé) quand le dossier android/ change.
+# La signature se fait hors de GitHub, avec la clé gardée par William (jamais dans le dépôt).
+name: Appli Android
+on:
+  push:
+    branches: [main]
+    paths: ['android/**', '.github/workflows/android.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+      - uses: gradle/actions/setup-gradle@v4
+        with: { gradle-version: '8.9' }
+      - name: Compilation
+        working-directory: android
+        run: gradle assembleRelease --no-daemon --stacktrace
+      - name: Préparation
+        run: |
+          BT=$(ls -d $ANDROID_HOME/build-tools/* | sort -V | tail -1)
+          mkdir out
+          $BT/zipalign -p -f 4 android/app/build/outputs/apk/release/app-release-unsigned.apk out/diagsav-non-signe.apk
+          cp $BT/lib/apksigner.jar out/
+      - name: Publication
+        env: { GH_TOKEN: '${{ github.token }}' }
+        run: gh release create "android-build-${{ github.run_number }}" out/* --prerelease --title "Android (compilation ${{ github.run_number }}, non signée)" --notes "APK non signé, à signer avant installation."
