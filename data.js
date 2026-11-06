@@ -192,6 +192,9 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "1.98", date: "2026-11-06", titre: "Correction après vérification complète", items: [
+    "Fadini Elpro S40 : le voyant « L5 éteinte » s'affichait sans explication ; il reprend maintenant la notice (L5 = arrêt, normalement allumée, s'éteint à l'impulsion d'arrêt)"
+  ] },
   { v: "1.97", date: "2026-11-06", titre: "Photos des cartes, chemin dans les menus, choix du moteur", items: [
     "Onglet Bornier : photo réelle de la carte avec des repères numérotés. Toucher un repère ouvre la borne ; toucher une borne fait clignoter son repère. Gardée sur le téléphone pour le hors ligne",
     "Chaque technicien peut envoyer une photo de carte depuis l'onglet Bornier. Elle s'affiche pour tous après validation par l'administrateur, qui place les repères (Réglages > Administration > Photos des cartes)",
@@ -56151,7 +56154,7 @@ const MARQUES = [
     codes: [
       { code: "L7 éteinte", type: "led", titre: "Pas de tension ou fusible grillé", action: "L7 allumée = réseau présent et fusibles F1 à F4 intacts." },
       { code: "L2 éteinte", type: "led", titre: "Photocellules ou boucle occultées (1-2)", action: "Obstacle ou contact ouvert." },
-      { code: "L5 éteinte", type: "led", titre: "Contact d'arrêt ouvert (6)", action: "" },
+      { code: "L5 éteinte", type: "led", titre: "Contact d'arrêt ouvert (6)", action: "L5 = arrêt : normalement allumée, elle s'éteint à l'impulsion d'arrêt (notice p. 3). Contrôler le dispositif d'arrêt raccordé sur la borne 6." },
       { code: "L8 à L15 éteinte", type: "led", titre: "Fin de course actionné", action: "LED paires : ouverture (borne baissée) de M1 à M4 ; impaires : fermeture (borne levée). Une LED éteinte = fin de course correspondant actionné." },
       { code: "L1 / L3 / L4 / L6", type: "led", titre: "Commandes", action: "Éteintes au repos ; s'allument sur commande piéton / ouvre / ferme / radio." },
       { code: "Voyant 24 V (3-8)", type: "led", titre: "Voyant de mouvement", action: "Allumé = borne baissée (passage libre) ; éteint = borne levée ; clignotement 0,5 s = montée, 1 s = descente ; 2 petits clignotements puis pause = horloge externe active." },
