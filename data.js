@@ -192,6 +192,13 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "1.97", date: "2026-11-06", titre: "Photos des cartes, chemin dans les menus, choix du moteur", items: [
+    "Onglet Bornier : photo réelle de la carte avec des repères numérotés. Toucher un repère ouvre la borne ; toucher une borne fait clignoter son repère. Gardée sur le téléphone pour le hors ligne",
+    "Chaque technicien peut envoyer une photo de carte depuis l'onglet Bornier. Elle s'affiche pour tous après validation par l'administrateur, qui place les repères (Réglages > Administration > Photos des cartes)",
+    "Onglet Paramètres : bouton « Y aller sur la carte » sur chaque réglage, avec les touches à presser une par une et l'afficheur dessiné (Roger, Came BXV et ZLX24, BFT, Cardin, Tousek, Nice RUN et Robus, AFCA Startéco 4). Les étapes reprennent les procédures des notices ; les compteurs, mots de passe et retours usine renvoient à leur procédure propre",
+    "Choix de la motorisation : bouton direct sur l'accueil, lien vers la fiche de la carte de commande quand la fiche cite le moteur, ajout des Came BX-74 / BX-78 et Nice RB400 / RB250HS",
+    "Choix moteur : un appui sur un résultat juste après la saisie n'est plus perdu"
+  ] },
   { v: "1.96", date: "2026-11-05", titre: "3 notices ajoutées", items: [
     "Came ZBX7N : notice FA02214 (BX704 / BX708), lisible dans l'onglet Notice et dans la recherche",
     "Came ZBX74 / ZBX78 : notice de l'automatisme FA00127 (BX-74 / BX-78), qui reprend la carte, les dip-switch et la programmation",

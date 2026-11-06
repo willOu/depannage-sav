@@ -28,7 +28,8 @@
   /* réglages rangés par la fiche dans un groupe « Entrées / Sorties / Réseau » : menu vérifié dans les tableaux A (PARAM) / B (LOGIC) de la notice */
   const BFT_LOGIC = {
     "bft-merak-deimos-ultra": ["SAFE 1", "SAFE 2", "IC 1", "IC 2", "AUX 0", "AUX 3", "CODE FIXE", "Niveau de protection", "MODE SERIE", "ADRESSE", "EXPI1", "EXPI2", "EXPO1", "EXPO2"], /* tableau B, p. 10 à 12 */
-    "bft-thalia-a80-a160": ["1 SAFE", "2 SAFE", "10 SAFE · 11 SAFE · 12 SAFE · 13 SAFE", "1 ic", "2 ic", "10 ic · 11 ic", "1AUX", "2AUX", "10AUX · 11AUX"] /* tableau B, p. 47 à 49 */
+    "bft-thalia-a80-a160": ["1 SAFE", "2 SAFE", "10 SAFE · 11 SAFE · 12 SAFE · 13 SAFE", "1 ic", "2 ic", "10 ic · 11 ic", "1ch", "2ch", "3ch", "4ch", "1AUX", "2AUX", "10AUX · 11AUX", "SERRURE", "niv prot", "mODE SERIE", "ADRESSE"], /* tableau B, p. 47 à 50 */
+    "bft-merak": ["1 SAFE", "2 SAFE", "10 SAFE · 11 SAFE · 12 SAFE · 13 SAFE", "1 ic", "2 ic", "1ch", "2ch", "3ch", "4ch", "1AUX", "2AUX", "10AUX", "SErrurE", "niv Prot", "ModE SEriE", "AdrESSE", "FEu PrE", "FEu rouGE"] /* notice D814459, tableau B, p. 30 à 32 */
   };
   /* menu d'un réglage, d'après le nom de son groupe sur la fiche */
   const menuBft = (g, x, id) => {
@@ -48,17 +49,17 @@
   function etapes(fam, c, g, x, v) {
     const S = [], code = x.code, vv = v || "";
     const P = c.parametres, nav = (P.navigation || []).join(" ");
-    const add = (k, t, d) => S.push({ k, t, d });
+    const add = (k, t, d, arr) => S.push({ k, t, d, arr: !!arr }); /* arr : étape où le réglage est affiché */
     if (fam === "roger") {
       const val = court(vv, 2) || "··";
       add([], "Moteur à l'arrêt : les paramètres se lisent à tout moment mais ne se modifient que moteur arrêté.", "");
-      add(["UP ▲", "DOWN ▼"], `Faire défiler les paramètres jusqu'à ce que les 2 chiffres de gauche indiquent « ${code} ». Les 2 de droite montrent la valeur actuelle.`, seg(court(code, 2) || code, "··"));
+      add(["UP ▲", "DOWN ▼"], `Faire défiler les paramètres jusqu'à ce que les 2 chiffres de gauche indiquent « ${code} ». Les 2 de droite montrent la valeur actuelle.`, seg(court(code, 2) || code, "··"), true);
       add(["+", "−"], `Changer la valeur${vv ? ` jusqu'à « ${vv} »` : ""} : elle clignote. Maintenir la touche pour défiler vite.`, seg(court(code, 2) || code, val, "cli"));
       add([], "Attendre quelques secondes (ou passer à un autre paramètre avec UP / DOWN) : l'afficheur clignote vite = valeur enregistrée.", seg(court(code, 2) || code, val, "vite"));
       if (/mot de passe/i.test(nav)) S.unshift({ k: [], t: "Si un mot de passe est actif (CP 01), les valeurs sont visibles mais pas modifiables : saisir d'abord le mot de passe (P1 à P4).", d: "", info: true });
     } else if (fam === "f70") {
       add(["ENTER"], "Depuis la page d'accueil : entrer dans la page des paramètres.", lcd("PARAMÈTRES"));
-      add(["+", "−"], `Faire défiler la liste jusqu'au paramètre « ${code} ».`, lcd(code, "··"));
+      add(["+", "−"], `Faire défiler la liste jusqu'au paramètre « ${code} ».`, lcd(code, "··"), true);
       add(["ENTER"], "Entrer dans le paramètre.", lcd(code, "··", "cli"));
       add(["+", "−"], `Changer la valeur${vv ? ` jusqu'à « ${vv} »` : ""}.`, lcd(code, vv || "··", "cli"));
       add(["ESC"], "Enregistrer et revenir à la liste.", lcd(code, vv || "··"));
@@ -66,7 +67,7 @@
     } else if (fam === "came") {
       const v3 = court(vv, 3);
       add(["ENTER"], "Entrer dans les menus.", "");
-      add(["<", ">"], `Naviguer jusqu'à « ${code} ».`, seg(code));
+      add(["<", ">"], `Naviguer jusqu'à « ${code} ».`, seg(code), true);
       add(["ENTER"], "Confirmer le choix.", seg(v3 || "···"));
       add(["<", ">"], `Changer la valeur${vv ? ` jusqu'à « ${vv} »` : ""}.`, seg(v3 || "···", undefined));
       add(["ENTER"], "Confirmer.", "");
@@ -75,45 +76,45 @@
     } else if (fam === "bft" || fam === "bftleo") {
       const mn = menuBft(g.nom, x, c.id);
       if (mn.simple) {
-        add(["OK"], "Afficheur éteint : un appui sur OK donne le menu simplifié.", lcd("menu simplifié"));
-        add(["+", "−"], `Aller sur « ${code} ».`, lcd(code));
+        add(["OK"], "Afficheur éteint : un appui sur OK donne le menu simplifié.", "");
+        add(["+", "−"], `Aller sur « ${code} ».`, seg(code), true);
         add(["OK"], "Entrer.", "");
-        add(["+", "−"], `Changer la valeur${vv ? ` (« ${vv} »)` : ""}.`, lcd(code, vv || "··", "cli"));
+        add(["+", "−"], `Changer la valeur${vv ? ` (« ${vv} »)` : ""}.`, seg(vv || "··", undefined));
         add(["OK"], "Confirmer.", "");
       } else {
-        if (fam === "bftleo") add(["OK"], "Entrer dans les menus de l'afficheur (PARAM, LOGIC, RADIO, DEFAULT, LANGUE…).", "");
-        else add(["OK", "OK"], "OK deux fois : menu avancé (PARAM, LOGIC, RADIO, DEFAULT, LANGUE, AUTOSET, STAT, PASSWORD). OK une seule fois donne le menu simplifié.", "");
-        if (mn.top) { add(["+", "−"], `Aller sur « ${mn.top} ».`, lcd(mn.top)); add(["OK"], "Entrer, puis suivre les indications de l'afficheur.", ""); }
+        if (fam === "bftleo") add([], "Afficher les menus PARAM, LOGIC, RADIO, DEFAULT, LANGUE… : la notice ne précise pas l'appui (un seul appui sur OK, afficheur éteint, donne le menu simplifié).", "");
+        else add(["OK", "OK"], "OK deux fois : menu avancé. OK une seule fois donne le menu simplifié.", "");
+        if (mn.top) { add(["+", "−"], `Aller sur « ${mn.top} ».`, seg(mn.top), true); add(["OK"], "Entrer, puis suivre les indications de l'afficheur.", ""); }
         else {
-          if (mn.m) add(["+", "−"], `Aller sur le menu « ${mn.m} ».`, lcd(mn.m));
-          else add(["+", "−"], `Aller sur le menu qui contient « ${code} » : la notice range les valeurs chiffrées dans PARAM et les réglages à choix dans LOGIC, sans préciser pour celui-ci.`, lcd("PARAM / LOGIC"));
+          if (mn.m) add(["+", "−"], `Aller sur le menu « ${mn.m} ».`, seg(mn.m));
+          else add(["+", "−"], `Aller sur le menu qui contient « ${code} » : la fiche ne précise pas s'il est dans PARAM (valeurs chiffrées) ou LOGIC (réglages à choix).`, "");
           add(["OK"], "Entrer dans le menu.", "");
-          add(["+", "−"], `Aller sur « ${code} ».`, lcd(code));
+          add(["+", "−"], `Aller sur « ${code} ».`, seg(code), true);
           add(["OK"], "Entrer dans le réglage.", "");
-          add(["+", "−"], `Changer la valeur${vv ? ` jusqu'à « ${vv} »` : ""}.`, lcd(code, vv || "··", "cli"));
+          add(["+", "−"], `Changer la valeur${vv ? ` jusqu'à « ${vv} »` : ""}.`, seg(vv || "··", undefined));
           add(["OK"], "Confirmer.", "");
         }
       }
       add(["+ et −"], "Les deux touches ensemble : sortir (ESC).", "");
       S.unshift({ k: [], t: "Si la logique « niveau de protection » est à 1, 2, 3 ou 4, un mot de passe est demandé (usine 1234). Après 10 essais faux : BLOC pendant 3 min.", d: "", info: true });
     } else if (fam === "cardin") {
-      const sous = /·/.test(g.nom) ? g.nom.split("·").map(s => s.trim()).join(" ou ") : g.nom;
+      const sous = (/·/.test(g.nom) ? g.nom.split("·").map(s => s.trim()).join(" ou ") : g.nom).replace(/^SÉCURITÉS$/, "SÉCURITÉ"); /* nom du menu dans la liste de la notice */
       add(["◀", "▶"], "Depuis l'écran d'accueil, une flèche : menu principal (OPTIONS, SÉCURITÉ, MOUVEMENT, AFFICHEUR, CALENDRIER, CODES RADIO).", lcd("MENU PRINCIPAL"));
       add(["◀", "▶"], `Aller sur « ${sous} »${/ ou /.test(sous) ? " (la fiche regroupe ces deux menus)" : ""}.`, lcd(sous));
       add(["PROG/OK"], "Confirmer le choix.", "");
-      add(["◀", "▶"], `Aller sur « ${code} ».`, lcd(code));
+      add(["◀", "▶"], `Aller sur « ${code} ».`, lcd(code), true);
       add(["PROG/OK"], "Modifier.", lcd(code, "··", "cli"));
       add(["◀", "▶"], `Choisir la valeur${vv ? ` « ${vv} »` : ""}.`, lcd(code, vv || "··", "cli"));
       add(["PROG/OK"], "Confirmer.", lcd(code, vv || "··"));
-      add(["SORTIE"], /SORTIE puis PROG\/OK/.test(nav) ? "Revenir : SORTIE puis PROG/OK." : "Revenir.", "");
-      S.unshift({ k: [], t: "Programmation impossible sur batterie : il faut le secteur.", d: "", info: true });
+      add([], /SORTIE puis PROG\/OK/.test(nav) ? "Pour revenir : SORTIE puis PROG/OK (selon la notice)." : "Pour revenir : SORTIE (selon la notice).", "");
+      (P.navigation || []).filter(n => /batterie/i.test(n)).forEach(n => S.unshift({ k: [], t: n, d: "", info: true }));
     } else if (fam === "tousek") {
       const m = g.nom.includes("/") ? g.nom.split("/").map(s => s.trim()).join(" ou ") : g.nom;
       add(["+", "−"], "Depuis les réglages de base, aller sur « Menu » (accès au menu complet).", lcd("Menu"));
       add(["ENTRÉE"], "Entrer.", "");
       add(["+", "−"], `Aller sur « ${m} »${/ ou /.test(m) ? " (la fiche regroupe ces deux menus)" : ""}.`, lcd(m));
       add(["ENTRÉE"], "Entrer.", "");
-      add(["+", "−"], `Aller sur « ${code} ».`, lcd(code));
+      add(["+", "−"], `Aller sur « ${code} ».`, lcd(code), true);
       add(["ENTRÉE"], "Entrer dans le réglage.", "");
       add(["+", "−"], `Changer la valeur${vv ? ` (« ${vv} »)` : ""}.`, lcd(code, vv || "··", "cli"));
       add(["ENTRÉE"], "Valider. ESC remonte d'un niveau en annulant la modification en cours.", "");
@@ -121,7 +122,7 @@
     } else if (fam === "nice") {
       const deux = /^2\s*·/.test(code) || /2e niveau/i.test(g.nom), L = +(code.match(/L(\d)/) || [])[1];
       add(["Stop/Set"], "Maintenir environ 3 s, relâcher quand L1 clignote.", leds({ 1: "cli" }, "L1 clignote"));
-      add(["▲", "▼"], `Amener le clignotement sur L${L}.`, leds({ [L]: "cli" }, `L${L} clignote`));
+      add(["▲", "▼"], `Amener le clignotement sur L${L}.`, leds({ [L]: "cli" }, `L${L} clignote`), true);
       if (!deux) {
         add(["Stop/Set"], `Un appui : change l'état${vv ? ` (« ${vv} »)` : ""}. Clignotement bref = OFF, long = ON.`, leds({ [L]: vv === "ON" ? "lon" : vv === "OFF" ? "cli" : "cli" }, vv ? (vv === "ON" ? "clignotement long = ON" : "clignotement bref = OFF") : ""));
       } else {
@@ -133,11 +134,11 @@
       S.unshift({ k: [], t: "Pas plus de 10 s entre deux appuis, sinon la procédure se termine en mémorisant ce qui a été fait.", d: "", info: true });
     } else if (fam === "afca4") {
       const mn = menusDe(g.nom, /^(MENU USINE|FDC [ÉE]LECTRONIQUE|HORLOGE|INPUTS)/i) || "PARAMETRAGE";
-      add(["VALID"], "Carte au repos : accès aux menus.", lcd("UTILISATION"));
+      add(["VALID"], "Carte au repos : accès aux menus.", "");
       add(["+", "−"], `Aller sur « ${mn} ».`, lcd(mn));
       add(["VALID"], "Entrer.", "");
-      if (/PARAMETRAGE|MENU USINE|INPUTS/.test(mn)) add(["+", "−", "VALID"], "Mot de passe (0000 d'usine) : + / − pour le chiffre, VALID pour passer au suivant.", lcd("Mot de passe", "0000"));
-      add(["+", "−"], `Aller sur le paramètre « ${code} ».`, lcd(code));
+      if (mn === "PARAMETRAGE" || new RegExp("Mot de passe \\([^)]*" + mn).test(nav)) add(["+", "−", "VALID"], "Mot de passe (0000 d'usine) : + / − pour le chiffre, VALID pour passer au suivant.", lcd("Mot de passe", "0000"));
+      add(["+", "−"], `Aller sur le paramètre « ${code} ».`, lcd(code), true);
       add(["VALID"], "Choisir ce paramètre.", "");
       add(["+", "−"], `Changer la valeur${vv ? ` (« ${vv} »)` : ""}.`, lcd(code, vv || "··", "cli"));
       add(["VALID"], "Valider.", "");
@@ -154,28 +155,36 @@
   });
 
   /* ---------- fenêtre ---------- */
-  let ouvert = null;
+  let ouvert = null, retourFocus = null;
   window.menuChemin = (id, gi, ii) => {
     const c = carte(id), fam = F[id]; if (!c || !fam) return;
     const g = c.parametres.groupes[gi], x = g && g.items[ii]; if (!x) return;
     fermer(false);
     const ov = document.createElement("div"); ov.className = "mnov"; ov.setAttribute("role", "dialog"); ov.setAttribute("aria-modal", "true");
-    const vals = (x.valeurs || []).map(v => v[0]).filter(v => v && v.length <= 24 && !/\d\s*[–-]\s*\d|…|\/|\bà\b/.test(v)); /* pas les plages (« 1-180 ») ni les choix groupés */
+    /* réglage à lire seulement ou avec sa propre procédure (compteurs, mot de passe, retour usine, effacement…) : on montre le chemin, puis la procédure de la fiche */
+    const special = x.def === "lecture" || (x.valeurs || []).some(([v, d]) => /^(Procédure|Activer|Débloquer|Supprimer|Exemple|Au démarrage|lecture)$/i.test(v) || /\b(ENTER|maintenir|Saisir|Choisir le numéro|Lire à la suite)\b/i.test(d || "")) || ((x.valeurs || []).length === 1 && !x.valeurs[0][0]);
+    const vals = special ? [] : (x.valeurs || []).map(v => v[0]).filter(v => v && v.length <= 24 && !/\d\s*[–-]\s*\d|…|\/|\bà\b|>/.test(v)); /* pas les plages (« 1-180 ») ni les choix groupés */
     let choix = "";
     const rendu = () => {
-      const S = etapes(fam, c, g, x, choix), info = S.filter(s => s.info), et = S.filter(s => !s.info), sv = aSavoir(c, x.code);
-      ov.innerHTML = `<div class="mnsh"><div class="mnhd"><b>Y aller : <span class="pc">${esc(x.code)}</span> ${esc(x.titre)}</b><button class="mnx" aria-label="Fermer">✕</button></div>
-        ${vals.length > 1 ? `<p class="mnl">Valeur voulue (facultatif) :</p><div class="mnv">${vals.map(v => `<button class="mini${v === choix ? " on" : ""}" data-v="${esc(v)}">${esc(v)}</button>`).join("")}</div>` : ""}
+      const S = etapes(fam, c, g, x, choix), info = S.filter(s => s.info), sv = aSavoir(c, x.code);
+      let et = S.filter(s => !s.info);
+      if (special) { const i = et.findIndex(s => s.arr); if (i >= 0) et = et.slice(0, i + 1); }
+      ov.innerHTML = `<div class="mnsh"><div class="mnhd"><b id="mnt">Y aller : <span class="pc">${esc(x.code)}</span> ${esc(x.titre)}</b><button class="mnx" aria-label="Fermer">✕</button></div>
+        ${vals.length > 1 ? `<p class="mnl">Valeur voulue (facultatif) :</p><div class="mnv">${vals.map(v => `<button class="mini${v === choix ? " on" : ""}" data-v="${esc(v)}" aria-pressed="${v === choix}">${esc(v)}</button>`).join("")}</div>` : ""}
         ${info.map(s => `<p class="mni">ⓘ ${esc(s.t)}</p>`).join("")}
         <ol class="mns">${et.map(s => `<li><div class="mnk">${s.k.map(K).join(" ")}</div><p>${esc(s.t)}</p>${s.d || ""}</li>`).join("")}</ol>
+        ${special ? `<h4>Ensuite, procédure propre à ce réglage (fiche)</h4><table class="pv">${(x.valeurs || []).filter(v => v[0] || v[1]).map(([v, d]) => `<tr><td class="w">${esc(v)}</td><td>${esc(d)}</td></tr>`).join("")}</table>${x.note ? `<div class="pn">${esc(x.note)}</div>` : ""}` : ""}
         ${sv.length ? `<h4>À savoir</h4><ul class="plain mnsv">${sv.map(n => `<li>${esc(n)}</li>`).join("")}</ul>` : ""}
         <p class="hotn">Procédure reprise de la fiche (onglet Paramètres, « Comment modifier un paramètre ») : ${esc(c.source)}. L'afficheur dessiné est indicatif. En cas de doute, la notice livrée avec la carte fait foi.</p></div>`;
       ov.querySelector(".mnx").onclick = () => fermer();
-      ov.querySelectorAll(".mnv button").forEach(b => b.onclick = () => { choix = choix === b.dataset.v ? "" : b.dataset.v; const y = ov.querySelector(".mnsh").scrollTop; rendu(); ov.querySelector(".mnsh").scrollTop = y; });
+      ov.querySelectorAll(".mnv button").forEach(b => b.onclick = () => { choix = choix === b.dataset.v ? "" : b.dataset.v; const y = ov.querySelector(".mnsh").scrollTop, v = b.dataset.v; rendu(); ov.querySelector(".mnsh").scrollTop = y; const nb = [...ov.querySelectorAll(".mnv button")].find(e => e.dataset.v === v); if (nb) nb.focus(); });
     };
     rendu();
+    ov.setAttribute("aria-labelledby", "mnt");
     ov.onclick = e => { if (e.target === ov) fermer(); };
+    retourFocus = document.activeElement;
     document.body.appendChild(ov); ouvert = ov;
+    try { ov.querySelector(".mnx").focus(); } catch (e) {}
     document.addEventListener("keydown", echap);
     try { history.pushState({ mn: 1 }, ""); } catch (e) {}
   };
@@ -183,6 +192,7 @@
   function fermer(retour) {
     if (!ouvert) return;
     ouvert.remove(); ouvert = null; document.removeEventListener("keydown", echap);
+    try { if (retourFocus && document.contains(retourFocus)) retourFocus.focus(); } catch (e) {} retourFocus = null;
     if (retour !== false) try { if (history.state && history.state.mn) history.back(); } catch (e) {} /* retire l'étape ajoutée à l'ouverture */
   }
   /* bouton retour du téléphone : ferme la fenêtre au lieu de quitter la fiche */
