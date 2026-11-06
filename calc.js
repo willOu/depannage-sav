@@ -71,7 +71,10 @@
     const lim = m => [m.p !== null ? "≤ " + f(m.p, 0) + " kg" : "poids non indiqué", m.l !== null ? "≤ " + f(m.l) + " m" : (type === "coulissant" ? "longueur non indiquée" : "")].filter(Boolean).join(" · ");
     const ligne = m => { const ch = besoinP && m.p ? Math.round(P / m.p * 100) : null;
       return `<div class="mot"><div class="mh"><span class="badge" style="--c:${m.marque === "Roger" ? "var(--brand)" : "var(--blue)"}">${esc(m.marque)}</span><b>${esc(m.modele)}</b>${m.alim ? `<span class="ma">${esc(m.alim)}</span>` : ""}</div>
-        <div class="ml">${lim(m)}${ch !== null ? ` · <span class="${ch > 85 ? "hi" : ""}">charge ${ch} %</span>` : ""}</div>${m.note ? `<small>${esc(m.note)}</small>` : ""}<small class="src">Source : ${esc(m.src)}</small></div>`; };
+        <div class="ml">${lim(m)}${ch !== null ? ` · <span class="${ch > 85 ? "hi" : ""}">charge ${ch} %</span>` : ""}</div>${m.note ? `<small>${esc(m.note)}</small>` : ""}<small class="src">Source : ${esc(m.src)}</small>${cartesHtml(m)}</div>`; };
+    /* lien vers la fiche de la carte de commande (seulement quand la fiche cite ce moteur) */
+    const cartesHtml = m => { const l = (m.cartes || []).map(id => (typeof BOARDS !== "undefined" ? BOARDS : []).find(x => x.c.id === id)).filter(Boolean);
+      return l.length ? `<div class="mcar">Carte : ${l.map(b => `<a href="#/c/${esc(b.c.id)}">${esc(b.c.nom)}</a>`).join(" · ")}</div>` : ""; };
     /* Roger Technology en premier : marque posée en priorité par l'entreprise */
     const PRIO = "Roger", estP = m => m.marque === PRIO;
     const okP = ok.filter(estP), vP = verif.filter(estP), okA = ok.filter(m => !estP(m)), vA = verif.filter(m => !estP(m));
@@ -107,7 +110,7 @@
     app.innerHTML = h;
     if (sel === "chute") { app.querySelectorAll("input,select").forEach(e => e.oninput = e.onchange = chute); chute(); }
     if (sel === "pui") { app.querySelectorAll("input").forEach(e => e.oninput = pui); pui(); }
-    if (sel === "moteur") { app.querySelectorAll("input,select").forEach(e => e.oninput = e.onchange = moteur); moteur(); }
+    if (sel === "moteur") { app.querySelectorAll("input").forEach(e => e.oninput = moteur); app.querySelectorAll("select").forEach(e => e.onchange = moteur); moteur(); } /* pas de « change » sur les champs : il redessinait la liste au moment où l'on touchait un lien */
     if (sel === "acc") {
       const bind = () => {
         app.querySelectorAll("#al input").forEach(e => e.oninput = () => { lignes[+e.dataset.i][e.dataset.k] = e.value; conso(); });

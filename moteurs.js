@@ -12,7 +12,8 @@
     r2ml: "Notice Roger IS240 Rev.15 (B70/2ML)", rctrl: "Notice Roger IS88 Rev.28 (CTRL, barrières BIONIK)", afca: "Notice AFCA REVERS / Startéco 4-2M (22-06-17)",
     elkaP: "Manuel ELKA Barrières P 2500 – P 5000 (V2.0 07.17)", elkaT: "Manuel ELKA Barrières T 3000 – T 3500 (V1.4 11.16)",
     lba: "Instructions de service La Barrière Automatique LBA 4 / 6 / 7 (2017)", lba12: "Dossier La Barrière Automatique LBA 12 (COAT010027)",
-    cameBX: "came.com, page BX", cameBXV: "came.com, page BXV", cameBK: "Dépliant CAME BK (KADFRABE18, 2019)", cameGam: "came.com, page Automatismes de portails (maxi de la gamme)",
+    cameBX: "came.com, page BX", cameFA02214: "Notice Came FA02214-FR (03/2025), limites d'utilisation p. 8", cameFA00127: "Notice Came FA00127-FR v1 (05/2015), § 2.2",
+    rb4: "Notice Nice IDV0629A01FR (Robus RB400 / RB250HS), tableau 1", cameBXV: "came.com, page BXV", cameBK: "Dépliant CAME BK (KADFRABE18, 2019)", cameGam: "came.com, page Automatismes de portails (maxi de la gamme)",
     cameAXO: "came.com, page AXO", cameFROG: "came.com, page FROG", cameFX: "came.com, page FROG-X", cameATI: "came.com, page ATI",
     cameFAST: "Dépliant CAME FAST70 (« vantaux jusqu'à 2,30 m ou 300 kg »)", cameSTY: "Notice CAME STYLO-ME 119DV11 (03/2010)", cameSTYR: "came.com, page STYLO",
     faac740: "faac.fr, page 740 / 741", faac746: "faac.fr, page 746 C / 844 C", faacB: "Brochure FAAC « Automatismes pour portails battants »",
@@ -21,8 +22,10 @@
   const M = (marque, modele, type, alim, p, l, src, note) => ({ marque, modele, type, alim, p, l, src: N[src] || src, note: note || "" });
   window.MOTEURS = [
     /* ---------- coulissants ---------- */
-    M("CAME", "BX704AGS", "coulissant", "230 V", 400, 14, "cameBX"),
-    M("CAME", "BX708AGS", "coulissant", "230 V", 800, 14, "cameBX"),
+    M("CAME", "BX704AGS", "coulissant", "230 V", 400, 14, "cameFA02214"),
+    M("CAME", "BX708AGS", "coulissant", "230 V", 800, 14, "cameFA02214"),
+    M("CAME", "BX-74", "coulissant", "230 V", 400, null, "cameFA00127", "Ancienne gamme (carte ZBX74)."),
+    M("CAME", "BX-78", "coulissant", "230 V", 800, null, "cameFA00127", "Ancienne gamme (carte ZBX78). Copropriété : 600 kg maxi selon la notice."),
     M("CAME", "BXV04 (AGS / AGT / AGF)", "coulissant", "24 V", 400, 14, "cameBXV"),
     M("CAME", "BXV06 (AGS / AGF)", "coulissant", "24 V", 600, 18, "cameBXV"),
     M("CAME", "BXV08 (AGS / AGT)", "coulissant", "24 V", 800, 20, "cameBXV"),
@@ -32,6 +35,8 @@
     M("CAME", "BK 801MS-0090", "coulissant", "230 V", 1800, 20, "cameBK"),
     M("CAME", "BK 801MS-0100 / 0120", "coulissant", "230 V", 2200, 20, "cameBK"),
     M("CAME", "BY-3500T", "coulissant", null, 3500, 23, "cameGam", "Valeurs de la gamme sur la page d'ensemble CAME."),
+    M("Nice", "RB250HS", "coulissant", "230 V", 250, 8, "rb4"),
+    M("Nice", "RB400", "coulissant", "230 V", 400, 8, "rb4"),
     M("Nice", "RB500HS", "coulissant", "230 V", 500, 8, "rb"),
     M("Nice", "RB600 / RB600P", "coulissant", "230 V", 600, 8, "rb"),
     M("Nice", "RB1000 / RB1000P", "coulissant", "230 V", 1000, 12, "rb"),
@@ -155,4 +160,31 @@
     M("Tousek", "PULL T24", "coulissant", "24 V", 600, null, "tPull24", "13 m/min, batterie en option."),
     M("Tousek", "PULL T24speed", "coulissant", "24 V", 400, null, "tPull24", "16 m/min, batterie en option.")
   ];
+  /* carte de commande de chaque motorisation : seulement quand la fiche de la carte cite ce moteur dans ses modèles (vérifié) */
+  const C = {
+    "BX704AGS": ["came-zbx7n"], "BX708AGS": ["came-zbx7n"], "BX-74": ["came-zbx74", "came-zbx7n"], "BX-78": ["came-zbx74", "came-zbx7n"],
+    "BXV04 (AGS / AGT / AGF)": ["came-bxv"], "BXV06 (AGS / AGF)": ["came-bxv"], "BXV08 (AGS / AGT)": ["came-bxv"], "BXV10 (AGS / AGT / AGF)": ["came-bxv"],
+    "RB250HS": ["nice-rba3"], "RB400": ["nice-rba3"], "RB500HS": ["nice-robus-r10"], "RB600 / RB600P": ["nice-robus-r10"], "RB1000 / RB1000P": ["nice-robus-r10"],
+    "RUN1800 / RUN1800P": ["nice-run"], "RUN2500 / RUN2500P": ["nice-run"],
+    "DEIMOS ULTRA BT A 400": ["bft-merak-deimos-ultra"], "DEIMOS ULTRA BT A 600": ["bft-merak-deimos-ultra"],
+    "AYROS 400D-230V": ["v2-pd19"], "AYROS 800-230V": ["v2-pd19"], "AYROS 1200 (230 V / 120 V)": ["v2-pd19"], "FORTECO 1200": ["v2-pd19"], "FORTECO 1800": ["v2-pd19"], "FORTECO 2200 / 2200-M": ["v2-pd19"],
+    "AYROS 500D-24V-F": ["v2-ayros24v"], "AYROS 600D-24V": ["v2-ayros24v"], "AYROS 1000D-24V": ["v2-ayros24v"], "AYROS 1500-I": ["v2-ayros1500"], "FORTECO 2500-I / 2500-I-M": ["v2-forteco2500"],
+    "REVERS 3i (Startéco 4-2M)": ["afca-starteco4-2m-revers"],
+    "AXO AX3024": ["came-zlx24"], "AXO AX5024": ["came-zlx24"], "FROG-A24 / FROG-A24E": ["came-zlx24"], "STYLO-ME": ["came-zlx24"], "STYLO-RME": ["came-zlx24"],
+    "AYRON AY/250/M · AY/250/S (bras articulé)": ["roger-b70-2ml"], "BE20/200": ["roger-b70-2ml", "roger-edge1"], "BE20/210/HS": ["roger-edge1"], "BE20/400": ["roger-edge1"],
+    "SMARTY4/HS": ["roger-edge1"], "SMARTY5R5 (réversible)": ["roger-edge1"], "SMARTY5": ["roger-edge1"], "SMARTY7R (réversible)": ["roger-edge1"], "SMARTY7": ["roger-edge1"],
+    "BR21/351 · /361 (enterré)": ["roger-edge1"], "BR21/351/HS · /361/HS (enterré)": ["roger-edge1"], "BR21/362 (enterré)": ["roger-edge1"], "R21/351 · /361 · /362 (+ SUB, enterré)": ["roger-h70-200ac"],
+    "BH23/282 (bras articulé)": ["roger-edge1"], "BH23/252/HS (bras articulé)": ["roger-edge1"], "MONOS4": ["roger-b70-2ml", "roger-edge1"],
+    "BM30/303/HS · /304/HS": ["roger-b70-1dc"], "BM30/403": ["roger-b70-1dc"], "BH30/603/HS · /604/HS (et /115)": ["roger-b70-1dc"], "BH30/603 · /604 · /503/HS · /504/HS": ["roger-b70-1dc"],
+    "BH30/804/R (réversible)": ["roger-b70-1dc"], "BH30/803 · /804 (et /803/115)": ["roger-b70-1dc"],
+    "BG30/803/HS · /804/HS": ["roger-b70-1dchp"], "BG30/1003/HS · /1004/HS": ["roger-b70-1dchp"], "BG30/1404/R (réversible)": ["roger-b70-1dchp"], "BG30/1504/HS": ["roger-b70-1dchp"],
+    "BG30/1603 · /1604": ["roger-b70-1dchp"], "BG30/1804/HS": ["roger-b70-1dchp"], "BG30/2203 · /2204": ["roger-b70-1dchp"],
+    "BIONIK BI/004": ["roger-ctrl"], "BIONIK BI/004HP": ["roger-ctrl"], "BIONIK BI/006": ["roger-ctrl"], "BIONIK BI/008": ["roger-ctrl"], "WAY/004": ["roger-b70-1t"], "WAY/005": ["roger-b70-1t"], "WAY/006": ["roger-b70-1t"],
+    "SLX24DRACO": ["cardin-ecu-sl"], "SLi724": ["cardin-ecu-sl"], "SLi1024": ["cardin-ecu-sl"], "SLi24DRACO": ["cardin-ecu-sl"], "SL4024 (101/SL402409)": ["cardin-sl4024"],
+    "Combi 740 (enterré)": ["fadini-elpro13exp"], "PULL T5": ["tousek-pull-t"], "PULL T8": ["tousek-pull-t"], "PULL T10": ["tousek-pull-t"], "PULL T15": ["tousek-pull-t"], "PULL T24": ["tousek-pull-t24"], "PULL T24speed": ["tousek-pull-t24"],
+    "P 2500": ["elka-p2500-5000"], "P 3000": ["elka-p2500-5000"], "P 3500": ["elka-p2500-5000"], "P 4000": ["elka-p2500-5000"], "P 5000": ["elka-p2500-5000"], "T 3000": ["elka-t3000-3500"], "T 3500": ["elka-t3000-3500"],
+    "LBA 4": ["lba-4"], "LBA 6 / 6R": ["lba-67"], "LBA 63PK": ["lba-67"], "LBA 7": ["lba-67"], "LBA 7R": ["lba-67"], "LBA 74": ["lba-67"], "LBA 12": ["lba-12"]
+  };
+  window.MOTEURS.forEach(m => { m.cartes = C[m.modele] || []; });
+  window.MOTEUR_CARTES_INCONNUES = Object.keys(C).filter(k => !window.MOTEURS.some(m => m.modele === k)); /* contrôle : doit rester vide */
 })();
