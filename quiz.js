@@ -10,7 +10,7 @@
     const out = [];
     BOARDS.filter(({ m }) => !marque || m.id === marque).forEach(({ m, c }) => {
       const carte = `${m.nom} ${c.nom}`;
-      const codes = uniq(uniq((c.codes || []).filter(x => TYPES_CODE.includes(x.type) && x.code && x.titre && x.code.length <= 24 && x.titre.length <= 90), x => x.code), x => x.titre);
+      const codes = uniq(uniq((c.codes || []).filter(x => x.quiz !== false && TYPES_CODE.includes(x.type) && x.code && x.titre && x.code.length <= 24 && x.titre.length <= 90), x => x.code), x => x.titre);
       if (codes.length >= 4) codes.forEach(x => {
         const autres = mel(codes.filter(y => y !== x)).slice(0, 3);
         out.push({ id: c.id, tab: "codes", carte, q: `Que signifie le code « ${x.code} » ?`, bonne: x.titre, choix: mel([x.titre, ...autres.map(y => y.titre)]), expl: x.action || "", src: c.source });

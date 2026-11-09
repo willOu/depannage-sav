@@ -192,6 +192,13 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "2.41", date: "2026-11-09", titre: "Corrections de l'atelier et du quiz", items: [
+    "Atelier, sur téléphone : glisser le doigt sur le fond du schéma fait défiler la page (sur une borne, un fil ou un accessoire, il câble toujours)",
+    "Atelier : en tirant un fil, la page défile toute seule quand le doigt arrive en haut ou en bas de l'écran",
+    "Atelier EQ2009 : le multimètre affiche bien 24 V~ entre 33 et 34",
+    "Atelier : message « Mettez le secteur » plus affiché en double",
+    "Quiz LBA 12 : les lignes d'aide (« ESC + ↑ / ESC + ↓ », « Écrans I et Q ») ne sont plus proposées comme réponses"
+  ] },
   { v: "2.4", date: "2026-11-09", titre: "Atelier de câblage : B70/1DC, KEQS08 et EQ2009", items: [
     "Nouvelle carte dans l'atelier de câblage : Roger B70/1DC, borniers placés comme sur la carte (notice IS117, fig. 11 p. 15), missions et mode TEST avec ses propres numéros de bornes",
     "Nouvelles cartes CASIT KEQS08 (1 moteur) et EQ2009 (2 moteurs, vantaux battants) : on câble soi-même l'arrivée 230 V, les moteurs et les fins de course ; dip-switch et cavaliers à toucher sur la carte, voyants comme dans les notices, missions corrigées",
@@ -53516,12 +53523,14 @@ const MARQUES = [
         },
         {
           "code": "Entrées / sorties",
+          "quiz": false,
           "type": "diag",
           "titre": "Écrans I et Q",
           "action": "Depuis l'écran date et heure : flèches gauche / droite. Case grisée = 1 (active), non grisée = 0. Pas d'entrées / sorties analogiques dans ce programme."
         },
         {
           "code": "Commandes locales",
+          "quiz": false,
           "type": "diag",
           "titre": "ESC + ↑ / ESC + ↓",
           "action": "ESC + flèche haut = commande d'ouverture ; ESC + flèche bas = commande de fermeture."
