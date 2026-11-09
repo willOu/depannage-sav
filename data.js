@@ -192,8 +192,9 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
-  { v: "2.5", date: "2026-11-09", titre: "Atelier de câblage : carte Roger B70/2ML (2 vantaux)", items: [
+  { v: "2.5", date: "2026-11-09", titre: "Atelier de câblage : cartes Roger B70/2ML et EDGE1 (2 vantaux)", items: [
     "Atelier : nouvelle carte B70/2ML, borniers placés comme sur la notice IS240 (fig. 1 et 2)",
+    "Atelier : nouvelle carte EDGE1 (notice IS160, fig. 1), avec COS1 et COS2 séparés, horloge ORO, codes SECO (SEC1 / SEC2 inversés) et FUSE (F1 grillé)",
     "Atelier : moteurs brushless à câbler soi-même sur X · Y · Z ; deux fils échangés = vantail à l'envers, moteur absent = code Mot1 / Mot2, court-circuit = PrOt",
     "Atelier : deux vantaux animés, avec le retard du moteur 2 à l'ouverture (paramètre 25) et du moteur 1 à la fermeture (26) ; ouverture partielle sur le vantail 1",
     "Atelier : entrée ISEL en bord sensible ou en horloge (paramètre 60), contacts NF ou 8,2 kΩ (57), afficheur et mode TEST de la B70/2ML",
