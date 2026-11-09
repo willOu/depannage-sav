@@ -14175,7 +14175,7 @@ const MARQUES = [
           { n: "22", label: "ORO", desc: "Horloge (paramètre 80). Ne jamais ponter si inutilisée", t: "no" },
           { n: "23", label: "AP", desc: "Ouverture. Maintenue : pas de fermeture automatique", t: "no" },
           { n: "24", label: "CH", desc: "Fermeture", t: "no" },
-          { n: "25", label: "PP", desc: "Pas-à-pas (paramètre 84)", t: "no" },
+          { n: "25", label: "PP", desc: "Pas-à-pas (paramètre A4)", t: "no" },
           { n: "26", label: "PED", desc: "Ouverture partielle, 50 % d'usine", t: "no" }
         ]},
         { nom: "Alimentation, bus, antenne", bornes: [
