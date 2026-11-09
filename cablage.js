@@ -21,6 +21,7 @@
       coms: ["9", "14", "21", "28"], batt: false, alim: { lab: ["5+", "4−"], nom: "Alimentation de la carte POWER IN 5+ / 4−", carte: "Alim carte" },
       facc: { lab: "F2 2A", nom: "Fusible F2 2 A (accessoires)", court: "F2" }, fmot: { lab: "F1 15A", nom: "Fusible F1 15 A (circuit moteur)", code: null } }
   };
+  CFG["casit-keqs08"] = { modele: "keqs08", fig: "schéma § 2.1 p. 4 de la notice KEQS08-R", coms: ["9", "10", "20"] };
   const CARTES = CFG;
   const NS = "http://www.w3.org/2000/svg";
   const st = { get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} } };
@@ -30,10 +31,11 @@
   /* ---------- carte : bornes (disposition réelle) ---------- */
   const DY = 330; /* haut de la carte dans le dessin */
   const P = 24;
-  let F = null, RANGEES = [], BORNES = {}, COMS = [], ENTREES = {}, K = {}, USINE = {}; /* carte courante */
+  let M = null, F = null, RANGEES = [], BORNES = {}, COMS = [], ENTREES = {}, K = {}, USINE = {}; /* carte courante */
   const nB = k => K[k] ? K[k].slice(2) : "?"; /* numéro de borne d'un rôle (« ap » → 25) */
   function charger(id) {
-    F = CFG[id];
+    F = CFG[id]; M = F.modele ? (window.CABMOD || {})[F.modele] || null : null; BIBLIO = BIBLIO_R;
+    if (M) { RANGEES = []; BORNES = M.bornes(DY); K = {}; Object.keys(M.K).forEach(k => K[k] = "b:" + M.K[k]); COMS = M.coms.map(n => "b:" + n); ENTREES = {}; Object.keys(M.entrees).forEach(n => ENTREES["b:" + n] = M.entrees[n]); USINE = M.usine; BIBLIO = M.biblio; return; }
     RANGEES = [{ y: DY + 238, dessus: true, blocs: [[88, F.haut[0]], [318, F.haut[1]]] }, { y: DY + 266, dessus: false, blocs: [[32, F.bas[0]], [88, F.bas[1]], [306, F.bas[2]]] }];
     BORNES = {}; RANGEES.forEach(r => r.blocs.forEach(([x0, l]) => l.forEach(([n, lab], i) => { BORNES["b:" + n] = { x: x0 + i * P, y: r.y, lab, n, dessus: r.dessus }; })));
     K = {}; Object.keys(F.K).forEach(k => K[k] = "b:" + F.K[k]);
@@ -63,10 +65,18 @@
     sec: { nom: "Arrivée 230 V~", sous: "pour la lumière", ic: "⚡", b: [["L", "L"], ["N", "N"]] },
     lum: { nom: "Lumière", sous: "courtoisie 230 V~", ic: "💡", b: [["L", "L"], ["N", "N"]], charge: ["L", "N"], ac: true },
     radio: { nom: "Récepteur radio", sous: "H93/RX2LP enfiché + télécommande", ic: "📡", enfiche: true },
+    mot: { nom: "Moteur 230 V~", sous: "condensateur inclus", ic: "⚙", b: [["C", "Com"], ["O", "Ouvre"], ["F", "Ferme"]] },
+    fdc: { nom: "Fins de course", sous: "2 contacts NF du moteur", ic: "⇤", b: [["C", "C"], ["O", "FCO"], ["F", "FCF"]] },
+    cellc: { nom: "Cellules", sous: "paire 24 V AC/DC", ic: "◉", paire: "c" },
+    txc: { nom: "Cellule TX", sous: "émetteur 24 V AC/DC", ic: "◉", b: [["1", "~"], ["2", "~"]], act: "faisceau", charge: ["1", "2"], dom: "a24d24" },
+    rxc: { nom: "Cellule RX", sous: "récepteur 24 V AC/DC", ic: "◉", b: [["1", "~"], ["2", "~"], ["C", "C"], ["NF", "NF"]], act: "faisceau", charge: ["1", "2"], dom: "a24d24" },
+    fla: { nom: "Clignotant", sous: "230 V~ avec carte", ic: "💡", b: [["L", "~"], ["N", "~"]], charge: ["L", "N"], ac: true },
+    voy24: { nom: "Voyant", sous: "24 V AC/DC", ic: "🔆", b: [["1", "~"], ["2", "~"]], charge: ["1", "2"], dom: "a24d24" },
     pont: { nom: "Fil de pont", sous: "entre deux bornes", ic: "〰", fil: true }
   };
-  const BIBLIO = ["cell", "pp", "cle", "digi", "bnf", "b8k", "stop", "lam", "voy", "oro", "sec", "lum", "radio", "pont"];
+  const BIBLIO_R = ["cell", "pp", "cle", "digi", "bnf", "b8k", "stop", "lam", "voy", "oro", "sec", "lum", "radio", "pont"];
   const COULEURS = [["#e5484d", "rouge"], ["#3e7bfa", "bleu"], ["#f5f5f5", "blanc"], ["#f0b429", "jaune"], ["#8b8b8b", "gris"], ["#a46bff", "violet"], ["#8b5a2b", "marron"], ["#2fbf71", "vert"]];
+  let BIBLIO = BIBLIO_R;
   const largeur = t => Math.max(92, ACC[t].b.length * 24 + 20);
 
   /* ---------- paramètres simulés (valeurs et réglages usine tirés de la fiche) ---------- */
@@ -82,7 +92,7 @@
   /* ---------- état : installation (enregistrée) + simulation (en mémoire) ---------- */
   let I = null, cleI = "";
   let S = null; /* simulation */
-  const neuf = () => ({ n: 1, acc: [], fils: [{ id: "w0", a: K.cosCom, b: K.st, c: "#f5f5f5", usine: 1 }], params: {} });
+  const neuf = () => ({ n: 1, acc: [], fils: M ? [] : [{ id: "w0", a: K.cosCom, b: K.st, c: "#f5f5f5", usine: 1 }], params: {} });
   /* historique : chaque modification enregistrée peut être annulée puis rétablie */
   let hist = [], futur = [], dernier = "";
   const sauver = () => { const j = JSON.stringify(I); if (j !== dernier) { if (dernier) { hist.push(dernier); if (hist.length > 60) hist.shift(); futur = []; } dernier = j; } st.set(cleI, I); outils(); };
@@ -115,51 +125,72 @@
       case "cle": return e.g ? [[k + "C", k + "1"]] : e.d ? [[k + "C", k + "2"]] : [];
       case "digi": return e.on && e.alim ? [[k + "C", k + "NO"]] : [];
       case "rx": return e.ok ? [[k + "C", k + "NF"]] : [[k + "C", k + "NO"]];
+      case "rxc": return e.ok ? [[k + "C", k + "NF"]] : [];
+      case "fdc": return [].concat(S.pos < 100 ? [[k + "C", k + "O"]] : [], S.pos > 0 ? [[k + "C", k + "F"]] : []);
       case "bnf": case "stop": return e.on ? [] : [[k + "1", k + "2"]];
       case "b8k": return e.on ? [[k + "1", k + "2"]] : [];
       default: return [];
     }
   }
   const resistances = a => a.t === "b8k" && !(S.etat[a.id] || {}).on ? [[a.id + ":1", a.id + ":2", 8200]] : [];
+  /* sources de la carte Roger : +24 V, LAM, +SC (sorties) et contact sec COR */
+  function sourcesRoger() {
+    const on = S.secteur && !S.hs, tags = [], liens = [];
+    if (on && S.f3) { tags.push([K.p24, "+24"]); if (lamSortie()) tags.push([K.lam, "LAM"]); if (S.sc) tags.push([K.sc, "SC"]); }
+    if (on && corFerme()) liens.push([K.cor1, K.cor2]);
+    return { tags, liens };
+  }
+  const DCP = ["+24", "LAM", "SC"]; /* sorties continues 24 V (pôle +) ; le pôle − est COM (0V) */
+  const aDC = s => DCP.some(t => s.has(t));
+  /* une charge est-elle alimentée ? renvoie les deux étiquettes de source [pôle de p, pôle de q] ou null */
+  function alimCharge(d, p, q) {
+    const tp = DCP.find(t => p.has(t)), tq = DCP.find(t => q.has(t));
+    if (d.ac) return p.has("L") && q.has("N") ? ["L", "N"] : p.has("N") && q.has("L") ? ["N", "L"] : null;
+    const dcOk = (tp && q.has("0V") && !tq) ? [tp, "0V"] : (d.dom !== "dc24p" && tq && p.has("0V") && !tp) ? ["0V", tq] : null;
+    if (dcOk) return dcOk;
+    if (d.dom === "a24d24") return p.has("A24") && q.has("A24b") ? ["A24", "A24b"] : p.has("A24b") && q.has("A24") ? ["A24b", "A24"] : null;
+    return null;
+  }
   function circuit() {
-    const sorties = { [K.p24]: S.secteur && !S.hs && S.f3 ? "+24" : null, [K.lam]: S.secteur && !S.hs && S.f3 && lamSortie() ? "+24" : null, [K.sc]: S.secteur && !S.hs && S.f3 && S.sc ? "+24" : null };
-    let R;
-    for (let tour = 0; tour < 4; tour++) {
+    let R, carteOn = M ? !!(S.R && S.R.carteOn) : (S.secteur && !S.hs);
+    for (let tour = 0; tour < 6; tour++) {
+      const src = M ? M.sources(api(), carteOn) : sourcesRoger();
       const U = uf(), aretes = [];
       I.fils.forEach(w => { U.u(w.a, w.b); aretes.push([w.a, w.b, w.id]); });
       COMS.forEach(b => { U.u("G", b); aretes.push(["G", b, null]); });
-      if (S.secteur && !S.hs && corFerme()) { U.u(K.cor1, K.cor2); aretes.push([K.cor1, K.cor2, null]); }
+      src.liens.forEach(([x, y]) => { U.u(x, y); aretes.push([x, y, null]); });
       I.acc.forEach(a => contacts(a).forEach(([x, y]) => { U.u(x, y); aretes.push([x, y, null]); }));
-      const tags = {}; const tag = (n, t) => { const r = U.f(n); (tags[r] = tags[r] || new Set()).add(t); };
+      const tags = {}, ou = {}; const tag = (n, t) => { const r = U.f(n); (tags[r] = tags[r] || new Set()).add(t); (ou[t] = ou[t] || []).push(n); };
       tag("G", "0V");
-      for (const b in sorties) if (sorties[b]) tag(b, b === K.p24 ? "+24" : b === K.lam ? "LAM" : "SC");
-      I.acc.filter(a => a.t === "sec").forEach(a => { tag(a.id + ":L", "L"); tag(a.id + ":N", "N"); });
+      src.tags.forEach(([b, t]) => tag(b, t));
+      if (S.secteur) I.acc.filter(a => a.t === "sec").forEach(a => { tag(a.id + ":L", "L"); tag(a.id + ":N", "N"); }); /* l'arrivée 230 V suit l'interrupteur « Secteur » */
       const T = n => tags[U.f(n)] || new Set();
-      const dc = s => s.has("+24") || s.has("LAM") || s.has("SC");
       /* défauts */
       const def = { cc24: false, ccAC: false, d230: false };
-      Object.values(tags).forEach(s => { if (dc(s) && s.has("0V")) def.cc24 = true; if (s.has("L") && s.has("N")) def.ccAC = true; if ((s.has("L") || s.has("N")) && (dc(s) || s.has("0V"))) def.d230 = true; });
-      /* 230 V sur une borne de la carte autre que le contact sec COR */
-      Object.keys(BORNES).forEach(b => { if (b !== K.cor1 && b !== K.cor2 && (T(b).has("L") || T(b).has("N"))) def.d230 = true; });
+      Object.values(tags).forEach(s => { if ((aDC(s) || s.has("+12")) && s.has("0V")) def.cc24 = true; if (s.has("A24") && s.has("A24b")) def.cc24 = true; if (s.has("L") && s.has("N")) def.ccAC = true; if ((s.has("L") || s.has("N")) && (aDC(s) || s.has("0V") || s.has("+12") || s.has("A24") || s.has("A24b"))) def.d230 = true; });
+      const ok230 = M ? M.bornes230 : [K.cor1, K.cor2]; /* bornes de la carte qui acceptent le 230 V */
+      Object.keys(BORNES).forEach(b => { if (!ok230.includes(b) && (T(b).has("L") || T(b).has("N"))) def.d230 = true; });
       /* charges alimentées */
-      const alim = {};
+      const alim = {}, poles = {};
       I.acc.forEach(a => {
         const d = ACC[a.t]; if (!d.charge) return;
         const p = T(a.id + ":" + d.charge[0]), q = T(a.id + ":" + d.charge[1]);
-        if (d.ac) alim[a.id] = (p.has("L") && q.has("N")) || (p.has("N") && q.has("L"));
-        else {
-          const pol = d.charge[0] === "+"; /* digicode et cellules : + et − repérés */
-          alim[a.id] = (dc(p) && q.has("0V") && !dc(q)) || (!pol && dc(q) && p.has("0V") && !dc(p));
-          if (p.has("L") || q.has("L") || p.has("N") || q.has("N")) def.d230 = true; }
+        const r = alimCharge(d, p, q); alim[a.id] = !!r; if (r) poles[a.id] = r;
+        if (!d.ac && (p.has("L") || q.has("L") || p.has("N") || q.has("N"))) def.d230 = true;
       });
+      /* moteurs 230 V : enroulement Ouvre ou Ferme alimenté entre Com et la phase */
+      const moteurs = {};
+      I.acc.filter(a => a.t === "mot").forEach(a => { const k = a.id + ":", c = T(k + "C"), o = T(k + "O"), f = T(k + "F"); const pr = (x, y) => (x.has("L") && y.has("N")) || (x.has("N") && y.has("L")); const O = pr(o, c), Fe = pr(f, c); moteurs[a.id] = { O, F: Fe, sens: O && !Fe ? 1 : Fe && !O ? -1 : 0, bloque: O && Fe }; if (aDC(c) || aDC(o) || aDC(f)) def.d230 = true; });
       /* état dynamique des accessoires alimentés */
       let change = false;
       I.acc.forEach(a => {
         const e = S.etat[a.id] = S.etat[a.id] || {};
         if (a.t === "digi" && e.alim !== !!alim[a.id]) { e.alim = !!alim[a.id]; change = true; }
-        if (a.t === "rx") { const tx = I.acc.find(x => x.t === "tx" && x.paire === a.paire); const ok = !!alim[a.id] && !!(tx && alim[tx.id]) && !(S.etat["p" + a.paire] || {}).coupe; if (e.ok !== ok) { e.ok = ok; change = true; } }
+        if (a.t === "rx" || a.t === "rxc") { const tt = a.t === "rx" ? "tx" : "txc", tx = I.acc.find(x => x.t === tt && x.paire === a.paire); const ok = !!alim[a.id] && !!(tx && alim[tx.id]) && !(S.etat["p" + a.paire] || {}).coupe; if (e.ok !== ok) { e.ok = ok; change = true; } }
       });
-      R = { U, aretes, tags, T, alim, def, sorties };
+      const on2 = M ? M.alimentee(T) && !S.hs : carteOn;
+      if (on2 !== carteOn) { carteOn = on2; change = true; }
+      R = { U, aretes, tags, ou, T, alim, poles, def, moteurs, carteOn };
       if (!change) break;
     }
     /* entrées : contact fermé vers COM, ou résistance (bords 8,2 kΩ) */
@@ -199,14 +230,14 @@
     I.acc.forEach(x => resistances(x).forEach(([a, b]) => add(a, b, null)));
     const flux = new Set();
     const chemin = (de, buts) => { const prev = { [de]: null }, f = [de]; while (f.length) { const n = f.shift(); if (buts.includes(n)) { let c = n; while (prev[c]) { if (prev[c][1]) flux.add(prev[c][1]); c = prev[c][0]; } return true; } (adj[n] || []).forEach(([m, w]) => { if (!(m in prev)) { prev[m] = [n, w]; f.push(m); } }); } return false; };
-    const srcs = [K.p24, K.lam, K.sc].filter(b => R.sorties[b]);
+    const vers = t => t === "0V" ? ["G"] : (R.ou[t] || []);
     I.acc.forEach(a => {
       const d = ACC[a.t]; if (!d.charge || !R.alim[a.id]) return;
-      const p = a.id + ":" + d.charge[0], q = a.id + ":" + d.charge[1];
-      if (d.ac) { const s = I.acc.filter(x => x.t === "sec"); const L = s.map(x => x.id + ":L"), N = s.map(x => x.id + ":N"); if (!(chemin(p, L) && chemin(q, N))) { chemin(p, N); chemin(q, L); } }
-      else { if (R.T(p).has("0V")) { chemin(p, ["G"]); chemin(q, srcs); } else { chemin(p, srcs); chemin(q, ["G"]); } }
+      const p = a.id + ":" + d.charge[0], q = a.id + ":" + d.charge[1], [tp, tq] = R.poles[a.id];
+      chemin(p, vers(tp)); chemin(q, vers(tq));
     });
-    if (S.secteur && !S.hs) Object.keys(ENTREES).forEach(b => { if (R.ent[ENTREES[b]] || isFinite(R.ohm[ENTREES[b]])) chemin(b, ["G"]); });
+    I.acc.filter(a => a.t === "mot").forEach(a => { const m = R.moteurs[a.id]; if (!m || !(m.O || m.F)) return; const k = a.id + ":", w = m.O ? k + "O" : k + "F"; const pc = R.T(k + "C"); chemin(k + "C", vers(pc.has("L") ? "L" : "N")); chemin(w, vers(pc.has("L") ? "N" : "L")); });
+    if (R.carteOn) Object.keys(ENTREES).forEach(b => { if (R.ent[ENTREES[b]] || isFinite(R.ohm[ENTREES[b]])) chemin(b, ["G"]); });
     return flux;
   }
 
@@ -260,10 +291,13 @@
     S.t++;
     const R = circuit(); S.R = R;
     /* défauts électriques */
-    if (S.secteur && R.def.d230 && !S.hs) { S.hs = true; S.dir = 0; dit("230 V sur la très basse tension : carte et accessoires 24 V détruits. Le 230 V ne se raccorde qu'au contact sec COR (" + nB("cor1") + "-" + nB("cor2") + "), jamais sur les bornes 24 V. Corrigez le câblage, coupez le secteur puis « Remplacer la carte » (Missions).", "Bornier : COR = contact libre, 230 V~ 100 W", true); }
-    if (S.secteur && R.def.cc24 && S.f3) { S.f3 = false; dit("Court-circuit entre une sortie 24 V et COM : le fusible " + F.facc.court + " (alimentation des accessoires) a grillé. Coupez le secteur, corrigez le câblage et remplacez " + F.facc.court + " (touchez-le sur la carte).", "Fiche : " + F.facc.nom + " ; code FE : fusible " + F.facc.court + " grillé avec fins de course magnétiques", true); }
+    if (M && R.def.d230 && !S.hs && S.secteur) { S.hs = true; S.dir = 0; dit("230 V sur la très basse tension : carte et accessoires 24 V détruits. Le 230 V ne va que sur l'alimentation, le moteur et la lampe (" + M.texte230 + "). Corrigez le câblage, coupez le secteur puis « Remplacer la carte » (Missions).", M.source230, true); }
+    if (M && R.def.cc24 && S.f3) { S.f3 = false; dit(M.texteCC, "", true); }
+    if (!M && S.secteur && R.def.d230 && !S.hs) { S.hs = true; S.dir = 0; dit("230 V sur la très basse tension : carte et accessoires 24 V détruits. Le 230 V ne se raccorde qu'au contact sec COR (" + nB("cor1") + "-" + nB("cor2") + "), jamais sur les bornes 24 V. Corrigez le câblage, coupez le secteur puis « Remplacer la carte » (Missions).", "Bornier : COR = contact libre, 230 V~ 100 W", true); }
+    if (!M && S.secteur && R.def.cc24 && S.f3) { S.f3 = false; dit("Court-circuit entre une sortie 24 V et COM : le fusible " + F.facc.court + " (alimentation des accessoires) a grillé. Coupez le secteur, corrigez le câblage et remplacez " + F.facc.court + " (touchez-le sur la carte).", "Fiche : " + F.facc.nom + " ; code FE : fusible " + F.facc.court + " grillé avec fins de course magnétiques", true); }
     if (S.secteur && R.def.ccAC && !S.ccAC) { S.ccAC = true; dit("Court-circuit sur l'arrivée 230 V~ : la protection de l'installation coupe (non dessinée).", ""); }
     if (!R.def.ccAC) S.ccAC = false;
+    if (M) { M.tick(api(), R); I.acc.forEach(a => { const e = S.etat[a.id]; if (e && e.imp) { e.imp--; if (!e.imp) e.on = false; } }); maj(); return; }
     const actif = S.secteur && !S.hs && !panneBloque();
     const E = R.ent;
     /* entrées de sécurité */
@@ -354,6 +388,7 @@
   }
 
   /* ---------- missions (vérifiées sur le câblage, carte sous tension) ---------- */
+  const missions = () => M ? M.missions(api()) : MISSIONS;
   const MISSIONS = [
     { id: "ap", t: "Bouton poussoir en ouverture", but: "Câblez un bouton poussoir qui commande l'OUVERTURE (AP).", aide: () => `Contact NO entre AP (${nB("ap")}) et le commun des commandes COM (${nB("cmdCom")}).`, test: m => essai(m, [["pp", "on"]], "AP") },
     { id: "cle", t: "Sélecteur à clé ouverture / fermeture", but: "Câblez un sélecteur à clé : à gauche OUVERTURE (AP), à droite FERMETURE (CH).", aide: () => `C du sélecteur sur COM (${nB("cmdCom")}), NO1 sur AP (${nB("ap")}), NO2 sur CH (${nB("ch")}).`, test: m => essai(m, [["cle", "g"]], "AP") || essai(m, [["cle", "d"]], "CH") },
@@ -366,7 +401,7 @@
   ];
   /* essai : on simule l'action et on regarde l'entrée de la carte, sur une copie de l'état */
   function avec(etats, f) {
-    const sauv = { etat: JSON.parse(JSON.stringify(S.etat)), secteur: S.secteur, hs: S.hs, f3: S.f3, dir: S.dir, pre: S.pre, t: S.t, corT: S.corT, sc: S.sc };
+    const sauv = { etat: JSON.parse(JSON.stringify(S.etat)), secteur: S.secteur, hs: S.hs, f3: S.f3, dir: S.dir, pre: S.pre, t: S.t, corT: S.corT, sc: S.sc, rel: S.rel, lampe: S.lampe, sec: S.sec, pos: S.pos, cmd: S.cmd };
     S.secteur = true; S.hs = false; S.f3 = true; S.etat = {}; const rad = S.radio, cr = [S.corRadio, S.corRadio5]; S.radio = {}; S.corRadio = S.corRadio5 = false; /* accessoires au repos pour l'essai */
     try { circuit(); etats(); return f(circuit()); } finally { Object.assign(S, sauv); S.radio = rad; [S.corRadio, S.corRadio5] = cr; }
   }
@@ -430,7 +465,7 @@
   function verifierMission() { /* rien en continu : la vérification se fait au bouton */ }
 
   /* ---------- dessin ---------- */
-  const W = 390, H = 654;
+  const W = 390, H = 680;
   const posB = k => { if (k.startsWith("b:")) { const b = BORNES[k]; return b ? [b.x, b.y] : null; } const [id, n] = k.split(":"); const a = I.acc.find(x => x.id === id); if (!a) return null; const i = ACC[a.t].b.findIndex(b => b[0] === n); return [a.x + 14 + i * 24, a.y + 40]; };
   /* fil : part vers le haut depuis une borne de la carte, vers le bas depuis un accessoire */
   const chemin = (a, b, m) => { const p = posB(a), q = posB(b); if (!p || !q) return ""; const dy = Math.max(28, Math.abs(q[1] - p[1]) * 0.5), sp = a.startsWith("b:") ? -1 : 1, sq = b.startsWith("b:") ? -1 : 1;
@@ -439,6 +474,7 @@
     const tx = (q[0] - p[0]) / 4, ty = (q[1] - p[1]) / 4, l1 = Math.max(20, Math.abs(m[1] - p[1]) * 0.5), l2 = Math.max(20, Math.abs(q[1] - m[1]) * 0.5);
     return `M${p[0]} ${p[1]} C${p[0]} ${p[1] + sp * l1} ${m[0] - tx} ${m[1] - ty} ${m[0]} ${m[1]} C${m[0] + tx} ${m[1] + ty} ${q[0]} ${q[1] + sq * l2} ${q[0]} ${q[1]}`; };
   function dessinCarte() {
+    if (M) return M.dessin(api());
     const g = [];
     const T = (x, y, t, o = "") => g.push(`<text x="${x}" y="${y}" ${o}>${esc(t)}</text>`);
     const GR = "#5b605d";
@@ -476,8 +512,8 @@
     const d = ACC[a.t], w = largeur(a.t), sel = S.selAcc === a.id;
     let h = `<g class="caba" data-a="${a.id}" transform="translate(${a.x} ${a.y})"><rect class="cabbox" width="${w}" height="56" rx="10" fill="#262626" stroke="${sel ? "#f0b429" : "#3a3a3a"}" stroke-width="${sel ? 2 : 1}"/>`;
     h += `<text x="10" y="16" class="cabn">${esc(d.nom)}${a.t === "tx" || a.t === "rx" ? " " + a.paire : ""}</text><text x="10" y="27" class="cabs">${esc(d.sous)}</text>`;
-    if (d.charge && a.t !== "digi" && a.t !== "tx" && a.t !== "rx") h += `<circle id="cabl-${a.id}" cx="${w - 14}" cy="14" r="7" fill="#333"/>`;
-    if (["pp", "stop", "oro", "bnf", "b8k", "cle", "digi"].includes(a.t)) h += `<text id="cabe-${a.id}" x="${w - 8}" y="16" class="cabs" text-anchor="end" fill="#f0b429"></text>`;
+    if (d.charge && !["digi", "tx", "rx", "txc", "rxc"].includes(a.t)) h += `<circle id="cabl-${a.id}" cx="${w - 14}" cy="14" r="7" fill="#333"/>`;
+    if (["pp", "stop", "oro", "bnf", "b8k", "cle", "digi", "mot"].includes(a.t)) h += `<text id="cabe-${a.id}" x="${w - 8}" y="16" class="cabs" text-anchor="end" fill="#f0b429"></text>`;
     d.b.forEach(([k, lab], i) => { const x = 14 + i * 24; h += `<circle class="cabb" data-b="${a.id}:${k}" cx="${x}" cy="40" r="4.5" fill="#d7dde4"/><text x="${x}" y="53" class="cabs" text-anchor="middle">${esc(lab)}</text><circle class="cabhit" data-b="${a.id}:${k}" cx="${x}" cy="40" r="11" fill="transparent"/>`; });
     return h + `</g>`;
   }
@@ -492,7 +528,7 @@
   function rendre() {
     const sv = $("#cabsvg"); if (!sv) return;
     const fils = I.fils.map(w => { const d = chemin(w.a, w.b, w.p); return `<path class="cabwh" data-w="${w.id}" id="cwh-${w.id}" d="${d}"/><path class="cabw${S.selFil === w.id ? " sel" : ""}" id="cw-${w.id}" data-w="${w.id}" d="${d}" stroke="${w.c}" />`; }).join("");
-    const faisceaux = [...new Set(I.acc.filter(a => a.t === "tx").map(a => a.paire))].map(p => { const t = I.acc.find(a => a.t === "tx" && a.paire === p), r = I.acc.find(a => a.t === "rx" && a.paire === p); if (!t || !r) return ""; return `<line id="cabf-${p}" x1="${t.x + largeur("tx")}" y1="${t.y + 20}" x2="${r.x}" y2="${r.y + 20}" stroke-width="2"/>`; }).join("");
+    const faisceaux = [...new Set(I.acc.filter(a => a.t === "tx" || a.t === "txc").map(a => a.paire))].map(p => { const t = I.acc.find(a => (a.t === "tx" || a.t === "txc") && a.paire === p), r = I.acc.find(a => (a.t === "rx" || a.t === "rxc") && a.paire === p); if (!t || !r) return ""; return `<line id="cabf-${p}" x1="${t.x + largeur("tx")}" y1="${t.y + 20}" x2="${r.x}" y2="${r.y + 20}" stroke-width="2"/>`; }).join("");
     sv.innerHTML = `<defs><pattern id="cabgr" width="13" height="13" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".9" fill="#2a2a2a"/></pattern></defs><rect width="${W}" height="${H}" fill="url(#cabgr)"/>` +
       dessinPortail() + dessinCarte() + faisceaux + I.acc.filter(a => !ACC[a.t].enfiche).map(dessinAcc).join("") + `<g id="cabfils" class="${S.estompe ? "estompe" : ""}" fill="none" stroke-width="3" stroke-linecap="round">${fils}</g><g id="cabhits">${hits()}</g><g id="cabsel"></g><g id="cabmm"></g>`;
     maj(); panneau();
@@ -522,6 +558,7 @@
       { a: on(L.ft2, "FT2"), e: S.pos >= 100 ? "" : "on", c: S.pos <= 0 ? "" : "on", dp: L.st17 ? "on" : "" }] };
   }
   function dessinAff() {
+    if (M) return M.voyants(api());
     const A = affichage(), y0 = DY + 50; let h = "";
     const SEG = { a: [1, 0, 10, 0], b: [11, 1, 11, 9], c: [11, 11, 11, 19], d: [1, 20, 10, 20], e: [0, 11, 0, 19], f: [0, 1, 0, 9], g: [1, 10, 10, 10] };
     const X = [246, 263, 294, 311];
@@ -547,7 +584,8 @@
       if (l) { let on = !!R.alim[a.id]; if (a.t === "lam" && on && par("78") === "00") on = Math.floor(S.t / 5) % 2 === 0; /* le clignotant fait lui-même l'intermittence */ l.setAttribute("fill", on ? (a.t === "voy" ? "#4cc27a" : "#f0b429") : "#333"); }
       const t = document.getElementById("cabe-" + a.id), es = S.etat[a.id] || {};
       if (t) t.textContent = a.t === "stop" ? (es.on ? "enfoncé" : "") : a.t === "oro" ? (es.on ? "active" : "") : a.t === "cle" ? (es.g ? "◀ gauche" : es.d ? "droite ▶" : "") : a.t === "digi" ? (es.on ? "code OK" : R.alim[a.id] ? "allumé" : "") : es.on ? "actionné" : "";
-      if (a.t === "tx") { const f = document.getElementById("cabf-" + a.paire), rx = I.acc.find(x => x.t === "rx" && x.paire === a.paire); if (f) { const cut = (S.etat["p" + a.paire] || {}).coupe, on = R.alim[a.id]; f.setAttribute("stroke", !on ? "#444" : cut ? "#ff4d4d" : "#ff8a80"); f.setAttribute("stroke-dasharray", cut ? "3 3" : on ? "" : "2 5"); f.setAttribute("opacity", on ? 1 : .6); } }
+      if (a.t === "mot") { const t = document.getElementById("cabe-" + a.id), m = R.moteurs[a.id]; if (t) t.textContent = !m ? "" : m.bloque ? "2 enroulements !" : m.sens > 0 ? "tourne ▶ ouvre" : m.sens < 0 ? "◀ ferme" : ""; }
+      if (a.t === "tx" || a.t === "txc") { const f = document.getElementById("cabf-" + a.paire); if (f) { const cut = (S.etat["p" + a.paire] || {}).coupe, on = R.alim[a.id]; f.setAttribute("stroke", !on ? "#444" : cut ? "#ff4d4d" : "#ff8a80"); f.setAttribute("stroke-dasharray", cut ? "3 3" : on ? "" : "2 5"); f.setAttribute("opacity", on ? 1 : .6); } }
     });
     const inf = $("#cabinfo"), h = infoHtml(); if (inf && inf._h !== h) { inf.innerHTML = h; inf._h = h; } /* ne pas recréer les boutons à chaque image */
   }
@@ -574,9 +612,11 @@
       if (R.U.f(a) === R.U.f(b)) return "0 Ω : continuité (bip)."; const r = resistance(R, a, b); return isFinite(r) ? Math.round(r) + " Ω" : "OL : circuit ouvert.";
     }
     const ta = R.T(a), tb = R.T(b);
-    const pot = t => t.has("+24") || t.has("LAM") || t.has("SC") ? 24 : t.has("0V") ? 0 : t.has("L") ? "L" : t.has("N") ? "N" : null;
+    const pot = t => aDC(t) ? 24 : t.has("+12") ? 12 : t.has("0V") ? 0 : t.has("L") ? "L" : t.has("N") ? "N" : t.has("A24") ? "A" : t.has("A24b") ? "B" : null;
     const pa = pot(ta), pb = pot(tb);
     if (!S.secteur) return "0 V : secteur coupé.";
+    if ((pa === "A" && pb === "B") || (pa === "B" && pb === "A")) return "24 V~ (alternatif).";
+    if (pa === "A" || pa === "B" || pb === "A" || pb === "B") return pa === pb ? "0 V~ : même conducteur." : "Mesure entre le 24 V~ et un autre circuit : non significative.";
     if ((pa === "L" && pb === "N") || (pa === "N" && pb === "L")) return "230 V~ (alternatif).";
     if (pa === "L" || pa === "N" || pb === "L" || pb === "N") { if (pa === pb) return "0 V~ : même conducteur."; if (pa === null || pb === null) return "Une pointe au 230 V~, l'autre sur un conducteur en l'air : tension non déterminée. Prudence."; return "Mesure entre le 230 V~ et la très basse tension de la carte : non significative (circuits séparés)."; }
     if (R.U.f(a) === R.U.f(b)) return "0 V : les deux pointes sont sur le même conducteur.";
@@ -597,7 +637,7 @@
   function panneau() {
     const el = $("#cabpan"); if (!el) return;
     if (S && I) { I.acc.forEach(a => { const e = S.etat[a.id]; if (e && ["pp", "bnf", "b8k"].includes(a.t)) e.on = false; if (e && a.t === "cle") e.g = e.d = false; }); S.radio = {}; } /* un appui en cours ne reste pas coincé */
-    const radio = I.acc.some(a => a.t === "radio");
+    const radio = !M && I.acc.some(a => a.t === "radio");
     if (S.mode === "cabler") {
       el.innerHTML = `<div class="cabcoul">${COULEURS.map(([c, n]) => `<button class="cabc${S.couleur === c ? " on" : ""}" style="--c:${c}" aria-label="Fil ${n}" onclick="CAB.couleur('${c}')"></button>`).join("")}</div>
         <h4 class="cabh">Bibliothèque d'accessoires</h4><div class="cablib">${BIBLIO.map(t => `<button class="cabchip" onclick="CAB.poser('${t}')"><span>${ACC[t].ic}</span>${esc(ACC[t].nom)}<small>${esc(ACC[t].sous)}</small></button>`).join("")}</div>
@@ -611,8 +651,9 @@
         if (a.t === "digi") acts.push(`<button class="cabact" onclick="CAB.code('${a.id}')">⌨ Taper le code</button>`);
         if (a.t === "stop") acts.push(`<button class="cabact" onclick="CAB.bascule('${a.id}')">⛔ ${(S.etat[a.id] || {}).on ? "Déverrouiller STOP" : "Appuyer STOP"}</button>`);
         if (a.t === "oro") acts.push(`<button class="cabact" onclick="CAB.bascule('${a.id}')">⏰ Horloge ${(S.etat[a.id] || {}).on ? "OFF" : "ON"}</button>`);
-        if (a.t === "rx") acts.push(`<button class="cabact" onclick="CAB.faisceau(${a.paire})">✋ ${(S.etat["p" + a.paire] || {}).coupe ? "Dégager" : "Couper"} cellules ${a.paire}</button>`);
+        if (a.t === "rx" || a.t === "rxc") acts.push(`<button class="cabact" onclick="CAB.faisceau(${a.paire})">✋ ${(S.etat["p" + a.paire] || {}).coupe ? "Dégager" : "Couper"} cellules ${a.paire}</button>`);
       });
+      if (M && M.radio) acts.push(M.radio.map((l, i) => `<button class="cabact" data-radio="PR${i + 1}">📡 Télécommande touche ${i + 1}<small>${esc(l)}</small></button>`).join(""));
       if (radio) acts.push(`<button class="cabact" data-radio="PR1">📡 Télécommande touche 1<small>${esc(pdesc("76").slice(0, 26))}</small></button><button class="cabact" data-radio="PR2">📡 Touche 2<small>${esc(pdesc("77").slice(0, 26))}</small></button>`);
       el.innerHTML = `<div class="cabacts">${acts.join("") || `<p class="note">Aucun accessoire actionnable : posez-en en mode Câbler.</p>`}</div>
         <div class="sga"><button class="mini" onclick="CAB.mm()">🧪 Multimètre</button><button class="mini" onclick="CAB.parametres()">⚙ Paramètres</button><button class="mini" onclick="CAB.missions()">🎯 Missions</button></div>
@@ -649,6 +690,7 @@
         if (S.mode === "cabler" && !S.mm && !S.sel) { borne(k); tir = { k, cx: e.clientX, cy: e.clientY, bouge: false }; try { sv.setPointerCapture(e.pointerId); } catch (er) {} return; }
         return borne(k);
       }
+      const mm = t.closest(".cabm"); if (mm && M) { S.msgU = M.clic(api(), mm.dataset.m); maj(); return; } /* dip-switch et cavaliers dessinés */
       if (k) { const kk = k.dataset.k; touche(kk); clearInterval(rep); if (kk === "pl" || kk === "mo") { const t0 = Date.now(); rep = setInterval(() => { if (Date.now() - t0 > 500) touche(kk); }, 140); } return; } /* + / − maintenus : défilement rapide */
       if (us) return usine(us.dataset.u);
       if (fil && !S.mm) { const w = I.fils.find(x => x.id === fil.dataset.w); if (w) { tirFil = { w, cx: e.clientX, cy: e.clientY, bouge: false, p0: w.p }; try { sv.setPointerCapture(e.pointerId); } catch (er) {} } return; }
@@ -673,7 +715,7 @@
     if (["pp", "bnf", "b8k"].includes(a.t)) e.on = bas;
     else if (bas && (a.t === "stop" || a.t === "oro")) { e.on = !e.on; panneau(); }
     else if (bas && a.t === "digi") codeDigi(a.id);
-    else if (bas && (a.t === "tx" || a.t === "rx")) faisceau(a.paire);
+    else if (bas && ["tx", "rx", "txc", "rxc"].includes(a.t)) faisceau(a.paire);
     else if (a.t === "cle") e.g = bas;
   }
   function codeDigi(id) { const e = S.etat[id] = S.etat[id] || {}; if (!e.alim) { S.msgU = "Le digicode reste éteint : il n'est pas alimenté."; return; } e.on = true; e.imp = 10; S.msgU = ""; }
@@ -698,6 +740,7 @@
     const x = P.liste[P.i]; I.params[x.code] = P.edit; P.edit = null; P.flash = 8; sauver(); panneau(); maj();
   }
   function touche(k) {
+    if (M) { S.msgU = M.touche(api(), k); maj(); return; }
     if (!S.secteur || S.hs) { S.msgU = "Carte hors tension : l'afficheur et les touches ne répondent pas."; maj(); return; }
     if (k === "test") { if (S.dir) { stopper("Touche TEST pendant le mouvement : ARRÊT."); return; } enregistrerP(); S.prog = null; S.test = !S.test; S.msgU = S.test ? "Mode TEST (§ 9.3) : à gauche la commande active, à droite la première sécurité en alarme (00 = aucune). Touchez TEST à nouveau pour en sortir." : ""; maj(); return; }
     if (k === "prog") { S.msgU = "PROG lance l'apprentissage de la course (§ 10) : non simulé dans l'atelier."; maj(); return; }
@@ -723,6 +766,7 @@
     return `<b>${esc(x.code)} · ${esc(x.titre)}</b><br>${P.edit !== null ? "Valeur en cours de modification (elle clignote, enregistrée dans 3 s) : " : "Valeur : "}<b>${esc(v || "—")}</b>${o && o.d ? " — " + esc(o.d) : ""}${!L ? "<br><i>Réglage à procédure propre ou en lecture : voir la fiche.</i>" : ""}<br><button class="mini" onclick="CAB.etatAff()">Revenir à l'état des entrées</button> <small>(la notice ne dit pas comment l'afficheur y revient)</small>`;
   }
   function usine(id) {
+    if (M) { const h = M.usineInfo(api(), id); if (h != null) { S.msgU = h; S.mm = null; maj(); } return; }
     const u = USINE[id]; if (!u) return;
     const ent = C.bornier.groupes.flatMap(g => g.bornes);
     const map = { mot: "Moteur", enc: "Encodeur", fc: "Fins de course", sb: "Déverrouillage", sec: F.alim.carte, batt: "Batteries", wifi: "B74/BCONNECT", rec: "Récepteur" };
@@ -753,7 +797,7 @@
       <div class="cabzone"><svg id="cabsvg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Carte ${esc(C.nom)} et accessoires"></svg>
         <div class="cabzbt"><button onclick="CAB.zoom(1.4)" aria-label="Zoomer">＋</button><button onclick="CAB.zoom(1 / 1.4)" aria-label="Dézoomer">−</button><button onclick="CAB.zoomRaz()" aria-label="Vue entière" id="cabzl">100 %</button><button onclick="CAB.plein()" id="cabplb" aria-label="Plein écran">⛶</button></div></div>
       <div class="cabinfo" id="cabinfo" aria-live="polite"></div><div id="cabpan"></div><div id="cabsheet"></div></div>
-      <p class="hotn">Simulateur de formation construit d'après la fiche (source : ${esc(C.source)}) : bornier, paramètres, afficheur (§ 9.2), mode TEST (§ 9.3), codes. Disposition des borniers : ${esc(F.fig)}. Accessoires génériques. Vitesse du portail indicative (environ 10 s pour la course). Non simulés : apprentissage de la course et des télécommandes, batteries, fonctionnement MASTER / SLAVE, veille low power, sortie SC en test des photocellules ou battery saving (A8 02 à 04, sortie laissée coupée), commandes radio avec confirmation (76 / 77 = 07 à 10). Refermeture après ouverture partielle (16) appliquée seulement quand A2 est actif. Les bornes COM (${F.coms.join(", ")}) sont traitées comme un 0 V commun.</p>`;
+      <p class="hotn">${M ? M.notes : `Simulateur de formation construit d'après la fiche (source : ${esc(C.source)}) : bornier, paramètres, afficheur (§ 9.2), mode TEST (§ 9.3), codes. Disposition des borniers : ${esc(F.fig)}. Accessoires génériques. Vitesse du portail indicative (environ 10 s pour la course). Non simulés : apprentissage de la course et des télécommandes, batteries, fonctionnement MASTER / SLAVE, veille low power, sortie SC en test des photocellules ou battery saving (A8 02 à 04, sortie laissée coupée), commandes radio avec confirmation (76 / 77 = 07 à 10). Refermeture après ouverture partielle (16) appliquée seulement quand A2 est actif. Les bornes COM (${F.coms.join(", ")}) sont traitées comme un 0 V commun.`}</p>`;
     rendre(); brancherSvg(); outils();
     clearInterval(minuterie); minuterie = setInterval(() => { if (location.hash !== "#/cab/" + id) { clearInterval(minuterie); clearTimeout(tEnr); document.body.classList.remove("cabnoscroll"); return; } tick(); }, 100);
   }
@@ -766,7 +810,7 @@
       if (ACC[t].fil) { S.couleur = "#f5f5f5"; S.msgU = "Fil de pont : touchez la première borne de la carte, puis la seconde (exemple : " + nB("ft1") + " et " + nB("com") + " pour ponter FT1 absente)."; panneau(); maj(); return; }
       if (ACC[t].enfiche) { this.radio(); return; }
       if (I.acc.length >= 14) { S.msgU = "Quatorze accessoires maximum."; maj(); return; }
-      if (ACC[t].paire) { const p = 1 + Math.max(0, ...I.acc.filter(a => a.paire).map(a => a.paire)); [["tx"], ["rx"]].forEach(([u]) => { const [x, y] = libre(u); I.acc.push({ id: "a" + (I.n++), t: u, x, y, paire: p }); }); }
+      if (ACC[t].paire) { const p = 1 + Math.max(0, ...I.acc.filter(a => a.paire).map(a => a.paire)); (ACC[t].paire === "c" ? [["txc"], ["rxc"]] : [["tx"], ["rx"]]).forEach(([u]) => { const [x, y] = libre(u); I.acc.push({ id: "a" + (I.n++), t: u, x, y, paire: p }); }); }
       else { const [x, y] = libre(t); I.acc.push({ id: "a" + (I.n++), t, x, y }); }
       sauver(); rendre();
     },
@@ -792,7 +836,7 @@
     mission(id) { S.mission = { id, t0: Date.now(), aide: false }; feuille("missions"); },
     aide() { if (S.mission) S.mission.aide = true; feuille("missions"); },
     verifier() {
-      const m = MISSIONS.find(x => x.id === (S.mission || {}).id); if (!m) return;
+      const m = missions().find(x => x.id === (S.mission || {}).id); if (!m) return;
       if (S.hs) { S.mission.res = "La carte est détruite (230 V) : effacez le câblage fautif puis « Remplacer la carte » en coupant le secteur."; feuille("missions"); return; }
       const err = m.test(m); S.mission.res = err ? "✗ " + err : "✓ Réussi : câblage correct."; S.mission.ok = !err;
       if (window.SIM && SIM.noter) SIM.noter(C.id, "Câblage : " + m.t, !err, S.mission.aide, (Date.now() - S.mission.t0) / 1000);
@@ -801,12 +845,14 @@
     etatAff() { enregistrerP(); S.prog = null; S.msgU = ""; maj(); },
     zoom(f) { zoomer(f); }, zoomRaz() { Z = { x: 0, y: 0, w: W, h: H }; appliquerZ(); },
     plein() { const w = $("#cabwrap"); if (!w) return; const on = !w.classList.contains("cabplein"); w.classList.toggle("cabplein", on); document.body.classList.toggle("cabnoscroll", on); const b = $("#cabplb"); if (b) { b.textContent = on ? "✕" : "⛶"; b.setAttribute("aria-label", on ? "Quitter le plein écran" : "Plein écran"); } },
+    clic(k) { if (M) { S.msgU = M.clic(api(), k); maj(); } },
     carte() { if (S.secteur) { S.msgU = "Coupez le secteur avant de remplacer la carte."; maj(); return; } S.hs = false; S.f3 = true; S.pannes = {}; S.msg = []; rendre(); }
   };
   function feuille(k) {
     const s = $("#cabsheet"); if (!s) return;
     let h = "";
-    if (k === "params") {
+    if (k === "params" && M) { h = M.feuille(api()); }
+    else if (k === "params") {
       const tous = SIM.ordreRoger(C), ligne = x => { const c = x.code, L = SIM.valeursRoger(x);
         if (!L) return `<label><b>${esc(c)}</b> ${esc(x.titre)}<span class="hotn">Réglage à procédure propre ou en lecture : voir la fiche.</span></label>`;
         const v = pval(c), d = pdef(c);
@@ -814,11 +860,14 @@
       const actifs = tous.filter(x => PARAMS.includes(x.code)), autres = tous.filter(x => !PARAMS.includes(x.code));
       h = `<h3>Paramètres de la carte</h3><p class="note">Tous les paramètres de la notice, dans son ordre. Valeurs et réglages usine d'après la fiche. Ils se règlent aussi avec les touches de la carte (▲ ▼ puis + −), sous tension et moteur à l'arrêt.</p><h4 class="cabh">Paramètres qui agissent dans l'atelier</h4><div class="cabpar">${actifs.map(ligne).join("")}</div><h4 class="cabh">Autres paramètres</h4><p class="hotn">Enregistrés, mais sans effet simulé dans l'atelier (vitesses, couple, ralentissements, batterie, MASTER / SLAVE…).</p><div class="cabpar">${autres.map(ligne).join("")}</div><div class="sga"><button class="mini" onclick="CAB.usineParams()">Réglages usine</button><button class="mini" onclick="CAB.fermer()">Fermer</button></div>`;
     } else {
-      const m = S.mission && MISSIONS.find(x => x.id === S.mission.id);
+      const m = S.mission && missions().find(x => x.id === S.mission.id);
       h = `<h3>Missions</h3>` + (m ? `<p><b>${esc(m.t)}</b><br>${esc(m.but)}</p>${S.mission.aide ? `<p class="note">${esc(m.aide())}</p>` : ""}${S.mission.res ? `<p class="${S.mission.ok ? "simok" : "note"}">${esc(S.mission.res)}</p>` : ""}<div class="sga"><button class="mini" onclick="CAB.verifier()">Vérifier mon câblage</button>${S.mission.aide ? "" : `<button class="mini" onclick="CAB.aide()">Indice</button>`}<button class="mini" onclick="CAB.mission('')">Autre mission</button></div>` :
-        `<div class="list">${MISSIONS.map(x => `<button class="row" onclick="CAB.mission('${x.id}')"><b>${esc(x.t)}</b><small>${esc(x.but)}</small></button>`).join("")}</div>`) + `<div class="sga"><button class="mini" onclick="CAB.fermer()">Fermer</button>${S.hs ? `<button class="mini" onclick="CAB.carte()">Remplacer la carte</button>` : ""}</div>`;
+        `<div class="list">${missions().map(x => `<button class="row" onclick="CAB.mission('${x.id}')"><b>${esc(x.t)}</b><small>${esc(x.but)}</small></button>`).join("")}</div>`) + `<div class="sga"><button class="mini" onclick="CAB.fermer()">Fermer</button>${S.hs ? `<button class="mini" onclick="CAB.carte()">Remplacer la carte</button>` : ""}</div>`;
     }
     s.innerHTML = `<div class="cabfeuille">${h}</div>`; s.scrollIntoView({ block: "nearest", behavior: "smooth" });
   }
-  window.CABT = { circuit: () => circuit(), etat: () => S, inst: () => I, K: () => K, bornes: () => BORNES, essai: id => MISSIONS.find(m => m.id === id).test() }; /* pour les tests */
+  /* interface donnée aux modèles de cartes (cablage-*.js) */
+  function api() { return { S, I, R: S && S.R, K, BORNES, DY, W, H, C, F, ACC, esc, dit, avec, essai, nB, largeur, posB, panneau, maj, rendre, sauver, feuille, actives, resistance,
+    par: k => I.params[k], regler(k, v) { I.params[k] = v; sauver(); panneau(); }, cut: p => !!(S.etat["p" + p] || {}).coupe }; }
+  window.CABT = { circuit: () => circuit(), etat: () => S, inst: () => I, K: () => K, bornes: () => BORNES, essai: id => missions().find(m => m.id === id).test(), api: () => api() }; /* pour les tests */
 })();
