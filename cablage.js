@@ -73,6 +73,17 @@
   let S = null; /* simulation */
   const neuf = () => ({ n: 1, acc: [], fils: [{ id: "w0", a: "b:16", b: "b:17", c: "#f5f5f5", usine: 1 }], params: {} });
   const sauver = () => st.set(cleI, I);
+  /* installation relue depuis le téléphone : on ne garde que des valeurs attendues */
+  function propre(x) {
+    try {
+      if (!x || !Array.isArray(x.acc) || !Array.isArray(x.fils)) return null;
+      const acc = x.acc.filter(a => a && /^a\d{1,5}$/.test(a.id) && ACC[a.t] && !ACC[a.t].paire && !ACC[a.t].fil && Number.isFinite(a.x) && Number.isFinite(a.y)).map(a => ({ id: a.id, t: a.t, x: Math.round(a.x), y: Math.round(a.y), paire: Number.isInteger(a.paire) ? a.paire : undefined }));
+      const ok = k => { if (typeof k !== "string") return false; if (BORNES[k]) return true; const i = k.indexOf(":"), a = acc.find(x => x.id === k.slice(0, i)); return !!(a && ACC[a.t].b && ACC[a.t].b.some(b => b[0] === k.slice(i + 1))); };
+      const fils = x.fils.filter(w => w && /^w\d{1,5}$/.test(w.id) && ok(w.a) && ok(w.b) && /^#[0-9a-f]{6}$/i.test(w.c)).map(w => ({ id: w.id, a: w.a, b: w.b, c: w.c, usine: w.usine ? 1 : undefined }));
+      const params = {}; Object.keys(x.params || {}).forEach(k => { if (PARAMS.includes(k) && /^\d{2}$/.test(x.params[k])) params[k] = x.params[k]; });
+      return { n: Math.max(1, parseInt(x.n, 10) || 1, ...acc.map(a => +a.id.slice(1) + 1), ...fils.map(w => +w.id.slice(1) + 1)), acc, fils, params };
+    } catch (e) { return null; }
+  }
   function simNeuve() {
     return { secteur: false, mode: "cabler", pos: 0, dir: 0, cible: 0, arret: null, att: null, pause: 0, inv: 0, pre: 0, preDir: 0, lamT: 0, corT: 0, sc: 0, t: 0,
       prec: {}, etat: {}, pannes: {}, f3: true, hs: false, test: false, sel: null, selFil: null, selAcc: null, couleur: "#e5484d", msg: [], mm: null, mmMode: "V", radio: {}, tentatives: 0, oroLatch: false, mission: null };
@@ -121,7 +132,10 @@
         const d = ACC[a.t]; if (!d.charge) return;
         const p = T(a.id + ":" + d.charge[0]), q = T(a.id + ":" + d.charge[1]);
         if (d.ac) alim[a.id] = (p.has("L") && q.has("N")) || (p.has("N") && q.has("L"));
-        else { alim[a.id] = (dc(p) && q.has("0V") && !dc(q)) || (dc(q) && p.has("0V") && !dc(p)); if ((p.has("L") || q.has("L"))) def.d230 = true; }
+        else {
+          const pol = d.charge[0] === "+"; /* digicode et cellules : + et − repérés */
+          alim[a.id] = (dc(p) && q.has("0V") && !dc(q)) || (!pol && dc(q) && p.has("0V") && !dc(p));
+          if (p.has("L") || q.has("L") || p.has("N") || q.has("N")) def.d230 = true; }
       });
       /* état dynamique des accessoires alimentés */
       let change = false;
@@ -189,6 +203,7 @@
     const per = m === "02" && d < 0 ? 4 : 10; return Math.floor(S.t / (per / 2)) % 2 === 0;
   }
   function corFerme() {
+    if (S.corRadio || S.corRadio5) return true; /* 76 / 77 = 05 ou 06 : 79 ignoré */
     const m = par("20");
     if (m === "00") { const t = par("79"); if (t === "00") return false; if (t === "01") return S.corT > 0; if (t === "02") return !!S.dir; return !!S.dir || S.corT > 0; }
     if (m === "01") return !panneBloque(); if (m === "02" || m === "03") return true; /* sans batterie simulée : pas d'anomalie */
@@ -200,12 +215,18 @@
     if (v === "01" || v === "03") return r === 0; if (v === "02" || v === "04") return r > 6500 && r < 10000; if (v === "12" || v === "14") return r > 3300 && r < 5000; return null;
   }
   function bouger(d, cible, raison) {
-    if (d > 0 && S.pos >= cible) return; if (d < 0 && S.pos <= 0) return;
+    if (d > 0 && S.pos >= cible) return false; if (d < 0 && S.pos <= 0) return false;
+    if ((S.pre && S.preDir === d) || S.dir === d) { S.cible = cible; return true; } /* déjà en route (ou en préclignotement) dans ce sens */
+    if (d > 0 && S.pos === 0 && S.lu) { /* portail fermé, cellule occultée : 52 / 55 = 00 → ouverture impossible */
+      const r = [["ft1", "FT1", "52", "50", "51"], ["ft2", "FT2", "55", "53", "54"]].find(([k, , p, a, b]) => !S.lu[k] && par(p) === "00" && !(par(a) === "00" && par(b) === "00"));
+      if (r) { dit(r[1] + " occultée portail fermé : ouverture impossible (paramètre " + r[2] + " = 00).", "Paramètre " + r[2] + " : " + pdesc(r[2], "00")); return false; }
+    }
     const pre = par("A5"), n = pre === "99" ? (d < 0 ? 5 : 0) : pn("A5");
     S.cible = cible; S.arret = null; S.att = null; S.pause = 0;
     if (n > 0 && !S.dir) { S.pre = n * 10; S.preDir = d; S.dir = 0; } else { S.dir = d; }
     S.corT = par("20") === "00" && par("79") === "01" ? 10 : S.corT;
     if (raison) dit(raison);
+    return true;
   }
   function stopper(raison, src) { if (S.dir || S.pre) { S.arret = S.dir || S.preDir; S.dir = 0; S.pre = 0; finManoeuvre(); if (raison) dit(raison, src); } }
   function finManoeuvre() { const t = par("79"); if (par("20") === "00" && t !== "00" && t !== "01" && t !== "02") S.corT = duree("79") * 10; }
@@ -236,7 +257,12 @@
     S.lu = { st17, sb, ft1, ft2, c1, c2 };
     /* commandes (fronts montants) */
     const radio = S.radio; const cmd = { AP: E.AP, CH: E.CH, PP: E.PP, PED: E.PED, ORO: E.ORO };
-    [["PR1", "76"], ["PR2", "77"]].forEach(([k, p]) => { if (radio[k]) { const v = par(p); const m = { "00": "PP", "01": "PED", "02": "AP", "03": "CH", "07": "PP", "08": "PED", "09": "AP", "10": "CH" }[v]; if (m) cmd[m] = true; if (v === "04") cmd.STOPR = true; } });
+    [["PR1", "76"], ["PR2", "77"]].forEach(([k, p]) => { const v = par(p), f = radio[k] && !S.prec[k];
+      if (radio[k]) { const m = { "00": "PP", "01": "PED", "02": "AP", "03": "CH" }[v]; if (m) cmd[m] = true; if (v === "04") cmd.STOPR = true; }
+      if (v === "05") S.corRadio5 = !!radio[k];
+      if (f && v === "06") { S.corRadio = !S.corRadio; dit("Télécommande : lumière de courtoisie " + (S.corRadio ? "allumée" : "éteinte") + " (paramètre " + p + " = 06).", "Paramètre " + p); }
+      if (f && ["07", "08", "09", "10"].includes(v)) dit("Paramètre " + p + " = " + v + " (commande avec confirmation par une 2e touche) : non simulé.", "Paramètre " + p);
+      cmd[k] = !!radio[k]; });
     const front = k => cmd[k] && !S.prec[k]; S.cmd = cmd;
     if (actif) {
       if (S.pre) { S.pre--; if (!S.pre) S.dir = S.preDir; }
@@ -244,17 +270,17 @@
       if (!st17 && (S.dir || S.pre)) stopper("Contact STOP (17-16) ouvert : arrêt, les commandes sont ignorées tant qu'il est ouvert.", "Bornier : ST, l'ouverture du contact arrête le mouvement");
       if (!sb && (S.dir || S.pre)) stopper("Poignée de déverrouillage ouverte : arrêt, les commandes sont ignorées.", "Fiche : connecteur SB");
       /* horloge */
-      if (cmd.ORO && st17 && sb && S.pos < 100 && !(S.dir > 0) && (par("80") === "00" || front("ORO"))) ouvrir("Contact horloge fermé : ouverture, le portail reste ouvert (paramètre 80 = " + par("80") + ").");
+      if (front("ORO") && st17 && sb && S.pos < 100 && !(S.dir > 0)) ouvrir("Contact horloge fermé : ouverture, le portail reste ouvert (paramètre 80 = " + par("80") + ").");
       if (!cmd.ORO && S.prec.ORO && par("80") === "00" && S.pos > 0) fermer("Fin d'horloge : fermeture (paramètre 80 = 00).");
       if (!ignore) {
         const hp = par("A7") === "01";
         if (hp) { /* homme présent : maintenir AP / CH */
-          if (cmd.AP && !(S.dir > 0) && S.pos < 100) ouvrir(); else if (cmd.CH && !(S.dir < 0) && S.pos > 0) fermer(); else if (!cmd.AP && !cmd.CH && S.dir) stopper();
+          if (cmd.AP && !(S.dir > 0) && S.pos < 100) ouvrir(); else if (cmd.CH && !(S.dir < 0) && S.pos > 0) fermer(); else if (!cmd.AP && !cmd.CH && (S.dir || S.pre)) stopper();
         } else {
-          if (front("AP")) { if (S.pos < 100 && !(S.dir > 0)) { if (S.pos === 0 && !ft1 && par("52") === "00" && par("50") + par("51") !== "0000") dit("FT1 occultée portail fermé : ouverture refusée (paramètre 52 = 00).", "Paramètre 52"); else ouvrir("Commande AP (25) : ouverture."); } }
+          if (front("AP")) { if (S.pos < 100 && !(S.dir > 0)) ouvrir("Commande AP (25) : ouverture."); }
           if (front("CH")) { if (S.pos > 0 && !(S.dir < 0)) fermer("Commande CH (26) : fermeture."); }
-          if (front("PP")) { pasAPas(par("A4"), false); dit("Commande pas-à-pas : action selon le paramètre A4 = " + par("A4") + " (" + pdesc("A4") + ")", "Paramètre A4"); }
-          if (front("PED")) { if (!(par("A6") === "01" && S.dir > 0)) { pasAPas("00", true); dit("Ouverture partielle (PED) : " + pn("15") + " % de la course (paramètre 15).", "Paramètre 15, A6"); } }
+          if (front("PP")) { dit("Commande pas-à-pas : action selon le paramètre A4 = " + par("A4") + " (" + pdesc("A4") + ")", "Paramètre A4"); pasAPas(par("A4"), false); }
+          if (front("PED")) { if (!(par("A6") === "01" && S.dir > 0)) { dit("Commande PED (28) : pas-à-pas sur l'ouverture partielle, " + pn("15") + " % de la course.", "Paramètres 15 et A6 = " + par("A6")); pasAPas("00", true); } }
           if (front("STOPR")) stopper("Télécommande : arrêt (paramètre 76 / 77 = 04).");
         }
       }
@@ -278,7 +304,8 @@
         if (ok !== false || !S.dir || S.inv) return;
         const v = par(code), d = S.dir;
         const invOuv = code === "73" ? ["01", "02", "03", "04", "12", "14"] : ["03", "04", "12", "14"], invFer = code === "73" ? ["03", "04", "14"] : ["01", "02", "03", "04", "14"];
-        if ((d > 0 && invOuv.includes(v)) || (d < 0 && invFer.includes(v))) { S.dir = 0; S.inv = Math.max(1, duree("27")) * 10; d > 0 ? fermer() : ouvrir(); S.invDir = -d; dit(nom + " actionné pendant " + (d > 0 ? "l'ouverture" : "la fermeture") + " : inversion pendant " + duree("27") + " s (paramètre 27), puis arrêt.", "Paramètre " + code + " = " + v + " : " + pdesc(code, v)); }
+        if (((d > 0 && invOuv.includes(v)) || (d < 0 && invFer.includes(v))) && duree("27") === 0) { stopper(nom + " actionné : inversion de 0 s (paramètre 27 = 00), le portail s'arrête.", "Paramètre " + code + " = " + v); return; }
+        if ((d > 0 && invOuv.includes(v)) || (d < 0 && invFer.includes(v))) { S.dir = 0; S.inv = duree("27") * 10; d > 0 ? fermer() : ouvrir(); S.invDir = -d; dit(nom + " actionné pendant " + (d > 0 ? "l'ouverture" : "la fermeture") + " : inversion pendant " + duree("27") + " s (paramètre 27), puis arrêt.", "Paramètre " + code + " = " + v + " : " + pdesc(code, v)); }
         else if (!S["nd" + code]) { S["nd" + code] = 1; dit(nom + " actionné pendant " + (d > 0 ? "l'ouverture" : "la fermeture") + " : la notice ne décrit pas d'action dans ce sens avec " + code + " = " + v + ". Rien n'est simulé.", "Paramètre " + code); }
       };
       bord(c1, "Bord sensible COS1", "73"); bord(c2, "Bord sensible COS2", "74");
@@ -302,7 +329,8 @@
     if (S.corT > 0) S.corT--;
     /* sortie +SC (A8) */
     const a8 = par("A8");
-    S.sc = !actif ? 0 : a8 === "00" ? (S.pos > 0 || S.dir ? 1 : 0) : a8 === "01" ? (S.dir > 0 ? Math.floor(S.t / 5) % 2 : S.dir < 0 ? Math.floor(S.t / 2) % 2 : S.pos >= 100 ? 1 : 0) : 1;
+    const mi = S.t % 150; /* 01, arrêté à mi-course : s'éteint 2 fois toutes les 15 s */
+    S.sc = !actif ? 0 : a8 === "00" ? (S.pos > 0 || S.dir ? 1 : 0) : a8 === "01" ? (S.dir > 0 ? Math.floor(S.t / 5) % 2 : S.dir < 0 ? Math.floor(S.t / 2) % 2 : S.pos >= 100 ? 1 : S.pos > 0 ? (mi < 3 || (mi >= 6 && mi < 9) ? 0 : 1) : 0) : 0; /* 02 à 04 : non simulé, sortie laissée coupée */
     S.prec = Object.assign({}, cmd, { ft1, ft2 });
     /* digicode : impulsion d'une seconde */
     I.acc.forEach(a => { const e = S.etat[a.id]; if (e && e.imp) { e.imp--; if (!e.imp) e.on = false; } });
@@ -324,13 +352,18 @@
   /* essai : on simule l'action et on regarde l'entrée de la carte, sur une copie de l'état */
   function avec(etats, f) {
     const sauv = { etat: JSON.parse(JSON.stringify(S.etat)), secteur: S.secteur, hs: S.hs, f3: S.f3, dir: S.dir, pre: S.pre, t: S.t, corT: S.corT, sc: S.sc };
-    S.secteur = true; S.hs = false; S.f3 = true;
-    try { etats(); return f(circuit()); } finally { Object.assign(S, sauv); }
+    S.secteur = true; S.hs = false; S.f3 = true; S.etat = {}; const rad = S.radio, cr = [S.corRadio, S.corRadio5]; S.radio = {}; S.corRadio = S.corRadio5 = false; /* accessoires au repos pour l'essai */
+    try { circuit(); etats(); return f(circuit()); } finally { Object.assign(S, sauv); S.radio = rad; [S.corRadio, S.corRadio5] = cr; }
   }
   const actives = R => Object.keys(R.ent).filter(k => ["AP", "CH", "PP", "PED", "ORO"].includes(k) && R.ent[k]);
   function essai(m, acts, entree, alim, nf) {
     const des = acts.map(([t]) => I.acc.filter(a => a.t === t)).flat(); if (!des.length) return "Posez d'abord l'accessoire demandé.";
-    for (const a of des) {
+    let err1 = "";
+    for (const a of des) { const e = essai1(a, acts, entree, alim, nf); if (!e) return ""; err1 = err1 || e; }
+    return err1;
+  }
+  function essai1(a, acts, entree, alim, nf) {
+    {
       const act = acts.find(([t]) => t === a.t)[1];
       const repos = avec(() => {}, R => ({ e: R.ent[entree], act: actives(R), alim: R.alim[a.id] }));
       const appui = avec(() => { const e = S.etat[a.id] = S.etat[a.id] || {}; if (act === "imp") { e.on = true; } else e[act] = true; }, R => ({ e: R.ent[entree], act: actives(R), alim: R.alim[a.id] }));
@@ -341,7 +374,6 @@
       if (appui.act.length > 1) return "En actionnant l'accessoire, plusieurs commandes s'activent (" + appui.act.join(", ") + ").";
       return "";
     }
-    return "Accessoire non raccordé.";
   }
   function essaiCell() {
     const rx = I.acc.find(a => a.t === "rx"); if (!rx) return "Posez d'abord une paire de cellules.";
@@ -370,9 +402,15 @@
   function essaiCor() {
     const l = I.acc.find(a => a.t === "lum"); if (!l) return "Posez une lumière 230 V~ et une arrivée 230 V~.";
     if (!I.acc.some(a => a.t === "sec")) return "Posez une arrivée 230 V~.";
-    const d = avec(() => {}, R => R.def.d230); if (d) return "DANGER : du 230 V arrive sur une borne 24 V de la carte.";
-    const on = avec(() => { S.corT = 50; S.dir = 1; }, R => R.alim[l.id]), off = avec(() => { S.corT = 0; S.dir = 0; }, R => R.alim[l.id]);
-    if (!on) return "Quand le contact COR se ferme, la lumière ne s'allume pas : L → 8, 9 → lumière, lumière → N."; if (off) return "La lumière reste allumée quand COR est ouvert : elle ne passe pas par le contact 8-9."; return "";
+    const sp = I.params; I.params = Object.assign({}, sp, { "20": "00", "79": "02" }); /* contact COR fermé pendant la manœuvre, le temps de l'essai */
+    try {
+      const on = avec(() => { S.dir = 1; }, R => R), off = avec(() => { S.dir = 0; S.pre = 0; S.corT = 0; }, R => R);
+      if (on.def.d230 || off.def.d230) return "DANGER : du 230 V arrive sur une borne 24 V de la carte (ou sur un accessoire 24 V) quand COR est fermé ou ouvert.";
+      if (on.def.cc24 || off.def.cc24 || on.def.ccAC) return "Court-circuit dans l'installation.";
+      if (!on.alim[l.id]) return "Quand le contact COR se ferme, la lumière ne s'allume pas : L → 8, 9 → lumière, lumière → N.";
+      if (off.alim[l.id]) return "La lumière reste allumée quand COR est ouvert : elle ne passe pas par le contact 8-9.";
+      return "";
+    } finally { I.params = sp; }
   }
   function verifierMission() { /* rien en continu : la vérification se fait au bouton */ }
 
@@ -473,7 +511,7 @@
   }
   function maj() {
     const sv = $("#cabsvg"); if (!sv || !S.R) return;
-    const R = S.R, aff = $("#cabaff"); if (aff) aff.innerHTML = dessinAff();
+    const R = S.R, aff = $("#cabaff"); if (S.mm && S.mm.a && S.mm.b) S.mm.r = mesure(S.mm.a, S.mm.b); /* mesure suivie en direct */ if (aff) aff.innerHTML = dessinAff();
     I.fils.forEach(w => { const p = document.getElementById("cw-" + w.id); if (p) p.classList.toggle("flux", S.secteur && R.flux.has(w.id)); });
     const v = $("#cabvantail"); if (v) v.setAttribute("transform", `translate(${S.pos * 1.6} 0)`);
     const e = $("#cabetat"); if (e) e.textContent = !S.secteur ? "hors tension" : S.hs ? "carte détruite" : S.pre ? "préclignotement" : S.dir > 0 ? "ouverture " + S.pos + " %" : S.dir < 0 ? "fermeture " + S.pos + " %" : S.att ? "arrêt temporaire" : S.pos >= 100 ? "ouvert" : S.pos <= 0 ? "fermé" : "arrêté à " + S.pos + " %";
@@ -514,7 +552,7 @@
     const pa = pot(ta), pb = pot(tb);
     if (!S.secteur) return "0 V : secteur coupé.";
     if ((pa === "L" && pb === "N") || (pa === "N" && pb === "L")) return "230 V~ (alternatif).";
-    if (pa === "L" || pa === "N" || pb === "L" || pb === "N") return pa === pb ? "0 V~ : même conducteur." : "Mesure entre le 230 V~ et la très basse tension de la carte : non significative (circuits séparés).";
+    if (pa === "L" || pa === "N" || pb === "L" || pb === "N") { if (pa === pb) return "0 V~ : même conducteur."; if (pa === null || pb === null) return "Une pointe au 230 V~, l'autre sur un conducteur en l'air : tension non déterminée. Prudence."; return "Mesure entre le 230 V~ et la très basse tension de la carte : non significative (circuits séparés)."; }
     if (R.U.f(a) === R.U.f(b)) return "0 V : les deux pointes sont sur le même conducteur.";
     if (pa !== null && pb !== null) return Math.abs(pa - pb) + " V" + (pa !== pb ? " continu" : "") + ".";
     const ent = [a, b].find(k => ENTREES[k] && R.T(k).size === 0 || (ENTREES[k] && !pot(R.T(k)) && pot(R.T(k)) !== 0));
@@ -532,6 +570,7 @@
   /* ---------- panneau sous le dessin ---------- */
   function panneau() {
     const el = $("#cabpan"); if (!el) return;
+    if (S && I) { I.acc.forEach(a => { const e = S.etat[a.id]; if (e && ["pp", "bnf", "b8k"].includes(a.t)) e.on = false; if (e && a.t === "cle") e.g = e.d = false; }); S.radio = {}; } /* un appui en cours ne reste pas coincé */
     const radio = I.acc.some(a => a.t === "radio");
     if (S.mode === "cabler") {
       el.innerHTML = `<div class="cabcoul">${COULEURS.map(([c, n]) => `<button class="cabc${S.couleur === c ? " on" : ""}" style="--c:${c}" aria-label="Fil ${n}" onclick="CAB.couleur('${c}')"></button>`).join("")}</div>
@@ -626,12 +665,12 @@
   let minuterie = 0;
   function atelier(id) {
     const b = board(id); C = b.c; ITEMS = {}; C.parametres.groupes.forEach(g => g.items.forEach(x => ITEMS[x.code] = x));
-    cleI = "cab-" + id; I = st.get(cleI, null) || neuf(); S = simNeuve();
+    cleI = "cab-" + id; I = propre(st.get(cleI, null)) || neuf(); S = simNeuve();
     setHead("Atelier · " + C.nom, true);
     app.innerHTML = `<div class="cabbar"><div class="cabseg" role="tablist"><button id="cabm1" class="on" onclick="CAB.mode('cabler')">✎ Câbler</button><button id="cabm2" onclick="CAB.mode('tester')">▶ Tester</button></div><label class="cabsw">Secteur <input type="checkbox" id="cabsect" onchange="CAB.secteur(this.checked)"><i></i></label></div>
       <div class="cabzone"><svg id="cabsvg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Carte ${esc(C.nom)} et accessoires"></svg></div>
       <div class="cabinfo" id="cabinfo" aria-live="polite"></div><div id="cabpan"></div><div id="cabsheet"></div>
-      <p class="hotn">Simulateur de formation construit d'après la fiche (source : ${esc(C.source)}) : bornier, paramètres, afficheur (§ 9.2), mode TEST (§ 9.3), codes. Disposition des borniers : fig. 5 p. 9 et photo p. 5. Accessoires génériques. Vitesse du portail indicative (environ 10 s pour la course). Non simulés : apprentissage de la course et des télécommandes, batteries, fonctionnement MASTER / SLAVE, veille low power, test des photocellules par la sortie SC (A8 02 / 04). Refermeture après ouverture partielle (16) appliquée seulement quand A2 est actif. Les bornes COM (11, 16, 23, 30) sont traitées comme un 0 V commun.</p>`;
+      <p class="hotn">Simulateur de formation construit d'après la fiche (source : ${esc(C.source)}) : bornier, paramètres, afficheur (§ 9.2), mode TEST (§ 9.3), codes. Disposition des borniers : fig. 5 p. 9 et photo p. 5. Accessoires génériques. Vitesse du portail indicative (environ 10 s pour la course). Non simulés : apprentissage de la course et des télécommandes, batteries, fonctionnement MASTER / SLAVE, veille low power, sortie SC en test des photocellules ou battery saving (A8 02 à 04, sortie laissée coupée), commandes radio avec confirmation (76 / 77 = 07 à 10). Refermeture après ouverture partielle (16) appliquée seulement quand A2 est actif. Les bornes COM (11, 16, 23, 30) sont traitées comme un 0 V commun.</p>`;
     rendre(); brancherSvg();
     clearInterval(minuterie); minuterie = setInterval(() => { if (!location.hash.startsWith("#/cab/" + id)) { clearInterval(minuterie); return; } tick(); }, 100);
   }
@@ -670,7 +709,7 @@
       const m = MISSIONS.find(x => x.id === (S.mission || {}).id); if (!m) return;
       if (S.hs) { S.mission.res = "La carte est détruite (230 V) : effacez le câblage fautif puis « Remplacer la carte » en coupant le secteur."; feuille("missions"); return; }
       const err = m.test(m); S.mission.res = err ? "✗ " + err : "✓ Réussi : câblage correct."; S.mission.ok = !err;
-      if (!err && window.SIM && SIM.noter) SIM.noter(C.id, "Câblage : " + m.t, true, S.mission.aide, (Date.now() - S.mission.t0) / 1000);
+      if (window.SIM && SIM.noter) SIM.noter(C.id, "Câblage : " + m.t, !err, S.mission.aide, (Date.now() - S.mission.t0) / 1000);
       feuille("missions");
     },
     carte() { if (S.secteur) { S.msgU = "Coupez le secteur avant de remplacer la carte."; maj(); return; } S.hs = false; S.f3 = true; S.pannes = {}; S.msg = []; rendre(); }
