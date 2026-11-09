@@ -192,6 +192,11 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "2.0", date: "2026-11-09", titre: "Lecture de l'afficheur en direct et simulateur de cartes", items: [
+    "Bouton appareil photo à droite de la barre de recherche : on filme l'afficheur de la carte, le code est reconnu en direct (sans réseau) et la fiche s'ouvre",
+    "Simulateur de carte pour s'entraîner sans portail : Roger B70/1DCHP, EDGE1 et B70/1DC (afficheur et touches) et Casit EQ 2009 et KEQS08 (dip-switch), avec des exercices tirés au hasard",
+    "Les responsables voient la progression de chaque technicien dans le suivi du simulateur"
+  ] },
   { v: "1.98", date: "2026-11-06", titre: "Correction après vérification complète", items: [
     "Fadini Elpro S40 : le voyant « L5 éteinte » s'affichait sans explication ; il reprend maintenant la notice (L5 = arrêt, normalement allumée, s'éteint à l'impulsion d'arrêt)"
   ] },

@@ -32,7 +32,7 @@
     try {
       const lot = st.get(Q, []).filter(x => x.e === moi()).slice(0, 50); if (!lot.length) return;
       const r = await AUTH.api("/rest/v1/simulateur_resultats", { method: "POST", headers: { "Content-Type": "application/json", Prefer: "return=minimal" }, body: JSON.stringify(lot.map(({ e, ...x }) => ({ ...x, email: e }))) });
-      if (r.ok || (!r.net && r.status >= 400 && r.status < 500 && r.status !== 401 && r.status !== 429)) { const s = new Set(lot.map(x => x.fait_le + x.exercice)); st.set(Q, st.get(Q, []).filter(x => !(x.e === moi() && s.has(x.fait_le + x.exercice)))); }
+      if (r.ok || r.status === 409) { const s = new Set(lot.map(x => x.fait_le + x.exercice)); st.set(Q, st.get(Q, []).filter(x => !(x.e === moi() && s.has(x.fait_le + x.exercice)))); }
     } catch (e) {} finally { enCours = false; }
   }
   addEventListener("online", () => setTimeout(envoyer, 3000));
@@ -41,7 +41,8 @@
 
   /* ---------- Roger : liste des paramètres et valeurs ---------- */
   const SPECIAL_V = /^(Procédure|Activer|Débloquer|Supprimer|Exemple|Au démarrage|lecture)$/i;
-  const special = x => x.def === "lecture" || (x.valeurs || []).some(([v, d]) => SPECIAL_V.test(v) || /\b(maintenir|Saisir|Lire à la suite)\b/i.test(d || "")) || !(x.valeurs || []).length;
+  const NON_SIMULE = /^(FA|CP|P\d)/; /* réglés par une procédure décrite dans la fiche, pas par + / − */
+  const special = x => x.def === "lecture" || NON_SIMULE.test(x.code) || (x.valeurs || []).some(([v, d]) => SPECIAL_V.test(v) || (!/^[\d–\- ]+$/.test(v) && /\b(maintenir|Saisir|Lire à la suite)\b/i.test(d || ""))) || !(x.valeurs || []).length;
   /* valeurs possibles à l'écran (2 caractères), plages développées ; null si la fiche ne donne pas de valeurs simples */
   function valeursRoger(x) {
     if (special(x)) return null;
@@ -71,13 +72,15 @@
   function etiquette(item, dp, etat) {
     const pos = dp.n.map(k => etat[dp.banc + k] ? "ON" : "OFF");
     const a = pos.join(" · "), b = dp.n.map((k, i) => k + " " + pos[i]).join(" · ");
-    return (item.valeurs.find(([v]) => v === a || v === b) || [null, null]);
+    const t = item.valeurs.find(([v]) => v === a || v === b); if (t) return t;
+    const seul = item.valeurs.length === 1 && /^[−-]$/.test(item.valeurs[0][0]) ? item.valeurs[0] : null; /* « − » : même effet dans toutes les positions */
+    return seul ? [seul[0], seul[1] || "—"] : [null, null];
   }
 
   /* ---------- pages ---------- */
   window.viewSim = function (sub) {
     if (sub === "suivi") return suivi();
-    if (sub && CARTES[sub]) return simulateur(sub);
+    if (sub && CARTES[sub] && simDispo(sub)) return simulateur(sub);
     setHead("Simulateur de carte", true);
     const loc = st.get(LOC, {});
     app.innerHTML = `<p class="note"><b>Formation.</b> Une carte dessinée qui réagit comme la vraie, d'après les fiches (tirées des notices). Faites les exercices pour vous entraîner sans portail. Ce que la notice ne décrit pas n'est pas simulé.</p><div class="list">` +
@@ -111,12 +114,12 @@
       const gauche = S.mode === "param" ? (/^[0-9A-Za-z]{2}$/.test(x.code) ? x.code : x.code.slice(0, 2)) : "", desc = S.mode === "param" && L ? (L.find(o => o.v === (S.edit !== null ? S.edit : S.vals[x.code])) || {}).d : "";
       el.innerHTML = `<div class="simcarte"><div class="mne seg simaff ${S.flash ? "vite" : ""}"><span>${esc(gauche || "  ")}</span><span class="${S.edit !== null ? "cli" : ""}">${esc(S.mode === "param" ? val : "")}</span></div>
         <div class="simk">${["UP ▲", "DOWN ▼", "+", "−", "PROG", "TEST"].map(k => `<button class="simt" data-k="${k}" aria-label="Touche ${k}">${k}</button>`).join("")}</div></div>
-        <div class="siminfo">${S.mode === "param" ? `<b>${esc(x.code)} · ${esc(x.titre)}</b><br>${S.edit !== null ? "Valeur en cours de modification (elle clignote) : " : "Valeur : "}<b>${esc(val)}</b>${desc ? " — " + esc(desc) : ""}${!L ? `<br><i>Réglage à procédure propre ou en lecture : voir la fiche.</i>` : ""}` : "Au repos, l'afficheur montre l'état des commandes et des sécurités (onglet Écran de la fiche). Appuyez sur UP ou DOWN pour afficher les paramètres."}${S.msg ? `<p class="simmsg">${esc(S.msg)}</p>` : ""}</div>`;
+        <div class="siminfo" aria-live="polite">${S.mode === "param" ? `<b>${esc(x.code)} · ${esc(x.titre)}</b><br>${S.edit !== null ? "Valeur en cours de modification (elle clignote) : " : "Valeur : "}<b>${esc(val === "--" ? "—" : val)}</b>${desc ? " — " + esc(desc) : ""}${!L ? `<br><i>Réglage à procédure propre ou en lecture : voir la fiche.</i>` : ""}` : "Au repos, l'afficheur montre l'état des commandes et des sécurités (onglet Écran de la fiche). Appuyez sur UP ou DOWN pour afficher les paramètres."}${S.msg ? `<p class="simmsg">${esc(S.msg)}</p>` : ""}</div>`;
       el.querySelectorAll(".simt").forEach(b => b.onclick = () => touche(S, b.dataset.k));
     } else {
       const bancs = Object.keys(S.bancs);
       el.innerHTML = `<div class="simcarte dip">${bancs.map(bn => `<div class="simbanc"><b>${esc(bn.length === 1 ? "DIP " + bn : bn)}</b><div class="simdips">${Array.from({ length: S.bancs[bn] }, (_, i) => i + 1).map(k => `<button class="simdip${S.etat[bn + k] ? " on" : ""}" data-b="${esc(bn)}" data-k="${k}" aria-pressed="${!!S.etat[bn + k]}" aria-label="${esc(bn)} interrupteur ${k}"><i></i><span>${k}</span></button>`).join("")}</div><small>ON en haut</small></div>`).join("")}</div>
-        <div class="siminfo">${bancs.map(bn => `<h4>${esc(bn.length === 1 ? "DIP " + bn : bn)}</h4><ul class="plain">${S.items.filter(o => o.dp.banc === bn).map(o => { const [v, d] = etiquette(o.x, o.dp, S.etat); return `<li${S.dernier === o.x.code ? ' class="simder"' : ""}><b>${esc(o.dp.n.join(" · "))}</b> ${esc(o.x.titre)} : ${v ? esc(d || v) : "<i>combinaison non décrite par la notice</i>"}</li>`; }).join("")}</ul>`).join("")}</div>`;
+        <div class="siminfo" aria-live="polite">${bancs.map(bn => `<h4>${esc(bn.length === 1 ? "DIP " + bn : bn)}</h4><ul class="plain">${S.items.filter(o => o.dp.banc === bn).map(o => { const [v, d] = etiquette(o.x, o.dp, S.etat); return `<li${S.dernier === o.x.code ? ' class="simder"' : ""}><b>${esc(o.dp.n.join(" · "))}</b> ${esc(o.x.titre)} : ${v ? esc(d || v) : "<i>combinaison non décrite par la notice</i>"}</li>`; }).join("")}</ul>`).join("")}</div>`;
       el.querySelectorAll(".simdip").forEach(b => b.onclick = () => { const k = b.dataset.b + b.dataset.k; S.etat[k] = !S.etat[k]; const o = S.items.find(o => o.dp.banc === b.dataset.b && o.dp.n.includes(+b.dataset.k)); S.dernier = o && o.x.code; dessiner(S); verifier(S); });
     }
   }

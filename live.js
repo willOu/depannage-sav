@@ -3,7 +3,7 @@
    Un code n'est retenu que s'il correspond à un code connu des fiches et qu'il est lu plusieurs fois de suite (3 lectures sur les 5 dernières).
    Ensuite : une seule fiche → ouverture automatique (annulable) ; plusieurs → on choisit. « Ce n'est pas le bon code » relance la lecture. */
 (function () {
-  let ov = null, flux = null, boucle = 0, lectures = [], arret = true, compte = 0;
+  let ov = null, flux = null, ouv = 0, boucle = 0, lectures = [], arret = true, compte = 0;
   const recente = () => { try { return (typeof store !== "undefined" ? store.get("recents", []) : [])[0] || ""; } catch (e) { return ""; } };
   /* un « 1 » en trop au bord vient souvent du cadre de l'afficheur */
   const variantes = t => { const v = [t]; let a = t; while (/^[1i]/.test(a) && a.length > 1) { a = a.slice(1); v.push(a); } v.slice().forEach(x => { let b = x; while (/[1i]$/.test(b) && b.length > 1) { b = b.slice(0, -1); v.push(b); } }); return [...new Set(v)]; };
@@ -12,25 +12,30 @@
 
   window.liveOuvrir = async function () {
     if (ov) return;
+    const id = ++ouv;
     ov = document.createElement("div"); ov.className = "lvov"; ov.setAttribute("role", "dialog"); ov.setAttribute("aria-modal", "true"); ov.setAttribute("aria-label", "Lecture de l'afficheur en direct");
     ov.innerHTML = `<video playsinline muted autoplay></video><div class="lvcadre"><i></i></div>
       <div class="lvhaut"><button class="lvx" aria-label="Fermer">✕</button><button class="lvl" aria-label="Lampe" hidden>🔦</button></div>
       <div class="lvbas"><p class="lvs" role="status">Ouverture de la caméra…</p><div class="lvr"></div>
-      <p class="lvaide">Placez l'afficheur dans le cadre, de face, sans reflet. Afficheurs à segments (chiffres et lettres lumineux) : lecture sans réseau. <a href="#/scan/afficheur">Mode photo</a></p></div>`;
+      <p class="lvaide">Placez l'afficheur dans le cadre, de face, sans reflet. Afficheurs à segments (chiffres et lettres lumineux) : lecture sans réseau. <a href="#/scan/afficheur" class="lvphoto">Mode photo</a></p></div>`;
     document.body.appendChild(ov);
     ov.querySelector(".lvx").onclick = fermer;
+    ov.querySelector(".lvphoto").onclick = e => { e.preventDefault(); fermer(false); allerA("#/scan/afficheur"); };
+    try { ov.querySelector(".lvx").focus(); } catch (e) {}
     document.addEventListener("keydown", echap);
     try { history.pushState({ lv: 1 }, ""); } catch (e) {}
     const st = ov.querySelector(".lvs");
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { st.textContent = "Caméra indisponible dans ce navigateur. Utilisez le mode photo."; return; }
+    let f;
     try {
-      flux = await navigator.mediaDevices.getUserMedia({ audio: false, video: { facingMode: { ideal: "environment" }, width: { ideal: 1280 }, height: { ideal: 720 } } });
+      f = await navigator.mediaDevices.getUserMedia({ audio: false, video: { facingMode: { ideal: "environment" }, width: { ideal: 1280 }, height: { ideal: 720 } } });
     } catch (e) {
-      if (!ov) return;
+      if (!ov || id !== ouv) return;
       st.textContent = /NotAllowed|Permission/i.test(e && e.name || "") ? "Accès à la caméra refusé : autorisez-le dans les réglages du navigateur (cadenas à côté de l'adresse), ou utilisez le mode photo." : "Caméra introuvable ou déjà utilisée par une autre appli. Utilisez le mode photo.";
       return;
     }
-    if (!ov) { couper(); return; } /* fenêtre fermée pendant la demande d'autorisation */
+    if (!ov || id !== ouv) { try { f.getTracks().forEach(t => t.stop()); } catch (e) {} return; } /* fenêtre fermée (ou rouverte) pendant la demande d'autorisation */
+    flux = f;
     const v = ov.querySelector("video"); v.srcObject = flux;
     try { await v.play(); } catch (e) {}
     /* lampe, si le téléphone la propose */
@@ -90,6 +95,7 @@
     clearTimeout(boucle); arret = true; couper();
     if (!ov) return;
     ov.remove(); ov = null; document.removeEventListener("keydown", echap);
+    try { const q = document.getElementById("qcam"); if (q && retour !== false) q.focus(); } catch (e) {}
     if (retour !== false) try { if (history.state && history.state.lv) history.back(); } catch (e) {}
   }
   addEventListener("popstate", () => fermer(false));
