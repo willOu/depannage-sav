@@ -192,6 +192,11 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "2.6", date: "2026-11-09", titre: "Atelier de câblage : barrière Roger CTRL (BIONIK)", items: [
+    "Atelier : nouvelle carte CTRL (barrière BIONIK), borniers placés comme sur la notice IS88 (fig. 2)",
+    "Atelier : lisse animée ; PED ouvre toujours en totalité ; bord sensible COS qui inverse seulement en fermeture (73)",
+    "Atelier : afficheur et mode TEST de la CTRL (21, 23, 24), codes SECO, FUSE, Mot, EnE1 et StoP (déblocage ou trappe ouverte, en touchant LOCKS)"
+  ] },
   { v: "2.5", date: "2026-11-09", titre: "Atelier de câblage : cartes Roger B70/2ML et EDGE1 (2 vantaux)", items: [
     "Atelier : nouvelle carte B70/2ML, borniers placés comme sur la notice IS240 (fig. 1 et 2)",
     "Atelier : nouvelle carte EDGE1 (notice IS160, fig. 1), avec COS1 et COS2 séparés, horloge ORO, codes SECO (SEC1 / SEC2 inversés) et FUSE (F1 grillé)",
