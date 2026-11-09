@@ -1,7 +1,7 @@
 /* Atelier de câblage (formation) : #/cab (cartes), #/cab/<carte> (atelier).
    Le technicien pose des accessoires, les câble lui-même sur les borniers de la carte, met sous tension et teste.
    Le courant est calculé à partir du câblage (réseaux de fils et de contacts fermés) : un fil parcouru par le courant s'anime.
-   La carte réagit d'après sa fiche (notices Roger IS142 pour la B70/1DCHP, IS117 pour la B70/1DC) : bornier, paramètres, afficheur d'état (§ 9.2), mode TEST (§ 9.3),
+   La carte réagit d'après sa fiche (notices Roger IS142 pour la B70/1DCHP, IS117 pour la B70/1DC, IS240 pour la B70/2ML) : bornier, paramètres, afficheur d'état (§ 9.2), mode TEST (§ 9.3),
    codes d'erreur. Ce que la notice ne décrit pas n'est pas simulé et l'écran le dit.
    Disposition des borniers et des connecteurs : figure de la notice indiquée dans CFG.
    Les accessoires sont génériques (pas de modèle de marque) : cellule 24 V, digicode à contact sec, etc. */
@@ -21,6 +21,19 @@
       coms: ["9", "14", "21", "28"], batt: false, alim: { lab: ["5+", "4−"], nom: "Alimentation de la carte POWER IN 5+ / 4−", carte: "Alim carte" },
       facc: { lab: "F2 2A", nom: "Fusible F2 2 A (accessoires)", court: "F2" }, fmot: { lab: "F1 15A", nom: "Fusible F1 15 A (circuit moteur)", code: null } }
   };
+  /* B70/2ML : 2 moteurs brushless (battants), câblés par le technicien sur X · Y · Z (fig. 1 p. 6) ; borniers fig. 2 p. 7 ; un seul COM électrique */
+  CFG["roger-b70-2ml"] = { fig: "fig. 1 p. 6 et fig. 2 p. 7 de la notice IS240", deux: true, isel: true, pCor: "18", affY: 74,
+    blocs: [{ ns: [["9", "COR"], ["10", "COR"]], x: 34, y: 262, pas: 24, lab: "bas" }, { ns: [["11", "SC"], ["12", "COM"], ["13", "PED"], ["14", "PP"], ["15", "CH"], ["16", "AP"], ["17", "COM"]], x: 116, y: 262, pas: 24, lab: "bas" },
+      { ns: [["22", "+ES"], ["21", "COM"], ["20", "LAM"], ["19", "COM"], ["18", "+24V"]], x: 164, y: 220, pas: 24, lab: "haut" },
+      { ns: [["28", "ISEL"], ["27", "ST"], ["26", "COM"], ["25", "FT1"], ["24", "FT2"], ["23", "COM"]], x: 300, y: 162, pas: 24, lab: "droite", vertical: true },
+      { ns: [["36", "ANT"], ["35", "ANT"]], x: 316, y: 24, pas: 24, lab: "bas" },
+      { ns: [["2X", "X"], ["2Y", "Y"], ["2Z", "Z"]], x: 28, y: 92, pas: 20, lab: "droite", vertical: true, titre: "MOTEUR 2" },
+      { ns: [["1X", "X"], ["1Y", "Y"], ["1Z", "Z"]], x: 28, y: 172, pas: 20, lab: "droite", vertical: true, titre: "MOTEUR 1" }],
+    K: { p24: "18", com: "19", lam: "20", sc: "11", cor1: "9", cor2: "10", ft2: "24", ft1: "25", ftCom: "23", cos1: "28", cosCom: "26", st: "27", cmdCom: "17", ap: "16", ch: "15", pp: "14", ped: "13" },
+    coms: ["12", "17", "19", "21", "23", "26"], batt: true, alim: { lab: ["+", "−"], nom: "Alimentation de la carte + / − (transformateur)", carte: "Alim carte" },
+    facc: { lab: "F1 3,15A", nom: "Fusible F1 3,15 A (accessoires)", court: "F1" }, fmot: { lab: "F2 15A", nom: "Fusible F2 15 A (circuit de puissance des moteurs)", code: "notr" },
+    params: ["70", "60", "A2", "21", "A4", "A5", "A6", "A7", "A8", "15", "25", "26", "27", "50", "51", "52", "53", "54", "55", "57", "73", "76", "77", "78", "18", "79", "80"],
+    notes: "Deux vantaux : le MOTEUR 2 part après le retard 25 à l'ouverture, le MOTEUR 1 après le retard 26 à la fermeture. Ouverture partielle : vantail 1 seul, à la valeur de 15 (un seul vantail, 70 01 : 50 % d'usine d'après la notice). Pas de refermeture automatique depuis l'ouverture partielle (la notice ne la décrit que portail complètement ouvert, A2). La notice écrit « 27 (ISEL) » dans le tableau des bornes (p. 104) mais le schéma fig. 2 et la carte donnent 28 (ISEL) et 27 (ST) : l'atelier suit le schéma. Non simulés en plus : électroserrure (22-21, 28, 29, 38), veille « low power » (L1), batteries, ralentissements, couple, détection d'obstacle ampèremétrique, essai des photocellules (58, 59, A8 02 à 04), fermeture garantie (81, 82)." };
   CFG["casit-eq2009"] = { modele: "eq2009", fig: "schéma p. 2 de la notice EQ2009 R1.0", coms: ["14", "17", "22", "28", "33", "35"] };
   CFG["casit-keqs08"] = { modele: "keqs08", fig: "schéma § 2.1 p. 4 de la notice KEQS08-R", coms: ["9", "10", "20"] };
   const CARTES = CFG;
@@ -37,11 +50,13 @@
   function charger(id) {
     F = CFG[id]; M = F.modele ? (window.CABMOD || {})[F.modele] || null : null; BIBLIO = BIBLIO_R;
     if (M) { RANGEES = []; BORNES = M.bornes(DY); K = {}; Object.keys(M.K).forEach(k => K[k] = "b:" + M.K[k]); COMS = M.coms.map(n => "b:" + n); ENTREES = {}; Object.keys(M.entrees).forEach(n => ENTREES["b:" + n] = M.entrees[n]); USINE = M.usine; BIBLIO = M.biblio; return; }
-    RANGEES = [{ y: DY + 238, dessus: true, blocs: [[88, F.haut[0]], [318, F.haut[1]]] }, { y: DY + 266, dessus: false, blocs: [[32, F.bas[0]], [88, F.bas[1]], [306, F.bas[2]]] }];
-    BORNES = {}; RANGEES.forEach(r => r.blocs.forEach(([x0, l]) => l.forEach(([n, lab], i) => { BORNES["b:" + n] = { x: x0 + i * P, y: r.y, lab, n, dessus: r.dessus }; })));
+    BORNES = {};
+    if (F.blocs) { RANGEES = []; BIBLIO = BIBLIO_R.concat(["mbl"]); F.blocs.forEach(b => b.ns.forEach(([n, lab], i) => { BORNES["b:" + n] = { x: b.x + (b.vertical ? 0 : i * b.pas), y: DY + b.y + (b.vertical ? i * b.pas : 0), lab, n: n.length === 2 && /^[12][XYZ]$/.test(n) ? "M" + n[0] + " " + n[1] : n, dessus: b.lab === "haut" }; })); }
+    else { RANGEES = [{ y: DY + 238, dessus: true, blocs: [[88, F.haut[0]], [318, F.haut[1]]] }, { y: DY + 266, dessus: false, blocs: [[32, F.bas[0]], [88, F.bas[1]], [306, F.bas[2]]] }];
+      RANGEES.forEach(r => r.blocs.forEach(([x0, l]) => l.forEach(([n, lab], i) => { BORNES["b:" + n] = { x: x0 + i * P, y: r.y, lab, n, dessus: r.dessus }; }))); }
     K = {}; Object.keys(F.K).forEach(k => K[k] = "b:" + F.K[k]);
     COMS = F.coms.map(n => "b:" + n); /* bornes COM : 0 V commun des sécurités, des commandes et des sorties */
-    ENTREES = { [K.ft2]: "FT2", [K.ft1]: "FT1", [K.cos2]: "COS2", [K.cos1]: "COS1", [K.st]: "ST", [K.oro]: "ORO", [K.ap]: "AP", [K.ch]: "CH", [K.pp]: "PP", [K.ped]: "PED" };
+    ENTREES = {}; [["ft2", "FT2"], ["ft1", "FT1"], ["cos2", "COS2"], ["cos1", F.isel ? "ISEL" : "COS1"], ["st", "ST"], ["oro", "ORO"], ["ap", "AP"], ["ch", "CH"], ["pp", "PP"], ["ped", "PED"]].forEach(([k, n]) => { if (K[k]) ENTREES[K[k]] = n; });
     /* connecteurs câblés en usine : pannes que l'on peut provoquer (codes de la fiche) */
     USINE = { mot: { nom: "Moteur X · Y · Z", panne: "Débrancher le moteur", code: "Mot" }, enc: { nom: "Encodeur (ENC)", panne: "Débrancher l'encodeur", code: "EnE1" }, fc: { nom: "Fins de course (FC)" },
       sb: { nom: "Déverrouillage (SB)", panne: "Ouvrir la poignée de déverrouillage", code: "StoP" }, sec: { nom: F.alim.nom, panne: F.alim.panne, code: F.alim.code },
@@ -73,6 +88,7 @@
     rxc: { nom: "Cellule RX", sous: "récepteur 24 V AC/DC", ic: "◉", b: [["1", "~"], ["2", "~"], ["C", "C"], ["NF", "NF"]], act: "faisceau", charge: ["1", "2"], dom: "a24d24" },
     fla: { nom: "Clignotant", sous: "230 V~ avec carte", ic: "💡", b: [["L", "~"], ["N", "~"]], charge: ["L", "N"], ac: true },
     voy24: { nom: "Voyant", sous: "24 V AC/DC", ic: "🔆", b: [["1", "~"], ["2", "~"]], charge: ["1", "2"], dom: "a24d24" },
+    mbl: { nom: "Moteur", sous: "brushless 24 V · X Y Z", ic: "⚙", b: [["X", "X"], ["Y", "Y"], ["Z", "Z"]], w: 150 },
     pont: { nom: "Fil de pont", sous: "entre deux bornes", ic: "〰", fil: true }
   };
   const BIBLIO_R = ["cell", "pp", "cle", "digi", "bnf", "b8k", "stop", "lam", "voy", "oro", "sec", "lum", "radio", "pont"];
@@ -80,7 +96,7 @@
   const TRAIT = c => c === "vj" ? "url(#cabvj)" : c;
   const FONCE = c => { if (!/^#[0-9a-f]{6}$/i.test(c)) return false; const n = parseInt(String(c).slice(1), 16); return ((n >> 16) * 299 + ((n >> 8) & 255) * 587 + (n & 255) * 114) / 1000 < 60; };
   let BIBLIO = BIBLIO_R;
-  const largeur = t => Math.max(92, ACC[t].b.length * 24 + 20);
+  const largeur = t => Math.max(ACC[t].w || 92, ACC[t].b.length * 24 + 20);
 
   /* ---------- paramètres simulés (valeurs et réglages usine tirés de la fiche) ---------- */
   const PARAMS = ["A2", "21", "16", "A4", "A5", "A6", "A7", "A8", "15", "50", "51", "52", "53", "54", "55", "73", "74", "27", "76", "77", "78", "20", "79", "80"];
@@ -141,8 +157,10 @@
     const on = S.secteur && !S.hs, tags = [], liens = [];
     if (on && S.f3) { tags.push([K.p24, "+24"]); if (lamSortie()) tags.push([K.lam, "LAM"]); if (S.sc) tags.push([K.sc, "SC"]); }
     if (on && corFerme()) liens.push([K.cor1, K.cor2]);
+    if (on && F.deux && !S.pannes.fmot) ["1", "2"].forEach(m => ["X", "Y", "Z"].forEach(p => tags.push(["b:" + m + p, m + p]))); /* sorties moteur brushless (onduleur de la carte) */
     return { tags, liens };
   }
+  const PHASES = ["1X", "1Y", "1Z", "2X", "2Y", "2Z"]; /* sorties moteur brushless de la B70/2ML */
   const DCP = ["+24", "LAM", "SC"]; /* sorties continues 24 V (pôle +) ; le pôle − est COM (0V) */
   const aDC = s => DCP.some(t => s.has(t));
   /* une charge est-elle alimentée ? renvoie les deux étiquettes de source [pôle de p, pôle de q] ou null */
@@ -169,8 +187,8 @@
       if (S.secteur) I.acc.filter(a => a.t === "sec").forEach(a => { tag(a.id + ":L", "L"); tag(a.id + ":N", "N"); }); /* l'arrivée 230 V suit l'interrupteur « Secteur » */
       const T = n => tags[U.f(n)] || new Set();
       /* défauts */
-      const def = { cc24: false, ccAC: false, d230: false };
-      Object.values(tags).forEach(s => { if ((aDC(s) || s.has("+12")) && s.has("0V")) def.cc24 = true; if (s.has("A24") && s.has("A24b")) def.cc24 = true; if (s.has("L") && s.has("N")) def.ccAC = true; if ((s.has("L") || s.has("N")) && (aDC(s) || s.has("0V") || s.has("+12") || s.has("A24") || s.has("A24b"))) def.d230 = true; });
+      const def = { cc24: false, ccAC: false, d230: false, ccMot: false };
+      Object.values(tags).forEach(s => { const ph = [...s].filter(t => PHASES.includes(t)); if (ph.length && (ph.length > 1 || aDC(s) || s.has("0V") || s.has("+12"))) def.ccMot = true; if (ph.length && (s.has("L") || s.has("N"))) def.d230 = true; if ((aDC(s) || s.has("+12")) && s.has("0V")) def.cc24 = true; if (s.has("A24") && s.has("A24b")) def.cc24 = true; if (s.has("L") && s.has("N")) def.ccAC = true; if ((s.has("L") || s.has("N")) && (aDC(s) || s.has("0V") || s.has("+12") || s.has("A24") || s.has("A24b"))) def.d230 = true; });
       const ok230 = M ? M.bornes230 : [K.cor1, K.cor2]; /* bornes de la carte qui acceptent le 230 V */
       Object.keys(BORNES).forEach(b => { if (!ok230.includes(b) && (T(b).has("L") || T(b).has("N"))) def.d230 = true; });
       /* charges alimentées */
@@ -184,6 +202,13 @@
       /* moteurs 230 V : enroulement Ouvre ou Ferme alimenté entre Com et la phase */
       const moteurs = {};
       I.acc.filter(a => a.t === "mot").forEach(a => { const k = a.id + ":", c = T(k + "C"), o = T(k + "O"), f = T(k + "F"); const pr = (x, y) => (x.has("L") && y.has("N")) || (x.has("N") && y.has("L")); const O = pr(o, c), Fe = pr(f, c); moteurs[a.id] = { O, F: Fe, sens: O && !Fe ? 1 : Fe && !O ? -1 : 0, bloque: O && Fe }; if (aDC(c) || aDC(o) || aDC(f)) def.d230 = true; });
+      /* moteurs brushless : chaque fil X Y Z sur une phase de la même sortie ; deux phases échangées = sens inversé */
+      I.acc.filter(a => a.t === "mbl").forEach(a => { const ph = ["X", "Y", "Z"].map(p => [...T(a.id + ":" + p)].filter(t => PHASES.includes(t)));
+        if (ph.some(l => l.length !== 1)) { moteurs[a.id] = { ok: false, err: ph.every(l => !l.length) ? "" : "phase manquante" }; return; }
+        const t = ph.map(l => l[0]), n = t[0][0];
+        if (t.some(x => x[0] !== n) || new Set(t).size < 3) { moteurs[a.id] = { ok: false, err: "fils mélangés" }; return; }
+        const o = t.map(x => "XYZ".indexOf(x[1])), inv = (o[0] > o[1]) + (o[0] > o[2]) + (o[1] > o[2]);
+        moteurs[a.id] = { ok: true, sortie: +n, sens: inv % 2 ? -1 : 1 }; });
       /* état dynamique des accessoires alimentés */
       let change = false;
       I.acc.forEach(a => {
@@ -199,6 +224,7 @@
     /* entrées : contact fermé vers COM, ou résistance (bords 8,2 kΩ) */
     R.ent = {}; R.ohm = {};
     Object.keys(ENTREES).forEach(b => { const ferme = R.T(b).has("0V"); R.ent[ENTREES[b]] = ferme; R.ohm[ENTREES[b]] = ferme ? 0 : resistance(R, b, "G"); });
+    if (!M && F.isel) { const cosM = par("60") !== "00"; R.ent.COS1 = cosM ? R.ent.ISEL : true; R.ohm.COS1 = cosM ? R.ohm.ISEL : 0; R.ent.ORO = !cosM && R.ent.ISEL; } /* ISEL : bord sensible (60 01) ou horloge (60 00) */
     R.flux = fluxFils(R);
     return R;
   }
@@ -240,6 +266,7 @@
       chemin(p, vers(tp)); chemin(q, vers(tq));
     });
     I.acc.filter(a => a.t === "mot").forEach(a => { const m = R.moteurs[a.id]; if (!m || !(m.O || m.F)) return; const k = a.id + ":", w = m.O ? k + "O" : k + "F"; const pc = R.T(k + "C"); chemin(k + "C", vers(pc.has("L") ? "L" : "N")); chemin(w, vers(pc.has("L") ? "N" : "L")); });
+    if (!M && F.deux && S.mv) I.acc.filter(a => a.t === "mbl").forEach(a => { const m = R.moteurs[a.id]; if (m && m.ok && S.mv[m.sortie]) ["X", "Y", "Z"].forEach(p => { const t = [...R.T(a.id + ":" + p)].find(x => PHASES.includes(x)); if (t) chemin(a.id + ":" + p, vers(t)); }); });
     if (R.carteOn) Object.keys(ENTREES).forEach(b => { if (R.ent[ENTREES[b]] || isFinite(R.ohm[ENTREES[b]])) chemin(b, ["G"]); });
     return flux;
   }
@@ -253,14 +280,14 @@
   }
   function corFerme() {
     if (S.corRadio || S.corRadio5) return true; /* 76 / 77 = 05 ou 06 : 79 ignoré */
-    const m = par("20");
+    const m = par(F.pCor || "20");
     if (m === "00") { const t = par("79"); if (t === "00") return false; if (t === "01") return S.corT > 0; if (t === "02") return !!S.dir; return !!S.dir || S.corT > 0; }
     if (m === "01") return !panneBloque(); if (m === "02" || m === "03") return true; /* sans batterie simulée : pas d'anomalie */
     if (m === "04") return S.pos < 100; if (m === "05") return S.pos > 0; return false;
   }
   const dit = (t, src, alerte) => { S.msg.unshift({ t, src: src || "", alerte: !!alerte }); S.msg = S.msg.slice(0, 4); };
   function cos(R, nom, code) { /* état d'un bord sensible : null = non installé, true = OK, false = alarme */
-    const v = par(code); if (v === "00") return null; const r = R.ohm[nom];
+    const v = par(code); if (v === "00" || (F.isel && par("60") === "00")) return null; const r = R.ohm[nom];
     if (v === "01" || v === "03") return r === 0; if (v === "02" || v === "04") return r > 6500 && r < 10000; if (v === "12" || v === "14") return r > 3300 && r < 5000; return null;
   }
   function bouger(d, cible, raison) {
@@ -273,12 +300,13 @@
     const pre = par("A5"), n = pre === "99" ? (d < 0 ? 5 : 0) : pn("A5");
     S.cible = cible; S.arret = null; S.att = null; S.pause = 0;
     if (n > 0 && !S.dir) { S.pre = n * 10; S.preDir = d; S.dir = 0; } else { S.dir = d; }
-    S.corT = par("20") === "00" && par("79") === "01" ? 10 : S.corT;
+    S.corT = par(F.pCor || "20") === "00" && par("79") === "01" ? 10 : S.corT;
+    if (F.deux && d > 0) S.ped = cible < 100; /* 2 vantaux : ouverture partielle = vantail 1 seul */
     if (raison) dit(raison);
     return true;
   }
   function stopper(raison, src) { if (S.dir || S.pre) { S.arret = S.dir || S.preDir; S.dir = 0; S.pre = 0; finManoeuvre(); if (raison) dit(raison, src); } }
-  function finManoeuvre() { const t = par("79"); if (par("20") === "00" && t !== "00" && t !== "01" && t !== "02") S.corT = duree("79") * 10; }
+  function finManoeuvre() { const t = par("79"); if (par(F.pCor || "20") === "00" && t !== "00" && t !== "01" && t !== "02") S.corT = duree("79") * 10; }
   const ouvrir = r => bouger(1, 100, r), fermer = r => bouger(-1, 0, r);
   function pasAPas(mode, partiel) {
     const cible = partiel ? pn("15") : 100;
@@ -289,6 +317,42 @@
     /* 00 : ouvre – stop – ferme – stop */
     if (bougeant) stopper(); else if (S.pos === 0 || S.arret < 0) bouger(1, cible); else fermer();
   }
+  /* B70/2ML : moteur nécessaire non raccordé (codes Mot1 / Mot2 de la fiche) */
+  const nbMot = () => par("70") === "01" ? 1 : 2;
+  const p15 = () => I.params["15"] != null ? pn("15") : nbMot() === 1 ? 50 : pn("15"); /* notice : un seul vantail, ouverture partielle à 50 % d'usine */
+  function motManque(R) {
+    if (!F || !F.deux || !S.secteur || S.hs || S.pannes.fmot) return "";
+    for (let n = 1; n <= nbMot(); n++) if (!I.acc.some(a => a.t === "mbl" && R.moteurs[a.id] && R.moteurs[a.id].ok && R.moteurs[a.id].sortie === n)) return "Mot" + n;
+    return "";
+  }
+  /* B70/2ML : deux vantaux. Ouverture : MOTEUR 1, puis MOTEUR 2 après le retard 25 ; fermeture : MOTEUR 2, puis MOTEUR 1 après le retard 26 (s'il reste un vantail 2 à fermer) */
+  function mouvement2(R) {
+    const v = S.v = S.v || { 1: 0, 2: 0 }, n = nbMot(), d = S.dir;
+    if (d !== S.dPrec) { S.tm = 0; S.dPrec = d; S.v2depart = v[2]; S.mauvais = {}; }
+    S.mv = { 1: 0, 2: 0 };
+    if (!d) { S.pos = posGlobale(); return; }
+    S.tm++;
+    const p15v = p15();
+    const cible = { 1: S.ped ? p15v : 100, 2: n === 2 && !S.ped ? 100 : 0 };
+    const attente = { 1: d < 0 && n === 2 && S.v2depart > 0 ? pn("26") * 10 : 0, 2: d > 0 ? pn("25") * 10 : 0 };
+    const sensM = k => { const a = I.acc.find(x => x.t === "mbl" && R.moteurs[x.id] && R.moteurs[x.id].ok && R.moteurs[x.id].sortie === k); return a ? R.moteurs[a.id].sens : 0; };
+    let fini = true;
+    for (let k = 1; k <= n; k++) {
+      const but = d > 0 ? cible[k] : 0, reste = d > 0 ? v[k] < but : v[k] > but;
+      if (!reste) continue; fini = false;
+      if (S.tm <= attente[k]) continue;
+      const sm = sensM(k), pas = d * sm; S.mv[k] = 1;
+      if (sm < 0) { /* fils échangés : le vantail part à l'envers jusqu'à sa butée */
+        if ((pas < 0 && v[k] <= 0) || (pas > 0 && v[k] >= 100)) { stopper("Le vantail " + k + " part dans le mauvais sens et force sur sa butée : arrêt. Échangez deux fils du MOTEUR " + k + " (X-Y-Z). La réaction exacte de la carte n'est pas décrite par la notice.", "Fiche, symptôme « Mauvais sens » : échanger deux fils sur X-Y-Z"); S.pos = posGlobale(); return; }
+        if (!S.mauvais[k]) { S.mauvais[k] = 1; dit("Vantail " + k + " : il part à l'envers (" + (pas > 0 ? "ouvre" : "ferme") + " au lieu de " + (d > 0 ? "ouvrir" : "fermer") + ").", "Fiche, symptôme « Mauvais sens »"); }
+      }
+      v[k] = Math.max(0, Math.min(100, v[k] + pas));
+    }
+    if (n === 1) v[2] = 0;
+    S.pos = posGlobale();
+    if (fini) { S.dir = 0; S.mv = { 1: 0, 2: 0 }; S.arret = null; finManoeuvre(); S.pause = 0; if (S.pos === 0) S.tentatives = 0; }
+  }
+  function posGlobale() { const v = S.v || { 1: 0, 2: 0 }, n = nbMot(); if (n === 1) return v[1]; if (v[1] === 0 && v[2] === 0) return 0; if (v[1] >= 100 && v[2] >= 100) return 100; return Math.max(1, Math.min(99, Math.round((v[1] + v[2]) / 2))); }
   function tick() {
     if (!S || !I) return;
     S.t++;
@@ -301,11 +365,15 @@
     if (S.secteur && R.def.ccAC && !S.ccAC) { S.ccAC = true; dit("Court-circuit sur l'arrivée 230 V~ : la protection de l'installation coupe (non dessinée).", ""); }
     if (!R.def.ccAC) S.ccAC = false;
     if (M) { M.tick(api(), R); I.acc.forEach(a => { const e = S.etat[a.id]; if (e && e.imp) { e.imp--; if (!e.imp) e.on = false; } }); maj(); return; }
-    const actif = S.secteur && !S.hs && !panneBloque();
+    if (F.deux && S.secteur && !S.hs && R.def.ccMot && !S.prot) { S.prot = 1; S.dir = 0; S.pre = 0; dit("Court-circuit sur une sortie moteur (fils X Y Z entre eux ou sur la très basse tension) : surintensité dans l'onduleur, code PrOt.", "Fiche : PrOt, surintensité dans l'onduleur (deux appuis sur TEST ou 3 commandes de suite)", true); }
+    const mq = motManque(R);
+    const actif = S.secteur && !S.hs && !panneBloque() && !S.prot && !mq;
+    if (mq && S.secteur && !S.hs && (S.dir || S.pre)) { S.dir = 0; S.pre = 0; }
     const E = R.ent;
-    /* entrées de sécurité */
-    const st17 = E.ST, sb = !S.pannes.sb;
-    const ft1 = E.FT1, ft2 = E.FT2, c1 = cos(R, "COS1", "73"), c2 = cos(R, "COS2", "74");
+    /* entrées de sécurité (57 : NF ou 8,2 kΩ) */
+    const v57 = ITEMS["57"] ? par("57") : "00", k8 = (nom, r8) => r8 ? R.ohm[nom] > 6500 && R.ohm[nom] < 10000 : E[nom];
+    const st17 = k8("ST", v57[0] === "1"), sb = !S.pannes.sb;
+    const ft1 = k8("FT1", v57[1] === "1" || v57[1] === "3"), ft2 = k8("FT2", v57[1] === "2" || v57[1] === "3"), c1 = cos(R, "COS1", "73"), c2 = cos(R, "COS2", "74");
     S.lu = { st17, sb, ft1, ft2, c1, c2 };
     /* commandes (fronts montants) */
     const radio = S.radio; const cmd = { AP: E.AP, CH: E.CH, PP: E.PP, PED: E.PED, ORO: E.ORO };
@@ -316,6 +384,7 @@
       if (f && ["07", "08", "09", "10"].includes(v)) dit("Paramètre " + p + " = " + v + " (commande avec confirmation par une 2e touche) : non simulé.", "Paramètre " + p);
       cmd[k] = !!radio[k]; });
     const front = k => cmd[k] && !S.prec[k]; S.cmd = cmd;
+    if (S.prot && ["AP", "CH", "PP", "PED"].some(front)) { S.protC = (S.protC || 0) + 1; if (S.protC >= 3 && !R.def.ccMot) { S.prot = 0; S.protC = 0; dit("PrOt effacé (trois commandes de suite).", "Fiche : PrOt"); } }
     if (actif) {
       if (S.pre) { S.pre--; if (!S.pre) S.dir = S.preDir; }
       const ignore = !st17 || !sb || (par("80") === "00" && cmd.ORO);
@@ -332,7 +401,7 @@
           if (front("AP")) { if (S.pos < 100 && !(S.dir > 0)) ouvrir("Commande AP (" + nB("ap") + ") : ouverture."); }
           if (front("CH")) { if (S.pos > 0 && !(S.dir < 0)) fermer("Commande CH (" + nB("ch") + ") : fermeture."); }
           if (front("PP")) { dit("Commande pas-à-pas : action selon le paramètre A4 = " + par("A4") + " (" + pdesc("A4") + ")", "Paramètre A4"); pasAPas(par("A4"), false); }
-          if (front("PED")) { if (!(par("A6") === "01" && S.dir > 0)) { dit("Commande PED (" + nB("ped") + ") : pas-à-pas sur l'ouverture partielle, " + pn("15") + " % de la course.", "Paramètres 15 et A6 = " + par("A6")); pasAPas("00", true); } }
+          if (front("PED")) { if (!(par("A6") === "01" && S.dir > 0)) { dit("Commande PED (" + nB("ped") + ") : pas-à-pas sur l'ouverture partielle, " + (F.deux ? (nbMot() === 2 ? "vantail 1 seul à " + p15() + " %" : p15() + " % de la course") + (I.params["15"] == null && nbMot() === 1 ? " (50 % d'usine pour un vantail, d'après la notice)" : "") : pn("15") + " % de la course") + ".", "Paramètres 15 et A6 = " + par("A6")); pasAPas("00", true); } }
           if (front("STOPR")) stopper("Télécommande : arrêt (paramètre 76 / 77 = 04).");
         }
       }
@@ -364,11 +433,12 @@
       if (c1 !== false) S.nd73 = 0; if (c2 !== false) S.nd74 = 0;
       if (S.inv) { S.inv--; if (!S.inv) stopper(); }
       /* mouvement : course complète en 10 s environ (vitesse indicative) */
-      if (S.dir > 0) { S.pos = Math.min(S.cible || 100, S.pos + 1); if (S.pos >= (S.cible || 100)) { S.dir = 0; S.arret = null; finManoeuvre(); S.pause = 0; S.tentatives = S.pos >= 100 ? S.tentatives : S.tentatives; } }
+      if (F.deux) mouvement2(R);
+      else if (S.dir > 0) { S.pos = Math.min(S.cible || 100, S.pos + 1); if (S.pos >= (S.cible || 100)) { S.dir = 0; S.arret = null; finManoeuvre(); S.pause = 0; S.tentatives = S.pos >= 100 ? S.tentatives : S.tentatives; } }
       else if (S.dir < 0) { S.pos = Math.max(0, S.pos - 1); if (S.pos === 0) { S.dir = 0; S.arret = null; finManoeuvre(); S.tentatives = 0; } }
       /* refermeture automatique (A2 différent de 00) : 21 depuis complètement ouvert, 16 depuis l'ouverture partielle */
       const a2 = par("A2"), copro = ["01", "02"].includes(par("A4"));
-      if (!S.dir && !S.pre && !S.att && S.pos > 0 && S.arret === null && (a2 !== "00" || copro) && !(cmd.ORO) && st17 && sb) {
+      if (!S.dir && !S.pre && !S.att && S.pos > 0 && (S.pos >= 100 || ITEMS["16"]) && S.arret === null && (a2 !== "00" || copro) && !(cmd.ORO) && st17 && sb) {
         const lim = a2 === "99" ? 1e9 : Math.max(1, pn("A2"));
         if (S.tentatives < lim) {
           const tps = (S.pos >= 100 ? duree("21") : duree("16")) * 10;
@@ -378,6 +448,7 @@
       } else if (S.dir) S.pause = 0;
     }
     if (!actif && (S.dir || S.pre)) { S.dir = 0; S.pre = 0; }
+    if (F.deux && !S.dir) S.mv = { 1: 0, 2: 0 };
     if (S.corT > 0) S.corT--;
     /* sortie +SC (A8) */
     const a8 = par("A8");
@@ -391,12 +462,17 @@
   }
 
   /* ---------- missions (vérifiées sur le câblage, carte sous tension) ---------- */
-  const missions = () => M ? M.missions(api()) : MISSIONS;
+  const MOT2 = { id: "mot2", t: "Moteurs brushless", but: "Câblez les moteurs : MOTEUR 1 (vantail 1) sur le connecteur M1, MOTEUR 2 (vantail 2) sur M2. Chaque vantail doit partir dans le bon sens.", aide: () => "Fil X du moteur sur X, Y sur Y, Z sur Z (dans l'atelier, cet ordre donne le bon sens). Vantail à l'envers : échangez deux fils. Un seul moteur : paramètre 70 sur 01.", test: () => {
+    const n = nbMot(), R = avec(() => {}, R => R); if (R.def.ccMot) return "Court-circuit sur une sortie moteur : deux phases reliées entre elles ou à la très basse tension."; if (R.def.d230) return "DANGER : du 230 V arrive sur la carte.";
+    for (let k = 1; k <= n; k++) { const a = I.acc.find(x => x.t === "mbl" && x.num === k); if (!a) return "Posez le moteur brushless " + k + " (vantail " + k + ")."; const m = R.moteurs[a.id];
+      if (!m || !m.ok) return "Moteur " + k + " : " + (m && m.err ? m.err + " (trois fils X, Y, Z sur le même connecteur)." : "non raccordé (code Mot" + k + ")."); if (m.sortie !== k) return "Le moteur " + k + " est câblé sur le connecteur M" + m.sortie + " : le vantail " + k + " doit être commandé par M" + k + "."; if (m.sens < 0) return "Le moteur " + k + " partirait à l'envers : échangez deux de ses fils."; }
+    return ""; } };
+  const missions = () => M ? M.missions(api()) : F.deux ? [MOT2].concat(MISSIONS.map(m => m.id === "cos" ? Object.assign({}, m, { t: "Bord sensible 8,2 kΩ sur ISEL", but: "Câblez un bord sensible résistif 8,2 kΩ sur l'entrée ISEL et réglez les paramètres 60 et 73 en conséquence.", aide: () => "Bord entre ISEL (" + nB("cos1") + ") et COM (" + nB("cosCom") + "). Paramètre 60 sur 01 (ISEL = bord sensible), 73 sur 02 ou 04 (résistif 8k2).", test: () => par("60") === "00" ? "Le paramètre 60 est sur 00 : ISEL sert d'horloge. Réglez 60 sur 01." : essaiCos() }) : m)) : MISSIONS;
   const MISSIONS = [
     { id: "ap", t: "Bouton poussoir en ouverture", but: "Câblez un bouton poussoir qui commande l'OUVERTURE (AP).", aide: () => `Contact NO entre AP (${nB("ap")}) et le commun des commandes COM (${nB("cmdCom")}).`, test: m => essai(m, [["pp", "on"]], "AP") },
     { id: "cle", t: "Sélecteur à clé ouverture / fermeture", but: "Câblez un sélecteur à clé : à gauche OUVERTURE (AP), à droite FERMETURE (CH).", aide: () => `C du sélecteur sur COM (${nB("cmdCom")}), NO1 sur AP (${nB("ap")}), NO2 sur CH (${nB("ch")}).`, test: m => essai(m, [["cle", "g"]], "AP") || essai(m, [["cle", "d"]], "CH") },
     { id: "digi", t: "Digicode en pas-à-pas", but: "Câblez un digicode alimenté par la carte, qui commande le PAS-À-PAS (PP).", aide: () => `Alimentation : + sur +24V (${nB("p24")}), − sur COM (${nB("com")}). Contact : C sur COM (${nB("cmdCom")}), NO sur PP (${nB("pp")}).`, test: m => essai(m, [["digi", "imp"]], "PP", true) },
-    { id: "ft1", t: "Cellules en FT1", but: "Câblez une paire de cellules sur FT1 : quand le faisceau est coupé, l'entrée FT1 s'ouvre.", aide: () => `TX et RX : + sur ${nB("p24")}, − sur ${nB("com")}. Contact du RX : C sur COM (${nB("com")}), NF sur FT1 (${nB("ft1")}). Pas de pont sur ${nB("ft1")}-${nB("com")}.`, test: m => essaiCell(m) },
+    { id: "ft1", t: "Cellules en FT1", but: "Câblez une paire de cellules sur FT1 : quand le faisceau est coupé, l'entrée FT1 s'ouvre.", aide: () => `TX et RX : + sur ${nB("p24")}, − sur ${nB("com")}. Contact du RX : C sur COM (${nB(K.ftCom ? "ftCom" : "com")}), NF sur FT1 (${nB("ft1")}). Pas de pont sur ${nB("ft1")}-${nB(K.ftCom ? "ftCom" : "com")}.`, test: m => essaiCell(m) },
     { id: "lam", t: "Clignotant", but: "Câblez le clignotant : il doit s'allumer quand le portail bouge.", aide: () => `Clignotant sur LAM (${nB("lam")}) et COM (${nB("com")}).`, test: m => essaiLam(m) },
     { id: "stop", t: "Bouton STOP", but: "Remplacez le pont d'usine de ST par un bouton STOP coup de poing.", aide: () => `Retirez le pont ${nB("cosCom")}-${nB("st")}, câblez le bouton NF entre ST (${nB("st")}) et COM (${nB("cosCom")}).`, test: m => essai(m, [["stop", "on"]], "ST", false, true) },
     { id: "cos", t: "Bord sensible 8,2 kΩ sur COS1", but: "Câblez un bord sensible résistif 8,2 kΩ sur COS1 et réglez le paramètre 73 en conséquence.", aide: () => `Bord entre COS1 (${nB("cos1")}) et COM (${nB("cosCom")}). Paramètre 73 sur 02 ou 04 (résistif 8k2).`, test: m => essaiCos(m) },
@@ -449,13 +525,13 @@
     if (!["02", "04", "12"].includes(par("73")) && !["14"].includes(par("73"))) return "Le paramètre 73 n'est pas réglé pour un bord résistif 8,2 kΩ (02 ou 04).";
     const r = avec(() => {}, R => R.ohm.COS1), p = avec(() => { S.etat[b.id] = { on: true }; }, R => R.ohm.COS1);
     const att = par("73") === "12" || par("73") === "14" ? 4100 : 8200;
-    if (!(Math.abs(r - att) < att * 0.2)) return "Au repos, la carte ne voit pas " + (att === 8200 ? "8,2 kΩ" : "4,1 kΩ") + " entre COS1 (" + nB("cos1") + ") et COM : " + (isFinite(r) ? Math.round(r) + " Ω" : "circuit ouvert") + ".";
-    if (p !== 0) return "Bord écrasé, COS1 devrait passer en court-circuit."; return "";
+    if (!(Math.abs(r - att) < att * 0.2)) return "Au repos, la carte ne voit pas " + (att === 8200 ? "8,2 kΩ" : "4,1 kΩ") + " entre " + (F.isel ? "ISEL" : "COS1") + " (" + nB("cos1") + ") et COM : " + (isFinite(r) ? Math.round(r) + " Ω" : "circuit ouvert") + ".";
+    if (p !== 0) return "Bord écrasé, " + (F.isel ? "ISEL" : "COS1") + " devrait passer en court-circuit."; return "";
   }
   function essaiCor() {
     const l = I.acc.find(a => a.t === "lum"); if (!l) return "Posez une lumière 230 V~ et une arrivée 230 V~.";
     if (!I.acc.some(a => a.t === "sec")) return "Posez une arrivée 230 V~.";
-    const sp = I.params; I.params = Object.assign({}, sp, { "20": "00", "79": "02" }); /* contact COR fermé pendant la manœuvre, le temps de l'essai */
+    const sp = I.params; I.params = Object.assign({}, sp, { [F.pCor || "20"]: "00", "79": "02" }); /* contact COR fermé pendant la manœuvre, le temps de l'essai */
     try {
       const on = avec(() => { S.dir = 1; }, R => R), off = avec(() => { S.dir = 0; S.pre = 0; S.corT = 0; }, R => R);
       if (on.def.d230 || off.def.d230) return "DANGER : du 230 V arrive sur une borne 24 V de la carte (ou sur un accessoire 24 V) quand COR est fermé ou ouvert.";
@@ -478,6 +554,7 @@
     return `M${p[0]} ${p[1]} C${p[0]} ${p[1] + sp * l1} ${m[0] - tx} ${m[1] - ty} ${m[0]} ${m[1]} C${m[0] + tx} ${m[1] + ty} ${q[0]} ${q[1] + sq * l2} ${q[0]} ${q[1]}`; };
   function dessinCarte() {
     if (M) return M.dessin(api());
+    if (F.blocs) return dessinCarte2();
     const g = [];
     const T = (x, y, t, o = "") => g.push(`<text x="${x}" y="${y}" ${o}>${esc(t)}</text>`);
     const GR = "#5b605d";
@@ -511,12 +588,45 @@
     Object.entries(BORNES).forEach(([k, b]) => g.push(`<circle class="cabhit" data-b="${k}" cx="${b.x}" cy="${b.y}" r="11.5" fill="transparent"/>`));
     return g.join("");
   }
+  /* carte dessinée par blocs de bornes (B70/2ML, fig. 1 et 2 de la notice) */
+  function dessinCarte2() {
+    const g = [], GR = "#5b605d", T = (x, y, t, o = "") => g.push(`<text x="${x}" y="${y}" ${o}>${esc(t)}</text>`), u = (id, inner) => g.push(`<g class="cabu" data-u="${id}">${inner}</g>`);
+    g.push(`<rect x="10" y="${DY}" width="370" height="300" rx="10" fill="#0f3b2a" stroke="#1d6b4c"/>`);
+    T(150, DY + 70, C.nom, 'class="cabt" fill="#8fd1b2" font-size="11"');
+    g.push(`<rect x="150" y="${DY + 76}" width="9" height="9" rx="2" fill="${GR}"/>`); T(163, DY + 84, "câblé usine", 'class="cabt"');
+    const inv = S.pannes.sec && F.alim.inv;
+    u("sec", `<rect x="96" y="${DY + 12}" width="14" height="16" rx="2" fill="${GR}"/><rect x="112" y="${DY + 12}" width="14" height="16" rx="2" fill="${GR}"/><text x="111" y="${DY + 38}" class="cabt" text-anchor="middle">${(inv || F.alim.lab).join(" ")}</text>`);
+    u("fmot", `<rect x="96" y="${DY + 46}" width="30" height="9" rx="2" fill="${S.pannes.fmot ? "#5a1e1e" : "#e8c33a"}"/><text x="111" y="${DY + 66}" class="cabt" text-anchor="middle">${esc(F.fmot.lab)}</text>`);
+    u("facc", `<rect x="96" y="${DY + 130}" width="30" height="9" rx="2" fill="${S.f3 ? "#e8c33a" : "#5a1e1e"}"/><text x="111" y="${DY + 150}" class="cabt" text-anchor="middle">${esc(F.facc.lab)}</text>`);
+    u("rec", `<rect x="150" y="${DY + 14}" width="120" height="12" rx="2" fill="#2a62c9"/>${I.acc.some(a => a.t === "radio") ? `<rect x="150" y="${DY + 8}" width="120" height="24" rx="4" fill="#e9eef7" stroke="#2a62c9"/><text x="210" y="${DY + 24}" class="cabt" fill="#1d3f86" text-anchor="middle">H93/RX2LP/I</text>` : `<text x="210" y="${DY + 40}" class="cabt" text-anchor="middle">RÉCEPTEUR RADIO</text>`}`);
+    u("wifi", `<rect x="352" y="${DY + 112}" width="18" height="10" rx="2" fill="#bdbdbd" opacity=".7"/><text x="361" y="${DY + 134}" class="cabt" text-anchor="middle">WIFI</text>`);
+    if (F.batt) u("batt", `<rect x="160" y="${DY + 130}" width="14" height="16" rx="2" fill="${GR}"/><rect x="176" y="${DY + 130}" width="14" height="16" rx="2" fill="${GR}"/><text x="175" y="${DY + 156}" class="cabt" text-anchor="middle">BATT</text>`);
+    g.push(`<g id="cabaff"></g>`);
+    const y = DY + (F.affY || 50);
+    T(270, y + 34, "COMMANDES", 'class="cabt" font-size="6" text-anchor="middle" fill="#8fd1b2"'); T(318, y + 34, "SÉCURITÉS", 'class="cabt" font-size="6" text-anchor="middle" fill="#8fd1b2"');
+    [["▲", 226, 3, "up"], ["▼", 226, 24, "dn"], ["+", 338, 3, "pl"], ["−", 338, 24, "mo"], ["PROG", 268, 50, "prog"], ["TEST", 312, 50, "test"]].forEach(([n, x, dy, k]) => g.push(`<g class="cabk" data-k="${k}"><rect x="${x - 7}" y="${y + dy - 7}" width="14" height="14" rx="2" fill="#e9e9e9"/><circle cx="${x}" cy="${y + dy}" r="4.5" fill="#d23b3b"/><text x="${n.length > 1 ? x : x < 300 ? x - 13 : x + 13}" y="${n.length > 1 ? y + dy + 17 : y + dy + 3}" class="cabt" text-anchor="middle" font-size="${n.length > 1 ? 6.5 : 9}" fill="#e8f4ec">${n}</text></g>`));
+    F.blocs.forEach(b => { const p = b.ns.map(([n]) => BORNES["b:" + n]); const x0 = Math.min(...p.map(q => q.x)) - 12, y0 = Math.min(...p.map(q => q.y)) - 12, x1 = Math.max(...p.map(q => q.x)) + 12, y1 = Math.max(...p.map(q => q.y)) + 12;
+      g.push(`<rect x="${x0}" y="${y0}" width="${x1 - x0}" height="${y1 - y0}" rx="3" fill="#3fae5a" stroke="#1f7a36"/>`);
+      if (b.titre) T(x1 + 26, (y0 + y1) / 2 + 3, b.titre, 'class="cabt" font-size="7.5" fill="#e8f4ec"');
+      b.ns.forEach(([n, lab]) => { const q = BORNES["b:" + n], mot = /^[12][XYZ]$/.test(n);
+        g.push(`<rect x="${q.x - 8}" y="${q.y - 8}" width="16" height="16" rx="2" fill="#d9efe0" stroke="#1f7a36"/><circle class="cabb" data-b="b:${n}" cx="${q.x}" cy="${q.y}" r="4.5" fill="#8f9a95"/>`);
+        if (b.lab === "droite") { T(q.x + 16, q.y + 4, mot ? lab : n, 'class="cabt" font-size="10" font-weight="800" fill="#fff"'); if (!mot) T(q.x + 34, q.y + 4, lab, 'class="cabt" font-size="7.2" fill="#bfe8cc"'); }
+        else if (b.lab === "haut") { T(q.x, q.y - 30, n, 'class="cabt" text-anchor="middle" font-size="10" font-weight="800" fill="#fff"'); T(q.x, q.y - 19, lab, 'class="cabt" text-anchor="middle" font-size="7.2" fill="#bfe8cc"'); }
+        else { T(q.x, q.y + 24, n, 'class="cabt" text-anchor="middle" font-size="10" font-weight="800" fill="#fff"'); T(q.x, q.y + 34, lab, 'class="cabt" text-anchor="middle" font-size="7.2" fill="#bfe8cc"'); } }); });
+    Object.entries(BORNES).forEach(([k, b]) => g.push(`<circle class="cabhit" data-b="${k}" cx="${b.x}" cy="${b.y}" r="11.5" fill="transparent"/>`));
+    return g.join("");
+  }
+  function dessinPortail2() {
+    return `<g id="cabportail"><rect x="20" y="58" width="350" height="5" rx="2" fill="#333"/><rect x="40" y="18" width="10" height="46" fill="#555"/><rect x="340" y="18" width="10" height="46" fill="#555"/>
+      <rect id="cabv1" x="50" y="26" width="145" height="28" rx="2" fill="none" stroke="#bbb" stroke-width="2.5"/><rect id="cabv2" x="195" y="26" width="145" height="28" rx="2" fill="none" stroke="#bbb" stroke-width="2.5"/>
+      <text id="cabetat" x="195" y="12" text-anchor="middle" class="cabn"></text><text id="cabv1t" x="52" y="12" class="cabs">vantail 1</text><text id="cabv2t" x="338" y="12" class="cabs" text-anchor="end">vantail 2</text></g>`;
+  }
   function dessinAcc(a) {
     const d = ACC[a.t], w = largeur(a.t), sel = S.selAcc === a.id;
     let h = `<g class="caba" data-a="${a.id}" transform="translate(${a.x} ${a.y})"><rect class="cabbox" width="${w}" height="56" rx="10" fill="#262626" stroke="${sel ? "#f0b429" : "#3a3a3a"}" stroke-width="${sel ? 2 : 1}"/>`;
     h += `<text x="10" y="16" class="cabn">${esc(d.nom)}${a.paire ? " " + a.paire : a.num ? " " + a.num : ""}</text><text x="10" y="27" class="cabs">${esc(d.sous)}</text>`;
     if (d.charge && !["digi", "tx", "rx", "txc", "rxc"].includes(a.t)) h += `<circle id="cabl-${a.id}" cx="${w - 14}" cy="14" r="7" fill="#333"/>`;
-    if (["pp", "stop", "oro", "bnf", "b8k", "cle", "digi", "mot"].includes(a.t)) h += `<text id="cabe-${a.id}" x="${w - 8}" y="16" class="cabs" text-anchor="end" fill="#f0b429"></text>`;
+    if (["pp", "stop", "oro", "bnf", "b8k", "cle", "digi", "mot", "mbl"].includes(a.t)) h += `<text id="cabe-${a.id}" x="${w - 8}" y="16" class="cabs" text-anchor="end" fill="#f0b429"></text>`;
     d.b.forEach(([k, lab], i) => { const x = 14 + i * 24; h += `<circle class="cabb" data-b="${a.id}:${k}" cx="${x}" cy="40" r="4.5" fill="#d7dde4"/><text x="${x}" y="53" class="cabs" text-anchor="middle">${esc(lab)}</text><circle class="cabhit" data-b="${a.id}:${k}" cx="${x}" cy="40" r="11" fill="transparent"/>`; });
     return h + `</g>`;
   }
@@ -533,19 +643,28 @@
     const fils = I.fils.map(w => { const d = chemin(w.a, w.b, w.p); return `<path class="cabwh" data-w="${w.id}" id="cwh-${w.id}" d="${d}"/><path class="cabw${S.selFil === w.id ? " sel" : ""}${FONCE(w.c) ? " fonce" : ""}" id="cw-${w.id}" data-w="${w.id}" d="${d}" stroke="${TRAIT(w.c)}" />`; }).join("");
     const faisceaux = [...new Set(I.acc.filter(a => a.t === "tx" || a.t === "txc").map(a => a.paire))].map(p => { const t = I.acc.find(a => (a.t === "tx" || a.t === "txc") && a.paire === p), r = I.acc.find(a => (a.t === "rx" || a.t === "rxc") && a.paire === p); if (!t || !r) return ""; return `<line id="cabf-${p}" x1="${t.x + largeur("tx")}" y1="${t.y + 20}" x2="${r.x}" y2="${r.y + 20}" stroke-width="2"/>`; }).join("");
     sv.innerHTML = `<defs><pattern id="cabgr" width="13" height="13" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".9" fill="#2a2a2a"/></pattern></defs><rect width="${W}" height="${H}" fill="url(#cabgr)"/>` +
-      (M && M.portail ? M.portail(api()) : dessinPortail()) + dessinCarte() + faisceaux + I.acc.filter(a => !ACC[a.t].enfiche).map(dessinAcc).join("") + `<defs><pattern id="cabvj" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="10" height="10" fill="#2fbf71"/><rect width="5" height="10" fill="#f2d000"/></pattern></defs><g id="cabfils" class="${S.estompe ? "estompe" : ""}" fill="none" stroke-width="3" stroke-linecap="round">${fils}</g><g id="cabhits">${hits()}</g><g id="cabsel"></g><g id="cabmm"></g>`;
+      (M && M.portail ? M.portail(api()) : F.deux ? dessinPortail2() : dessinPortail()) + dessinCarte() + faisceaux + I.acc.filter(a => !ACC[a.t].enfiche).map(dessinAcc).join("") + `<defs><pattern id="cabvj" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="10" height="10" fill="#2fbf71"/><rect width="5" height="10" fill="#f2d000"/></pattern></defs><g id="cabfils" class="${S.estompe ? "estompe" : ""}" fill="none" stroke-width="3" stroke-linecap="round">${fils}</g><g id="cabhits">${hits()}</g><g id="cabsel"></g><g id="cabmm"></g>`;
     maj(); panneau();
   }
   /* afficheur : état des commandes / sécurités (§ 9.2), mode TEST, codes */
   function affichage() {
     if (!S.secteur || S.hs) return { off: true };
     if (S.pannes.fmot && F.fmot.code) return { code: F.fmot.code }; if (S.pannes.sec && F.alim.code) return { code: F.alim.code }; if (S.pannes.mot) return { code: "Mot" }; if (S.pannes.enc) return { code: "EnE1" };
-    if (!S.f3 && par("60") !== "00") return { code: "FE" };
+    if (!S.f3 && !F.deux && par("60") !== "00") return { code: "FE" };
+    if (S.prot) return { code: "PrOt" };
     if (S.pannes.sb && !S.test) return { code: "StoP", cli: true };
     if (S.prog) { const P = S.prog, x = P.liste[P.i], L = SIM.valeursRoger(x), v = P.edit !== null ? P.edit : (L ? (pval(x.code) || "--") : "--"); const g = /^[0-9A-Za-z]{2}$/.test(x.code) ? x.code : x.code.slice(0, 2);
       if (P.flash > 0) { P.flash--; return { test: [g, P.flash % 2 ? v : ""] }; }
       return { test: [g, P.edit !== null && Math.floor(S.t / 4) % 2 ? "" : v] }; }
     const L = S.lu || {}, c = S.cmd || {};
+    if (F.deux) { /* B70/2ML : fiche, onglet Écran */
+      const cosM = par("60") !== "00", d2 = { FT1: par("50") === "00" && par("51") === "00", FT2: par("53") === "00" && par("54") === "00", COS: par("73") === "00" };
+      if (S.test) { const g = c.AP ? "AP" : c.CH ? "CH" : c.PP ? "PP" : c.PED ? "PE" : c.ORO ? "Or" : ""; const al = !L.st17 ? nB("st") : (cosM && L.c1 === false && !d2.COS) ? nB("cos1") : (!L.ft1 && !d2.FT1) ? nB("ft1") : (!L.ft2 && !d2.FT2) ? nB("ft2") : "00"; return { test: [g, al] }; }
+      const mq = S.R && motManque(S.R); if (mq) return { code: mq };
+      const on2 = (ok, k) => d2[k] ? "cli" : ok ? "on" : "";
+      return { seg: [{ a: c.AP ? "on" : "", g: c.PP ? "on" : "", d: c.CH ? "on" : "", dp: S.f3 ? "on" : "" }, { a: c.PED ? "on" : "", d: !cosM && c.ORO ? "on" : "" },
+        { a: on2(L.ft1, "FT1"), g: cosM ? on2(L.c1 !== false, "COS") : "" }, { a: on2(L.ft2, "FT2"), dp: L.st17 ? "on" : "" }] };
+    }
     const desact = { FT1: par("50") === "00" && par("51") === "00", FT2: par("53") === "00" && par("54") === "00", COS1: par("73") === "00", COS2: par("74") === "00" };
     if (S.test) {
       const g = c.AP ? "AP" : c.CH ? "CH" : c.PP ? "PP" : c.PED ? "PE" : c.ORO ? "Or" : "";
@@ -562,7 +681,7 @@
   }
   function dessinAff() {
     if (M) return M.voyants(api());
-    const A = affichage(), y0 = DY + 50; let h = "";
+    const A = affichage(), y0 = DY + (F.affY || 50); let h = "";
     const SEG = { a: [1, 0, 10, 0], b: [11, 1, 11, 9], c: [11, 11, 11, 19], d: [1, 20, 10, 20], e: [0, 11, 0, 19], f: [0, 1, 0, 9], g: [1, 10, 10, 10] };
     const X = [246, 263, 294, 311];
     X.forEach(x => h += `<rect x="${x - 3}" y="${y0 - 4}" width="17" height="30" rx="2" fill="#1d1f1e"/>`);
@@ -579,7 +698,7 @@
     const sv = $("#cabsvg"); if (!sv || !S.R) return;
     const R = S.R, aff = $("#cabaff"); if (S.mm && S.mm.a && S.mm.b) S.mm.r = mesure(S.mm.a, S.mm.b); /* mesure suivie en direct */ if (aff) aff.innerHTML = dessinAff();
     I.fils.forEach(w => { const p = document.getElementById("cw-" + w.id); if (p) p.classList.toggle("flux", S.secteur && R.flux.has(w.id)); });
-    if (M && M.majPortail) M.majPortail(api()); else { const v = $("#cabvantail"); if (v) v.setAttribute("transform", `translate(${S.pos * 1.6} 0)`); }
+    if (M && M.majPortail) M.majPortail(api()); else if (F.deux) { const p = S.v || { 1: 0, 2: 0 }, n = nbMot(); [1, 2].forEach(k => { const w = Math.max(6, 145 * Math.cos(p[k] / 100 * Math.PI / 2.2)), r = document.getElementById("cabv" + k), t = document.getElementById("cabv" + k + "t"); if (r) { r.setAttribute("width", w.toFixed(1)); if (k === 2) r.setAttribute("x", (340 - w).toFixed(1)); r.setAttribute("opacity", k === 2 && n === 1 ? .25 : 1); } if (t) t.textContent = k === 2 && n === 1 ? "pas de vantail 2 (70 01)" : "vantail " + k + " · " + p[k] + " %"; }); } else { const v = $("#cabvantail"); if (v) v.setAttribute("transform", `translate(${S.pos * 1.6} 0)`); }
     const e = $("#cabetat"); if (e) e.textContent = !S.secteur ? "hors tension" : S.hs ? "carte détruite" : S.pre ? "préclignotement" : S.dir > 0 ? "ouverture " + S.pos + " %" : S.dir < 0 ? "fermeture " + S.pos + " %" : S.att ? "arrêt temporaire" : S.pos >= 100 ? "ouvert" : S.pos <= 0 ? "fermé" : "arrêté à " + S.pos + " %";
     [0, 1, 2].forEach(i => { const m = document.getElementById("cabmot" + i); if (m) m.setAttribute("class", S.dir ? "flux" : ""); });
     I.acc.forEach(a => {
@@ -587,6 +706,7 @@
       if (l) { let on = !!R.alim[a.id]; if (a.t === "lam" && on && par("78") === "00") on = Math.floor(S.t / 5) % 2 === 0; /* le clignotant fait lui-même l'intermittence */ l.setAttribute("fill", on ? (a.t === "voy" ? "#4cc27a" : "#f0b429") : "#333"); }
       const t = document.getElementById("cabe-" + a.id), es = S.etat[a.id] || {};
       if (t) t.textContent = a.t === "stop" ? (es.on ? "enfoncé" : "") : a.t === "oro" ? (es.on ? "active" : "") : a.t === "cle" ? (es.g ? "◀ gauche" : es.d ? "droite ▶" : "") : a.t === "digi" ? (es.on ? "code OK" : R.alim[a.id] ? "allumé" : "") : es.on ? "actionné" : "";
+      if (a.t === "mbl") { const t = document.getElementById("cabe-" + a.id), m = R.moteurs[a.id]; if (t) t.textContent = !m || !S.secteur ? "" : !m.ok ? m.err : "M" + m.sortie + (S.mv && S.mv[m.sortie] ? (S.dir * m.sens > 0 ? " ▶ ouvre" : " ◀ ferme") : ""); }
       if (a.t === "mot") { const t = document.getElementById("cabe-" + a.id), m = R.moteurs[a.id]; if (t) t.textContent = !m ? "" : m.bloque ? "2 enroulements !" : m.sens > 0 ? "tourne ▶ ouvre" : m.sens < 0 ? "◀ ferme" : ""; }
       if (a.t === "tx" || a.t === "txc") { const f = document.getElementById("cabf-" + a.paire); if (f) { const cut = (S.etat["p" + a.paire] || {}).coupe, on = R.alim[a.id]; f.setAttribute("stroke", !on ? "#444" : cut ? "#ff4d4d" : "#ff8a80"); f.setAttribute("stroke-dasharray", cut ? "3 3" : on ? "" : "2 5"); f.setAttribute("opacity", on ? 1 : .6); } }
     });
@@ -763,8 +883,9 @@
   function touche(k) {
     if (M) { S.msgU = M.touche(api(), k); maj(); return; }
     if (!S.secteur || S.hs) { S.msgU = "Carte hors tension : l'afficheur et les touches ne répondent pas."; maj(); return; }
+    if (k === "test" && S.prot) { S.protN = (S.protN || 0) + 1; if (S.protN >= 2) { S.protN = 0; if (S.R && S.R.def.ccMot) { S.msgU = "PrOt : le court-circuit est toujours là. Coupez le secteur et corrigez les fils du moteur."; } else { S.prot = 0; S.msgU = "PrOt effacé (deux appuis sur TEST)."; } } else S.msgU = "PrOt : appuyez encore une fois sur TEST pour effacer l'alarme."; maj(); return; }
     if (k === "test") { if (S.dir) { stopper("Touche TEST pendant le mouvement : ARRÊT."); return; } enregistrerP(); S.prog = null; S.test = !S.test; S.msgU = S.test ? "Mode TEST (§ 9.3) : à gauche la commande active, à droite la première sécurité en alarme (00 = aucune). Touchez TEST à nouveau pour en sortir." : ""; maj(); return; }
-    if (k === "prog") { S.msgU = "PROG lance l'apprentissage de la course (§ 10) : non simulé dans l'atelier."; maj(); return; }
+    if (k === "prog") { S.msgU = "PROG lance l'apprentissage de la course" + (F.deux ? " (maintenir 4 s : APP-, puis Auto)" : " (§ 10)") + " : non simulé dans l'atelier."; maj(); return; }
     if (k === "up" || k === "dn") {
       S.test = false;
       if (!S.prog) { const liste = SIM.ordreRoger(C); S.prog = { liste, i: 0, edit: null, flash: 0 }; }
@@ -818,7 +939,7 @@
       <div class="cabzone"><svg id="cabsvg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Carte ${esc(C.nom)} et accessoires"></svg>
         <div class="cabzbt"><button onclick="CAB.zoom(1.4)" aria-label="Zoomer">＋</button><button onclick="CAB.zoom(1 / 1.4)" aria-label="Dézoomer">−</button><button onclick="CAB.zoomRaz()" aria-label="Vue entière" id="cabzl">100 %</button><button onclick="CAB.plein()" id="cabplb" aria-label="Plein écran">⛶</button></div></div>
       <div class="cabinfo" id="cabinfo" aria-live="polite"></div><div id="cabpan"></div><div id="cabsheet"></div></div>
-      <p class="hotn">${M ? M.notes : `Simulateur de formation construit d'après la fiche (source : ${esc(C.source)}) : bornier, paramètres, afficheur (§ 9.2), mode TEST (§ 9.3), codes. Disposition des borniers : ${esc(F.fig)}. Accessoires génériques. Vitesse du portail indicative (environ 10 s pour la course). Non simulés : apprentissage de la course et des télécommandes, batteries, fonctionnement MASTER / SLAVE, veille low power, sortie SC en test des photocellules ou battery saving (A8 02 à 04, sortie laissée coupée), commandes radio avec confirmation (76 / 77 = 07 à 10). Refermeture après ouverture partielle (16) appliquée seulement quand A2 est actif. Les bornes COM (${F.coms.join(", ")}) sont traitées comme un 0 V commun.`}</p>`;
+      <p class="hotn">${M ? M.notes : `Simulateur de formation construit d'après la fiche (source : ${esc(C.source)}) : bornier, paramètres, afficheur (§ 9.2), mode TEST (§ 9.3), codes. Disposition des borniers : ${esc(F.fig)}. Accessoires génériques. Vitesse du portail indicative (environ 10 s pour la course). Non simulés : apprentissage de la course et des télécommandes, batteries, fonctionnement MASTER / SLAVE, veille low power, sortie SC en test des photocellules ou battery saving (A8 02 à 04, sortie laissée coupée), commandes radio avec confirmation (76 / 77 = 07 à 10). ${F.deux ? "" : "Refermeture après ouverture partielle (16) appliquée seulement quand A2 est actif. "}Les bornes COM (${F.coms.join(", ")}) sont traitées comme un 0 V commun.${F.notes ? " " + esc(F.notes) : ""}`}</p>`;
     rendre(); brancherSvg(); outils();
     clearInterval(minuterie); minuterie = setInterval(() => { if (location.hash !== "#/cab/" + id) { clearInterval(minuterie); clearTimeout(tEnr); document.body.classList.remove("cabnoscroll"); return; } tick(); }, 100);
   }
@@ -832,7 +953,7 @@
       if (ACC[t].enfiche) { this.radio(); return; }
       if (I.acc.length >= 14) { S.msgU = "Quatorze accessoires maximum."; maj(); return; }
       if (ACC[t].paire) { const p = 1 + Math.max(0, ...I.acc.filter(a => a.paire).map(a => a.paire)); (ACC[t].paire === "c" ? [["txc"], ["rxc"]] : [["tx"], ["rx"]]).forEach(([u]) => { const [x, y] = libre(u); I.acc.push({ id: "a" + (I.n++), t: u, x, y, paire: p }); }); }
-      else { const [x, y] = libre(t), o = { id: "a" + (I.n++), t, x, y }; if (t === "mot" || t === "fdc") o.num = 1 + I.acc.filter(a => a.t === t).length; I.acc.push(o); } /* moteurs et fins de course numérotés : 1 = vantail 1 */
+      else { const [x, y] = libre(t), o = { id: "a" + (I.n++), t, x, y }; if (t === "mot" || t === "fdc" || t === "mbl") o.num = 1 + I.acc.filter(a => a.t === t).length; I.acc.push(o); } /* moteurs et fins de course numérotés : 1 = vantail 1 */
       sauver(); rendre();
     },
     radio() { const r = I.acc.find(a => a.t === "radio"); if (r) I.acc = I.acc.filter(a => a !== r); else { if (S.secteur) { S.msgU = "Enfichez le récepteur hors tension (coupez le secteur)."; maj(); return; } I.acc.push({ id: "a" + (I.n++), t: "radio", x: 0, y: 0 }); } S.msgU = ""; sauver(); rendre(); },
@@ -878,7 +999,7 @@
         if (!L) return `<label><b>${esc(c)}</b> ${esc(x.titre)}<span class="hotn">Réglage à procédure propre ou en lecture : voir la fiche.</span></label>`;
         const v = pval(c), d = pdef(c);
         return `<label><b>${esc(c)}</b> ${esc(x.titre)}<select onchange="CAB.param('${esc(c)}', this.value)">${v == null ? `<option value="" selected>— réglage usine non indiqué (${esc(String(x.def || "").slice(0, 30))})</option>` : ""}${L.map(o => `<option value="${esc(o.v)}"${o.v === v ? " selected" : ""}>${esc(o.v)}${o.v === d ? " (usine)" : ""} · ${esc((o.d || "").slice(0, 42))}${(o.d || "").length > 42 ? "…" : ""}</option>`).join("")}</select></label>`; };
-      const actifs = tous.filter(x => PARAMS.includes(x.code)), autres = tous.filter(x => !PARAMS.includes(x.code));
+      const PA = F.params || PARAMS, actifs = tous.filter(x => PA.includes(x.code)), autres = tous.filter(x => !PA.includes(x.code));
       h = `<h3>Paramètres de la carte</h3><p class="note">Tous les paramètres de la notice, dans son ordre. Valeurs et réglages usine d'après la fiche. Ils se règlent aussi avec les touches de la carte (▲ ▼ puis + −), sous tension et moteur à l'arrêt.</p><h4 class="cabh">Paramètres qui agissent dans l'atelier</h4><div class="cabpar">${actifs.map(ligne).join("")}</div><h4 class="cabh">Autres paramètres</h4><p class="hotn">Enregistrés, mais sans effet simulé dans l'atelier (vitesses, couple, ralentissements, batterie, MASTER / SLAVE…).</p><div class="cabpar">${autres.map(ligne).join("")}</div><div class="sga"><button class="mini" onclick="CAB.usineParams()">Réglages usine</button><button class="mini" onclick="CAB.fermer()">Fermer</button></div>`;
     } else {
       const m = S.mission && missions().find(x => x.id === S.mission.id);
