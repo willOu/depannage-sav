@@ -192,6 +192,12 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "2.2", date: "2026-11-09", titre: "Atelier de câblage : zoom, touches de la carte, annuler", items: [
+    "Zoom sur le schéma (boutons + / −, pincement à deux doigts, glisser pour se déplacer) et mode plein écran",
+    "Les touches de la carte dessinée fonctionnent comme dans la notice : ▲ ▼ pour afficher les paramètres, + / − pour changer la valeur (enregistrée après quelques secondes), TEST",
+    "Boutons Annuler, Rétablir et Tout retirer au-dessus du schéma",
+    "Correction : l'écran Paramètres ne fait plus rétrécir l'appli"
+  ] },
   { v: "2.1", date: "2026-11-09", titre: "Atelier de câblage", items: [
     "Nouvel atelier de câblage sur la Roger B70/1DCHP : on pose des accessoires (cellules, digicode, sélecteur, bord sensible, STOP, clignotant, lumière 230 V…), on les câble soi-même sur les borniers et on teste sous tension",
     "On voit le courant passer dans les fils ; la carte, l'afficheur et le portail réagissent comme dans la notice (paramètres réglables, mode TEST, pannes, multimètre)",

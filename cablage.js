@@ -72,7 +72,11 @@
   let I = null, cleI = "";
   let S = null; /* simulation */
   const neuf = () => ({ n: 1, acc: [], fils: [{ id: "w0", a: "b:16", b: "b:17", c: "#f5f5f5", usine: 1 }], params: {} });
-  const sauver = () => st.set(cleI, I);
+  /* historique : chaque modification enregistrée peut être annulée puis rétablie */
+  let hist = [], futur = [], dernier = "";
+  const sauver = () => { const j = JSON.stringify(I); if (j !== dernier) { if (dernier) { hist.push(dernier); if (hist.length > 60) hist.shift(); futur = []; } dernier = j; } st.set(cleI, I); outils(); };
+  function outils() { const a = $("#cabund"), r = $("#cabred"), v = $("#cabvid"); if (a) a.disabled = !hist.length; if (r) r.disabled = !futur.length; if (v) v.disabled = !I || (!I.acc.length && I.fils.length <= 1 && !Object.keys(I.params).length); }
+  function revenir(de, vers) { if (!de.length) return; vers.push(dernier); dernier = de.pop(); I = propre(JSON.parse(dernier)) || neuf(); st.set(cleI, I); S.sel = S.selFil = S.selAcc = null; S.mm = null; S.prog = null; rendre(); outils(); }
   /* installation relue depuis le téléphone : on ne garde que des valeurs attendues */
   function propre(x) {
     try {
@@ -80,7 +84,7 @@
       const acc = x.acc.filter(a => a && /^a\d{1,5}$/.test(a.id) && ACC[a.t] && !ACC[a.t].paire && !ACC[a.t].fil && Number.isFinite(a.x) && Number.isFinite(a.y)).map(a => ({ id: a.id, t: a.t, x: Math.round(a.x), y: Math.round(a.y), paire: Number.isInteger(a.paire) ? a.paire : undefined }));
       const ok = k => { if (typeof k !== "string") return false; if (BORNES[k]) return true; const i = k.indexOf(":"), a = acc.find(x => x.id === k.slice(0, i)); return !!(a && ACC[a.t].b && ACC[a.t].b.some(b => b[0] === k.slice(i + 1))); };
       const fils = x.fils.filter(w => w && /^w\d{1,5}$/.test(w.id) && ok(w.a) && ok(w.b) && /^#[0-9a-f]{6}$/i.test(w.c)).map(w => ({ id: w.id, a: w.a, b: w.b, c: w.c, usine: w.usine ? 1 : undefined }));
-      const params = {}; Object.keys(x.params || {}).forEach(k => { if (PARAMS.includes(k) && /^\d{2}$/.test(x.params[k])) params[k] = x.params[k]; });
+      const params = {}; Object.keys(x.params || {}).forEach(k => { if (ITEMS[k] && /^[0-9A-Za-z]{2}$/.test(x.params[k])) params[k] = x.params[k]; });
       return { n: Math.max(1, parseInt(x.n, 10) || 1, ...acc.map(a => +a.id.slice(1) + 1), ...fils.map(w => +w.id.slice(1) + 1)), acc, fils, params };
     } catch (e) { return null; }
   }
@@ -480,6 +484,9 @@
     if (S.pannes.f1) return { code: "FUSE" }; if (S.pannes.sec) return { code: "SEC0" }; if (S.pannes.mot) return { code: "Mot" }; if (S.pannes.enc) return { code: "EnE1" };
     if (!S.f3 && par("60") !== "00") return { code: "FE" };
     if (S.pannes.sb && !S.test) return { code: "StoP", cli: true };
+    if (S.prog) { const P = S.prog, x = P.liste[P.i], L = SIM.valeursRoger(x), v = P.edit !== null ? P.edit : (L ? par(x.code) : "--"); const g = /^[0-9A-Za-z]{2}$/.test(x.code) ? x.code : x.code.slice(0, 2);
+      if (P.flash > 0) { P.flash--; return { test: [g, P.flash % 2 ? v : ""] }; }
+      return { test: [g, P.edit !== null && Math.floor(S.t / 4) % 2 ? "" : v] }; }
     const L = S.lu || {}, c = S.cmd || {};
     const desact = { FT1: par("50") === "00" && par("51") === "00", FT2: par("53") === "00" && par("54") === "00", COS1: par("73") === "00", COS2: par("74") === "00" };
     if (S.test) {
@@ -575,7 +582,7 @@
     if (S.mode === "cabler") {
       el.innerHTML = `<div class="cabcoul">${COULEURS.map(([c, n]) => `<button class="cabc${S.couleur === c ? " on" : ""}" style="--c:${c}" aria-label="Fil ${n}" onclick="CAB.couleur('${c}')"></button>`).join("")}</div>
         <h4 class="cabh">Bibliothèque d'accessoires</h4><div class="cablib">${BIBLIO.map(t => `<button class="cabchip" onclick="CAB.poser('${t}')"><span>${ACC[t].ic}</span>${esc(ACC[t].nom)}<small>${esc(ACC[t].sous)}</small></button>`).join("")}</div>
-        <div class="sga"><button class="mini" onclick="CAB.missions()">🎯 Missions</button><button class="mini" onclick="CAB.parametres()">⚙ Paramètres</button><button class="mini" onclick="CAB.vider()">Tout effacer</button></div>`;
+        <div class="sga"><button class="mini" onclick="CAB.missions()">🎯 Missions</button><button class="mini" onclick="CAB.parametres()">⚙ Paramètres</button></div>`;
     } else {
       const acts = [];
       I.acc.forEach(a => { const n = ACC[a.t].nom + (a.paire ? " " + a.paire : "");
@@ -597,14 +604,27 @@
   }
 
   /* ---------- interactions ---------- */
-  let drag = null;
+  let drag = null, Z = { x: 0, y: 0, w: W, h: H }, doigts = new Map(), pince = null, glis = null, rep = 0;
+  function appliquerZ() { const sv = $("#cabsvg"); if (sv) sv.setAttribute("viewBox", `${Z.x} ${Z.y} ${Z.w} ${Z.h}`); const z = $("#cabzl"); if (z) z.textContent = Math.round(W / Z.w * 100) + " %"; }
+  function borner() { Z.w = Math.max(W / 5, Math.min(W, Z.w)); Z.h = Z.w * H / W; Z.x = Math.max(0, Math.min(W - Z.w, Z.x)); Z.y = Math.max(0, Math.min(H - Z.h, Z.y)); }
+  function zoomer(f, cx, cy) { if (cx === undefined) { cx = Z.x + Z.w / 2; cy = Z.y + Z.h / 2; } const nw = Math.max(W / 5, Math.min(W, Z.w / f)), k = nw / Z.w; Z.x = cx - (cx - Z.x) * k; Z.y = cy - (cy - Z.y) * k; Z.w = nw; borner(); appliquerZ(); }
   function brancherSvg() {
     const sv = $("#cabsvg");
-    const pt = e => { const r = sv.getBoundingClientRect(); return [(e.clientX - r.left) * W / r.width, (e.clientY - r.top) * H / r.height]; };
+    const pt = e => { const r = sv.getBoundingClientRect(); return [Z.x + (e.clientX - r.left) * Z.w / r.width, Z.y + (e.clientY - r.top) * Z.h / r.height]; };
+    sv.addEventListener("pointerdown", e => { doigts.set(e.pointerId, [e.clientX, e.clientY]); if (doigts.size === 2) { drag = null; glis = null; const [a, b] = [...doigts.values()]; pince = { d: Math.hypot(a[0] - b[0], a[1] - b[1]), w: Z.w }; } }, true);
+    sv.addEventListener("pointermove", e => {
+      if (!doigts.has(e.pointerId)) return; doigts.set(e.pointerId, [e.clientX, e.clientY]);
+      if (pince && doigts.size >= 2) { const [a, b] = [...doigts.values()], d = Math.hypot(a[0] - b[0], a[1] - b[1]); if (d > 10) { const r = sv.getBoundingClientRect(), mx = (a[0] + b[0]) / 2, my = (a[1] + b[1]) / 2; const cx = Z.x + (mx - r.left) * Z.w / r.width, cy = Z.y + (my - r.top) * Z.h / r.height; zoomer(Z.w / (pince.w * pince.d / d), cx, cy); } return; }
+      if (glis) { const r = sv.getBoundingClientRect(); Z.x = glis.x - (e.clientX - glis.cx) * Z.w / r.width; Z.y = glis.y - (e.clientY - glis.cy) * Z.h / r.height; borner(); appliquerZ(); if (Math.abs(e.clientX - glis.cx) + Math.abs(e.clientY - glis.cy) > 6) glis.bouge = true; }
+    }, true);
+    const fin = e => { doigts.delete(e.pointerId); if (doigts.size < 2) pince = null; if (!doigts.size) { if (glis && !glis.bouge && (S.selFil || S.selAcc || S.sel)) { S.selFil = S.selAcc = S.sel = null; rendre(); } glis = null; } clearInterval(rep); };
+    sv.addEventListener("pointerup", fin, true); sv.addEventListener("pointercancel", fin, true); sv.addEventListener("pointerleave", e => { if (e.pointerType === "mouse") fin(e); }, true);
+    sv.addEventListener("wheel", e => { e.preventDefault(); const [x, y] = pt(e); zoomer(e.deltaY < 0 ? 1.15 : 1 / 1.15, x, y); }, { passive: false });
     sv.onpointerdown = e => {
+      if (doigts.size >= 2) return;
       const t = e.target, hit = t.closest("[data-b]"), acc = t.closest(".caba"), fil = t.closest(".cabw"), us = t.closest(".cabu"), k = t.closest(".cabk");
       if (hit) { e.preventDefault(); return borne(hit.dataset.b); }
-      if (k) return touche(k.dataset.k);
+      if (k) { const kk = k.dataset.k; touche(kk); clearInterval(rep); if (kk === "pl" || kk === "mo") { const t0 = Date.now(); rep = setInterval(() => { if (Date.now() - t0 > 500) touche(kk); }, 140); } return; } /* + / − maintenus : défilement rapide */
       if (us) return usine(us.dataset.u);
       if (fil && S.mode === "cabler") { S.selFil = fil.dataset.w; S.selAcc = null; S.sel = null; rendre(); return; }
       if (acc) {
@@ -612,9 +632,9 @@
         if (S.mode === "cabler") { const [x, y] = pt(e); drag = { a, dx: x - a.x, dy: y - a.y, bouge: false }; sv.setPointerCapture(e.pointerId); return; }
         actionAcc(a, true); const up = () => { actionAcc(a, false); removeEventListener("pointerup", up); }; addEventListener("pointerup", up); return;
       }
-      if (S.selFil || S.selAcc || S.sel) { S.selFil = S.selAcc = S.sel = null; rendre(); }
+      glis = { cx: e.clientX, cy: e.clientY, x: Z.x, y: Z.y, bouge: false }; /* fond : faire glisser la vue zoomée */
     };
-    sv.onpointermove = e => { if (!drag) return; const [x, y] = pt(e); const nx = Math.max(0, Math.min(W - largeur(drag.a.t), x - drag.dx)), ny = Math.max(70, Math.min(DY - 58, y - drag.dy)); if (Math.abs(nx - drag.a.x) + Math.abs(ny - drag.a.y) > 2) drag.bouge = true; drag.a.x = Math.round(nx); drag.a.y = Math.round(ny); const g = sv.querySelector(`.caba[data-a="${drag.a.id}"]`); if (g) g.setAttribute("transform", `translate(${drag.a.x} ${drag.a.y})`); I.fils.forEach(w => { if (w.a.startsWith(drag.a.id + ":") || w.b.startsWith(drag.a.id + ":")) { const p = document.getElementById("cw-" + w.id); if (p) p.setAttribute("d", chemin(w.a, w.b)); } }); };
+    sv.onpointermove = e => { if (!drag || pince) return; const [x, y] = pt(e); const nx = Math.max(0, Math.min(W - largeur(drag.a.t), x - drag.dx)), ny = Math.max(70, Math.min(DY - 58, y - drag.dy)); if (Math.abs(nx - drag.a.x) + Math.abs(ny - drag.a.y) > 2) drag.bouge = true; drag.a.x = Math.round(nx); drag.a.y = Math.round(ny); const g = sv.querySelector(`.caba[data-a="${drag.a.id}"]`); if (g) g.setAttribute("transform", `translate(${drag.a.x} ${drag.a.y})`); I.fils.forEach(w => { if (w.a.startsWith(drag.a.id + ":") || w.b.startsWith(drag.a.id + ":")) { const p = document.getElementById("cw-" + w.id); if (p) p.setAttribute("d", chemin(w.a, w.b)); } }); };
     sv.onpointerup = () => { if (!drag) return; const a = drag.a, b = drag.bouge; drag = null; if (b) { sauver(); rendre(); } else { S.selAcc = S.selAcc === a.id ? null : a.id; S.selFil = null; rendre(); } };
   }
   function actionAcc(a, bas) {
@@ -638,10 +658,38 @@
     if (n.some(x => x >= 3)) { S.msgU = "Trois fils maximum par borne."; rendre(); return; }
     I.fils.push({ id: "w" + (I.n++), a, b: k, c: S.couleur }); S.msgU = ""; sauver(); rendre();
   }
+  /* touches de la carte (notice § 7) : UP / DOWN affichent les paramètres, + / − changent la valeur qui clignote,
+     enregistrement après quelques secondes ou en passant à un autre paramètre (l'écran clignote vite) ;
+     modification seulement moteur à l'arrêt, consultation toujours possible. Ordre : index des paramètres de la notice. */
+  let tEnr = 0;
+  function enregistrerP() {
+    clearTimeout(tEnr); const P = S.prog; if (!P || P.edit === null) return;
+    const x = P.liste[P.i]; I.params[x.code] = P.edit; P.edit = null; P.flash = 8; sauver(); panneau(); maj();
+  }
   function touche(k) {
-    if (!S.secteur) { S.msgU = "Carte hors tension."; maj(); return; }
-    if (k === "test") { if (S.dir) { stopper("Touche TEST pendant le mouvement : ARRÊT."); return; } S.test = !S.test; S.msgU = S.test ? "Mode TEST (§ 9.3) : à gauche la commande active, à droite la première sécurité en alarme (00 = aucune)." : ""; maj(); return; }
-    S.msgU = "Les touches ▲ ▼ + − et PROG servent au réglage des paramètres : utilisez le bouton « Paramètres » ci-dessous (ou le simulateur de carte pour s'entraîner aux menus)."; maj();
+    if (!S.secteur || S.hs) { S.msgU = "Carte hors tension : l'afficheur et les touches ne répondent pas."; maj(); return; }
+    if (k === "test") { if (S.dir) { stopper("Touche TEST pendant le mouvement : ARRÊT."); return; } enregistrerP(); S.prog = null; S.test = !S.test; S.msgU = S.test ? "Mode TEST (§ 9.3) : à gauche la commande active, à droite la première sécurité en alarme (00 = aucune). Touchez TEST à nouveau pour en sortir." : ""; maj(); return; }
+    if (k === "prog") { S.msgU = "PROG lance l'apprentissage de la course (§ 10) : non simulé dans l'atelier."; maj(); return; }
+    if (k === "up" || k === "dn") {
+      S.test = false;
+      if (!S.prog) { const liste = SIM.ordreRoger(C); S.prog = { liste, i: 0, edit: null, flash: 0 }; }
+      else { enregistrerP(); const n = S.prog.liste.length; S.prog.i = (S.prog.i + (k === "up" ? 1 : -1) + n) % n; }
+      S.msgU = progInfo(); maj(); return;
+    }
+    if (!S.prog) { S.msgU = "Affichez d'abord un paramètre avec ▲ (UP) ou ▼ (DOWN)."; maj(); return; }
+    if (S.dir || S.pre) { S.msgU = "Modification possible seulement moteur à l'arrêt (consultation toujours possible)."; maj(); return; }
+    const x = S.prog.liste[S.prog.i], L = SIM.valeursRoger(x);
+    if (!L) { S.msgU = "<b>" + esc(x.code) + "</b> ne se règle pas avec + / − : procédure propre ou lecture seule (voir la fiche)."; maj(); return; }
+    const cur = S.prog.edit !== null ? S.prog.edit : par(x.code);
+    let i = L.findIndex(o => o.v === cur); if (i < 0) i = k === "pl" ? -1 : L.length;
+    i = Math.max(0, Math.min(L.length - 1, i + (k === "pl" ? 1 : -1)));
+    S.prog.edit = L[i].v; clearTimeout(tEnr); tEnr = setTimeout(enregistrerP, 3000);
+    S.msgU = progInfo(); maj();
+  }
+  function progInfo() {
+    const P = S.prog; if (!P) return ""; const x = P.liste[P.i], L = SIM.valeursRoger(x), v = P.edit !== null ? P.edit : (L ? par(x.code) : "");
+    const o = L && L.find(o => o.v === v);
+    return `<b>${esc(x.code)} · ${esc(x.titre)}</b><br>${P.edit !== null ? "Valeur en cours de modification (elle clignote, enregistrée dans 3 s) : " : "Valeur : "}<b>${esc(v || "—")}</b>${o && o.d ? " — " + esc(o.d) : ""}${!L ? "<br><i>Réglage à procédure propre ou en lecture : voir la fiche.</i>" : ""}<br><button class="mini" onclick="CAB.etatAff()">Revenir à l'état des entrées</button> <small>(la notice ne dit pas comment l'afficheur y revient)</small>`;
   }
   function usine(id) {
     const u = USINE[id]; if (!u) return;
@@ -665,19 +713,22 @@
   let minuterie = 0;
   function atelier(id) {
     const b = board(id); C = b.c; ITEMS = {}; C.parametres.groupes.forEach(g => g.items.forEach(x => ITEMS[x.code] = x));
-    cleI = "cab-" + id; I = propre(st.get(cleI, null)) || neuf(); S = simNeuve();
+    cleI = "cab-" + id; I = propre(st.get(cleI, null)) || neuf(); S = simNeuve(); hist = []; futur = []; dernier = JSON.stringify(I);
     setHead("Atelier · " + C.nom, true);
-    app.innerHTML = `<div class="cabbar"><div class="cabseg" role="tablist"><button id="cabm1" class="on" onclick="CAB.mode('cabler')">✎ Câbler</button><button id="cabm2" onclick="CAB.mode('tester')">▶ Tester</button></div><label class="cabsw">Secteur <input type="checkbox" id="cabsect" onchange="CAB.secteur(this.checked)"><i></i></label></div>
-      <div class="cabzone"><svg id="cabsvg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Carte ${esc(C.nom)} et accessoires"></svg></div>
-      <div class="cabinfo" id="cabinfo" aria-live="polite"></div><div id="cabpan"></div><div id="cabsheet"></div>
+    Z = { x: 0, y: 0, w: W, h: H };
+    app.innerHTML = `<div id="cabwrap"><div class="cabbar"><div class="cabseg" role="tablist"><button id="cabm1" class="on" onclick="CAB.mode('cabler')">✎ Câbler</button><button id="cabm2" onclick="CAB.mode('tester')">▶ Tester</button></div><label class="cabsw">Secteur <input type="checkbox" id="cabsect" onchange="CAB.secteur(this.checked)"><i></i></label></div>
+      <div class="cabtools"><button id="cabund" onclick="CAB.annulerTout()" disabled>↶ Annuler</button><button id="cabred" onclick="CAB.retablir()" disabled>↷ Rétablir</button><button id="cabvid" onclick="CAB.vider()">🗑 Tout retirer</button></div>
+      <div class="cabzone"><svg id="cabsvg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Carte ${esc(C.nom)} et accessoires"></svg>
+        <div class="cabzbt"><button onclick="CAB.zoom(1.4)" aria-label="Zoomer">＋</button><button onclick="CAB.zoom(1 / 1.4)" aria-label="Dézoomer">−</button><button onclick="CAB.zoomRaz()" aria-label="Vue entière" id="cabzl">100 %</button><button onclick="CAB.plein()" id="cabplb" aria-label="Plein écran">⛶</button></div></div>
+      <div class="cabinfo" id="cabinfo" aria-live="polite"></div><div id="cabpan"></div><div id="cabsheet"></div></div>
       <p class="hotn">Simulateur de formation construit d'après la fiche (source : ${esc(C.source)}) : bornier, paramètres, afficheur (§ 9.2), mode TEST (§ 9.3), codes. Disposition des borniers : fig. 5 p. 9 et photo p. 5. Accessoires génériques. Vitesse du portail indicative (environ 10 s pour la course). Non simulés : apprentissage de la course et des télécommandes, batteries, fonctionnement MASTER / SLAVE, veille low power, sortie SC en test des photocellules ou battery saving (A8 02 à 04, sortie laissée coupée), commandes radio avec confirmation (76 / 77 = 07 à 10). Refermeture après ouverture partielle (16) appliquée seulement quand A2 est actif. Les bornes COM (11, 16, 23, 30) sont traitées comme un 0 V commun.</p>`;
-    rendre(); brancherSvg();
-    clearInterval(minuterie); minuterie = setInterval(() => { if (!location.hash.startsWith("#/cab/" + id)) { clearInterval(minuterie); return; } tick(); }, 100);
+    rendre(); brancherSvg(); outils();
+    clearInterval(minuterie); minuterie = setInterval(() => { if (!location.hash.startsWith("#/cab/" + id)) { clearInterval(minuterie); clearTimeout(tEnr); document.body.classList.remove("cabnoscroll"); return; } tick(); }, 100);
   }
   const libre = t => { const w = largeur(t); for (let y = 76; y <= DY - 62; y += 62) for (let x = 6; x + w <= W - 4; x += 8) { if (!I.acc.some(a => !ACC[a.t].enfiche && x < a.x + largeur(a.t) + 6 && a.x < x + w + 6 && y < a.y + 60 && a.y < y + 60)) return [x, y]; } return [6 + Math.random() * 200, 80 + Math.random() * 100]; };
   window.CAB = {
     mode(m) { S.mode = m; S.sel = S.selFil = S.selAcc = null; S.mm = null; S.msgU = ""; $("#cabm1").classList.toggle("on", m === "cabler"); $("#cabm2").classList.toggle("on", m === "tester"); if (m === "tester" && !S.secteur) { S.msgU = "Mettez le secteur (en haut à droite) pour tester."; } rendre(); },
-    secteur(on) { S.secteur = on; if (!on) { S.dir = 0; S.pre = 0; S.test = false; } else if (S.mode === "cabler") { S.msgU = "Sous tension : passez en mode « Tester » pour actionner les accessoires. Coupez le secteur avant de modifier le câblage."; } S.msg = []; maj(); },
+    secteur(on) { S.secteur = on; if (!on) { S.dir = 0; S.pre = 0; S.test = false; clearTimeout(tEnr); S.prog = null; } else if (S.mode === "cabler") { S.msgU = "Sous tension : passez en mode « Tester » pour actionner les accessoires. Coupez le secteur avant de modifier le câblage."; } S.msg = []; maj(); },
     couleur(c) { S.couleur = c; panneau(); },
     poser(t) {
       if (ACC[t].fil) { S.couleur = "#f5f5f5"; S.msgU = "Fil de pont : touchez la première borne de la carte, puis la seconde (exemple : 13 et 30 pour ponter FT1 absente)."; panneau(); maj(); return; }
@@ -691,7 +742,8 @@
     supFil() { I.fils = I.fils.filter(w => w.id !== S.selFil); S.selFil = null; sauver(); rendre(); },
     supAcc() { const id = S.selAcc; const a = I.acc.find(x => x.id === id); const ids = a && a.paire ? I.acc.filter(x => x.paire === a.paire).map(x => x.id) : [id]; I.acc = I.acc.filter(x => !ids.includes(x.id)); I.fils = I.fils.filter(w => !ids.some(i => w.a.startsWith(i + ":") || w.b.startsWith(i + ":"))); S.selAcc = null; sauver(); rendre(); },
     annuler() { S.sel = null; dessinSondes(); maj(); },
-    vider() { if (!confirmer()) return; I = neuf(); S = Object.assign(simNeuve(), { mode: S.mode }); sauver(); const c = $("#cabsect"); if (c) c.checked = false; rendre(); },
+    vider() { const prm = I.params; I = neuf(); I.params = prm; S.sel = S.selFil = S.selAcc = null; S.mm = null; S.etat = {}; S.msgU = "Tout est retiré (pont d'usine 16-17 remis). « Annuler » pour revenir en arrière."; sauver(); rendre(); },
+    annulerTout() { revenir(hist, futur); }, retablir() { revenir(futur, hist); },
     code(id) { codeDigi(id); maj(); },
     bascule(id) { const e = S.etat[id] = S.etat[id] || {}; e.on = !e.on; panneau(); },
     faisceau(p) { faisceau(p); },
@@ -712,14 +764,16 @@
       if (window.SIM && SIM.noter) SIM.noter(C.id, "Câblage : " + m.t, !err, S.mission.aide, (Date.now() - S.mission.t0) / 1000);
       feuille("missions");
     },
+    etatAff() { enregistrerP(); S.prog = null; S.msgU = ""; maj(); },
+    zoom(f) { zoomer(f); }, zoomRaz() { Z = { x: 0, y: 0, w: W, h: H }; appliquerZ(); },
+    plein() { const w = $("#cabwrap"); if (!w) return; const on = !w.classList.contains("cabplein"); w.classList.toggle("cabplein", on); document.body.classList.toggle("cabnoscroll", on); const b = $("#cabplb"); if (b) { b.textContent = on ? "✕" : "⛶"; b.setAttribute("aria-label", on ? "Quitter le plein écran" : "Plein écran"); } },
     carte() { if (S.secteur) { S.msgU = "Coupez le secteur avant de remplacer la carte."; maj(); return; } S.hs = false; S.f3 = true; S.pannes = {}; S.msg = []; rendre(); }
   };
-  const confirmer = () => { try { return confirm("Effacer toute l'installation ?"); } catch (e) { return true; } };
   function feuille(k) {
     const s = $("#cabsheet"); if (!s) return;
     let h = "";
     if (k === "params") {
-      h = `<h3>Paramètres de la carte</h3><p class="note">Ceux qui jouent sur l'installation. Valeurs et réglages usine d'après la fiche.</p><div class="cabpar">` + PARAMS.filter(c => ITEMS[c] && SIM.valeursRoger(ITEMS[c])).map(c => { const x = ITEMS[c], L = SIM.valeursRoger(x), v = par(c); return `<label><b>${esc(c)}</b> ${esc(x.titre)}<select onchange="CAB.param('${c}', this.value)">${L.map(o => `<option value="${esc(o.v)}"${o.v === v ? " selected" : ""}>${esc(o.v)}${o.v === pdef(c) ? " (usine)" : ""} · ${esc((o.d || "").slice(0, 60))}</option>`).join("")}</select></label>`; }).join("") + `</div><div class="sga"><button class="mini" onclick="CAB.usineParams()">Réglages usine</button><button class="mini" onclick="CAB.fermer()">Fermer</button></div>`;
+      h = `<h3>Paramètres de la carte</h3><p class="note">Ceux qui jouent sur l'installation. Valeurs et réglages usine d'après la fiche. Tous les paramètres se règlent aussi avec les touches de la carte (▲ ▼ puis + −), sous tension et moteur à l'arrêt.</p><div class="cabpar">` + PARAMS.filter(c => ITEMS[c] && SIM.valeursRoger(ITEMS[c])).map(c => { const x = ITEMS[c], L = SIM.valeursRoger(x), v = par(c); return `<label><b>${esc(c)}</b> ${esc(x.titre)}<select onchange="CAB.param('${c}', this.value)">${L.map(o => `<option value="${esc(o.v)}"${o.v === v ? " selected" : ""}>${esc(o.v)}${o.v === pdef(c) ? " (usine)" : ""} · ${esc((o.d || "").slice(0, 42))}${(o.d || "").length > 42 ? "…" : ""}</option>`).join("")}</select></label>`; }).join("") + `</div><div class="sga"><button class="mini" onclick="CAB.usineParams()">Réglages usine</button><button class="mini" onclick="CAB.fermer()">Fermer</button></div>`;
     } else {
       const m = S.mission && MISSIONS.find(x => x.id === S.mission.id);
       h = `<h3>Missions</h3>` + (m ? `<p><b>${esc(m.t)}</b><br>${esc(m.but)}</p>${S.mission.aide ? `<p class="note">${esc(m.aide)}</p>` : ""}${S.mission.res ? `<p class="${S.mission.ok ? "simok" : "note"}">${esc(S.mission.res)}</p>` : ""}<div class="sga"><button class="mini" onclick="CAB.verifier()">Vérifier mon câblage</button>${S.mission.aide ? "" : `<button class="mini" onclick="CAB.aide()">Indice</button>`}<button class="mini" onclick="CAB.mission('')">Autre mission</button></div>` :
