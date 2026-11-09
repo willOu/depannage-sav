@@ -62,7 +62,8 @@
   /* ---------- paramètres simulés (valeurs et réglages usine tirés de la fiche) ---------- */
   const PARAMS = ["A2", "21", "16", "A4", "A5", "A6", "A7", "A8", "15", "50", "51", "52", "53", "54", "55", "73", "74", "27", "76", "77", "78", "20", "79", "80"];
   let C = null, ITEMS = {}; /* carte courante */
-  const pdef = code => { const x = ITEMS[code]; if (!x) return null; const L = window.SIM ? SIM.valeursRoger(x) : null; return L && L.some(o => o.v === x.def) ? x.def : (L && L[0] ? L[0].v : null); };
+  const pdef = code => { const x = ITEMS[code]; if (!x) return null; const L = window.SIM ? SIM.valeursRoger(x) : null; return L && L.some(o => o.v === x.def) ? x.def : null; }; /* réglage usine absent de la fiche (A1 « selon moteur ») : null, jamais inventé */
+  const pval = code => (I && I.params && I.params[code] != null ? I.params[code] : pdef(code)); /* valeur affichée : null si inconnue */
   const par = code => (I && I.params && I.params[code] != null ? I.params[code] : pdef(code)) || "00";
   const pn = code => parseInt(par(code), 10) || 0;
   const duree = code => { const v = pn(code); return v >= 92 ? (v - 90) * 60 : v; }; /* 00–90 s, 92–99 = 2 à 9 min */
@@ -83,7 +84,7 @@
       if (!x || !Array.isArray(x.acc) || !Array.isArray(x.fils)) return null;
       const acc = x.acc.filter(a => a && /^a\d{1,5}$/.test(a.id) && ACC[a.t] && !ACC[a.t].paire && !ACC[a.t].fil && Number.isFinite(a.x) && Number.isFinite(a.y)).map(a => ({ id: a.id, t: a.t, x: Math.round(a.x), y: Math.round(a.y), paire: Number.isInteger(a.paire) ? a.paire : undefined }));
       const ok = k => { if (typeof k !== "string") return false; if (BORNES[k]) return true; const i = k.indexOf(":"), a = acc.find(x => x.id === k.slice(0, i)); return !!(a && ACC[a.t].b && ACC[a.t].b.some(b => b[0] === k.slice(i + 1))); };
-      const fils = x.fils.filter(w => w && /^w\d{1,5}$/.test(w.id) && ok(w.a) && ok(w.b) && /^#[0-9a-f]{6}$/i.test(w.c)).map(w => ({ id: w.id, a: w.a, b: w.b, c: w.c, usine: w.usine ? 1 : undefined }));
+      const fils = x.fils.filter(w => w && /^w\d{1,5}$/.test(w.id) && ok(w.a) && ok(w.b) && /^#[0-9a-f]{6}$/i.test(w.c)).map(w => ({ id: w.id, a: w.a, b: w.b, c: w.c, usine: w.usine ? 1 : undefined, p: Array.isArray(w.p) && w.p.length === 2 && w.p.every(Number.isFinite) ? [Math.max(0, Math.min(W, Math.round(w.p[0]))), Math.max(0, Math.min(H, Math.round(w.p[1])))] : undefined }));
       const params = {}; Object.keys(x.params || {}).forEach(k => { if (ITEMS[k] && /^[0-9A-Za-z]{2}$/.test(x.params[k])) params[k] = x.params[k]; });
       return { n: Math.max(1, parseInt(x.n, 10) || 1, ...acc.map(a => +a.id.slice(1) + 1), ...fils.map(w => +w.id.slice(1) + 1)), acc, fils, params };
     } catch (e) { return null; }
@@ -422,7 +423,11 @@
   const W = 390, H = 654;
   const posB = k => { if (k.startsWith("b:")) { const b = BORNES[k]; return b ? [b.x, b.y] : null; } const [id, n] = k.split(":"); const a = I.acc.find(x => x.id === id); if (!a) return null; const i = ACC[a.t].b.findIndex(b => b[0] === n); return [a.x + 14 + i * 24, a.y + 40]; };
   /* fil : part vers le haut depuis une borne de la carte, vers le bas depuis un accessoire */
-  const chemin = (a, b) => { const p = posB(a), q = posB(b); if (!p || !q) return ""; const dy = Math.max(28, Math.abs(q[1] - p[1]) * 0.5), sp = a.startsWith("b:") ? -1 : 1, sq = b.startsWith("b:") ? -1 : 1; return `M${p[0]} ${p[1]} C${p[0]} ${p[1] + sp * dy} ${q[0]} ${q[1] + sq * dy} ${q[0]} ${q[1]}`; };
+  const chemin = (a, b, m) => { const p = posB(a), q = posB(b); if (!p || !q) return ""; const dy = Math.max(28, Math.abs(q[1] - p[1]) * 0.5), sp = a.startsWith("b:") ? -1 : 1, sq = b.startsWith("b:") ? -1 : 1;
+    if (!m) return `M${p[0]} ${p[1]} C${p[0]} ${p[1] + sp * dy} ${q[0]} ${q[1] + sq * dy} ${q[0]} ${q[1]}`;
+    /* fil écarté par l'utilisateur : il passe par le point m */
+    const tx = (q[0] - p[0]) / 4, ty = (q[1] - p[1]) / 4, l1 = Math.max(20, Math.abs(m[1] - p[1]) * 0.5), l2 = Math.max(20, Math.abs(q[1] - m[1]) * 0.5);
+    return `M${p[0]} ${p[1]} C${p[0]} ${p[1] + sp * l1} ${m[0] - tx} ${m[1] - ty} ${m[0]} ${m[1]} C${m[0] + tx} ${m[1] + ty} ${q[0]} ${q[1] + sq * l2} ${q[0]} ${q[1]}`; };
   function dessinCarte() {
     const g = [];
     const T = (x, y, t, o = "") => g.push(`<text x="${x}" y="${y}" ${o}>${esc(t)}</text>`);
@@ -470,12 +475,15 @@
       <g id="cabvantail"><rect x="42" y="24" width="158" height="32" rx="2" fill="none" stroke="#bbb" stroke-width="2.5"/>${[1, 2, 3, 4, 5, 6, 7].map(i => `<line x1="${42 + i * 20}" y1="26" x2="${42 + i * 20}" y2="54" stroke="#888" stroke-width="2"/>`).join("")}</g>
       <text id="cabetat" x="372" y="16" text-anchor="end" class="cabn"></text></g>`;
   }
+  /* zones de toucher des bornes au-dessus des fils : un fil ne cache jamais une borne */
+  const toutesBornes = () => Object.keys(BORNES).concat(I.acc.filter(a => ACC[a.t].b).flatMap(a => ACC[a.t].b.map(b => a.id + ":" + b[0])));
+  const hits = () => toutesBornes().map(k => { const q = posB(k); return q ? `<circle class="cabhit" data-b="${k}" cx="${q[0]}" cy="${q[1]}" r="11" fill="transparent"/>` : ""; }).join("");
   function rendre() {
     const sv = $("#cabsvg"); if (!sv) return;
-    const fils = I.fils.map(w => `<path class="cabw${S.selFil === w.id ? " sel" : ""}" id="cw-${w.id}" data-w="${w.id}" d="${chemin(w.a, w.b)}" stroke="${w.c}" />`).join("");
+    const fils = I.fils.map(w => { const d = chemin(w.a, w.b, w.p); return `<path class="cabwh" data-w="${w.id}" id="cwh-${w.id}" d="${d}"/><path class="cabw${S.selFil === w.id ? " sel" : ""}" id="cw-${w.id}" data-w="${w.id}" d="${d}" stroke="${w.c}" />`; }).join("");
     const faisceaux = [...new Set(I.acc.filter(a => a.t === "tx").map(a => a.paire))].map(p => { const t = I.acc.find(a => a.t === "tx" && a.paire === p), r = I.acc.find(a => a.t === "rx" && a.paire === p); if (!t || !r) return ""; return `<line id="cabf-${p}" x1="${t.x + largeur("tx")}" y1="${t.y + 20}" x2="${r.x}" y2="${r.y + 20}" stroke-width="2"/>`; }).join("");
     sv.innerHTML = `<defs><pattern id="cabgr" width="13" height="13" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".9" fill="#2a2a2a"/></pattern></defs><rect width="${W}" height="${H}" fill="url(#cabgr)"/>` +
-      dessinPortail() + dessinCarte() + faisceaux + I.acc.filter(a => !ACC[a.t].enfiche).map(dessinAcc).join("") + `<g id="cabfils" fill="none" stroke-width="3" stroke-linecap="round">${fils}</g><g id="cabsel"></g><g id="cabmm"></g>`;
+      dessinPortail() + dessinCarte() + faisceaux + I.acc.filter(a => !ACC[a.t].enfiche).map(dessinAcc).join("") + `<g id="cabfils" class="${S.estompe ? "estompe" : ""}" fill="none" stroke-width="3" stroke-linecap="round">${fils}</g><g id="cabhits">${hits()}</g><g id="cabsel"></g><g id="cabmm"></g>`;
     maj(); panneau();
   }
   /* afficheur : état des commandes / sécurités (§ 9.2), mode TEST, codes */
@@ -484,7 +492,7 @@
     if (S.pannes.f1) return { code: "FUSE" }; if (S.pannes.sec) return { code: "SEC0" }; if (S.pannes.mot) return { code: "Mot" }; if (S.pannes.enc) return { code: "EnE1" };
     if (!S.f3 && par("60") !== "00") return { code: "FE" };
     if (S.pannes.sb && !S.test) return { code: "StoP", cli: true };
-    if (S.prog) { const P = S.prog, x = P.liste[P.i], L = SIM.valeursRoger(x), v = P.edit !== null ? P.edit : (L ? par(x.code) : "--"); const g = /^[0-9A-Za-z]{2}$/.test(x.code) ? x.code : x.code.slice(0, 2);
+    if (S.prog) { const P = S.prog, x = P.liste[P.i], L = SIM.valeursRoger(x), v = P.edit !== null ? P.edit : (L ? (pval(x.code) || "--") : "--"); const g = /^[0-9A-Za-z]{2}$/.test(x.code) ? x.code : x.code.slice(0, 2);
       if (P.flash > 0) { P.flash--; return { test: [g, P.flash % 2 ? v : ""] }; }
       return { test: [g, P.edit !== null && Math.floor(S.t / 4) % 2 ? "" : v] }; }
     const L = S.lu || {}, c = S.cmd || {};
@@ -536,11 +544,11 @@
     if (S.mm) return mmHtml();
     if (S.mode === "cabler") {
       if (S.sel) return `<span class="k">Fil en cours :</span> depuis <b>${esc(nomB(S.sel))}</b>. Touchez la borne d'arrivée (ou glissez le doigt jusqu'à elle). <button class="mini" onclick="CAB.annuler()">Annuler</button>`;
-      if (S.selFil) { const w = I.fils.find(x => x.id === S.selFil); return w ? `<b>Fil</b> ${esc(nomB(w.a))} → ${esc(nomB(w.b))}${w.usine ? " (pont d'usine)" : ""}. <button class="mini" onclick="CAB.supFil()">Supprimer le fil</button>` : ""; }
+      if (S.selFil) { const w = I.fils.find(x => x.id === S.selFil); return w ? `<b>Fil</b> ${esc(nomB(w.a))} → ${esc(nomB(w.b))}${w.usine ? " (pont d'usine)" : ""}. <button class="mini" onclick="CAB.supFil()">Supprimer le fil</button>${w.p ? ` <button class="mini" onclick="CAB.redresser()">Remettre en place</button>` : ""}<br><small>Glissez un fil pour l'écarter et dégager les touches ou l'écran.</small>` : ""; }
       if (S.selAcc) { const a = I.acc.find(x => x.id === S.selAcc); return a ? `<b>${esc(ACC[a.t].nom)}</b> : glissez pour déplacer. <button class="mini" onclick="CAB.supAcc()">Supprimer</button>` : ""; }
       const al = S.msg.find(m => m.alerte); if (al && (S.hs || !S.f3)) return `<b>⚠ ${esc(al.t)}</b>${al.src ? `<br><small>Source : ${esc(al.src)}</small>` : ""}`;
       if (S.msgU) return S.msgU;
-      return "Pour poser un fil : touchez une borne puis l'autre, ou appuyez sur une borne et glissez jusqu'à l'autre avant de lâcher. Touchez un fil pour le supprimer.";
+      return "Pour poser un fil : touchez une borne puis l'autre, ou appuyez sur une borne et glissez jusqu'à l'autre avant de lâcher. Touchez un fil pour le supprimer, glissez-le pour l'écarter.";
     }
     const m = S.msg.slice(0, 3).map((x, i) => `<div class="${i ? "cabold" : ""}">${esc(x.t)}${x.src ? `<br><small>Source : ${esc(x.src)}</small>` : ""}</div>`).join("");
     return (S.msgU ? S.msgU + (m ? "<hr>" : "") : "") + (m || (S.secteur ? "Agissez sur les accessoires (touchez-les) ou avec les boutons ci-dessous." : "Mettez le secteur pour tester l'installation."));
@@ -604,7 +612,7 @@
   }
 
   /* ---------- interactions ---------- */
-  let tir = null, drag = null, Z = { x: 0, y: 0, w: W, h: H }, doigts = new Map(), pince = null, glis = null, rep = 0;
+  let tirFil = null, tir = null, drag = null, Z = { x: 0, y: 0, w: W, h: H }, doigts = new Map(), pince = null, glis = null, rep = 0;
   function appliquerZ() { const sv = $("#cabsvg"); if (sv) sv.setAttribute("viewBox", `${Z.x} ${Z.y} ${Z.w} ${Z.h}`); const z = $("#cabzl"); if (z) z.textContent = Math.round(W / Z.w * 100) + " %"; }
   function borner() { Z.w = Math.max(W / 5, Math.min(W, Z.w)); Z.h = Z.w * H / W; Z.x = Math.max(0, Math.min(W - Z.w, Z.x)); Z.y = Math.max(0, Math.min(H - Z.h, Z.y)); }
   function zoomer(f, cx, cy) { if (cx === undefined) { cx = Z.x + Z.w / 2; cy = Z.y + Z.h / 2; } const nw = Math.max(W / 5, Math.min(W, Z.w / f)), k = nw / Z.w; Z.x = cx - (cx - Z.x) * k; Z.y = cy - (cy - Z.y) * k; Z.w = nw; borner(); appliquerZ(); }
@@ -622,7 +630,7 @@
     sv.addEventListener("wheel", e => { e.preventDefault(); const [x, y] = pt(e); zoomer(e.deltaY < 0 ? 1.15 : 1 / 1.15, x, y); }, { passive: false });
     sv.onpointerdown = e => {
       if (doigts.size >= 2) return;
-      const t = e.target, hit = t.closest("[data-b]"), acc = t.closest(".caba"), fil = t.closest(".cabw"), us = t.closest(".cabu"), k = t.closest(".cabk");
+      const t = e.target, hit = t.closest("[data-b]"), acc = t.closest(".caba"), fil = t.closest(".cabw,.cabwh"), us = t.closest(".cabu"), k = t.closest(".cabk");
       if (hit) {
         e.preventDefault(); const k = hit.dataset.b;
         /* câbler en glissant : appui sur une borne, on glisse jusqu'à l'autre, on lâche (le toucher simple marche toujours) */
@@ -631,7 +639,7 @@
       }
       if (k) { const kk = k.dataset.k; touche(kk); clearInterval(rep); if (kk === "pl" || kk === "mo") { const t0 = Date.now(); rep = setInterval(() => { if (Date.now() - t0 > 500) touche(kk); }, 140); } return; } /* + / − maintenus : défilement rapide */
       if (us) return usine(us.dataset.u);
-      if (fil && S.mode === "cabler") { S.selFil = fil.dataset.w; S.selAcc = null; S.sel = null; rendre(); return; }
+      if (fil && !S.mm) { const w = I.fils.find(x => x.id === fil.dataset.w); if (w) { tirFil = { w, cx: e.clientX, cy: e.clientY, bouge: false, p0: w.p }; try { sv.setPointerCapture(e.pointerId); } catch (er) {} } return; }
       if (acc) {
         const a = I.acc.find(x => x.id === acc.dataset.a); if (!a) return;
         if (S.mode === "cabler") { const [x, y] = pt(e); drag = { a, dx: x - a.x, dy: y - a.y, bouge: false }; sv.setPointerCapture(e.pointerId); return; }
@@ -640,9 +648,11 @@
       glis = { cx: e.clientX, cy: e.clientY, x: Z.x, y: Z.y, bouge: false }; /* fond : faire glisser la vue zoomée */
     };
     sv.onpointermove = e => {
+      if (tirFil) { if (pince) { tirFil.w.p = tirFil.p0; tirFil = null; rendre(); return; } if (Math.abs(e.clientX - tirFil.cx) + Math.abs(e.clientY - tirFil.cy) > 8) tirFil.bouge = true; if (tirFil.bouge) { const [x, y] = pt(e), w = tirFil.w; w.p = [Math.round(Math.max(0, Math.min(W, x))), Math.round(Math.max(0, Math.min(H, y)))]; const d = chemin(w.a, w.b, w.p); ["cw-", "cwh-"].forEach(k => { const p = document.getElementById(k + w.id); if (p) p.setAttribute("d", d); }); } return; }
       if (tir) { if (pince) { tir = null; S.sel = null; const gs = $("#cabsel"); if (gs) gs.innerHTML = ""; dessinSondes(); return; } if (Math.abs(e.clientX - tir.cx) + Math.abs(e.clientY - tir.cy) > 8) tir.bouge = true; if (tir.bouge) { const p0 = posB(tir.k), [x, y] = pt(e), g = $("#cabsel"); if (p0 && g) { g.innerHTML = `<path d="M${p0[0]} ${p0[1]} L${x} ${y}" stroke="${S.couleur}" stroke-width="3" stroke-dasharray="5 4" fill="none" stroke-linecap="round"/><circle cx="${x}" cy="${y}" r="6" fill="none" stroke="${S.couleur}" stroke-width="2"/>`; } } return; }
-      if (!drag || pince) return; const [x, y] = pt(e); const nx = Math.max(0, Math.min(W - largeur(drag.a.t), x - drag.dx)), ny = Math.max(70, Math.min(DY - 58, y - drag.dy)); if (Math.abs(nx - drag.a.x) + Math.abs(ny - drag.a.y) > 2) drag.bouge = true; drag.a.x = Math.round(nx); drag.a.y = Math.round(ny); const g = sv.querySelector(`.caba[data-a="${drag.a.id}"]`); if (g) g.setAttribute("transform", `translate(${drag.a.x} ${drag.a.y})`); I.fils.forEach(w => { if (w.a.startsWith(drag.a.id + ":") || w.b.startsWith(drag.a.id + ":")) { const p = document.getElementById("cw-" + w.id); if (p) p.setAttribute("d", chemin(w.a, w.b)); } }); };
+      if (!drag || pince) return; const [x, y] = pt(e); const nx = Math.max(0, Math.min(W - largeur(drag.a.t), x - drag.dx)), ny = Math.max(70, Math.min(DY - 58, y - drag.dy)); if (Math.abs(nx - drag.a.x) + Math.abs(ny - drag.a.y) > 2) drag.bouge = true; drag.a.x = Math.round(nx); drag.a.y = Math.round(ny); const g = sv.querySelector(`.caba[data-a="${drag.a.id}"]`); if (g) g.setAttribute("transform", `translate(${drag.a.x} ${drag.a.y})`); I.fils.forEach(w => { if (w.a.startsWith(drag.a.id + ":") || w.b.startsWith(drag.a.id + ":")) { const d = chemin(w.a, w.b, w.p); ["cw-", "cwh-"].forEach(k => { const p = document.getElementById(k + w.id); if (p) p.setAttribute("d", d); }); } }); sv.querySelectorAll(`#cabhits [data-b^="${drag.a.id}:"]`).forEach(c => { const q = posB(c.dataset.b); if (q) { c.setAttribute("cx", q[0]); c.setAttribute("cy", q[1]); } }); };
     sv.onpointerup = e => {
+      if (tirFil) { const f = tirFil; tirFil = null; if (f.bouge) { sauver(); rendre(); } else if (S.mode === "cabler") { S.selFil = f.w.id; S.selAcc = null; S.sel = null; rendre(); } else { S.msgU = "Fil : " + esc(nomB(f.w.a)) + " → " + esc(nomB(f.w.b)) + ". Glissez-le pour l'écarter."; maj(); } return; }
       if (tir) { const t = tir; tir = null; const gs = $("#cabsel"); if (gs) gs.innerHTML = ""; if (t.bouge) { const el = document.elementFromPoint(e.clientX, e.clientY), cible = el && el.closest && el.closest("[data-b]"); if (cible && cible.dataset.b !== t.k) borne(cible.dataset.b); else { S.sel = null; S.msgU = "Fil non posé : lâchez le doigt sur une borne."; } dessinSondes(); maj(); } return; } /* sans glisser : la borne reste choisie (mode toucher) */
       if (!drag) return; const a = drag.a, b = drag.bouge; drag = null; if (b) { sauver(); rendre(); } else { S.selAcc = S.selAcc === a.id ? null : a.id; S.selFil = null; rendre(); } };
   }
@@ -689,14 +699,14 @@
     if (S.dir || S.pre) { S.msgU = "Modification possible seulement moteur à l'arrêt (consultation toujours possible)."; maj(); return; }
     const x = S.prog.liste[S.prog.i], L = SIM.valeursRoger(x);
     if (!L) { S.msgU = "<b>" + esc(x.code) + "</b> ne se règle pas avec + / − : procédure propre ou lecture seule (voir la fiche)."; maj(); return; }
-    const cur = S.prog.edit !== null ? S.prog.edit : par(x.code);
+    const cur = S.prog.edit !== null ? S.prog.edit : pval(x.code);
     let i = L.findIndex(o => o.v === cur); if (i < 0) i = k === "pl" ? -1 : L.length;
     i = Math.max(0, Math.min(L.length - 1, i + (k === "pl" ? 1 : -1)));
     S.prog.edit = L[i].v; clearTimeout(tEnr); tEnr = setTimeout(enregistrerP, 3000);
     S.msgU = progInfo(); maj();
   }
   function progInfo() {
-    const P = S.prog; if (!P) return ""; const x = P.liste[P.i], L = SIM.valeursRoger(x), v = P.edit !== null ? P.edit : (L ? par(x.code) : "");
+    const P = S.prog; if (!P) return ""; const x = P.liste[P.i], L = SIM.valeursRoger(x), v = P.edit !== null ? P.edit : (L ? pval(x.code) : "");
     const o = L && L.find(o => o.v === v);
     return `<b>${esc(x.code)} · ${esc(x.titre)}</b><br>${P.edit !== null ? "Valeur en cours de modification (elle clignote, enregistrée dans 3 s) : " : "Valeur : "}<b>${esc(v || "—")}</b>${o && o.d ? " — " + esc(o.d) : ""}${!L ? "<br><i>Réglage à procédure propre ou en lecture : voir la fiche.</i>" : ""}<br><button class="mini" onclick="CAB.etatAff()">Revenir à l'état des entrées</button> <small>(la notice ne dit pas comment l'afficheur y revient)</small>`;
   }
@@ -726,7 +736,7 @@
     setHead("Atelier · " + C.nom, true);
     Z = { x: 0, y: 0, w: W, h: H };
     app.innerHTML = `<div id="cabwrap"><div class="cabbar"><div class="cabseg" role="tablist"><button id="cabm1" class="on" onclick="CAB.mode('cabler')">✎ Câbler</button><button id="cabm2" onclick="CAB.mode('tester')">▶ Tester</button></div><label class="cabsw">Secteur <input type="checkbox" id="cabsect" onchange="CAB.secteur(this.checked)"><i></i></label></div>
-      <div class="cabtools"><button id="cabund" onclick="CAB.annulerTout()" disabled>↶ Annuler</button><button id="cabred" onclick="CAB.retablir()" disabled>↷ Rétablir</button><button id="cabvid" onclick="CAB.vider()">🗑 Tout retirer</button></div>
+      <div class="cabtools"><button id="cabund" onclick="CAB.annulerTout()" disabled>↶ Annuler</button><button id="cabred" onclick="CAB.retablir()" disabled>↷ Rétablir</button><button id="cabvid" onclick="CAB.vider()" aria-label="Tout retirer">🗑 Tout retirer</button><button id="cabest" onclick="CAB.estomper()" aria-label="Estomper les fils">◑ Fils</button></div>
       <div class="cabzone"><svg id="cabsvg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Carte ${esc(C.nom)} et accessoires"></svg>
         <div class="cabzbt"><button onclick="CAB.zoom(1.4)" aria-label="Zoomer">＋</button><button onclick="CAB.zoom(1 / 1.4)" aria-label="Dézoomer">−</button><button onclick="CAB.zoomRaz()" aria-label="Vue entière" id="cabzl">100 %</button><button onclick="CAB.plein()" id="cabplb" aria-label="Plein écran">⛶</button></div></div>
       <div class="cabinfo" id="cabinfo" aria-live="polite"></div><div id="cabpan"></div><div id="cabsheet"></div></div>
@@ -752,6 +762,8 @@
     supAcc() { const id = S.selAcc; const a = I.acc.find(x => x.id === id); const ids = a && a.paire ? I.acc.filter(x => x.paire === a.paire).map(x => x.id) : [id]; I.acc = I.acc.filter(x => !ids.includes(x.id)); I.fils = I.fils.filter(w => !ids.some(i => w.a.startsWith(i + ":") || w.b.startsWith(i + ":"))); S.selAcc = null; sauver(); rendre(); },
     annuler() { S.sel = null; dessinSondes(); maj(); },
     vider() { const prm = I.params; I = neuf(); I.params = prm; S.sel = S.selFil = S.selAcc = null; S.mm = null; S.etat = {}; S.msgU = "Tout est retiré (pont d'usine 16-17 remis). « Annuler » pour revenir en arrière."; sauver(); rendre(); },
+    redresser() { const w = I.fils.find(x => x.id === S.selFil); if (w) { delete w.p; sauver(); rendre(); } },
+    estomper() { S.estompe = !S.estompe; const g = $("#cabfils"); if (g) g.classList.toggle("estompe", S.estompe); const b = $("#cabest"); if (b) b.classList.toggle("on", S.estompe); },
     annulerTout() { revenir(hist, futur); }, retablir() { revenir(futur, hist); },
     code(id) { codeDigi(id); maj(); },
     bascule(id) { const e = S.etat[id] = S.etat[id] || {}; e.on = !e.on; panneau(); },
@@ -761,7 +773,7 @@
     panne(id) { S.pannes[id] = !S.pannes[id]; S.dir = 0; S.msgU = ""; rendre(); usine(id); },
     f3() { if (!S.f3 && S.secteur) { S.msgU = "Coupez le secteur avant de remplacer le fusible."; maj(); return; } S.f3 = !S.f3; rendre(); usine("f3"); },
     parametres() { feuille("params"); }, missions() { feuille("missions"); },
-    param(code, v) { I.params[code] = v; sauver(); feuille("params"); panneau(); },
+    param(code, v) { if (!ITEMS[code]) return; if (v === "") delete I.params[code]; else I.params[code] = v; sauver(); panneau(); },
     usineParams() { I.params = {}; sauver(); feuille("params"); },
     fermer() { const s = $("#cabsheet"); if (s) s.innerHTML = ""; },
     mission(id) { S.mission = { id, t0: Date.now(), aide: false }; feuille("missions"); },
@@ -782,7 +794,12 @@
     const s = $("#cabsheet"); if (!s) return;
     let h = "";
     if (k === "params") {
-      h = `<h3>Paramètres de la carte</h3><p class="note">Ceux qui jouent sur l'installation. Valeurs et réglages usine d'après la fiche. Tous les paramètres se règlent aussi avec les touches de la carte (▲ ▼ puis + −), sous tension et moteur à l'arrêt.</p><div class="cabpar">` + PARAMS.filter(c => ITEMS[c] && SIM.valeursRoger(ITEMS[c])).map(c => { const x = ITEMS[c], L = SIM.valeursRoger(x), v = par(c); return `<label><b>${esc(c)}</b> ${esc(x.titre)}<select onchange="CAB.param('${c}', this.value)">${L.map(o => `<option value="${esc(o.v)}"${o.v === v ? " selected" : ""}>${esc(o.v)}${o.v === pdef(c) ? " (usine)" : ""} · ${esc((o.d || "").slice(0, 42))}${(o.d || "").length > 42 ? "…" : ""}</option>`).join("")}</select></label>`; }).join("") + `</div><div class="sga"><button class="mini" onclick="CAB.usineParams()">Réglages usine</button><button class="mini" onclick="CAB.fermer()">Fermer</button></div>`;
+      const tous = SIM.ordreRoger(C), ligne = x => { const c = x.code, L = SIM.valeursRoger(x);
+        if (!L) return `<label><b>${esc(c)}</b> ${esc(x.titre)}<span class="hotn">Réglage à procédure propre ou en lecture : voir la fiche.</span></label>`;
+        const v = pval(c), d = pdef(c);
+        return `<label><b>${esc(c)}</b> ${esc(x.titre)}<select onchange="CAB.param('${esc(c)}', this.value)">${v == null ? `<option value="" selected>— réglage usine non indiqué (${esc(String(x.def || "").slice(0, 30))})</option>` : ""}${L.map(o => `<option value="${esc(o.v)}"${o.v === v ? " selected" : ""}>${esc(o.v)}${o.v === d ? " (usine)" : ""} · ${esc((o.d || "").slice(0, 42))}${(o.d || "").length > 42 ? "…" : ""}</option>`).join("")}</select></label>`; };
+      const actifs = tous.filter(x => PARAMS.includes(x.code)), autres = tous.filter(x => !PARAMS.includes(x.code));
+      h = `<h3>Paramètres de la carte</h3><p class="note">Tous les paramètres de la notice, dans son ordre. Valeurs et réglages usine d'après la fiche. Ils se règlent aussi avec les touches de la carte (▲ ▼ puis + −), sous tension et moteur à l'arrêt.</p><h4 class="cabh">Paramètres qui agissent dans l'atelier</h4><div class="cabpar">${actifs.map(ligne).join("")}</div><h4 class="cabh">Autres paramètres</h4><p class="hotn">Enregistrés, mais sans effet simulé dans l'atelier (vitesses, couple, ralentissements, batterie, MASTER / SLAVE…).</p><div class="cabpar">${autres.map(ligne).join("")}</div><div class="sga"><button class="mini" onclick="CAB.usineParams()">Réglages usine</button><button class="mini" onclick="CAB.fermer()">Fermer</button></div>`;
     } else {
       const m = S.mission && MISSIONS.find(x => x.id === S.mission.id);
       h = `<h3>Missions</h3>` + (m ? `<p><b>${esc(m.t)}</b><br>${esc(m.but)}</p>${S.mission.aide ? `<p class="note">${esc(m.aide)}</p>` : ""}${S.mission.res ? `<p class="${S.mission.ok ? "simok" : "note"}">${esc(S.mission.res)}</p>` : ""}<div class="sga"><button class="mini" onclick="CAB.verifier()">Vérifier mon câblage</button>${S.mission.aide ? "" : `<button class="mini" onclick="CAB.aide()">Indice</button>`}<button class="mini" onclick="CAB.mission('')">Autre mission</button></div>` :

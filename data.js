@@ -192,6 +192,11 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "2.31", date: "2026-11-09", titre: "Atelier de câblage : tous les paramètres, fils déplaçables", items: [
+    "L'écran Paramètres de l'atelier montre tous les paramètres de la notice (A0, A1…) ; ceux sans effet dans l'atelier sont regroupés à part. A1 n'a pas de réglage usine dans la notice (selon le moteur) : il reste vide tant qu'on ne le règle pas",
+    "On peut saisir un fil et le glisser pour l'écarter, afin de dégager les touches et l'écran de la carte ; « Remettre en place » le redresse",
+    "Bouton « Fils » pour estomper tous les fils"
+  ] },
   { v: "2.3", date: "2026-11-09", titre: "Atelier de câblage : tirer les fils au doigt", items: [
     "On peut poser un fil en appuyant sur une borne et en glissant le doigt jusqu'à l'autre borne avant de lâcher (le fil prend la couleur choisie) ; toucher une borne puis l'autre marche toujours"
   ] },
