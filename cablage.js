@@ -105,7 +105,7 @@
   }
 
   /* ---------- calcul électrique ---------- */
-  /* Réseaux : union des bornes reliées par des fils ou des contacts fermés. Sources : +24 V (29), LAM (31), +SC (10) quand la carte
+  /* Réseaux : union des bornes reliées par des fils ou des contacts fermés. Sources : +24 V, LAM, +SC quand la carte
      les commande, COM (0 V), arrivée 230 V~ (L / N). Une charge est alimentée si ses deux bornes sont sur une source et sa référence. */
   function uf() { const p = {}; const f = x => { if (p[x] === undefined) p[x] = x; while (p[x] !== x) { p[x] = p[p[x]]; x = p[x]; } return x; }; return { f, u: (a, b) => { const A = f(a), B = f(b); if (A !== B) p[A] = B; } }; }
   function contacts(a) { /* contacts fermés internes à un accessoire selon son état */
@@ -394,8 +394,8 @@
     const rx = I.acc.find(a => a.t === "rx"); if (!rx) return "Posez d'abord une paire de cellules.";
     const tx = I.acc.find(a => a.t === "tx" && a.paire === rx.paire);
     const ok = avec(() => { S.etat["p" + rx.paire] = {}; }, R => ({ ft: R.ent.FT1, rx: R.alim[rx.id], tx: R.alim[tx.id] }));
-    if (!ok.tx) return "L'émetteur TX n'est pas alimenté (+ sur 29, − sur COM).";
-    if (!ok.rx) return "Le récepteur RX n'est pas alimenté (+ sur 29, − sur COM).";
+    if (!ok.tx) return "L'émetteur TX n'est pas alimenté (+ sur " + nB("p24") + ", − sur COM).";
+    if (!ok.rx) return "Le récepteur RX n'est pas alimenté (+ sur " + nB("p24") + ", − sur COM).";
     if (!ok.ft) return "Faisceau libre, l'entrée FT1 (" + nB("ft1") + ") devrait être fermée sur COM : C du RX sur COM, NF sur " + nB("ft1") + ".";
     const cut = avec(() => { S.etat["p" + rx.paire] = { coupe: true }; }, R => R.ent.FT1);
     if (cut) return "Faisceau coupé, FT1 reste fermée : un pont " + nB("ft1") + "-" + nB("com") + " est-il resté en place ? Ou le contact NO est utilisé à la place du NF.";
@@ -422,7 +422,7 @@
       const on = avec(() => { S.dir = 1; }, R => R), off = avec(() => { S.dir = 0; S.pre = 0; S.corT = 0; }, R => R);
       if (on.def.d230 || off.def.d230) return "DANGER : du 230 V arrive sur une borne 24 V de la carte (ou sur un accessoire 24 V) quand COR est fermé ou ouvert.";
       if (on.def.cc24 || off.def.cc24 || on.def.ccAC) return "Court-circuit dans l'installation.";
-      if (!on.alim[l.id]) return "Quand le contact COR se ferme, la lumière ne s'allume pas : L → 8, 9 → lumière, lumière → N.";
+      if (!on.alim[l.id]) return "Quand le contact COR se ferme, la lumière ne s'allume pas : L → " + nB("cor1") + ", " + nB("cor2") + " → lumière, lumière → N.";
       if (off.alim[l.id]) return "La lumière reste allumée quand COR est ouvert : elle ne passe pas par le contact " + nB("cor1") + "-" + nB("cor2") + ".";
       return "";
     } finally { I.params = sp; }
@@ -747,7 +747,7 @@
     const b = board(id); C = b.c; ITEMS = {}; charger(id); C.parametres.groupes.forEach(g => g.items.forEach(x => ITEMS[x.code] = x));
     cleI = "cab-" + id; I = propre(st.get(cleI, null)) || neuf(); S = simNeuve(); hist = []; futur = []; dernier = JSON.stringify(I);
     setHead("Atelier · " + C.nom, true);
-    Z = { x: 0, y: 0, w: W, h: H };
+    Z = { x: 0, y: 0, w: W, h: H }; doigts.clear(); pince = glis = tir = tirFil = drag = null;
     app.innerHTML = `<div id="cabwrap"><div class="cabbar"><div class="cabseg" role="tablist"><button id="cabm1" class="on" onclick="CAB.mode('cabler')">✎ Câbler</button><button id="cabm2" onclick="CAB.mode('tester')">▶ Tester</button></div><label class="cabsw">Secteur <input type="checkbox" id="cabsect" onchange="CAB.secteur(this.checked)"><i></i></label></div>
       <div class="cabtools"><button id="cabund" onclick="CAB.annulerTout()" disabled>↶ Annuler</button><button id="cabred" onclick="CAB.retablir()" disabled>↷ Rétablir</button><button id="cabvid" onclick="CAB.vider()" aria-label="Tout retirer">🗑 Tout retirer</button><button id="cabest" onclick="CAB.estomper()" aria-label="Estomper les fils">◑ Fils</button></div>
       <div class="cabzone"><svg id="cabsvg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Carte ${esc(C.nom)} et accessoires"></svg>
@@ -755,7 +755,7 @@
       <div class="cabinfo" id="cabinfo" aria-live="polite"></div><div id="cabpan"></div><div id="cabsheet"></div></div>
       <p class="hotn">Simulateur de formation construit d'après la fiche (source : ${esc(C.source)}) : bornier, paramètres, afficheur (§ 9.2), mode TEST (§ 9.3), codes. Disposition des borniers : ${esc(F.fig)}. Accessoires génériques. Vitesse du portail indicative (environ 10 s pour la course). Non simulés : apprentissage de la course et des télécommandes, batteries, fonctionnement MASTER / SLAVE, veille low power, sortie SC en test des photocellules ou battery saving (A8 02 à 04, sortie laissée coupée), commandes radio avec confirmation (76 / 77 = 07 à 10). Refermeture après ouverture partielle (16) appliquée seulement quand A2 est actif. Les bornes COM (${F.coms.join(", ")}) sont traitées comme un 0 V commun.</p>`;
     rendre(); brancherSvg(); outils();
-    clearInterval(minuterie); minuterie = setInterval(() => { if (!location.hash.startsWith("#/cab/" + id)) { clearInterval(minuterie); clearTimeout(tEnr); document.body.classList.remove("cabnoscroll"); return; } tick(); }, 100);
+    clearInterval(minuterie); minuterie = setInterval(() => { if (location.hash !== "#/cab/" + id) { clearInterval(minuterie); clearTimeout(tEnr); document.body.classList.remove("cabnoscroll"); return; } tick(); }, 100);
   }
   const libre = t => { const w = largeur(t); for (let y = 76; y <= DY - 62; y += 62) for (let x = 6; x + w <= W - 4; x += 8) { if (!I.acc.some(a => !ACC[a.t].enfiche && x < a.x + largeur(a.t) + 6 && a.x < x + w + 6 && y < a.y + 60 && a.y < y + 60)) return [x, y]; } return [6 + Math.random() * 200, 80 + Math.random() * 100]; };
   window.CAB = {
@@ -763,7 +763,7 @@
     secteur(on) { S.secteur = on; if (!on) { S.dir = 0; S.pre = 0; S.test = false; clearTimeout(tEnr); S.prog = null; } else if (S.mode === "cabler") { S.msgU = "Sous tension : passez en mode « Tester » pour actionner les accessoires. Coupez le secteur avant de modifier le câblage."; } S.msg = []; maj(); },
     couleur(c) { S.couleur = c; panneau(); },
     poser(t) {
-      if (ACC[t].fil) { S.couleur = "#f5f5f5"; S.msgU = "Fil de pont : touchez la première borne de la carte, puis la seconde (exemple : 13 et 30 pour ponter FT1 absente)."; panneau(); maj(); return; }
+      if (ACC[t].fil) { S.couleur = "#f5f5f5"; S.msgU = "Fil de pont : touchez la première borne de la carte, puis la seconde (exemple : " + nB("ft1") + " et " + nB("com") + " pour ponter FT1 absente)."; panneau(); maj(); return; }
       if (ACC[t].enfiche) { this.radio(); return; }
       if (I.acc.length >= 14) { S.msgU = "Quatorze accessoires maximum."; maj(); return; }
       if (ACC[t].paire) { const p = 1 + Math.max(0, ...I.acc.filter(a => a.paire).map(a => a.paire)); [["tx"], ["rx"]].forEach(([u]) => { const [x, y] = libre(u); I.acc.push({ id: "a" + (I.n++), t: u, x, y, paire: p }); }); }

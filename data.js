@@ -192,6 +192,11 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "2.4", date: "2026-11-09", titre: "Atelier de câblage : B70/1DC", items: [
+    "Nouvelle carte dans l'atelier de câblage : Roger B70/1DC, borniers placés comme sur la carte (notice IS117, fig. 11 p. 15), missions et mode TEST avec ses propres numéros de bornes",
+    "Fiche B70/1DC : le pas-à-pas (borne 25) se règle avec le paramètre A4 (la fiche indiquait 84 par erreur)",
+    "Atelier : plus de blocage si le doigt est relâché en dehors du schéma"
+  ] },
   { v: "2.31", date: "2026-11-09", titre: "Atelier de câblage : tous les paramètres, fils déplaçables", items: [
     "L'écran Paramètres de l'atelier montre tous les paramètres de la notice (A0, A1…) ; ceux sans effet dans l'atelier sont regroupés à part. A1 n'a pas de réglage usine dans la notice (selon le moteur) : il reste vide tant qu'on ne le règle pas",
     "On peut saisir un fil et le glisser pour l'écarter, afin de dégager les touches et l'écran de la carte ; « Remettre en place » le redresse",
