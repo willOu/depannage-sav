@@ -36,19 +36,19 @@
     notes: "Deux vantaux : le MOTEUR 2 part après le retard 25 à l'ouverture, le MOTEUR 1 après le retard 26 à la fermeture. Ouverture partielle : vantail 1 seul, à la valeur de 15 (un seul vantail, 70 01 : 50 % d'usine d'après la notice). Après l'ouverture partielle, la refermeture automatique (A2) utilise le temps 21 : la notice ne la décrit qu'à partir du portail complètement ouvert (A2), mais le paramètre 22 indique qu'elle s'active après PED. Paramètre 15 : la fiche donne 99 d'usine ; pour un seul vantail la notice indique 50 %, l'atelier utilise 50 % tant que 15 n'est pas réglé (le tableau des paramètres affiche quand même 99). La notice écrit « 27 (ISEL) » dans le tableau des bornes (p. 104) mais le schéma fig. 2 et la carte donnent 28 (ISEL) et 27 (ST) : l'atelier suit le schéma. Non simulés en plus : électroserrure (22-21, 28, 29, 38), veille « low power » (L1), batteries, ralentissements, couple, détection d'obstacle ampèremétrique, essai des photocellules (58, 59, A8 02 à 04), fermeture garantie (81, 82), fonction d'ouverture avec exclusion de la fermeture automatique (22), récupération de position après une coupure de courant." };
   /* EDGE1 : 2 moteurs brushless 36 V (battants), câblés par le technicien (fig. 1 p. 6 de la notice IS160). Sur la carte, les bornes 15 à 37 forment une seule colonne : dessinées ici sur deux colonnes */
   CFG["roger-edge1"] = { fig: "fig. 1 p. 6 de la notice IS160", deux: true, pCor: "18", affY: 52, affDX: -122, hauteur: 330,
-    pos: { titre: [24, 140], sec: [24, 14], facc: [22, 52], fmot: [22, 84], rec: [104, 162, 110], wifi: [150, 222], wifiLab: "EXP", batt: [24, 216] },
+    pos: { titre: [24, 140], facc: [22, 52], fmot: [22, 84], rec: [104, 162, 110], wifi: [150, 222], wifiLab: "EXP", batt: [24, 216], battLab: "BATT − +", sec: [30, 14] },
     blocs: [{ ns: [["37", "COM"], ["36", "PED"], ["35", "PP"], ["34", "CH"], ["33", "AP"], ["32", "ORO"], ["31", "COM"]], x: 250, y: 24, pas: 22, lab: "droite", vertical: true },
-      { ns: [["30", "ANT"], ["29", "AUX"]], x: 250, y: 190, pas: 22, lab: "droite", vertical: true },
+      { ns: [["30", "ANT"], ["29", "ANT"]], x: 250, y: 190, pas: 22, lab: "droite", vertical: true },
       { ns: [["27", "ST"], ["26", "COM"], ["25", "COS1"], ["24", "COS2"], ["23", "FT1"], ["22", "FT2"], ["21", "COM"], ["20", "SC"], ["19", "COM"], ["18", "+24V"]], x: 318, y: 24, pas: 22, lab: "droite", vertical: true },
       { ns: [["17", "+ES"], ["16", "LAM"], ["15", "COM"]], x: 318, y: 252, pas: 22, lab: "droite", vertical: true },
       { ns: [["1X", "X"], ["1Y", "Y"], ["1Z", "Z"]], x: 36, y: 292, pas: 22, lab: "haut", titre: "MOTEUR 1" },
       { ns: [["2X", "X"], ["2Y", "Y"], ["2Z", "Z"]], x: 120, y: 292, pas: 22, lab: "haut", titre: "MOTEUR 2" },
       { ns: [["13", "COR"], ["14", "COR"]], x: 196, y: 292, pas: 24, lab: "haut" }],
     K: { p24: "18", com: "15", lam: "16", sc: "20", cor1: "13", cor2: "14", ft2: "22", ft1: "23", ftCom: "21", cos2: "24", cos1: "25", cosCom: "26", st: "27", oro: "32", cmdCom: "37", ap: "33", ch: "34", pp: "35", ped: "36" },
-    coms: ["15", "19", "21", "26", "31", "37"], batt: true, battNom: "Batteries (kit B71/BCHP)", alim: { lab: ["SEC1", "SEC2"], inv: ["SEC2", "SEC1"], nom: "Secondaire du transformateur SEC1 · SEC2", carte: "Transfo", panne: "Inverser SEC1 et SEC2", code: "SECO" },
+    coms: ["15", "19", "21", "26", "31", "37"], batt: true, battNom: "Batteries (kit B71/BCHP)", alim: { lab: ["SEC2", "SEC1"], inv: ["SEC1", "SEC2"], nom: "Secondaire du transformateur SEC2 · SEC1", carte: "Transfo", panne: "Inverser SEC1 et SEC2", code: "SECO" },
     facc: { lab: "F3 3A", nom: "Fusible F3 3 A (accessoires)", court: "F3" }, fmot: { lab: "F1 20A", nom: "Fusible F1 20 A (puissance des moteurs)", code: "FUSE" },
-    params: ["70", "A2", "21", "A4", "A5", "A6", "A7", "A8", "15", "25", "26", "27", "50", "51", "52", "53", "54", "55", "57", "73", "74", "76", "77", "78", "18", "79", "80"],
-    notes: "Deux vantaux : le MOTEUR 2 part après le retard 25 à l'ouverture, le MOTEUR 1 après le retard 26 à la fermeture. Ouverture partielle : vantail 1 seul, à la valeur de 15 (un seul vantail, 70 01 : 50 % d'usine d'après la fiche, l'atelier l'utilise tant que 15 n'est pas réglé). Après l'ouverture partielle, la refermeture automatique (A2) utilise le temps 21. Non simulés en plus : encodeur absolu SMARTY/EMA (71, codes En11 à En25, POS1 / POS2), électroserrure (17-15, fusible F2, 28, 29, 38), veille « low power » (L1), batteries, ralentissements, couple, détection d'obstacle ampèremétrique, essai des photocellules (58, 59, A8 02 à 04), fermeture garantie (81, 82), fonction 22, récupération de position après une coupure de courant." };
+    params: ["70", "A2", "21", "23", "A4", "A5", "A6", "A7", "A8", "15", "25", "26", "27", "50", "51", "52", "53", "54", "55", "57", "73", "74", "76", "77", "78", "18", "79", "80"],
+    notes: "Deux vantaux : le MOTEUR 2 part après le retard 25 à l'ouverture, le MOTEUR 1 après le retard 26 à la fermeture. Ouverture partielle : vantail 1 seul, à la valeur de 15 (un seul vantail, 70 01 : 50 % d'usine d'après la fiche, l'atelier l'utilise tant que 15 n'est pas réglé). Après l'ouverture partielle, la refermeture automatique utilise le temps 23 ; l'atelier la soumet à A2 comme depuis l'ouverture totale (la notice ne précise pas ce lien). Moteur 2 : la notice indique l'ordre Z-Y-X ; dans l'atelier, X sur X, Y sur Y, Z sur Z donne le bon sens (le sens réel dépend de la pose). Non simulés en plus : encodeur absolu SMARTY/EMA (71, codes En11 à En25, POS1 / POS2), électroserrure (17-15, fusible F2, 28, 29, 38), veille « low power » (L1), batteries, ralentissements, couple, détection d'obstacle ampèremétrique, essai des photocellules (58, 59, A8 02 à 04), fermeture garantie (81, 82), fonction 22, récupération de position après une coupure de courant." };
   CFG["casit-eq2009"] = { modele: "eq2009", fig: "schéma p. 2 de la notice EQ2009 R1.0", coms: ["14", "17", "22", "28", "33", "35"] };
   CFG["casit-keqs08"] = { modele: "keqs08", fig: "schéma § 2.1 p. 4 de la notice KEQS08-R", coms: ["9", "10", "20"] };
   const CARTES = CFG;
@@ -444,6 +444,7 @@
         const v = par(code), d = S.dir;
         const invOuv = code === "73" ? ["01", "02", "03", "04", "12", "14"] : ["03", "04", "12", "14"], invFer = code === "73" ? ["03", "04", "14"] : ["01", "02", "03", "04", "14"];
         if (((d > 0 && invOuv.includes(v)) || (d < 0 && invFer.includes(v))) && duree("27") === 0) { stopper(nom + " actionné : inversion de 0 s (paramètre 27 = 00), le portail s'arrête.", "Paramètre " + code + " = " + v); return; }
+        if (((d > 0 && invOuv.includes(v)) || (d < 0 && invFer.includes(v))) && (d > 0 ? S.pos <= 0 : S.pos >= 100)) { stopper(nom + " actionné au départ : inversion impossible (le portail est déjà en butée), arrêt.", "Paramètre " + code + " = " + v); return; }
         if ((d > 0 && invOuv.includes(v)) || (d < 0 && invFer.includes(v))) { S.dir = 0; S.inv = duree("27") * 10; d > 0 ? fermer() : ouvrir(); S.invDir = -d; dit(nom + " actionné pendant " + (d > 0 ? "l'ouverture" : "la fermeture") + " : inversion pendant " + duree("27") + " s (paramètre 27), puis arrêt.", "Paramètre " + code + " = " + v + " : " + pdesc(code, v)); }
         else if (!S["nd" + code]) { S["nd" + code] = 1; dit(nom + " actionné pendant " + (d > 0 ? "l'ouverture" : "la fermeture") + " : la notice ne décrit pas d'action dans ce sens avec " + code + " = " + v + ". Rien n'est simulé.", "Paramètre " + code); }
       };
@@ -459,9 +460,9 @@
       if (!S.dir && !S.pre && !S.att && S.pos > 0 && (S.pos >= 100 || ITEMS["16"] || F.deux) && S.arret === null && (a2 !== "00" || copro) && !(cmd.ORO) && st17 && sb) {
         const lim = a2 === "99" ? 1e9 : Math.max(1, pn("A2"));
         if (S.tentatives < lim) {
-          const tps = (S.pos >= 100 || F.deux ? duree("21") : duree("16")) * 10;
+          const pPart = S.pos >= 100 ? "21" : F.deux ? (ITEMS["23"] ? "23" : "21") : "16", tps = duree(pPart) * 10;
           if ((!ft1 && par("51") !== "00") || (!ft2 && par("54") !== "00")) S.pause = 0; /* les photocellules relancent le décompte */
-          S.pause++; if (S.pause >= tps) fermer("Refermeture automatique après " + Math.round(tps / 10) + " s (paramètres A2 et " + (S.pos >= 100 || F.deux ? "21" : "16") + ").");
+          S.pause++; if (S.pause >= tps) fermer("Refermeture automatique après " + Math.round(tps / 10) + " s (paramètres A2 et " + pPart + ").");
         }
       } else if (S.dir) S.pause = 0;
     }
@@ -480,7 +481,7 @@
   }
 
   /* ---------- missions (vérifiées sur le câblage, carte sous tension) ---------- */
-  const MOT2 = { id: "mot2", t: "Moteurs brushless", but: "Câblez les moteurs : MOTEUR 1 (vantail 1) sur le connecteur M1, MOTEUR 2 (vantail 2) sur M2. Chaque vantail doit partir dans le bon sens.", aide: () => "Fil X du moteur sur X, Y sur Y, Z sur Z (dans l'atelier, cet ordre donne le bon sens). Vantail à l'envers : échangez deux fils. Un seul moteur : paramètre 70 sur 01.", test: () => {
+  const MOT2 = { id: "mot2", t: "Moteurs brushless", but: "Câblez les moteurs : MOTEUR 1 (vantail 1) sur le connecteur M1, MOTEUR 2 (vantail 2) sur M2. Chaque vantail doit partir dans le bon sens.", aide: () => "Fil X du moteur sur X, Y sur Y, Z sur Z : dans l'atelier, cet ordre donne le bon sens (sur le terrain, le sens dépend de la pose ; la notice écrit le moteur 2 dans l'ordre Z-Y-X). Vantail à l'envers : échangez deux fils. Un seul moteur : paramètre 70 sur 01.", test: () => {
     const n = nbMot(), R = avec(() => {}, R => R); if (R.def.ccMot) return "Court-circuit sur une sortie moteur : deux phases reliées entre elles ou à la très basse tension."; if (R.def.d230) return "DANGER : du 230 V arrive sur la carte.";
     for (let k = 1; k <= n; k++) { const a = I.acc.find(x => x.t === "mbl" && x.num === k); if (!a) return "Posez le moteur brushless " + k + " (vantail " + k + ")."; const m = R.moteurs[a.id];
       if (!m || !m.ok) return "Moteur " + k + " : " + (m && m.err ? m.err + " (trois fils X, Y, Z sur le même connecteur)." : "non raccordé (code Mot" + k + ")."); if (m.sortie !== k) return "Le moteur " + k + " est câblé sur le connecteur M" + m.sortie + " : le vantail " + k + " doit être commandé par M" + k + "."; if (m.sens < 0) return "Le moteur " + k + " partirait à l'envers : échangez deux de ses fils."; }
@@ -623,7 +624,7 @@
     const [rx, ry, rw] = Q.rec, rc = rx + rw / 2;
     u("rec", `<rect x="${rx}" y="${DY + ry}" width="${rw}" height="12" rx="2" fill="#2a62c9"/>${I.acc.some(a => a.t === "radio") ? `<rect x="${rx}" y="${DY + ry - 6}" width="${rw}" height="24" rx="4" fill="#e9eef7" stroke="#2a62c9"/><text x="${rc}" y="${DY + ry + 10}" class="cabt" fill="#1d3f86" text-anchor="middle">H93/RX2LP/I</text>` : `<text x="${rc}" y="${DY + ry + 26}" class="cabt" text-anchor="middle">RÉCEPTEUR RADIO</text>`}`);
     u("wifi", `<rect x="${Q.wifi[0]}" y="${DY + Q.wifi[1]}" width="18" height="10" rx="2" fill="#bdbdbd" opacity=".7"/><text x="${Q.wifi[0] + 9}" y="${DY + Q.wifi[1] + 22}" class="cabt" text-anchor="middle">${Q.wifiLab || "WIFI"}</text>`);
-    if (F.batt) u("batt", `<rect x="${Q.batt[0]}" y="${DY + Q.batt[1]}" width="14" height="16" rx="2" fill="${GR}"/><rect x="${Q.batt[0] + 16}" y="${DY + Q.batt[1]}" width="14" height="16" rx="2" fill="${GR}"/><text x="${Q.batt[0] + 15}" y="${DY + Q.batt[1] + 26}" class="cabt" text-anchor="middle">BATT − +</text>`);
+    if (F.batt) u("batt", `<rect x="${Q.batt[0]}" y="${DY + Q.batt[1]}" width="14" height="16" rx="2" fill="${GR}"/><rect x="${Q.batt[0] + 16}" y="${DY + Q.batt[1]}" width="14" height="16" rx="2" fill="${GR}"/><text x="${Q.batt[0] + 15}" y="${DY + Q.batt[1] + 26}" class="cabt" text-anchor="middle">${Q.battLab || "BATT"}</text>`);
     g.push(`<g id="cabaff"></g>`);
     const y = DY + (F.affY || 50), ax = F.affDX || 0;
     T(270 + ax, y + 34, "COMMANDES", 'class="cabt" font-size="6" text-anchor="middle" fill="#8fd1b2"'); T(318 + ax, y + 34, "SÉCURITÉS", 'class="cabt" font-size="6" text-anchor="middle" fill="#8fd1b2"');
