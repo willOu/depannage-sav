@@ -200,5 +200,5 @@
     const fd = d => { try { return new Date(d).toLocaleDateString("fr-FR", { day: "numeric", month: "short" }); } catch (e) { return ""; } };
     app.innerHTML = r.j.length ? `<table class="stt">${r.j.map(t => `<tr><td>${esc(t.nom)}<small>${(t.liste_cartes || []).map(id => esc((board(id) || { c: { nom: id } }).c.nom)).join(" · ")} · dernier exercice ${fd(t.dernier)}</small></td><td class="n">${Number(t.reussis)}<small>réussis / ${Number(t.essais)}<br>${Number(t.sans_aide)} sans indice</small></td></tr>`).join("")}</table>` : `<p class="empty">Aucun exercice fait pour l'instant.</p>`;
   }
-  window.SIM = { valeursRoger, ordreRoger, dipsDe, etiquette, cartes: CARTES };
+  window.SIM = { valeursRoger, ordreRoger, dipsDe, etiquette, cartes: CARTES, noter };
 })();

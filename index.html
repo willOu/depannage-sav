@@ -397,6 +397,18 @@ html{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 .simcarte.dip{justify-items:stretch}.simbanc{display:grid;gap:6px;color:#e8f5e9}.simbanc small{opacity:.7;font-size:11px}
 .simdips{display:flex;flex-wrap:wrap;gap:6px;background:#c62828;border-radius:8px;padding:8px}.simdip{width:28px;height:58px;border:0;border-radius:4px;background:#f2f2f2;position:relative;cursor:pointer;padding:0}
 .simdip i{position:absolute;left:4px;right:4px;height:22px;bottom:6px;background:#333;border-radius:3px;transition:bottom .12s}.simdip.on i{bottom:30px}.simdip span{position:absolute;top:-1px;left:0;right:0;font:700 9px system-ui;color:#c62828}
+.cabbar{display:flex;align-items:center;gap:8px;margin:8px 0}.cabseg{display:flex;background:#262626;border-radius:10px;padding:3px}.cabseg button{border:0;background:transparent;color:#a9a29e;font:600 14px/1 inherit;padding:9px 13px;border-radius:8px;cursor:pointer}.cabseg button.on{background:#3a3a3a;color:#fff}
+.cabsw{margin-left:auto;display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;cursor:pointer}.cabsw input{position:absolute;opacity:0;width:1px;height:1px}.cabsw i{width:44px;height:26px;border-radius:13px;background:#777;position:relative;transition:.2s}.cabsw i:after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s}.cabsw input:checked+i{background:#2f9e55}.cabsw input:checked+i:after{left:21px}.cabsw input:focus-visible+i{outline:2px solid #f0b429}
+.cabzone{background:#121212;border-radius:14px;overflow:hidden;touch-action:none;max-width:560px;margin:0 auto}.cabzone svg{display:block;width:100%;height:auto;user-select:none;-webkit-user-select:none}
+#cabsvg text{font-family:Inter,system-ui,sans-serif}.cabt{font-size:7.5px;font-weight:700;fill:#b9c0bc}.cabn{font-size:10.5px;font-weight:700;fill:#fff}.cabs{font-size:7.5px;fill:#a9a29e}.cabcode{font:700 19px/1 ui-monospace,Menlo,monospace;fill:#ff3b30;letter-spacing:2px}
+.cabw{fill:none;stroke-width:3;cursor:pointer}.cabw.sel{stroke-width:5}.caba,.cabu,.cabk,.cabhit{cursor:pointer}
+@keyframes cabflux{to{stroke-dashoffset:-24}}#cabsvg .flux{stroke-dasharray:7 5;animation:cabflux .7s linear infinite}@keyframes cabcl{50%{stroke:#3b2626}}#cabsvg .cli{animation:cabcl 1s steps(1) infinite}@keyframes cabcl2{50%{opacity:.15}}#cabsvg .cli2{animation:cabcl2 1s steps(1) infinite}
+@media (prefers-reduced-motion:reduce){#cabsvg .flux{animation-duration:2.5s}}
+.cabinfo{margin:10px 0;background:var(--card,#1d1d1d);border:1px solid var(--line,#2e2e2e);border-radius:14px;padding:10px 12px;font-size:14px;line-height:1.45;min-height:44px}.cabinfo small{opacity:.75}.cabinfo .k{color:#c98a00;font-weight:700}.cabinfo hr{border:0;border-top:1px solid var(--line,#333);margin:8px 0}.cabold{opacity:.6;font-size:12.5px;margin-top:6px}.cabmm{font:700 22px/1.3 ui-monospace,Menlo,monospace;margin:6px 0}
+.cabcoul{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 10px}.cabc{width:30px;height:30px;border-radius:50%;border:3px solid transparent;background:var(--c);cursor:pointer;box-shadow:0 0 0 1px rgba(0,0,0,.3)}.cabc.on{border-color:#f0b429}
+.cabh{margin:6px 0;font-size:14px}.cablib{display:grid;grid-template-columns:repeat(auto-fill,minmax(102px,1fr));gap:7px}.cabchip{display:flex;flex-direction:column;align-items:center;gap:2px;text-align:center;border:1px solid var(--line,#333);background:var(--card,#222);color:inherit;border-radius:12px;padding:8px 4px;font:600 12.5px/1.2 inherit;cursor:pointer}.cabchip span{font-size:20px}.cabchip small{font-weight:400;opacity:.7;font-size:10.5px}
+.cabacts{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:7px;margin:4px 0}.cabact{border:1px solid var(--line,#333);background:var(--card,#222);color:inherit;border-radius:12px;padding:11px 6px;font:600 13.5px/1.25 inherit;cursor:pointer;touch-action:none;user-select:none;-webkit-user-select:none}.cabact small{display:block;font-weight:400;opacity:.7;font-size:11px}.cabact.on{background:#2a3a2e;border-color:#2f9e55}
+.cabfeuille{margin:10px 0;border:1px solid var(--line,#333);border-radius:14px;padding:10px 12px}.cabfeuille h3{margin:2px 0 8px}.cabpar{display:grid;gap:10px}.cabpar label{display:grid;gap:4px;font-size:13.5px}.cabpar select{width:100%;padding:8px;border-radius:8px;font-size:14px}
 .simex{margin:6px 0}.simq{font-size:17px;font-weight:600}.simok{font-size:17px;font-weight:700;color:#2ea043}
 .qcam{position:absolute;right:4px;top:50%;transform:translateY(-50%);width:42px;height:38px;border:0;border-radius:10px;background:transparent;display:grid;place-items:center;cursor:pointer}.qcam:active{background:rgba(0,0,0,.08)}.search .qcam svg{position:static;opacity:1}
 .search input::-webkit-search-cancel-button{display:none}
@@ -484,6 +496,7 @@ html{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 <script src="menu.js"></script> <!-- MENU -->
 <script src="live.js"></script> <!-- LIVE -->
 <script src="sim.js"></script> <!-- SIM -->
+<script src="cablage.js"></script> <!-- CAB -->
 <script src="moteurs.js"></script> <!-- MOTEURS -->
 <script src="calc.js"></script> <!-- CALC -->
 <script src="sympt.js"></script> <!-- SYMPT -->
@@ -567,6 +580,7 @@ function viewHome(){
   h += `<button class="dbtn" onclick="go('#/calc/moteur')">Choisir une motorisation<small>selon le poids et la longueur du portail · Roger en premier · lien vers la carte de commande</small></button>`; /* CALC moteur */
   h += `<button class="dbtn" onclick="go('#/calc')">Calculs rapides : chute de tension, choix du moteur, conso 24 V<small>formules et hypothèses affichées</small></button>`; /* CALC */
   h += `<button class="dbtn" onclick="go('#/sim')">Simulateur de carte : s'entraîner sans portail<small>afficheur et touches Roger, dip-switch Casit · exercices corrigés</small></button>`; /* SIM */
+  h += `<button class="dbtn" onclick="go('#/cab')">Atelier de câblage : câbler et tester une installation<small>Roger B70/1DCHP · on voit le courant passer · missions corrigées</small></button>`; /* CAB */
   h += `<button class="dbtn" onclick="go('#/quiz')">Quiz de formation : codes erreur et borniers<small><b>EN TEST</b> · 10 questions tirées des fiches</small></button>`; /* QUIZ */
   h += `<button class="dbtn" onclick="go('#/cmp')">Comparateur de borniers : remplacer une carte par une autre<small>bornes des deux cartes rangées par fonction · aide indicative</small></button>`; /* CMP */
   h += `<button class="dbtn" onclick="go('#/scan')">Dépannage par photo : l'étiquette ou l'afficheur de la carte<small><b>BÊTA</b> · photographiez la plaque pour trouver la fiche, ou l'afficheur pour ouvrir le code d'erreur</small></button>`; /* SCAN */
@@ -979,6 +993,7 @@ function route(){
   if (p[0] === "notices-admin") return viewNoticesAdmin(); /* PDF ajoutées */
   if (p[0] === "photos") return viewPhotosAdmin(p[1]); /* PHOTOS */
   if (p[0] === "sim") return viewSim(p[1]); /* SIM */
+  if (p[0] === "cab") return viewCab(p[1]); /* CAB */
   if (p[0] === "calc") return viewCalc(p[1]); /* CALC */
   if (p[0] === "cmp") return viewCmp(p[1] && p[1] !== "-" ? decodeURIComponent(p[1]) : "", p[2] ? decodeURIComponent(p[2]) : ""); /* CMP */
   if (p[0] === "stats") return SYNC.viewStats(p[1]); /* SYNC */
