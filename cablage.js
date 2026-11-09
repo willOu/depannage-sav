@@ -21,6 +21,7 @@
       coms: ["9", "14", "21", "28"], batt: false, alim: { lab: ["5+", "4−"], nom: "Alimentation de la carte POWER IN 5+ / 4−", carte: "Alim carte" },
       facc: { lab: "F2 2A", nom: "Fusible F2 2 A (accessoires)", court: "F2" }, fmot: { lab: "F1 15A", nom: "Fusible F1 15 A (circuit moteur)", code: null } }
   };
+  CFG["casit-eq2009"] = { modele: "eq2009", fig: "schéma p. 2 de la notice EQ2009 R1.0", coms: ["14", "17", "22", "28", "33", "35"] };
   CFG["casit-keqs08"] = { modele: "keqs08", fig: "schéma § 2.1 p. 4 de la notice KEQS08-R", coms: ["9", "10", "20"] };
   const CARTES = CFG;
   const NS = "http://www.w3.org/2000/svg";
@@ -102,7 +103,7 @@
   function propre(x) {
     try {
       if (!x || !Array.isArray(x.acc) || !Array.isArray(x.fils)) return null;
-      const acc = x.acc.filter(a => a && /^a\d{1,5}$/.test(a.id) && ACC[a.t] && !ACC[a.t].paire && !ACC[a.t].fil && Number.isFinite(a.x) && Number.isFinite(a.y)).map(a => ({ id: a.id, t: a.t, x: Math.round(a.x), y: Math.round(a.y), paire: Number.isInteger(a.paire) ? a.paire : undefined }));
+      const acc = x.acc.filter(a => a && /^a\d{1,5}$/.test(a.id) && ACC[a.t] && !ACC[a.t].paire && !ACC[a.t].fil && Number.isFinite(a.x) && Number.isFinite(a.y)).map(a => ({ id: a.id, t: a.t, x: Math.round(a.x), y: Math.round(a.y), paire: Number.isInteger(a.paire) ? a.paire : undefined, num: Number.isInteger(a.num) ? a.num : undefined }));
       const ok = k => { if (typeof k !== "string") return false; if (BORNES[k]) return true; const i = k.indexOf(":"), a = acc.find(x => x.id === k.slice(0, i)); return !!(a && ACC[a.t].b && ACC[a.t].b.some(b => b[0] === k.slice(i + 1))); };
       const fils = x.fils.filter(w => w && /^w\d{1,5}$/.test(w.id) && ok(w.a) && ok(w.b) && /^#[0-9a-f]{6}$/i.test(w.c)).map(w => ({ id: w.id, a: w.a, b: w.b, c: w.c, usine: w.usine ? 1 : undefined, p: Array.isArray(w.p) && w.p.length === 2 && w.p.every(Number.isFinite) ? [Math.max(0, Math.min(W, Math.round(w.p[0]))), Math.max(0, Math.min(H, Math.round(w.p[1])))] : undefined }));
       const params = {}; Object.keys(x.params || {}).forEach(k => { if (ITEMS[k] && /^[0-9A-Za-z]{2}$/.test(x.params[k])) params[k] = x.params[k]; });
@@ -126,7 +127,7 @@
       case "digi": return e.on && e.alim ? [[k + "C", k + "NO"]] : [];
       case "rx": return e.ok ? [[k + "C", k + "NF"]] : [[k + "C", k + "NO"]];
       case "rxc": return e.ok ? [[k + "C", k + "NF"]] : [];
-      case "fdc": return [].concat(S.pos < 100 ? [[k + "C", k + "O"]] : [], S.pos > 0 ? [[k + "C", k + "F"]] : []);
+      case "fdc": { const ps = S.posM && a.num ? (S.posM[a.num] || 0) : S.pos; return [].concat(ps < 100 ? [[k + "C", k + "O"]] : [], ps > 0 ? [[k + "C", k + "F"]] : []); }
       case "bnf": case "stop": return e.on ? [] : [[k + "1", k + "2"]];
       case "b8k": return e.on ? [[k + "1", k + "2"]] : [];
       default: return [];
@@ -465,7 +466,7 @@
   function verifierMission() { /* rien en continu : la vérification se fait au bouton */ }
 
   /* ---------- dessin ---------- */
-  const W = 390, H = 680;
+  const W = 390, H = 700;
   const posB = k => { if (k.startsWith("b:")) { const b = BORNES[k]; return b ? [b.x, b.y] : null; } const [id, n] = k.split(":"); const a = I.acc.find(x => x.id === id); if (!a) return null; const i = ACC[a.t].b.findIndex(b => b[0] === n); return [a.x + 14 + i * 24, a.y + 40]; };
   /* fil : part vers le haut depuis une borne de la carte, vers le bas depuis un accessoire */
   const chemin = (a, b, m) => { const p = posB(a), q = posB(b); if (!p || !q) return ""; const dy = Math.max(28, Math.abs(q[1] - p[1]) * 0.5), sp = a.startsWith("b:") ? -1 : 1, sq = b.startsWith("b:") ? -1 : 1;
@@ -511,7 +512,7 @@
   function dessinAcc(a) {
     const d = ACC[a.t], w = largeur(a.t), sel = S.selAcc === a.id;
     let h = `<g class="caba" data-a="${a.id}" transform="translate(${a.x} ${a.y})"><rect class="cabbox" width="${w}" height="56" rx="10" fill="#262626" stroke="${sel ? "#f0b429" : "#3a3a3a"}" stroke-width="${sel ? 2 : 1}"/>`;
-    h += `<text x="10" y="16" class="cabn">${esc(d.nom)}${a.t === "tx" || a.t === "rx" ? " " + a.paire : ""}</text><text x="10" y="27" class="cabs">${esc(d.sous)}</text>`;
+    h += `<text x="10" y="16" class="cabn">${esc(d.nom)}${a.paire ? " " + a.paire : a.num ? " " + a.num : ""}</text><text x="10" y="27" class="cabs">${esc(d.sous)}</text>`;
     if (d.charge && !["digi", "tx", "rx", "txc", "rxc"].includes(a.t)) h += `<circle id="cabl-${a.id}" cx="${w - 14}" cy="14" r="7" fill="#333"/>`;
     if (["pp", "stop", "oro", "bnf", "b8k", "cle", "digi", "mot"].includes(a.t)) h += `<text id="cabe-${a.id}" x="${w - 8}" y="16" class="cabs" text-anchor="end" fill="#f0b429"></text>`;
     d.b.forEach(([k, lab], i) => { const x = 14 + i * 24; h += `<circle class="cabb" data-b="${a.id}:${k}" cx="${x}" cy="40" r="4.5" fill="#d7dde4"/><text x="${x}" y="53" class="cabs" text-anchor="middle">${esc(lab)}</text><circle class="cabhit" data-b="${a.id}:${k}" cx="${x}" cy="40" r="11" fill="transparent"/>`; });
@@ -530,7 +531,7 @@
     const fils = I.fils.map(w => { const d = chemin(w.a, w.b, w.p); return `<path class="cabwh" data-w="${w.id}" id="cwh-${w.id}" d="${d}"/><path class="cabw${S.selFil === w.id ? " sel" : ""}" id="cw-${w.id}" data-w="${w.id}" d="${d}" stroke="${w.c}" />`; }).join("");
     const faisceaux = [...new Set(I.acc.filter(a => a.t === "tx" || a.t === "txc").map(a => a.paire))].map(p => { const t = I.acc.find(a => (a.t === "tx" || a.t === "txc") && a.paire === p), r = I.acc.find(a => (a.t === "rx" || a.t === "rxc") && a.paire === p); if (!t || !r) return ""; return `<line id="cabf-${p}" x1="${t.x + largeur("tx")}" y1="${t.y + 20}" x2="${r.x}" y2="${r.y + 20}" stroke-width="2"/>`; }).join("");
     sv.innerHTML = `<defs><pattern id="cabgr" width="13" height="13" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".9" fill="#2a2a2a"/></pattern></defs><rect width="${W}" height="${H}" fill="url(#cabgr)"/>` +
-      dessinPortail() + dessinCarte() + faisceaux + I.acc.filter(a => !ACC[a.t].enfiche).map(dessinAcc).join("") + `<g id="cabfils" class="${S.estompe ? "estompe" : ""}" fill="none" stroke-width="3" stroke-linecap="round">${fils}</g><g id="cabhits">${hits()}</g><g id="cabsel"></g><g id="cabmm"></g>`;
+      (M && M.portail ? M.portail(api()) : dessinPortail()) + dessinCarte() + faisceaux + I.acc.filter(a => !ACC[a.t].enfiche).map(dessinAcc).join("") + `<g id="cabfils" class="${S.estompe ? "estompe" : ""}" fill="none" stroke-width="3" stroke-linecap="round">${fils}</g><g id="cabhits">${hits()}</g><g id="cabsel"></g><g id="cabmm"></g>`;
     maj(); panneau();
   }
   /* afficheur : état des commandes / sécurités (§ 9.2), mode TEST, codes */
@@ -576,7 +577,7 @@
     const sv = $("#cabsvg"); if (!sv || !S.R) return;
     const R = S.R, aff = $("#cabaff"); if (S.mm && S.mm.a && S.mm.b) S.mm.r = mesure(S.mm.a, S.mm.b); /* mesure suivie en direct */ if (aff) aff.innerHTML = dessinAff();
     I.fils.forEach(w => { const p = document.getElementById("cw-" + w.id); if (p) p.classList.toggle("flux", S.secteur && R.flux.has(w.id)); });
-    const v = $("#cabvantail"); if (v) v.setAttribute("transform", `translate(${S.pos * 1.6} 0)`);
+    if (M && M.majPortail) M.majPortail(api()); else { const v = $("#cabvantail"); if (v) v.setAttribute("transform", `translate(${S.pos * 1.6} 0)`); }
     const e = $("#cabetat"); if (e) e.textContent = !S.secteur ? "hors tension" : S.hs ? "carte détruite" : S.pre ? "préclignotement" : S.dir > 0 ? "ouverture " + S.pos + " %" : S.dir < 0 ? "fermeture " + S.pos + " %" : S.att ? "arrêt temporaire" : S.pos >= 100 ? "ouvert" : S.pos <= 0 ? "fermé" : "arrêté à " + S.pos + " %";
     [0, 1, 2].forEach(i => { const m = document.getElementById("cabmot" + i); if (m) m.setAttribute("class", S.dir ? "flux" : ""); });
     I.acc.forEach(a => {
@@ -811,7 +812,7 @@
       if (ACC[t].enfiche) { this.radio(); return; }
       if (I.acc.length >= 14) { S.msgU = "Quatorze accessoires maximum."; maj(); return; }
       if (ACC[t].paire) { const p = 1 + Math.max(0, ...I.acc.filter(a => a.paire).map(a => a.paire)); (ACC[t].paire === "c" ? [["txc"], ["rxc"]] : [["tx"], ["rx"]]).forEach(([u]) => { const [x, y] = libre(u); I.acc.push({ id: "a" + (I.n++), t: u, x, y, paire: p }); }); }
-      else { const [x, y] = libre(t); I.acc.push({ id: "a" + (I.n++), t, x, y }); }
+      else { const [x, y] = libre(t), o = { id: "a" + (I.n++), t, x, y }; if (t === "mot" || t === "fdc") o.num = 1 + I.acc.filter(a => a.t === t).length; I.acc.push(o); } /* moteurs et fins de course numérotés : 1 = vantail 1 */
       sauver(); rendre();
     },
     radio() { const r = I.acc.find(a => a.t === "radio"); if (r) I.acc = I.acc.filter(a => a !== r); else { if (S.secteur) { S.msgU = "Enfichez le récepteur hors tension (coupez le secteur)."; maj(); return; } I.acc.push({ id: "a" + (I.n++), t: "radio", x: 0, y: 0 }); } S.msgU = ""; sauver(); rendre(); },
