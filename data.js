@@ -192,7 +192,9 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
-  { v: "2.6", date: "2026-11-09", titre: "Atelier de câblage : barrière Roger CTRL (BIONIK)", items: [
+  { v: "2.6", date: "2026-11-09", titre: "Atelier de câblage : barrière Roger CTRL et cartes BFT MERAK, MERAK (DEIMOS ULTRA), THALIA", items: [
+    "Atelier : cartes BFT MERAK (notice D814459), MERAK pour DEIMOS ULTRA (D811980) et THALIA BT A80 / A160 (D814283), avec moteurs 24 V à câbler (+ / −), ponts d'usine 70-71 / 70-72 / 70-73 (70-74 sur la DEIMOS), 24 Vsafe (52) alimenté seulement pendant la manœuvre et Power Down",
+    "Atelier BFT : logiques IC 1 / IC 2, SAFE 1 / SAFE 2 (photocellules et bords), pas-à-pas 4 / 3 / 2 pas, TCA, préalarme, homme mort, blocages d'impulsions, sortie AUX en clignotant, diagnostic à l'afficheur (STRE, PED, STOP, PHOT, BAR…)",
     "Atelier : nouvelle carte CTRL (barrière BIONIK), borniers placés comme sur la notice IS88 (fig. 2)",
     "Atelier : lisse animée ; PED ouvre toujours en totalité ; bord sensible COS qui inverse seulement en fermeture (73)",
     "Atelier : afficheur et mode TEST de la CTRL (21, 23, 24), codes SECO, FUSE, Mot, EnE1 et StoP (déblocage ou trappe ouverte, en touchant LOCKS)"
