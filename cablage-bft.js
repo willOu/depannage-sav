@@ -150,7 +150,7 @@
         if (S.veille && Object.values(cmd).some(Boolean)) { S.veille = 0; S.idle = 0; }
         /* diagnostic de l'afficheur */
         const dg = !ok.STOP ? "STOP" : (S.cmd || S.pre) && !ok.SAFE1 ? M.nomSafe(s1) : (S.cmd || S.pre) && !ok.SAFE2 ? M.nomSafe(s2) : cmd.STRE ? "STRE" : cmd.STRI ? "STRI" : cmd.OPEN ? "OPEN" : cmd.CLS ? "CLS" : cmd.PED ? "PED" : cmd.TIME || cmd.TIMP ? "TIME" : "";
-        S.diag = dg;
+        S.diag = dg; S.dir = S.cmd || 0; /* pour l'état affiché au-dessus du portail */
         S.prec = Object.assign({}, cmd, { nPR1: radio.PR1, nPR2: radio.PR2 });
       },
       nomSafe: t => [0, 1].includes(t) ? "PHOT" : [2, 3].includes(t) ? "PHOP" : [4, 5].includes(t) ? "PHCL" : [9, 10, 11].includes(t) ? "BARO" : [12, 13, 14].includes(t) ? "BARC" : "BAR",
@@ -177,7 +177,7 @@
           g.push(`<rect x="${x0}" y="${y0}" width="${x1 - x0}" height="${y1 - y0}" rx="3" fill="#3fae5a" stroke="#1f7a36"/>`);
           p.forEach(q => { g.push(`<rect x="${q.x - 7}" y="${q.y - 7}" width="14" height="14" rx="2" fill="#d9efe0" stroke="#1f7a36"/><circle class="cabb" data-b="b:${q.n}" cx="${q.x}" cy="${q.y}" r="4" fill="#8f9a95"/>`);
             if (k.haut) { T(q.x, q.y - 22, q.n, 'class="cabt" text-anchor="middle" font-size="9" font-weight="800" fill="#fff"'); T(q.x, q.y - 13, q.lab, 'class="cabt" text-anchor="middle" font-size="6" fill="#cfe3ff"'); }
-            else { T(q.x, q.y + 20, q.n, 'class="cabt" text-anchor="middle" font-size="9" font-weight="800" fill="#fff"'); T(q.x, q.y + 29, q.lab, 'class="cabt" text-anchor="middle" font-size="6" fill="#cfe3ff"'); } });
+            else { T(q.x, q.y + 20, q.n, 'class="cabt" text-anchor="middle" font-size="9" font-weight="800" fill="#fff"'); T(q.x, q.y + 29, q.lab, 'class="cabt" text-anchor="middle" font-size="5" fill="#cfe3ff"'); } });
           if (k.titre) T((x0 + x1) / 2, k.haut ? y0 - 26 : y1 + 30, k.titre, 'class="cabt" text-anchor="middle" font-size="6.5" fill="#a8c8f0"'); });
         g.push(`<g id="cabaff"></g>`);
         const [ax, ay] = c.aff;
