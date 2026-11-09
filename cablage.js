@@ -76,8 +76,9 @@
     pont: { nom: "Fil de pont", sous: "entre deux bornes", ic: "〰", fil: true }
   };
   const BIBLIO_R = ["cell", "pp", "cle", "digi", "bnf", "b8k", "stop", "lam", "voy", "oro", "sec", "lum", "radio", "pont"];
-  const COULEURS = [["#e5484d", "rouge"], ["#1c1c1c", "noir"], ["#3e7bfa", "bleu"], ["#6fd0ff", "bleu ciel"], ["#f5f5f5", "blanc"], ["#f0b429", "jaune"], ["#ff8a1f", "orange"], ["#2fbf71", "vert"], ["#8b5a2b", "marron"], ["#8b8b8b", "gris"], ["#a46bff", "violet"], ["#ff7eb6", "rose"]];
-  const FONCE = c => { const n = parseInt(String(c).slice(1), 16); return ((n >> 16) * 299 + ((n >> 8) & 255) * 587 + (n & 255) * 114) / 1000 < 60; };
+  const COULEURS = [["#e5484d", "rouge"], ["#1c1c1c", "noir"], ["#3e7bfa", "bleu"], ["#6fd0ff", "bleu ciel"], ["#f5f5f5", "blanc"], ["#f0b429", "jaune"], ["#ff8a1f", "orange"], ["#2fbf71", "vert"], ["#8b5a2b", "marron"], ["#8b8b8b", "gris"], ["#a46bff", "violet"], ["#ff7eb6", "rose"], ["vj", "vert/jaune (terre)"]];
+  const TRAIT = c => c === "vj" ? "url(#cabvj)" : c;
+  const FONCE = c => { if (!/^#[0-9a-f]{6}$/i.test(c)) return false; const n = parseInt(String(c).slice(1), 16); return ((n >> 16) * 299 + ((n >> 8) & 255) * 587 + (n & 255) * 114) / 1000 < 60; };
   let BIBLIO = BIBLIO_R;
   const largeur = t => Math.max(92, ACC[t].b.length * 24 + 20);
 
@@ -106,7 +107,7 @@
       if (!x || !Array.isArray(x.acc) || !Array.isArray(x.fils)) return null;
       const acc = x.acc.filter(a => a && /^a\d{1,5}$/.test(a.id) && ACC[a.t] && !ACC[a.t].paire && !ACC[a.t].fil && Number.isFinite(a.x) && Number.isFinite(a.y)).map(a => ({ id: a.id, t: a.t, x: Math.round(a.x), y: Math.round(a.y), paire: Number.isInteger(a.paire) ? a.paire : undefined, num: Number.isInteger(a.num) ? a.num : undefined }));
       const ok = k => { if (typeof k !== "string") return false; if (BORNES[k]) return true; const i = k.indexOf(":"), a = acc.find(x => x.id === k.slice(0, i)); return !!(a && ACC[a.t].b && ACC[a.t].b.some(b => b[0] === k.slice(i + 1))); };
-      const fils = x.fils.filter(w => w && /^w\d{1,5}$/.test(w.id) && ok(w.a) && ok(w.b) && /^#[0-9a-f]{6}$/i.test(w.c)).map(w => ({ id: w.id, a: w.a, b: w.b, c: w.c, usine: w.usine ? 1 : undefined, p: Array.isArray(w.p) && w.p.length === 2 && w.p.every(Number.isFinite) ? [Math.max(0, Math.min(W, Math.round(w.p[0]))), Math.max(0, Math.min(H, Math.round(w.p[1])))] : undefined }));
+      const fils = x.fils.filter(w => w && /^w\d{1,5}$/.test(w.id) && ok(w.a) && ok(w.b) && (/^#[0-9a-f]{6}$/i.test(w.c) || w.c === "vj")).map(w => ({ id: w.id, a: w.a, b: w.b, c: w.c, usine: w.usine ? 1 : undefined, p: Array.isArray(w.p) && w.p.length === 2 && w.p.every(Number.isFinite) ? [Math.max(0, Math.min(W, Math.round(w.p[0]))), Math.max(0, Math.min(H, Math.round(w.p[1])))] : undefined }));
       const params = {}; Object.keys(x.params || {}).forEach(k => { if ((ITEMS[k] && /^[0-9A-Za-z]{2}$/.test(x.params[k])) || (M && /^(A\d{1,2}|B\d|S[1-4]\d{1,2}|JP1|ACDC)$/.test(k) && /^(ON|OFF|AC|DC)$/.test(x.params[k]))) params[k] = x.params[k]; });
       return { n: Math.max(1, parseInt(x.n, 10) || 1, ...acc.map(a => +a.id.slice(1) + 1), ...fils.map(w => +w.id.slice(1) + 1)), acc, fils, params };
     } catch (e) { return null; }
@@ -529,10 +530,10 @@
   const hits = () => toutesBornes().map(k => { const q = posB(k); return q ? `<circle class="cabhit" data-b="${k}" cx="${q[0]}" cy="${q[1]}" r="11" fill="transparent"/>` : ""; }).join("");
   function rendre() {
     const sv = $("#cabsvg"); if (!sv) return;
-    const fils = I.fils.map(w => { const d = chemin(w.a, w.b, w.p); return `<path class="cabwh" data-w="${w.id}" id="cwh-${w.id}" d="${d}"/><path class="cabw${S.selFil === w.id ? " sel" : ""}${FONCE(w.c) ? " fonce" : ""}" id="cw-${w.id}" data-w="${w.id}" d="${d}" stroke="${w.c}" />`; }).join("");
+    const fils = I.fils.map(w => { const d = chemin(w.a, w.b, w.p); return `<path class="cabwh" data-w="${w.id}" id="cwh-${w.id}" d="${d}"/><path class="cabw${S.selFil === w.id ? " sel" : ""}${FONCE(w.c) ? " fonce" : ""}" id="cw-${w.id}" data-w="${w.id}" d="${d}" stroke="${TRAIT(w.c)}" />`; }).join("");
     const faisceaux = [...new Set(I.acc.filter(a => a.t === "tx" || a.t === "txc").map(a => a.paire))].map(p => { const t = I.acc.find(a => (a.t === "tx" || a.t === "txc") && a.paire === p), r = I.acc.find(a => (a.t === "rx" || a.t === "rxc") && a.paire === p); if (!t || !r) return ""; return `<line id="cabf-${p}" x1="${t.x + largeur("tx")}" y1="${t.y + 20}" x2="${r.x}" y2="${r.y + 20}" stroke-width="2"/>`; }).join("");
     sv.innerHTML = `<defs><pattern id="cabgr" width="13" height="13" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".9" fill="#2a2a2a"/></pattern></defs><rect width="${W}" height="${H}" fill="url(#cabgr)"/>` +
-      (M && M.portail ? M.portail(api()) : dessinPortail()) + dessinCarte() + faisceaux + I.acc.filter(a => !ACC[a.t].enfiche).map(dessinAcc).join("") + `<g id="cabfils" class="${S.estompe ? "estompe" : ""}" fill="none" stroke-width="3" stroke-linecap="round">${fils}</g><g id="cabhits">${hits()}</g><g id="cabsel"></g><g id="cabmm"></g>`;
+      (M && M.portail ? M.portail(api()) : dessinPortail()) + dessinCarte() + faisceaux + I.acc.filter(a => !ACC[a.t].enfiche).map(dessinAcc).join("") + `<defs><pattern id="cabvj" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="10" height="10" fill="#2fbf71"/><rect width="5" height="10" fill="#f2d000"/></pattern></defs><g id="cabfils" class="${S.estompe ? "estompe" : ""}" fill="none" stroke-width="3" stroke-linecap="round">${fils}</g><g id="cabhits">${hits()}</g><g id="cabsel"></g><g id="cabmm"></g>`;
     maj(); panneau();
   }
   /* afficheur : état des commandes / sécurités (§ 9.2), mode TEST, codes */
@@ -642,7 +643,7 @@
     if (S && I) { I.acc.forEach(a => { const e = S.etat[a.id]; if (e && ["pp", "bnf", "b8k"].includes(a.t)) e.on = false; if (e && a.t === "cle") e.g = e.d = false; }); S.radio = {}; } /* un appui en cours ne reste pas coincé */
     const radio = !M && I.acc.some(a => a.t === "radio");
     if (S.mode === "cabler") {
-      el.innerHTML = `<div class="cabcoul">${COULEURS.map(([c, n]) => `<button class="cabc${S.couleur === c ? " on" : ""}" style="--c:${c}" aria-label="Fil ${n}" title="${n}" onclick="CAB.couleur('${c}')"></button>`).join("")}</div>
+      el.innerHTML = `<div class="cabcoul">${COULEURS.map(([c, n]) => `<button class="cabc${S.couleur === c ? " on" : ""}" style="--c:${c === "vj" ? "repeating-linear-gradient(45deg,#2fbf71 0 6px,#f2d000 6px 12px)" : c}" aria-label="Fil ${n}" title="${n}" onclick="CAB.couleur('${c}')"></button>`).join("")}</div>
         <h4 class="cabh">Bibliothèque d'accessoires</h4><div class="cablib">${BIBLIO.map(t => `<button class="cabchip" onclick="CAB.poser('${t}')"><span>${ACC[t].ic}</span>${esc(ACC[t].nom)}<small>${esc(ACC[t].sous)}</small></button>`).join("")}</div>
         <div class="sga"><button class="mini" onclick="CAB.missions()">🎯 Missions</button><button class="mini" onclick="CAB.parametres()">⚙ Paramètres</button></div>`;
     } else {
@@ -683,7 +684,7 @@
       if (w) w.scrollTop += v; else window.scrollBy(0, v);
       const sv = $("#cabsvg"), g = $("#cabsel"), p0 = posB(tir.k); if (!sv || !g || !p0) return;
       const r = sv.getBoundingClientRect(), x = Z.x + (tir.dx - r.left) * Z.w / r.width, yy = Z.y + (tir.dy - r.top) * Z.h / r.height;
-      g.innerHTML = `<path d="M${p0[0]} ${p0[1]} L${x} ${yy}" stroke="${S.couleur}" stroke-width="3" stroke-dasharray="5 4" fill="none" stroke-linecap="round"${FONCE(S.couleur) ? ' class="fonce"' : ""}/><circle cx="${x}" cy="${yy}" r="6" fill="none" stroke="${S.couleur}" stroke-width="2"/>`;
+      g.innerHTML = `<path d="M${p0[0]} ${p0[1]} L${x} ${yy}" stroke="${TRAIT(S.couleur)}" stroke-width="3" stroke-dasharray="5 4" fill="none" stroke-linecap="round"${FONCE(S.couleur) ? ' class="fonce"' : ""}/><circle cx="${x}" cy="${yy}" r="6" fill="none" stroke="${TRAIT(S.couleur)}" stroke-width="2"/>`;
     }, 30);
   }
   function brancherSvg() {
@@ -723,7 +724,7 @@
     sv.onpointermove = e => {
       if (tirFil) { if (pince) { tirFil.w.p = tirFil.p0; tirFil = null; rendre(); return; } if (Math.abs(e.clientX - tirFil.cx) + Math.abs(e.clientY - tirFil.cy) > 8) tirFil.bouge = true; if (tirFil.bouge) { const [x, y] = pt(e), w = tirFil.w; w.p = [Math.round(Math.max(0, Math.min(W, x))), Math.round(Math.max(0, Math.min(H, y)))]; const d = chemin(w.a, w.b, w.p); ["cw-", "cwh-"].forEach(k => { const p = document.getElementById(k + w.id); if (p) p.setAttribute("d", d); }); } return; }
       if (tir) { tir.dx = e.clientX; tir.dy = e.clientY; }
-      if (tir) { if (pince) { tir = null; S.sel = null; const gs = $("#cabsel"); if (gs) gs.innerHTML = ""; dessinSondes(); return; } if (Math.abs(e.clientX - tir.cx) + Math.abs(e.clientY - tir.cy) > 8) tir.bouge = true; if (tir.bouge) { const p0 = posB(tir.k), [x, y] = pt(e), g = $("#cabsel"); if (p0 && g) { g.innerHTML = `<path d="M${p0[0]} ${p0[1]} L${x} ${y}" stroke="${S.couleur}" stroke-width="3" stroke-dasharray="5 4" fill="none" stroke-linecap="round"${FONCE(S.couleur) ? ' class="fonce"' : ""}/><circle cx="${x}" cy="${y}" r="6" fill="none" stroke="${S.couleur}" stroke-width="2"/>`; } } return; }
+      if (tir) { if (pince) { tir = null; S.sel = null; const gs = $("#cabsel"); if (gs) gs.innerHTML = ""; dessinSondes(); return; } if (Math.abs(e.clientX - tir.cx) + Math.abs(e.clientY - tir.cy) > 8) tir.bouge = true; if (tir.bouge) { const p0 = posB(tir.k), [x, y] = pt(e), g = $("#cabsel"); if (p0 && g) { g.innerHTML = `<path d="M${p0[0]} ${p0[1]} L${x} ${y}" stroke="${TRAIT(S.couleur)}" stroke-width="3" stroke-dasharray="5 4" fill="none" stroke-linecap="round"${FONCE(S.couleur) ? ' class="fonce"' : ""}/><circle cx="${x}" cy="${y}" r="6" fill="none" stroke="${TRAIT(S.couleur)}" stroke-width="2"/>`; } } return; }
       if (!drag || pince) return; const [x, y] = pt(e); const nx = Math.max(0, Math.min(W - largeur(drag.a.t), x - drag.dx)), ny = Math.max(70, Math.min(DY - 58, y - drag.dy)); if (Math.abs(nx - drag.a.x) + Math.abs(ny - drag.a.y) > 2) drag.bouge = true; drag.a.x = Math.round(nx); drag.a.y = Math.round(ny); const g = sv.querySelector(`.caba[data-a="${drag.a.id}"]`); if (g) g.setAttribute("transform", `translate(${drag.a.x} ${drag.a.y})`); I.fils.forEach(w => { if (w.a.startsWith(drag.a.id + ":") || w.b.startsWith(drag.a.id + ":")) { const d = chemin(w.a, w.b, w.p); ["cw-", "cwh-"].forEach(k => { const p = document.getElementById(k + w.id); if (p) p.setAttribute("d", d); }); } }); sv.querySelectorAll(`#cabhits [data-b^="${drag.a.id}:"]`).forEach(c => { const q = posB(c.dataset.b); if (q) { c.setAttribute("cx", q[0]); c.setAttribute("cy", q[1]); } }); };
     sv.onpointerup = e => {
       if (tirFil) { const f = tirFil; tirFil = null; if (f.bouge) { sauver(); rendre(); } else if (S.mode === "cabler") { S.selFil = f.w.id; S.selAcc = null; S.sel = null; rendre(); } else { S.msgU = "Fil : " + esc(nomB(f.w.a)) + " → " + esc(nomB(f.w.b)) + ". Glissez-le pour l'écarter."; maj(); } return; }

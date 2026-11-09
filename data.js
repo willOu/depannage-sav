@@ -193,7 +193,7 @@ const NOTICES = {
 
 const CHANGELOG = [
   { v: "2.42", date: "2026-11-09", titre: "Plus de couleurs de fils dans l'atelier", items: [
-    "Atelier : nouvelles couleurs de fils noir, bleu ciel, orange et rose (12 couleurs au total)",
+    "Atelier : nouvelles couleurs de fils noir, bleu ciel, orange, rose et vert/jaune pour la terre (13 couleurs au total)",
     "Atelier : le fil noir est entouré d'un léger liseré clair pour rester visible sur le fond sombre du schéma"
   ] },
   { v: "2.41", date: "2026-11-09", titre: "Corrections de l'atelier et du quiz", items: [
