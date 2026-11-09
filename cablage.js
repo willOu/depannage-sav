@@ -33,7 +33,7 @@
     coms: ["12", "17", "19", "21", "23", "26"], batt: true, alim: { lab: ["+", "−"], nom: "Alimentation de la carte + / − (transformateur)", carte: "Alim carte" },
     facc: { lab: "F1 3,15A", nom: "Fusible F1 3,15 A (accessoires)", court: "F1" }, fmot: { lab: "F2 15A", nom: "Fusible F2 15 A (circuit de puissance des moteurs)", code: "notr" },
     params: ["70", "60", "A2", "21", "A4", "A5", "A6", "A7", "A8", "15", "25", "26", "27", "50", "51", "52", "53", "54", "55", "57", "73", "76", "77", "78", "18", "79", "80"],
-    notes: "Deux vantaux : le MOTEUR 2 part après le retard 25 à l'ouverture, le MOTEUR 1 après le retard 26 à la fermeture. Ouverture partielle : vantail 1 seul, à la valeur de 15 (un seul vantail, 70 01 : 50 % d'usine d'après la notice). Pas de refermeture automatique depuis l'ouverture partielle (la notice ne la décrit que portail complètement ouvert, A2). La notice écrit « 27 (ISEL) » dans le tableau des bornes (p. 104) mais le schéma fig. 2 et la carte donnent 28 (ISEL) et 27 (ST) : l'atelier suit le schéma. Non simulés en plus : électroserrure (22-21, 28, 29, 38), veille « low power » (L1), batteries, ralentissements, couple, détection d'obstacle ampèremétrique, essai des photocellules (58, 59, A8 02 à 04), fermeture garantie (81, 82)." };
+    notes: "Deux vantaux : le MOTEUR 2 part après le retard 25 à l'ouverture, le MOTEUR 1 après le retard 26 à la fermeture. Ouverture partielle : vantail 1 seul, à la valeur de 15 (un seul vantail, 70 01 : 50 % d'usine d'après la notice). Après l'ouverture partielle, la refermeture automatique (A2) utilise le temps 21 : la notice ne la décrit qu'à partir du portail complètement ouvert (A2), mais le paramètre 22 indique qu'elle s'active après PED. Paramètre 15 : la fiche donne 99 d'usine ; pour un seul vantail la notice indique 50 %, l'atelier utilise 50 % tant que 15 n'est pas réglé (le tableau des paramètres affiche quand même 99). La notice écrit « 27 (ISEL) » dans le tableau des bornes (p. 104) mais le schéma fig. 2 et la carte donnent 28 (ISEL) et 27 (ST) : l'atelier suit le schéma. Non simulés en plus : électroserrure (22-21, 28, 29, 38), veille « low power » (L1), batteries, ralentissements, couple, détection d'obstacle ampèremétrique, essai des photocellules (58, 59, A8 02 à 04), fermeture garantie (81, 82), fonction d'ouverture avec exclusion de la fermeture automatique (22), récupération de position après une coupure de courant." };
   CFG["casit-eq2009"] = { modele: "eq2009", fig: "schéma p. 2 de la notice EQ2009 R1.0", coms: ["14", "17", "22", "28", "33", "35"] };
   CFG["casit-keqs08"] = { modele: "keqs08", fig: "schéma § 2.1 p. 4 de la notice KEQS08-R", coms: ["9", "10", "20"] };
   const CARTES = CFG;
@@ -61,7 +61,7 @@
     USINE = { mot: { nom: "Moteur X · Y · Z", panne: "Débrancher le moteur", code: "Mot" }, enc: { nom: "Encodeur (ENC)", panne: "Débrancher l'encodeur", code: "EnE1" }, fc: { nom: "Fins de course (FC)" },
       sb: { nom: "Déverrouillage (SB)", panne: "Ouvrir la poignée de déverrouillage", code: "StoP" }, sec: { nom: F.alim.nom, panne: F.alim.panne, code: F.alim.code },
       fmot: { nom: F.fmot.nom, panne: F.fmot.code ? "Griller " + F.fmot.lab.split(" ")[0] : null, code: F.fmot.code }, facc: { nom: F.facc.nom },
-      batt: { nom: "Batteries (B71/BCHP)" }, cl: { nom: "Chargeur B72/CL" }, wifi: { nom: "Wi-Fi B74/BCONNECT" }, rec: { nom: "Récepteur radio" } };
+      batt: { nom: F.deux ? "Batteries (B71/BC/INT ou B71/BC/EXT)" : "Batteries (B71/BCHP)" }, cl: { nom: "Chargeur B72/CL" }, wifi: { nom: "Wi-Fi B74/BCONNECT" }, rec: { nom: "Récepteur radio" } };
   }
 
   /* ---------- bibliothèque d'accessoires (génériques) ---------- */
@@ -291,7 +291,7 @@
     if (v === "01" || v === "03") return r === 0; if (v === "02" || v === "04") return r > 6500 && r < 10000; if (v === "12" || v === "14") return r > 3300 && r < 5000; return null;
   }
   function bouger(d, cible, raison) {
-    if (d > 0 && S.pos >= cible) return false; if (d < 0 && S.pos <= 0) return false;
+    if (d > 0 && atteint(cible)) return false; if (d < 0 && S.pos <= 0) return false;
     if ((S.pre && S.preDir === d) || S.dir === d) { S.cible = cible; return true; } /* déjà en route (ou en préclignotement) dans ce sens */
     if (d > 0 && S.pos === 0 && S.lu) { /* portail fermé, cellule occultée : 52 / 55 = 00 → ouverture impossible */
       const r = [["ft1", "FT1", "52", "50", "51"], ["ft2", "FT2", "55", "53", "54"]].find(([k, , p, a, b]) => !S.lu[k] && par(p) === "00" && !(par(a) === "00" && par(b) === "00"));
@@ -308,12 +308,14 @@
   function stopper(raison, src) { if (S.dir || S.pre) { S.arret = S.dir || S.preDir; S.dir = 0; S.pre = 0; finManoeuvre(); if (raison) dit(raison, src); } }
   function finManoeuvre() { const t = par("79"); if (par(F.pCor || "20") === "00" && t !== "00" && t !== "01" && t !== "02") S.corT = duree("79") * 10; }
   const ouvrir = r => bouger(1, 100, r), fermer = r => bouger(-1, 0, r);
+  /* 2 vantaux : l'ouverture partielle se mesure sur le vantail 1 */
+  const atteint = cible => F.deux && cible < 100 ? ((S.v || {})[1] || 0) >= cible : S.pos >= cible;
   function pasAPas(mode, partiel) {
-    const cible = partiel ? pn("15") : 100;
+    const cible = partiel ? (F.deux ? p15() : pn("15")) : 100;
     const bougeant = S.dir || S.pre, sens = S.dir || S.preDir;
     if (mode === "03") { if (bougeant) { sens > 0 ? fermer() : ouvrir(); } else S.pos > 0 ? fermer() : bouger(1, cible); return; }
     if (mode === "04") { if (bougeant) { sens > 0 ? fermer() : stopper(); } else if (S.arret < 0 || S.pos === 0) bouger(1, cible); else fermer(); return; }
-    if (mode === "01" || mode === "02") { if (bougeant && sens > 0) return; if (bougeant && sens < 0) { bouger(1, cible); return; } if (S.pos >= cible) { if (mode === "01") S.pause = 0; return; } bouger(1, cible); return; }
+    if (mode === "01" || mode === "02") { if (bougeant && sens > 0) return; if (bougeant && sens < 0) { bouger(1, cible); return; } if (atteint(cible)) { if (mode === "01") S.pause = 0; return; } bouger(1, cible); return; }
     /* 00 : ouvre – stop – ferme – stop */
     if (bougeant) stopper(); else if (S.pos === 0 || S.arret < 0) bouger(1, cible); else fermer();
   }
@@ -365,7 +367,7 @@
     if (S.secteur && R.def.ccAC && !S.ccAC) { S.ccAC = true; dit("Court-circuit sur l'arrivée 230 V~ : la protection de l'installation coupe (non dessinée).", ""); }
     if (!R.def.ccAC) S.ccAC = false;
     if (M) { M.tick(api(), R); I.acc.forEach(a => { const e = S.etat[a.id]; if (e && e.imp) { e.imp--; if (!e.imp) e.on = false; } }); maj(); return; }
-    if (F.deux && S.secteur && !S.hs && R.def.ccMot && !S.prot) { S.prot = 1; S.dir = 0; S.pre = 0; dit("Court-circuit sur une sortie moteur (fils X Y Z entre eux ou sur la très basse tension) : surintensité dans l'onduleur, code PrOt.", "Fiche : PrOt, surintensité dans l'onduleur (deux appuis sur TEST ou 3 commandes de suite)", true); }
+    if (F.deux && S.secteur && !S.hs && R.def.ccMot && !S.prot) { S.prot = 1; S.protC = 0; S.protN = 0; S.dir = 0; S.pre = 0; dit("Court-circuit sur une sortie moteur (fils X Y Z entre eux ou sur la très basse tension) : surintensité dans l'onduleur, code PrOt (réaction déduite : la notice ne décrit pas ce câblage). Corrigez les fils, puis deux appuis sur TEST.", "Fiche : PrOt, surintensité dans l'onduleur (deux appuis sur TEST ou 3 commandes de suite)", true); }
     const mq = motManque(R);
     const actif = S.secteur && !S.hs && !panneBloque() && !S.prot && !mq;
     if (mq && S.secteur && !S.hs && (S.dir || S.pre)) { S.dir = 0; S.pre = 0; }
@@ -384,7 +386,8 @@
       if (f && ["07", "08", "09", "10"].includes(v)) dit("Paramètre " + p + " = " + v + " (commande avec confirmation par une 2e touche) : non simulé.", "Paramètre " + p);
       cmd[k] = !!radio[k]; });
     const front = k => cmd[k] && !S.prec[k]; S.cmd = cmd;
-    if (S.prot && ["AP", "CH", "PP", "PED"].some(front)) { S.protC = (S.protC || 0) + 1; if (S.protC >= 3 && !R.def.ccMot) { S.prot = 0; S.protC = 0; dit("PrOt effacé (trois commandes de suite).", "Fiche : PrOt"); } }
+    if (S.prot && R.def.ccMot) S.protC = 0;
+    if (S.prot && !R.def.ccMot && ["AP", "CH", "PP", "PED"].some(front)) { S.protC = (S.protC || 0) + 1; if (S.protC >= 3 && !R.def.ccMot) { S.prot = 0; S.protC = 0; dit("PrOt effacé (trois commandes de suite).", "Fiche : PrOt"); } }
     if (actif) {
       if (S.pre) { S.pre--; if (!S.pre) S.dir = S.preDir; }
       const ignore = !st17 || !sb || (par("80") === "00" && cmd.ORO);
@@ -429,7 +432,7 @@
         if ((d > 0 && invOuv.includes(v)) || (d < 0 && invFer.includes(v))) { S.dir = 0; S.inv = duree("27") * 10; d > 0 ? fermer() : ouvrir(); S.invDir = -d; dit(nom + " actionné pendant " + (d > 0 ? "l'ouverture" : "la fermeture") + " : inversion pendant " + duree("27") + " s (paramètre 27), puis arrêt.", "Paramètre " + code + " = " + v + " : " + pdesc(code, v)); }
         else if (!S["nd" + code]) { S["nd" + code] = 1; dit(nom + " actionné pendant " + (d > 0 ? "l'ouverture" : "la fermeture") + " : la notice ne décrit pas d'action dans ce sens avec " + code + " = " + v + ". Rien n'est simulé.", "Paramètre " + code); }
       };
-      bord(c1, "Bord sensible COS1", "73"); bord(c2, "Bord sensible COS2", "74");
+      bord(c1, F.isel ? "Bord sensible (ISEL)" : "Bord sensible COS1", "73"); bord(c2, "Bord sensible COS2", "74");
       if (c1 !== false) S.nd73 = 0; if (c2 !== false) S.nd74 = 0;
       if (S.inv) { S.inv--; if (!S.inv) stopper(); }
       /* mouvement : course complète en 10 s environ (vitesse indicative) */
@@ -438,12 +441,12 @@
       else if (S.dir < 0) { S.pos = Math.max(0, S.pos - 1); if (S.pos === 0) { S.dir = 0; S.arret = null; finManoeuvre(); S.tentatives = 0; } }
       /* refermeture automatique (A2 différent de 00) : 21 depuis complètement ouvert, 16 depuis l'ouverture partielle */
       const a2 = par("A2"), copro = ["01", "02"].includes(par("A4"));
-      if (!S.dir && !S.pre && !S.att && S.pos > 0 && (S.pos >= 100 || ITEMS["16"]) && S.arret === null && (a2 !== "00" || copro) && !(cmd.ORO) && st17 && sb) {
+      if (!S.dir && !S.pre && !S.att && S.pos > 0 && (S.pos >= 100 || ITEMS["16"] || F.deux) && S.arret === null && (a2 !== "00" || copro) && !(cmd.ORO) && st17 && sb) {
         const lim = a2 === "99" ? 1e9 : Math.max(1, pn("A2"));
         if (S.tentatives < lim) {
-          const tps = (S.pos >= 100 ? duree("21") : duree("16")) * 10;
+          const tps = (S.pos >= 100 || F.deux ? duree("21") : duree("16")) * 10;
           if ((!ft1 && par("51") !== "00") || (!ft2 && par("54") !== "00")) S.pause = 0; /* les photocellules relancent le décompte */
-          S.pause++; if (S.pause >= tps) fermer("Refermeture automatique après " + Math.round(tps / 10) + " s (paramètres A2 et " + (S.pos >= 100 ? "21" : "16") + ").");
+          S.pause++; if (S.pause >= tps) fermer("Refermeture automatique après " + Math.round(tps / 10) + " s (paramètres A2 et " + (S.pos >= 100 || F.deux ? "21" : "16") + ").");
         }
       } else if (S.dir) S.pause = 0;
     }
@@ -497,6 +500,7 @@
       const repos = avec(() => {}, R => ({ e: R.ent[entree], act: actives(R), alim: R.alim[a.id] }));
       const appui = avec(() => { const e = S.etat[a.id] = S.etat[a.id] || {}; if (act === "imp") { e.on = true; } else e[act] = true; }, R => ({ e: R.ent[entree], act: actives(R), alim: R.alim[a.id] }));
       if (alim && !repos.alim) return "Le digicode n'est pas alimenté : + sur +24V (" + nB("p24") + "), − sur un COM.";
+      if (nf && avec57()) return avec57();
       if (nf) { if (!repos.e) return "Au repos, l'entrée " + entree + " doit être fermée sur COM (contact NF)."; if (appui.e) return "En actionnant l'accessoire, l'entrée " + entree + " reste fermée : il est peut-être court-circuité par un pont."; if (I.fils.some(w => w.usine && w.b === K.st)) return "Le pont d'usine " + nB("cosCom") + "-" + nB("st") + " est encore en place."; return ""; }
       if (repos.act.length) return "Au repos, une commande est déjà active (" + repos.act.join(", ") + ") : contact mal raccordé.";
       if (!appui.e) return "En actionnant l'accessoire, l'entrée " + entree + " ne se ferme pas sur COM : vérifiez le contact et le commun (" + nB("cmdCom") + ").";
@@ -504,7 +508,9 @@
       return "";
     }
   }
+  const avec57 = () => ITEMS["57"] && par("57") !== "00" ? "Paramètre 57 = " + par("57") + " (contacts 8,2 kΩ) : cette mission se fait avec des contacts NF, remettez 57 sur 00." : "";
   function essaiCell() {
+    if (avec57()) return avec57();
     const rx = I.acc.find(a => a.t === "rx"); if (!rx) return "Posez d'abord une paire de cellules.";
     const tx = I.acc.find(a => a.t === "tx" && a.paire === rx.paire);
     const ok = avec(() => { S.etat["p" + rx.paire] = {}; }, R => ({ ft: R.ent.FT1, rx: R.alim[rx.id], tx: R.alim[tx.id] }));
@@ -883,7 +889,7 @@
   function touche(k) {
     if (M) { S.msgU = M.touche(api(), k); maj(); return; }
     if (!S.secteur || S.hs) { S.msgU = "Carte hors tension : l'afficheur et les touches ne répondent pas."; maj(); return; }
-    if (k === "test" && S.prot) { S.protN = (S.protN || 0) + 1; if (S.protN >= 2) { S.protN = 0; if (S.R && S.R.def.ccMot) { S.msgU = "PrOt : le court-circuit est toujours là. Coupez le secteur et corrigez les fils du moteur."; } else { S.prot = 0; S.msgU = "PrOt effacé (deux appuis sur TEST)."; } } else S.msgU = "PrOt : appuyez encore une fois sur TEST pour effacer l'alarme."; maj(); return; }
+    if (k === "test" && S.prot) { S.protN = (S.protN || 0) + 1; if (S.protN >= 2) { S.protN = 0; if (S.R && S.R.def.ccMot) { S.msgU = "PrOt : le court-circuit est toujours là. Corrigez les fils du moteur (secteur coupé), puis deux appuis sur TEST."; } else { S.prot = 0; S.msgU = "PrOt effacé (deux appuis sur TEST)."; } } else S.msgU = "PrOt : appuyez encore une fois sur TEST pour effacer l'alarme."; maj(); return; }
     if (k === "test") { if (S.dir) { stopper("Touche TEST pendant le mouvement : ARRÊT."); return; } enregistrerP(); S.prog = null; S.test = !S.test; S.msgU = S.test ? "Mode TEST (§ 9.3) : à gauche la commande active, à droite la première sécurité en alarme (00 = aucune). Touchez TEST à nouveau pour en sortir." : ""; maj(); return; }
     if (k === "prog") { S.msgU = "PROG lance l'apprentissage de la course" + (F.deux ? " (maintenir 4 s : APP-, puis Auto)" : " (§ 10)") + " : non simulé dans l'atelier."; maj(); return; }
     if (k === "up" || k === "dn") {
@@ -939,7 +945,7 @@
       <div class="cabzone"><svg id="cabsvg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Carte ${esc(C.nom)} et accessoires"></svg>
         <div class="cabzbt"><button onclick="CAB.zoom(1.4)" aria-label="Zoomer">＋</button><button onclick="CAB.zoom(1 / 1.4)" aria-label="Dézoomer">−</button><button onclick="CAB.zoomRaz()" aria-label="Vue entière" id="cabzl">100 %</button><button onclick="CAB.plein()" id="cabplb" aria-label="Plein écran">⛶</button></div></div>
       <div class="cabinfo" id="cabinfo" aria-live="polite"></div><div id="cabpan"></div><div id="cabsheet"></div></div>
-      <p class="hotn">${M ? M.notes : `Simulateur de formation construit d'après la fiche (source : ${esc(C.source)}) : bornier, paramètres, afficheur (§ 9.2), mode TEST (§ 9.3), codes. Disposition des borniers : ${esc(F.fig)}. Accessoires génériques. Vitesse du portail indicative (environ 10 s pour la course). Non simulés : apprentissage de la course et des télécommandes, batteries, fonctionnement MASTER / SLAVE, veille low power, sortie SC en test des photocellules ou battery saving (A8 02 à 04, sortie laissée coupée), commandes radio avec confirmation (76 / 77 = 07 à 10). ${F.deux ? "" : "Refermeture après ouverture partielle (16) appliquée seulement quand A2 est actif. "}Les bornes COM (${F.coms.join(", ")}) sont traitées comme un 0 V commun.${F.notes ? " " + esc(F.notes) : ""}`}</p>`;
+      <p class="hotn">${M ? M.notes : `Simulateur de formation construit d'après la fiche (source : ${esc(C.source)}) : bornier, paramètres, afficheur${F.deux ? "" : " (§ 9.2)"}, mode TEST${F.deux ? "" : " (§ 9.3)"}, codes. Disposition des borniers : ${esc(F.fig)}. Accessoires génériques. Vitesse du portail indicative (environ 10 s pour la course). Non simulés : apprentissage de la course et des télécommandes, batteries, ${F.deux ? "" : "fonctionnement MASTER / SLAVE, "}veille low power, sortie SC en test des photocellules ou battery saving (A8 02 à 04, sortie laissée coupée), commandes radio avec confirmation (76 / 77 = 07 à 10). ${F.deux ? "" : "Refermeture après ouverture partielle (16) appliquée seulement quand A2 est actif. "}Les bornes COM (${F.coms.join(", ")}) sont traitées comme un 0 V commun.${F.notes ? " " + esc(F.notes) : ""}`}</p>`;
     rendre(); brancherSvg(); outils();
     clearInterval(minuterie); minuterie = setInterval(() => { if (location.hash !== "#/cab/" + id) { clearInterval(minuterie); clearTimeout(tEnr); document.body.classList.remove("cabnoscroll"); return; } tick(); }, 100);
   }
@@ -953,7 +959,7 @@
       if (ACC[t].enfiche) { this.radio(); return; }
       if (I.acc.length >= 14) { S.msgU = "Quatorze accessoires maximum."; maj(); return; }
       if (ACC[t].paire) { const p = 1 + Math.max(0, ...I.acc.filter(a => a.paire).map(a => a.paire)); (ACC[t].paire === "c" ? [["txc"], ["rxc"]] : [["tx"], ["rx"]]).forEach(([u]) => { const [x, y] = libre(u); I.acc.push({ id: "a" + (I.n++), t: u, x, y, paire: p }); }); }
-      else { const [x, y] = libre(t), o = { id: "a" + (I.n++), t, x, y }; if (t === "mot" || t === "fdc" || t === "mbl") o.num = 1 + I.acc.filter(a => a.t === t).length; I.acc.push(o); } /* moteurs et fins de course numérotés : 1 = vantail 1 */
+      else { const [x, y] = libre(t), o = { id: "a" + (I.n++), t, x, y }; if (t === "mot" || t === "fdc" || t === "mbl") { let k = 1; while (I.acc.some(a => a.t === t && a.num === k)) k++; o.num = k; } I.acc.push(o); } /* moteurs et fins de course numérotés : 1 = vantail 1 */
       sauver(); rendre();
     },
     radio() { const r = I.acc.find(a => a.t === "radio"); if (r) I.acc = I.acc.filter(a => a !== r); else { if (S.secteur) { S.msgU = "Enfichez le récepteur hors tension (coupez le secteur)."; maj(); return; } I.acc.push({ id: "a" + (I.n++), t: "radio", x: 0, y: 0 }); } S.msgU = ""; sauver(); rendre(); },
