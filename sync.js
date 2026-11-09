@@ -185,6 +185,7 @@
         <button class="srow" onclick="go('#/notices-admin')"><span>📄 Ajouter une notice PDF</span><i>›</i></button>
         <button class="srow" onclick="go('#/astuces')"><span>💡 Astuces terrain${window.astuceNbAttente && astuceNbAttente() ? ` <span class="tb2 pv">${astuceNbAttente()} à valider</span>` : ""}</span><i>›</i></button>
         <button class="srow" onclick="go('#/photos')"><span>📷 Photos des cartes${window.photoNbAttente && photoNbAttente() ? ` <span class="tb2 pv">${photoNbAttente()} à valider</span>` : ""}</span><i>›</i></button>
+        <button class="srow" onclick="go('#/sim/suivi')"><span>🎓 Suivi du simulateur</span><i>›</i></button>
         <button class="srow" onclick="go('#/stats')"><span>📊 Statistiques de consultation</span><i>›</i></button>
         <details class="grp in" id="pubd"><summary>✉️ Publier un message</summary><div class="secb">
         <input id="mt" maxlength="120" placeholder="Titre (ex. Nouvelle notice Came ajoutée)">

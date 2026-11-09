@@ -50,7 +50,7 @@ html{background:var(--bg)}
 .iconbtn{display:grid;place-items:center;background:rgba(255,255,255,.14);border:0;border-radius:10px;min-width:40px;height:40px;padding:0 10px;font-size:15px}
 .back{background:none;border:0;color:#fff;font-size:15px;padding:6px 0;display:none}
 .search{margin-top:10px;position:relative}
-.search input{width:100%;height:46px;border:0;border-radius:12px;padding:0 14px 0 40px;font-size:16px;background:#fff;color:#1d1a19}
+.search input{width:100%;height:46px;border:0;border-radius:12px;padding:0 50px 0 40px;font-size:16px;background:#fff;color:#1d1a19}
 .search svg{position:absolute;left:12px;top:13px;opacity:.55}
 .status{font-size:12.5px;opacity:.95;margin-top:6px;display:flex;align-items:flex-start;gap:7px;cursor:pointer;line-height:1.3}.status .sdot{width:9px;height:9px;border-radius:50%;background:#e07b00;flex:none;margin-top:4px}.status.ok .sdot{background:#5ee08a}
 main{padding:14px 16px calc(env(safe-area-inset-bottom) + 30px);max-width:760px;margin:0 auto}
@@ -388,6 +388,25 @@ html{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 .ast>summary{padding:11px 14px;font-weight:700;cursor:pointer}.ast>summary span{color:var(--muted);font-weight:500}
 .astb{padding:0 14px 12px}.astl{padding:9px 0;border-top:1px solid var(--line)}.astl p{margin:0 0 3px;white-space:pre-wrap}.astl small{color:var(--muted);font-size:12.5px}
 .astn{margin-top:8px}.astn>summary{cursor:pointer;color:var(--brand);font-weight:700;padding:6px 0}.astn textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px;background:var(--bg);color:var(--ink);font:inherit}
+.simc{display:grid;gap:12px;margin:10px 0}@media(min-width:760px){.simc{grid-template-columns:auto 1fr;align-items:start}}
+.simcarte{background:#1f5130;border:2px solid #0f3a20;border-radius:16px;padding:16px;display:grid;gap:14px;justify-items:center;box-shadow:inset 0 0 0 4px rgba(255,255,255,.04)}
+.simaff span{min-width:2.4ch;display:inline-block;text-align:center}.simaff.vite span{animation:mncli .25s steps(1) 4}
+.simk{display:grid;grid-template-columns:repeat(3,64px);gap:10px}.simt{height:52px;border-radius:12px;border:0;border-bottom:4px solid #111;background:#2b2b2b;color:#fff;font:700 15px system-ui;cursor:pointer}.simt:active{transform:translateY(2px);border-bottom-width:2px}
+.siminfo{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;font-size:14.5px}.siminfo h4{margin:6px 0}.siminfo li{margin:4px 0}.siminfo .simder{background:var(--chip);border-radius:8px;padding:2px 6px}
+.simmsg{margin:8px 0 0;padding:8px 10px;border-radius:10px;background:var(--chip)}
+.simcarte.dip{justify-items:stretch}.simbanc{display:grid;gap:6px;color:#e8f5e9}.simbanc small{opacity:.7;font-size:11px}
+.simdips{display:flex;flex-wrap:wrap;gap:6px;background:#c62828;border-radius:8px;padding:8px}.simdip{width:28px;height:58px;border:0;border-radius:4px;background:#f2f2f2;position:relative;cursor:pointer;padding:0}
+.simdip i{position:absolute;left:4px;right:4px;height:22px;bottom:6px;background:#333;border-radius:3px;transition:bottom .12s}.simdip.on i{bottom:30px}.simdip span{position:absolute;top:-1px;left:0;right:0;font:700 9px system-ui;color:#c62828}
+.simex{margin:6px 0}.simq{font-size:17px;font-weight:600}.simok{font-size:17px;font-weight:700;color:#2ea043}
+.qcam{position:absolute;right:4px;top:50%;transform:translateY(-50%);width:42px;height:38px;border:0;border-radius:10px;background:transparent;display:grid;place-items:center;cursor:pointer}.qcam:active{background:rgba(0,0,0,.08)}
+.search input::-webkit-search-cancel-button{display:none}
+.lvov{position:fixed;inset:0;z-index:80;background:#000;color:#fff;display:flex;flex-direction:column}.lvov video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.lvcadre{position:absolute;left:8%;right:8%;top:28%;aspect-ratio:2.4/1;border:3px solid #fff;border-radius:14px;box-shadow:0 0 0 100vmax rgba(0,0,0,.45)}.lvov.trouve .lvcadre{border-color:#3fdc5a}
+.lvhaut{position:absolute;top:max(12px,env(safe-area-inset-top));left:12px;right:12px;display:flex;justify-content:space-between}
+.lvhaut button{width:46px;height:46px;border-radius:23px;border:0;background:rgba(0,0,0,.55);color:#fff;font-size:20px;cursor:pointer}.lvl.on{background:#f5c400;color:#111}
+.lvbas{position:absolute;left:0;right:0;bottom:0;padding:14px 16px max(16px,env(safe-area-inset-bottom));background:linear-gradient(transparent,rgba(0,0,0,.85) 30%);max-height:62%;overflow:auto}
+.lvs{margin:0 0 8px;font-size:17px;font-weight:600}.lvc{font:700 26px ui-monospace,Menlo,monospace;color:#3fdc5a;letter-spacing:2px}.lvo{margin:4px 0;color:#ddd}
+.lvbas .list .row{background:rgba(255,255,255,.95);color:#1d1a19}.lvbas .row small{display:block;color:#666}.lvaide{margin:8px 0 0;font-size:13px;color:#ccc}.lvaide a{color:#fff}
 .mnb{margin:8px 12px 2px}.mnov{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.55);display:flex;align-items:flex-end;justify-content:center}
 .mnsh{width:100%;max-width:640px;max-height:88vh;overflow:auto;background:var(--bg);color:var(--ink);border-radius:18px 18px 0 0;padding:14px 16px 24px;box-sizing:border-box}
 .mnhd{display:flex;gap:10px;align-items:flex-start;justify-content:space-between;position:sticky;top:-14px;background:var(--bg);padding:6px 0 8px;z-index:1}.mnhd .pc{font-family:ui-monospace,Menlo,monospace}
@@ -439,6 +458,7 @@ html{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
   <div class="search">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
     <input id="q" type="search" inputmode="search" autocomplete="off" placeholder="Code, modèle, borne, symptôme…" aria-label="Rechercher">
+    <button class="qcam" id="qcam" type="button" title="Lire l'afficheur avec la caméra" aria-label="Lire le code de l'afficheur avec la caméra" onclick="window.liveOuvrir && liveOuvrir()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1d1a19" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg></button>
   </div>
   <div class="status" id="status"></div>
 </header>
@@ -462,6 +482,8 @@ html{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 <script src="notes.js"></script> <!-- NOTES -->
 <script src="photo.js"></script> <!-- PHOTOS -->
 <script src="menu.js"></script> <!-- MENU -->
+<script src="live.js"></script> <!-- LIVE -->
+<script src="sim.js"></script> <!-- SIM -->
 <script src="moteurs.js"></script> <!-- MOTEURS -->
 <script src="calc.js"></script> <!-- CALC -->
 <script src="sympt.js"></script> <!-- SYMPT -->
@@ -544,6 +566,7 @@ function viewHome(){
   h += `<button class="dbtn" onclick="go('#/a')">Accessoires : gyrophares, radio, photocellules…<small>${ACCESSOIRES.length} fiche${ACCESSOIRES.length>1?"s":""} par famille · rubrique en construction</small></button>`; /* ACC */
   h += `<button class="dbtn" onclick="go('#/calc/moteur')">Choisir une motorisation<small>selon le poids et la longueur du portail · Roger en premier · lien vers la carte de commande</small></button>`; /* CALC moteur */
   h += `<button class="dbtn" onclick="go('#/calc')">Calculs rapides : chute de tension, choix du moteur, conso 24 V<small>formules et hypothèses affichées</small></button>`; /* CALC */
+  h += `<button class="dbtn" onclick="go('#/sim')">Simulateur de carte : s'entraîner sans portail<small>afficheur et touches Roger, dip-switch Casit · exercices corrigés</small></button>`; /* SIM */
   h += `<button class="dbtn" onclick="go('#/quiz')">Quiz de formation : codes erreur et borniers<small><b>EN TEST</b> · 10 questions tirées des fiches</small></button>`; /* QUIZ */
   h += `<button class="dbtn" onclick="go('#/cmp')">Comparateur de borniers : remplacer une carte par une autre<small>bornes des deux cartes rangées par fonction · aide indicative</small></button>`; /* CMP */
   h += `<button class="dbtn" onclick="go('#/scan')">Dépannage par photo : l'étiquette ou l'afficheur de la carte<small><b>BÊTA</b> · photographiez la plaque pour trouver la fiche, ou l'afficheur pour ouvrir le code d'erreur</small></button>`; /* SCAN */
@@ -955,6 +978,7 @@ function route(){
   if (p[0] === "astuces") return viewAstuces(p[1]); /* AST */
   if (p[0] === "notices-admin") return viewNoticesAdmin(); /* PDF ajoutées */
   if (p[0] === "photos") return viewPhotosAdmin(p[1]); /* PHOTOS */
+  if (p[0] === "sim") return viewSim(p[1]); /* SIM */
   if (p[0] === "calc") return viewCalc(p[1]); /* CALC */
   if (p[0] === "cmp") return viewCmp(p[1] && p[1] !== "-" ? decodeURIComponent(p[1]) : "", p[2] ? decodeURIComponent(p[2]) : ""); /* CMP */
   if (p[0] === "stats") return SYNC.viewStats(p[1]); /* SYNC */
