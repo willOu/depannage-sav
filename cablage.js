@@ -400,7 +400,7 @@
     S.t++;
     const R = circuit(); S.R = R;
     /* défauts électriques */
-    if (M && R.def.d230 && !S.hs && S.secteur) { S.hs = true; S.dir = 0; dit("230 V sur la très basse tension : carte et accessoires 24 V détruits. Le 230 V ne va que sur l'alimentation, le moteur et la lampe (" + M.texte230 + "). Corrigez le câblage, coupez le secteur puis « Remplacer la carte » (Missions).", M.source230, true); }
+    if (M && R.def.d230 && !S.hs && S.secteur) { S.hs = true; S.dir = 0; dit("230 V sur la très basse tension : carte et accessoires 24 V détruits. " + (M.texte230Long || "Le 230 V ne va que sur l'alimentation, le moteur et la lampe (" + M.texte230 + ").") + " Corrigez le câblage, coupez le secteur puis « Remplacer la carte » (Missions).", M.source230, true); }
     if (M && R.def.cc24 && S.f3) { S.f3 = false; dit(M.texteCC, "", true); }
     if (!M && S.secteur && R.def.d230 && !S.hs) { S.hs = true; S.dir = 0; dit("230 V sur la très basse tension : carte et accessoires 24 V détruits. " + (K.cor1 ? "Le 230 V ne se raccorde qu'au contact sec COR (" + nB("cor1") + "-" + nB("cor2") + "), jamais sur les bornes 24 V." : "Aucune borne de cette carte n'accepte le 230 V (alimentation câblée en usine).") + " Corrigez le câblage, coupez le secteur puis « Remplacer la carte » (Missions).", "Bornier : COR = contact libre, 230 V~ 100 W", true); }
     if (!M && S.secteur && R.def.cc24 && S.f3) { S.f3 = false; dit("Court-circuit entre une sortie 24 V et COM : le fusible " + F.facc.court + " (alimentation des accessoires) a grillé. Coupez le secteur, corrigez le câblage et remplacez " + F.facc.court + " (touchez-le sur la carte).", "Fiche : " + F.facc.nom + " ; code FE : fusible " + F.facc.court + " grillé avec fins de course magnétiques", true); }

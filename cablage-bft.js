@@ -28,7 +28,7 @@
     const M = {
       nom: c.nom, fig: c.fig, notes: c.notes,
       K: c.K, coms: c.coms, entrees: c.entrees, ponts: c.ponts,
-      bornes230: ["b:L", "b:N"], texte230: "bornes L et N", source230: SRC,
+      bornes230: ["b:L", "b:N"], texte230: "bornes L et N", texte230Long: "Le 230 V ne va que sur L et N ; le moteur et les sorties de la carte sont en 24 V.", source230: SRC,
       texteCC: "Court-circuit sur l'alimentation des accessoires (24 V) : la sortie est coupée (la notice cite ERF4 « surcharge sur la sortie d'alimentation des auxiliaires »). Coupez le secteur, corrigez le câblage, puis touchez le fusible F3 sur la carte pour rétablir.",
       biblio: ["mdc", "cell", "pp", "cle", "stop", "bnf", "b8k", "lam", "voy", "sec", "pont"],
       radio: c.radio, usine: c.usine,
@@ -65,8 +65,8 @@
         const front = k => cmd[k] && !S.prec[k];
         const hm = pn(A, "hm", 0);
         const ferme = () => S.posM[1] === 0 && S.posM[2] === 0, ouvert = () => S.etat2 === "ouvert" || S.etat2 === "pieton";
-        const lancer = (d, ped, txt) => { if (c.P.type && d && pn(A, "type", 0) === 0) { if (!S.typeNd) { S.typeNd = 1; A.dit("TYPE DE MOTEUR sur 0 : moteurs non actifs, rien ne bouge. Réglez le type de moteur (Paramètres).", "Paramètre TYPE DE MOTEUR (usine 0)"); } return; } S.typeNd = 0; const pa = c.preal ? c.preal(pn(A, "preal", 0)) : pn(A, "preal", 0); S.cmd = d; S.ped = !!ped; S.pre = S.cmd && !hm ? pa * 10 : 0; S.t0 = 0; S.m = { 1: { fin: false }, 2: { fin: n < 2 || (ped && c.pedM1) } }; S.att = null; S.pause = 0; S.etat2 = d > 0 ? "ouverture" : "fermeture"; S.veille = 0; S.idle = 0; S.dem = 3; if (txt) A.dit(txt, SRC + (pa ? " (préalarme " + pa + " s)" : "")); };
-        const arreter = (txt, src) => { if (S.cmd) S.dernier = S.cmd; S.cmd = 0; S.pre = 0; S.etat2 = "arrete"; if (txt) A.dit(txt, src || SRC); };
+        const lancer = (d, ped, txt, imm) => { if (c.P.type && d && ![3, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].includes(pn(A, "type", 0)) && !(pn(A, "type", 0) > 15)) { if (!S.typeNd) { S.typeNd = 1; A.dit("TYPE DE MOTEUR sur " + pn(A, "type", 0) + " : " + (pn(A, "type", 0) ? "type non géré" : "moteurs non actifs") + ", rien ne bouge. Réglez le type de moteur (Paramètres).", "Paramètre TYPE DE MOTEUR (usine 0)"); } return; } S.typeNd = 0; const pa = c.preal ? c.preal(pn(A, "preal", 0)) : pn(A, "preal", 0); S.cmd = d; S.ped = !!ped; S.pre = S.cmd && !hm && !imm ? pa * 10 : 0; S.t0 = 0; S.m = { 1: { fin: false }, 2: { fin: n < 2 || (ped && c.pedM1 && d > 0) } }; S.att = null; S.pause = 0; S.etat2 = d > 0 ? "ouverture" : "fermeture"; S.veille = 0; S.idle = 0; S.dem = 3; if (txt) A.dit(txt, SRC + (pa ? " (préalarme " + pa + " s)" : "")); };
+        const arreter = (txt, src) => { if (S.cmd) S.dernier = S.cmd; S.cmd = 0; S.pre = 0; S.att = null; S.etat2 = "arrete"; if (txt) A.dit(txt, src || SRC); };
         /* STOP */
         if (!ok.STOP) { if (S.cmd || S.pre) arreter("STOP (71) ouvert : la manœuvre s'arrête.", SRC + ", bornier STOP"); }
         else if (hm === 1) { /* homme mort : 61 = OPEN UP, 62 = CLOSE UP, sécurités non actives */
@@ -103,13 +103,13 @@
             const photoOuv = [0, 1, 2, 3].includes(t), photoFer = [0, 1, 4, 5].includes(t), bar = [6, 7, 8].includes(t), barO = [9, 10, 11].includes(t), barC = [12, 13, 14].includes(t);
             if (d > 0 && photoOuv) { S.att = { k, t: "bloque", d: 1 }; A.dit(nom + " (photocellule) occultée pendant l'ouverture : le mouvement est bloqué tant qu'elle est occultée." + (t < 2 ? " Pour PHOT, la notice dit seulement qu'elle est active aussi à l'ouverture : comportement repris de PHOT OP." : ""), SRC + ", logique SAFE = " + t); }
             else if (d < 0 && (t === 0 || t === 1)) { S.att = { k, t: "inverse", d: 1 }; A.dit(nom + " (PHOT) occultée pendant la fermeture : arrêt, puis réouverture quand elle est dégagée.", SRC + ", logique SAFE = " + t); }
-            else if (d < 0 && (t === 4 || t === 5)) lancer(1, S.ped, nom + " (PHOT CL) occultée pendant la fermeture : inversion immédiate.");
+            else if (d < 0 && (t === 4 || t === 5)) lancer(1, S.ped, nom + " (PHOT CL) occultée pendant la fermeture : inversion immédiate.", null, true);
             else if (bar || (barO && d > 0) || (barC && d < 0)) { S.att = { k, t: "bar", n: 20 }; S.cmd = -d; S.pre = 0; S.m = { 1: { fin: false }, 2: { fin: n < 2 } }; A.dit(nom + " (bord sensible) actionné : inversion du mouvement pendant 2 s.", SRC + ", logique SAFE = " + t); }
             else if (barO || barC) arreter(nom + " (bord sensible) actionné : arrêt (inversion seulement " + (barO ? "à l'ouverture" : "à la fermeture") + ").", SRC + ", logique SAFE = " + t);
           });
         }
         if (S.att && S.att.t === "bloque") { if (ok[S.att.k]) { S.att = null; A.dit("Photocellule dégagée : l'ouverture reprend."); } }
-        if (S.att && S.att.t === "inverse") { if (ok[S.att.k]) { S.att = null; lancer(1, S.ped, "Photocellule dégagée : réouverture."); } }
+        if (S.att && S.att.t === "inverse") { if (ok[S.att.k]) { S.att = null; lancer(1, S.ped, "Photocellule dégagée : réouverture.", null, true); } }
         if (S.att && S.att.t === "bar") { S.att.n--; if (S.att.n <= 0) { S.att = null; arreter(""); } }
         /* manœuvre : préalarme, puis moteur(s) ; 2 moteurs : retard du 2 à l'ouverture, du 1 à la fermeture */
         const bloque = S.att && (S.att.t === "bloque" || S.att.t === "inverse");
@@ -135,9 +135,8 @@
         S.pos = Math.max(S.posM[1], n > 1 ? S.posM[2] : 0);
         /* fermeture automatique (logique TCA) et fermeture rapide */
         const tcaOn = pn(A, "tcal", 0) === 1;
-        if (hm !== 1 && !S.cmd && !S.att && ok.STOP && tcaOn && (ouvert() || S.etat2 === "stopTca")) {
+        if (hm !== 1 && !S.cmd && !S.att && ok.STOP && tcaOn && !cmd.OPEN && (ouvert() || S.etat2 === "stopTca")) {
           const pt = S.etat2 === "pieton" && c.P.pedtca && pn(A, "pedtca", 0) ? pn(A, "pedtca", 0) : pn(A, "tca", 10);
-          if (!ok.SAFE1 && [0, 1, 4, 5].includes(s1)) S.pause = 0;
           S.pause++; if (S.pause >= pt * 10) lancer(-1, S.etat2 === "pieton", "Fin du TCA (" + pt + " s) : fermeture automatique.");
         }
         /* sorties AUX (logiques simulées : 1 SCA, 3 lumière de zone, 6 clignotant) */
@@ -150,7 +149,7 @@
         if (S.veille && Object.values(cmd).some(Boolean)) { S.veille = 0; S.idle = 0; }
         /* diagnostic de l'afficheur */
         const dg = !ok.STOP ? "STOP" : (S.cmd || S.pre) && !ok.SAFE1 ? M.nomSafe(s1) : (S.cmd || S.pre) && !ok.SAFE2 ? M.nomSafe(s2) : cmd.STRE ? "STRE" : cmd.STRI ? "STRI" : cmd.OPEN ? "OPEN" : cmd.CLS ? "CLS" : cmd.PED ? "PED" : cmd.TIME || cmd.TIMP ? "TIME" : "";
-        S.diag = dg; S.dir = S.cmd || 0; /* pour l'état affiché au-dessus du portail */
+        S.diag = (c.codes || {})[dg] || dg; if (!S.f3) S.diag = c.codeF4 || "ERF4"; S.dir = S.cmd || 0; /* pour l'état affiché au-dessus du portail */
         S.prec = Object.assign({}, cmd, { nPR1: radio.PR1, nPR2: radio.PR2 });
       },
       nomSafe: t => [0, 1].includes(t) ? "PHOT" : [2, 3].includes(t) ? "PHOP" : [4, 5].includes(t) ? "PHCL" : [9, 10, 11].includes(t) ? "BARO" : [12, 13, 14].includes(t) ? "BARC" : "BAR",
@@ -183,7 +182,7 @@
         const [ax, ay] = c.aff;
         g.push(`<rect x="${ax}" y="${DY + ay}" width="86" height="30" rx="3" fill="#111"/>`);
         [["+", "pl", 0], ["−", "mo", 1], ["OK", "ok", 2]].forEach(([nn, k, i]) => g.push(`<g class="cabk" data-k="${k}"><rect x="${ax + 100}" y="${DY + ay - 6 + i * 18}" width="14" height="14" rx="2" fill="#e9e9e9"/><circle cx="${ax + 107}" cy="${DY + ay + 1 + i * 18}" r="4" fill="#555"/><text x="${ax + 120}" y="${DY + ay + 4 + i * 18}" class="cabt" font-size="7">${nn}</text></g>`));
-        c.us.forEach(([id, x, y, w, h, lab]) => g.push(`<g class="cabu" data-u="${id}"><rect x="${x}" y="${DY + y}" width="${w}" height="${h}" rx="2" fill="${id === "f3" && !A.S.f3 ? "#5a1e1e" : id.startsWith("f") ? "#e8c33a" : GR}"/><text x="${x + w / 2}" y="${DY + y + h + 9}" class="cabt" text-anchor="middle" font-size="6.5">${lab}</text></g>`));
+        c.us.forEach(([id, x, y, w, h, lab]) => g.push(`<g class="cabu" data-u="${id}"><rect x="${x}" y="${DY + y}" width="${w}" height="${h}" rx="2" fill="${id === "f3" && !A.S.f3 ? "#5a1e1e" : /^f\d$/.test(id) ? "#e8c33a" : GR}"/><text x="${x + w / 2}" y="${DY + y + h + 9}" class="cabt" text-anchor="middle" font-size="6.5">${lab}</text></g>`));
         return g.join("");
       },
       voyants(A) {
@@ -197,6 +196,7 @@
         if (k === "ok") return "OK : menus de la carte (simplifié, avancé). Non simulés dans l'atelier : réglez les paramètres et logiques avec « ⚙ Paramètres ».";
         if (S.cmd || S.pre) { S.cmd = 0; S.pre = 0; S.etat2 = "arrete"; return "Touche " + (k === "pl" ? "+" : "−") + " pendant la manœuvre : STOP (afficheur éteint : + = OPEN / STOP, − = CLOSE / STOP)."; }
         S.prec = S.prec || {}; const d = k === "pl" ? 1 : -1;
+        if (c.P.type && ![3, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].includes(pn(A, "type", 0))) return "TYPE DE MOTEUR non réglé (ou non géré) : les moteurs ne sont pas actifs.";
         S.cmd = d; S.ped = false; S.pre = 0; S.t0 = 0; S.m = { 1: { fin: false }, 2: { fin: nbMot(A) < 2 } }; S.etat2 = d > 0 ? "ouverture" : "fermeture"; S.veille = 0; S.idle = 0;
         return "Touche " + (k === "pl" ? "+ : OPEN" : "− : CLOSE") + " (afficheur éteint, appui de moins de 2 s, fiche).";
       },
@@ -207,7 +207,7 @@
       },
       feuille(A) {
         const IT = items(A), ligne = key => { const code = c.P[key]; const x = IT[code]; if (!x) return ""; const o = options(x, IT, c.ref[code]), v = pv(A, key) || "", def = String(x.def);
-          const pl = o.find(z => z.plage), sel = pl ? `<input type="number" min="${pl.plage[0]}" max="${pl.plage[1]}" value="${A.esc(v)}" onchange="CAB.param('${A.esc(code)}', this.value);CAB.parametres()" style="width:90px">` : `<select onchange="CAB.param('${A.esc(code)}', this.value);CAB.parametres()">${o.map(z => `<option value="${A.esc(z.v)}"${z.v === v ? " selected" : ""}>${A.esc(z.v)}${z.v === def ? " (usine)" : ""} · ${A.esc((z.d || "").slice(0, 48))}</option>`).join("")}</select>`;
+          const pl = o.find(z => z.plage), sel = pl ? `<input type="number" min="${pl.plage[0]}" max="${pl.plage[1]}" value="${A.esc(v)}" onchange="this.value=Math.min(${pl.plage[1]},Math.max(${pl.plage[0]},Math.round(+this.value)||${pl.plage[0]}));CAB.param('${A.esc(code)}', this.value);CAB.parametres()" style="width:90px">` : `<select onchange="CAB.param('${A.esc(code)}', this.value);CAB.parametres()">${o.map(z => `<option value="${A.esc(z.v)}"${z.v === v ? " selected" : ""}>${A.esc(z.v)}${z.v === def ? " (usine)" : ""} · ${A.esc((z.d || "").slice(0, 48))}</option>`).join("")}</select>`;
           return `<label><b>${A.esc(code)}</b> ${A.esc(x.titre)}${pl ? ` <small>(${pl.plage[0]} à ${pl.plage[1]}, usine ${A.esc(def)})</small>` : ""}${sel}</label>`; };
         const actifs = Object.keys(c.P).filter(k => IT[c.P[k]]).map(ligne).join("");
         return `<h3>Paramètres et logiques</h3><p class="note">D'après la fiche (${A.esc(SRC)}). Les menus de la carte (touches + − OK) ne sont pas simulés : réglez ici.</p><h4 class="cabh">Réglages qui agissent dans l'atelier</h4><div class="cabpar">${actifs}</div>
@@ -221,11 +221,14 @@
           { id: "b230", t: "Alimentation 230 V~", but: "Raccordez l'arrivée 230 V~ à la carte.", aide: () => "Phase et neutre sur L et N (" + SRC + ").", test: () => { if (!acc("sec").length) return "Posez une arrivée 230 V~."; return ess(null, R => R.def.d230 ? "DANGER : du 230 V arrive sur une borne basse tension." : pasAlim(R)); } },
           { id: "bmot", t: c.deux ? "Moteurs 24 V" : "Moteur 24 V", but: "Câblez " + (c.deux ? "les moteurs : moteur 1 (vantail 1) sur " + c.mot[0].join("-") + ", moteur 2 sur " + c.mot[1].join("-") : "le moteur sur " + c.mot[0].join("-")) + " ; le portail doit s'ouvrir dans le bon sens.", aide: () => "Fil + du moteur sur " + c.mot.map(m => m[0]).join(" / ") + ", fil − sur " + c.mot.map(m => m[1]).join(" / ") + " (dans l'atelier, ce sens ouvre). " + c.sensTxt, test: () => {
             const n = nbMot(A), R = ess(null, R => R); if (pasAlim(R)) return pasAlim(R); if (R.def.ccMot) return "Court-circuit sur une sortie moteur.";
+            if (c.P.type && ![3, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].includes(pn(A, "type", 0))) return "Câblage à vérifier, mais TYPE DE MOTEUR n'est pas réglé (0 = moteurs non actifs) : réglez-le dans Paramètres.";
             for (let v = 1; v <= n; v++) { const a = A.I.acc.find(x => x.t === "mdc" && x.num === v); if (!a) return "Posez le moteur " + v + "."; const m = R.moteurs[a.id]; if (!m || !m.ok) return "Moteur " + v + " : " + (m && m.err ? m.err : "non raccordé") + "."; if (m.sortie !== v) return "Le moteur " + v + " est sur la sortie du moteur " + m.sortie + "."; if (m.sens * (c.P.dir && pn(A, "dir", 0) === 1 ? -1 : 1) < 0) return "Le moteur " + v + " partirait à l'envers. " + c.sensTxt; }
             return ""; } },
-          { id: "bph", t: "Photocellules sur SAFE 1", but: "Câblez une paire de cellules sur SAFE 1 (72), émetteur sur le 24 Vsafe.", aide: () => "TX : + sur " + T.safe + " (24 Vsafe, alimenté pendant la manœuvre), − sur 50. RX : + sur 51, − sur 50 ; contact C sur 70, NF sur 72. Retirez le pont 70-72. SAFE 1 en photocellule (0).", test: () => {
+          { id: "bph", t: "Photocellules sur SAFE 1", but: "Câblez une paire de cellules sur SAFE 1 (72), émetteur sur le 24 Vsafe.", aide: () => "Photocellule non vérifiée (SAFE 1 = 0, fig. C de la notice) : TX et RX + sur 51, − sur 50 ; contact du RX : C sur 70, NF sur 72. Retirez le pont 70-72. Le 24 Vsafe (" + T.safe + ") sert aux photocellules vérifiées (SAFE 1 = 1, 3, 5).", test: () => {
             const rx = acc("rx")[0]; if (!rx) return "Posez une paire de cellules."; const tx = A.I.acc.find(x => x.t === "tx" && x.paire === rx.paire); if (pn(A, "safe1", 0) > 5) return "SAFE 1 n'est pas réglée en photocellule.";
-            const r = ess(() => { A.S.cmd = 1; }, R => R); if (pasAlim(r)) return pasAlim(r); if (!r.alim[tx.id]) return "Pendant la manœuvre, l'émetteur TX n'est pas alimenté : + sur " + T.safe + " (24 Vsafe), − sur 50."; if (!r.alim[rx.id]) return "Le récepteur RX n'est pas alimenté (+ 51, − 50).";
+            const v1 = pn(A, "safe1", 0), r = ess(() => { A.S.cmd = 1; }, R => R), r0 = ess(null, R => R); if (pasAlim(r)) return pasAlim(r);
+            if (!r.alim[tx.id]) return "L'émetteur TX n'est pas alimenté : + sur 51 (ou " + T.safe + " pour une photocellule vérifiée), − sur 50.";
+            if (!r0.alim[tx.id] && [0, 2, 4].includes(v1)) return "TX sur le 24 Vsafe (" + T.safe + ") avec SAFE 1 = " + v1 + " (non vérifiée) : la notice met ce TX sur 51 (fig. C). Le 24 Vsafe est pour SAFE 1 = 1, 3 ou 5 (fig. D)."; if (!r.alim[rx.id]) return "Le récepteur RX n'est pas alimenté (+ 51, − 50).";
             if (!r.ent.SAFE1) return "Faisceau libre, SAFE 1 (72) devrait être fermée sur 70 : C du RX sur 70, NF sur 72.";
             if (ess(() => { A.S.cmd = 1; A.S.etat["p" + rx.paire] = { coupe: true }; }, R => R.ent.SAFE1)) return "Faisceau coupé, SAFE 1 reste fermée : le pont 70-72 est-il encore en place ?"; return ""; } },
           { id: "bstart", t: "Bouton START sur IC 1", but: "Câblez un bouton poussoir sur l'entrée IC 1 (START E d'usine).", aide: () => "Contact NO entre 61 et 60 (COM IC).", test: () => {
@@ -260,7 +263,7 @@
     K: {}, coms: ["21", "50", "60", "70"], entrees: { 71: "STOP", 72: "SAFE1", 73: "SAFE2", 61: "IC1", 62: "IC2" }, ponts: [["70", "71"], ["70", "72"], ["70", "73"]],
     T: { p24: "51", safe: "52", aux1: "20", aux1b: "21", aux2: ["26", "27"], safe2: "73" }, mot: [["10", "11"]], aff: [170, 90],
     us: [["fc", 60, 228, 30, 8, "fins de course"], ["jp32", 30, 70, 20, 30, "JP32"], ["f1", 70, 76, 8, 22, "F1"], ["f3", 90, 76, 8, 22, "F3"]],
-    usine: { fc: { nom: "Connecteur des fins de course", txt: "Fins de course non simulés : l'atelier arrête le portail en fin de course théorique." }, jp32: { nom: "JP32 : primaire du transformateur" }, f1: { nom: "Fusible F1 0,63 A T (valeur de l'ancienne notice D811980)" }, f3: { nom: "Fusible F3 1,25 A T (valeur de l'ancienne notice D811980)" } },
+    usine: { fc: { nom: "Connecteur des fins de course", txt: "Fins de course non simulés : l'atelier arrête le portail en fin de course théorique." }, jp32: { nom: "JP32 (connecteur de la carte, non décrit par la notice D814459)" }, f1: { nom: "Fusible F1 0,63 A T (valeur de l'ancienne notice D811980)" }, f3: { nom: "Fusible F3 1,25 A T (valeur de l'ancienne notice D811980)" } },
     radio: ["1er canal (1ch)", "2e canal (2ch)"], ch2def: 4, P: P_MERAK, partDef: 30, pedM1: false, deux: false,
     ref: { "2 SAFE": "1 SAFE", "2 ic": "1 ic", "2ch": "1ch", "2AUX": "1AUX" }, nomAux1: "AUX 1 (20-21)",
     sensTxt: "Changement de sens : la notice demande de ne pas intervertir les étriers de fin de course ; l'atelier simule l'échange des fils + et − du moteur.",
@@ -288,8 +291,8 @@
       rangLigne([["Y", "ANT"]], 350, 150, 0, false)],
     K: {}, coms: ["21", "50", "60", "70"], entrees: { 71: "STOP", 72: "SAFE1", 73: "SAFE2", 61: "IC1", 62: "IC2" }, ponts: [["70", "71"], ["70", "72"], ["70", "73"]],
     T: { p24: "51", safe: "52", aux1: "20", aux1b: "21", aux2: ["26", "27"], safe2: "73" }, mot: [["10", "11"], ["14", "15"]], aff: [170, 90],
-    us: [["f1", 70, 76, 8, 22, "F1"], ["f3", 90, 76, 8, 22, "F3"]],
-    usine: { f1: { nom: "Fusible F1 (valeur non reprise dans la fiche)" }, f3: { nom: "Fusible F3 (valeur non reprise dans la fiche)" } },
+    us: [["f3", 90, 76, 8, 22, "prot. 24 V"]],
+    usine: { f3: { nom: "Protection de la sortie accessoires (la notice ne donne pas de fusible : code ErF4 en cas de surcharge)" } }, codes: { TIME: "TImE", BARO: "baro", BARC: "barc" }, codeF4: "ErF4",
     radio: ["1er canal (1ch)", "2e canal (2ch)"], ch2def: 9, deux: true, pedM1: true, partDef: 100,
     P: { tca: "tcA", pedtca: "ped.tca", part: "ouv PArtiELLE", rouv: "retard ouv", rfer: "retard fer", nmot: "mOT.ACTIF", tcal: "TCA (logique)", psave: "P save", pas: "mOUVT PAS A PAS", preal: "PREAL", hm: "HOmmE mORT", blo: "BL.ImP.OUV", blt: "BL.ImP.TCA", blf: "BLI.FE", safe1: "1 SAFE", safe2: "2 SAFE", ic1: "1 ic", ic2: "2 ic", ch1: "1ch", ch2: "2ch", aux1: "1AUX", aux2: "2AUX", type: "TYPE DE MOTEUR" },
     ref: { "2 SAFE": "1 SAFE", "2 ic": "1 ic", "2ch": "1ch", "2AUX": "1AUX" }, nomAux1: "AUX 1 (20-21)",
