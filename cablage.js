@@ -535,12 +535,12 @@
   function infoHtml() {
     if (S.mm) return mmHtml();
     if (S.mode === "cabler") {
-      if (S.sel) return `<span class="k">Fil en cours :</span> depuis <b>${esc(nomB(S.sel))}</b>. Touchez la borne d'arrivée. <button class="mini" onclick="CAB.annuler()">Annuler</button>`;
+      if (S.sel) return `<span class="k">Fil en cours :</span> depuis <b>${esc(nomB(S.sel))}</b>. Touchez la borne d'arrivée (ou glissez le doigt jusqu'à elle). <button class="mini" onclick="CAB.annuler()">Annuler</button>`;
       if (S.selFil) { const w = I.fils.find(x => x.id === S.selFil); return w ? `<b>Fil</b> ${esc(nomB(w.a))} → ${esc(nomB(w.b))}${w.usine ? " (pont d'usine)" : ""}. <button class="mini" onclick="CAB.supFil()">Supprimer le fil</button>` : ""; }
       if (S.selAcc) { const a = I.acc.find(x => x.id === S.selAcc); return a ? `<b>${esc(ACC[a.t].nom)}</b> : glissez pour déplacer. <button class="mini" onclick="CAB.supAcc()">Supprimer</button>` : ""; }
       const al = S.msg.find(m => m.alerte); if (al && (S.hs || !S.f3)) return `<b>⚠ ${esc(al.t)}</b>${al.src ? `<br><small>Source : ${esc(al.src)}</small>` : ""}`;
       if (S.msgU) return S.msgU;
-      return "Touchez une borne d'un accessoire puis une borne de la carte pour poser un fil. Touchez un fil pour le supprimer.";
+      return "Pour poser un fil : touchez une borne puis l'autre, ou appuyez sur une borne et glissez jusqu'à l'autre avant de lâcher. Touchez un fil pour le supprimer.";
     }
     const m = S.msg.slice(0, 3).map((x, i) => `<div class="${i ? "cabold" : ""}">${esc(x.t)}${x.src ? `<br><small>Source : ${esc(x.src)}</small>` : ""}</div>`).join("");
     return (S.msgU ? S.msgU + (m ? "<hr>" : "") : "") + (m || (S.secteur ? "Agissez sur les accessoires (touchez-les) ou avec les boutons ci-dessous." : "Mettez le secteur pour tester l'installation."));
@@ -604,7 +604,7 @@
   }
 
   /* ---------- interactions ---------- */
-  let drag = null, Z = { x: 0, y: 0, w: W, h: H }, doigts = new Map(), pince = null, glis = null, rep = 0;
+  let tir = null, drag = null, Z = { x: 0, y: 0, w: W, h: H }, doigts = new Map(), pince = null, glis = null, rep = 0;
   function appliquerZ() { const sv = $("#cabsvg"); if (sv) sv.setAttribute("viewBox", `${Z.x} ${Z.y} ${Z.w} ${Z.h}`); const z = $("#cabzl"); if (z) z.textContent = Math.round(W / Z.w * 100) + " %"; }
   function borner() { Z.w = Math.max(W / 5, Math.min(W, Z.w)); Z.h = Z.w * H / W; Z.x = Math.max(0, Math.min(W - Z.w, Z.x)); Z.y = Math.max(0, Math.min(H - Z.h, Z.y)); }
   function zoomer(f, cx, cy) { if (cx === undefined) { cx = Z.x + Z.w / 2; cy = Z.y + Z.h / 2; } const nw = Math.max(W / 5, Math.min(W, Z.w / f)), k = nw / Z.w; Z.x = cx - (cx - Z.x) * k; Z.y = cy - (cy - Z.y) * k; Z.w = nw; borner(); appliquerZ(); }
@@ -623,7 +623,12 @@
     sv.onpointerdown = e => {
       if (doigts.size >= 2) return;
       const t = e.target, hit = t.closest("[data-b]"), acc = t.closest(".caba"), fil = t.closest(".cabw"), us = t.closest(".cabu"), k = t.closest(".cabk");
-      if (hit) { e.preventDefault(); return borne(hit.dataset.b); }
+      if (hit) {
+        e.preventDefault(); const k = hit.dataset.b;
+        /* câbler en glissant : appui sur une borne, on glisse jusqu'à l'autre, on lâche (le toucher simple marche toujours) */
+        if (S.mode === "cabler" && !S.mm && !S.sel) { borne(k); tir = { k, cx: e.clientX, cy: e.clientY, bouge: false }; try { sv.setPointerCapture(e.pointerId); } catch (er) {} return; }
+        return borne(k);
+      }
       if (k) { const kk = k.dataset.k; touche(kk); clearInterval(rep); if (kk === "pl" || kk === "mo") { const t0 = Date.now(); rep = setInterval(() => { if (Date.now() - t0 > 500) touche(kk); }, 140); } return; } /* + / − maintenus : défilement rapide */
       if (us) return usine(us.dataset.u);
       if (fil && S.mode === "cabler") { S.selFil = fil.dataset.w; S.selAcc = null; S.sel = null; rendre(); return; }
@@ -634,8 +639,12 @@
       }
       glis = { cx: e.clientX, cy: e.clientY, x: Z.x, y: Z.y, bouge: false }; /* fond : faire glisser la vue zoomée */
     };
-    sv.onpointermove = e => { if (!drag || pince) return; const [x, y] = pt(e); const nx = Math.max(0, Math.min(W - largeur(drag.a.t), x - drag.dx)), ny = Math.max(70, Math.min(DY - 58, y - drag.dy)); if (Math.abs(nx - drag.a.x) + Math.abs(ny - drag.a.y) > 2) drag.bouge = true; drag.a.x = Math.round(nx); drag.a.y = Math.round(ny); const g = sv.querySelector(`.caba[data-a="${drag.a.id}"]`); if (g) g.setAttribute("transform", `translate(${drag.a.x} ${drag.a.y})`); I.fils.forEach(w => { if (w.a.startsWith(drag.a.id + ":") || w.b.startsWith(drag.a.id + ":")) { const p = document.getElementById("cw-" + w.id); if (p) p.setAttribute("d", chemin(w.a, w.b)); } }); };
-    sv.onpointerup = () => { if (!drag) return; const a = drag.a, b = drag.bouge; drag = null; if (b) { sauver(); rendre(); } else { S.selAcc = S.selAcc === a.id ? null : a.id; S.selFil = null; rendre(); } };
+    sv.onpointermove = e => {
+      if (tir) { if (pince) { tir = null; S.sel = null; const gs = $("#cabsel"); if (gs) gs.innerHTML = ""; dessinSondes(); return; } if (Math.abs(e.clientX - tir.cx) + Math.abs(e.clientY - tir.cy) > 8) tir.bouge = true; if (tir.bouge) { const p0 = posB(tir.k), [x, y] = pt(e), g = $("#cabsel"); if (p0 && g) { g.innerHTML = `<path d="M${p0[0]} ${p0[1]} L${x} ${y}" stroke="${S.couleur}" stroke-width="3" stroke-dasharray="5 4" fill="none" stroke-linecap="round"/><circle cx="${x}" cy="${y}" r="6" fill="none" stroke="${S.couleur}" stroke-width="2"/>`; } } return; }
+      if (!drag || pince) return; const [x, y] = pt(e); const nx = Math.max(0, Math.min(W - largeur(drag.a.t), x - drag.dx)), ny = Math.max(70, Math.min(DY - 58, y - drag.dy)); if (Math.abs(nx - drag.a.x) + Math.abs(ny - drag.a.y) > 2) drag.bouge = true; drag.a.x = Math.round(nx); drag.a.y = Math.round(ny); const g = sv.querySelector(`.caba[data-a="${drag.a.id}"]`); if (g) g.setAttribute("transform", `translate(${drag.a.x} ${drag.a.y})`); I.fils.forEach(w => { if (w.a.startsWith(drag.a.id + ":") || w.b.startsWith(drag.a.id + ":")) { const p = document.getElementById("cw-" + w.id); if (p) p.setAttribute("d", chemin(w.a, w.b)); } }); };
+    sv.onpointerup = e => {
+      if (tir) { const t = tir; tir = null; const gs = $("#cabsel"); if (gs) gs.innerHTML = ""; if (t.bouge) { const el = document.elementFromPoint(e.clientX, e.clientY), cible = el && el.closest && el.closest("[data-b]"); if (cible && cible.dataset.b !== t.k) borne(cible.dataset.b); else { S.sel = null; S.msgU = "Fil non posé : lâchez le doigt sur une borne."; } dessinSondes(); maj(); } return; } /* sans glisser : la borne reste choisie (mode toucher) */
+      if (!drag) return; const a = drag.a, b = drag.bouge; drag = null; if (b) { sauver(); rendre(); } else { S.selAcc = S.selAcc === a.id ? null : a.id; S.selFil = null; rendre(); } };
   }
   function actionAcc(a, bas) {
     const e = S.etat[a.id] = S.etat[a.id] || {};

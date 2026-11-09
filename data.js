@@ -192,6 +192,9 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "2.3", date: "2026-11-09", titre: "Atelier de câblage : tirer les fils au doigt", items: [
+    "On peut poser un fil en appuyant sur une borne et en glissant le doigt jusqu'à l'autre borne avant de lâcher (le fil prend la couleur choisie) ; toucher une borne puis l'autre marche toujours"
+  ] },
   { v: "2.2", date: "2026-11-09", titre: "Atelier de câblage : zoom, touches de la carte, annuler", items: [
     "Zoom sur le schéma (boutons + / −, pincement à deux doigts, glisser pour se déplacer) et mode plein écran",
     "Les touches de la carte dessinée fonctionnent comme dans la notice : ▲ ▼ pour afficher les paramètres, + / − pour changer la valeur (enregistrée après quelques secondes), TEST",
