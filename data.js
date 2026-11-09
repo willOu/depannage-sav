@@ -192,6 +192,11 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "2.1", date: "2026-11-09", titre: "Atelier de câblage", items: [
+    "Nouvel atelier de câblage sur la Roger B70/1DCHP : on pose des accessoires (cellules, digicode, sélecteur, bord sensible, STOP, clignotant, lumière 230 V…), on les câble soi-même sur les borniers et on teste sous tension",
+    "On voit le courant passer dans les fils ; la carte, l'afficheur et le portail réagissent comme dans la notice (paramètres réglables, mode TEST, pannes, multimètre)",
+    "8 missions corrigées, suivies dans le suivi du simulateur"
+  ] },
   { v: "2.0", date: "2026-11-09", titre: "Lecture de l'afficheur en direct et simulateur de cartes", items: [
     "Bouton appareil photo à droite de la barre de recherche : on filme l'afficheur de la carte, le code est reconnu en direct (sans réseau) et la fiche s'ouvre",
     "Simulateur de carte pour s'entraîner sans portail : Roger B70/1DCHP, EDGE1 et B70/1DC (afficheur et touches) et Casit EQ 2009 et KEQS08 (dip-switch), avec des exercices tirés au hasard",
