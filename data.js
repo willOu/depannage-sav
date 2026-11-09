@@ -192,8 +192,9 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
-  { v: "2.4", date: "2026-11-09", titre: "Atelier de câblage : B70/1DC", items: [
+  { v: "2.4", date: "2026-11-09", titre: "Atelier de câblage : B70/1DC, KEQS08 et EQ2009", items: [
     "Nouvelle carte dans l'atelier de câblage : Roger B70/1DC, borniers placés comme sur la carte (notice IS117, fig. 11 p. 15), missions et mode TEST avec ses propres numéros de bornes",
+    "Nouvelles cartes CASIT KEQS08 (1 moteur) et EQ2009 (2 moteurs, vantaux battants) : on câble soi-même l'arrivée 230 V, les moteurs et les fins de course ; dip-switch et cavaliers à toucher sur la carte, voyants comme dans les notices, missions corrigées",
     "Fiche B70/1DC : le pas-à-pas (borne 25) se règle avec le paramètre A4 (la fiche indiquait 84 par erreur)",
     "Atelier : plus de blocage si le doigt est relâché en dehors du schéma"
   ] },

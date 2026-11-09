@@ -106,7 +106,7 @@
       const acc = x.acc.filter(a => a && /^a\d{1,5}$/.test(a.id) && ACC[a.t] && !ACC[a.t].paire && !ACC[a.t].fil && Number.isFinite(a.x) && Number.isFinite(a.y)).map(a => ({ id: a.id, t: a.t, x: Math.round(a.x), y: Math.round(a.y), paire: Number.isInteger(a.paire) ? a.paire : undefined, num: Number.isInteger(a.num) ? a.num : undefined }));
       const ok = k => { if (typeof k !== "string") return false; if (BORNES[k]) return true; const i = k.indexOf(":"), a = acc.find(x => x.id === k.slice(0, i)); return !!(a && ACC[a.t].b && ACC[a.t].b.some(b => b[0] === k.slice(i + 1))); };
       const fils = x.fils.filter(w => w && /^w\d{1,5}$/.test(w.id) && ok(w.a) && ok(w.b) && /^#[0-9a-f]{6}$/i.test(w.c)).map(w => ({ id: w.id, a: w.a, b: w.b, c: w.c, usine: w.usine ? 1 : undefined, p: Array.isArray(w.p) && w.p.length === 2 && w.p.every(Number.isFinite) ? [Math.max(0, Math.min(W, Math.round(w.p[0]))), Math.max(0, Math.min(H, Math.round(w.p[1])))] : undefined }));
-      const params = {}; Object.keys(x.params || {}).forEach(k => { if (ITEMS[k] && /^[0-9A-Za-z]{2}$/.test(x.params[k])) params[k] = x.params[k]; });
+      const params = {}; Object.keys(x.params || {}).forEach(k => { if ((ITEMS[k] && /^[0-9A-Za-z]{2}$/.test(x.params[k])) || (M && /^(A\d{1,2}|B\d|S[1-4]\d{1,2}|JP1|ACDC)$/.test(k) && /^(ON|OFF|AC|DC)$/.test(x.params[k]))) params[k] = x.params[k]; });
       return { n: Math.max(1, parseInt(x.n, 10) || 1, ...acc.map(a => +a.id.slice(1) + 1), ...fils.map(w => +w.id.slice(1) + 1)), acc, fils, params };
     } catch (e) { return null; }
   }
@@ -402,9 +402,9 @@
   ];
   /* essai : on simule l'action et on regarde l'entrée de la carte, sur une copie de l'état */
   function avec(etats, f) {
-    const sauv = { etat: JSON.parse(JSON.stringify(S.etat)), secteur: S.secteur, hs: S.hs, f3: S.f3, dir: S.dir, pre: S.pre, t: S.t, corT: S.corT, sc: S.sc, rel: S.rel, lampe: S.lampe, sec: S.sec, pos: S.pos, cmd: S.cmd };
-    S.secteur = true; S.hs = false; S.f3 = true; S.etat = {}; const rad = S.radio, cr = [S.corRadio, S.corRadio5]; S.radio = {}; S.corRadio = S.corRadio5 = false; /* accessoires au repos pour l'essai */
-    try { circuit(); etats(); return f(circuit()); } finally { Object.assign(S, sauv); S.radio = rad; [S.corRadio, S.corRadio5] = cr; }
+    const R0 = S.R, snap = JSON.parse(JSON.stringify(S, (k, v) => k === "R" ? undefined : v)); /* tout l'état est remis comme avant l'essai */
+    S.secteur = true; S.hs = false; S.f3 = true; S.etat = {}; S.radio = {}; S.corRadio = S.corRadio5 = false; /* accessoires au repos pour l'essai */
+    try { circuit(); etats(); return f(circuit()); } finally { Object.keys(S).forEach(k => { if (k !== "R" && !(k in snap)) delete S[k]; }); Object.assign(S, snap); S.R = R0; }
   }
   const actives = R => Object.keys(R.ent).filter(k => ["AP", "CH", "PP", "PED", "ORO"].includes(k) && R.ent[k]);
   function essai(m, acts, entree, alim, nf) {
@@ -808,7 +808,7 @@
     secteur(on) { S.secteur = on; if (!on) { S.dir = 0; S.pre = 0; S.test = false; clearTimeout(tEnr); S.prog = null; } else if (S.mode === "cabler") { S.msgU = "Sous tension : passez en mode « Tester » pour actionner les accessoires. Coupez le secteur avant de modifier le câblage."; } S.msg = []; maj(); },
     couleur(c) { S.couleur = c; panneau(); },
     poser(t) {
-      if (ACC[t].fil) { S.couleur = "#f5f5f5"; S.msgU = "Fil de pont : touchez la première borne de la carte, puis la seconde (exemple : " + nB("ft1") + " et " + nB("com") + " pour ponter FT1 absente)."; panneau(); maj(); return; }
+      if (ACC[t].fil) { S.couleur = "#f5f5f5"; S.msgU = "Fil de pont : touchez la première borne de la carte, puis la seconde" + (M ? " (exemple : une entrée NF non utilisée vers son commun)." : " (exemple : " + nB("ft1") + " et " + nB("com") + " pour ponter FT1 absente)."); panneau(); maj(); return; }
       if (ACC[t].enfiche) { this.radio(); return; }
       if (I.acc.length >= 14) { S.msgU = "Quatorze accessoires maximum."; maj(); return; }
       if (ACC[t].paire) { const p = 1 + Math.max(0, ...I.acc.filter(a => a.paire).map(a => a.paire)); (ACC[t].paire === "c" ? [["txc"], ["rxc"]] : [["tx"], ["rx"]]).forEach(([u]) => { const [x, y] = libre(u); I.acc.push({ id: "a" + (I.n++), t: u, x, y, paire: p }); }); }
@@ -819,7 +819,7 @@
     supFil() { I.fils = I.fils.filter(w => w.id !== S.selFil); S.selFil = null; sauver(); rendre(); },
     supAcc() { const id = S.selAcc; const a = I.acc.find(x => x.id === id); const ids = a && a.paire ? I.acc.filter(x => x.paire === a.paire).map(x => x.id) : [id]; I.acc = I.acc.filter(x => !ids.includes(x.id)); I.fils = I.fils.filter(w => !ids.some(i => w.a.startsWith(i + ":") || w.b.startsWith(i + ":"))); S.selAcc = null; sauver(); rendre(); },
     annuler() { S.sel = null; dessinSondes(); maj(); },
-    vider() { const prm = I.params; I = neuf(); I.params = prm; S.sel = S.selFil = S.selAcc = null; S.mm = null; S.etat = {}; S.msgU = "Tout est retiré (pont d'usine " + nB("cosCom") + "-" + nB("st") + " remis). « Annuler » pour revenir en arrière."; sauver(); rendre(); },
+    vider() { const prm = I.params; I = neuf(); I.params = prm; S.sel = S.selFil = S.selAcc = null; S.mm = null; S.etat = {}; S.msgU = (M ? "Tout est retiré." : "Tout est retiré (pont d'usine " + nB("cosCom") + "-" + nB("st") + " remis).") + " « Annuler » pour revenir en arrière."; sauver(); rendre(); },
     redresser() { const w = I.fils.find(x => x.id === S.selFil); if (w) { delete w.p; sauver(); rendre(); } },
     estomper() { S.estompe = !S.estompe; const g = $("#cabfils"); if (g) g.classList.toggle("estompe", S.estompe); const b = $("#cabest"); if (b) b.classList.toggle("on", S.estompe); },
     annulerTout() { revenir(hist, futur); }, retablir() { revenir(futur, hist); },
@@ -829,7 +829,7 @@
     mm() { S.mm = S.mm ? null : {}; dessinSondes(); maj(); },
     mmMode() { S.mmMode = S.mmMode === "V" ? "R" : "V"; if (S.mm && S.mm.a && S.mm.b) S.mm.r = mesure(S.mm.a, S.mm.b); maj(); },
     panne(id) { S.pannes[id] = !S.pannes[id]; S.dir = 0; S.msgU = ""; rendre(); usine(id); },
-    f3() { if (!S.f3 && S.secteur) { S.msgU = "Coupez le secteur avant de remplacer le fusible."; maj(); return; } S.f3 = !S.f3; rendre(); usine("facc"); },
+    f3() { if (!S.f3 && S.secteur) { S.msgU = "Coupez le secteur avant de remplacer le fusible."; maj(); return; } S.f3 = !S.f3; rendre(); if (M) { S.msgU = S.f3 ? "Fusible remplacé : sorties basse tension rétablies." : "Fusible grillé : sorties basse tension coupées."; maj(); } else usine("facc"); },
     parametres() { feuille("params"); }, missions() { feuille("missions"); },
     param(code, v) { if (!ITEMS[code]) return; if (v === "") delete I.params[code]; else I.params[code] = v; sauver(); panneau(); },
     usineParams() { I.params = {}; sauver(); feuille("params"); },
