@@ -192,6 +192,9 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "2.64", date: "2026-11-10", titre: "Fiches moteurs Came ATI et ATS", items: [
+    "Nouvelles fiches dans Came > Accessoires : ATI A3000A / A5000A et ATS30 / ATS50 (AGS, AGR) avec caractéristiques, limites d'utilisation, branchement, cotes de pose, réglage des fins de course, déverrouillage, maintenance, et la notice PDF"
+  ] },
   { v: "2.63", date: "2026-11-10", titre: "Notices Came ATS et ATI", items: [
     "Notices Came ATS30 / ATS50 230 V (FA01337-FR) et ATI A3000A / A5000A (119DV74FR) en PDF sur les fiches ZM3E et ZA3 (l'ATS sur ZA3 seulement), cherchables hors ligne",
     "Liste Moteurs : lignes ATS30, ATS50, ATI A3000A et ATI A5000A avec les limites poids / longueur de leur notice ; la contradiction de la page web sur l'ATI A3000A / A5000A est levée"
