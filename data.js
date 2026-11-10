@@ -192,6 +192,16 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "2.61", date: "2026-11-10", titre: "Corrections après vérification complète", items: [
+    "Atelier : le message « Mettez le secteur » disparaît quand on met le secteur",
+    "Atelier Roger : le bouton de la touche 2 de la télécommande affiche sa vraie fonction (réglage 77) au lieu de « Mêmes valeurs que 76 »",
+    "Atelier BFT : étiquettes des bornes décalées pour ne plus se chevaucher, L et N sans doublon, bandes « fins de course » dégagées des bornes",
+    "Atelier : une borne COM accepte jusqu'à six fils (elle porte les ponts d'usine), message plus clair au-delà",
+    "Atelier : le multimètre sur une sortie moteur dit que la tension moteur n'est pas simulée",
+    "Atelier : liste des cartes classée par marque (Roger, BFT, Casit)",
+    "Contraste : pastille BFT et numéros de paramètres du thème Chantier plus lisibles",
+    "Nice RUN : les symptômes « Radio » et « Aucune manœuvre » ont chacun un code distinct"
+  ] },
   { v: "2.6", date: "2026-11-09", titre: "Atelier de câblage : barrière Roger CTRL et cartes BFT MERAK, MERAK (DEIMOS ULTRA), THALIA", items: [
     "Atelier : cartes BFT MERAK (notice D814459), MERAK pour DEIMOS ULTRA (D811980) et THALIA BT A80 / A160 (D814283), avec moteurs 24 V à câbler (+ / −), ponts d'usine 70-71 / 70-72 / 70-73 (70-74 sur la DEIMOS), 24 Vsafe (52) alimenté seulement pendant la manœuvre et Power Down",
     "Atelier BFT : logiques IC 1 / IC 2, SAFE 1 / SAFE 2 (photocellules et bords), pas-à-pas 4 / 3 / 2 pas, TCA, préalarme, homme mort, blocages d'impulsions, sortie AUX en clignotant, diagnostic à l'afficheur (STRE, PED, STOP, PHOT, BAR…)",
@@ -8012,31 +8022,31 @@ const MARQUES = [
         "action": "La reconnaissance de la longueur du tablier est à faire (onglet Apprentissage)."
       },
       {
-        "code": "Radio",
+        "code": "Radio : LED de l'émetteur éteinte",
         "type": "symptome",
         "titre": "L'émetteur ne commande pas, sa LED ne s'allume pas",
         "action": "Vérifier si les piles de l'émetteur sont déchargées et les remplacer si besoin."
       },
       {
-        "code": "Radio",
+        "code": "Radio : LED de l'émetteur allumée",
         "type": "symptome",
         "titre": "L'émetteur ne commande pas, mais sa LED s'allume",
         "action": "Vérifier que l'émetteur est correctement mémorisé dans le récepteur radio."
       },
       {
-        "code": "Aucune manœuvre",
+        "code": "Aucune manœuvre : BLUEBUS éteinte",
         "type": "symptome",
         "titre": "Rien ne bouge et la LED BLUEBUS ne clignote pas",
         "action": "Vérifier que RUN est alimenté en secteur et que les fusibles ne sont pas interrompus. Si c'est le cas, chercher la cause avant de les remplacer par d'autres de même valeur et mêmes caractéristiques."
       },
       {
-        "code": "Aucune manœuvre",
+        "code": "Aucune manœuvre : clignotant éteint",
         "type": "symptome",
         "titre": "Rien ne bouge et le clignotant est éteint",
         "action": "Vérifier que la commande est bien reçue : avec l'entrée PP, la LED « PP » doit s'allumer ; avec l'émetteur radio, la LED BLUEBUS doit faire 2 clignotements rapides."
       },
       {
-        "code": "Aucune manœuvre",
+        "code": "Aucune manœuvre : clignotements",
         "type": "symptome",
         "titre": "Rien ne bouge et le clignotant émet quelques clignotements",
         "action": "Compter les clignotements et se reporter aux codes « 1 à 8 clignot. »."
@@ -10611,7 +10621,7 @@ const MARQUES = [
 },
 /* ------------------------------------------------------------------ */
 {
-  id: "bft", nom: "BFT", couleur: "#e07b00",
+  id: "bft", nom: "BFT", couleur: "#b35c00",
   cartes: [
   {
     id: "bft-merak",

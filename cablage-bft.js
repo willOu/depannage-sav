@@ -176,13 +176,13 @@
           g.push(`<rect x="${x0}" y="${y0}" width="${x1 - x0}" height="${y1 - y0}" rx="3" fill="#3fae5a" stroke="#1f7a36"/>`);
           p.forEach(q => { g.push(`<rect x="${q.x - 7}" y="${q.y - 7}" width="14" height="14" rx="2" fill="#d9efe0" stroke="#1f7a36"/><circle class="cabb" data-b="b:${q.n}" cx="${q.x}" cy="${q.y}" r="4" fill="#8f9a95"/>`);
             if (k.haut) { T(q.x, q.y - 22, q.n, 'class="cabt" text-anchor="middle" font-size="9" font-weight="800" fill="#fff"'); T(q.x, q.y - 13, q.lab, 'class="cabt" text-anchor="middle" font-size="6" fill="#cfe3ff"'); }
-            else { T(q.x, q.y + 20, q.n, 'class="cabt" text-anchor="middle" font-size="9" font-weight="800" fill="#fff"'); T(q.x, q.y + 29, q.lab, 'class="cabt" text-anchor="middle" font-size="5" fill="#cfe3ff"'); } });
+            else { const i = k.ns.findIndex(u => String(u[0]) === q.n), dense = k.pas <= 22 && k.ns.length > 6; T(q.x, q.y + 20, q.n, 'class="cabt" text-anchor="middle" font-size="9" font-weight="800" fill="#fff"'); if (q.lab !== q.n) T(q.x, q.y + 29 + (dense && i % 2 ? 8 : 0), q.lab, 'class="cabt" text-anchor="middle" font-size="5" fill="#cfe3ff"'); } });
           if (k.titre) T((x0 + x1) / 2, k.haut ? y0 - 26 : y1 + 30, k.titre, 'class="cabt" text-anchor="middle" font-size="6.5" fill="#a8c8f0"'); });
         g.push(`<g id="cabaff"></g>`);
         const [ax, ay] = c.aff;
         g.push(`<rect x="${ax}" y="${DY + ay}" width="86" height="30" rx="3" fill="#111"/>`);
         [["+", "pl", 0], ["−", "mo", 1], ["OK", "ok", 2]].forEach(([nn, k, i]) => g.push(`<g class="cabk" data-k="${k}"><rect x="${ax + 100}" y="${DY + ay - 6 + i * 18}" width="14" height="14" rx="2" fill="#e9e9e9"/><circle cx="${ax + 107}" cy="${DY + ay + 1 + i * 18}" r="4" fill="#555"/><text x="${ax + 120}" y="${DY + ay + 4 + i * 18}" class="cabt" font-size="7">${nn}</text></g>`));
-        c.us.forEach(([id, x, y, w, h, lab]) => g.push(`<g class="cabu" data-u="${id}"><rect x="${x}" y="${DY + y}" width="${w}" height="${h}" rx="2" fill="${id === "f3" && !A.S.f3 ? "#5a1e1e" : /^f\d$/.test(id) ? "#e8c33a" : GR}"/><text x="${x + w / 2}" y="${DY + y + h + 9}" class="cabt" text-anchor="middle" font-size="6.5">${lab}</text></g>`));
+        c.us.forEach(([id, x, y, w, h, lab]) => g.push(`<g class="cabu" data-u="${id}"><rect x="${x}" y="${DY + y}" width="${w}" height="${h}" rx="2" fill="${id === "f3" && !A.S.f3 ? "#5a1e1e" : /^f\d$/.test(id) ? "#e8c33a" : GR}"/><text x="${lab.length * 3.4 / 2 > x + w / 2 - 12 ? 14 : x + w / 2}" y="${DY + y + h + 9}" class="cabt" text-anchor="${lab.length * 3.4 / 2 > x + w / 2 - 12 ? "start" : "middle"}" font-size="6.5">${lab}</text></g>`));
         return g.join("");
       },
       voyants(A) {
@@ -262,7 +262,7 @@
       rangLigne([["Y", "ANT"]], 350, 150, 0, false)],
     K: {}, coms: ["21", "50", "60", "70"], entrees: { 71: "STOP", 72: "SAFE1", 73: "SAFE2", 61: "IC1", 62: "IC2" }, ponts: [["70", "71"], ["70", "72"], ["70", "73"]],
     T: { p24: "51", safe: "52", aux1: "20", aux1b: "21", aux2: ["26", "27"], safe2: "73" }, mot: [["10", "11"]], aff: [170, 90],
-    us: [["fc", 60, 228, 30, 8, "fins de course"], ["jp32", 30, 70, 20, 30, "JP32"], ["f1", 70, 76, 8, 22, "F1"], ["f3", 90, 76, 8, 22, "F3"]],
+    us: [["fc", 60, 206, 30, 8, "fins de course"], ["jp32", 30, 70, 20, 30, "JP32"], ["f1", 70, 76, 8, 22, "F1"], ["f3", 90, 76, 8, 22, "F3"]],
     usine: { fc: { nom: "Connecteur des fins de course", txt: "Fins de course non simulés : l'atelier arrête le portail en fin de course théorique." }, jp32: { nom: "JP32 (connecteur de la carte, non décrit par la notice D814459)" }, f1: { nom: "Fusible F1 0,63 A T (valeur de l'ancienne notice D811980)" }, f3: { nom: "Fusible F3 1,25 A T (valeur de l'ancienne notice D811980)" } },
     radio: ["1er canal (1ch)", "2e canal (2ch)"], ch2def: 4, P: P_MERAK, partDef: 30, pedM1: false, deux: false,
     ref: { "2 SAFE": "1 SAFE", "2 ic": "1 ic", "2ch": "1ch", "2AUX": "1AUX" }, nomAux1: "AUX 1 (20-21)",
@@ -276,7 +276,7 @@
       rangLigne([["Y", "ANT"]], 350, 150, 0, false)],
     K: {}, coms: ["21", "50", "60", "70"], entrees: { 71: "STOP", 72: "SAFE1", 74: "SAFE2", 61: "IC1", 62: "IC2" }, ponts: [["70", "71"], ["70", "72"], ["70", "74"]],
     T: { p24: "51", safe: "52", aux1: "20", aux1b: "21", aux2: ["26", "27"], safe2: "74" }, mot: [["10", "11"]], aff: [170, 90],
-    us: [["jp10", 30, 254, 30, 8, "JP10 fins de course"], ["jp13", 30, 70, 20, 30, "JP13"], ["f1", 70, 76, 8, 22, "F1"], ["f3", 90, 76, 8, 22, "F3"]],
+    us: [["jp10", 30, 186, 30, 8, "JP10 fins de course"], ["jp13", 30, 70, 20, 30, "JP13"], ["f1", 70, 76, 8, 22, "F1"], ["f3", 90, 76, 8, 22, "F3"]],
     usine: { jp10: { nom: "JP10 : groupe de fins de course", txt: "Fins de course non simulés : l'atelier arrête le portail en fin de course théorique." }, jp13: { nom: "JP13 : secondaire du transformateur (24 V~)" }, f1: { nom: "Fusible F1 0,63 A T" }, f3: { nom: "Fusible F3 1,25 A T" } },
     radio: [], P: { tca: "TCA", part: "ouv. partielle", tcal: "TCA (logique)", pas: "MOUVT PAS A PAS", preal: "PREAL", hm: "HOMME MORTE", dir: "INV.SENS.OUV", blo: "BL.IMP.OUV", blt: "BL.IMP.TCA", blf: "BLI.FE", safe1: "SAFE 1", safe2: "SAFE 2", ic1: "IC 1", ic2: "IC 2", aux1: "AUX 0", aux2: "AUX 3" },
     preal: v => v ? 3 : 0, partDef: 20, pedM1: false, deux: false,
