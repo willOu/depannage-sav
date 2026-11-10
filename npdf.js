@@ -45,7 +45,7 @@
     setHead(n.t, true);
     app.innerHTML = `<div class="pdfbar"><button class="btn sec" id="pzm" aria-label="Réduire">−</button><span id="pzv">100 %</span><button class="btn sec" id="pzp" aria-label="Agrandir">+</button>${enreg(id, +k || 0, n)}</div>
       <p class="note" id="pmsg">Chargement de la notice (${mo(n.ko)})…</p><div id="ppages" class="ppages"></div>
-      <p class="note">Touchez une page pour l'ouvrir en plein écran : faites défiler les pages de haut en bas, zoom avec + / − ou double-touche.</p>`;
+      <p class="note">Touchez une page pour l'ouvrir en plein écran : faites défiler les pages de haut en bas, zoom avec + / − (le − montre la page entière), pincement ou double-touche.</p>`;
     let pdf;
     try {
       const [L, buf] = await Promise.all([chargeLib(), (n.sb && window.NAJOUT ? NAJOUT.octets(n) : fetch(n.f).then(r => { if (!r.ok) throw new Error("http"); return r.arrayBuffer(); }, () => { throw new Error("reseau"); }))]);
@@ -64,7 +64,7 @@
     document.getElementById("pmsg").textContent = `${pdf.numPages} page${pdf.numPages > 1 ? "s" : ""} · disponible hors ligne sur ce téléphone.`;
     const box = document.getElementById("ppages");
     let zoom = 1;
-    const ZS = [1, 1.5, 2, 3, 4];
+    const ZS = [0.5, 1, 1.5, 2, 3, 4];
     const largeur = () => Math.max(280, box.clientWidth) * zoom;
     const rendus = new Map();
     for (let i = 1; i <= pdf.numPages; i++) {
@@ -202,8 +202,10 @@
     box.addEventListener("scroll", () => { o.querySelector("#pvt").textContent = `${actuelle()} / ${N}`; }, { passive: true });
     let tRendu = 0;
     const rendreVisibles = () => pages.forEach(d => { const r = d.getBoundingClientRect(); if (r.bottom > -1200 && r.top < innerHeight + 1200) rendre(d); });
+    /* zoom minimal : la page entière tient à l'écran (largeur et hauteur) */
+    const minZ = () => Math.min(0.8, Math.max(0.3, (box.clientHeight - 8) / (box.clientWidth * (ratios.get(actuelle()) || p1.height / p1.width))));
     const setZ = (z, cx, cy) => {
-      z = Math.max(1, Math.min(6, z)); if (Math.abs(z - zoom) < 0.01) return;
+      z = Math.max(minZ(), Math.min(6, z)); if (Math.abs(z - zoom) < 0.01) return;
       cx = cx == null ? box.clientWidth / 2 : cx; cy = cy == null ? box.clientHeight / 2 : cy;
       const ax = (box.scrollLeft + cx) / zoom, ay = (box.scrollTop + cy) / zoom;
       zoom = z;
@@ -218,8 +220,8 @@
     box.addEventListener("touchstart", e => { if (e.touches.length === 2) { const r = box.getBoundingClientRect(); pince = { d: dist(e.touches), z: zoom, cx: (e.touches[0].clientX + e.touches[1].clientX) / 2 - r.left, cy: (e.touches[0].clientY + e.touches[1].clientY) / 2 - r.top }; } }, { passive: true });
     box.addEventListener("touchmove", e => { if (pince && e.touches.length === 2) { e.preventDefault(); setZ(pince.z * dist(e.touches) / pince.d, pince.cx, pince.cy); } }, { passive: false });
     box.addEventListener("touchend", e => { if (e.touches.length < 2) pince = null; }, { passive: true });
-    o.querySelector("#pvz").onclick = () => setZ(zoom + 0.5);
-    o.querySelector("#pvm").onclick = () => setZ(zoom - 0.5);
+    o.querySelector("#pvz").onclick = () => setZ(zoom < 0.99 ? 1 : zoom + 0.5);
+    o.querySelector("#pvm").onclick = () => setZ(zoom > 1.01 ? Math.max(1, zoom - 0.5) : minZ());
     o.querySelector("#pvp").onclick = () => aller(actuelle() - 1);
     o.querySelector("#pvn").onclick = () => aller(actuelle() + 1);
     box.ondblclick = e => { const r = box.getBoundingClientRect(); setZ(zoom >= 2 ? 1 : 2.5, e.clientX - r.left, e.clientY - r.top); };
