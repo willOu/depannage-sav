@@ -192,6 +192,12 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "2.62", date: "2026-11-10", titre: "Barrières LBA avec capteur angulaire (carte ONE-C)", items: [
+    "Nouvelle fiche « LBA 4 / 6 / 7 (ONE-C, capteur angulaire) » d'après la notice COAT013736 indice B : pannes fréquentes, messages et codes moteur 106 / 107, paramètres du menu USER PARAMETERS, bornier 1 à 28 + feux 29 à 38 et entrées / sorties de la carte",
+    "Apprentissage du capteur angulaire pas à pas (irréversibles et réversibles), remplacement du capteur et de la carte ONE-C, ouverture manuelle, maintenance",
+    "Notice PDF (84 pages) et 7 schémas ajoutés, utilisables hors ligne",
+    "Les fiches LBA 6 / 7 et LBA 4 existantes précisent qu'elles concernent la version à capteurs inductifs"
+  ] },
   { v: "2.61", date: "2026-11-10", titre: "Corrections après vérification complète", items: [
     "Atelier : le message « Mettez le secteur » disparaît quand on met le secteur",
     "Atelier Roger : le bouton de la touche 2 de la télécommande affiche sa vraie fonction (réglage 77) au lieu de « Mêmes valeurs que 76 »",
@@ -52611,7 +52617,7 @@ const MARQUES = [
   cartes: [
     {
       "id": "lba-67",
-      "nom": "LBA 6 / 7 (automate + variateur)",
+      "nom": "LBA 6 / 7 (automate LOGO, capteurs inductifs)",
       "modeles": "LBA 6 / 6R / 63PK (lisse jusqu'à 6 m ou 3,80 m selon modèle) et LBA 7 / 7R / 74 (lisse jusqu'à 7 m, 6 m ou 4 m) — moteur triphasé 0,18 kW 230 V, variateur 0,25 kW, automate programmable Siemens LOGO",
       "type": "Barrière levante (La Barrière Automatique) — irréversible (LBA 6 / 7) ou réversible (6R / 63PK / 7R / 74) ; commande par automate et variateur de fréquence",
       "source": "La Barrière Automatique, Instructions de service Barrières LBA 4 / 6 / 7 (version 2017) : §8, 9, 11, 12, 14.2 et 14.3 ; automate : notice « Siemens LOGO »",
@@ -53092,7 +53098,7 @@ const MARQUES = [
     },
     {
       "id": "lba-4",
-      "nom": "LBA 4 (platine ENPC001652)",
+      "nom": "LBA 4 (platine ENPC001652, capteurs inductifs)",
       "modeles": "LBA 4 (lisse jusqu'à 4 m, moteur triphasé 0,18 kW 230 V, variateur 0,25 kW, carte électronique ENPC001652 sans automate)",
       "type": "Barrière levante irréversible (La Barrière Automatique) — commande par platine électronique ENPC001652",
       "source": "La Barrière Automatique, Instructions de service Barrières LBA 4 / 6 / 7 (version 2017) : §9.7 (platine ENPC001652), §8 et §14.1 (LBA 4)",
@@ -53432,6 +53438,940 @@ const MARQUES = [
           "Remettre le capot et contrôler les cycles ouverture / fermeture, l'absence de rebond en fin de course, les sécurités (boucle, cellule) et la signalisation.",
           "Maintenance tous les 6 mois : nettoyage, serrage de la visserie et des fils, connectiques, position horizontale et verticale de la lisse. Chaque année : réglages, organes de sécurité / signalisation / verrouillage, sectionneur, commandes locales et distantes, graissage de l'ensemble de compensation (chaîne, maillon rapide, ressort), position et état du ressort.",
           "Ouverture manuelle sans tension (LBA 4/6/7) : ouvrir la porte avec la clé (de base clé 405), prendre la manivelle fixée sur le côté de la platine (son contacteur coupe l'alimentation de la carte), l'insérer dans le trou sur le côté, tourner dans le sens horaire pour lever, antihoraire pour baisser. Réversibles : la lisse s'ouvre seule ou est libre et se lève à la main."
+        ]
+      }
+    },
+    {
+      "id": "lba-capt-ang",
+      "nom": "LBA 4 / 6 / 7 (ONE-C, capteur angulaire)",
+      "modeles": "LBA 4, 6, 6R, 63PK, 7, 7R, 74 avec carte de commande ONE-C et capteur angulaire de position (accéléromètre) : moteur triphasé 0,18 kW 230 V à variation de fréquence, lisse de 3,80 à 7 m selon le modèle. Notice indice B du 28.12.2021 (ajout de la détection de chocs). Version à capteurs inductifs : voir les fiches LBA 6 / 7 et LBA 4.",
+      "type": "Barrière levante (La Barrière Automatique) — irréversible (LBA 4 / 6 / 7) ou réversible (6R / 63PK / 7R / 74), apprentissage du capteur angulaire par la carte ONE-C",
+      "source": "La Barrière Automatique, Notice technique COAT013736 indice B (28.12.2021) LBA 4 / 6 / 63PK / 7 / 74, capteur angulaire : §4.2, 8, 9, 10.2, 11 à 13, 16 à 18 et schémas §19 (pages 76 à 81)",
+      "codes": [
+        {
+          "code": "Ne s'ouvre pas",
+          "type": "symptome",
+          "titre": "La barrière ne s'ouvre pas",
+          "action": "Regarder l'état des entrées / sorties de la carte (maintenir ENTER 2 s) et vérifier le câblage de la commande d'ouverture (I1) ou de la boucle d'ouverture libre (I6). Si un message d'erreur s'affiche sur l'automate : contacter le SAV. Réducteur cassé (impossible d'ouvrir même hors tension) : remplacement de l'ensemble motoréducteur (§18.2). LBA 4 / 6 / 7 : vérifier que la manivelle est remise dans son logement sur le côté de la platine (son contacteur coupe l'alimentation de la carte)."
+        },
+        {
+          "code": "Ne se ferme pas",
+          "type": "symptome",
+          "titre": "La barrière ne se ferme pas",
+          "action": "Vérifier l'arrivée de la commande de fermeture (I2) sur l'état des entrées / sorties et son câblage. Une commande d'ouverture active empêche la fermeture : la désactiver. Une entrée de sécurité activée (boucle I3, cellule IR ou ultrason I4 / I5) bloque aussi : retirer le véhicule ou l'objet, vérifier l'orientation des cellules ; sans cellule, sans ultrason ni boucle, vérifier qu'il y a un shunt sur I3, I4 et I5. Carte en défaut, réducteur cassé, manivelle absente (LBA 4 / 6 / 7) : comme pour l'ouverture."
+        },
+        {
+          "code": "Se ferme sur un véhicule",
+          "type": "symptome",
+          "titre": "Elle se ferme alors qu'un véhicule est devant la cellule IR (ou ultrason) ou sur la boucle de sécurité",
+          "action": "Le véhicule n'est pas détecté : vérifier le câblage de l'organe de sécurité concerné."
+        },
+        {
+          "code": "Pas de fermeture après passage",
+          "type": "symptome",
+          "titre": "Elle ne se ferme pas après le passage sur la boucle de sécurité",
+          "action": "La fermeture après passage n'est pas activée : mettre le paramètre FAP sur TRUE (menu USER PARAMETERS)."
+        },
+        {
+          "code": "Pas de fermeture temporisée",
+          "type": "symptome",
+          "titre": "Elle ne se ferme pas au bout de la temporisation",
+          "action": "La fermeture après temporisation n'est pas activée : mettre le paramètre FAT sur TRUE (temporisation T_FAT, 15 s par défaut)."
+        },
+        {
+          "code": "Ne reste pas ouverte",
+          "type": "symptome",
+          "titre": "La barrière ne reste pas ouverte",
+          "action": "Une fermeture automatique (après passage ou après temporisation) est activée : mettre FAP et FAT sur FALSE."
+        },
+        {
+          "code": "Pas de relevage au manque de tension",
+          "type": "symptome",
+          "titre": "(LBA 6R / 63PK / 7R / 74) Elle ne s'ouvre pas automatiquement sur coupure de courant",
+          "action": "La compensation n'est pas assez forte : l'augmenter (§9.4, hors tension). Le relevage peut aussi être limité par la longueur de la lisse ou le poids des accessoires qu'elle porte."
+        },
+        {
+          "code": "N'atteint pas l'horizontale",
+          "type": "symptome",
+          "titre": "La barrière n'atteint pas la position horizontale",
+          "action": "Réversibles (6R / 63PK / 7R / 74) : compensation trop forte, la diminuer (§9.4). Irréversibles (LBA 4 / 6 / 7) : temporisation de ralentissement de fermeture trop courte, augmenter T_PVT, ou apprentissage de la position fermée mal réalisé, refaire un apprentissage complet. Dans tous les cas : si la butée de fermeture est trop haute par rapport au reposoir ou à la béquille (ou inversement), reprendre le réglage du reposoir ou de la béquille (notice des accessoires)."
+        },
+        {
+          "code": "Temps de manœuvre dépassé",
+          "type": "erreur",
+          "titre": "Mise en sécurité : ni l'ouverture ni la fermeture ne s'est terminée dans le temps de manœuvre",
+          "action": "Le temps d'ouverture ou de fermeture a dépassé T_manoeuvre (30 s par défaut). Le pilotage du moteur est coupé : un reset de la barrière est nécessaire."
+        },
+        {
+          "code": "Moteur en défaut · code 106",
+          "type": "erreur",
+          "titre": "Erreur de calcul des enroulements à la mise sous tension",
+          "action": "Message « Moteur en defaut » suivi du code erreur. Moteur débranché, court-circuit sur les phases, mauvaise configuration du moteur, etc. La notice ne donne pas d'autre dépannage : contrôler le câblage du moteur (U, V, W) et sa configuration."
+        },
+        {
+          "code": "Moteur en défaut · code 107",
+          "type": "erreur",
+          "titre": "Surchauffe du module IGBT",
+          "action": "Vérifier la température du module : l'écran Paramètres avancés 2/2 (ESC 2 s puis une flèche) l'affiche, elle doit rester inférieure à 80 °C."
+        },
+        {
+          "code": "Moteur en défaut · autre code",
+          "type": "erreur",
+          "titre": "Code d'erreur moteur non décrit (0 = pas d'erreur)",
+          "action": "La notice ne décrit que les codes 106 et 107 : pour tout autre code, contacter le SAV de La Barrière Automatique (04 78 86 02 86)."
+        },
+        {
+          "code": "Obstacle détecté en fermeture",
+          "type": "erreur",
+          "titre": "Réouverture automatique sur obstacle",
+          "action": "La barrière a détecté un obstacle en fermeture, s'est rouverte et reste ouverte. Un ordre d'ouverture est nécessaire pour la remettre en service. Réglages : Réouverture_obstacle, T_detection_choc (0,03 s), Rampe_detection_choc (2,0 °), Nb_chocs_autorises (3 essais de refermeture avant mise en défaut), T_pos_ouverte (2 s)."
+        },
+        {
+          "code": "Type de barrière inconnu",
+          "type": "erreur",
+          "titre": "La configuration paramétrée est inconnue",
+          "action": "Reprendre les paramètres Type_barriere, Longueur_lisse et Grille_lisse (profil ADMIN), puis redémarrer la barrière."
+        },
+        {
+          "code": "Messages d'état",
+          "type": "diag",
+          "titre": "Dernière ligne de l'écran Informations (écran par défaut)",
+          "action": "BARRIERE OUVERTE : ouverte, fermeture automatique non activée. BARRIERE OUVERTE 15S : ouverte, se referme à la fin du compte à rebours (FAT et mode auto activés) ; si le compte à rebours reste à 15 s, un ordre d'ouverture ou une sécurité est actif. BARRIERE FERMEE. OUVERTURE EN COURS / FERMETURE EN COURS. DETECTION BOUCLE : véhicule sur la boucle de sécurité, fermeture impossible. DETECTION CELLULE : véhicule devant les cellules IR ou ultrasons, fermeture impossible. BARRIERE DEGONDEE : fermeture impossible si « Regondage automatique » est activé. MANIVELLE ABSENTE : manivelle hors de son logement, pilotage impossible, moteur coupé."
+        },
+        {
+          "code": "Écrans et touches de la carte",
+          "type": "diag",
+          "titre": "Navigation sur la carte ONE-C",
+          "action": "▲ ou ▼ (depuis les écrans Informations ou Inputs-Outputs) : commande locale d'ouverture ou de fermeture. ESC 2 s : paramètres avancés (cycles, programme, version LBA6R GA 4.5m…, dégondages, tension du bus continu autour de 300 V ± 20 V, température IGBT inférieure à 80 °C, adresse IP). ENTER 2 s : état des entrées / sorties (AI, I, Encoder en degrés, Q, QR ; 1 = actif). ESC + ENTER 3 s : menu principal. Retour automatique à l'écran Informations après 60 s sans appui."
+        },
+        {
+          "code": "Remplacement de carte ONE-C",
+          "type": "diag",
+          "titre": "Reprise du programme par la carte SD de l'ancienne carte",
+          "action": "Retirer la carte ONE-C, récupérer sa carte SD (logement en haut à gauche), poser la nouvelle carte, y insérer l'ancienne SD. Au démarrage : « UPDATE PLC FROM SDCARD AUTO SAVE ? », ENTER (oui) ; « Done » s'affiche, ENTER, puis START PLC et ESC pour sortir (§18.7)."
+        }
+      ],
+      "parametres": {
+        "intro": "Tous les réglages se font dans le menu de la carte ONE-C (profils OP et ADMIN, mot de passe ADMIN à demander au SAV). Le variateur n'a plus de réglage à faire. La notice indique que cette liste est une liste par défaut, qui varie selon le type de barrière et les clients, et que certains paramètres ne se modifient pas sans contacter le SAV. Voir aussi la fiche ONE-C pour les autres menus (Modbus, serveur web).",
+        "navigation": [
+          "Menu principal : ESC + ENTER pendant 3 s, choisir le profil OP ou ADMIN (ADMIN : mot de passe à quatre chiffres), puis USER PARAMETERS.",
+          "Modifier une valeur : choisir le paramètre avec les flèches et ENTER (la valeur s'affiche), ENTER à nouveau pour la modifier, régler avec les flèches haut et bas, ENTER pour valider, ESC pour revenir à la liste, ESC pour sortir.",
+          "Accès : INFORMATIONS, START/STOP PLC, USER PARAMETERS, IP CONFIG, DOWNLOAD / UPLOAD PLC PROG en OP et ADMIN ; ERASE PLC PROG, ERASE PLC RETAIN, ERASE USERPARAM, LOCATED VARS et REBOOT en ADMIN seulement."
+        ],
+        "groupes": [
+          {
+            "nom": "Réservés ADMIN",
+            "items": [
+              {
+                "code": "Type_barriere",
+                "def": "—",
+                "titre": "Type de barrière à piloter (redémarrage obligatoire après modification)",
+                "valeurs": [
+                  [
+                    "1",
+                    "LBA4"
+                  ],
+                  [
+                    "2",
+                    "LBA6"
+                  ],
+                  [
+                    "3",
+                    "LBA6R"
+                  ],
+                  [
+                    "4",
+                    "LBA63PK"
+                  ],
+                  [
+                    "5",
+                    "LBA63PG Aval"
+                  ],
+                  [
+                    "6",
+                    "LBA63PG Amont"
+                  ],
+                  [
+                    "7",
+                    "LBA7"
+                  ],
+                  [
+                    "8",
+                    "LBA7R"
+                  ],
+                  [
+                    "9",
+                    "LBA74"
+                  ],
+                  [
+                    "10",
+                    "LBA86NEO IR"
+                  ],
+                  [
+                    "11",
+                    "LBA86NEO R"
+                  ],
+                  [
+                    "12",
+                    "LBA12"
+                  ]
+                ]
+              },
+              {
+                "code": "Longueur_lisse",
+                "def": "—",
+                "titre": "Longueur de la lisse (m)",
+                "valeurs": []
+              },
+              {
+                "code": "Grille_lisse",
+                "def": "—",
+                "titre": "Type de grille",
+                "valeurs": [
+                  [
+                    "0",
+                    "Pas de grille."
+                  ],
+                  [
+                    "1",
+                    "Grille GA."
+                  ],
+                  [
+                    "2",
+                    "Grille GTH."
+                  ],
+                  [
+                    "3",
+                    "Grille HP."
+                  ]
+                ]
+              },
+              {
+                "code": "Boost_Vit_1",
+                "def": "100 %",
+                "titre": "Boost appliqué à la vitesse d'ouverture (%)",
+                "valeurs": []
+              },
+              {
+                "code": "Boost_Vit_2",
+                "def": "100 %",
+                "titre": "Boost appliqué à la vitesse de fermeture (%)",
+                "valeurs": []
+              },
+              {
+                "code": "Regondage_auto",
+                "def": "—",
+                "titre": "Regondage automatique (LBA63PG)",
+                "valeurs": [
+                  [
+                    "TRUE",
+                    "Activé."
+                  ],
+                  [
+                    "FALSE",
+                    "Désactivé."
+                  ]
+                ]
+              },
+              {
+                "code": "Reouverture_secu",
+                "def": "—",
+                "titre": "Réouverture automatique sur détection d'un organe de sécurité (boucles, cellule IR, ultrason…)",
+                "valeurs": [
+                  [
+                    "TRUE",
+                    "Activé."
+                  ],
+                  [
+                    "FALSE",
+                    "Désactivé."
+                  ]
+                ]
+              },
+              {
+                "code": "Etat_apprentissage",
+                "def": "—",
+                "titre": "Apprentissage réalisé ou non (lecture)",
+                "valeurs": [
+                  [
+                    "TRUE",
+                    "Réalisé."
+                  ],
+                  [
+                    "FALSE",
+                    "Non réalisé."
+                  ]
+                ]
+              },
+              {
+                "code": "Valeur_Filtre_Chocs",
+                "def": "200",
+                "titre": "Seuil de détection d'un choc frontal en position fermée, pour le comptage des chocs subis",
+                "valeurs": []
+              },
+              {
+                "code": "Duree_Filtre_Chocs",
+                "def": "2 s",
+                "titre": "Durée de l'impulsion créée par un front pour la prise en compte du comptage (s)",
+                "valeurs": []
+              }
+            ]
+          },
+          {
+            "nom": "Réglages OP et ADMIN",
+            "items": [
+              {
+                "code": "T_manoeuvre",
+                "def": "30 s",
+                "titre": "Temps au-delà duquel la barrière se met en défaut si aucun des deux capteurs de fin de course n'a été détecté (s)",
+                "valeurs": []
+              },
+              {
+                "code": "FAT",
+                "def": "—",
+                "titre": "Fermeture automatique après temporisation",
+                "valeurs": [
+                  [
+                    "TRUE",
+                    "Activé."
+                  ],
+                  [
+                    "FALSE",
+                    "Désactivé."
+                  ]
+                ]
+              },
+              {
+                "code": "FAP",
+                "def": "—",
+                "titre": "Fermeture automatique après passage sur la boucle de sécurité",
+                "valeurs": [
+                  [
+                    "TRUE",
+                    "Activé."
+                  ],
+                  [
+                    "FALSE",
+                    "Désactivé."
+                  ]
+                ]
+              },
+              {
+                "code": "T_FAT",
+                "def": "15 s",
+                "titre": "Attente avant la fermeture après temporisation, si activée (s)",
+                "valeurs": []
+              },
+              {
+                "code": "T_FAP",
+                "def": "0 s",
+                "titre": "Attente avant la fermeture après passage, si activée (s)",
+                "valeurs": []
+              },
+              {
+                "code": "T_detection_FAP",
+                "def": "0,5 s",
+                "titre": "Durée minimum de détection sur la boucle pour que la fermeture après passage soit activée (s)",
+                "valeurs": []
+              },
+              {
+                "code": "T_PVT",
+                "def": "1 s",
+                "titre": "Durée de la petite vitesse temporisée en fermeture, barrières irréversibles (s)",
+                "valeurs": []
+              },
+              {
+                "code": "Presign_OUV",
+                "def": "0 s",
+                "titre": "Présignalisation avant l'ouverture (s)",
+                "valeurs": []
+              },
+              {
+                "code": "Presign_FERM",
+                "def": "0 s",
+                "titre": "Présignalisation avant la fermeture (s)",
+                "valeurs": []
+              },
+              {
+                "code": "Clignotement_feux",
+                "def": "—",
+                "titre": "Clignotement des feux sur lisse",
+                "valeurs": [
+                  [
+                    "TRUE",
+                    "Activé."
+                  ],
+                  [
+                    "FALSE",
+                    "Désactivé."
+                  ]
+                ]
+              },
+              {
+                "code": "T_ON_feux",
+                "def": "0,5 s",
+                "titre": "Temps d'allumage des feux sur lisse (s)",
+                "valeurs": []
+              },
+              {
+                "code": "T_OFF_feux",
+                "def": "0,5 s",
+                "titre": "Temps d'extinction des feux sur lisse (s)",
+                "valeurs": []
+              },
+              {
+                "code": "PWM_verrou",
+                "def": "—",
+                "titre": "PWM sur la sortie verrouillage (Q3) pour consommer moins",
+                "valeurs": [
+                  [
+                    "TRUE",
+                    "Activé."
+                  ],
+                  [
+                    "FALSE",
+                    "Désactivé."
+                  ]
+                ]
+              },
+              {
+                "code": "T_verrouillage",
+                "def": "1 s",
+                "titre": "Temps au bout duquel le verrouillage est activé après la fermeture complète (s)",
+                "valeurs": []
+              },
+              {
+                "code": "Activation_deverr",
+                "def": "—",
+                "titre": "Organe de verrouillage mécanique (hors ventouse électromagnétique) : la barrière se referme très légèrement avant chaque ouverture pour libérer le verrouillage",
+                "valeurs": [
+                  [
+                    "TRUE",
+                    "Activé."
+                  ],
+                  [
+                    "FALSE",
+                    "Désactivé."
+                  ]
+                ]
+              },
+              {
+                "code": "T_deverrouillage",
+                "def": "0,2 s",
+                "titre": "Durée de la refermeture pour libérer le verrouillage avant l'ouverture (s)",
+                "valeurs": []
+              },
+              {
+                "code": "Angle_deverr",
+                "def": "20°",
+                "titre": "Angle à partir duquel le verrouillage est désactivé en cas de forçage de la lisse (°)",
+                "valeurs": []
+              },
+              {
+                "code": "Mode_1_BP",
+                "def": "—",
+                "titre": "Mode « 1 BP » : une seule commande, l'ouverture devient fermeture quand la barrière est ouverte",
+                "valeurs": [
+                  [
+                    "TRUE",
+                    "Activé."
+                  ],
+                  [
+                    "FALSE",
+                    "Désactivé."
+                  ]
+                ]
+              },
+              {
+                "code": "Mode_homme_mort",
+                "def": "—",
+                "titre": "Mode « homme mort » : la commande de fermeture doit être maintenue jusqu'à la fin, sinon la barrière se rouvre",
+                "valeurs": [
+                  [
+                    "TRUE",
+                    "Activé."
+                  ],
+                  [
+                    "FALSE",
+                    "Désactivé."
+                  ]
+                ]
+              },
+              {
+                "code": "Mode_orange",
+                "def": "—",
+                "titre": "Éclairage en orange de la signalisation (capot LED, lisse lumineuse) pendant le mouvement de la lisse",
+                "valeurs": [
+                  [
+                    "TRUE",
+                    "Activé."
+                  ],
+                  [
+                    "FALSE",
+                    "Désactivé."
+                  ]
+                ]
+              },
+              {
+                "code": "Cligno_orange",
+                "def": "—",
+                "titre": "Clignotement de la signalisation pendant l'allumage en orange",
+                "valeurs": [
+                  [
+                    "TRUE",
+                    "Activé."
+                  ],
+                  [
+                    "FALSE",
+                    "Désactivé."
+                  ]
+                ]
+              },
+              {
+                "code": "Cligno_rouge",
+                "def": "—",
+                "titre": "Clignotement du feu rouge (ou capot LED / lisse lumineuse en phase rouge)",
+                "valeurs": [
+                  [
+                    "TRUE",
+                    "Activé."
+                  ],
+                  [
+                    "FALSE",
+                    "Désactivé."
+                  ]
+                ]
+              },
+              {
+                "code": "Veille_Vert",
+                "def": "—",
+                "titre": "Extinction automatique du feu vert (ou capot LED / lisse lumineuse en phase verte)",
+                "valeurs": [
+                  [
+                    "TRUE",
+                    "Activé."
+                  ],
+                  [
+                    "FALSE",
+                    "Désactivé."
+                  ]
+                ]
+              },
+              {
+                "code": "T_Veille_Vert",
+                "def": "60 s",
+                "titre": "Temps au bout duquel le feu vert s'éteint si Veille_Vert est activé (s)",
+                "valeurs": []
+              },
+              {
+                "code": "English",
+                "def": "—",
+                "titre": "Messages en anglais",
+                "valeurs": [
+                  [
+                    "TRUE",
+                    "Anglais."
+                  ],
+                  [
+                    "FALSE",
+                    "Français."
+                  ]
+                ]
+              },
+              {
+                "code": "Butee_1",
+                "def": "—",
+                "titre": "Butée d'ouverture enregistrée à l'apprentissage (°)",
+                "valeurs": []
+              },
+              {
+                "code": "Tolerance_1",
+                "def": "± 5°",
+                "titre": "Angle de tolérance autour de la butée d'ouverture dans lequel la barrière est considérée ouverte (°)",
+                "valeurs": []
+              },
+              {
+                "code": "Butee_2",
+                "def": "—",
+                "titre": "Butée de fermeture enregistrée à l'apprentissage (°)",
+                "valeurs": []
+              },
+              {
+                "code": "Tolerance_2",
+                "def": "± 5°",
+                "titre": "Angle de tolérance autour de la butée de fermeture dans lequel la barrière est considérée fermée (°)",
+                "valeurs": []
+              },
+              {
+                "code": "Offset_Ouv",
+                "def": "0°",
+                "titre": "Plage de ralenti, une fois le ralentissement terminé, avant la butée d'ouverture (°)",
+                "valeurs": []
+              },
+              {
+                "code": "Offset_Ferm",
+                "def": "0°",
+                "titre": "Plage de ralenti, une fois le ralentissement terminé, avant la butée de fermeture (°)",
+                "valeurs": []
+              },
+              {
+                "code": "Numero_Serie",
+                "def": "—",
+                "titre": "Numéro de série de la barrière (non paramétré : à saisir pour pouvoir le lire dans la table d'échange Modbus)",
+                "valeurs": []
+              },
+              {
+                "code": "T_pos_ouverte",
+                "def": "2 s",
+                "titre": "Temps d'ouverture avant refermeture après une réouverture sur obstacle, si activée (s)",
+                "valeurs": []
+              },
+              {
+                "code": "T_detection_choc",
+                "def": "0,03 s",
+                "titre": "Temps pendant lequel la lisse doit être bloquée pour considérer un obstacle (s)",
+                "valeurs": []
+              },
+              {
+                "code": "Rampe_detection_choc",
+                "def": "2,0°",
+                "titre": "Variation d'angle en dessous de laquelle la lisse est considérée bloquée pendant la durée réglée (°)",
+                "valeurs": []
+              },
+              {
+                "code": "Réouverture_obstacle",
+                "def": "—",
+                "titre": "Réouverture automatique sur détection d'obstacle en cours de fermeture",
+                "valeurs": [
+                  [
+                    "TRUE",
+                    "Activé."
+                  ],
+                  [
+                    "FALSE",
+                    "Désactivé."
+                  ]
+                ]
+              },
+              {
+                "code": "Nb_chocs_autorises",
+                "def": "3",
+                "titre": "Nombre d'essais de refermeture après une détection d'obstacle avant la mise en défaut (un ordre d'ouverture réinitialise le défaut)",
+                "valeurs": []
+              }
+            ]
+          }
+        ]
+      },
+      "bornier": {
+        "groupes": [
+          {
+            "nom": "Bornier façade (bas de la platine) · 1 à 28, N, PH",
+            "bornes": [
+              {
+                "n": "1-2",
+                "label": "Commande d'ouverture",
+                "desc": "Contact sec NO, en impulsion. Une commande d'ouverture maintenue empêche la fermeture (l'ouverture est prioritaire). Bornes 1 à 4 doublées en cas de commandes externes (radio, commandes pompiers…).",
+                "t": "no"
+              },
+              {
+                "n": "3-4",
+                "label": "Commande de fermeture",
+                "desc": "Contact sec NO, en impulsion.",
+                "t": "no"
+              },
+              {
+                "n": "5-6",
+                "label": "Mode automatique / manuel",
+                "desc": "Shunt = mode automatique (défaut) : boucle d'ouverture, fermeture après passage et fermeture après temporisation actives. Sans shunt = manuel : la barrière ne bouge que sur commande (bornes 1 à 4). Un commutateur peut remplacer le shunt.",
+                "t": "autre"
+              },
+              {
+                "n": "7-8",
+                "label": "Alimentation 24 Vdc des accessoires",
+                "desc": "7 = +, 8 = −. Émetteur IR, radio, etc.",
+                "t": "alim"
+              },
+              {
+                "n": "9-10",
+                "label": "Ventouse / verrouillage sur reposoir",
+                "desc": "9 = +, 10 = −. Sortie Q3 de la carte (verrouillage).",
+                "t": "sortie"
+              },
+              {
+                "n": "11-12",
+                "label": "Report barrière ouverte",
+                "desc": "Contact sec NO.",
+                "t": "sortie"
+              },
+              {
+                "n": "13-14",
+                "label": "Report barrière fermée",
+                "desc": "Contact sec NO.",
+                "t": "sortie"
+              },
+              {
+                "n": "15-16",
+                "label": "Report barrière dégondée (lisse tombée)",
+                "desc": "Contact sec NC, option.",
+                "t": "sortie"
+              },
+              {
+                "n": "17-18",
+                "label": "Report boucle de sécurité",
+                "desc": "Contact sec NC, option (§8 et schéma). Attention : le tableau §10.2.2 de la même notice donne QR4 « report boucle de sécurité (NO) » ; la notice se contredit, relever l'état réel au multimètre.",
+                "t": "sortie"
+              },
+              {
+                "n": "19-20",
+                "label": "Report synthèse défauts",
+                "desc": "Contact sec NC, option.",
+                "t": "sortie"
+              },
+              {
+                "n": "21-22",
+                "label": "Report boucle de présence",
+                "desc": "Contact sec NO, option.",
+                "t": "sortie"
+              },
+              {
+                "n": "25-26",
+                "label": "Report porte ouverte",
+                "desc": "Contact sec NC, option. Les numéros 23 et 24 n'existent pas sur le bornier.",
+                "t": "sortie"
+              },
+              {
+                "n": "27-28",
+                "label": "Report position pivotée",
+                "desc": "Contact sec NO, option.",
+                "t": "sortie"
+              },
+              {
+                "n": "N · PH",
+                "label": "Alimentation 230 Vac monophasé",
+                "desc": "Câble 3G 1,5 mm² ou 2,5 mm² selon la distance ; protection en tête de ligne : disjoncteur différentiel 10 A 30 mA par barrière. Terre sur la barrette de masse à côté du bornier. À câbler en dernier. Alimenter la barrière dès l'installation pour éviter la condensation.",
+                "t": "alim"
+              }
+            ]
+          },
+          {
+            "nom": "Signalisation (options, bornes 29 à 38 du schéma)",
+            "bornes": [
+              {
+                "n": "29",
+                "label": "Alimentation 24 Vdc de la lisse lumineuse rouge / vert",
+                "desc": "D'après le schéma électrique (la notice ne détaille pas ces bornes dans le texte). La platine ne comporte peut-être pas toutes les bornes du schéma.",
+                "t": "sortie"
+              },
+              {
+                "n": "30",
+                "label": "Feu rouge",
+                "desc": "D'après le schéma.",
+                "t": "sortie"
+              },
+              {
+                "n": "31",
+                "label": "Feu vert",
+                "desc": "D'après le schéma.",
+                "t": "sortie"
+              },
+              {
+                "n": "32",
+                "label": "Feu vert capot LED",
+                "desc": "D'après le schéma.",
+                "t": "sortie"
+              },
+              {
+                "n": "33",
+                "label": "Commun capot LED",
+                "desc": "D'après le schéma.",
+                "t": "sortie"
+              },
+              {
+                "n": "34",
+                "label": "Feu rouge capot LED",
+                "desc": "D'après le schéma.",
+                "t": "sortie"
+              },
+              {
+                "n": "35-36",
+                "label": "Feu rouge 230 V",
+                "desc": "Deux bornes reliées, d'après le schéma.",
+                "t": "sortie"
+              },
+              {
+                "n": "37-38",
+                "label": "Feu vert 230 V",
+                "desc": "Deux bornes reliées, d'après le schéma.",
+                "t": "sortie"
+              }
+            ]
+          },
+          {
+            "nom": "Carte ONE-C · entrées par défaut (§10.2.2)",
+            "bornes": [
+              {
+                "n": "I1",
+                "label": "Commande d'ouverture",
+                "desc": "NO.",
+                "t": "no"
+              },
+              {
+                "n": "I2",
+                "label": "Commande de fermeture",
+                "desc": "NO.",
+                "t": "no"
+              },
+              {
+                "n": "I3",
+                "label": "Boucle magnétique de sécurité",
+                "desc": "NF.",
+                "t": "nf"
+              },
+              {
+                "n": "I4",
+                "label": "Cellule IR (ou détecteur ultrason) de sécurité n° 1",
+                "desc": "NF.",
+                "t": "nf"
+              },
+              {
+                "n": "I5",
+                "label": "Cellule IR (ou détecteur ultrason) de sécurité n° 2",
+                "desc": "NF.",
+                "t": "nf"
+              },
+              {
+                "n": "I6",
+                "label": "Boucle magnétique d'ouverture libre",
+                "desc": "NO.",
+                "t": "no"
+              },
+              {
+                "n": "I7",
+                "label": "Mode automatique / manuel",
+                "desc": "1 = auto, 0 = manuel.",
+                "t": "autre"
+              },
+              {
+                "n": "I8",
+                "label": "Capteur de dégondage (ou lisse tombée)",
+                "desc": "NC.",
+                "t": "nf"
+              },
+              {
+                "n": "AI3",
+                "label": "Non attribuée, ou fin de course manivelle (barrières irréversibles)",
+                "desc": "AI1, AI2 et AI4 : non attribuées (NO).",
+                "t": "autre"
+              },
+              {
+                "n": "Encod",
+                "label": "Capteur angulaire de position",
+                "desc": "Valeur affichée en degrés sur l'écran Inputs-Outputs.",
+                "t": "autre"
+              }
+            ]
+          },
+          {
+            "nom": "Carte ONE-C · sorties par défaut (§10.2.2)",
+            "bornes": [
+              {
+                "n": "Q1",
+                "label": "Feu flash sur capot",
+                "desc": "Sortie transistor 24 Vdc, 0,75 A par sortie (40 W au total).",
+                "t": "sortie"
+              },
+              {
+                "n": "Q2",
+                "label": "Feux sur lisse",
+                "desc": "",
+                "t": "sortie"
+              },
+              {
+                "n": "Q3",
+                "label": "Ventouse / verrouillage",
+                "desc": "",
+                "t": "sortie"
+              },
+              {
+                "n": "Q4",
+                "label": "Alarme dégondage",
+                "desc": "",
+                "t": "sortie"
+              },
+              {
+                "n": "Q5",
+                "label": "Feu vert",
+                "desc": "",
+                "t": "sortie"
+              },
+              {
+                "n": "Q6",
+                "label": "Feu rouge",
+                "desc": "",
+                "t": "sortie"
+              },
+              {
+                "n": "QR1",
+                "label": "Report barrière ouverte",
+                "desc": "Relais contact sec 10 A 250 Vac, NO.",
+                "t": "sortie"
+              },
+              {
+                "n": "QR2",
+                "label": "Report barrière fermée",
+                "desc": "NO.",
+                "t": "sortie"
+              },
+              {
+                "n": "QR3",
+                "label": "Report barrière dégondée / lisse tombée",
+                "desc": "NC.",
+                "t": "sortie"
+              },
+              {
+                "n": "QR4",
+                "label": "Report boucle de sécurité",
+                "desc": "NO selon ce tableau ; voir la contradiction aux bornes 17-18.",
+                "t": "sortie"
+              },
+              {
+                "n": "QR5",
+                "label": "Report synthèse défaut",
+                "desc": "NC.",
+                "t": "sortie"
+              },
+              {
+                "n": "QR6",
+                "label": "Non attribuée",
+                "desc": "",
+                "t": "autre"
+              }
+            ]
+          }
+        ]
+      },
+      "apprentissage": {
+        "avant": [
+          "Les barrières sont testées et réglées en usine ; un ajustement sur site (butées et capteur) peut être nécessaire, surtout après une modification comme un changement de longueur de lisse. Les réglages se font sous tension, sans capot : risque de blessures.",
+          "Attention à la fermeture automatique si la fermeture après passage est activée.",
+          "Vérifier que le type de barrière paramétré dans la carte (Type_barriere) correspond à la barrière : l'écran de lancement l'affiche (« pour : LBA6 »)."
+        ],
+        "etapes": [
+          "Irréversibles (LBA 4 / 6 / 7), 1re étape — apprentissage du capteur : appuyer ensemble sur ESC et ▼ pendant 2 s. « Apprentissage pour : LBA6 », OK pour continuer (si le type est faux, corriger d'abord Type_barriere). Butée ouverture : placer la barrière en position ouverte avec ▲ et ▼, OK. Butée fermeture : placer la barrière en position fermée avec ▲ et ▼, OK. L'écran affiche « realise avec succes » pendant 1 s ; la barrière est alors fermée.",
+          "Irréversibles, 2e étape — butées mécaniques (sauf LBA 4) : elles servent de sécurité en cas de défaut du capteur. Capot ôté et alimentation coupée, débloquer le contre-écrou, visser ou dévisser la butée pour bloquer la lisse en cas de sur-course (légèrement après la position finale), rebloquer le contre-écrou.",
+          "Réversibles (6R / 63PK / 7R / 74), 1re étape — butées : elles définissent les positions ouverte et fermée. Capot ôté et alimentation coupée, débloquer le contre-écrou, visser ou dévisser la butée jusqu'à la position voulue, rebloquer le contre-écrou.",
+          "Réversibles, 2e étape — apprentissage des butées : ESC et ▼ pendant 2 s, OK pour continuer. Butée ouverture : maintenir ▲ jusqu'à la butée d'ouverture et relâcher pour valider. Butée fermeture : maintenir ▼ jusqu'à la butée de fermeture et relâcher. « realise avec succes » pendant 1 s.",
+          "En cas de mauvais réglage, l'apprentissage se relance à tout moment par ESC et ▼ pendant 2 s. Résultat lisible dans Butee_1 (ouverture), Butee_2 (fermeture) et Etat_apprentissage.",
+          "Compensation, réversibles (hors tension) : desserrer le contre-écrou sur la tige du ressort, serrer l'écrou pour plus de compensation (relevage automatique activé ou augmenté), le desserrer pour moins, resserrer le contre-écrou. Le relevage automatique doit rester lent pour ne pas taper la butée d'ouverture."
+        ],
+        "apres": [
+          "Remplacement du capteur angulaire : retirer les deux vis (clé Allen), débrancher le capteur du bornier Encoder, couper le collier, sortir le capteur, poser le nouveau sur la came métallique, le rebrancher, fixer son câble avec un nouveau collier (rayon de courbure suffisant, sans frottement sur l'équerre), puis refaire un apprentissage complet (§18.4).",
+          "Inversion de sens de la barrière : voir §18.6 de la notice (LBA 4 : inverser la came de fixation, clé de 36, puis inverser deux phases du moteur en sortie de l'automate). Toujours refaire un apprentissage complet ensuite.",
+          "Ouverture manuelle sans tension (LBA 4 / 6 / 7) : ouvrir la porte avec la clé (de base clé 405), prendre la manivelle fixée sur le côté de la platine (son contacteur coupe l'alimentation de la carte), l'insérer dans le trou sur le côté, tourner dans le sens horaire pour lever, antihoraire pour baisser. Réversibles (6R / 63PK / 7R / 74) : la barrière s'ouvre seule ou la lisse est libre ; réglage par la compensation.",
+          "Maintenance tous les 6 mois : nettoyage, serrage de la visserie et des fils, connectiques, positions horizontale et verticale de la lisse, organes de sécurité. Chaque année : réglages, absence de rebond en fin de course, signalisation, verrouillage, sectionneur, commandes locales et distantes, graissage de l'ensemble de compensation (chaîne, maillon rapide, ressort : graisse MOLYKOTE D-PASTE ou équivalent), état du ressort.",
+          "Cette notice renvoie pour la LBA 4 à un « §14.1 LBA4 » (bornes 3-4 et 24 Vdc 15-16) qui n'existe pas : le §14.1 traite de la communication RS485. La numérotation du bornier de la LBA 4 n'est donc pas confirmée par la notice.",
+          "Support LBA : 04 78 86 02 86."
         ]
       }
     },
@@ -55188,7 +56128,7 @@ const MARQUES = [
           "En logique angulaire : régler Type_barriere (ADMIN) puis redémarrer la barrière ; renseigner Longueur_lisse, Lisse, Grille, Accessoire_lisse."
         ],
         "etapes": [
-          "Lire Etat_apprentissage : FALSE = apprentissage des butées non réalisé. La notice ne décrit pas la procédure de l'apprentissage ; elle enregistre Butee_1 (ouverture) et Butee_2 (fermeture) en degrés.",
+          "Lire Etat_apprentissage : FALSE = apprentissage des butées non réalisé. Procédure décrite dans la notice des barrières LBA 4 / 6 / 7 à capteur angulaire (fiche « LBA 4 / 6 / 7 (ONE-C, capteur angulaire) ») : ESC et ▼ pendant 2 s, puis butée ouverture et butée fermeture ; elle enregistre Butee_1 (ouverture) et Butee_2 (fermeture) en degrés.",
           "Régler les vitesses et rampes (Param_Vit_1 à 9 en logique inductive, Offset_Vit / Offset_Pvit en angulaire) et le sens du moteur (Sens_barriere).",
           "Régler les fermetures automatiques (FAT / FAP et leurs temporisations), les présignalisations et les feux."
         ],
