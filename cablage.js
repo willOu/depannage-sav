@@ -808,6 +808,7 @@
     if (pa === "L" || pa === "N" || pb === "L" || pb === "N") { if (pa === pb) return "0 V~ : même conducteur."; if (pa === null || pb === null) return "Une pointe au 230 V~, l'autre sur un conducteur en l'air : tension non déterminée. Prudence."; return "Mesure entre le 230 V~ et la très basse tension de la carte : non significative (circuits séparés)."; }
     if (R.U.f(a) === R.U.f(b)) return "0 V : les deux pointes sont sur le même conducteur.";
     if (pa !== null && pb !== null) return Math.abs(pa - pb) + " V" + (pa !== pb ? " continu" : "") + ".";
+    if ([...ta, ...tb].some(t => PHASES.includes(t))) return "Tension sur une sortie moteur : non simulée par l'atelier (la notice ne donne pas la tension de sortie du moteur).";
     const ent = [a, b].find(k => ENTREES[k] && R.T(k).size === 0 || (ENTREES[k] && !pot(R.T(k)) && pot(R.T(k)) !== 0));
     if (ent) return "Entrée " + ENTREES[ent] + " en l'air : la carte impose une tension sur l'entrée, la notice ne la donne pas.";
     return "Rien de mesurable : au moins une pointe est sur un conducteur en l'air.";
@@ -841,7 +842,7 @@
         if (a.t === "rx" || a.t === "rxc") acts.push(`<button class="cabact" onclick="CAB.faisceau(${a.paire})">✋ ${(S.etat["p" + a.paire] || {}).coupe ? "Dégager" : "Couper"} cellules ${a.paire}</button>`);
       });
       if (M && M.radio) acts.push(M.radio.map((l, i) => `<button class="cabact" data-radio="PR${i + 1}">📡 Télécommande touche ${i + 1}<small>${esc(l)}</small></button>`).join(""));
-      if (radio) acts.push(`<button class="cabact" data-radio="PR1">📡 Télécommande touche 1<small>${esc(pdesc("76").slice(0, 26))}</small></button><button class="cabact" data-radio="PR2">📡 Touche 2<small>${esc(pdesc("77").slice(0, 26))}</small></button>`);
+      if (radio) acts.push(`<button class="cabact" data-radio="PR1">📡 Télécommande touche 1<small>${esc(pdesc("76").slice(0, 26))}</small></button><button class="cabact" data-radio="PR2">📡 Touche 2<small>${esc((pdesc("77", par("77")) && !/^Mêmes valeurs/.test(pdesc("77")) ? pdesc("77") : (ITEMS["76"] ? pdesc("76", par("77")) : "")).slice(0, 26))}</small></button>`);
       el.innerHTML = `<div class="cabacts">${acts.join("") || `<p class="note">Aucun accessoire actionnable : posez-en en mode Câbler.</p>`}</div>
         <div class="sga"><button class="mini" onclick="CAB.mm()">🧪 Multimètre</button><button class="mini" onclick="CAB.parametres()">⚙ Paramètres</button><button class="mini" onclick="CAB.missions()">🎯 Missions</button></div>
         ${radio ? `<p class="hotn">Télécommande supposée déjà mémorisée dans le récepteur (l'apprentissage radio n'est pas simulé).</p>` : ""}`;
@@ -932,7 +933,7 @@
     const a = S.sel; S.sel = null;
     if (I.fils.some(w => (w.a === a && w.b === k) || (w.a === k && w.b === a))) { S.msgU = "Ce fil existe déjà."; rendre(); return; }
     const n = [a, k].map(x => I.fils.filter(w => w.a === x || w.b === x).length);
-    if (n.some(x => x >= 3)) { S.msgU = "Trois fils maximum par borne."; rendre(); return; }
+    if ([a, k].some((x, i) => n[i] >= (COMS.includes(x) ? 6 : 3))) { S.msgU = COMS.includes(a) && COMS.includes(k) ? "Six fils maximum par borne COM." : "Trois fils maximum par borne (six sur une borne COM : elle porte les ponts d'usine)."; rendre(); return; }
     I.fils.push({ id: "w" + (I.n++), a, b: k, c: S.couleur }); S.msgU = ""; sauver(); rendre();
   }
   /* touches de la carte (notice § 7) : UP / DOWN affichent les paramètres, + / − changent la valeur qui clignote,
@@ -989,7 +990,7 @@
     if (sub && CARTES[sub] && cabDispo(sub)) return atelier(sub);
     setHead("Atelier de câblage", true);
     app.innerHTML = `<p class="note"><b>Formation.</b> Choisissez une carte, posez les accessoires, câblez-les vous-même puis testez l'installation sous tension : on voit le courant passer dans les fils et la carte réagir comme dans la notice.</p><div class="list">` +
-      Object.keys(CARTES).filter(cabDispo).map(id => { const b = board(id); return `<button class="row" onclick="go('#/cab/${id}')"><span class="badge" style="--c:${esc(b.m.couleur)}">${esc(b.m.nom)}</span><b>${esc(b.c.nom)}</b><small>Borniers, accessoires, missions · ${esc(CFG[id].fig.replace(/ de la notice.*/, ""))}</small></button>`; }).join("") + `</div><p class="hotn">D'autres cartes viendront ensuite.</p>`;
+      Object.keys(CARTES).filter(cabDispo).map((id, i) => ({ id, i, m: board(id).m.nom })).sort((x, y) => (x.m === "Roger" ? 0 : 1) - (y.m === "Roger" ? 0 : 1) || (x.m === "Roger" ? 0 : x.m.localeCompare(y.m, "fr")) || x.i - y.i).map(o => o.id).map(id => { const b = board(id); return `<button class="row" onclick="go('#/cab/${id}')"><span class="badge" style="--c:${esc(b.m.couleur)}">${esc(b.m.nom)}</span><b>${esc(b.c.nom)}</b><small>Borniers, accessoires, missions · ${esc(CFG[id].fig.replace(/ de la notice.*/, ""))}</small></button>`; }).join("") + `</div><p class="hotn">D'autres cartes viendront ensuite.</p>`;
   };
   let minuterie = 0;
   function atelier(id) {
@@ -1009,7 +1010,7 @@
   const libre = t => { const w = largeur(t); for (let y = 76; y <= DY - 62; y += 62) for (let x = 6; x + w <= W - 4; x += 8) { if (!I.acc.some(a => !ACC[a.t].enfiche && x < a.x + largeur(a.t) + 6 && a.x < x + w + 6 && y < a.y + 60 && a.y < y + 60)) return [x, y]; } return [6 + Math.random() * 200, 80 + Math.random() * 100]; };
   window.CAB = {
     mode(m) { S.mode = m; S.sel = S.selFil = S.selAcc = null; S.mm = null; S.msgU = ""; $("#cabm1").classList.toggle("on", m === "cabler"); $("#cabm2").classList.toggle("on", m === "tester"); if (m === "tester" && !S.secteur) { S.msgU = "Mettez le secteur (en haut à droite) pour tester."; } rendre(); },
-    secteur(on) { S.secteur = on; if (!on) { S.dir = 0; S.pre = 0; S.test = false; clearTimeout(tEnr); S.prog = null; } else if (S.mode === "cabler") { S.msgU = "Sous tension : passez en mode « Tester » pour actionner les accessoires. Coupez le secteur avant de modifier le câblage."; } S.msg = []; maj(); },
+    secteur(on) { S.secteur = on; if (!on) { S.dir = 0; S.pre = 0; S.test = false; clearTimeout(tEnr); S.prog = null; } else if (S.mode === "tester") { if (/^Mettez le secteur/.test(S.msgU)) S.msgU = ""; } else if (S.mode === "cabler") { S.msgU = "Sous tension : passez en mode « Tester » pour actionner les accessoires. Coupez le secteur avant de modifier le câblage."; } S.msg = []; maj(); },
     couleur(c) { S.couleur = c; panneau(); },
     poser(t) {
       if (ACC[t].fil) { S.couleur = "#f5f5f5"; S.msgU = "Fil de pont : touchez la première borne de la carte, puis la seconde" + (M ? " (exemple : une entrée NF non utilisée vers son commun)." : " (exemple : " + nB("ft1") + " et " + nB("com") + " pour ponter FT1 absente)."); panneau(); maj(); return; }

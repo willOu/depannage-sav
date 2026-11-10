@@ -494,6 +494,15 @@
       S("lba67-p64", "Schéma électrique : réversibles (6R / 63PK / 7R / 74)", 64, "Page 64 : automate, variateur Unidrive M200 0,25 kW, moteur, capteurs et accessoires."),
       S("lba67-p65", "Borniers : réversibles", 65, "Page 65.")
     ],
+    "lba-capt-ang": [
+      S("lba-ang-p26", "Bornier façade 1 à 28, N, PH", 26, "Page 26 : commandes, mode auto / manu, 24 Vdc, ventouse, reports d'information, alimentation."),
+      S("lba-ang-p77", "Schéma électrique : irréversibles (LBA 4 / 6 / 7)", 77, "Page 77 : carte ONE-C, entrées I1 à I8, sorties Q1 à Q6 et QR1 à QR5, capteur angulaire, moteur."),
+      S("lba-ang-p78", "Bornier 001BN et note : irréversibles", 78, "Page 78 : bornes 1 à 38 avec leur fonction et note sur les boucles magnétiques et le shunt 5-6."),
+      S("lba-ang-p80", "Schéma électrique : réversibles (6R / 63PK / 7R / 74)", 80, "Page 80 : carte ONE-C, entrées, sorties, capteur angulaire, moteur."),
+      S("lba-ang-p81", "Bornier 001BN et note : réversibles", 81, "Page 81 : bornes 1 à 38 avec leur fonction."),
+      S("lba-ang-p29", "Apprentissage du capteur : irréversibles", 29, "Page 29 : écrans de l'apprentissage (type de barrière, butée ouverture, butée fermeture)."),
+      S("lba-ang-p32", "Apprentissage des butées : réversibles", 32, "Page 32 : écrans de l'apprentissage (maintenir ▲ puis ▼ jusqu'à la butée).")
+    ],
     "lba-4": [
       S("lba4-p41", "Tableau de programmation SW1", 41, "Page 41 : positions des dip-switches SW1-1 à SW1-8 et fonctions."),
       S("lba4-p59", "Schéma électrique LBA 4", 59, "Page 59 : platine ENPC001652, variateur, moteur, capteurs.")

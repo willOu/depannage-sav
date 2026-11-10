@@ -775,6 +775,16 @@ window.NOTICES_PDF = {
 "m": 0
 }
 ],
+"lba-capt-ang": [
+{
+"f": "notices/coat013736-b-notice-technique-lba-4-6-63pk-7-capteur-angulaire.pdf",
+"t": "Notice technique LBA 4 / 6 / 63PK / 7 / 74 (capteur angulaire, indice B)",
+"p": 84,
+"pt": 84,
+"ko": 4966,
+"m": 0
+}
+],
 "lba-4": [
 {
 "f": "notices/dossier-technique-lba-4-6-63pk-7-instructions-de-services.pdf",

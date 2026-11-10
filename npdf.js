@@ -236,9 +236,9 @@
   }
 
   /* ---------- recherche dans le texte des notices ----------
-     Texte de chaque page extrait à l'avance (notices-texte-2.json, lecture optique pour les pages scannées),
+     Texte de chaque page extrait à l'avance (notices-texte-3.json, lecture optique pour les pages scannées),
      gardé en cache sur le téléphone : la recherche marche sans réseau. */
-  const TEXTE = "notices-texte-2.json";
+  const TEXTE = "notices-texte-3.json";
   let texte = null;
   const nchar = c => { const r = c.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase(); return r.length === 1 ? r : (r[0] || " "); };
   const normL = t => { let o = ""; for (const c of t) o += c.length === 1 ? nchar(c) : "  ".slice(0, c.length); return o; };
