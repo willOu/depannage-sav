@@ -5,6 +5,215 @@
 (function () {
   const ACCESSOIRES = [
     {
+      "id": "came-ati-a3000a-a5000a",
+      "nom": "ATI A3000A / A5000A",
+      "marque": "Came",
+      "couleur": "#1f5fa8",
+      "categorie": "Motoréducteur battant 230 V irréversible à vérin (motorisation)",
+      "modeles": "Came A3000A (vantail jusqu'à 3 m) et A5000A (jusqu'à 5 m) — motoréducteur 230 V AC pour portails battants d'habitations et de copropriétés, à électrobloc, double fin de course électromécanique",
+      "source": "Notice Came 119DV74FR ver. 2 (02/2015) A3000A / A5000A, français : § 2.2, 4, 5 et 7",
+      "resume": "Motoréducteur irréversible à vis sans fin, avec réducteur épicycloïdal, déverrouillable à la clé personnalisée. Les fins de course sont deux micro-interrupteurs réglables sur la tige. La notice le raccorde aux armoires ZA3N et ZM3E ; elle ne décrit ni code d'erreur ni réglage de la carte (voir les fiches des cartes).",
+      "specs": [
+        [
+          "Alimentation du moteur",
+          "230 V AC 50/60 Hz"
+        ],
+        [
+          "Absorption maxi",
+          "1,2 A"
+        ],
+        [
+          "Puissance",
+          "150 W"
+        ],
+        [
+          "Condensateur",
+          "10 µF"
+        ],
+        [
+          "Temps d'ouverture à 90°",
+          "A3000A : 19 s · A5000A : 32 s"
+        ],
+        [
+          "Rapport de réduction",
+          "1/36"
+        ],
+        [
+          "Poussée",
+          "400 à 3000 N"
+        ],
+        [
+          "Intermittence de travail",
+          "50 %"
+        ],
+        [
+          "Poids du motoréducteur",
+          "A3000A : 10 kg · A5000A : 11 kg"
+        ],
+        [
+          "Protection",
+          "IP44"
+        ],
+        [
+          "Température de fonctionnement",
+          "−20 à +55 °C"
+        ],
+        [
+          "Limites d'utilisation A3000A",
+          "2 m : 800 kg · 2,5 m : 600 kg · 3 m : 400 kg"
+        ],
+        [
+          "Limites d'utilisation A5000A",
+          "2 m : 1000 kg · 2,5 m : 800 kg · 3 m : 600 kg · 4 m : 500 kg · 5 m : 400 kg"
+        ],
+        [
+          "Serrure électrique",
+          "Toujours conseillée sur un battant ; obligatoire avec des automatismes irréversibles pour les vantaux de plus de 4 m (notice § 2.2)"
+        ]
+      ],
+      "raccordement": [
+        {
+          "n": "Moteur → carte (2 moteurs)",
+          "label": "Armoire ZA3N / ZM3E, bornier moteurs U V W X Y",
+          "desc": "D'après le dessin p. 9 : M1 : U sur U, V sur V ; M2 : U sur X, V sur Y ; les bornes W des deux moteurs sont reliées ensemble à la borne W de la carte (commun). Le texte de la notice ne détaille pas ces liaisons."
+        },
+        {
+          "n": "Moteur → carte (1 moteur)",
+          "label": "Armoire ZA3N / ZM3E",
+          "desc": "D'après le dessin p. 9 : U du moteur sur X, V sur Y, W sur W. Contrôler avec la fiche de la carte."
+        },
+        {
+          "n": "Câble moteur 230 V",
+          "label": "4G × 1 mm² (1 à 10 m), 4G × 1,5 mm² (10 à 20 m), 4G × 2,5 mm² (20 à 30 m)",
+          "desc": "Alimentation de l'armoire : 3G × 1,5 / 2,5 / 4 mm² selon les mêmes longueurs."
+        },
+        {
+          "n": "Fin de course",
+          "label": "3 × 0,5 mm² (1 à 10 m), 3 × 1 mm² (10 à 20 m), 3 × 1,5 mm² (20 à 30 m)",
+          "desc": "Câble des micro-interrupteurs."
+        }
+      ],
+      "installation": [
+        "Contrôles préliminaires : châssis du portail robuste, charnières en état, aucun frottement entre parties fixes et mobiles, butée d'arrêt mécanique en fermeture bien fixée au sol, cote C inférieure à la valeur du tableau 3 (sinon intervenir sur le pilier), passage des câbles prévu.",
+        "Cotes de pose (tableau 3, vantail < 3 m) : ouverture 90° → A 130, B 130, C 60 maxi, E 720 mm ; 120° → A 130, B 110, C 50 maxi, E 720 mm. Vantail < 5 m : 90° → A 200, B 200, C 120 maxi, E 920 ; 120° → A 200, B 140, C 70 maxi, E 920.",
+        "Effet des cotes : augmenter B diminue l'angle d'ouverture, donc la vitesse périphérique, et augmente la poussée sur le vantail ; augmenter A fait l'inverse. L'étrier de queue a des trous supplémentaires pour changer l'angle.",
+        "Fixer la plaque avec l'étrier de queue au pilier (cotes A et B entre l'axe de la charnière et le trou de l'étrier). Portail fermé, fixer la plaque sur le vantail avec l'étrier de tête au même niveau horizontal que l'étrier de queue, en respectant la cote E.",
+        "Montage : retirer le carter (deux vis) et la tige (deux vis), monter le motoréducteur sur les deux étriers (vis M8×50 côté étrier de queue, écrou M8 autobloquant, vis M8×10), après avoir lubrifié la vis sans fin et la bague avec une graisse neutre.",
+        "Fins de course : débloquer le motoréducteur, amener le vantail en ouverture maximale voulue, desserrer le groupe micro-interrupteur d'ouverture et le faire coulisser sur la tige jusqu'à ce que le micro de stop soit enclenché, le fixer. Même opération vantail fermé pour le groupe de fermeture.",
+        "Ouverture vers l'extérieur (tableau 4) : A3000A A 130, B 130, E 720 mm ; A5000A A 200, B 200, E 920 mm. Étrier de queue fixé à un étrier supplémentaire au pilier, vantail ouvert à 90° maxi pour relever la cote E ; replacer et régler le micro de stop en ouverture."
+      ],
+      "notes": [
+        "Déverrouillage (moteur à l'arrêt) : soulever le volet, introduire et tourner la clé personnalisée, ce qui déverrouille instantanément le vantail ; pousser ou tirer à la main. Pour reverrouiller, introduire la clé et la tourner à nouveau.",
+        "Maintenance périodique : nettoyer les lamelles des photocellules, contrôler les dispositifs de sécurité (passer un objet devant les photocellules pendant la fermeture : l'automatisme doit s'inverser ou se bloquer), contrôler la lubrification et le serrage des vis. C'est la seule opération qui se fait sous tension.",
+        "La notice ne contient ni code d'erreur ni tableau de paramètres : la programmation de l'armoire (ZA3N ou ZM3E) est dans la notice de la carte."
+      ]
+    },
+    {
+      "id": "came-ats30-ats50",
+      "nom": "ATS30 / ATS50 (AGS, AGR)",
+      "marque": "Came",
+      "couleur": "#1f5fa8",
+      "categorie": "Motoréducteur battant télescopique 230 V irréversible (motorisation)",
+      "modeles": "Came ATS30AGS (801MP-0050), ATS50AGS (801MP-0060), ATS30AGR (801MP-0090), ATS50AGR (801MP-0100) — motoréducteur télescopique 230 V pour portails battants, habitations et usage collectif ; AGR : avec adaptation pour le déblocage à distance (câble de déblocage)",
+      "source": "Manuel Came FA01337-FR (11/2019) ATS30AGS / ATS50AGS / ATS30AGR / ATS50AGR, français : pages 5 à 18",
+      "resume": "Motoréducteur télescopique irréversible, fins de course à micro-interrupteurs réglables par une tige. Raccordement en U V W sur chaque moteur, un moteur retardé à l'ouverture et l'autre à la fermeture. La notice ne nomme aucune armoire de commande et ne donne ni code d'erreur ni paramètre.",
+      "specs": [
+        [
+          "Alimentation du moteur",
+          "230 V AC 50/60 Hz"
+        ],
+        [
+          "Puissance",
+          "250 W"
+        ],
+        [
+          "Condensateur",
+          "8 µF"
+        ],
+        [
+          "Courant absorbé",
+          "1 A"
+        ],
+        [
+          "Poussée",
+          "400 à 3000 N"
+        ],
+        [
+          "Temps d'ouverture à 90°",
+          "20 s"
+        ],
+        [
+          "Thermo-protection moteur",
+          "150 °C"
+        ],
+        [
+          "Rapport de réduction",
+          "28"
+        ],
+        [
+          "Poids",
+          "ATS30 : 8,5 kg · ATS50 : 9 kg"
+        ],
+        [
+          "Protection",
+          "IP54 · classe d'isolation I"
+        ],
+        [
+          "Température de fonctionnement",
+          "−20 à +55 °C"
+        ],
+        [
+          "Niveau sonore",
+          "≤ 70 dB A"
+        ],
+        [
+          "Cycles",
+          "20 par heure, 10 consécutifs (EN 60335-2-103, 20 °C)"
+        ],
+        [
+          "Limites ATS30 (AGS et AGR)",
+          "2 m : 800 kg · 2,5 m : 600 kg · 3 m : 400 kg"
+        ],
+        [
+          "Limites ATS50 (AGS et AGR)",
+          "2 m : 1000 kg · 2,5 m : 800 kg · 3 m : 600 kg · 4 m : 500 kg · 5 m : 400 kg"
+        ],
+        [
+          "Serrure électrique",
+          "Conseillée pour les vantaux de plus de 2,5 m"
+        ],
+        [
+          "MCBF (cycles)",
+          "ATS30 : 120 000 (2 m) · 110 000 (2,5 m) · 100 000 (3 m) ; ATS50 : 120 000 (2 m) · 110 000 (2,5 m) · 100 000 (3 m) · 85 000 (4 m) · 70 000 (5 m). À réduire de 15 % pour un vantail plein, 15 % en zone exposée au vent, 30 % pour les deux"
+        ]
+      ],
+      "raccordement": [
+        {
+          "n": "U · V · W",
+          "label": "Bornier de chaque moteur",
+          "desc": "Schéma p. 12 : motoréducteur B retardé pendant l'ouverture, motoréducteur C retardé pendant la fermeture, chacun avec ses bornes W V U, câble jaune-vert à la terre, arrivée 230 V AC 50-60 Hz sur l'armoire (D). La notice ne dit pas sur quelles bornes de l'armoire arrivent U, V et W."
+        },
+        {
+          "n": "Câble moteur 230 V",
+          "label": "4G × 1,5 mm² (jusqu'à 20 m), 4G × 2,5 mm² (20 à 30 m)",
+          "desc": "Alimentation 230 V : 3G × 1,5 mm² (jusqu'à 20 m), 3G × 2,5 mm² (20 à 30 m). En extérieur : câbles H05RN-F ; en intérieur : H05VV-F."
+        }
+      ],
+      "installation": [
+        "Prévoir les boîtes de jonction et les gaines annelées pour les raccordements issus du boîtier de dérivation. Les dessins de la notice représentent le motoréducteur installé à gauche. Installation faite portail ouvert à 90° ou 120°.",
+        "Cotes de pose ATS30 (mm) : 90° → A 130, B 130, E 910, F 1170, C maxi 50 ; 90° → A 150, B 220, E 910, F 1290, C maxi 150 ; 90° → A 120, B 270, E 890, F 1300, C maxi 200 ; 120° → A 180, B 130, E 910, F 1300, C maxi 50. La colonne de la notice est imprimée « 5 » dans le tableau, mais le dessin la note E.",
+        "Cotes de pose ATS50 (mm) : 90° → A 200, B 200, E 1030, F 1430, C maxi 150 ; 90° → A 200, B 270, E 1030, F 1510, C maxi 200 ; 120° → A 200, B 140, E 1030, F 1460, C maxi 70.",
+        "Fixer l'étrier au pilier avec chevilles et vis (soudure possible sur un pilier métallique) et l'étrier au portail par vis ou soudure. Lubrifier toutes les parties mobiles. L'écrou de sécurité se serre modérément pour ne pas gêner le mouvement du bras télescopique.",
+        "Fin de course à l'ouverture (installation en ouverture vers l'intérieur) : débloquer, ouvrir le portail à la main, envoyer une commande d'ouverture et tourner la tige EN SENS HORAIRE jusqu'à l'arrêt du motoréducteur. Fin de course à la fermeture : débloquer, fermer à la main, envoyer une commande de fermeture et tourner la tige EN SENS ANTI-HORAIRE jusqu'à l'arrêt. Laisser l'écrou de la tige desserré pendant la définition. 20 tours de tige déplacent le micro-interrupteur de 10 mm.",
+        "Ouverture vers l'extérieur : portail fermé à la main, étrier supplémentaire non fourni. ATS30 : A 150, B 150, E 910 mm à 90° ; ATS50 : A 200, B 200, E 1030 mm à 90°. Dans ce cas les tiges de réglage sont inversées : ouverture dans le sens anti-horaire, fermeture dans le sens horaire."
+      ],
+      "notes": [
+        "ATS30 : vantail jusqu'à 3 m et 400 kg ; ATS50 : jusqu'à 5 m et 400 kg, d'après la description (page 5), qui est cohérente avec le tableau des limites à la longueur maximale.",
+        "Maintenance obligatoire tous les 20 000 cycles ou tous les 6 mois : serrage des boulons, lubrification des pièces mobiles, signalisation et sécurités, usure, fonctionnement du déblocage (manœuvre vantail libre), état des câbles et connexions, nettoyage du volet de déblocage. Si le système reste longtemps à l'arrêt, couper l'alimentation puis vérifier le fonctionnement à la remise sous tension.",
+        "La notice ne nomme aucune armoire de commande et ne contient ni code d'erreur ni paramètre : se reporter à la fiche de la carte utilisée."
+      ]
+    },
+    {
       "id": "faac-c720-c721",
       "nom": "C720 / C721",
       "marque": "FAAC",

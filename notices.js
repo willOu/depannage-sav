@@ -1,6 +1,26 @@
 /* Notices PDF (pages françaises), téléchargées à la première ouverture puis gardées hors ligne.
    NOTICES_PDF[id carte ou fiche] = [{ f: fichier, t: titre, p: pages gardées, pt: pages de l'original, ko: taille, m: 1 si multilingue mélangé }] */
 window.NOTICES_PDF = {
+"came-ati-a3000a-a5000a": [
+{
+"f": "notices/came-119dv74fr-ati-a3000a-a5000a.pdf",
+"t": "Notice Came ATI A3000A / A5000A (119DV74FR)",
+"p": 12,
+"pt": 12,
+"ko": 594,
+"m": 0
+}
+],
+"came-ats30-ats50": [
+{
+"f": "notices/came-fa01337-fr-ats30-ats50-230v.pdf",
+"t": "Notice Came ATS30 / ATS50 230 V (FA01337-FR)",
+"p": 20,
+"pt": 20,
+"ko": 3485,
+"m": 0
+}
+],
 "came-zm3e": [
 {
 "f": "notices/came-119dv74fr-ati-a3000a-a5000a.pdf",
