@@ -1,9 +1,9 @@
 /* Service worker — tout est mis en cache à l'installation.
    Après modification de data.js ou index.html, augmenter VERSION. */
-const VERSION = "sav-2026-11-10-2";
+const VERSION = "sav-2026-11-10-3";
 const OCR = "sav-ocr-1";
 const NTC = "sav-notices-2"; /* notices PDF : gardées d'une version à l'autre */
-const TXT = "notices-texte-3.json"; /* texte des notices pour la recherche (changer le nom s'il change) */
+const TXT = "notices-texte-4.json"; /* texte des notices pour la recherche (changer le nom s'il change) */
 const FILES = ["./", "index.html", "data.js", "diag.js", "ask.js", "acc.js", "img.js", "notices.js", "najout.js", "npdf.js", "auth.js", "sync.js", "cmp.js", "quiz.js", "admin.js", "signal.js", "astuce.js", "notes.js", "photo.js", "menu.js", "live.js", "sim.js", "cablage.js", "cablage-casit.js", "cablage-bft.js", "moteurs.js", "calc.js", "sympt.js", "scan.js", "manifest.webmanifest",
   "icons/icon-192.png", "icons/icon-512.png", "icons/icon-maskable-512.png", "icons/apple-touch-icon.png",
   "icons/marques/came.png", "icons/marques/fadini.png", "icons/marques/tousek.png", "icons/marques/nice.png", "icons/marques/faac.png", "icons/marques/bft.png", "icons/marques/roger.png", "icons/marques/afca.png", "icons/marques/casit.png", "icons/marques/optex.png", "icons/marques/cardin.png", "icons/marques/doitrand.png", "icons/marques/intratone.png", "icons/marques/locinox.png", "icons/marques/lba.png", "icons/marques/prastel.png", "icons/marques/dea.png", "icons/marques/theben.png", "icons/marques/elka.png", "icons/marques/opera.png", "icons/marques/bbc-bircher.png", "icons/marques/sewosy.png", "icons/marques/jcm-technologies.png",

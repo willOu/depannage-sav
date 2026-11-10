@@ -192,6 +192,10 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "2.63", date: "2026-11-10", titre: "Notices Came ATS et ATI", items: [
+    "Notices Came ATS30 / ATS50 230 V (FA01337-FR) et ATI A3000A / A5000A (119DV74FR) en PDF sur les fiches ZM3E et ZA3 (l'ATS sur ZA3 seulement), cherchables hors ligne",
+    "Liste Moteurs : lignes ATS30, ATS50, ATI A3000A et ATI A5000A avec les limites poids / longueur de leur notice ; la contradiction de la page web sur l'ATI A3000A / A5000A est levée"
+  ] },
   { v: "2.62", date: "2026-11-10", titre: "Barrières LBA avec capteur angulaire (carte ONE-C)", items: [
     "Nouvelle fiche « LBA 4 / 6 / 7 (ONE-C, capteur angulaire) » d'après la notice COAT013736 indice B : pannes fréquentes, messages et codes moteur 106 / 107, paramètres du menu USER PARAMETERS, bornier 1 à 28 + feux 29 à 38 et entrées / sorties de la carte",
     "Apprentissage du capteur angulaire pas à pas (irréversibles et réversibles), remplacement du capteur et de la carte ONE-C, ouverture manuelle, maintenance",

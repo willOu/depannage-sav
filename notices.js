@@ -3,6 +3,14 @@
 window.NOTICES_PDF = {
 "came-zm3e": [
 {
+"f": "notices/came-119dv74fr-ati-a3000a-a5000a.pdf",
+"t": "Notice Came ATI A3000A / A5000A (119DV74FR)",
+"p": 12,
+"pt": 12,
+"ko": 594,
+"m": 0
+},
+{
 "f": "notices/came-fa00379m4a.pdf",
 "t": "Notice Came FA00379M4A",
 "p": 2,
@@ -92,6 +100,22 @@ window.NOTICES_PDF = {
 }
 ],
 "came-za3": [
+{
+"f": "notices/came-119dv74fr-ati-a3000a-a5000a.pdf",
+"t": "Notice Came ATI A3000A / A5000A (119DV74FR)",
+"p": 12,
+"pt": 12,
+"ko": 594,
+"m": 0
+},
+{
+"f": "notices/came-fa01337-fr-ats30-ats50-230v.pdf",
+"t": "Notice Came ATS30 / ATS50 230 V (FA01337-FR)",
+"p": 20,
+"pt": 20,
+"ko": 3485,
+"m": 0
+},
 {
 "f": "notices/came-319lr23.pdf",
 "t": "Notice Came 319LR23",
