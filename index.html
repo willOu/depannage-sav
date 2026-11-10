@@ -30,6 +30,7 @@
 :root[data-skin="soleil"] .cr,:root[data-skin="soleil"] .boardhead,:root[data-skin="soleil"] .set{border-width:2px}
 :root[data-skin="chantier"] header,:root[data-skin="chantier"] header .back,:root[data-skin="chantier"] header h1,:root[data-skin="chantier"] #status,:root[data-skin="chantier"] #status a{color:#111!important}
 :root[data-skin="chantier"] .prm .pc{color:#111}
+:root[data-skin="chantier"] header .back{background:rgba(0,0,0,.12);border-color:rgba(0,0,0,.28)}
 :root[data-skin="chantier"] header .iconbtn{background:rgba(0,0,0,.12);color:#111}
 :root[data-skin="chantier"] .tabs [aria-selected="true"],:root[data-skin="chantier"] .seg2 button[aria-pressed="true"],:root[data-skin="chantier"] .btn:not(.sec),:root[data-skin="chantier"] .skin[aria-pressed="true"]{color:#111!important}
 .skins{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px;padding:10px 14px 14px}
@@ -49,7 +50,7 @@ html{background:var(--bg)}
 .mark i:nth-child(1){background:var(--blue)}.mark i:nth-child(2){background:var(--orange)}.mark i:nth-child(3){background:#ff4b4b}
 .top h1{font-size:17px;margin:0;flex:1;font-weight:700;letter-spacing:.2px}
 .iconbtn{display:grid;place-items:center;background:rgba(255,255,255,.14);border:0;border-radius:10px;min-width:40px;height:40px;padding:0 10px;font-size:15px}
-.back{background:none;border:0;color:#fff;font-size:15px;padding:6px 0;display:none}
+.back{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.3);border-radius:999px;color:#fff;font-size:14.5px;font-weight:600;padding:6px 14px 6px 8px;margin:4px 0 2px;display:none;-webkit-tap-highlight-color:transparent;transition:background .15s,transform .1s}.back svg{vertical-align:-4px;margin-right:2px}.back:active{background:rgba(255,255,255,.3);transform:scale(.96)}
 .search{margin-top:10px;position:relative}
 .search input{width:100%;height:46px;border:0;border-radius:12px;padding:0 50px 0 40px;font-size:16px;background:#fff;color:#1d1a19}
 .search svg{position:absolute;left:12px;top:13px;opacity:.55}
@@ -469,7 +470,7 @@ html{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
     <button class="iconbtn" id="theme" title="Mode sombre / clair" aria-label="Changer de thème">◐</button>
     <button class="iconbtn" id="gear" title="Réglages" aria-label="Réglages" onclick="toggleSettings()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
   </div>
-  <button class="back" id="back">‹ Retour</button>
+  <button class="back" id="back" aria-label="Retour"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m14.5 6-6 6 6 6"/></svg>Retour</button>
   <div class="search">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
     <input id="q" type="search" inputmode="search" autocomplete="off" placeholder="Code, modèle, borne, symptôme…" aria-label="Rechercher">

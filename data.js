@@ -192,6 +192,9 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "2.66", date: "2026-11-10", titre: "Bouton Retour plus soigné", items: [
+    "Le bouton Retour devient une pastille arrondie avec une flèche, plus facile à toucher"
+  ] },
   { v: "2.65", date: "2026-11-10", titre: "Notices PDF : voir la page entière", items: [
     "Notices : le bouton − (et le pincement) permet maintenant de dézoomer jusqu'à voir la page entière, en plein écran comme dans la liste des pages"
   ] },
