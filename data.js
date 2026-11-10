@@ -192,6 +192,9 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "2.65", date: "2026-11-10", titre: "Notices PDF : voir la page entière", items: [
+    "Notices : le bouton − (et le pincement) permet maintenant de dézoomer jusqu'à voir la page entière, en plein écran comme dans la liste des pages"
+  ] },
   { v: "2.64", date: "2026-11-10", titre: "Fiches moteurs Came ATI et ATS", items: [
     "Nouvelles fiches dans Came > Accessoires : ATI A3000A / A5000A et ATS30 / ATS50 (AGS, AGR) avec caractéristiques, limites d'utilisation, branchement, cotes de pose, réglage des fins de course, déverrouillage, maintenance, et la notice PDF"
   ] },
