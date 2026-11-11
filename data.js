@@ -192,6 +192,9 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "2.82", date: "2026-11-11", titre: "Assistance Came", items: [
+    "Assistance fabricant Came : un seul numéro pour tous les produits Came (08 25 82 58 74, du lundi au vendredi de 8 h 30 à 12 h et de 13 h 30 à 17 h)"
+  ] },
   { v: "2.81", date: "2026-11-11", titre: "Titres du haut", items: [
     "Les titres du haut ne sont plus coupés en bas (lettres g, y, p, j…)"
   ] },
@@ -58621,8 +58624,7 @@ const MARQUES = [
    Marque absente ou liste vide = aucun numéro dans les notices. */
 const HOTLINES = {
   came: [
-    { nom: "CAME France — Nanterre", tel: "+33146130500", src: "notice Came 319LR36 v2.0 (03/2012)" },
-    { nom: "CAME Automatismes — Marseille", tel: "+33491606905", src: "notice Came 319LR36 v2.0 (03/2012)" }
+    { nom: "CAME France — assistance technique (tous les produits Came)", tel: "+33825825874", h: "Lun-ven 8h30-12h00 et 13h30-17h00", src: "indiqué par William (Espacs Automatisme)" }
   ],
   nice: [
     { nom: "Nice France — Buchelay", tel: "+33130339595", src: "notice Nice ROBUS 600/1000 (2004)" },
