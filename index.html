@@ -43,12 +43,16 @@ button{font:inherit;color:inherit}
 header{position:sticky;top:0;z-index:5;background:var(--brand);color:#fff;padding:calc(env(safe-area-inset-top) + 10px) 16px 10px}
 header::before{content:"";position:absolute;left:0;right:0;bottom:100%;height:100vh;background:var(--brand);pointer-events:none}
 html{background:var(--bg)}
-.top{display:flex;align-items:center;gap:10px}
-.mark{display:grid;grid-template-columns:repeat(3,8px);gap:3px;align-content:center;background:none;border:0;padding:14px 10px;margin:-14px -10px;cursor:pointer;border-radius:10px;-webkit-tap-highlight-color:transparent}
+.top{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px}
+.brand{display:flex;flex-direction:column;align-items:center;gap:7px;min-width:0;max-width:100%}
+.btns{display:flex;gap:10px;justify-self:end}
+#title{cursor:pointer;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;-webkit-tap-highlight-color:transparent}
+body.hometabs #gear{display:none}
+.mark{display:grid;grid-template-columns:repeat(3,14px);gap:4px;align-content:center;background:none;border:0;padding:6px 12px;margin:-6px -12px;cursor:pointer;border-radius:10px;-webkit-tap-highlight-color:transparent}
 .mark:active{background:rgba(255,255,255,.18)}
-.mark i{width:8px;height:8px;display:block}
+.mark i{width:14px;height:14px;border-radius:3px;display:block}
 .mark i:nth-child(1){background:var(--blue)}.mark i:nth-child(2){background:var(--orange)}.mark i:nth-child(3){background:#ff4b4b}
-.top h1{font-size:17px;margin:0;flex:1;font-weight:700;letter-spacing:.2px}
+.top h1{font-size:23px;line-height:1;margin:0;font-weight:800;letter-spacing:.2px}
 .iconbtn{display:grid;place-items:center;background:rgba(255,255,255,.14);border:0;border-radius:10px;min-width:40px;height:40px;padding:0 10px;font-size:15px}
 .back{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.3);border-radius:999px;color:#fff;font-size:14.5px;font-weight:600;padding:6px 14px 6px 8px;margin:4px 0 2px;display:none;-webkit-tap-highlight-color:transparent;transition:background .15s,transform .1s}.back svg{vertical-align:-4px;margin-right:2px}.back:active{background:rgba(255,255,255,.3);transform:scale(.96)}
 .search{margin-top:10px;position:relative}
@@ -325,7 +329,7 @@ header{padding-left:max(16px,env(safe-area-inset-left));padding-right:max(16px,e
 main{padding-left:max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right))}
 html{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 @media (max-width:359px){
-  .top h1{font-size:15px}.tabs button{font-size:12px;padding:0 3px}.gen button{font-size:13px}
+  .top h1{font-size:21px}.tabs button{font-size:12px;padding:0 3px}.gen button{font-size:13px}
   main{padding-left:max(10px,env(safe-area-inset-left));padding-right:max(10px,env(safe-area-inset-right))}
 }
 @media (pointer:coarse){
@@ -473,10 +477,14 @@ html{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 <div id="splash" aria-hidden="true"><div class="sq"><b style="background:#6FA8E8"></b><b style="background:#F5A33A"></b><b style="background:#FF6A5E"></b></div><h2>Diag'SAV</h2></div>
 <header id="hdr">
   <div class="top">
-    <button class="mark" id="home" title="Accueil" aria-label="Retour à l'accueil" onclick="$('#q').value='';go('#/')"><i></i><i></i><i></i></button>
-    <h1 id="title">Diag'SAV</h1>
-    <button class="iconbtn" id="theme" title="Mode sombre / clair" aria-label="Changer de thème">◐</button>
-    <button class="iconbtn" id="gear" title="Réglages" aria-label="Réglages" onclick="toggleSettings()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
+    <span class="tl"></span>
+    <div class="brand">
+      <h1 id="title" onclick="$('#q').value='';go('#/')">Diag'SAV</h1>
+      <button class="mark" id="home" title="Accueil" aria-label="Retour à l'accueil" onclick="$('#q').value='';go('#/')"><i></i><i></i><i></i></button>
+    </div>
+    <div class="btns">
+      <button class="iconbtn" id="gear" title="Réglages" aria-label="Réglages" onclick="toggleSettings()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
+    </div>
   </div>
   <button class="back" id="back" aria-label="Retour"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m14.5 6-6 6 6 6"/></svg>Retour</button>
   <div class="search">
@@ -555,7 +563,6 @@ function applyTheme(t){
 applyTheme(store.get("theme", "dark"));
 applyTaille(store.get("taille", "n"));
 function setTheme(t){ applyTheme(t); store.set("theme", t); if (location.hash === "#/reglages") viewSettings(); }
-$("#theme").onclick = () => setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark"); /* bouton rapide : sombre / clair classiques */
 
 const APP_V = CHANGELOG[0].v;
 const DATA_DATE = CHANGELOG[0].date; /* date des données = date de la dernière nouveauté (plus rien à mettre à jour à la main) */
@@ -613,17 +620,25 @@ function viewHome(){
   if (tab === 0) h += rh;
   else h = `<h2>${SEC[tab][0]}</h2>` + SEC[tab][1].map(k => T[k]).join("");
   app.innerHTML = h + (tab === 0 ? foot : "");
+  homeBar(tab);
+}
+function homeBar(tab){
   document.body.classList.add("hometabs");
   const IC = [
     '<path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/>',
     '<circle cx="11" cy="11" r="7"/><path d="M16.5 16.5L21 21"/>',
     '<path d="M3 8h18v12H3zM8 8V5h8v3M3 13h18"/>',
-    '<path d="M2 9l10-5 10 5-10 5zM6 11.5V16c0 1.5 3 3 6 3s6-1.5 6-3v-4.5"/>'];
-  $("#htabs").innerHTML = ["Accueil","Dépanner","Outils","Formation"].map((t,n) =>
+    '<path d="M2 9l10-5 10 5-10 5zM6 11.5V16c0 1.5 3 3 6 3s6-1.5 6-3v-4.5"/>',
+    '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>'];
+  $("#htabs").innerHTML = ["Accueil","Dépanner","Outils","Formation","Réglages"].map((t,n) =>
     `<button class="${n===tab?"on":""}" ${n===tab?'aria-current="page"':""} onclick="homeTab(${n})"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[n]}</svg>${t}</button>`).join("");
 }
 function homeMob(){ return matchMedia("(max-width:1100px), (pointer:coarse)").matches; }
-function homeTab(n){ store.set("hometab", n); window.scrollTo(0, 0); viewHome(); }
+function homeTab(n){
+  if (n === 4){ if (location.hash !== "#/reglages"){ beforeSettings = "#/"; go("#/reglages"); } return; }
+  store.set("hometab", n); window.scrollTo(0, 0);
+  if (location.hash.replace(/^#\/?/, "")) go("#/"); else viewHome();
+}
 matchMedia("(max-width:1100px), (pointer:coarse)").addEventListener("change", () => { if (!location.hash.replace(/^#\/?/, "")) viewHome(); });
 function swAsk(msg){
   return new Promise(res => {
@@ -922,6 +937,7 @@ function viewSearch(q){
 /* ---------- réglages ---------- */
 function viewSettings(){
   setHead("Réglages", true);
+  if (homeMob()) homeBar(4);
   const th = document.documentElement.dataset.theme;
   const nf = getFavs().filter(x => findBoard(x) || (window.ACCESSOIRES || []).some(a => a.id === x)).length;
   let h = "";

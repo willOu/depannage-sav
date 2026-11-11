@@ -192,6 +192,11 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "2.69", date: "2026-11-11", titre: "En-tête recentré, Réglages dans la barre du bas", items: [
+    "En-tête : le nom Diag'SAV au-dessus des trois carrés de couleur, centrés ; toucher le nom ou les carrés ramène à l'accueil",
+    "Le bouton clair / sombre quitte l'en-tête : le choix du thème se fait dans Réglages",
+    "Sur téléphone et tablette, Réglages devient le 5e onglet de la barre du bas"
+  ] },
   { v: "2.68", date: "2026-11-11", titre: "Logos des marques harmonisés, BÊTA", items: [
     "Accueil : les logos des marques sont rangés en grille, tous dans des cases de même taille, pour un visuel plus régulier",
     "Les fonctions en test portent désormais la mention BÊTA partout"
