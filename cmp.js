@@ -74,4 +74,5 @@
     document.getElementById("ca").onchange = upd; document.getElementById("cb").onchange = upd;
   };
   window.cmpFonction = fonction; /* pour les tests */
+  window.CMP = { F, norm, fonction, bornes, find, selectHtml }; /* réutilisé par le schéma de câblage et le guide de remplacement (perso.js) */
 })();

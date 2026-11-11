@@ -482,6 +482,18 @@ html{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 .nsrp>span:last-child{min-width:0;overflow-wrap:anywhere}.nsrp mark{background:#ffd54a;color:#000;border-radius:3px;padding:0 1px}
 .nsrm{display:block;margin-top:6px;color:var(--muted);font-size:13px}.nsrm a{color:var(--brand-txt);font-weight:700}.pvp{position:relative;margin:0 auto 8px;background:#fff;box-shadow:0 0 0 1px #ccc}.pvp canvas{display:block}
 #pvc{background:#555}
+
+/* v2.80 : schéma de câblage, remplacement, mode atelier */
+.plsel{border:1px solid var(--line);border-radius:12px;background:var(--card);padding:10px;margin-bottom:12px}.plg{margin-top:10px}.plg>b{display:block;font-size:13px;color:var(--muted);margin-bottom:4px}
+.plck{display:flex;gap:9px;align-items:center;padding:6px 2px;font-size:14px;cursor:pointer}.plck input{width:20px;height:20px;flex:none}.plck small{display:block;color:var(--muted);font-size:12px}
+.plt{font:700 12.5px ui-monospace,Menlo,monospace;border-left:4px solid var(--tc,var(--line));padding:2px 7px;background:var(--bg);border-radius:4px;min-width:58px;flex:none}
+.plsvg{width:100%;height:auto;display:block;background:var(--card);border:1px solid var(--line);border-radius:12px}.plc{fill:var(--bg);stroke:var(--line);stroke-width:2}.plct{font:700 15px system-ui,sans-serif;fill:var(--ink)}.plp{fill:var(--card);stroke:var(--line)}.plpt{font:700 12px ui-monospace,Menlo,monospace;fill:var(--ink)}.pld{fill:var(--card);stroke-width:2.5}.pln{font:700 13px system-ui,sans-serif;fill:var(--ink)}.pls{font:11.5px system-ui,sans-serif;fill:var(--muted)}
+.pllg{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;margin:8px 2px}.pllg i{display:inline-block;width:18px;height:4px;border-radius:2px;margin-right:5px;vertical-align:middle}
+.pltab{width:100%;border-collapse:collapse;font-size:13.5px}.pltab td{padding:7px 6px;border-top:1px solid var(--line);vertical-align:top}.pltab td:first-child{width:1%;white-space:nowrap}
+.rst{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:6px 14px;font-size:14.5px}.rst li{margin:5px 0}.rst p{margin:8px 0 2px}
+.rck{display:inline-flex;gap:8px;align-items:center;cursor:pointer}.rck input{width:20px;height:20px}.rtab{width:100%;border-collapse:collapse;font-size:13.5px}.rtab th{text-align:left;font-size:12px;color:var(--muted)}.rtab td{padding:7px 5px;border-top:1px solid var(--line);vertical-align:top}.rtab small{display:block;color:var(--muted)}.relv{width:100%;min-width:64px;padding:7px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:inherit;font-size:14px}
+body.atelier main{max-width:none}body.atelier #atl .list{grid-template-columns:1fr!important}body.atelier #app{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:16px;align-items:start}body.atelier #atr{position:sticky;top:8px;height:calc(100vh - 24px);overflow:auto;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:8px}.atsel{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+@media print{.top,#htabs,.status,.noprint,.tabs,#gear,.sig{display:none!important}body{background:#fff!important;color:#000!important}main{max-width:none!important;padding:0!important}.plsvg,.rst,.cb{break-inside:avoid}}
 </style>
 </head>
 <body>
@@ -521,6 +533,7 @@ html{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 <script src="auth.js"></script> <!-- AUTH -->
 <script src="sync.js"></script> <!-- SYNC -->
 <script src="cmp.js"></script> <!-- CMP -->
+<script src="perso.js"></script> <!-- PERSO -->
 <script src="quiz.js"></script> <!-- QUIZ -->
 <script src="admin.js"></script> <!-- ADMIN -->
 <script src="signal.js"></script> <!-- SIG -->
@@ -716,17 +729,19 @@ function viewHome(){
   T['#/cab'] = (()=>{ let h=''; h += `<button class="dbtn" onclick="go('#/cab')">Atelier de câblage : câbler et tester une installation<small>Roger B70/1DCHP · on voit le courant passer · missions corrigées</small></button>`; /* CAB */ return h; })();
   T['#/quiz'] = (()=>{ let h=''; h += `<button class="dbtn" onclick="go('#/quiz')">Quiz de formation : codes erreur et borniers<small><b>BÊTA</b> · 10 questions tirées des fiches</small></button>`; /* QUIZ */ return h; })();
   T['#/cmp'] = (()=>{ let h=''; h += `<button class="dbtn" onclick="go('#/cmp')">Comparateur de borniers : remplacer une carte par une autre<small>bornes des deux cartes rangées par fonction · aide indicative</small></button>`; /* CMP */ return h; })();
+  T['#/plan'] = `<button class="dbtn" onclick="go('#/plan')">Schéma de câblage personnalisé<small>choisissez la carte et les accessoires : le raccordement est dessiné borne par borne · à imprimer</small></button>`; /* PLAN */
+  T['#/rempl'] = `<button class="dbtn" onclick="go('#/rempl')">Remplacer une carte : le guide pas à pas<small>correspondance des fils, paramètres à reporter, remise en service</small></button>`; /* REMPL */
   T['#/scan'] = (()=>{ let h=''; h += `<button class="dbtn" onclick="go('#/scan')">Dépannage par photo : l'étiquette, la carte entière ou l'afficheur<small><b>BÊTA</b> · photographiez la plaque ou la carte pour trouver la fiche, ou l'afficheur pour ouvrir le code d'erreur</small></button>`; /* SCAN */ return h; })();
   const rh = recents.length ? `<h2>Dernières consultées</h2><div class="list">` + recents.map(rowBoard).join("") + `</div>` : "";
   const foot = `<p class="foot">Codes et borniers repris des notices fabricant citées sur chaque fiche.<br>En cas de doute, la notice livrée avec le matériel fait foi.</p>`;
   if (!homeMob()){
     document.body.classList.remove("hometabs");
-    h += ["#/ask","#/d","#/a","#/calc/moteur","#/calc","#/sim","#/cab","#/quiz","#/cmp","#/scan"].map(k => T[k]).join("") + rh + foot;
+    h += ["#/ask","#/d","#/a","#/calc/moteur","#/calc","#/plan","#/rempl","#/sim","#/cab","#/quiz","#/cmp","#/scan"].map(k => T[k]).join("") + rh + foot;
     app.innerHTML = h; return;
   }
   /* téléphone et tablette : 4 onglets en bas */
   const tab = Math.min(3, Math.max(0, +store.get("hometab", 0) || 0));
-  const SEC = [null, ["Dépanner", ["#/ask","#/scan","#/d","#/cmp"]], ["Outils", ["#/calc/moteur","#/calc","#/a"]], ["Formation", ["#/sim","#/cab","#/quiz"]]];
+  const SEC = [null, ["Dépanner", ["#/ask","#/scan","#/d","#/cmp"]], ["Outils", ["#/calc/moteur","#/calc","#/plan","#/rempl","#/a"]], ["Formation", ["#/sim","#/cab","#/quiz"]]];
   if (tab === 0) h += rh;
   else h = `<h2>${SEC[tab][0]}</h2>` + SEC[tab][1].map(k => T[k]).join("");
   app.innerHTML = h + (tab === 0 ? foot : "");
@@ -816,7 +831,8 @@ function viewBrand(id){
 }
 
 let paramOpen = "";
-function viewBoard(id, tab, sel){
+function viewBoard(id, tab, sel){ viewBoard0(id, tab, sel); try { if (window.atelierAttache) atelierAttache(id, tab || "codes"); } catch (e) {} } /* ATELIER */
+function viewBoard0(id, tab, sel){
   const b = findBoard(id); if (!b) return viewHome();
   const { m, c } = b;
   tab = tab || "codes";
@@ -1072,8 +1088,10 @@ function viewSettings(){
   const sk = store.get("theme", "dark");
   const tl = store.get("taille", "n");
   h += `<h2>Préférences</h2><div class="set"><div class="row"><span>Taille du texte</span><div class="seg2">${TAILLES.map(t => `<button aria-pressed="${tl === t[0]}" onclick="setTaille('${t[0]}')">${t[1]}</button>`).join("")}</div></div><div class="row"><span>Thème</span></div><div class="skins">` + SKINS.map(k => `<button class="skin" aria-pressed="${sk === k[0]}" onclick="setTheme('${k[0]}')"><i><b style="background:${k[3]}"></b><b style="background:${k[4]}"></b><b style="background:${k[5]}"></b></i>${esc(k[1])}</button>`).join("") + `</div>
+      <div class="row"><span>Mode atelier <small class="mono">écran partagé</small></span><button class="mini" id="atb" aria-pressed="${!!store.get("atelier", false)}" onclick="atelierBascule()">${store.get("atelier", false) ? "Activé" : "Désactivé"}</button></div>
       <div class="row"><span>Fiches en favori</span><span class="rr"><span class="mono">${nf}</span>${nf ? `<button class="mini" onclick="if(confirm('Effacer tous vos favoris ?')){getFavs().forEach(x=>window.SYNC&&SYNC.fav(x,false));store.set('favs',[]);viewSettings();}">Effacer</button>` : ""}</span></div></div>
-      <p class="hotn">${esc(FAV_NOTE)}</p>`;
+      <p class="hotn">${esc(FAV_NOTE)}</p>
+      <p class="hotn">Mode atelier : sur un grand écran (ordinateur, tablette en paysage), la fiche s'affiche à gauche et sa notice PDF à droite. Sur téléphone, rien ne change.</p>`;
   /* 4. Hors ligne et version */
   h += `<h2>Hors ligne et version</h2><div class="set"><div class="row"><span>Version de l'appli</span><span class="mono">v${APP_V}</span></div><div class="row"><span>Données</span><span class="mono">${fdate(DATA_DATE)}</span></div>
       <div class="row"><span>Hors ligne</span><span class="mono" id="swv">…</span></div>
@@ -1146,9 +1164,9 @@ function route(){
   if (p[0] === "c" && p[1]){ if (prevRoute[0] === "s" && prevRoute[1]) hlQ = { id: p[1], q: decodeURIComponent(prevRoute.slice(1).join("/")) }; else if (hlQ && hlQ.id !== p[1]) hlQ = null; }
   else if (p[0] !== "s") hlQ = null;
   prevRoute = p;
-  document.body.classList.remove("hometabs");
+  document.body.classList.remove("hometabs"); if (p[0] !== "c") document.body.classList.remove("atelier");
   if (homeMob() && p[0] !== "pdf"){ /* barre du bas sur toutes les pages (téléphone et tablette) */
-    const T = {"":0, g:0, m:0, c:0, s:0, d:1, scan:1, cmp:1, ask:1, calc:2, a:2, ma:2, sim:3, cab:3, quiz:3, reglages:4};
+    const T = {"":0, g:0, m:0, c:0, s:0, d:1, scan:1, cmp:1, ask:1, calc:2, plan:2, rempl:2, a:2, ma:2, sim:3, cab:3, quiz:3, reglages:4};
     homeBar(p[0] in T ? T[p[0]] : -1);
   }
   window.scrollTo(0, 0);
@@ -1170,6 +1188,8 @@ function route(){
   if (p[0] === "sim") return viewSim(p[1]); /* SIM */
   if (p[0] === "cab") return viewCab(p[1]); /* CAB */
   if (p[0] === "calc") return viewCalc(p[1]); /* CALC */
+  if (p[0] === "plan") return viewPlan(p[1] ? decodeURIComponent(p[1]) : ""); /* PLAN */
+  if (p[0] === "rempl") return viewRempl(p[1] && p[1] !== "-" ? decodeURIComponent(p[1]) : "", p[2] ? decodeURIComponent(p[2]) : ""); /* REMPL */
   if (p[0] === "cmp") return viewCmp(p[1] && p[1] !== "-" ? decodeURIComponent(p[1]) : "", p[2] ? decodeURIComponent(p[2]) : ""); /* CMP */
   if (p[0] === "stats") return SYNC.viewStats(p[1]); /* SYNC */
   if (p[0] === "reglages") return viewSettings();

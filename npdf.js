@@ -37,12 +37,12 @@
 
   window.chargePdfJs = chargeLib;
   let courant = 0;
-  window.viewPdf = async function (id, k, pageVoulue, cherche) {
+  window.viewPdf = async function (id, k, pageVoulue, cherche, host) {
     const n = list(id)[+k || 0];
-    const app = document.getElementById("app");
-    if (!n) { go("#/"); return; }
+    const app = host || document.getElementById("app");
+    if (!n) { if (!host) go("#/"); return; }
     const jeton = ++courant;
-    setHead(n.t, true);
+    if (!host) setHead(n.t, true);
     app.innerHTML = `<div class="pdfbar"><button class="btn sec" id="pzm" aria-label="Réduire">−</button><span id="pzv">100 %</span><button class="btn sec" id="pzp" aria-label="Agrandir">+</button>${enreg(id, +k || 0, n)}</div>
       <p class="note" id="pmsg">Chargement de la notice (${mo(n.ko)})…</p><div id="ppages" class="ppages"></div>
       <p class="note">Touchez une page pour l'ouvrir en plein écran : faites défiler les pages de haut en bas, zoom avec + / − (le − montre la page entière), pincement ou double-touche.</p>`;
@@ -60,7 +60,7 @@
       return;
     }
     /* on a quitté la notice pendant son chargement : rien à afficher */
-    if (jeton !== courant || !document.getElementById("pmsg") || !/^#\/pdf\//.test(location.hash)) { try { pdf.destroy(); } catch (e) {} return; }
+    if (jeton !== courant || !document.getElementById("pmsg") || (!host && !/^#\/pdf\//.test(location.hash))) { try { pdf.destroy(); } catch (e) {} return; }
     document.getElementById("pmsg").textContent = `${pdf.numPages} page${pdf.numPages > 1 ? "s" : ""} · disponible hors ligne sur ce téléphone.`;
     const box = document.getElementById("ppages");
     let zoom = 1;

@@ -192,6 +192,11 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "2.80", date: "2026-11-11", titre: "Schéma de câblage, remplacement de carte, mode atelier", items: [
+    "Schéma de câblage personnalisé (onglet Outils) : choisissez la carte et ce que vous raccordez (photocellules, STOP, clignotant, commandes, antenne…) ; le raccordement est dessiné borne par borne d'après la fiche, avec les notes de la fiche, et s'imprime ou s'enregistre en PDF",
+    "Remplacer une carte (onglet Outils) : choisissez l'ancienne et la nouvelle carte ; le guide donne la correspondance des fils (à cocher), les paramètres à reporter avec une colonne pour noter les valeurs relevées, les étapes de remise en service de la nouvelle carte et les contrôles finaux",
+    "Mode atelier (Réglages, activable ou non) : sur grand écran, la fiche à gauche et sa notice PDF à droite"
+  ] },
   { v: "2.79", date: "2026-11-11", titre: "Assistant de recherche et photo de la carte entière", items: [
     "Assistant (onglet Dépanner) : décrivez la panne ou posez une question ; il cherche dans les fiches et pose des questions de précision (marque, carte, réglage / branchement / code / panne). Sans réseau, sans IA",
     "Dépannage par photo : nouveau mode « Carte entière » (BÊTA) qui lit toutes les inscriptions de la carte, dans plusieurs sens, pour retrouver la fiche"
