@@ -192,6 +192,9 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "2.76", date: "2026-11-11", titre: "Accueil : titre sur une seule ligne", items: [
+    "La question « Quel automatisme avez-vous devant vous ? » est un peu plus petite pour tenir sur une seule ligne sur téléphone"
+  ] },
   { v: "2.75", date: "2026-11-11", titre: "Retour haptique : correctif iPhone", items: [
     "iPhone : nouvelle méthode pour déclencher le retour haptique, et bouton « Tester » dans Réglages > Préférences"
   ] },
