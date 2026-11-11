@@ -192,6 +192,9 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "2.74", date: "2026-11-11", titre: "Tout télécharger pour le hors ligne", items: [
+    "Réglages > Hors ligne et version : le bouton « Tout télécharger pour le hors ligne » enregistre toutes les notices PDF sur le téléphone, avec le nombre de notices déjà téléchargées et la progression"
+  ] },
   { v: "2.73", date: "2026-11-11", titre: "Retour haptique", items: [
     "Une courte vibration à chaque appui sur un bouton (Android ; iPhone avec iOS 17.4 ou plus récent). À désactiver dans Réglages > Préférences > Retour haptique"
   ] },

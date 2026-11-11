@@ -555,6 +555,60 @@ const SKINS = [["dark","Sombre","dark","#9B2424","#0f0e0e","#1b1918"],["light","
 /* taille du texte : agrandit toute l'interface (lecture dehors, avec des gants) */
 const TAILLES = [["p", "Petite", 0.9], ["n", "Normale", 1], ["g", "Grande", 1.12], ["tg", "Très grande", 1.25]];
 function applyTaille(k){ const t = TAILLES.find(x => x[0] === k) || TAILLES[1]; document.documentElement.style.zoom = t[2] === 1 ? "" : t[2]; document.documentElement.dataset.taille = t[0]; }
+/* Tout télécharger : toutes les notices PDF (et le lecteur) mises en cache pour le hors ligne */
+const DL_CACHE = "sav-notices-2";
+const DL_VENDOR = ["pdf.min.mjs","pdf.worker.min.mjs","wasm/openjpeg.wasm","wasm/qcms_bg.wasm","wasm/jbig2.wasm","wasm/openjpeg_nowasm_fallback.js","wasm/jbig2_nowasm_fallback.js","iccs/CGATS001Compat-v2-micro.icc","standard_fonts/FoxitSerifBoldItalic.pfb","standard_fonts/FoxitSerifItalic.pfb","standard_fonts/FoxitSerif.pfb","standard_fonts/FoxitSerifBold.pfb","standard_fonts/FoxitFixed.pfb","standard_fonts/FoxitSymbol.pfb","standard_fonts/FoxitDingbats.pfb","standard_fonts/FoxitFixedBoldItalic.pfb","standard_fonts/FoxitFixedItalic.pfb","standard_fonts/FoxitFixedBold.pfb","standard_fonts/LiberationSans-BoldItalic.ttf","standard_fonts/LiberationSans-Italic.ttf","standard_fonts/LiberationSans-Bold.ttf","standard_fonts/LiberationSans-Regular.ttf"].map(f => "vendor/pdfjs/" + f);
+const dlAbs = f => new URL(f, location.href).href;
+const dlMo = ko => ko < 1024 ? Math.max(1, Math.round(ko)) + " Ko" : Math.round(ko / 1024) + " Mo";
+async function dlListe(){ /* notices + fichiers du lecteur, avec ce qui manque encore */
+  const seen = new Set(), items = [];
+  Object.values(window.NOTICES_PDF || {}).forEach(l => l.forEach(n => { const k = n.sb || n.f; if (k && !seen.has(k)){ seen.add(k); items.push({ n, k, ko: n.ko || 0, tx: n.tx }); } }));
+  DL_VENDOR.forEach(f => items.push({ f, k: f, ko: 0 }));
+  const c = await caches.open(DL_CACHE);
+  for (const it of items){
+    try { it.ok = it.n && it.n.sb ? (window.NAJOUT ? await NAJOUT.enCache(it.n) : false) : !!(await c.match(dlAbs(it.n ? it.n.f : it.f))); } catch (e) { it.ok = false; }
+  }
+  return items;
+}
+async function dlInit(){
+  const st = $("#dlst"), b = $("#dlb"); if (!st || !b) return;
+  if (!window.caches){ st.textContent = "indisponible"; b.style.display = "none"; return; }
+  if (dlInit.run){ b.querySelector("span").textContent = "Arrêter le téléchargement"; return; }
+  const it = (await dlListe()).filter(x => x.n); const faits = it.filter(x => x.ok).length, reste = it.filter(x => !x.ok);
+  st.textContent = reste.length ? `${faits} / ${it.length}` : `✓ ${it.length} / ${it.length}`;
+  $("#dld").textContent = reste.length ? `Il reste ${reste.length} notice${reste.length > 1 ? "s" : ""} à télécharger (environ ${dlMo(reste.reduce((a, x) => a + x.ko, 0))}). À faire de préférence en Wi-Fi.` : "Toutes les notices sont déjà sur ce téléphone : elles se lisent sans réseau.";
+  b.onclick = () => dlTout();
+}
+async function dlTout(){
+  if (dlInit.run){ dlInit.stop = true; return; }
+  if (navigator.onLine === false){ alert("Pas de réseau : connectez-vous pour télécharger les notices."); return; }
+  const tous = await dlListe(); const reste = tous.filter(x => !x.ok);
+  if (!reste.some(x => x.n)){ await dlInit(); return; }
+  const taille = reste.reduce((a, x) => a + x.ko, 0);
+  if (!confirm(`Télécharger ${reste.filter(x => x.n).length} notices (environ ${dlMo(taille)}) ?\nUtilisez de préférence le Wi-Fi.`)) return;
+  dlInit.run = true; dlInit.stop = false;
+  const b = $("#dlb"), st = $("#dlst"), d = $("#dld"); let fait = 0, err = 0, plein = false;
+  const maj = () => { const e1 = $("#dlst"), e2 = $("#dlb"); if (e1) e1.textContent = `${fait} / ${reste.filter(x => x.n).length}`; if (e2) e2.querySelector("span").textContent = "Arrêter le téléchargement"; };
+  maj(); if (d) d.textContent = "Téléchargement en cours : gardez l'appli ouverte. Vous pouvez continuer à l'utiliser.";
+  let i = 0;
+  const worker = async () => {
+    while (!dlInit.stop && !plein){
+      const it = reste[i++]; if (!it) return;
+      try {
+        if (it.n && it.n.sb && window.NAJOUT){ await NAJOUT.octets(it.n); if (it.tx) await NAJOUT.texte(it.n); }
+        else { const r = await fetch(dlAbs(it.n ? it.n.f : it.f)); if (!r.ok) throw new Error("http"); await r.arrayBuffer(); }
+        if (it.n) fait++;
+      } catch (e) { if (e && e.name === "QuotaExceededError") plein = true; else err++; }
+      maj();
+    }
+  };
+  await Promise.all([worker(), worker(), worker()]);
+  const arret = dlInit.stop; dlInit.run = false; dlInit.stop = false;
+  if (location.hash === "#/reglages"){
+    await dlInit();
+    const e3 = $("#dld"); if (e3 && (arret || plein || err)) e3.textContent = (plein ? "Espace insuffisant sur ce téléphone. " : arret ? "Téléchargement arrêté. " : "") + (err ? `${err} notice${err > 1 ? "s" : ""} n'${err > 1 ? "ont" : "a"} pas pu être téléchargée${err > 1 ? "s" : ""} : réessayez. ` : "") + e3.textContent;
+  }
+}
 /* retour haptique : vibration courte à chaque appui (Android : vibrate ; iPhone iOS 17.4+ : astuce « interrupteur ») */
 let hapEl;
 function haptic(){
@@ -981,7 +1035,10 @@ function viewSettings(){
   /* 4. Hors ligne et version */
   h += `<h2>Hors ligne et version</h2><div class="set"><div class="row"><span>Version de l'appli</span><span class="mono">v${APP_V}</span></div><div class="row"><span>Données</span><span class="mono">${fdate(DATA_DATE)}</span></div>
       <div class="row"><span>Hors ligne</span><span class="mono" id="swv">…</span></div>
-      <button class="srow" id="swb"><span>Vérifier / compléter le téléchargement</span><i>›</i></button></div>
+      <button class="srow" id="swb"><span>Vérifier / compléter le téléchargement</span><i>›</i></button>
+      <div class="row"><span>Notices PDF</span><span class="mono" id="dlst">…</span></div>
+      <button class="srow" id="dlb"><span>Tout télécharger pour le hors ligne</span><i>›</i></button></div>
+      <p class="hotn" id="dld">Télécharge toutes les notices PDF sur ce téléphone pour les lire sans réseau. À faire de préférence en Wi-Fi.</p>
       <p class="hotn" id="swd">Vérification du mode hors ligne…</p>`;
   /* 5. Administration (administrateurs seulement) */
   if (window.SYNC) h += SYNC.adminHtml(); /* SYNC */
@@ -999,6 +1056,7 @@ function viewSettings(){
       <p class="foot">Diag'SAV est une application conçue et développée par William, avec l'aide de l'intelligence artificielle Claude.</p>`;
   app.innerHTML = h;
   if (window.SYNC) SYNC.brancherReglages(); /* SYNC */
+  dlInit();
   const mab = $("#mab"); /* changer mon mot de passe */
   if (mab) mab.onclick = async () => {
     const a0 = $("#ma0").value, a1 = $("#ma1").value, a2 = $("#ma2").value, out = $("#mar");
