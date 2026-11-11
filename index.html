@@ -381,6 +381,8 @@ html{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 .dbtn small{display:block;font-weight:400;color:var(--muted)}
 .dtest{background:#fff4d6;color:#5a3d00;border:1px solid #e0b34a;border-radius:12px;padding:10px 12px;font-size:14px;margin-bottom:12px}
 :root[data-theme="dark"] .dtest{background:#3a2d0c;color:#ffe3a1;border-color:#7a5a12}
+.askf{display:flex;gap:8px;align-items:stretch;margin:10px 0}.askf textarea{flex:1;min-width:0;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);font:inherit;font-size:16px;padding:10px 12px;resize:vertical}
+.askc{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 4px}.askc .mini{text-align:left;flex:0 1 auto;max-width:100%}.askc .mini small{opacity:.65;margin-left:4px}.askc .mini.on{background:var(--brand);color:#fff;border-color:var(--brand)}
 .ahit{display:flex;gap:10px;padding:10px 12px;border:1px solid var(--line,#8884);border-radius:10px;margin:8px 0;cursor:pointer}
 .ahit .ak{font-size:11px;font-weight:700;text-transform:uppercase;opacity:.7;min-width:62px;padding-top:3px}
 .ahit ul.plain{margin:4px 0 0;padding-left:16px;font-size:13.5px}
@@ -705,6 +707,7 @@ function viewHome(){
   const favs = getFavs().map(x => findBoard(x) ? rowBoard(findBoard(x)) : (window.rowAccFav ? rowAccFav(x) : "")).filter(Boolean);
   h += `<h2>★ Mes favoris</h2>` + (favs.length ? `<div class="list">` + favs.join("") + `</div>` : `<p class="note">Aucun favori. Ouvrez une fiche (carte ou accessoire) et touchez l'étoile ★ pour la retrouver ici.</p>`) + `<p class="hotn">${esc(FAV_NOTE)}</p>`;
   const T = {};
+  T['#/ask'] = `<button class="dbtn" onclick="go('#/ask')">Assistant : décrivez la panne ou posez votre question<small>recherche guidée dans les fiches · sans réseau, sans IA</small></button>`; /* ASK */
   T['#/d'] = (()=>{ let h=''; h += `<button class="dbtn" onclick="go('#/d')">Diagnostic guidé : trouver la panne en quelques questions<small><b>BÊTA</b> · peut contenir des erreurs ou mal fonctionner</small></button>`; /* DIAG */ return h; })();
   T['#/a'] = (()=>{ let h=''; h += `<button class="dbtn" onclick="go('#/a')">Accessoires : gyrophares, radio, photocellules…<small>${ACCESSOIRES.length} fiche${ACCESSOIRES.length>1?"s":""} par famille · rubrique en construction</small></button>`; /* ACC */ return h; })();
   T['#/calc/moteur'] = (()=>{ let h=''; h += `<button class="dbtn" onclick="go('#/calc/moteur')">Choisir une motorisation<small>selon le poids et la longueur du portail · Roger en premier · lien vers la carte de commande</small></button>`; /* CALC moteur */ return h; })();
@@ -713,17 +716,17 @@ function viewHome(){
   T['#/cab'] = (()=>{ let h=''; h += `<button class="dbtn" onclick="go('#/cab')">Atelier de câblage : câbler et tester une installation<small>Roger B70/1DCHP · on voit le courant passer · missions corrigées</small></button>`; /* CAB */ return h; })();
   T['#/quiz'] = (()=>{ let h=''; h += `<button class="dbtn" onclick="go('#/quiz')">Quiz de formation : codes erreur et borniers<small><b>BÊTA</b> · 10 questions tirées des fiches</small></button>`; /* QUIZ */ return h; })();
   T['#/cmp'] = (()=>{ let h=''; h += `<button class="dbtn" onclick="go('#/cmp')">Comparateur de borniers : remplacer une carte par une autre<small>bornes des deux cartes rangées par fonction · aide indicative</small></button>`; /* CMP */ return h; })();
-  T['#/scan'] = (()=>{ let h=''; h += `<button class="dbtn" onclick="go('#/scan')">Dépannage par photo : l'étiquette ou l'afficheur de la carte<small><b>BÊTA</b> · photographiez la plaque pour trouver la fiche, ou l'afficheur pour ouvrir le code d'erreur</small></button>`; /* SCAN */ return h; })();
+  T['#/scan'] = (()=>{ let h=''; h += `<button class="dbtn" onclick="go('#/scan')">Dépannage par photo : l'étiquette, la carte entière ou l'afficheur<small><b>BÊTA</b> · photographiez la plaque ou la carte pour trouver la fiche, ou l'afficheur pour ouvrir le code d'erreur</small></button>`; /* SCAN */ return h; })();
   const rh = recents.length ? `<h2>Dernières consultées</h2><div class="list">` + recents.map(rowBoard).join("") + `</div>` : "";
   const foot = `<p class="foot">Codes et borniers repris des notices fabricant citées sur chaque fiche.<br>En cas de doute, la notice livrée avec le matériel fait foi.</p>`;
   if (!homeMob()){
     document.body.classList.remove("hometabs");
-    h += ["#/d","#/a","#/calc/moteur","#/calc","#/sim","#/cab","#/quiz","#/cmp","#/scan"].map(k => T[k]).join("") + rh + foot;
+    h += ["#/ask","#/d","#/a","#/calc/moteur","#/calc","#/sim","#/cab","#/quiz","#/cmp","#/scan"].map(k => T[k]).join("") + rh + foot;
     app.innerHTML = h; return;
   }
   /* téléphone et tablette : 4 onglets en bas */
   const tab = Math.min(3, Math.max(0, +store.get("hometab", 0) || 0));
-  const SEC = [null, ["Dépanner", ["#/scan","#/d","#/cmp"]], ["Outils", ["#/calc/moteur","#/calc","#/a"]], ["Formation", ["#/sim","#/cab","#/quiz"]]];
+  const SEC = [null, ["Dépanner", ["#/ask","#/scan","#/d","#/cmp"]], ["Outils", ["#/calc/moteur","#/calc","#/a"]], ["Formation", ["#/sim","#/cab","#/quiz"]]];
   if (tab === 0) h += rh;
   else h = `<h2>${SEC[tab][0]}</h2>` + SEC[tab][1].map(k => T[k]).join("");
   app.innerHTML = h + (tab === 0 ? foot : "");
@@ -1145,7 +1148,7 @@ function route(){
   prevRoute = p;
   document.body.classList.remove("hometabs");
   if (homeMob() && p[0] !== "pdf"){ /* barre du bas sur toutes les pages (téléphone et tablette) */
-    const T = {"":0, g:0, m:0, c:0, s:0, d:1, scan:1, cmp:1, calc:2, a:2, ma:2, sim:3, cab:3, quiz:3, reglages:4};
+    const T = {"":0, g:0, m:0, c:0, s:0, d:1, scan:1, cmp:1, ask:1, calc:2, a:2, ma:2, sim:3, cab:3, quiz:3, reglages:4};
     homeBar(p[0] in T ? T[p[0]] : -1);
   }
   window.scrollTo(0, 0);
@@ -1154,6 +1157,7 @@ function route(){
   if (p[0] === "c"){ viewBoard(p[1], p[2], p[3] ? decodeURIComponent(p[3]) : ""); try { if (hlQ && hlQ.id === p[1]) hlPane($("#pane"), hlQ.q); } catch (e) {} try { const bh = app.querySelector(".boardhead"); if (bh && window.astuceHtml && findBoard(p[1])) bh.insertAdjacentHTML("afterend", astuceHtml("carte", p[1])); } catch (e) {} /* AST */ try { const ap = app.querySelector(".ast") || app.querySelector(".boardhead"); if (ap && window.noteHtml && findBoard(p[1])) { ap.insertAdjacentHTML("afterend", noteHtml("carte", p[1])); noteBrancher("carte", p[1]); } } catch (e) {} /* NOTES */ if (window.sigBouton && findBoard(p[1])) app.insertAdjacentHTML("beforeend", sigBouton("carte", p[1], p[2] || "codes")); /* SIG */ app.insertAdjacentHTML("beforeend", `<div class="sig"><i><b style="background:#1F5FA8"></b><b style="background:#E07B00"></b><b style="background:#E5372E"></b></i>Diag'SAV</div>`); return; } /* SIG */
   if (p[0] === "ma") return viewAccBrand(p[1]);
   if (p[0] === "a"){ if (!p[1]) return viewAccList(); viewAcc(p[1], p[2]); try { const bh = app.querySelector(".boardhead"); if (bh && window.astuceHtml && (window.ACCESSOIRES || []).some(x => x.id === p[1])) bh.insertAdjacentHTML("afterend", astuceHtml("accessoire", p[1])); } catch (e) {} try { const ap = app.querySelector(".ast") || app.querySelector(".boardhead"); if (ap && window.noteHtml && (window.ACCESSOIRES || []).some(x => x.id === p[1])) { ap.insertAdjacentHTML("afterend", noteHtml("accessoire", p[1])); noteBrancher("accessoire", p[1]); } } catch (e) {} return; } /* ACC AST NOTES */
+  if (p[0] === "ask") return viewAsk(p[1] ? decodeURIComponent(p.slice(1).join("/")) : ""); /* ASK */
   if (p[0] === "d") return viewDiag(p[1], p[2]); /* DIAG */
   if (p[0] === "pdf") return viewPdf(p[1], p[2], p[3], p[4] ? decodeURIComponent(p.slice(4).join("/")) : ""); /* PDF */
   if (p[0] === "scan") return viewScan(p[1]); /* SCAN */

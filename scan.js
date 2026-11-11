@@ -255,14 +255,93 @@
     show();
   }
 
+  const seg = m => `<div class="seg2 stseg">${[["", "Étiquette"], ["carte", "Carte entière"], ["afficheur", "Afficheur / code"]].map(([k, l]) => `<button aria-pressed="${k === m}" ${k === m ? "" : `onclick="go('#/scan${k ? "/" + k : ""}')"`}>${l}</button>`).join("")}</div>`;
+
+  /* ---------- carte entière : lecture de toutes les inscriptions, dans plusieurs sens et par morceaux ---------- */
+  function charge(file, max) { /* image -> canvas en niveaux de gris contrastés */
+    return new Promise((ok, ko) => {
+      const img = new Image(); img.onload = () => {
+        const k = Math.min(1, max / Math.max(img.width, img.height)), c = document.createElement("canvas");
+        c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+        const x = c.getContext("2d"); x.drawImage(img, 0, 0, c.width, c.height);
+        const d = x.getImageData(0, 0, c.width, c.height), p = d.data;
+        for (let i = 0; i < p.length; i += 4) { let g = .3 * p[i] + .59 * p[i + 1] + .11 * p[i + 2]; g = Math.max(0, Math.min(255, (g - 128) * 1.5 + 128)); p[i] = p[i + 1] = p[i + 2] = g; }
+        x.putImageData(d, 0, 0); URL.revokeObjectURL(img.src); ok(c);
+      }; img.onerror = () => ko(new Error("image")); img.src = URL.createObjectURL(file);
+    });
+  }
+  function tourne(c, deg) {
+    if (!deg) return c;
+    const o = document.createElement("canvas"), q = deg % 180 !== 0; o.width = q ? c.height : c.width; o.height = q ? c.width : c.height;
+    const x = o.getContext("2d"); x.translate(o.width / 2, o.height / 2); x.rotate(deg * Math.PI / 180); x.drawImage(c, -c.width / 2, -c.height / 2); return o;
+  }
+  function reduit(c, max) {
+    const k = Math.min(1, max / Math.max(c.width, c.height)); if (k === 1) return c;
+    const o = document.createElement("canvas"); o.width = Math.round(c.width * k); o.height = Math.round(c.height * k); o.getContext("2d").drawImage(c, 0, 0, o.width, o.height); return o;
+  }
+  function morceaux(c) { /* 4 quarts qui se recouvrent, pour les petites inscriptions */
+    const w = Math.round(c.width * .58), h = Math.round(c.height * .58), out = [];
+    [[0, 0], [c.width - w, 0], [0, c.height - h], [c.width - w, c.height - h]].forEach(([x, y]) => { const o = document.createElement("canvas"); o.width = w; o.height = h; o.getContext("2d").drawImage(c, x, y, w, h, 0, 0, w, h); out.push(o); });
+    return out;
+  }
+  const motsLus = t => String(t || "").split(/\s+/).map(w => w.replace(/^[^A-Za-z0-9]+|[^A-Za-z0-9]+$/g, "")).filter(w => w.length >= 3 && /[A-Za-z0-9]{3}/.test(w) && !/(.)\1{3}/.test(w));
+  let stopCarte = false;
+  function viewCarte() {
+    setHead("Photo de la carte", true);
+    app.innerHTML = seg("carte") + `<p class="note"><b>BÊTA.</b> Photographiez la carte entière, de face et bien éclairée, sans reflet. L'appli lit toutes les inscriptions (référence imprimée sur la carte, marque) dans plusieurs sens et par morceaux, puis propose les fiches qui ressemblent. Comptez <b>30 secondes à 1 minute</b>. Le moteur de lecture se télécharge au premier scan : il faut du réseau ce jour-là. Si rien n'est lisible sur la carte, la lecture échoue : vérifiez toujours le modèle sur la fiche.</p>
+      <label class="dbtn" style="display:block;text-align:center;cursor:pointer">📷 Prendre / choisir une photo de la carte<input id="scf" type="file" accept="image/*" capture="environment" style="display:none"></label>
+      <p class="note" id="scs"></p><button class="mini" id="scstop" hidden>Arrêter la lecture</button>
+      <div id="scr"></div>
+      <h2>Inscriptions lues (modifiables)</h2>
+      <textarea id="sct" rows="4" style="width:100%;box-sizing:border-box;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit" placeholder="ex. ZBX7N CAME"></textarea>
+      <button class="dbtn" id="scg">Chercher avec ce texte</button>`;
+    const st = m => { const e = $("#scs"); if (e) e.textContent = m; };
+    const show = fini => {
+      const z = $("#sct"), o = $("#scr"); if (!z || !o) return [];
+      const t = z.value.trim(), r = t ? scanMatch(t) : [];
+      o.innerHTML = (r.length ? `<h2>Fiches possibles</h2><div class="list">` + r.map(x => `<button class="row" onclick="go('${x.hash}')"><span class="badge" style="--c:${x.couleur}">${esc(x.marque)}</span><b>${esc(x.nom)}</b><small>${esc(x.sous)}</small></button>`).join("") + `</div>`
+        : fini && t ? `<p class="empty">Aucune fiche reconnue dans ces inscriptions.<br>Photographiez plutôt l'étiquette, ou <a href="#/s/${encodeURIComponent(t.split(/\s+/).slice(0, 4).join(" "))}">lancez la recherche normale</a>.</p>` : "");
+      return r;
+    };
+    $("#scg").onclick = () => show(true);
+    $("#scstop").onclick = () => { stopCarte = true; };
+    $("#scf").onchange = async e => {
+      const f = e.target.files[0]; if (!f) return;
+      let w = null; stopCarte = false;
+      try {
+        st("Préparation de la photo…"); const grand = await charge(f, 2600), petit = reduit(grand, 1800);
+        st("Chargement du moteur de lecture (première fois : quelques secondes)…");
+        w = await loadOcr(() => {});
+        try { await w.setParameters({ tessedit_pageseg_mode: "11" }); } catch (x) {} /* texte épars */
+        const passes = [0, 90, 270, 180].map(d => () => tourne(petit, d));
+        morceaux(grand).forEach(m => { passes.push(() => m); passes.push(() => tourne(m, 90)); passes.push(() => tourne(m, 270)); });
+        const vus = new Set(), mots = []; $("#scstop").hidden = false; let r = [];
+        for (let i = 0; i < passes.length && !stopCarte; i++) {
+          if (!$("#sct")) break; /* l'utilisateur a quitté l'écran */
+          st(`Lecture des inscriptions : passe ${i + 1} sur ${passes.length}…`);
+          const { data } = await w.recognize(passes[i]());
+          motsLus(data.text).forEach(m => { const k = m.toLowerCase(); if (!vus.has(k)) { vus.add(k); mots.push(m); } });
+          if ($("#sct")) { $("#sct").value = mots.join(" "); r = show(false); }
+          if (r.length && r[0].s >= 6 && (r.length < 2 || r[0].s >= r[1].s * 1.5)) break; /* une fiche ressort nettement : inutile de continuer */
+        }
+        if ($("#scstop")) $("#scstop").hidden = true;
+        r = show(true);
+        st(r.length ? "Lecture terminée. Vérifiez le modèle sur la fiche." : mots.length ? "Lecture terminée : aucune fiche reconnue. Corrigez le texte ou photographiez l'étiquette." : "Aucune inscription lisible. Recommencez avec une photo plus nette, ou photographiez l'étiquette.");
+      } catch (err) {
+        st(err && err.message === "réseau" ? "Moteur de lecture indisponible : connectez-vous une fois au réseau, ou tapez la référence ci-dessous." : "Lecture impossible : tapez la référence ci-dessous.");
+      } finally { try { if (w) await w.setParameters({ tessedit_pageseg_mode: "6" }); } catch (x) {} const b = $("#scstop"); if (b) b.hidden = true; }
+    };
+  }
+
   window.viewScan = function (mode) {
+    if (mode === "carte") return viewCarte();
     if (mode === "afficheur") {
       setHead("Photo de l'afficheur", true);
-      app.innerHTML = `<div class="seg2 stseg"><button aria-pressed="false" onclick="go('#/scan')">Étiquette / carte</button><button aria-pressed="true">Afficheur / code</button></div>` + viewAfficheur();
+      app.innerHTML = `${seg("afficheur")}` + viewAfficheur();
       brancheAfficheur(); return;
     }
     setHead("Scanner une étiquette", true);
-    app.innerHTML = `<div class="seg2 stseg"><button aria-pressed="true">Étiquette / carte</button><button aria-pressed="false" onclick="go('#/scan/afficheur')">Afficheur / code</button></div><p class="note"><b>BÊTA.</b> Photographiez la plaque de l'armoire (bien à plat, sans reflet). L'appli lit le texte et propose les fiches qui ressemblent. Le moteur de lecture se télécharge au premier scan : il faut du réseau ce jour-là. La lecture peut se tromper : vérifiez toujours le modèle sur la fiche.</p>
+    app.innerHTML = `${seg("")}<p class="note"><b>BÊTA.</b> Photographiez la plaque de l'armoire (bien à plat, sans reflet). L'appli lit le texte et propose les fiches qui ressemblent. Le moteur de lecture se télécharge au premier scan : il faut du réseau ce jour-là. La lecture peut se tromper : vérifiez toujours le modèle sur la fiche.</p>
       <label class="dbtn" style="display:block;text-align:center;cursor:pointer">📷 Prendre / choisir une photo<input id="scf" type="file" accept="image/*" capture="environment" style="display:none"></label>
       <p class="note" id="scs"></p>
       <h2>Texte lu (modifiable)</h2>

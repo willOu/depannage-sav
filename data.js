@@ -192,6 +192,10 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "2.79", date: "2026-11-11", titre: "Assistant de recherche et photo de la carte entière", items: [
+    "Assistant (onglet Dépanner) : décrivez la panne ou posez une question ; il cherche dans les fiches et pose des questions de précision (marque, carte, réglage / branchement / code / panne). Sans réseau, sans IA",
+    "Dépannage par photo : nouveau mode « Carte entière » (BÊTA) qui lit toutes les inscriptions de la carte, dans plusieurs sens, pour retrouver la fiche"
+  ] },
   { v: "2.78", date: "2026-11-11", titre: "Dictée, partage, nouveaux calculs, date des fiches", items: [
     "Recherche vocale : un micro dans la barre de recherche pour dicter le code ou le modèle (selon le navigateur, avec du réseau)",
     "Partage : un bouton sur chaque fiche (carte ou accessoire) pour envoyer le lien à un collègue",
