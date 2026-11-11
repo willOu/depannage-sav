@@ -192,6 +192,13 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "2.78", date: "2026-11-11", titre: "Dictée, partage, nouveaux calculs, date des fiches", items: [
+    "Recherche vocale : un micro dans la barre de recherche pour dicter le code ou le modèle (selon le navigateur, avec du réseau)",
+    "Partage : un bouton sur chaque fiche (carte ou accessoire) pour envoyer le lien à un collègue",
+    "Calculs rapides : deux nouveaux onglets, Longueur maxi de câble et Autonomie de batterie",
+    "Chaque fiche affiche sa date de dernière mise à jour",
+    "Les mots cherchés restent surlignés dans la fiche ouverte depuis la recherche"
+  ] },
   { v: "2.77", date: "2026-11-11", titre: "Retour haptique retiré", items: [
     "Le retour haptique (vibration à l'appui) et son bouton Tester sont retirés de l'appli"
   ] },

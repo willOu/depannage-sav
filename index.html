@@ -85,6 +85,13 @@ h2{font-size:13px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted
 .hotn{color:var(--muted);font-size:12.5px;margin:8px 0 0}
 .boardhead{position:relative}
 .boardhead h3{padding-right:46px}
+.shbtn{position:absolute;top:8px;right:56px;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--chip);color:var(--muted);display:grid;place-items:center;cursor:pointer}
+.boardhead:has(.shbtn) h3{padding-right:96px}
+.boardhead .maj{font-size:12px;color:var(--muted);margin-top:4px}
+.qmic{position:absolute;right:46px;top:50%;transform:translateY(-50%);width:42px;height:38px;border:0;border-radius:10px;background:transparent;display:grid;place-items:center;cursor:pointer}.qmic:active{background:rgba(0,0,0,.08)}.search .qmic svg{position:static;opacity:.8}
+.qmic.on{background:#c4161c}.qmic.on svg{stroke:#fff;opacity:1}
+.search:has(.qmic:not([hidden])) input{padding-right:94px}
+#toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom) + 96px);transform:translateX(-50%);background:#222;color:#fff;padding:10px 16px;border-radius:999px;font-size:14px;font-weight:600;z-index:60;box-shadow:0 4px 14px rgba(0,0,0,.35);max-width:90vw;text-align:center}
 .favbtn{position:absolute;top:8px;right:8px;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--chip);color:var(--muted);font-size:22px;line-height:1;cursor:pointer}
 .bchip.on{outline:2px solid var(--brand);outline-offset:1px}
 .favbtn[aria-pressed="true"]{color:#e8a200;border-color:#e8a200}
@@ -492,6 +499,7 @@ html{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
   <div class="search">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
     <input id="q" type="search" inputmode="search" autocomplete="off" placeholder="Code, modèle, borne, symptôme…" aria-label="Rechercher">
+    <button class="qmic" id="qmic" type="button" hidden title="Dicter la recherche" aria-label="Dicter la recherche"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>
     <button class="qcam" id="qcam" type="button" title="Lire l'afficheur avec la caméra" aria-label="Lire le code de l'afficheur avec la caméra" onclick="window.liveOuvrir && liveOuvrir()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1d1a19" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg></button>
   </div>
 </header>
@@ -507,6 +515,7 @@ html{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 <script src="acc.js"></script> <!-- ACC -->
 
 <script src="data.js"></script>
+<script src="maj.js"></script> <!-- dates de mise à jour des fiches (généré) -->
 <script src="auth.js"></script> <!-- AUTH -->
 <script src="sync.js"></script> <!-- SYNC -->
 <script src="cmp.js"></script> <!-- CMP -->
@@ -608,6 +617,48 @@ async function dlTout(){
     await dlInit();
     const e3 = $("#dld"); if (e3 && (arret || plein || err)) e3.textContent = (plein ? "Espace insuffisant sur ce téléphone. " : arret ? "Téléchargement arrêté. " : "") + (err ? `${err} notice${err > 1 ? "s" : ""} n'${err > 1 ? "ont" : "a"} pas pu être téléchargée${err > 1 ? "s" : ""} : réessayez. ` : "") + e3.textContent;
   }
+}
+/* date de mise à jour d'une fiche (maj.js, généré depuis l'historique) */
+function majHtml(id){ const d = window.MAJ && MAJ[id]; return d ? `<div class="maj">Fiche mise à jour le ${fdate(d)}</div>` : ""; }
+/* petit message temporaire */
+function toast(t){ let e = $("#toast"); if (!e){ e = document.createElement("div"); e.id = "toast"; e.setAttribute("role", "status"); document.body.appendChild(e); } e.textContent = t; e.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => { e.hidden = true; }, 2600); }
+/* partage de la fiche ouverte : feuille de partage du téléphone, sinon copie du lien */
+function shareBtn(){ return `<button class="shbtn" aria-label="Partager cette fiche" title="Partager cette fiche" onclick="shareFiche()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3M8 7l4-4 4 4M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/></svg></button>`; }
+async function shareFiche(){
+  const titre = $("#title").textContent + " · Diag'SAV", url = location.href;
+  try { if (navigator.share){ await navigator.share({ title: titre, text: titre, url }); return; } } catch (e) { if (e && e.name === "AbortError") return; }
+  try { await navigator.clipboard.writeText(url); toast("Lien de la fiche copié"); } catch (e) { prompt("Copiez le lien de la fiche :", url); }
+}
+/* recherche vocale : dictée du navigateur (il faut du réseau et l'autorisation du micro) */
+(function(){
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition, b = $("#qmic"); if (!SR || !b) return;
+  b.hidden = false; let rec = null;
+  b.onclick = () => {
+    if (rec){ rec.stop(); return; }
+    try {
+      rec = new SR(); rec.lang = "fr-FR"; rec.interimResults = true; rec.maxAlternatives = 1;
+      rec.onresult = e => { const t = Array.from(e.results).map(r => r[0].transcript).join(" ").trim(); const q = $("#q"); q.value = t; if (e.results[e.results.length - 1].isFinal) q.dispatchEvent(new Event("input", { bubbles: true })); };
+      rec.onerror = e => { toast(e.error === "not-allowed" || e.error === "service-not-allowed" ? "Micro refusé : autorisez le micro pour dicter" : e.error === "network" ? "La dictée a besoin du réseau" : e.error === "no-speech" ? "Rien entendu" : "Dictée indisponible"); };
+      rec.onend = () => { rec = null; b.classList.remove("on"); const q = $("#q"); if (q.value) q.dispatchEvent(new Event("input", { bubbles: true })); };
+      rec.start(); b.classList.add("on");
+    } catch (e) { rec = null; b.classList.remove("on"); toast("Dictée indisponible sur ce navigateur"); }
+  };
+})();
+/* surlignage des mots cherchés dans la fiche ouverte depuis la recherche (sans tenir compte des accents) */
+let hlQ = null;
+function hlPane(root, q){
+  const base = t => Array.from(t).map(ch => ch.length > 1 ? ch : (ch.normalize("NFD")[0] || ch).toLowerCase()).join("");
+  const words = norm(q).split(" ").filter(w => w.length > 1); if (!root || !words.length) return;
+  const tw = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode: n => n.parentNode && /^(SCRIPT|STYLE|TEXTAREA|INPUT|MARK|SELECT)$/.test(n.parentNode.nodeName) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT });
+  const nodes = []; while (tw.nextNode()) nodes.push(tw.currentNode);
+  nodes.forEach(n => {
+    const t = n.nodeValue, b = base(t); if (b.length !== t.length) return;
+    const r = []; words.forEach(w => { let i = -1; while ((i = b.indexOf(w, i + 1)) >= 0) r.push([i, i + w.length]); });
+    if (!r.length) return; r.sort((x, y) => x[0] - y[0]);
+    const f = document.createDocumentFragment(); let last = 0;
+    r.forEach(([x, y]) => { if (x < last) return; f.appendChild(document.createTextNode(t.slice(last, x))); const m = document.createElement("mark"); m.textContent = t.slice(x, y); f.appendChild(m); last = y; });
+    f.appendChild(document.createTextNode(t.slice(last))); n.parentNode.replaceChild(f, n);
+  });
 }
 function setTaille(k){ applyTaille(k); store.set("taille", k); if (location.hash === "#/reglages") viewSettings(); }
 function applyTheme(t){
@@ -769,7 +820,7 @@ function viewBoard(id, tab, sel){
   setHead(`${m.nom} · ${c.nom}`, true);
   const rec = store.get("recents", []).filter(x => x !== id); rec.unshift(id); store.set("recents", rec.slice(0, 4));
 
-  let h = `<div class="boardhead" style="--c:${m.couleur}"><button class="favbtn" id="fav" aria-pressed="${isFav(id)}" aria-label="Ajouter aux favoris" title="Favori : enregistré dans ce navigateur seulement">${isFav(id) ? "★" : "☆"}</button><h3>${esc(c.nom)}</h3><p>${esc(c.modeles)}</p><p>${esc(c.type)}</p><div class="src">Source : ${esc(c.source)}</div>${hotlineHtml(m)}${noticeHtml(id)}</div>
+  let h = `<div class="boardhead" style="--c:${m.couleur}">${shareBtn()}<button class="favbtn" id="fav" aria-pressed="${isFav(id)}" aria-label="Ajouter aux favoris" title="Favori : enregistré dans ce navigateur seulement">${isFav(id) ? "★" : "☆"}</button><h3>${esc(c.nom)}</h3><p>${esc(c.modeles)}</p><p>${esc(c.type)}</p><div class="src">Source : ${esc(c.source)}</div>${majHtml(id)}${hotlineHtml(m)}${noticeHtml(id)}</div>
   <div class="tabs" role="tablist">
     ${[["codes","Codes"],["bornier","Bornier"],["aff","Écran"],["param","Paramètres"],["appr","Apprent."]].concat(window.hasSchema && hasSchema(id) ? [["sch","Schéma"]] : []).concat(window.hasPdf && hasPdf(id) ? [["pdf","Notice PDF"]] : []).map(([k,l]) => `<button role="tab" aria-selected="${tab===k}" onclick="go('#/c/${id}/${k}')">${l}</button>`).join("")}
   </div><div id="pane"></div>`;
@@ -1089,6 +1140,8 @@ function route(){
       SYNC.vue(p[0] === "c" ? "carte" : "accessoire", p[1], p[2]);
     } else if (p[0] !== "s") SYNC.vue("", "");
   }
+  if (p[0] === "c" && p[1]){ if (prevRoute[0] === "s" && prevRoute[1]) hlQ = { id: p[1], q: decodeURIComponent(prevRoute.slice(1).join("/")) }; else if (hlQ && hlQ.id !== p[1]) hlQ = null; }
+  else if (p[0] !== "s") hlQ = null;
   prevRoute = p;
   document.body.classList.remove("hometabs");
   if (homeMob() && p[0] !== "pdf"){ /* barre du bas sur toutes les pages (téléphone et tablette) */
@@ -1098,7 +1151,7 @@ function route(){
   window.scrollTo(0, 0);
   if (p[0] === "m") return viewBrand(p[1]);
   if (p[0] === "g") return viewGenre(p[1]);
-  if (p[0] === "c"){ viewBoard(p[1], p[2], p[3] ? decodeURIComponent(p[3]) : ""); try { const bh = app.querySelector(".boardhead"); if (bh && window.astuceHtml && findBoard(p[1])) bh.insertAdjacentHTML("afterend", astuceHtml("carte", p[1])); } catch (e) {} /* AST */ try { const ap = app.querySelector(".ast") || app.querySelector(".boardhead"); if (ap && window.noteHtml && findBoard(p[1])) { ap.insertAdjacentHTML("afterend", noteHtml("carte", p[1])); noteBrancher("carte", p[1]); } } catch (e) {} /* NOTES */ if (window.sigBouton && findBoard(p[1])) app.insertAdjacentHTML("beforeend", sigBouton("carte", p[1], p[2] || "codes")); /* SIG */ app.insertAdjacentHTML("beforeend", `<div class="sig"><i><b style="background:#1F5FA8"></b><b style="background:#E07B00"></b><b style="background:#E5372E"></b></i>Diag'SAV</div>`); return; } /* SIG */
+  if (p[0] === "c"){ viewBoard(p[1], p[2], p[3] ? decodeURIComponent(p[3]) : ""); try { if (hlQ && hlQ.id === p[1]) hlPane($("#pane"), hlQ.q); } catch (e) {} try { const bh = app.querySelector(".boardhead"); if (bh && window.astuceHtml && findBoard(p[1])) bh.insertAdjacentHTML("afterend", astuceHtml("carte", p[1])); } catch (e) {} /* AST */ try { const ap = app.querySelector(".ast") || app.querySelector(".boardhead"); if (ap && window.noteHtml && findBoard(p[1])) { ap.insertAdjacentHTML("afterend", noteHtml("carte", p[1])); noteBrancher("carte", p[1]); } } catch (e) {} /* NOTES */ if (window.sigBouton && findBoard(p[1])) app.insertAdjacentHTML("beforeend", sigBouton("carte", p[1], p[2] || "codes")); /* SIG */ app.insertAdjacentHTML("beforeend", `<div class="sig"><i><b style="background:#1F5FA8"></b><b style="background:#E07B00"></b><b style="background:#E5372E"></b></i>Diag'SAV</div>`); return; } /* SIG */
   if (p[0] === "ma") return viewAccBrand(p[1]);
   if (p[0] === "a"){ if (!p[1]) return viewAccList(); viewAcc(p[1], p[2]); try { const bh = app.querySelector(".boardhead"); if (bh && window.astuceHtml && (window.ACCESSOIRES || []).some(x => x.id === p[1])) bh.insertAdjacentHTML("afterend", astuceHtml("accessoire", p[1])); } catch (e) {} try { const ap = app.querySelector(".ast") || app.querySelector(".boardhead"); if (ap && window.noteHtml && (window.ACCESSOIRES || []).some(x => x.id === p[1])) { ap.insertAdjacentHTML("afterend", noteHtml("accessoire", p[1])); noteBrancher("accessoire", p[1]); } } catch (e) {} return; } /* ACC AST NOTES */
   if (p[0] === "d") return viewDiag(p[1], p[2]); /* DIAG */

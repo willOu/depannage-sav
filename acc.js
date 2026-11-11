@@ -4820,7 +4820,7 @@
     const a = ACCESSOIRES.find(x => x.id === id); if (!a) return viewAccList();
     setHead(`${a.marque} ${a.nom}`, true);
     const tabs = TABS.filter(t => has(a, t[0])); tab = tabs.some(t => t[0] === tab) ? tab : "info";
-    let h = `<div class="boardhead" style="--c:${a.couleur}"><button class="favbtn" id="fav" aria-pressed="${isFav(a.id)}" aria-label="Ajouter aux favoris" title="Favori : enregistré dans ce navigateur seulement">${isFav(a.id) ? "★" : "☆"}</button><h3>${esc(a.nom)}</h3><p>${esc(a.marque)} · ${esc(a.categorie)}</p></div><p class="note">${esc(a.resume)}</p><div class="tabs" role="tablist">` + tabs.map(t => `<button role="tab" aria-selected="${t[0] === tab}" onclick="go('#/a/${a.id}/${t[0]}')">${t[1]}</button>`).join("") + `</div>`;
+    let h = `<div class="boardhead" style="--c:${a.couleur}">${window.shareBtn ? shareBtn() : ""}<button class="favbtn" id="fav" aria-pressed="${isFav(a.id)}" aria-label="Ajouter aux favoris" title="Favori : enregistré dans ce navigateur seulement">${isFav(a.id) ? "★" : "☆"}</button><h3>${esc(a.nom)}</h3><p>${esc(a.marque)} · ${esc(a.categorie)}</p>${window.majHtml ? majHtml(a.id) : ""}</div><p class="note">${esc(a.resume)}</p><div class="tabs" role="tablist">` + tabs.map(t => `<button role="tab" aria-selected="${t[0] === tab}" onclick="go('#/a/${a.id}/${t[0]}')">${t[1]}</button>`).join("") + `</div>`;
     if (tab === "info") h += `<div class="set">` + a.specs.map(s => `<div style="padding:11px 14px;border-top:1px solid var(--line)"><div style="font-size:12.5px;color:var(--muted);font-weight:600">${esc(s[0])}</div><div style="font-size:15.5px;margin-top:2px">${esc(s[1])}</div></div>`).join("") + `</div>`;
     if (tab === "sch") h += schemaPane(a.id);
     if (tab === "ntc") h += noticePane(a);
