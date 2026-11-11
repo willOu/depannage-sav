@@ -192,6 +192,9 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "2.67", date: "2026-11-11", titre: "Accueil par onglets sur téléphone et tablette", items: [
+    "Sur téléphone et tablette, 4 onglets en bas : Accueil, Dépanner, Outils, Formation. Sur ordinateur, l'accueil reste inchangé"
+  ] },
   { v: "2.66", date: "2026-11-10", titre: "Bouton Retour plus soigné", items: [
     "Le bouton Retour devient une pastille arrondie avec une flèche, plus facile à toucher"
   ] },

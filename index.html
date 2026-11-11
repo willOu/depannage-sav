@@ -188,6 +188,10 @@ ul.plain li{margin:4px 0}
 .cr .todo{margin:0 12px 12px;background:var(--bg);border-radius:10px;padding:10px 12px;font-size:15px;line-height:1.4}
 .cr .todo b{display:block;font-size:12px;letter-spacing:.8px;color:var(--muted);margin-bottom:2px}
 .empty{color:var(--muted);text-align:center;padding:30px 10px}
+.hometabs #htabs{display:flex}#htabs{display:none;position:fixed;left:0;right:0;bottom:0;z-index:40;background:var(--card);border-top:1px solid var(--line);padding:6px 0 calc(env(safe-area-inset-bottom) + 6px)}
+#htabs button{flex:1;background:none;border:0;color:var(--muted);font:inherit;font-size:12px;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 0;cursor:pointer}
+#htabs button.on{color:var(--brand-txt,var(--brand))}
+body.hometabs main,body.hometabs #app{padding-bottom:84px}
 .foot{color:var(--muted);font-size:12px;text-align:center;margin-top:28px}
 .sig{display:flex;align-items:center;justify-content:center;gap:8px;margin:28px 0 8px;color:var(--muted);font-size:12px}
 .sig i{display:flex;gap:3px}.sig i b{width:8px;height:8px;border-radius:2px;display:block}
@@ -479,6 +483,7 @@ html{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
   <div class="status" id="status"></div>
 </header>
 <main id="app"></main>
+<nav id="htabs" aria-label="Sections"></nav>
 <script src="diag.js"></script> <!-- DIAG -->
 <script src="ask.js"></script> <!-- ASK -->
 <script src="img.js"></script> <!-- SCH -->
@@ -581,21 +586,41 @@ function viewHome(){
     m.sanslogo ? `<button class="bchip" style="--c:${m.couleur}" onclick="go('#/m/${m.id}')"><i></i>${esc(m.nom)}</button>` : `<button class="bchip logo" aria-label="${esc(m.nom)}" onclick="go('#/m/${m.id}')"><img src="icons/marques/${m.id}.png" alt="${esc(m.nom)}" height="${({afca:52,casit:36,dea:40,elka:40,doitrand:32,opera:34,fadini:50,tousek:32})[m.id]||28}"></button>`).join("") + accBrandsOnly().map(b => b.logo ? `<button class="bchip logo" aria-label="${esc(b.nom)}" onclick="go('#/ma/${b.slug}')"><img src="icons/marques/${b.slug}.png" alt="${esc(b.nom)}" height="${b.slug==="opera"?34:28}"></button>` : `<button class="bchip" style="--c:${b.couleur}" onclick="go('#/ma/${b.slug}')"><i></i>${esc(b.nom)}</button>`).join("") + `</div>`;
   const favs = getFavs().map(x => findBoard(x) ? rowBoard(findBoard(x)) : (window.rowAccFav ? rowAccFav(x) : "")).filter(Boolean);
   h += `<h2>★ Mes favoris</h2>` + (favs.length ? `<div class="list">` + favs.join("") + `</div>` : `<p class="note">Aucun favori. Ouvrez une fiche (carte ou accessoire) et touchez l'étoile ★ pour la retrouver ici.</p>`) + `<p class="hotn">${esc(FAV_NOTE)}</p>`;
-  h += `<button class="dbtn" onclick="go('#/d')">Diagnostic guidé : trouver la panne en quelques questions<small><b>EN TEST</b> · peut contenir des erreurs ou mal fonctionner</small></button>`; /* DIAG */
-  h += `<button class="dbtn" onclick="go('#/a')">Accessoires : gyrophares, radio, photocellules…<small>${ACCESSOIRES.length} fiche${ACCESSOIRES.length>1?"s":""} par famille · rubrique en construction</small></button>`; /* ACC */
-  h += `<button class="dbtn" onclick="go('#/calc/moteur')">Choisir une motorisation<small>selon le poids et la longueur du portail · Roger en premier · lien vers la carte de commande</small></button>`; /* CALC moteur */
-  h += `<button class="dbtn" onclick="go('#/calc')">Calculs rapides : chute de tension, choix du moteur, conso 24 V<small>formules et hypothèses affichées</small></button>`; /* CALC */
-  h += `<button class="dbtn" onclick="go('#/sim')">Simulateur de carte : s'entraîner sans portail<small>afficheur et touches Roger, dip-switch Casit · exercices corrigés</small></button>`; /* SIM */
-  h += `<button class="dbtn" onclick="go('#/cab')">Atelier de câblage : câbler et tester une installation<small>Roger B70/1DCHP · on voit le courant passer · missions corrigées</small></button>`; /* CAB */
-  h += `<button class="dbtn" onclick="go('#/quiz')">Quiz de formation : codes erreur et borniers<small><b>EN TEST</b> · 10 questions tirées des fiches</small></button>`; /* QUIZ */
-  h += `<button class="dbtn" onclick="go('#/cmp')">Comparateur de borniers : remplacer une carte par une autre<small>bornes des deux cartes rangées par fonction · aide indicative</small></button>`; /* CMP */
-  h += `<button class="dbtn" onclick="go('#/scan')">Dépannage par photo : l'étiquette ou l'afficheur de la carte<small><b>BÊTA</b> · photographiez la plaque pour trouver la fiche, ou l'afficheur pour ouvrir le code d'erreur</small></button>`; /* SCAN */
-  if (recents.length){
-    h += `<h2>Dernières consultées</h2><div class="list">` + recents.map(rowBoard).join("") + `</div>`;
+  const T = {};
+  T['#/d'] = (()=>{ let h=''; h += `<button class="dbtn" onclick="go('#/d')">Diagnostic guidé : trouver la panne en quelques questions<small><b>EN TEST</b> · peut contenir des erreurs ou mal fonctionner</small></button>`; /* DIAG */ return h; })();
+  T['#/a'] = (()=>{ let h=''; h += `<button class="dbtn" onclick="go('#/a')">Accessoires : gyrophares, radio, photocellules…<small>${ACCESSOIRES.length} fiche${ACCESSOIRES.length>1?"s":""} par famille · rubrique en construction</small></button>`; /* ACC */ return h; })();
+  T['#/calc/moteur'] = (()=>{ let h=''; h += `<button class="dbtn" onclick="go('#/calc/moteur')">Choisir une motorisation<small>selon le poids et la longueur du portail · Roger en premier · lien vers la carte de commande</small></button>`; /* CALC moteur */ return h; })();
+  T['#/calc'] = (()=>{ let h=''; h += `<button class="dbtn" onclick="go('#/calc')">Calculs rapides : chute de tension, choix du moteur, conso 24 V<small>formules et hypothèses affichées</small></button>`; /* CALC */ return h; })();
+  T['#/sim'] = (()=>{ let h=''; h += `<button class="dbtn" onclick="go('#/sim')">Simulateur de carte : s'entraîner sans portail<small>afficheur et touches Roger, dip-switch Casit · exercices corrigés</small></button>`; /* SIM */ return h; })();
+  T['#/cab'] = (()=>{ let h=''; h += `<button class="dbtn" onclick="go('#/cab')">Atelier de câblage : câbler et tester une installation<small>Roger B70/1DCHP · on voit le courant passer · missions corrigées</small></button>`; /* CAB */ return h; })();
+  T['#/quiz'] = (()=>{ let h=''; h += `<button class="dbtn" onclick="go('#/quiz')">Quiz de formation : codes erreur et borniers<small><b>EN TEST</b> · 10 questions tirées des fiches</small></button>`; /* QUIZ */ return h; })();
+  T['#/cmp'] = (()=>{ let h=''; h += `<button class="dbtn" onclick="go('#/cmp')">Comparateur de borniers : remplacer une carte par une autre<small>bornes des deux cartes rangées par fonction · aide indicative</small></button>`; /* CMP */ return h; })();
+  T['#/scan'] = (()=>{ let h=''; h += `<button class="dbtn" onclick="go('#/scan')">Dépannage par photo : l'étiquette ou l'afficheur de la carte<small><b>BÊTA</b> · photographiez la plaque pour trouver la fiche, ou l'afficheur pour ouvrir le code d'erreur</small></button>`; /* SCAN */ return h; })();
+  const rh = recents.length ? `<h2>Dernières consultées</h2><div class="list">` + recents.map(rowBoard).join("") + `</div>` : "";
+  const foot = `<p class="foot">Codes et borniers repris des notices fabricant citées sur chaque fiche.<br>En cas de doute, la notice livrée avec le matériel fait foi.</p>`;
+  if (!homeMob()){
+    document.body.classList.remove("hometabs");
+    h += ["#/d","#/a","#/calc/moteur","#/calc","#/sim","#/cab","#/quiz","#/cmp","#/scan"].map(k => T[k]).join("") + rh + foot;
+    app.innerHTML = h; return;
   }
-  h += `<p class="foot">Codes et borniers repris des notices fabricant citées sur chaque fiche.<br>En cas de doute, la notice livrée avec le matériel fait foi.</p>`;
-  app.innerHTML = h;
+  /* téléphone et tablette : 4 onglets en bas */
+  const tab = Math.min(3, Math.max(0, +store.get("hometab", 0) || 0));
+  const SEC = [null, ["Dépanner", ["#/scan","#/d","#/cmp"]], ["Outils", ["#/calc/moteur","#/calc","#/a"]], ["Formation", ["#/sim","#/cab","#/quiz"]]];
+  if (tab === 0) h += rh;
+  else h = `<h2>${SEC[tab][0]}</h2>` + SEC[tab][1].map(k => T[k]).join("");
+  app.innerHTML = h + (tab === 0 ? foot : "");
+  document.body.classList.add("hometabs");
+  const IC = [
+    '<path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/>',
+    '<circle cx="11" cy="11" r="7"/><path d="M16.5 16.5L21 21"/>',
+    '<path d="M3 8h18v12H3zM8 8V5h8v3M3 13h18"/>',
+    '<path d="M2 9l10-5 10 5-10 5zM6 11.5V16c0 1.5 3 3 6 3s6-1.5 6-3v-4.5"/>'];
+  $("#htabs").innerHTML = ["Accueil","Dépanner","Outils","Formation"].map((t,n) =>
+    `<button class="${n===tab?"on":""}" ${n===tab?'aria-current="page"':""} onclick="homeTab(${n})"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[n]}</svg>${t}</button>`).join("");
 }
+function homeMob(){ return matchMedia("(max-width:1100px), (pointer:coarse)").matches; }
+function homeTab(n){ store.set("hometab", n); window.scrollTo(0, 0); viewHome(); }
+matchMedia("(max-width:1100px), (pointer:coarse)").addEventListener("change", () => { if (!location.hash.replace(/^#\/?/, "")) viewHome(); });
 function swAsk(msg){
   return new Promise(res => {
     const sw = navigator.serviceWorker && navigator.serviceWorker.controller; if (!sw) return res(null);
@@ -983,6 +1008,7 @@ function route(){
     } else if (p[0] !== "s") SYNC.vue("", "");
   }
   prevRoute = p;
+  document.body.classList.remove("hometabs");
   window.scrollTo(0, 0);
   if (p[0] === "m") return viewBrand(p[1]);
   if (p[0] === "g") return viewGenre(p[1]);
