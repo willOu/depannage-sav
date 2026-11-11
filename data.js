@@ -192,6 +192,9 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "2.75", date: "2026-11-11", titre: "Retour haptique : correctif iPhone", items: [
+    "iPhone : nouvelle méthode pour déclencher le retour haptique, et bouton « Tester » dans Réglages > Préférences"
+  ] },
   { v: "2.74", date: "2026-11-11", titre: "Tout télécharger pour le hors ligne", items: [
     "Réglages > Hors ligne et version : le bouton « Tout télécharger pour le hors ligne » enregistre toutes les notices PDF sur le téléphone, avec le nombre de notices déjà téléchargées et la progression"
   ] },
