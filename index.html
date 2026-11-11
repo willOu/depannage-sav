@@ -555,6 +555,18 @@ const SKINS = [["dark","Sombre","dark","#9B2424","#0f0e0e","#1b1918"],["light","
 /* taille du texte : agrandit toute l'interface (lecture dehors, avec des gants) */
 const TAILLES = [["p", "Petite", 0.9], ["n", "Normale", 1], ["g", "Grande", 1.12], ["tg", "Très grande", 1.25]];
 function applyTaille(k){ const t = TAILLES.find(x => x[0] === k) || TAILLES[1]; document.documentElement.style.zoom = t[2] === 1 ? "" : t[2]; document.documentElement.dataset.taille = t[0]; }
+/* retour haptique : vibration courte à chaque appui (Android : vibrate ; iPhone iOS 17.4+ : astuce « interrupteur ») */
+let hapEl;
+function haptic(){
+  if (store.get("haptique", true) === false) return;
+  try { if (navigator.vibrate && navigator.vibrate(10)) return; } catch (e) {}
+  try {
+    if (!hapEl){ hapEl = document.createElement("label"); hapEl.setAttribute("aria-hidden", "true"); hapEl.style.cssText = "position:fixed;left:-99px;top:0;opacity:0;pointer-events:none"; hapEl.innerHTML = '<input type="checkbox" switch tabindex="-1">'; document.body.appendChild(hapEl); }
+    hapEl.click();
+  } catch (e) {}
+}
+document.addEventListener("click", e => { const t = e.target; if (t && t.closest && t.closest("button,a[href],summary,[onclick],.skin,select,input[type=checkbox],input[type=radio]") && !t.closest("label[aria-hidden]")) haptic(); }, true);
+function setHaptique(v){ store.set("haptique", v); if (location.hash === "#/reglages") viewSettings(); if (v) haptic(); }
 function setTaille(k){ applyTaille(k); store.set("taille", k); if (location.hash === "#/reglages") viewSettings(); }
 function applyTheme(t){
   const k = SKINS.find(x => x[0] === t) || SKINS[0];
@@ -963,7 +975,7 @@ function viewSettings(){
   /* 3. Préférences */
   const sk = store.get("theme", "dark");
   const tl = store.get("taille", "n");
-  h += `<h2>Préférences</h2><div class="set"><div class="row"><span>Taille du texte</span><div class="seg2">${TAILLES.map(t => `<button aria-pressed="${tl === t[0]}" onclick="setTaille('${t[0]}')">${t[1]}</button>`).join("")}</div></div><div class="row"><span>Thème</span></div><div class="skins">` + SKINS.map(k => `<button class="skin" aria-pressed="${sk === k[0]}" onclick="setTheme('${k[0]}')"><i><b style="background:${k[3]}"></b><b style="background:${k[4]}"></b><b style="background:${k[5]}"></b></i>${esc(k[1])}</button>`).join("") + `</div>
+  h += `<h2>Préférences</h2><div class="set"><div class="row"><span>Taille du texte</span><div class="seg2">${TAILLES.map(t => `<button aria-pressed="${tl === t[0]}" onclick="setTaille('${t[0]}')">${t[1]}</button>`).join("")}</div></div><div class="row"><span>Retour haptique <small class="mono">vibration à l'appui</small></span><div class="seg2"><button aria-pressed="${store.get("haptique", true) !== false}" onclick="setHaptique(true)">Activé</button><button aria-pressed="${store.get("haptique", true) === false}" onclick="setHaptique(false)">Désactivé</button></div></div><div class="row"><span>Thème</span></div><div class="skins">` + SKINS.map(k => `<button class="skin" aria-pressed="${sk === k[0]}" onclick="setTheme('${k[0]}')"><i><b style="background:${k[3]}"></b><b style="background:${k[4]}"></b><b style="background:${k[5]}"></b></i>${esc(k[1])}</button>`).join("") + `</div>
       <div class="row"><span>Fiches en favori</span><span class="rr"><span class="mono">${nf}</span>${nf ? `<button class="mini" onclick="if(confirm('Effacer tous vos favoris ?')){getFavs().forEach(x=>window.SYNC&&SYNC.fav(x,false));store.set('favs',[]);viewSettings();}">Effacer</button>` : ""}</span></div></div>
       <p class="hotn">${esc(FAV_NOTE)}</p>`;
   /* 4. Hors ligne et version */

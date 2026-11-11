@@ -192,6 +192,9 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "2.73", date: "2026-11-11", titre: "Retour haptique", items: [
+    "Une courte vibration à chaque appui sur un bouton (Android ; iPhone avec iOS 17.4 ou plus récent). À désactiver dans Réglages > Préférences > Retour haptique"
+  ] },
   { v: "2.72", date: "2026-11-11", titre: "Les trois carrés repassent au-dessus du nom", items: [
     "En-tête : les trois carrés de couleur sont de nouveau au-dessus de Diag'SAV, sur toutes les pages"
   ] },
