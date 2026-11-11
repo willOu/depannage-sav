@@ -192,6 +192,9 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "2.81", date: "2026-11-11", titre: "Titres du haut", items: [
+    "Les titres du haut ne sont plus coupés en bas (lettres g, y, p, j…)"
+  ] },
   { v: "2.80", date: "2026-11-11", titre: "Schéma de câblage, remplacement de carte, mode atelier", items: [
     "Schéma de câblage personnalisé (onglet Outils) : choisissez la carte et ce que vous raccordez (photocellules, STOP, clignotant, commandes, antenne…) ; le raccordement est dessiné borne par borne d'après la fiche, avec les notes de la fiche, et s'imprime ou s'enregistre en PDF",
     "Remplacer une carte (onglet Outils) : choisissez l'ancienne et la nouvelle carte ; le guide donne la correspondance des fils (à cocher), les paramètres à reporter avec une colonne pour noter les valeurs relevées, les étapes de remise en service de la nouvelle carte et les contrôles finaux",
