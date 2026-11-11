@@ -192,6 +192,9 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "2.77", date: "2026-11-11", titre: "Retour haptique retiré", items: [
+    "Le retour haptique (vibration à l'appui) et son bouton Tester sont retirés de l'appli"
+  ] },
   { v: "2.76", date: "2026-11-11", titre: "Accueil : titre sur une seule ligne", items: [
     "La question « Quel automatisme avez-vous devant vous ? » est un peu plus petite pour tenir sur une seule ligne sur téléphone"
   ] },
