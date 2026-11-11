@@ -965,7 +965,8 @@ function viewSettings(){
     return `<div class="dk" onclick="go('#/c/${c.id}')" style="cursor:pointer"><div class="n"><span class="badge" style="--c:${m.couleur}">${esc(m.nom)}</span>${esc(c.nom)}</div>
       <div class="s">${esc(c.source)}</div><div class="tb">${has.map(([l, ok]) => `<span class="${ok?"ok":""}">${ok?"✓ ":""}${l}</span>`).join("")}</div></div>`;
   }).join("") + `</div></details></div>
-      <p class="foot">En cas de doute, la notice livrée avec le matériel fait foi.</p>`;
+      <p class="foot">En cas de doute, la notice livrée avec le matériel fait foi.</p>
+      <p class="foot">Diag'SAV est une application conçue et développée par William, avec l'aide de l'intelligence artificielle Claude.</p>`;
   app.innerHTML = h;
   if (window.SYNC) SYNC.brancherReglages(); /* SYNC */
   const mab = $("#mab"); /* changer mon mot de passe */
