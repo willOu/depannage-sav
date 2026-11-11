@@ -192,6 +192,9 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "2.72", date: "2026-11-11", titre: "Les trois carrés repassent au-dessus du nom", items: [
+    "En-tête : les trois carrés de couleur sont de nouveau au-dessus de Diag'SAV, sur toutes les pages"
+  ] },
   { v: "2.71", date: "2026-11-11", titre: "Statut en bas de page, texte Petit, accueil", items: [
     "La ligne « Version … · données du … · mode hors ligne » passe tout en bas de la page, hors de l'en-tête",
     "Nouvelle taille de texte « Petite » dans Réglages (en plus de Normale, Grande et Très grande)",
