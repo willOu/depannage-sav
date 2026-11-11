@@ -28,7 +28,7 @@
 :root[data-skin="ardoise"]{--brand-txt:#5eead4;--brand:#0f766e;--brand-2:#0b5a54;--bg:#111827;--card:#1f2937;--ink:#e5e7eb;--muted:#9ca3af;--line:#374151;--chip:#273244}
 :root[data-skin="chantier"]{--brand-txt:#f5c400;--brand:#f5c400;--brand-2:#c99f00;--bg:#121212;--card:#1e1e1e;--ink:#f5f5f5;--muted:#b5b5b5;--line:#333333;--chip:#2a2a2a}
 :root[data-skin="soleil"] .cr,:root[data-skin="soleil"] .boardhead,:root[data-skin="soleil"] .set{border-width:2px}
-:root[data-skin="chantier"] header,:root[data-skin="chantier"] header .back,:root[data-skin="chantier"] header h1,:root[data-skin="chantier"] #status,:root[data-skin="chantier"] #status a{color:#111!important}
+:root[data-skin="chantier"] header,:root[data-skin="chantier"] header .back,:root[data-skin="chantier"] header h1{color:#111!important}
 :root[data-skin="chantier"] .prm .pc{color:#111}
 :root[data-skin="chantier"] header .back{background:rgba(0,0,0,.12);border-color:rgba(0,0,0,.28)}
 :root[data-skin="chantier"] header .iconbtn{background:rgba(0,0,0,.12);color:#111}
@@ -58,7 +58,8 @@ html{background:var(--bg)}
 .search{margin-top:10px;position:relative}
 .search input{width:100%;height:46px;border:0;border-radius:12px;padding:0 50px 0 40px;font-size:16px;background:#fff;color:#1d1a19}
 .search svg{position:absolute;left:12px;top:13px;opacity:.55}
-.status{font-size:12.5px;opacity:.95;margin-top:6px;display:flex;align-items:flex-start;gap:7px;cursor:pointer;line-height:1.3}.status .sdot{width:9px;height:9px;border-radius:50%;background:#e07b00;flex:none;margin-top:4px}.status.ok .sdot{background:#5ee08a}
+.status{font-size:12px;color:var(--muted);max-width:760px;margin:0 auto;padding:4px 16px calc(env(safe-area-inset-bottom) + 18px);display:flex;align-items:flex-start;justify-content:center;gap:7px;cursor:pointer;line-height:1.35;text-align:center}.status .sdot{width:9px;height:9px;border-radius:50%;background:#e07b00;flex:none;margin-top:4px}.status.ok .sdot{background:#5ee08a}.status a{color:var(--ink);font-weight:700}
+body.hometabs .status{padding-bottom:calc(env(safe-area-inset-bottom) + 90px)}
 main{padding:14px 16px calc(env(safe-area-inset-bottom) + 30px);max-width:760px;margin:0 auto}
 h2{font-size:13px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin:18px 2px 8px;font-weight:700}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
@@ -99,6 +100,7 @@ h2{font-size:13px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted
 .seg2{display:flex;border:1px solid var(--line);border-radius:9px;overflow:hidden}
 .seg2 button{border:0;background:transparent;color:var(--ink);height:36px;padding:0 14px;font-weight:600;font-size:14px}
 .seg2 button[aria-pressed="true"]{background:var(--brand);color:#fff}
+.seg2 button{flex:1;white-space:nowrap}.set .row:has(.seg2 button:nth-child(4)){flex-wrap:wrap}.set .row:has(.seg2 button:nth-child(4)) .seg2{flex:1 1 100%}
 .cl{padding:12px 14px;border-top:1px solid var(--line)}
 .cl:first-child{border-top:0}
 .cl .d{font-size:12px;color:var(--muted);font-weight:600}
@@ -353,7 +355,7 @@ html{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 }
 @media (orientation:landscape) and (max-height:500px){
   header{padding-top:calc(env(safe-area-inset-top) + 6px);padding-bottom:6px}
-  .search{margin-top:6px}.search input{height:40px}.search svg{top:11px}.status{display:none}
+  .search{margin-top:6px}.search input{height:40px}.search svg{top:11px}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 /* DIAG */
@@ -479,8 +481,8 @@ html{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
   <div class="top">
     <span class="tl"></span>
     <div class="brand">
-      <h1 id="title" onclick="$('#q').value='';go('#/')">Diag'SAV</h1>
-      <button class="mark" id="home" title="Accueil" aria-label="Retour à l'accueil" onclick="$('#q').value='';go('#/')"><i></i><i></i><i></i></button>
+      <h1 id="title" onclick="goHome()">Diag'SAV</h1>
+      <button class="mark" id="home" title="Accueil" aria-label="Retour à l'accueil" onclick="goHome()"><i></i><i></i><i></i></button>
     </div>
     <div class="btns">
       <button class="iconbtn" id="gear" title="Réglages" aria-label="Réglages" onclick="toggleSettings()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
@@ -492,9 +494,9 @@ html{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
     <input id="q" type="search" inputmode="search" autocomplete="off" placeholder="Code, modèle, borne, symptôme…" aria-label="Rechercher">
     <button class="qcam" id="qcam" type="button" title="Lire l'afficheur avec la caméra" aria-label="Lire le code de l'afficheur avec la caméra" onclick="window.liveOuvrir && liveOuvrir()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1d1a19" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg></button>
   </div>
-  <div class="status" id="status"></div>
 </header>
 <main id="app"></main>
+<div class="status" id="status"></div>
 <nav id="htabs" aria-label="Sections"></nav>
 <script src="diag.js"></script> <!-- DIAG -->
 <script src="ask.js"></script> <!-- ASK -->
@@ -551,8 +553,8 @@ const SKINS = [["dark","Sombre","dark","#9B2424","#0f0e0e","#1b1918"],["light","
   ["acier","Bleu acier","light","#1f4e79","#eef2f6","#ffffff"],["soleil","Plein soleil","light","#000000","#ffffff","#eeeeee"],
   ["astreinte","Nuit d'astreinte","dark","#1a1205","#000000","#ffd27a"],["ardoise","Ardoise","dark","#0f766e","#111827","#1f2937"],["chantier","Chantier","dark","#f5c400","#121212","#1e1e1e"]];
 /* taille du texte : agrandit toute l'interface (lecture dehors, avec des gants) */
-const TAILLES = [["n", "Normale", 1], ["g", "Grande", 1.12], ["tg", "Très grande", 1.25]];
-function applyTaille(k){ const t = TAILLES.find(x => x[0] === k) || TAILLES[0]; document.documentElement.style.zoom = t[2] === 1 ? "" : t[2]; document.documentElement.dataset.taille = t[0]; }
+const TAILLES = [["p", "Petite", 0.9], ["n", "Normale", 1], ["g", "Grande", 1.12], ["tg", "Très grande", 1.25]];
+function applyTaille(k){ const t = TAILLES.find(x => x[0] === k) || TAILLES[1]; document.documentElement.style.zoom = t[2] === 1 ? "" : t[2]; document.documentElement.dataset.taille = t[0]; }
 function setTaille(k){ applyTaille(k); store.set("taille", k); if (location.hash === "#/reglages") viewSettings(); }
 function applyTheme(t){
   const k = SKINS.find(x => x[0] === t) || SKINS[0];
@@ -1007,6 +1009,7 @@ function viewSettings(){
 /* ---------- navigation ---------- */
 function setHead(t, back){ $("#title").textContent = t; $("#back").style.display = back ? "block" : "none"; hh(); }
 function go(hash){ location.hash = hash; }
+function goHome(){ $("#q").value = ""; store.set("hometab", 0); window.scrollTo(0, 0); if (!location.hash.replace(/^#\/?/, "")) viewHome(); else go("#/"); }
 let beforeSettings = "#/";
 function toggleSettings(){
   if (location.hash === "#/reglages") go(beforeSettings || "#/");
@@ -1075,7 +1078,7 @@ if ("serviceWorker" in navigator){
         const w = reg.installing;
         w && w.addEventListener("statechange", () => {
           if (w.state === "installed" && navigator.serviceWorker.controller){
-            $("#status").dataset.upd = "1"; $("#status").innerHTML = `Nouvelle version disponible — <a href="#" onclick="location.reload();return false" style="color:#fff;font-weight:700">recharger</a>`;
+            $("#status").dataset.upd = "1"; $("#status").innerHTML = `Nouvelle version disponible — <a href="#" onclick="location.reload();return false" >recharger</a>`;
           }
         });
       });

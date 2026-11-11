@@ -192,6 +192,11 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "2.71", date: "2026-11-11", titre: "Statut en bas de page, texte Petit, accueil", items: [
+    "La ligne « Version … · données du … · mode hors ligne » passe tout en bas de la page, hors de l'en-tête",
+    "Nouvelle taille de texte « Petite » dans Réglages (en plus de Normale, Grande et Très grande)",
+    "Toucher Diag'SAV ou les carrés ramène toujours sur l'onglet Accueil, même depuis Dépanner, Outils ou Formation"
+  ] },
   { v: "2.70", date: "2026-11-11", titre: "Barre du bas sur toutes les pages (téléphone et tablette)", items: [
     "La barre du bas (Accueil, Dépanner, Outils, Formation, Réglages) reste visible dans les fiches et les outils ; la roue Réglages en haut à droite disparaît sur téléphone et tablette"
   ] },
