@@ -1,4 +1,4 @@
-/* Quiz de formation (EN TEST) : questions tirées uniquement des fiches (codes et borniers).
+/* Quiz de formation (BÊTA) : questions tirées uniquement des fiches (codes et borniers).
    Les mauvaises réponses proposées sont d'autres codes ou bornes de la même carte : rien n'est inventé. */
 (function () {
   const TYPES_CODE = ["afficheur", "erreur", "led", "flash", "diag"];
@@ -28,7 +28,7 @@
   function accueil() {
     setHead("Quiz de formation", true);
     const ms = MARQUES.filter(m => questions(m.id).length >= 5);
-    app.innerHTML = `<p class="note"><b>EN TEST.</b> Questions tirées des fiches de l'appli : codes erreur et borniers. Les mauvaises réponses proposées sont d'autres codes ou bornes de la même carte.</p>
+    app.innerHTML = `<p class="note"><b>BÊTA.</b> Questions tirées des fiches de l'appli : codes erreur et borniers. Les mauvaises réponses proposées sont d'autres codes ou bornes de la même carte.</p>
       <h2>Choisir</h2><div class="list">
       <button class="row" onclick="quizGo('')"><b>Toutes les marques</b><br><span class="muted">10 questions au hasard</span></button>` +
       ms.map(m => `<button class="row" onclick="quizGo('${m.id}')"><span class="badge" style="--c:${m.couleur}">${esc(m.nom)}</span> <span class="muted">10 questions</span></button>`).join("") + `</div>`;

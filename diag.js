@@ -254,7 +254,7 @@ function diagNode(sid, path) {
   return { t, n, trail };
 }
 
-const TEST = `<div class="dtest"><b>Fonction en test.</b> Ces conseils sont généraux et peuvent être incomplets, inadaptés à votre matériel ou comporter des erreurs. Ne vous y fiez pas seuls : contrôlez avec la fiche de la carte et la notice du fabricant.</div>`;
+const TEST = `<div class="dtest"><b>Fonction en BÊTA.</b> Ces conseils sont généraux et peuvent être incomplets, inadaptés à votre matériel ou comporter des erreurs. Ne vous y fiez pas seuls : contrôlez avec la fiche de la carte et la notice du fabricant.</div>`;
 function viewDiag(sid, pathStr) {
   setHead("Diagnostic guidé (test)", true);
   if (!sid) {
@@ -281,7 +281,7 @@ function viewDiag(sid, pathStr) {
       <input id="dpk" type="search" name="carte" inputmode="search" autocomplete="off" placeholder="Marque ou modèle (ex. Roger, ZN8, BXV)" aria-label="Chercher la carte de votre installation"><div id="dpl"></div></div>`;
     h += `<div class="dlinks">` + x.liens.filter(l => l[1] && l[1] !== "#/").map(l => `<button class="row" onclick="go('${l[1]}')">${esc(l[0])}</button>`).join("") +
       `<button class="row" onclick="go('#/d/${sid}')">Recommencer</button><button class="row" onclick="go('#/d')">Autre problème</button></div>
-      <p class="note">Fonction en test : en cas de doute, la notice de la carte fait foi. Couper l'alimentation avant toute intervention sur la carte.</p>`;
+      <p class="note">Fonction en BÊTA : en cas de doute, la notice de la carte fait foi. Couper l'alimentation avant toute intervention sur la carte.</p>`;
   } else {
     h += `<div class="dq"><h2>${esc(r.n.q)}</h2>` + r.n.o.map((o, i) =>
       `<button class="row" onclick="go('${base}/${path.concat(i).join("-")}')">${esc(o[0])}</button>`).join("") + `</div>`;

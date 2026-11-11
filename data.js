@@ -192,6 +192,10 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "2.68", date: "2026-11-11", titre: "Logos des marques harmonisés, BÊTA", items: [
+    "Accueil : les logos des marques sont rangés en grille, tous dans des cases de même taille, pour un visuel plus régulier",
+    "Les fonctions en test portent désormais la mention BÊTA partout"
+  ] },
   { v: "2.67", date: "2026-11-11", titre: "Accueil par onglets sur téléphone et tablette", items: [
     "Sur téléphone et tablette, 4 onglets en bas : Accueil, Dépanner, Outils, Formation. Sur ordinateur, l'accueil reste inchangé"
   ] },
@@ -475,7 +479,7 @@ const CHANGELOG = [
     "Un compte peut être connecté sur 2 appareils à la fois (par exemple téléphone et tablette). Sur un 3e, l'appli propose de déconnecter l'un des deux. « Se déconnecter » libère la place, et un appareil inutilisé depuis 15 jours la libère tout seul."
   ], docs: [] },
   { v: "1.58", date: "2026-10-25", titre: "Quiz de formation (test)", items: [
-    "Nouveau quiz de formation (EN TEST, bouton sur l'accueil) : 10 questions sur les codes erreur et les borniers, toutes marques ou une seule. Les questions et les réponses proposées viennent uniquement des fiches de l'appli ; les erreurs renvoient vers la fiche à revoir."
+    "Nouveau quiz de formation (BÊTA, bouton sur l'accueil) : 10 questions sur les codes erreur et les borniers, toutes marques ou une seule. Les questions et les réponses proposées viennent uniquement des fiches de l'appli ; les erreurs renvoient vers la fiche à revoir."
   ], docs: [] },
   { v: "1.57", date: "2026-10-24", titre: "Réglages réorganisés", items: [
     "Réglages rangés en rubriques : Compte, Messages du SAV, Préférences (thème, favoris), Hors ligne et version, Administration, Informations. Les nouveautés et la liste des documentations sont repliées sur une seule ligne chacune."
@@ -694,9 +698,9 @@ const CHANGELOG = [
     "Accueil : bandeau « Données à jour du … » avec l'état du mode hors ligne (actif ou en préparation).",
     "Recherche : une phrase comme « comment mettre la fermeture automatique sur ZL90 » renvoie vers le bon paramètre, la bonne borne ou le bon code. Recherche par mots-clés (en test) : la notice fait foi."
   ], docs: [] },
-  { v: "1.12", date: "2026-10-18", titre: "Diagnostic guidé (en test)", items: [
+  { v: "1.12", date: "2026-10-18", titre: "Diagnostic guidé (BÊTA)", items: [
     "Nouveau bouton sur l'accueil : un arbre de panne en 3 à 5 questions (le portail ne s'ouvre pas, ne se ferme pas, s'arrête en cours, émetteur sans effet, clignotant ou voyant en panne).",
-    "Fonction en test : les conseils sont généraux, ils peuvent être incomplets ou comporter des erreurs. La fiche de la carte et la notice du fabricant font foi."
+    "Fonction en BÊTA : les conseils sont généraux, ils peuvent être incomplets ou comporter des erreurs. La fiche de la carte et la notice du fabricant font foi."
   ], docs: [] },
   { v: "1.11", date: "2026-10-18", titre: "Came : 14 nouvelles cartes", items: [
     "Nouvelles cartes à afficheur : ZM3E, ZM3ES (400 V triphasé), ZLJ24, avec menu FONCTIONS, ENCODEUR, RÉGLAGE TEMPS, bornier complet et branchements.",
