@@ -192,6 +192,9 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "2.70", date: "2026-11-11", titre: "Barre du bas sur toutes les pages (téléphone et tablette)", items: [
+    "La barre du bas (Accueil, Dépanner, Outils, Formation, Réglages) reste visible dans les fiches et les outils ; la roue Réglages en haut à droite disparaît sur téléphone et tablette"
+  ] },
   { v: "2.69", date: "2026-11-11", titre: "En-tête recentré, Réglages dans la barre du bas", items: [
     "En-tête : le nom Diag'SAV au-dessus des trois carrés de couleur, centrés ; toucher le nom ou les carrés ramène à l'accueil",
     "Le bouton clair / sombre quitte l'en-tête : le choix du thème se fait dans Réglages",

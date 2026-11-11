@@ -47,7 +47,7 @@ html{background:var(--bg)}
 .brand{display:flex;flex-direction:column;align-items:center;gap:7px;min-width:0;max-width:100%}
 .btns{display:flex;gap:10px;justify-self:end}
 #title{cursor:pointer;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;-webkit-tap-highlight-color:transparent}
-body.hometabs #gear{display:none}
+@media (max-width:1100px),(pointer:coarse){#gear{display:none}}
 .mark{display:grid;grid-template-columns:repeat(3,14px);gap:4px;align-content:center;background:none;border:0;padding:6px 12px;margin:-6px -12px;cursor:pointer;border-radius:10px;-webkit-tap-highlight-color:transparent}
 .mark:active{background:rgba(255,255,255,.18)}
 .mark i{width:14px;height:14px;border-radius:3px;display:block}
@@ -639,7 +639,7 @@ function homeTab(n){
   store.set("hometab", n); window.scrollTo(0, 0);
   if (location.hash.replace(/^#\/?/, "")) go("#/"); else viewHome();
 }
-matchMedia("(max-width:1100px), (pointer:coarse)").addEventListener("change", () => { if (!location.hash.replace(/^#\/?/, "")) viewHome(); });
+matchMedia("(max-width:1100px), (pointer:coarse)").addEventListener("change", () => route());
 function swAsk(msg){
   return new Promise(res => {
     const sw = navigator.serviceWorker && navigator.serviceWorker.controller; if (!sw) return res(null);
@@ -1030,6 +1030,10 @@ function route(){
   }
   prevRoute = p;
   document.body.classList.remove("hometabs");
+  if (homeMob() && p[0] !== "pdf"){ /* barre du bas sur toutes les pages (téléphone et tablette) */
+    const T = {"":0, g:0, m:0, c:0, s:0, d:1, scan:1, cmp:1, calc:2, a:2, ma:2, sim:3, cab:3, quiz:3, reglages:4};
+    homeBar(p[0] in T ? T[p[0]] : -1);
+  }
   window.scrollTo(0, 0);
   if (p[0] === "m") return viewBrand(p[1]);
   if (p[0] === "g") return viewGenre(p[1]);
