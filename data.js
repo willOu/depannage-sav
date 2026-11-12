@@ -192,6 +192,9 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "2.89", date: "2026-11-12", titre: "Accueil ordinateur : icônes et rubriques égales", items: [
+    "Accueil sur ordinateur : une icône devant chaque outil et les 4 rubriques ont toutes la même taille"
+  ] },
   { v: "2.88", date: "2026-11-12", titre: "Accueil ordinateur en rubriques", items: [
     "Sur ordinateur, l'accueil range les outils en 4 rubriques avec un paragraphe : Dépanner une installation, Câbler et remplacer, Choisir et calculer, Me former. Téléphone et tablette inchangés (barre du bas)"
   ] },
