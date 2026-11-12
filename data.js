@@ -192,6 +192,9 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "2.88", date: "2026-11-12", titre: "Accueil ordinateur en rubriques", items: [
+    "Sur ordinateur, l'accueil range les outils en 4 rubriques avec un paragraphe : Dépanner une installation, Câbler et remplacer, Choisir et calculer, Me former. Téléphone et tablette inchangés (barre du bas)"
+  ] },
   { v: "2.87", date: "2026-11-12", titre: "Atelier BFT : afficheur au repos", items: [
     "Atelier de câblage, cartes BFT MERAK / THALIA : quand la carte est sous tension, l'écran indique « sous tension · afficheur éteint au repos » (l'afficheur de ces cartes est éteint au repos, il s'allume pour un code, un diagnostic ou un menu avec OK) ; la touche OK l'explique"
   ] },
