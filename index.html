@@ -494,6 +494,9 @@ html{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 .rck{display:inline-flex;gap:8px;align-items:center;cursor:pointer}.rck input{width:20px;height:20px}.rtab{width:100%;border-collapse:collapse;font-size:13.5px}.rtab th{text-align:left;font-size:12px;color:var(--muted)}.rtab td{padding:7px 5px;border-top:1px solid var(--line);vertical-align:top}.rtab small{display:block;color:var(--muted)}.relv{width:100%;min-width:64px;padding:7px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:inherit;font-size:14px}
 body.atelier main{max-width:none}body.atelier #atl .list{grid-template-columns:1fr!important}body.atelier #app{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:16px;align-items:start}body.atelier #atr{position:sticky;top:8px;height:calc(100vh - 24px);overflow:auto;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:8px}.atsel{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
 @media print{.top,#htabs,.status,.noprint,.tabs,#gear,.sig{display:none!important}body{background:#fff!important;color:#000!important}main{max-width:none!important;padding:0!important}.plsvg,.rst,.cb{break-inside:avoid}}
+
+/* v2.84 : atelier de câblage sur ordinateur : plan large à gauche, commandes fixes à droite */
+@media (min-width:1000px) and (pointer:fine){main:has(#cabwrap){max-width:none}#cabwrap.cabpc:not(.cabplein){display:grid;grid-template-columns:minmax(0,800px) minmax(320px,440px);gap:0 18px;justify-content:center;align-items:start;overflow:visible}#cabwrap.cabpc:not(.cabplein) .cabzone{max-width:none;margin:0}#cabwrap.cabpc:not(.cabplein) .cabside{position:sticky;top:8px;max-height:calc(100vh - 16px);overflow:auto}}
 </style>
 </head>
 <body>

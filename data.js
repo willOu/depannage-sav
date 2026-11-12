@@ -192,6 +192,10 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "2.84", date: "2026-11-12", titre: "Atelier de câblage sur ordinateur", items: [
+    "Atelier de câblage sur ordinateur : le plan occupe toute la largeur à gauche et les commandes (Câbler / Tester, outils, informations) restent visibles à droite pendant le défilement",
+    "Molette de la souris : la page défile maintenant même quand le pointeur est sur le plan ; Ctrl + molette (ou pincement du pavé tactile) pour zoomer"
+  ] },
   { v: "2.83", date: "2026-11-12", titre: "Assistance Roger", items: [
     "Assistance fabricant Roger : contact de la société ASD pour tous les produits Roger (04 42 70 43 36, du lundi au jeudi 8 h – 12 h et 14 h – 17 h 30, le vendredi 8 h – 12 h et 14 h – 17 h, fermé le week-end)"
   ] },

@@ -884,7 +884,7 @@
     const fin = e => { doigts.delete(e.pointerId); if (doigts.size < 2) pince = null; if (!doigts.size) { if (glis && !glis.bouge && (S.selFil || S.selAcc || S.sel)) { S.selFil = S.selAcc = S.sel = null; rendre(); } glis = null; } clearInterval(rep); };
     sv.addEventListener("pointerup", fin, true); sv.addEventListener("pointercancel", fin, true); sv.addEventListener("pointerleave", e => { if (e.pointerType === "mouse") fin(e); }, true);
     if (!window.__cabFin) { window.__cabFin = 1; addEventListener("pointerup", e => doigts.delete(e.pointerId), true); addEventListener("pointercancel", e => doigts.delete(e.pointerId), true); } /* doigt levé hors du schéma */
-    sv.addEventListener("wheel", e => { e.preventDefault(); const [x, y] = pt(e); zoomer(e.deltaY < 0 ? 1.15 : 1 / 1.15, x, y); }, { passive: false });
+    sv.addEventListener("wheel", e => { if (!(e.ctrlKey || e.metaKey)) return; /* molette seule : la page défile ; Ctrl + molette (ou pincement du pavé tactile) : zoom */ e.preventDefault(); const [x, y] = pt(e); zoomer(e.deltaY < 0 ? 1.15 : 1 / 1.15, x, y); }, { passive: false });
     sv.onpointerdown = e => {
       if (doigts.size >= 2) return;
       const t = e.target, hit = t.closest("[data-b]"), acc = t.closest(".caba"), fil = t.closest(".cabw,.cabwh"), us = t.closest(".cabu"), k = t.closest(".cabk");
@@ -1004,6 +1004,12 @@
         <div class="cabzbt"><button onclick="CAB.zoom(1.4)" aria-label="Zoomer">＋</button><button onclick="CAB.zoom(1 / 1.4)" aria-label="Dézoomer">−</button><button onclick="CAB.zoomRaz()" aria-label="Vue entière" id="cabzl">100 %</button><button onclick="CAB.plein()" id="cabplb" aria-label="Plein écran">⛶</button></div></div>
       <div class="cabinfo" id="cabinfo" aria-live="polite"></div><div id="cabpan"></div><div id="cabsheet"></div></div>
       <p class="hotn">${M ? M.notes : `Simulateur de formation construit d'après la fiche (source : ${esc(C.source)}) : bornier, paramètres, afficheur${F.deux ? "" : " (§ 9.2)"}, mode TEST${F.deux ? "" : " (§ 9.3)"}, codes. Disposition des borniers : ${esc(F.fig)}. Accessoires génériques. Vitesse du portail indicative (environ 10 s pour la course). Non simulés : apprentissage de la course et des télécommandes, batteries, ${F.deux ? "" : "fonctionnement MASTER / SLAVE, "}veille low power, sortie SC en test des photocellules ou battery saving (A8 02 à 04, sortie laissée coupée), commandes radio avec confirmation (76 / 77 = 07 à 10). ${F.deux ? "" : "Refermeture après ouverture partielle (16) appliquée seulement quand A2 est actif. "}Les bornes COM (${F.coms.join(", ")}) sont traitées comme un 0 V commun.${F.notes ? " " + esc(F.notes) : ""}`}</p>`;
+    /* ordinateur : le plan prend toute la largeur à gauche, les commandes restent visibles à droite pendant qu'on fait défiler */
+    if (matchMedia("(min-width:1000px) and (pointer:fine)").matches) {
+      const w = $("#cabwrap"), z = w.querySelector(".cabzone"), cote = document.createElement("div"); cote.className = "cabside";
+      ["#cabwrap > .cabbar", "#cabwrap > .cabtools", "#cabinfo", "#cabpan", "#cabsheet"].forEach(q => { const e = document.querySelector(q); if (e) cote.appendChild(e); });
+      z.after(cote); w.classList.add("cabpc"); z.title = "Molette : faire défiler la page · Ctrl + molette : zoomer · glisser le fond : déplacer la vue zoomée";
+    }
     rendre(); brancherSvg(); outils();
     clearInterval(minuterie); minuterie = setInterval(() => { if (location.hash !== "#/cab/" + id) { clearInterval(minuterie); clearTimeout(tEnr); document.body.classList.remove("cabnoscroll"); return; } tick(); }, 100);
   }
