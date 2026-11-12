@@ -158,7 +158,7 @@
       if (!x || !Array.isArray(x.acc) || !Array.isArray(x.fils)) return null;
       const acc = x.acc.filter(a => a && /^a\d{1,5}$/.test(a.id) && ACC[a.t] && !ACC[a.t].paire && !ACC[a.t].fil && Number.isFinite(a.x) && Number.isFinite(a.y)).map(a => ({ id: a.id, t: a.t, x: Math.round(a.x), y: Math.round(a.y), paire: Number.isInteger(a.paire) ? a.paire : undefined, num: Number.isInteger(a.num) ? a.num : undefined }));
       const ok = k => { if (typeof k !== "string") return false; if (BORNES[k]) return true; const i = k.indexOf(":"), a = acc.find(x => x.id === k.slice(0, i)); return !!(a && ACC[a.t].b && ACC[a.t].b.some(b => b[0] === k.slice(i + 1))); };
-      const fils = x.fils.filter(w => w && /^w\d{1,5}$/.test(w.id) && ok(w.a) && ok(w.b) && (/^#[0-9a-f]{6}$/i.test(w.c) || w.c === "vj")).map(w => ({ id: w.id, a: w.a, b: w.b, c: w.c, usine: w.usine ? 1 : undefined, p: Array.isArray(w.p) && w.p.length === 2 && w.p.every(Number.isFinite) ? [Math.max(0, Math.min(W, Math.round(w.p[0]))), Math.max(0, Math.min(H, Math.round(w.p[1])))] : undefined }));
+      const fils = x.fils.filter(w => w && /^w\d{1,5}$/.test(w.id) && ok(w.a) && ok(w.b) && (/^#[0-9a-f]{6}$/i.test(w.c) || w.c === "vj")).map(w => ({ id: w.id, a: w.a, b: w.b, c: w.c, usine: w.usine ? 1 : undefined, p: Array.isArray(w.p) && w.p.length === 2 && w.p.every(Number.isFinite) ? [Math.max(-2000, Math.min(W + 2000, Math.round(w.p[0]))), Math.max(0, Math.min(H, Math.round(w.p[1])))] : undefined }));
       const params = {}; Object.keys(x.params || {}).forEach(k => { if ((ITEMS[k] && /^[0-9A-Za-z]{2}$/.test(x.params[k])) || (M && /^(A\d{1,2}|B\d|S[1-4]\d{1,2}|JP1|ACDC)$/.test(k) && /^(ON|OFF|AC|DC)$/.test(x.params[k])) || (M && M.paramOk && ITEMS[k] && M.paramOk(k, x.params[k]))) params[k] = x.params[k]; });
       return { n: Math.max(1, parseInt(x.n, 10) || 1, ...acc.map(a => +a.id.slice(1) + 1), ...fils.map(w => +w.id.slice(1) + 1)), acc, fils, params };
     } catch (e) { return null; }
@@ -596,6 +596,8 @@
 
   /* ---------- dessin ---------- */
   const W = 390, H = 700;
+  let EX = 0; /* ordinateur : marge de chaque côté de la carte, pour que le plan occupe toute la zone */
+  const VB = () => ({ x: -EX, y: 0, w: W + 2 * EX, h: H });
   const posB = k => { if (k.startsWith("b:")) { const b = BORNES[k]; return b ? [b.x, b.y] : null; } const [id, n] = k.split(":"); const a = I.acc.find(x => x.id === id); if (!a) return null; const i = ACC[a.t].b.findIndex(b => b[0] === n); return [a.x + 14 + i * 24, a.y + 40]; };
   /* fil : part vers le haut depuis une borne de la carte, vers le bas depuis un accessoire */
   const chemin = (a, b, m) => { const p = posB(a), q = posB(b); if (!p || !q) return ""; const dy = Math.max(28, Math.abs(q[1] - p[1]) * 0.5), sp = a.startsWith("b:") ? -1 : 1, sq = b.startsWith("b:") ? -1 : 1;
@@ -698,7 +700,7 @@
     const sv = $("#cabsvg"); if (!sv) return;
     const fils = I.fils.map(w => { const d = chemin(w.a, w.b, w.p); return `<path class="cabwh" data-w="${w.id}" id="cwh-${w.id}" d="${d}"/><path class="cabw${S.selFil === w.id ? " sel" : ""}${FONCE(w.c) ? " fonce" : ""}" id="cw-${w.id}" data-w="${w.id}" d="${d}" stroke="${TRAIT(w.c)}" />`; }).join("");
     const faisceaux = [...new Set(I.acc.filter(a => a.t === "tx" || a.t === "txc").map(a => a.paire))].map(p => { const t = I.acc.find(a => (a.t === "tx" || a.t === "txc") && a.paire === p), r = I.acc.find(a => (a.t === "rx" || a.t === "rxc") && a.paire === p); if (!t || !r) return ""; return `<line id="cabf-${p}" x1="${t.x + largeur("tx")}" y1="${t.y + 20}" x2="${r.x}" y2="${r.y + 20}" stroke-width="2"/>`; }).join("");
-    sv.innerHTML = `<defs><pattern id="cabgr" width="13" height="13" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".9" fill="#2a2a2a"/></pattern></defs><rect width="${W}" height="${H}" fill="url(#cabgr)"/>` +
+    sv.innerHTML = `<defs><pattern id="cabgr" width="13" height="13" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".9" fill="#2a2a2a"/></pattern></defs><rect x="${-EX}" width="${W + 2 * EX}" height="${H}" fill="url(#cabgr)"/>` +
       (M && M.portail ? M.portail(api()) : F.deux ? dessinPortail2() : F.barriere ? `<g id="cabportail"><rect x="20" y="58" width="350" height="5" rx="2" fill="#333"/><g id="cablisse"><rect x="50" y="49" width="300" height="7" rx="3" fill="#eee"/>${[0, 1, 2, 3, 4, 5].map(i => `<rect x="${80 + i * 46}" y="49" width="20" height="7" fill="#e5484d"/>`).join("")}</g><rect x="30" y="30" width="26" height="34" rx="3" fill="#555"/><circle cx="52" cy="52" r="4" fill="#999"/><text id="cabetat" x="372" y="16" text-anchor="end" class="cabn"></text></g>` : dessinPortail()) + dessinCarte() + faisceaux + I.acc.filter(a => !ACC[a.t].enfiche).map(dessinAcc).join("") + `<defs><pattern id="cabvj" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="10" height="10" fill="#2fbf71"/><rect width="5" height="10" fill="#f2d000"/></pattern></defs><g id="cabfils" class="${S.estompe ? "estompe" : ""}" fill="none" stroke-width="3" stroke-linecap="round">${fils}</g><g id="cabhits">${hits()}</g><g id="cabsel"></g><g id="cabmm"></g>`;
     maj(); panneau();
   }
@@ -853,9 +855,9 @@
 
   /* ---------- interactions ---------- */
   let tirFil = null, tir = null, drag = null, Z = { x: 0, y: 0, w: W, h: H }, doigts = new Map(), pince = null, glis = null, rep = 0;
-  function appliquerZ() { const sv = $("#cabsvg"); if (sv) sv.setAttribute("viewBox", `${Z.x} ${Z.y} ${Z.w} ${Z.h}`); const zo = $(".cabzone"); if (zo) zo.classList.toggle("zoome", Z.w < W - 1); /* vue entière : glisser sur le fond fait défiler la page */ const z = $("#cabzl"); if (z) z.textContent = Math.round(W / Z.w * 100) + " %"; }
-  function borner() { Z.w = Math.max(W / 5, Math.min(W, Z.w)); Z.h = Z.w * H / W; Z.x = Math.max(0, Math.min(W - Z.w, Z.x)); Z.y = Math.max(0, Math.min(H - Z.h, Z.y)); }
-  function zoomer(f, cx, cy) { if (cx === undefined) { cx = Z.x + Z.w / 2; cy = Z.y + Z.h / 2; } const nw = Math.max(W / 5, Math.min(W, Z.w / f)), k = nw / Z.w; Z.x = cx - (cx - Z.x) * k; Z.y = cy - (cy - Z.y) * k; Z.w = nw; borner(); appliquerZ(); }
+  function appliquerZ() { const sv = $("#cabsvg"); if (sv) sv.setAttribute("viewBox", `${Z.x} ${Z.y} ${Z.w} ${Z.h}`); const zo = $(".cabzone"); if (zo) zo.classList.toggle("zoome", Z.w < VB().w - 1); /* vue entière : glisser sur le fond fait défiler la page */ const z = $("#cabzl"); if (z) z.textContent = Math.round(VB().w / Z.w * 100) + " %"; }
+  function borner() { const v = VB(); Z.w = Math.max(v.w / 5, Math.min(v.w, Z.w)); Z.h = Z.w * v.h / v.w; Z.x = Math.max(v.x, Math.min(v.x + v.w - Z.w, Z.x)); Z.y = Math.max(v.y, Math.min(v.y + v.h - Z.h, Z.y)); }
+  function zoomer(f, cx, cy) { if (cx === undefined) { cx = Z.x + Z.w / 2; cy = Z.y + Z.h / 2; } const v = VB(), nw = Math.max(v.w / 5, Math.min(v.w, Z.w / f)), k = nw / Z.w; Z.x = cx - (cx - Z.x) * k; Z.y = cy - (cy - Z.y) * k; Z.w = nw; borner(); appliquerZ(); }
   /* pendant qu'on tire un fil, la page défile toute seule quand le doigt approche du haut ou du bas de l'écran */
   let tDef = 0;
   function defilerBord() {
@@ -878,7 +880,7 @@
     sv.addEventListener("pointermove", e => {
       if (!doigts.has(e.pointerId)) return; doigts.set(e.pointerId, [e.clientX, e.clientY]);
       if (pince && doigts.size >= 2) { const [a, b] = [...doigts.values()], d = Math.hypot(a[0] - b[0], a[1] - b[1]); if (d > 10) { const r = sv.getBoundingClientRect(), mx = (a[0] + b[0]) / 2, my = (a[1] + b[1]) / 2; const cx = Z.x + (mx - r.left) * Z.w / r.width, cy = Z.y + (my - r.top) * Z.h / r.height; zoomer(Z.w / (pince.w * pince.d / d), cx, cy); } return; }
-      if (glis && Z.w >= W - 1) { /* vue entière : glisser sur le fond fait défiler la page */ const w = document.querySelector("#cabwrap.cabplein"), d = e.clientY - (glis.ly == null ? glis.cy : glis.ly); glis.ly = e.clientY; if (w) w.scrollTop -= d; else window.scrollBy(0, -d); if (Math.abs(e.clientY - glis.cy) > 6) glis.bouge = true; return; }
+      if (glis && Z.w >= VB().w - 1) { /* vue entière : glisser sur le fond fait défiler la page */ const w = document.querySelector("#cabwrap.cabplein"), d = e.clientY - (glis.ly == null ? glis.cy : glis.ly); glis.ly = e.clientY; if (w) w.scrollTop -= d; else window.scrollBy(0, -d); if (Math.abs(e.clientY - glis.cy) > 6) glis.bouge = true; return; }
       if (glis) { const r = sv.getBoundingClientRect(); Z.x = glis.x - (e.clientX - glis.cx) * Z.w / r.width; Z.y = glis.y - (e.clientY - glis.cy) * Z.h / r.height; borner(); appliquerZ(); if (Math.abs(e.clientX - glis.cx) + Math.abs(e.clientY - glis.cy) > 6) glis.bouge = true; }
     }, true);
     const fin = e => { doigts.delete(e.pointerId); if (doigts.size < 2) pince = null; if (!doigts.size) { if (glis && !glis.bouge && (S.selFil || S.selAcc || S.sel)) { S.selFil = S.selAcc = S.sel = null; rendre(); } glis = null; } clearInterval(rep); };
@@ -909,7 +911,7 @@
       if (tirFil) { if (pince) { tirFil.w.p = tirFil.p0; tirFil = null; rendre(); return; } if (Math.abs(e.clientX - tirFil.cx) + Math.abs(e.clientY - tirFil.cy) > 8) tirFil.bouge = true; if (tirFil.bouge) { const [x, y] = pt(e), w = tirFil.w; w.p = [Math.round(Math.max(0, Math.min(W, x))), Math.round(Math.max(0, Math.min(H, y)))]; const d = chemin(w.a, w.b, w.p); ["cw-", "cwh-"].forEach(k => { const p = document.getElementById(k + w.id); if (p) p.setAttribute("d", d); }); } return; }
       if (tir) { tir.dx = e.clientX; tir.dy = e.clientY; }
       if (tir) { if (pince) { tir = null; S.sel = null; const gs = $("#cabsel"); if (gs) gs.innerHTML = ""; dessinSondes(); return; } if (Math.abs(e.clientX - tir.cx) + Math.abs(e.clientY - tir.cy) > 8) tir.bouge = true; if (tir.bouge) { const p0 = posB(tir.k), [x, y] = pt(e), g = $("#cabsel"); if (p0 && g) { g.innerHTML = `<path d="M${p0[0]} ${p0[1]} L${x} ${y}" stroke="${TRAIT(S.couleur)}" stroke-width="3" stroke-dasharray="5 4" fill="none" stroke-linecap="round"${FONCE(S.couleur) ? ' class="fonce"' : ""}/><circle cx="${x}" cy="${y}" r="6" fill="none" stroke="${TRAIT(S.couleur)}" stroke-width="2"/>`; } } return; }
-      if (!drag || pince) return; const [x, y] = pt(e); const nx = Math.max(0, Math.min(W - largeur(drag.a.t), x - drag.dx)), ny = Math.max(70, Math.min(DY - 58, y - drag.dy)); if (Math.abs(nx - drag.a.x) + Math.abs(ny - drag.a.y) > 2) drag.bouge = true; drag.a.x = Math.round(nx); drag.a.y = Math.round(ny); const g = sv.querySelector(`.caba[data-a="${drag.a.id}"]`); if (g) g.setAttribute("transform", `translate(${drag.a.x} ${drag.a.y})`); I.fils.forEach(w => { if (w.a.startsWith(drag.a.id + ":") || w.b.startsWith(drag.a.id + ":")) { const d = chemin(w.a, w.b, w.p); ["cw-", "cwh-"].forEach(k => { const p = document.getElementById(k + w.id); if (p) p.setAttribute("d", d); }); } }); sv.querySelectorAll(`#cabhits [data-b^="${drag.a.id}:"]`).forEach(c => { const q = posB(c.dataset.b); if (q) { c.setAttribute("cx", q[0]); c.setAttribute("cy", q[1]); } }); };
+      if (!drag || pince) return; const [x, y] = pt(e); const lw = largeur(drag.a.t), nx = Math.max(-EX, Math.min(W + EX - lw, x - drag.dx)), cote = nx + lw <= 2 || nx >= W - 2, ny = Math.max(70, Math.min(cote ? H - 62 : DY - 58, y - drag.dy)); if (Math.abs(nx - drag.a.x) + Math.abs(ny - drag.a.y) > 2) drag.bouge = true; drag.a.x = Math.round(nx); drag.a.y = Math.round(ny); const g = sv.querySelector(`.caba[data-a="${drag.a.id}"]`); if (g) g.setAttribute("transform", `translate(${drag.a.x} ${drag.a.y})`); I.fils.forEach(w => { if (w.a.startsWith(drag.a.id + ":") || w.b.startsWith(drag.a.id + ":")) { const d = chemin(w.a, w.b, w.p); ["cw-", "cwh-"].forEach(k => { const p = document.getElementById(k + w.id); if (p) p.setAttribute("d", d); }); } }); sv.querySelectorAll(`#cabhits [data-b^="${drag.a.id}:"]`).forEach(c => { const q = posB(c.dataset.b); if (q) { c.setAttribute("cx", q[0]); c.setAttribute("cy", q[1]); } }); };
     sv.onpointerup = e => {
       if (tirFil) { const f = tirFil; tirFil = null; if (f.bouge) { sauver(); rendre(); } else if (S.mode === "cabler") { S.selFil = f.w.id; S.selAcc = null; S.sel = null; rendre(); } else { S.msgU = "Fil : " + esc(nomB(f.w.a)) + " → " + esc(nomB(f.w.b)) + ". Glissez-le pour l'écarter."; maj(); } return; }
       if (tir) { const t = tir; tir = null; const gs = $("#cabsel"); if (gs) gs.innerHTML = ""; if (t.bouge) { const el = document.elementFromPoint(t.dx != null ? t.dx : e.clientX, t.dy != null ? t.dy : e.clientY), /* dernière position du doigt */ cible = el && el.closest && el.closest("[data-b]"); if (cible && cible.dataset.b !== t.k) borne(cible.dataset.b); else { S.sel = null; S.msgU = "Fil non posé : lâchez le doigt sur une borne."; } dessinSondes(); maj(); } return; } /* sans glisser : la borne reste choisie (mode toucher) */
@@ -993,22 +995,33 @@
       Object.keys(CARTES).filter(cabDispo).map((id, i) => ({ id, i, m: board(id).m.nom })).sort((x, y) => (x.m === "Roger" ? 0 : 1) - (y.m === "Roger" ? 0 : 1) || (x.m === "Roger" ? 0 : x.m.localeCompare(y.m, "fr")) || x.i - y.i).map(o => o.id).map(id => { const b = board(id); return `<button class="row" onclick="go('#/cab/${id}')"><span class="badge" style="--c:${esc(b.m.couleur)}">${esc(b.m.nom)}</span><b>${esc(b.c.nom)}</b><small>Borniers, accessoires, missions · ${esc(CFG[id].fig.replace(/ de la notice.*/, ""))}</small></button>`; }).join("") + `</div><p class="hotn">D'autres cartes viendront ensuite.</p>`;
   };
   let minuterie = 0;
+  /* ordinateur : adapte la largeur du plan à la forme de la zone (portrait sur téléphone, paysage sur écran large) */
+  function ajusteCanevas() {
+    const z = $(".cabzone"), w = $("#cabwrap"); if (!z || !w || !w.classList.contains("cabpc") || !I) return;
+    const zw = z.clientWidth, zh = z.clientHeight; if (!zw || !zh) return;
+    const ex = Math.round((zw / zh * H - W) / 2); const n = ex < 30 ? 0 : ex;
+    if (n === EX) return;
+    EX = n; I.acc.forEach(a => { if (!ACC[a.t].enfiche) { const lw = largeur(a.t); a.x = Math.max(-EX, Math.min(W + EX - lw, a.x)); } });
+    Z = { ...VB() }; appliquerZ(); rendre();
+  }
+  addEventListener("resize", () => { clearTimeout(window.__cabr); window.__cabr = setTimeout(() => { if (/^#\/cab\//.test(location.hash)) ajusteCanevas(); }, 200); });
   function atelier(id) {
     const b = board(id); C = b.c; ITEMS = {}; charger(id); C.parametres.groupes.forEach(g => g.items.forEach(x => ITEMS[x.code] = x));
     cleI = "cab-" + id; I = propre(st.get(cleI, null)) || neuf(); S = simNeuve(); hist = []; futur = []; dernier = JSON.stringify(I);
     setHead("Atelier · " + C.nom, true);
-    Z = { x: 0, y: 0, w: W, h: H }; doigts.clear(); pince = glis = tir = tirFil = drag = null;
+    EX = 0; Z = { ...VB() }; doigts.clear(); pince = glis = tir = tirFil = drag = null;
     app.innerHTML = `<div id="cabwrap"><div class="cabbar"><div class="cabseg" role="tablist"><button id="cabm1" class="on" onclick="CAB.mode('cabler')">✎ Câbler</button><button id="cabm2" onclick="CAB.mode('tester')">▶ Tester</button></div><label class="cabsw">Secteur <input type="checkbox" id="cabsect" onchange="CAB.secteur(this.checked)"><i></i></label></div>
       <div class="cabtools"><button id="cabund" onclick="CAB.annulerTout()" disabled>↶ Annuler</button><button id="cabred" onclick="CAB.retablir()" disabled>↷ Rétablir</button><button id="cabvid" onclick="CAB.vider()" aria-label="Tout retirer">🗑 Tout retirer</button><button id="cabest" onclick="CAB.estomper()" aria-label="Estomper les fils">◑ Fils</button></div>
       <div class="cabzone"><svg id="cabsvg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Carte ${esc(C.nom)} et accessoires"></svg>
         <div class="cabzbt"><button onclick="CAB.zoom(1.4)" aria-label="Zoomer">＋</button><button onclick="CAB.zoom(1 / 1.4)" aria-label="Dézoomer">−</button><button onclick="CAB.zoomRaz()" aria-label="Vue entière" id="cabzl">100 %</button><button onclick="CAB.plein()" id="cabplb" aria-label="Plein écran">⛶</button></div></div>
       <div class="cabinfo" id="cabinfo" aria-live="polite"></div><div id="cabpan"></div><div id="cabsheet"></div></div>
       <p class="hotn">${M ? M.notes : `Simulateur de formation construit d'après la fiche (source : ${esc(C.source)}) : bornier, paramètres, afficheur${F.deux ? "" : " (§ 9.2)"}, mode TEST${F.deux ? "" : " (§ 9.3)"}, codes. Disposition des borniers : ${esc(F.fig)}. Accessoires génériques. Vitesse du portail indicative (environ 10 s pour la course). Non simulés : apprentissage de la course et des télécommandes, batteries, ${F.deux ? "" : "fonctionnement MASTER / SLAVE, "}veille low power, sortie SC en test des photocellules ou battery saving (A8 02 à 04, sortie laissée coupée), commandes radio avec confirmation (76 / 77 = 07 à 10). ${F.deux ? "" : "Refermeture après ouverture partielle (16) appliquée seulement quand A2 est actif. "}Les bornes COM (${F.coms.join(", ")}) sont traitées comme un 0 V commun.${F.notes ? " " + esc(F.notes) : ""}`}</p>`;
-    /* ordinateur : le plan prend toute la largeur à gauche, les commandes restent visibles à droite pendant qu'on fait défiler */
+    /* ordinateur : le plan occupe toute la zone (gauche, droite, haut, bas), les commandes restent à droite */
     if (matchMedia("(min-width:1000px) and (pointer:fine)").matches) {
       const w = $("#cabwrap"), z = w.querySelector(".cabzone"), cote = document.createElement("div"); cote.className = "cabside";
       ["#cabwrap > .cabbar", "#cabwrap > .cabtools", "#cabinfo", "#cabpan", "#cabsheet"].forEach(q => { const e = document.querySelector(q); if (e) cote.appendChild(e); });
       z.after(cote); w.classList.add("cabpc"); z.title = "Molette : faire défiler la page · Ctrl + molette : zoomer · glisser le fond : déplacer la vue zoomée";
+      ajusteCanevas();
     }
     rendre(); brancherSvg(); outils();
     clearInterval(minuterie); minuterie = setInterval(() => { if (location.hash !== "#/cab/" + id) { clearInterval(minuterie); clearTimeout(tEnr); document.body.classList.remove("cabnoscroll"); return; } tick(); }, 100);
@@ -1055,8 +1068,8 @@
       feuille("missions");
     },
     etatAff() { enregistrerP(); S.prog = null; S.msgU = ""; maj(); },
-    zoom(f) { zoomer(f); }, zoomRaz() { Z = { x: 0, y: 0, w: W, h: H }; appliquerZ(); },
-    plein() { const w = $("#cabwrap"); if (!w) return; const on = !w.classList.contains("cabplein"); w.classList.toggle("cabplein", on); document.body.classList.toggle("cabnoscroll", on); const b = $("#cabplb"); if (b) { b.textContent = on ? "✕" : "⛶"; b.setAttribute("aria-label", on ? "Quitter le plein écran" : "Plein écran"); } },
+    zoom(f) { zoomer(f); }, zoomRaz() { Z = { ...VB() }; appliquerZ(); },
+    plein() { const w = $("#cabwrap"); if (!w) return; const on = !w.classList.contains("cabplein"); w.classList.toggle("cabplein", on); document.body.classList.toggle("cabnoscroll", on); setTimeout(ajusteCanevas, 60); const b = $("#cabplb"); if (b) { b.textContent = on ? "✕" : "⛶"; b.setAttribute("aria-label", on ? "Quitter le plein écran" : "Plein écran"); } },
     clic(k) { if (M) { S.msgU = M.clic(api(), k); maj(); } },
     carte() { if (S.secteur) { S.msgU = "Coupez le secteur avant de remplacer la carte."; maj(); return; } S.hs = false; S.f3 = true; S.pannes = {}; S.msg = []; rendre(); }
   };

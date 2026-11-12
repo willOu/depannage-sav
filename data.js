@@ -192,6 +192,11 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "2.85", date: "2026-11-12", titre: "Plan de câblage plus grand sur ordinateur", items: [
+    "Atelier de câblage sur ordinateur : le plan occupe toute la zone de l'écran, à gauche et à droite de la carte comme en haut et en bas ; on peut poser les accessoires de chaque côté de la carte",
+    "Plein écran sur ordinateur : le plan prend toute la largeur, les commandes restent à droite",
+    "Zoom : on peut agrandir, mais jamais réduire en dessous de la vue entière"
+  ] },
   { v: "2.84", date: "2026-11-12", titre: "Atelier de câblage sur ordinateur", items: [
     "Atelier de câblage sur ordinateur : le plan occupe toute la largeur à gauche et les commandes (Câbler / Tester, outils, informations) restent visibles à droite pendant le défilement",
     "Molette de la souris : la page défile maintenant même quand le pointeur est sur le plan ; Ctrl + molette (ou pincement du pavé tactile) pour zoomer"
