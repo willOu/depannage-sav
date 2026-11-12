@@ -192,6 +192,9 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "2.87", date: "2026-11-12", titre: "Atelier BFT : afficheur au repos", items: [
+    "Atelier de câblage, cartes BFT MERAK / THALIA : quand la carte est sous tension, l'écran indique « sous tension · afficheur éteint au repos » (l'afficheur de ces cartes est éteint au repos, il s'allume pour un code, un diagnostic ou un menu avec OK) ; la touche OK l'explique"
+  ] },
   { v: "2.86", date: "2026-11-12", titre: "Atelier de câblage : dézoom, accessoires collés, carte déplaçable", items: [
     "Atelier de câblage sur ordinateur : on peut maintenant dézoomer (jusqu'à 50 %) pour avoir un espace de travail deux fois plus grand ; on peut déplacer la vue en glissant le fond",
     "Les accessoires se posent collés contre la carte, à gauche, à droite, au-dessus ou en dessous, sans sauter par-dessus",

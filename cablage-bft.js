@@ -188,12 +188,14 @@
       voyants(A) {
         const S = A.S, R = S.R || {}, on = R.carteOn, [ax, ay] = c.aff, y = A.DY + ay;
         const t = !on ? "" : S.diag || (S.veille ? "   ." : "");
-        return `<text x="${ax + 43}" y="${y + 22}" text-anchor="middle" class="cabcode">${A.esc(t)}</text>`;
+        /* au repos l'afficheur de la carte est éteint (notice : + / − = OPEN / CLOSE afficheur éteint, OK = allumer l'afficheur) : on le dit pour ne pas croire à une panne */
+        const veille = on && !t ? `<text x="${ax + 43}" y="${y + 44}" text-anchor="middle" class="cabs" fill="#5ee08a">● sous tension</text><text x="${ax + 43}" y="${y + 54}" text-anchor="middle" class="cabs">afficheur éteint au repos</text>` : "";
+        return `<text x="${ax + 43}" y="${y + 22}" text-anchor="middle" class="cabcode">${A.esc(t)}</text>` + veille;
       },
       clic() { return ""; },
       touche(A, k) {
         const S = A.S; if (!S.R || !S.R.carteOn) return "Carte hors tension.";
-        if (k === "ok") return "OK : menus de la carte (simplifié, avancé). Non simulés dans l'atelier : réglez les paramètres et logiques avec « ⚙ Paramètres ».";
+        if (k === "ok") return "OK : allume l'afficheur et ouvre les menus de la carte (simplifié, avancé). Menus non simulés dans l'atelier : réglez les paramètres et logiques avec « ⚙ Paramètres ». Au repos, l'afficheur est éteint (normal, d'après la notice) : il s'allume pour un code d'erreur, un diagnostic d'entrée ou un menu.";
         if (S.cmd || S.pre) { S.cmd = 0; S.pre = 0; S.etat2 = "arrete"; return "Touche " + (k === "pl" ? "+" : "−") + " pendant la manœuvre : STOP (afficheur éteint : + = OPEN / STOP, − = CLOSE / STOP)."; }
         S.prec = S.prec || {}; const d = k === "pl" ? 1 : -1;
         if (c.P.type && ![3, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].includes(pn(A, "type", 0))) return "TYPE DE MOTEUR non réglé (ou non géré) : les moteurs ne sont pas actifs.";
