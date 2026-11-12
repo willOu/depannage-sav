@@ -192,6 +192,9 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "2.83", date: "2026-11-12", titre: "Assistance Roger", items: [
+    "Assistance fabricant Roger : contact de la société ASD pour tous les produits Roger (04 42 70 43 36, du lundi au jeudi 8 h – 12 h et 14 h – 17 h 30, le vendredi 8 h – 12 h et 14 h – 17 h, fermé le week-end)"
+  ] },
   { v: "2.82", date: "2026-11-11", titre: "Assistance Came", items: [
     "Assistance fabricant Came : un seul numéro pour tous les produits Came (08 25 82 58 74, du lundi au vendredi de 8 h 30 à 12 h et de 13 h 30 à 17 h)"
   ] },
@@ -58640,7 +58643,7 @@ const HOTLINES = {
     { nom: "BFT S.p.A. — Schio (Italie, siège)", tel: "+390445696511", src: "notice BFT LEO B CBB (pas de numéro de BFT France dans les notices)" }
   ],
   roger: [
-    { nom: "Roger Technology — Mogliano Veneto (Italie)", tel: "+390415937023", src: "notices Roger B70 / CTRL / EDGE1" }
+    { nom: "ASD — assistance technique (tous les produits Roger)", tel: "+33442704336", h: "Lun-jeu 8h00-12h00 et 14h00-17h30 · ven 8h00-12h00 et 14h00-17h00 · sam-dim fermé", src: "indiqué par William (Espacs Automatisme)" }
   ],
   afca: [
     { nom: "AFCA - V2 SAS — Genas", tel: "+33472791030", src: "notice V2 LUMOS-M (2016)" }
