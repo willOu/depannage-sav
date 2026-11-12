@@ -192,6 +192,11 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "2.86", date: "2026-11-12", titre: "Atelier de câblage : dézoom, accessoires collés, carte déplaçable", items: [
+    "Atelier de câblage sur ordinateur : on peut maintenant dézoomer (jusqu'à 50 %) pour avoir un espace de travail deux fois plus grand ; on peut déplacer la vue en glissant le fond",
+    "Les accessoires se posent collés contre la carte, à gauche, à droite, au-dessus ou en dessous, sans sauter par-dessus",
+    "La carte de commande se déplace : glisser la poignée « déplacer la carte » au-dessus de la carte (les fils suivent)"
+  ] },
   { v: "2.85", date: "2026-11-12", titre: "Plan de câblage plus grand sur ordinateur", items: [
     "Atelier de câblage sur ordinateur : le plan occupe toute la zone de l'écran, à gauche et à droite de la carte comme en haut et en bas ; on peut poser les accessoires de chaque côté de la carte",
     "Plein écran sur ordinateur : le plan prend toute la largeur, les commandes restent à droite",
