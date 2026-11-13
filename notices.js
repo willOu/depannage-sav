@@ -1501,6 +1501,16 @@ window.NOTICES_PDF = {
 "m": 0
 }
 ],
+"bft-grizzly-pillar-b": [
+{
+"f": "notices/bft-grizzly-pillar-b-guides-coulissants.pdf",
+"t": "Notice BFT Grizzly / Pillar B : remplacement des guides coulissants (D814238)",
+"p": 3,
+"pt": 4,
+"ko": 163,
+"m": 1
+}
+],
 "fadini-talos": [
 {
 "f": "notices/notice-dinstallation-borne-talos.pdf",

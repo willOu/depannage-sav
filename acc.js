@@ -4439,6 +4439,51 @@
       ]
     },
     {
+      "id": "bft-grizzly-pillar-b",
+      "nom": "Grizzly / Pillar B",
+      "marque": "BFT",
+      "couleur": "#b35c00",
+      "categorie": "Borne escamotable (motorisation) : remplacement des guides coulissants",
+      "modeles": "BFT Grizzly / Pillar B : kit de patins de glissement (guides coulissants) de rechange",
+      "source": "Notice BFT D814238 23E97_02 « Procédure de remplacement des guides coulissants Grizzly / Pillar B » (italien / anglais, 3 pages) ; texte ci-dessous traduit en français",
+      "resume": "Procédure de remplacement des 3 patins de glissement de la borne : on sort la structure interne au palan, on remplace chaque patin en perçant un nouveau trou Ø 6,75 mm taraudé M8, puis on remonte. Notice d'origine en italien / anglais (onglet Notice PDF), traduction française dans l'onglet Installation.",
+      "specs": [
+        [
+          "Nombre de patins",
+          "3 (positions indiquées sur la figure 3 de la notice)"
+        ],
+        [
+          "Perçage",
+          "Ø 6,75 mm, taraudage M8"
+        ],
+        [
+          "Levage",
+          "Palan obligatoire pour sortir et reposer la structure interne"
+        ],
+        [
+          "Sécurité",
+          "Couper l'alimentation électrique avant toute intervention"
+        ]
+      ],
+      "installation": [
+        "Couper l'alimentation électrique de l'installation avant toute intervention.",
+        "Démonter le chapeau ; s'il porte des lumières, débrancher d'abord la fiche du câble lumières. Démonter la bride.",
+        "Sortir la structure interne avec un palan et la poser à terre.",
+        "Dévisser la vis M8. Soulever légèrement le fût avec le palan, puis démonter les anciens patins (fig. 2).",
+        "Poser le nouveau patin (fig. 3 et 4) : abaisser le fût.",
+        "Fixer provisoirement le patin dans le trou existant (repère 1) avec la visserie fournie, sans serrer. Vérifier l'orthogonalité des axes avec un niveau à bulle. Marquer le point 2 (repère du nouveau trou Ø 6,75 mm) (fig. 5).",
+        "Retirer provisoirement le patin. Percer Ø 6,75 mm au point 2 marqué et tarauder M8 (fig. 6).",
+        "Serrer le patin dans sa nouvelle position avec la visserie fournie (fig. 7).",
+        "Répéter les opérations 5, 6 et 7 pour les deux autres patins, aux positions de la figure 3.",
+        "Remonter : poser la structure, serrer la vis M8, descendre la structure interne au palan, fixer la bride à terre, rebrancher le câble lumières si présent, fixer le chapeau (fig. 8).",
+        "Faire fonctionner la borne pour vérifier que l'installation est correcte."
+      ],
+      "notes": [
+        "Notice originale en italien / anglais : les figures 1 à 8 sont dans l'onglet Notice PDF ; page 4 du PDF d'origine (adresses BFT) non reprise.",
+        "Le palan est repéré par une étoile (*) dans les figures."
+      ]
+    },
+    {
       "id": "bircher-proloop-lite",
       "nom": "ProLoop Lite",
       "marque": "BBC Bircher",
