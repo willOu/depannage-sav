@@ -193,7 +193,7 @@ const NOTICES = {
 
 const CHANGELOG = [
   { v: "2.90", date: "2026-11-13", titre: "BFT Grizzly / Pillar B : remplacement des guides coulissants", items: [
-    "Nouvelle fiche accessoire BFT Grizzly / Pillar B (bornes escamotables) : procédure de remplacement des 3 patins de glissement traduite en français, avec la notice BFT d'origine (italien / anglais) en onglet Notice PDF"
+    "Nouvelle fiche accessoire BFT Grizzly / Pillar B (bornes escamotables) : procédure de remplacement des 3 patins de glissement traduite en français, avec, en onglet Notice PDF, la notice BFT d'origine (italien / anglais) et sa traduction française"
   ] },
   { v: "2.89", date: "2026-11-12", titre: "Accueil ordinateur : icônes et rubriques égales", items: [
     "Accueil sur ordinateur : une icône devant chaque outil et les 4 rubriques ont toutes la même taille"
