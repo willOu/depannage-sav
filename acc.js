@@ -4446,7 +4446,7 @@
       "categorie": "Borne escamotable (motorisation) : remplacement des guides coulissants",
       "modeles": "BFT Grizzly / Pillar B : kit de patins de glissement (guides coulissants) de rechange",
       "source": "Notice BFT D814238 23E97_02 « Procédure de remplacement des guides coulissants Grizzly / Pillar B » (italien / anglais, 3 pages) ; texte ci-dessous traduit en français",
-      "resume": "Procédure de remplacement des 3 patins de glissement de la borne : on sort la structure interne au palan, on remplace chaque patin en perçant un nouveau trou Ø 6,75 mm taraudé M8, puis on remonte. Notice d'origine en italien / anglais (onglet Notice PDF), traduction française dans l'onglet Installation.",
+      "resume": "Procédure de remplacement des 3 patins de glissement de la borne : on sort la structure interne au palan, on remplace chaque patin en perçant un nouveau trou Ø 6,75 mm taraudé M8, puis on remonte. Notice d'origine en italien / anglais (onglet Notice PDF), traduction française dans le même onglet et dans l'onglet Installation.",
       "specs": [
         [
           "Nombre de patins",

@@ -1510,6 +1510,14 @@ window.NOTICES_PDF = {
 "ko": 163,
 "m": 1
 }
+,{
+"f": "notices/bft-grizzly-pillar-b-guides-coulissants-fr.pdf",
+"t": "Traduction française de la notice (remplacement des guides coulissants)",
+"p": 3,
+"pt": 3,
+"ko": 301,
+"m": 0
+}
 ],
 "fadini-talos": [
 {
