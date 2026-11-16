@@ -192,6 +192,9 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "2.92", date: "2026-11-16", titre: "Plein écran sur Android", items: [
+    "Appli installée sur Android : plein écran, sans la barre d'état (heure, notifications) ni la barre de navigation ; glisser depuis le haut ou le bas de l'écran les fait réapparaître un moment. Sans effet sur iPhone. Si les barres restent, désinstaller puis réinstaller l'appli"
+  ] },
   { v: "2.91", date: "2026-11-16", titre: "Atelier BFT : afficheur visible et menus de la carte", items: [
     "Atelier de câblage, cartes BFT MERAK / THALIA : l'afficheur de la carte était dessiné sous son fond noir (les codes d'erreur et diagnostics ne se voyaient pas) : corrigé",
     "Les touches de la carte fonctionnent : OK allume l'afficheur (menu simplifié), un deuxième OK ouvre le menu avancé ; + / − naviguent, OK entre et valide une valeur, la touche « + − (ESC) » sort. Les valeurs modifiées agissent sur le portail virtuel ; presets, retour usine inclus. Autoset, radio, langue, statistiques et mot de passe ne sont pas simulés"
