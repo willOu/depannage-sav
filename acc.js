@@ -4484,6 +4484,86 @@
       ]
     },
     {
+      "id": "sick-mrs1000",
+      "nom": "MRS1000 (LiDAR 3D)",
+      "marque": "SICK",
+      "couleur": "#007cc1",
+      "categorie": "Capteur LiDAR 3D de détection et de surveillance de zone",
+      "modeles": "SICK MRS1000 : capteur LiDAR 3D 4 plans, 275°, portée 0,2 à 64 m. Versions MRSxxxxx-0xxxxx (intérieur) et MRSxxxxx-1xxxxx (extérieur)",
+      "source": "Notice Quickstart SICK MRS1000 (8020472/12FY/2019-04-02, français)",
+      "resume": "Capteur laser à 4 plans de mesure : détection d'objets et surveillance de champs librement définis, avec signalement d'intrusion par sorties de commutation (contrôle d'accès, protection de bâtiments, anticollision). Ce n'est pas un dispositif de protection des personnes au sens des normes machines. Réglage sans PC par apprentissage (EasyTeach) ou avec le logiciel SOPAS ET.",
+      "specs": [
+        [
+          "Alimentation",
+          "10 à 30 V CC (ondulation ±5 %), typiquement ≤ 13 W, 30 W pendant 1 s au démarrage ; fusible externe 5 A temporisé en tête du câble ; circuits SELV / PELV"
+        ],
+        [
+          "Champ de vision",
+          "275° horizontal, 7,5° vertical sur 4 plans ; résolution 0,25° ; 50 Hz (4 × 12,5 Hz)"
+        ],
+        [
+          "Portée",
+          "0,2 à 64 m ; 30 m sur objet à 90 % de réflectance, 16 m à 10 %"
+        ],
+        [
+          "Sorties",
+          "Jusqu'à 100 mA par sortie ; E/S 1 à 4 réglées en entrées et 5 à 8 en sorties par défaut"
+        ],
+        [
+          "Champs",
+          "Jusqu'à 64 champs et 16 évaluations simultanées (caractéristiques) ; la partie configuration de la même notice parle de 24 champs et 6 évaluations"
+        ],
+        [
+          "Interfaces",
+          "Ethernet TCP/IP, UDP/IP (10/100 Mbit/s), adresse IP de base 192.168.0.1 ; SOPAS ET (port 2111 configuration, 2112 données), serveur web en lecture"
+        ],
+        [
+          "Boîtier",
+          "1,2 kg, 151,9 × 150 × 92,5 mm ; IP65 (intérieur), IP65 / IP67 (extérieur) ; -10 à +50 °C (intérieur), -30 à +50 °C (extérieur) ; laser classe 1"
+        ]
+      ],
+      "raccordement": [
+        {
+          "n": "PWR (M12 mâle 5 pôles, codage A)",
+          "label": "Alimentation",
+          "desc": "1 Vs +10 à +30 V CC (marron) · 2 réservé (blanc) · 3 GND 0 V (bleu) · 4 IN8/OUT8 entrée / sortie numérique 8 (noir) · 5 réservé (gris). Couleurs valables avec le câble SICK 2095733."
+        },
+        {
+          "n": "E/S (M12 femelle 8 pôles, codage A)",
+          "label": "Entrées / sorties",
+          "desc": "1 IN1/OUT1 (blanc) · 2 IN2/OUT2 (marron) · 3 IN3/OUT3 (vert) · 4 IN4/OUT4 (jaune) · 5 IN5/OUT5 (gris) · 6 IN6/OUT6 (rose) · 7 GND commun des E/S (bleu) · 8 IN7/OUT7 (rouge). Couleurs valables avec le câble SICK 6036155."
+        },
+        {
+          "n": "Ethernet (M12 femelle 4 pôles, codage D)",
+          "label": "Réseau / PC",
+          "desc": "1 TX+ · 2 RX+ · 3 TX- · 4 RX-. Pour la configuration avec SOPAS ET."
+        },
+        {
+          "n": "IN4",
+          "label": "EasyTeach",
+          "desc": "À la livraison, l'apprentissage du champ démarre et s'arrête par l'entrée IN4 (actif haut), par exemple avec un bouton relié à Vs."
+        },
+        {
+          "n": "Sorties 5 à 8",
+          "label": "Intrusion de champ / état",
+          "desc": "Sorties de commutation (PNP selon le modèle) : intrusion dans un champ, erreur de contour ou appareil prêt (Device Ready), selon la configuration SOPAS."
+        }
+      ],
+      "installation": [
+        "Monter le capteur sur un support stable (peu de vibrations), à l'abri du soleil direct ; près de la température maximale, sur support métallique pour évacuer la chaleur.",
+        "Aligner l'axe 0° (repère sur le dessus du capot) sur le centre de la zone à surveiller.",
+        "Raccorder hors tension uniquement ; boucher les connecteurs inutilisés avec un capuchon ; connecteurs rotatifs : 270° maximum.",
+        "Mise sous tension : au bout de l'initialisation, les deux LED passent au vert = prêt.",
+        "EasyTeach sans PC : retirer de la zone tout ce qui n'y restera pas, se tenir à l'écart (ou arpenter les limites du champ), activer IN4, puis le désactiver. Le champ suit le contour appris moins 100 mm. Tester ensuite par des intrusions volontaires.",
+        "Avec PC : logiciel SOPAS ET (3.3.3 ou plus), appareil MRS1xxx port 2111, niveau « Autorisierter Kunde » ; application Évaluation du champ ou Sortie des données ; enregistrer de manière permanente."
+      ],
+      "notes": [
+        "LED 1 / LED 2 : rouge fixe / rouge fixe = démarrage ; vert / vert = champ libre (marche) ; vert / jaune = intrusion de champ ; rouge clignotant / rouge clignotant = erreur fatale ; jaune / jaune clignotant = attente de redémarrage ; vert clignotant / vert clignotant = veille ; vert / jaune clignotant = redémarrage après temporisation ; jaune clignotant / jaune clignotant = EasyTeach ; vert clignotant / rouge clignotant = mode alignement.",
+        "Zone proche (moins de 0,2 m) : pas de détection ni de mesure.",
+        "Ne pas ouvrir le boîtier (perte de garantie)."
+      ]
+    },
+    {
       "id": "bircher-proloop-lite",
       "nom": "ProLoop Lite",
       "marque": "BBC Bircher",
@@ -4833,7 +4913,7 @@
 
 
   /* Marques d'accessoires : slug = nom normalisé ; les marques déjà présentes dans MARQUES (cartes) y sont rattachées */
-  const LOGOS = ["optex", "cardin", "intratone", "locinox", "prastel", "theben", "opera", "bbc-bircher", "sewosy", "jcm-technologies"];
+  const LOGOS = ["optex", "cardin", "intratone", "locinox", "prastel", "theben", "opera", "bbc-bircher", "sewosy", "jcm-technologies", "sick"];
   const slugM = n => norm(n).replace(/ /g, "-");
   const accOf = nom => ACCESSOIRES.filter(a => norm(a.marque) === norm(nom));
   window.accBrandsOnly = function () {

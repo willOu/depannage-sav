@@ -192,6 +192,10 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "2.93", date: "2026-11-16", titre: "Nouvelles marques SMINN et SICK", items: [
+    "Nouvelle marque SMINN (logo sur l'accueil) : fiche complète du coffret BOX L VF1D / VF1EA (moteur triphasé 230 V à variateur) : bornier 1 à 36, registre des pannes, menus et réglages d'usine, apprentissage, schémas et notice PDF",
+    "Nouvelle marque SICK (logo sur l'accueil) : fiche accessoire du capteur LiDAR 3D MRS1000 (raccordements M12, LED, EasyTeach, caractéristiques) avec la notice de démarrage rapide"
+  ] },
   { v: "2.92", date: "2026-11-16", titre: "Plein écran sur Android", items: [
     "Appli installée sur Android : plein écran, sans la barre d'état (heure, notifications) ni la barre de navigation ; glisser depuis le haut ou le bas de l'écran les fait réapparaître un moment. Sans effet sur iPhone. Si les barres restent, désinstaller puis réinstaller l'appli"
   ] },
@@ -58647,6 +58651,1289 @@ const MARQUES = [
     "apres": [
       "Avec la valeur d'usine -5, le portail s'arrête avant les butées (0 pour aller jusqu'aux butées).",
       "Vérifier chaque mois le réglage de force et le déverrouillage."
+    ]
+  }
+}
+  ]
+},
+/* ------------------------------------------------------------------ */
+{
+  id: "sminn", nom: "SMINN", couleur: "#3d3d3d",
+  cartes: [
+{
+  "id": "sminn-box-l-vf1d",
+  "nom": "BOX L VF1D / VF1EA",
+  "modeles": "Coffret de commande universel SMINN BOX L VF1D (encoder incrémental 1 ou 2 canaux) et BOX L VF1EA (encoder absolu RS-485) : portes rapides, basculantes, à déplacement vertical et portails, 1 moteur triphasé 230 V AC jusqu'à 1,5 kW (couplage triangle) piloté par variateur de fréquence",
+  "type": "Porte ou portail, 1 moteur triphasé 230 V à variateur — écran LCD 2 × 16, touches BACK / ENTER / ← / →, bouton TEST",
+  "source": "Notice SMINN BOX L VF1D/EA, manuel d'instructions français (Rev. 3818-1K)",
+  "codes": [
+    {
+      "code": "E aux 4 coins",
+      "type": "afficheur",
+      "titre": "Erreurs enregistrées",
+      "action": "Entrer dans le menu (BACK + ENTER) : chaque erreur enregistrée s'affiche, ENTER pour lire la suivante. L'armoire continue de fonctionner normalement (simple signalement)."
+    },
+    {
+      "code": "ERREUR TEST SEG1 / SEG2",
+      "type": "afficheur",
+      "titre": "Test de la photocellule 1 / 2 échoué",
+      "action": "Vérifier le câblage et l'alimentation de la photocellule. Le − de l'émetteur doit être sur la borne 18 (ou passer par un relais réglé en TEST SEG.) pour que l'armoire puisse couper l'émetteur pendant le test."
+    },
+    {
+      "code": "CONFIG ERREUR",
+      "type": "afficheur",
+      "titre": "Erreur mémoire de configuration",
+      "action": "Erreur dans la mémoire des données de configuration. Si elle persiste : service technique du fabricant."
+    },
+    {
+      "code": "LOG ERREUR",
+      "type": "afficheur",
+      "titre": "Erreur mémoire du registre d'événements",
+      "action": "Si elle persiste : service technique du fabricant."
+    },
+    {
+      "code": "SURCONSOMMATION DU MOTEUR",
+      "type": "afficheur",
+      "titre": "Consommation au-dessus de la limite",
+      "action": "Courant moteur au-dessus de LIM CONS SC (usine 10 A) : contrôler la mécanique (point dur, équilibrage), puis les réglages de puissance et la limite."
+    },
+    {
+      "code": "CC MOTEUR IGBT",
+      "type": "afficheur",
+      "titre": "Court-circuit circuit de puissance moteur",
+      "action": "Court-circuit détecté dans le circuit qui alimente le moteur : contrôler le câble moteur (4-5-6) et le bobinage, secteur coupé."
+    },
+    {
+      "code": "CC MOTEUR",
+      "type": "afficheur",
+      "titre": "Court-circuit circuit de coupure rapide",
+      "action": "Court-circuit détecté dans le circuit de sécurité de coupure rapide : contrôler le câblage moteur, secteur coupé."
+    },
+    {
+      "code": "OBSTACLE MOTEUR SENS",
+      "type": "afficheur",
+      "titre": "Obstacle détecté par le capteur de courant",
+      "action": "Si aucun obstacle réel : réduire M1 SENSIB. (1 = moins sensible, 9 = plus sensible, 0 = désactivé)."
+    },
+    {
+      "code": "OBSTACLE MOTEUR ENC",
+      "type": "afficheur",
+      "titre": "Obstacle détecté par l'encoder",
+      "action": "Si aucun obstacle réel : réduire M1 ENC SENS. (1 = moins sensible, 9 = plus sensible)."
+    },
+    {
+      "code": "OBSTACLE MOTEUR LIM.",
+      "type": "afficheur",
+      "titre": "Obstacle détecté par limite de courant",
+      "action": "Courant au-dessus de M1 LIM. PRES. (usine 3 A). La notice dit « si aucune collision, réduire M1 LIM. PRES. » ; une limite plus basse déclenche plus tôt, vérifier donc plutôt s'il faut l'augmenter (à confirmer sur place)."
+    },
+    {
+      "code": "ARRÊT ENCODER",
+      "type": "afficheur",
+      "titre": "Moteur arrêté vu par l'encoder",
+      "action": "Le moteur s'est arrêté de tourner (verrouillage en butée possible) : contrôler la mécanique et l'encoder."
+    },
+    {
+      "code": "MANQUE D'APPRENTISSAGE",
+      "type": "afficheur",
+      "titre": "Apprentissage non fait",
+      "action": "Faire la manœuvre d'apprentissage (PROG MANIOBRA, voir onglet Apprent.) avant toute manœuvre normale."
+    },
+    {
+      "code": "SÉC. ACTIVÉE",
+      "type": "afficheur",
+      "titre": "Une sécurité est active avant la manœuvre",
+      "action": "Au moins une sécurité est activée avant le départ : contrôler les LED des entrées, le STOP 31-32 (shunté s'il n'y a pas d'arrêt d'urgence), photocellules et barres palpeuses."
+    },
+    {
+      "code": "TEMPÉRATURE IGBT ÉLEVÉE",
+      "type": "afficheur",
+      "titre": "Surchauffe du circuit de puissance",
+      "action": "Laisser refroidir ; vérifier la fréquence d'utilisation, la puissance réglée et l'aération du coffret."
+    },
+    {
+      "code": "VOLTAGE DU BUS FAIBLE",
+      "type": "afficheur",
+      "titre": "Tension insuffisante",
+      "action": "L'armoire ne reçoit pas assez de tension (alimentation 1-2, section des câbles) ou le moteur demande plus que ce qu'elle peut fournir (moteur > 1,5 kW, point dur)."
+    },
+    {
+      "code": "ENTRÉES NON DISPONIBLES",
+      "type": "afficheur",
+      "titre": "Circuit de lecture des entrées en panne",
+      "action": "Si l'erreur persiste : service technique du fabricant."
+    },
+    {
+      "code": "ENCODER NON DISPONIBLE",
+      "type": "afficheur",
+      "titre": "Circuit de lecture de l'encoder en panne",
+      "action": "Si l'erreur persiste : service technique du fabricant."
+    },
+    {
+      "code": "ERREUR ENCODER",
+      "type": "afficheur",
+      "titre": "Erreurs de lecture de l'encoder",
+      "action": "Contrôler le câblage (27 à 30) et l'état de l'encoder ; en VF1EA, A sur A et B sur B, câble blindé fourni, câbles de puissance éloignés de l'encoder, ferrite en place."
+    },
+    {
+      "code": "LED ON éteinte",
+      "type": "led",
+      "titre": "Coffret non alimenté",
+      "action": "Contrôler l'alimentation 230 V sur 1-2 et le fusible d'entrée."
+    },
+    {
+      "code": "Photocellule en défaut moteur en marche",
+      "type": "symptome",
+      "titre": "Interférences du variateur",
+      "action": "Si la cellule marche moteur arrêté mais se met en défaut quand il tourne : alimenter le récepteur en continu (15 V DC sur 16-17 ou alimentation externe) et relier par un câble court le − du récepteur au poteau ou à la structure métallique (notice p. 25)."
+    },
+    {
+      "code": "Moteur qui tourne à l'envers",
+      "type": "symptome",
+      "titre": "Sens de rotation inversé",
+      "action": "Inverser deux phases (4-5-6) ou régler INVERTIR MOTOR. Vérifier d'abord en homme mort : Maintenance > ABRIR / CERRAR, ou touches → (ouvrir) / ← (fermer) au repos."
+    },
+    {
+      "code": "Ne démarre pas sans fin de course",
+      "type": "symptome",
+      "titre": "Fins de course absents",
+      "action": "Les fins de course 24 (ouverture) et 25 (fermeture) sont obligatoires, sauf avec un encoder absolu (VF1EA)."
+    }
+  ],
+  "afficheur": {
+    "intro": "Écran LCD 2 × 16 caractères rétroéclairé et 4 touches. Menu : BACK + ENTER en même temps. Les libellés de l'écran cités par la notice sont en espagnol (TIPO PUERTA, MODO MANIOB., CIERRE AUTO…) ; la langue se change dans Maintenance > LANGUE.",
+    "ecrans": [],
+    "reperes": {},
+    "regles": [],
+    "autres": [
+      {
+        "titre": "Touches",
+        "texte": "BACK = sortir / annuler · ENTER = sélectionner, valider · ← / → = élément précédent / suivant. Ligne du haut : menus et paramètres ; ligne du bas : valeurs du paramètre (les symboles < > indiquent la ligne active). Au repos, → ouvre et ← ferme en homme mort."
+      },
+      {
+        "titre": "Pendant la manœuvre",
+        "texte": "Exemple « APER 22C I 318V » puis « 1.82A 89 2.00A » : phase en cours, température de l'armoire, indication d'inhibition des entrées, tension du bus ; courant actuel, % de course ou temps de pause restant, courant maximum de la manœuvre."
+      },
+      {
+        "titre": "4 E aux coins",
+        "texte": "Erreurs enregistrées : les lire dans le menu (onglet Codes)."
+      },
+      {
+        "titre": "LED",
+        "texte": "LED ON = coffret alimenté. Une LED par entrée de sécurité : les LED des barres palpeuses ne s'allument que si la barre est activée dans le menu. LED extérieure clignotante = maintenance à faire (compteur partiel > LIM. MANT.)."
+      },
+      {
+        "titre": "Code d'accès",
+        "texte": "Si le code est activé (Maintenance), il est demandé pour entrer dans le menu : 4 chiffres, usine 1234."
+      }
+    ]
+  },
+  "bornier": {
+    "groupes": [
+      {
+        "nom": "Puissance",
+        "bornes": [
+          {
+            "n": "1 · 2",
+            "label": "Alimentation 230 V AC 50 Hz",
+            "desc": "1 = phase, 2 = neutre. Alimenter par un disjoncteur magnétothermique / interrupteur de secours accessible",
+            "t": "alim"
+          },
+          {
+            "n": "3",
+            "label": "Terre",
+            "desc": "",
+            "t": "autre"
+          },
+          {
+            "n": "4 · 5 · 6",
+            "label": "Moteur U · V · W",
+            "desc": "Moteur triphasé 230 V AC (couplage triangle), 1,5 kW max. Sens faux : inverser deux phases. Faire passer le câble moteur en boucle dans la ferrite fournie (CEM)",
+            "t": "moteur"
+          },
+          {
+            "n": "7",
+            "label": "Terre moteur",
+            "desc": "Vers la carcasse du moteur",
+            "t": "autre"
+          },
+          {
+            "n": "8 · 9",
+            "label": "Relais RL1 (contact NO)",
+            "desc": "Libre de potentiel, 16 A en 24 V DC ou 230 V AC. Usine : LUZ GARAJE (éclairage de zone)",
+            "t": "sortie"
+          },
+          {
+            "n": "10 · 11",
+            "label": "Relais RL2 (contact NO)",
+            "desc": "Usine : LAMPARA DEST (lampe flash)",
+            "t": "sortie"
+          },
+          {
+            "n": "12 · 13",
+            "label": "Relais RL3 (contact NO)",
+            "desc": "Usine : FRENO (frein). Frein du moteur : faire passer une phase 230 V AC par ce relais vers le redresseur du frein (la tension moteur du variateur ne peut pas alimenter le frein)",
+            "t": "sortie"
+          }
+        ]
+      },
+      {
+        "nom": "Alimentation des accessoires",
+        "bornes": [
+          {
+            "n": "14 · 15",
+            "label": "Sortie 24 V AC 12 VA",
+            "desc": "Fusible réarmable. Lampes, gâches… (le tableau Fig. 2 et les caractéristiques disent 24 V AC ; le texte p. 4 dit 24 V DC)",
+            "t": "alim"
+          },
+          {
+            "n": "16 · 17",
+            "label": "Sortie 15 V DC 3,5 W",
+            "desc": "16 = négatif, 17 = positif. Photocellules et autres circuits, fusible réarmable",
+            "t": "alim"
+          },
+          {
+            "n": "18",
+            "label": "Négatif émetteur (autotest)",
+            "desc": "− de l'émetteur de la photocellule pour le test des sécurités (TEST FOTOC.)",
+            "t": "alim"
+          }
+        ]
+      },
+      {
+        "nom": "Sécurités et fins de course",
+        "bornes": [
+          {
+            "n": "19 · 26",
+            "label": "Communs des entrées",
+            "desc": "",
+            "t": "autre"
+          },
+          {
+            "n": "20",
+            "label": "Barre palpeuse 1",
+            "desc": "8K2, 4K1, contact NO ou NF (paramètre BANDA 1). Plusieurs barres : NF en série, NO ou résistives en parallèle (2 barres 8K2 en parallèle = réglage 4K1)",
+            "t": "nf"
+          },
+          {
+            "n": "21",
+            "label": "Barre palpeuse 2",
+            "desc": "Idem (BANDA 2)",
+            "t": "nf"
+          },
+          {
+            "n": "22",
+            "label": "Photocellule 1 (NF)",
+            "desc": "Activer FOTOC.1. Plusieurs cellules : en série",
+            "t": "nf"
+          },
+          {
+            "n": "23",
+            "label": "Photocellule 2 (NF)",
+            "desc": "Activer FOTOC.2",
+            "t": "nf"
+          },
+          {
+            "n": "24",
+            "label": "Fin de course ouverture",
+            "desc": "Obligatoire sauf encoder absolu (VF1EA)",
+            "t": "nf"
+          },
+          {
+            "n": "25",
+            "label": "Fin de course fermeture",
+            "desc": "Obligatoire sauf encoder absolu (VF1EA)",
+            "t": "nf"
+          }
+        ]
+      },
+      {
+        "nom": "Encoder",
+        "bornes": [
+          {
+            "n": "27 · 30",
+            "label": "Alimentation encoder",
+            "desc": "27 = négatif, 30 = positif : 5 V DC (VF1D, encoder incrémental) ou 12 V DC (VF1EA, encoder absolu)",
+            "t": "alim"
+          },
+          {
+            "n": "28 · 29",
+            "label": "ENC1 · ENC2",
+            "desc": "VF1D : 1 canal sur 28, 2 canaux (quadrature ou direction + signal) sur 28 et 29. VF1EA : bus RS-485, A sur A et B sur B (câble blindé fourni)",
+            "t": "bus"
+          }
+        ]
+      },
+      {
+        "nom": "Commandes",
+        "bornes": [
+          {
+            "n": "31 · 32",
+            "label": "STOP (arrêt d'urgence)",
+            "desc": "Contact normalement fermé ; à shunter s'il n'y a pas d'arrêt d'urgence. Le tableau Fig. 2 écrit « Contact N/O », le texte (p. 5 et 11) dit normalement fermé",
+            "t": "nf"
+          },
+          {
+            "n": "33",
+            "label": "LL1",
+            "desc": "Ordre d'ouverture (selon MODO MANIOB.)",
+            "t": "no"
+          },
+          {
+            "n": "34",
+            "label": "LL2",
+            "desc": "Fermeture ou ouverture piétonne (selon MODO MANIOB.)",
+            "t": "no"
+          },
+          {
+            "n": "35",
+            "label": "LL3",
+            "desc": "Entrée sens sortie : polarité (LL3/POLARIDAD) et mode (LL3/MODO, usine PARO ALT) réglables",
+            "t": "no"
+          },
+          {
+            "n": "36",
+            "label": "Commun des entrées d'ordre",
+            "desc": "",
+            "t": "autre"
+          },
+          {
+            "n": "Socle radio",
+            "label": "Carte radio SMINN TRSH (6 broches)",
+            "desc": "Fonctionne comme LL1, ou en arrêt alternatif avec PAR ALT RADIO",
+            "t": "autre"
+          }
+        ]
+      }
+    ],
+    "fusibles": "Fusible principal d'entrée AC : 10 A d'après les caractéristiques techniques (la sérigraphie de la Fig. 2 porte « FUS 16A MAX »). Sorties 24 V AC et 15 V DC : fusibles réarmables.",
+    "notes": [
+      "Mise en route conseillée : raccorder d'abord le moteur, le frein si besoin et les fins de course (ou l'encoder absolu en VF1EA), vérifier le sens en homme mort, puis le reste et l'apprentissage.",
+      "Entrées optocouplées : 8 entrées tout-ou-rien et 2 analogiques (barres palpeuses). LED par entrée.",
+      "Normes EN 12453 / EN 12445 : force dynamique < 400 N entre 50 et 500 mm, < 1 400 N au-delà de 500 mm ; sinon ajouter des sécurités.",
+      "Coffret ABS 280 × 196 × 90 mm, 2,25 kg, IP54 (IP65 avec presse-étoupes), -20 à +70 °C ; fixation par 3 vis extérieures, à 15 cm du sol minimum."
+    ]
+  },
+  "parametres": {
+    "intro": "Valeurs d'usine et plages de la notice. Les codes sont les libellés de l'écran (en espagnol dans la notice).",
+    "navigation": [
+      "Menu : BACK + ENTER en même temps (l'écran s'allume). ← / → pour se déplacer, ENTER pour choisir ou valider, BACK pour annuler ou revenir.",
+      "Code d'accès éventuel : 4 chiffres, usine 1234 (Maintenance > activer le code).",
+      "MODE MENU (Maintenance) : passe au menu avancé."
+    ],
+    "groupes": [
+      {
+        "nom": "Mode de manœuvre",
+        "items": [
+          {
+            "code": "TIPO PUERTA",
+            "def": "—",
+            "titre": "Type de porte",
+            "valeurs": [
+              [
+                "—",
+                "Premier paramètre de l'assistant : choisir le type de porte."
+              ]
+            ]
+          },
+          {
+            "code": "MODO MANIOB.",
+            "def": "—",
+            "titre": "Mode de manœuvre",
+            "valeurs": [
+              [
+                "STANDARD",
+                "LL1 ouvre si fermée, ferme si ouverte ; LL2 pareil en piéton. Fermeture auto active par défaut."
+              ],
+              [
+                "ABRE/CIERRA",
+                "LL1 ouvre, LL2 ferme ; ordre contraire = inversion au ralenti. Fermeture auto désactivée par défaut."
+              ],
+              [
+                "PARO ALT.",
+                "Comme STANDARD mais LL1 / LL2 en mouvement = arrêt, l'impulsion suivante repart en sens inverse."
+              ],
+              [
+                "HOMB. PRESEN.",
+                "Homme mort : LL1 ou radio maintenu = ouverture, LL2 maintenu = fermeture."
+              ],
+              [
+                "HOM. PRES. SEM",
+                "Ouverture normale, fermeture en homme mort."
+              ]
+            ]
+          },
+          {
+            "code": "INVER TECLA",
+            "def": "SI",
+            "titre": "Inversion par impulsion (mode STANDARD)",
+            "valeurs": [
+              [
+                "SI / NO",
+                "LL1 / LL2 pendant la fermeture inversent au ralenti."
+              ]
+            ]
+          },
+          {
+            "code": "PAR ALT RADIO",
+            "def": "NO",
+            "titre": "Radio en arrêt alternatif",
+            "valeurs": [
+              [
+                "SI / NO",
+                "La carte radio fonctionne en mode alternatif quel que soit le mode."
+              ]
+            ]
+          },
+          {
+            "code": "HOM. PRES. AUX",
+            "def": "NO",
+            "titre": "Homme mort auxiliaire",
+            "valeurs": [
+              [
+                "SI / NO",
+                "Si le test des sécurités échoue, ouverture possible en maintenant la commande quelques secondes."
+              ]
+            ]
+          },
+          {
+            "code": "C. RET. COR.",
+            "def": "NO",
+            "titre": "Fermeture au retour du courant",
+            "valeurs": [
+              [
+                "SI / NO",
+                "Après une coupure, la porte se ferme si elle n'est pas fermée."
+              ]
+            ]
+          },
+          {
+            "code": "INVERTIR MOTOR",
+            "def": "NO",
+            "titre": "Inverser le moteur",
+            "valeurs": [
+              [
+                "SI / NO",
+                "Inverse le sens de rotation."
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "nom": "Fermeture automatique",
+        "items": [
+          {
+            "code": "CIERRE AUTO",
+            "def": "SI",
+            "titre": "Fermeture automatique",
+            "valeurs": [
+              [
+                "SI / NO",
+                "Ferme après le temps de pause."
+              ]
+            ]
+          },
+          {
+            "code": "T CIERRE AUTO",
+            "def": "15 s",
+            "titre": "Temps de pause",
+            "valeurs": [
+              [
+                "1–60000 s",
+                ""
+              ]
+            ]
+          },
+          {
+            "code": "T CR AUTO PEAT",
+            "def": "15 s",
+            "titre": "Pause après ouverture piétonne",
+            "valeurs": [
+              [
+                "1–60000 s",
+                ""
+              ]
+            ]
+          },
+          {
+            "code": "CIERRE FOTOC.",
+            "def": "NO",
+            "titre": "Fermeture après photocellule",
+            "valeurs": [
+              [
+                "NO / 2–240 s",
+                "Chaque passage devant une cellule en pause ramène le temps restant à cette valeur."
+              ]
+            ]
+          },
+          {
+            "code": "CIER FOTO RAP.",
+            "def": "NO",
+            "titre": "Fermeture rapide après inversion par cellule",
+            "valeurs": [
+              [
+                "SI / NO",
+                "Visible si CIERRE FOTOC. n'est pas NO."
+              ]
+            ]
+          },
+          {
+            "code": "AUTO OPCIONAL",
+            "def": "NO",
+            "titre": "Automatique optionnelle",
+            "valeurs": [
+              [
+                "SI / NO",
+                "Une impulsion termine la pause tout de suite."
+              ]
+            ]
+          },
+          {
+            "code": "TEC. RET. AUTO",
+            "def": "SI",
+            "titre": "Relance de la pause par impulsion",
+            "valeurs": [
+              [
+                "SI / NO",
+                "Chaque ordre relance le temps de pause (si AUTO OPCIONAL = NO)."
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "nom": "Sécurités",
+        "items": [
+          {
+            "code": "FOTOC.1 · FOTOC.2",
+            "def": "NO",
+            "titre": "Activer la photocellule 1 / 2",
+            "valeurs": [
+              [
+                "SI / NO",
+                ""
+              ]
+            ]
+          },
+          {
+            "code": "TEST FOTOC.1 · 2",
+            "def": "NO",
+            "titre": "Test de la photocellule",
+            "valeurs": [
+              [
+                "SI / NO",
+                "Test avant ouverture et fermeture ; détail : TEST FOTO1 AP / CR, TEST FOTO2 AP / CR."
+              ]
+            ]
+          },
+          {
+            "code": "FOTO 1 APER · FOTO 2 APER",
+            "def": "NO",
+            "titre": "Cellule en ouverture",
+            "valeurs": [
+              [
+                "NO / PAUSA / INVER / PARA / INV. CORTA / INV. RETR.",
+                "PAUSA : attend 3 s après libération ; INVER : inverse jusqu'au bout ; PARA : arrêt et annulation ; INV. CORTA : inversion pendant T INV. CORTA ; INV RETR. : arrêt puis reprise après T. INV. RETR."
+              ]
+            ]
+          },
+          {
+            "code": "FOTO 1 CIERRE · FOTO 2 CIERRE",
+            "def": "INVER",
+            "titre": "Cellule en fermeture",
+            "valeurs": [
+              [
+                "NO / PAUSA / INVER / PARA / INV. CORTA / INV. RETR.",
+                ""
+              ]
+            ]
+          },
+          {
+            "code": "BANDA 1 · BANDA 2",
+            "def": "NO",
+            "titre": "Type de barre palpeuse",
+            "valeurs": [
+              [
+                "NO / 8K2 / 4K1 / CONTACTO NA / CONTACTO NC",
+                ""
+              ]
+            ]
+          },
+          {
+            "code": "BANDA 1 APER · BANDA 2 APER",
+            "def": "NO",
+            "titre": "Barre en ouverture",
+            "valeurs": [
+              [
+                "NO / PARA / INV. CORTA / INVER",
+                ""
+              ]
+            ]
+          },
+          {
+            "code": "BANDA 1 CIERRE · BANDA 2 CIERRE",
+            "def": "INVER",
+            "titre": "Barre en fermeture",
+            "valeurs": [
+              [
+                "NO / PARA / INV. CORTA / INVER",
+                ""
+              ]
+            ]
+          },
+          {
+            "code": "PRES. APER",
+            "def": "PARA",
+            "titre": "Obstacle détecté en ouverture",
+            "valeurs": [
+              [
+                "NO / PARA / INV. CORTA / INVER",
+                ""
+              ]
+            ]
+          },
+          {
+            "code": "PRES. CIERRE",
+            "def": "INV. CORTA",
+            "titre": "Obstacle détecté en fermeture",
+            "valeurs": [
+              [
+                "NO / PARA / INV. CORTA / INVER",
+                ""
+              ]
+            ]
+          },
+          {
+            "code": "M1 SENSIB.",
+            "def": "5",
+            "titre": "Sensibilité obstacle par courant",
+            "valeurs": [
+              [
+                "0–9",
+                "0 = désactivé, 1 = moins sensible, 9 = plus sensible. Inactif pendant les rampes."
+              ]
+            ]
+          },
+          {
+            "code": "M1 ENC SENS.",
+            "def": "5",
+            "titre": "Sensibilité obstacle par encoder",
+            "valeurs": [
+              [
+                "0–9",
+                ""
+              ]
+            ]
+          },
+          {
+            "code": "M1 LIM. PRES.",
+            "def": "3 A",
+            "titre": "Limite de courant obstacle",
+            "valeurs": [
+              [
+                "0–16 A",
+                ""
+              ]
+            ]
+          },
+          {
+            "code": "LIM CONS SC",
+            "def": "10 A",
+            "titre": "Limite de surconsommation",
+            "valeurs": [
+              [
+                "0–16 A",
+                ""
+              ]
+            ]
+          },
+          {
+            "code": "T INV. CORTA",
+            "def": "1,5 s",
+            "titre": "Temps d'inversion courte",
+            "valeurs": [
+              [
+                "0–100 s",
+                ""
+              ]
+            ]
+          },
+          {
+            "code": "T. INV. RETR.",
+            "def": "5 s",
+            "titre": "Temps d'inversion retardée",
+            "valeurs": [
+              [
+                "0–1800 s",
+                ""
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "nom": "Course et temps",
+        "items": [
+          {
+            "code": "TIEMPO APER",
+            "def": "15 s",
+            "titre": "Temps d'ouverture",
+            "valeurs": [
+              [
+                "0–1800 s",
+                "Appris (+10 %) à l'apprentissage."
+              ]
+            ]
+          },
+          {
+            "code": "TIEMPO CIER",
+            "def": "15 s",
+            "titre": "Temps de fermeture",
+            "valeurs": [
+              [
+                "0–1800 s",
+                "Appris (+10 %)."
+              ]
+            ]
+          },
+          {
+            "code": "TIEMPO EXTRA",
+            "def": "0 s",
+            "titre": "Temps supplémentaire",
+            "valeurs": [
+              [
+                "0–1800 s",
+                "Ajouté quand le fin de course n'est pas atteint lors des inversions."
+              ]
+            ]
+          },
+          {
+            "code": "CARRERA PEAT",
+            "def": "50 %",
+            "titre": "Position d'ouverture piétonne",
+            "valeurs": [
+              [
+                "0–100 %",
+                ""
+              ]
+            ]
+          },
+          {
+            "code": "PARO SUAVE",
+            "def": "SI",
+            "titre": "Ralentissement",
+            "valeurs": [
+              [
+                "SI / NO",
+                ""
+              ]
+            ]
+          },
+          {
+            "code": "PARO SUAVE AP · CR",
+            "def": "0 %",
+            "titre": "Début du ralentissement",
+            "valeurs": [
+              [
+                "0–100 %",
+                "En % de course, ouverture / fermeture."
+              ]
+            ]
+          },
+          {
+            "code": "PULSOS TOTALES",
+            "def": "—",
+            "titre": "Impulsions totales (encoder)",
+            "valeurs": [
+              [
+                "—",
+                "Mémorisé par l'apprentissage."
+              ]
+            ]
+          },
+          {
+            "code": "ENC ABS POS I · F",
+            "def": "0",
+            "titre": "Positions encoder absolu (VF1EA)",
+            "valeurs": [
+              [
+                "0–65536",
+                "Fermeture (I) et ouverture (F)."
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "nom": "Vitesses et puissances",
+        "items": [
+          {
+            "code": "VEL NORMAL AP · CR",
+            "def": "50 Hz",
+            "titre": "Vitesse normale",
+            "valeurs": [
+              [
+                "10–100 Hz",
+                ""
+              ]
+            ]
+          },
+          {
+            "code": "POT NORMAL AP",
+            "def": "100 %",
+            "titre": "Puissance normale en ouverture",
+            "valeurs": [
+              [
+                "30–100 %",
+                ""
+              ]
+            ]
+          },
+          {
+            "code": "POT NORMAL CR",
+            "def": "80 %",
+            "titre": "Puissance normale en fermeture",
+            "valeurs": [
+              [
+                "30–100 %",
+                ""
+              ]
+            ]
+          },
+          {
+            "code": "VEL SUAVE AP · CR",
+            "def": "25 Hz",
+            "titre": "Vitesse de ralentissement",
+            "valeurs": [
+              [
+                "10–100 Hz",
+                ""
+              ]
+            ]
+          },
+          {
+            "code": "POT SUAVE AP · CR",
+            "def": "80 %",
+            "titre": "Puissance au ralentissement",
+            "valeurs": [
+              [
+                "30–100 %",
+                ""
+              ]
+            ]
+          },
+          {
+            "code": "T RAMP ACEL AP · CR",
+            "def": "1,5 s",
+            "titre": "Rampe d'accélération",
+            "valeurs": [
+              [
+                "0–100 s",
+                "Courte = démarrage brusque."
+              ]
+            ]
+          },
+          {
+            "code": "T RAMP SUAV AP · CR",
+            "def": "1,5 s",
+            "titre": "Rampe vers le ralentissement",
+            "valeurs": [
+              [
+                "0–100 s",
+                ""
+              ]
+            ]
+          },
+          {
+            "code": "T RAMP DCEL AP · CR",
+            "def": "1 s",
+            "titre": "Rampe d'arrêt",
+            "valeurs": [
+              [
+                "0–100 s",
+                "0 = arrêt immédiat."
+              ]
+            ]
+          },
+          {
+            "code": "VEL DCEL AP · CR",
+            "def": "10 Hz",
+            "titre": "Vitesse finale de décélération",
+            "valeurs": [
+              [
+                "0–100 Hz",
+                ""
+              ]
+            ]
+          },
+          {
+            "code": "MARGEN DCEL AP · CR",
+            "def": "15 %",
+            "titre": "Marge de décélération",
+            "valeurs": [
+              [
+                "0–15 %",
+                ""
+              ]
+            ]
+          },
+          {
+            "code": "POT FRENO AP · CR",
+            "def": "2",
+            "titre": "Frein électrique",
+            "valeurs": [
+              [
+                "0–4",
+                "0 = désactivé, 4 = maximum (déconseillé sans nécessité : forte intensité dans le bobinage)."
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "nom": "Sorties et entrées",
+        "items": [
+          {
+            "code": "RL1 · RL2 · RL3 / MODO RELE",
+            "def": "LUZ GARAJE · LAMPARA DEST · FRENO",
+            "titre": "Fonction des relais",
+            "valeurs": [
+              [
+                "LUZ GARAJE",
+                "Éclairage de zone pendant T LUZ GARJ."
+              ],
+              [
+                "LAMPARA DEST",
+                "Lampe flash (préclignotement, mouvement, pause)."
+              ],
+              [
+                "FRENO",
+                "Frein mécanique."
+              ],
+              [
+                "MANTENIMIENTO",
+                "Contact quand le compteur partiel dépasse LIM. MANT."
+              ],
+              [
+                "TEST SEG.",
+                "Test des sécurités alimentées à part."
+              ],
+              [
+                "ELECTROCERR.",
+                "Gâche électrique."
+              ],
+              [
+                "SEM ROJO ENTR. / SAL.",
+                "Feu rouge."
+              ],
+              [
+                "SEM VER. ENTR. / SAL.",
+                "Feu vert."
+              ],
+              [
+                "PUERTA CERRADA / ABIERTA / ABRIENDO / CERRANDO",
+                "État de la porte."
+              ],
+              [
+                "EN PAUSA",
+                "Pendant la pause."
+              ]
+            ]
+          },
+          {
+            "code": "RL1 · RL2 · RL3 / POLARIDAD",
+            "def": "CONTACTO NA",
+            "titre": "Polarité des relais",
+            "valeurs": [
+              [
+                "CONTACTO NA / CONTACTO NC",
+                "Le contact physique reste ouvert si l'armoire perd son alimentation."
+              ]
+            ]
+          },
+          {
+            "code": "MODO PREDEST",
+            "def": "INTERMITENCIA",
+            "titre": "Flash pendant le préclignotement",
+            "valeurs": [
+              [
+                "NO / INTERMITENCIA / ENCENDIDO",
+                ""
+              ]
+            ]
+          },
+          {
+            "code": "MODO DEST MOV",
+            "def": "INTERMITENCIA",
+            "titre": "Flash pendant la course",
+            "valeurs": [
+              [
+                "NO / INTERMITENCIA / ENCENDIDO",
+                ""
+              ]
+            ]
+          },
+          {
+            "code": "MODO DEST PAUS",
+            "def": "NO",
+            "titre": "Flash pendant la pause",
+            "valeurs": [
+              [
+                "NO / INTERMITENCIA / ENCENDIDO",
+                ""
+              ]
+            ]
+          },
+          {
+            "code": "PREDEST. SEM",
+            "def": "NO",
+            "titre": "Préclignotement sur le feu rouge",
+            "valeurs": [
+              [
+                "SI / NO",
+                ""
+              ]
+            ]
+          },
+          {
+            "code": "T PREDEST AP · CR",
+            "def": "0 s",
+            "titre": "Temps de préclignotement",
+            "valeurs": [
+              [
+                "0–1800 s",
+                ""
+              ]
+            ]
+          },
+          {
+            "code": "T LUZ GARJ",
+            "def": "0 s",
+            "titre": "Temps d'éclairage de zone",
+            "valeurs": [
+              [
+                "0–60000 s",
+                ""
+              ]
+            ]
+          },
+          {
+            "code": "ELECTROCERR.",
+            "def": "NO",
+            "titre": "Temps de gâche électrique",
+            "valeurs": [
+              [
+                "NO / 1–10 s",
+                ""
+              ]
+            ]
+          },
+          {
+            "code": "GOLPE INVER.",
+            "def": "0 s",
+            "titre": "Coup d'inversion (gâche)",
+            "valeurs": [
+              [
+                "0–1800 s",
+                ""
+              ]
+            ]
+          },
+          {
+            "code": "GOLPE ARIETE",
+            "def": "0 s",
+            "titre": "Coup de bélier (gâche)",
+            "valeurs": [
+              [
+                "0–1800 s",
+                ""
+              ]
+            ]
+          },
+          {
+            "code": "LL3/POLARIDAD",
+            "def": "CONTACTO NA",
+            "titre": "Polarité de LL3",
+            "valeurs": [
+              [
+                "CONTACTO NA / CONTACTO NC",
+                ""
+              ]
+            ]
+          },
+          {
+            "code": "LL3/MODO",
+            "def": "PARO ALT",
+            "titre": "Mode de LL3",
+            "valeurs": [
+              [
+                "STANDARD / PARO ALT / HOM. PRES. SEM",
+                ""
+              ]
+            ]
+          },
+          {
+            "code": "BLOQUEO LL1 · LL2 · LL3",
+            "def": "NO",
+            "titre": "Blocage des entrées",
+            "valeurs": [
+              [
+                "SI / NO",
+                "Visibles avec le code d'accès activé."
+              ]
+            ]
+          },
+          {
+            "code": "ENCODER",
+            "def": "NO",
+            "titre": "Encoder",
+            "valeurs": [
+              [
+                "NO / 1 CANAL / 2 CANALES",
+                "VF1D."
+              ],
+              [
+                "NO / KOSTAL / GFA",
+                "VF1EA."
+              ]
+            ]
+          },
+          {
+            "code": "POLARIDAD ENC",
+            "def": "NORMAL",
+            "titre": "Polarité de l'encoder",
+            "valeurs": [
+              [
+                "NORMAL / INVERTIDA",
+                "Réglée par l'apprentissage avec un encoder 2 canaux."
+              ]
+            ]
+          },
+          {
+            "code": "FC ABRIR · FC CERRAR",
+            "def": "NO",
+            "titre": "Fins de course avec encoder absolu (VF1EA)",
+            "valeurs": [
+              [
+                "SI / NO",
+                ""
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "nom": "Maintenance",
+        "items": [
+          {
+            "code": "VERSION",
+            "def": "—",
+            "titre": "Version du logiciel",
+            "valeurs": [
+              [
+                "—",
+                ""
+              ]
+            ]
+          },
+          {
+            "code": "COMPTEUR PARTIEL",
+            "def": "—",
+            "titre": "Manœuvres depuis le dernier reset",
+            "valeurs": [
+              [
+                "—",
+                "ENTER pour remettre à zéro."
+              ]
+            ]
+          },
+          {
+            "code": "COMPTEUR TOTAL",
+            "def": "—",
+            "titre": "Manœuvres depuis la mise en service",
+            "valeurs": [
+              [
+                "—",
+                "Non remis à zéro."
+              ]
+            ]
+          },
+          {
+            "code": "ÉTAT DES ENTRÉES",
+            "def": "—",
+            "titre": "État des entrées actives",
+            "valeurs": [
+              [
+                "—",
+                ""
+              ]
+            ]
+          },
+          {
+            "code": "ABRIR / CERRAR",
+            "def": "—",
+            "titre": "Ouvrir / fermer en homme mort",
+            "valeurs": [
+              [
+                "—",
+                "Ignore la plupart des sécurités : seulement pour vérifier le sens et les fins de course."
+              ]
+            ]
+          },
+          {
+            "code": "CONS MAX MAN · CONS MAX APR",
+            "def": "—",
+            "titre": "Courant maximum (manœuvres / apprentissage)",
+            "valeurs": [
+              [
+                "—",
+                ""
+              ]
+            ]
+          },
+          {
+            "code": "LIM. MANT.",
+            "def": "—",
+            "titre": "Seuil d'avis de maintenance",
+            "valeurs": [
+              [
+                "—",
+                "Au-delà, la LED extérieure clignote."
+              ]
+            ]
+          },
+          {
+            "code": "VALEURS PAR DÉFAUT",
+            "def": "—",
+            "titre": "Retour usine",
+            "valeurs": [
+              [
+                "—",
+                ""
+              ]
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "apprentissage": {
+    "avant": [
+      "Porte fermée. Moteur, frein éventuel et fins de course (ou encoder absolu en VF1EA) raccordés, STOP 31-32 fermé ou shunté.",
+      "Vérifier le sens en homme mort : Maintenance > ABRIR / CERRAR (ENTER maintenu) ; si le moteur tourne à l'envers, INVERTIR MOTOR = SI."
+    ],
+    "etapes": [
+      "BACK + ENTER : TIPO PUERTA s'affiche. ENTER, choisir le type avec ← / →, ENTER.",
+      "→ jusqu'à MODO MANIOB. : ENTER, choisir le mode, ENTER.",
+      "→ jusqu'à PROG MANIOBRA, ENTER : l'armoire demande un à un les paramètres essentiels (← / → puis ENTER ; BACK pour revenir). En VF1EA, positionner la porte fermée puis ouverte avec ← / → pour mémoriser les positions.",
+      "ENTER pour lancer l'apprentissage, puis avec ENTER, LL1 ou la radio : impulsion d'ouverture ; impulsion au début du ralentissement (si PARO SUAVE actif) ; attendre l'arrêt sur le fin de course d'ouverture.",
+      "Impulsion de fermeture ; impulsion au début du ralentissement ; attendre l'arrêt sur le fin de course de fermeture."
+    ],
+    "apres": [
+      "Sont mémorisés : PULSOS TOTALES, PARO SUAVE AP / CR, M1 SENSIB., M1 ENC SENS., M1 LIM. PRES., TIEMPO APER et TIEMPO CIERRE (+10 % de sécurité), POLARIDAD ENC et, en VF1EA, ENC ABS POS I / F.",
+      "Si la porte coupe la cellule S1 pendant sa course : INHIB. SEG1 = SI pour apprendre automatiquement la zone d'inhibition.",
+      "Faire un essai avec le bouton TEST ou une entrée d'impulsion, puis mesurer les forces (EN 12453 / EN 12445)."
     ]
   }
 }

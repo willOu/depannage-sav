@@ -270,6 +270,20 @@
       S("fadini-elpro13-p42", "Carte Elpro 13 exp", 42, "Bornier 1 à 25, fusibles F1 à F5, LED, dip, trimmers."),
       S("fadini-elpro13-p44", "Puissance et fonctions", 44, "Moteurs, clignotant, alimentation (16 à 25) ; automatique, piéton, coup de bélier, pas à pas, horloge.")
     ],
+    "sminn-box-l-vf1d": [
+      S("sminn-bxl-p02", "Localisation des composants", 2, "Fig. 1 : LED du capot, socle radio TRSH, écran, clavier, bouton TEST, borniers, relais, fusible, zone haute tension."),
+      S("sminn-bxl-p06", "Connexions (1/2)", 6, "Alimentation 1-2-3, moteur 4-5-6-7, relais RL1 à RL3, sorties 24 V et 15 V, sécurités et fins de course."),
+      S("sminn-bxl-p07", "Connexions (2/2)", 7, "Encoder 27 à 30 (VF1D / VF1EA), entrées LL1 à LL3, STOP 31-32, socle radio."),
+      S("sminn-bxl-p16", "Tableau des bornes et Fig. 2", 16, "Bornes 1 à 36 et début du schéma de la carte (suite page suivante)."),
+      S("sminn-bxl-p17", "Fig. 2 (suite) et accessoires", 17, "Suite du schéma : carte radio, photocellules, lampe flash."),
+      S("sminn-bxl-p26", "Connexion du frein", 26, "Phase 230 V AC par le relais RL3 vers le redresseur du frein."),
+      S("sminn-bxl-p27", "Encoder absolu et interférences des photocellules", 27, "Précautions de câblage avec variateur ; − du récepteur relié au poteau métallique.")
+    ],
+    "sick-mrs1000": [
+      S("sick-mrs1000-p1", "Raccordements M12", 1, "Brochage PWR (5 pôles), Ethernet (4 pôles) et E/S (8 pôles), couleurs des fils."),
+      S("sick-mrs1000-p2", "LED, montage et EasyTeach", 2, "Signification des LED, schéma de raccordement, câblage d'un bouton EasyTeach."),
+      S("sick-mrs1000-p6", "Plan coté", 6, "Dimensions, trous de fixation M5, zone morte, plages de détection.")
+    ],
     "fadini-elpro-s40": [
       S("fadini-s40-p10", "Carte Elpro S40", 10, "Bornier 1 à 66, fusibles, LED L1 à L15, dip, T1 / T2."),
       S("fadini-s40-p11", "LED et dip-switchs", 11, "Diagnostic, voyant, radio, photocellules ou boucle."),

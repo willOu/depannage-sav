@@ -1519,6 +1519,26 @@ window.NOTICES_PDF = {
 "m": 0
 }
 ],
+"sminn-box-l-vf1d": [
+{
+"f": "notices/sminn-box-l-vf1d-fr.pdf",
+"t": "Notice SMINN BOX L VF1D / VF1EA (Rev. 3818-1K)",
+"p": 32,
+"pt": 32,
+"ko": 2439,
+"m": 0
+}
+],
+"sick-mrs1000": [
+{
+"f": "notices/sick-mrs1000-quickstart-fr.pdf",
+"t": "Notice Quickstart SICK MRS1000 (8020472)",
+"p": 8,
+"pt": 8,
+"ko": 895,
+"m": 0
+}
+],
 "fadini-talos": [
 {
 "f": "notices/notice-dinstallation-borne-talos.pdf",
