@@ -178,15 +178,17 @@
             if (k.haut) { T(q.x, q.y - 22, q.n, 'class="cabt" text-anchor="middle" font-size="9" font-weight="800" fill="#fff"'); T(q.x, q.y - 13, q.lab, 'class="cabt" text-anchor="middle" font-size="6" fill="#cfe3ff"'); }
             else { const i = k.ns.findIndex(u => String(u[0]) === q.n), dense = k.pas <= 22 && k.ns.length > 6; T(q.x, q.y + 20, q.n, 'class="cabt" text-anchor="middle" font-size="9" font-weight="800" fill="#fff"'); if (q.lab !== q.n) T(q.x, q.y + 29 + (dense && i % 2 ? 8 : 0), q.lab, 'class="cabt" text-anchor="middle" font-size="5" fill="#cfe3ff"'); } });
           if (k.titre) T((x0 + x1) / 2, k.haut ? y0 - 26 : y1 + 30, k.titre, 'class="cabt" text-anchor="middle" font-size="6.5" fill="#a8c8f0"'); });
-        g.push(`<g id="cabaff"></g>`);
         const [ax, ay] = c.aff;
-        g.push(`<rect x="${ax}" y="${DY + ay}" width="86" height="30" rx="3" fill="#111"/>`);
-        [["+", "pl", 0], ["−", "mo", 1], ["OK", "ok", 2]].forEach(([nn, k, i]) => g.push(`<g class="cabk" data-k="${k}"><rect x="${ax + 100}" y="${DY + ay - 6 + i * 18}" width="14" height="14" rx="2" fill="#e9e9e9"/><circle cx="${ax + 107}" cy="${DY + ay + 1 + i * 18}" r="4" fill="#555"/><text x="${ax + 120}" y="${DY + ay + 4 + i * 18}" class="cabt" font-size="7">${nn}</text></g>`));
+        g.push(`<rect x="${ax}" y="${DY + ay}" width="86" height="30" rx="3" fill="#111"/><g id="cabaff"></g>`); /* le texte de l'afficheur doit être dessiné APRÈS le fond noir */
+        [["+", "pl", 0], ["−", "mo", 1], ["OK", "ok", 2], ["+ − (ESC)", "esc", 3]].forEach(([nn, k, i]) => g.push(`<g class="cabk" data-k="${k}"><rect x="${ax + 100}" y="${DY + ay - 6 + i * 18}" width="14" height="14" rx="2" fill="#e9e9e9"/><circle cx="${ax + 107}" cy="${DY + ay + 1 + i * 18}" r="4" fill="#555"/><text x="${ax + 120}" y="${DY + ay + 4 + i * 18}" class="cabt" font-size="7">${nn}</text></g>`));
         c.us.forEach(([id, x, y, w, h, lab]) => g.push(`<g class="cabu" data-u="${id}"><rect x="${x}" y="${DY + y}" width="${w}" height="${h}" rx="2" fill="${id === "f3" && !A.S.f3 ? "#5a1e1e" : /^f\d$/.test(id) ? "#e8c33a" : GR}"/><text x="${lab.length * 3.4 / 2 > x + w / 2 - 12 ? 14 : x + w / 2}" y="${DY + y + h + 9}" class="cabt" text-anchor="${lab.length * 3.4 / 2 > x + w / 2 - 12 ? "start" : "middle"}" font-size="6.5">${lab}</text></g>`));
         return g.join("");
       },
       voyants(A) {
         const S = A.S, R = S.R || {}, on = R.carteOn, [ax, ay] = c.aff, y = A.DY + ay;
+        if (S.mn && Date.now() - S.mn.t0 > 40000) S.mn = null; /* menu refermé après 40 s sans appui */
+        const mt = on && S.mn ? (S.mn.edit ? S.mn.edit.aff : S.mn.liste[S.mn.i].n) : "";
+        if (mt) return `<text x="${ax + 43}" y="${y + 20}" text-anchor="middle" class="cabcode" style="font-size:${mt.length > 4 ? Math.max(8, Math.round(60 / mt.length * 2.2)) : 18}px">${A.esc(mt)}</text><text x="${ax + 43}" y="${y + 44}" text-anchor="middle" class="cabs" fill="#5ee08a">menu ${S.mn.niv === "a" ? "avancé" : "simplifié"}</text>`;
         const t = !on ? "" : S.diag || (S.veille ? "   ." : "");
         /* au repos l'afficheur de la carte est éteint (notice : + / − = OPEN / CLOSE afficheur éteint, OK = allumer l'afficheur) : on le dit pour ne pas croire à une panne */
         const veille = on && !t ? `<text x="${ax + 43}" y="${y + 44}" text-anchor="middle" class="cabs" fill="#5ee08a">● sous tension</text><text x="${ax + 43}" y="${y + 54}" text-anchor="middle" class="cabs">afficheur éteint au repos</text>` : "";
@@ -194,8 +196,64 @@
       },
       clic() { return ""; },
       touche(A, k) {
-        const S = A.S; if (!S.R || !S.R.carteOn) return "Carte hors tension.";
-        if (k === "ok") return "OK : allume l'afficheur et ouvre les menus de la carte (simplifié, avancé). Menus non simulés dans l'atelier : réglez les paramètres et logiques avec « ⚙ Paramètres ». Au repos, l'afficheur est éteint (normal, d'après la notice) : il s'allume pour un code d'erreur, un diagnostic d'entrée ou un menu.";
+        const S = A.S; if (!S.R || !S.R.carteOn) { S.mn = null; return "Carte hors tension."; }
+        const now = Date.now(), IT = items(A);
+        if (S.mn && now - S.mn.t0 > 40000) S.mn = null;
+        const valeurDe = code => { const v = A.par(code); const x = IT[code]; return v != null ? String(v) : x && /^\d+$/.test(String(x.def)) ? String(x.def) : "0"; };
+        const editable = code => { const x = IT[code]; return x && options(x, IT, c.ref[code]).length ? x : null; };
+        const entree = code => { const x = editable(code); return x ? { n: code, t: x.titre, code } : null; };
+        const preset = (n, t, v) => ({ n, t: t + " (applique : " + Object.keys(v).map(q => c.P[q] + " = " + v[q]).join(", ") + ")", act: () => { Object.entries(v).forEach(([q, w]) => c.P[q] && A.regler(c.P[q], String(w))); return "Preset " + n + " appliqué."; } });
+        const simple = () => [
+          { n: "LAnG", t: "Langue de l'afficheur (itA, FrA, dEu, EnG, ESP) : non simulée dans l'atelier", info: 1 },
+          ...["type", "nmot", "dir"].map(q => c.P[q] && entree(c.P[q])).filter(Boolean),
+          { n: "PrESEt", t: "Presets d'installation", sub: () => [preset("rAU", "Résidentiel automatique", { tcal: 1, pas: 1 }), preset("rSAU", "Résidentiel semi-automatique", { pas: 1 }), preset("cAU", "Collectif automatique", { tcal: 1, pas: 1, preal: 3, blo: 1 }), preset("cSAU", "Collectif semi-automatique", { pas: 1, preal: 3, blo: 1 }), preset("indU", "Industriel (homme mort)", { hm: 1 })] },
+          { n: "AutoSEt", t: "Apprentissage de la course : non simulé (le portail virtuel a une course fixe)", info: 1 },
+          { n: "rAdio", t: "Mémorisation des radiocommandes : non simulée", info: 1 }];
+        const groupes = re => (A.C.parametres.groupes || []).filter(g => re.test(g.nom)).flatMap(g => g.items.map(x => entree(x.code))).filter(Boolean);
+        const avance = () => [
+          { n: "PArAM", t: "Paramètres : temps, course, vitesse, forces", sub: () => groupes(/^(Temps|Course|Forces)/) },
+          { n: "LoGic", t: "Logiques : fermeture, mouvement, entrées, sorties", sub: () => groupes(/^(Logiques|Entrées|Sorties|Réseau)/) },
+          { n: "rAdio", t: "Radiocommandes : non simulé", info: 1 },
+          { n: "dEFAULt", t: "Retour aux réglages d'usine : OK pour confirmer", act: () => { if (window.CAB && CAB.usineParams) CAB.usineParams(); return "Réglages d'usine rétablis."; } },
+          { n: "LAnG", t: "Langue : non simulée", info: 1 },
+          { n: "AutoSEt", t: "Autoset : non simulé", info: 1 },
+          { n: "StAt", t: "Statistiques (version, manœuvres, 30 dernières erreurs) : non simulées", info: 1 },
+          { n: "PASSW", t: "Mot de passe (usine 1234) : non simulé", info: 1 }];
+        const lib = mn => (mn.parent ? "" : mn.niv === "a" ? "Menu avancé · " : "Menu simplifié · ");
+        const dit = mn => { const e = mn.liste[mn.i]; return lib(mn) + e.n + " : " + e.t + (e.code ? ". OK pour modifier la valeur." : e.sub ? ". OK pour entrer." : e.act ? ". OK pour confirmer." : "") + " (+ / − : suivant, + − (ESC) : sortir)"; };
+        const val = mn => { const e = mn.edit; return e.x.titre + " : " + e.aff + ". + / − pour changer, OK pour valider."; };
+        /* ESC */
+        if (k === "esc") {
+          const mn = S.mn; if (!mn) return "+ et − ensemble (ESC) : sortir du menu. Aucun menu n'est ouvert.";
+          mn.t0 = now;
+          if (mn.edit) { mn.edit = null; return dit(mn); }
+          if (mn.parent) { mn.liste = mn.parent.liste; mn.i = mn.parent.i; mn.parent = null; return dit(mn); }
+          S.mn = null; return "Menu fermé : l'afficheur s'éteint.";
+        }
+        if (k === "ok") {
+          let mn = S.mn;
+          if (!mn) { S.mn = mn = { niv: "s", liste: simple(), i: 0, parent: null, edit: null, t0: now, ok0: now }; return "Afficheur allumé : menu simplifié. " + dit(mn); }
+          if (mn.niv === "s" && !mn.parent && !mn.edit && now - mn.ok0 < 1500) { mn.niv = "a"; mn.liste = avance(); mn.i = 0; mn.t0 = now; return "Deuxième appui sur OK : menu avancé. " + dit(mn); }
+          mn.t0 = now;
+          if (mn.edit) { mn.edit = null; return "Valeur enregistrée. " + dit(mn); }
+          const e = mn.liste[mn.i];
+          if (e.sub) { mn.parent = { liste: mn.liste, i: mn.i }; mn.liste = e.sub(); mn.i = 0; if (!mn.liste.length) { mn.liste = mn.parent.liste; mn.i = mn.parent.i; mn.parent = null; return "Rien à régler ici dans l'atelier."; } return dit(mn); }
+          if (e.code) { const x = IT[e.code], o = options(x, IT, c.ref[e.code]), v = valeurDe(e.code); mn.edit = { code: e.code, x, o, aff: v }; return val(mn); }
+          if (e.act) return e.act();
+          return e.t + ".";
+        }
+        if (S.mn) {
+          const mn = S.mn, d = k === "pl" ? 1 : -1; mn.t0 = now;
+          if (mn.edit) {
+            const E = mn.edit, o = E.o, pl = o.find(z => z.plage); let v = valeurDe(E.code);
+            if (pl) v = String(Math.min(pl.plage[1], Math.max(pl.plage[0], (+v || 0) + d)));
+            else { const vs = o.map(z => z.v); let q = vs.indexOf(v); q = q < 0 ? 0 : (q + d + vs.length) % vs.length; v = vs[q]; }
+            A.regler(E.code, v); E.aff = v;
+            const z = o.find(w => w.v === v); return val(mn) + (z && z.d ? " " + z.d : "");
+          }
+          mn.i = (mn.i + d + mn.liste.length) % mn.liste.length; return dit(mn);
+        }
+        if (k === "ok0") return "";
         if (S.cmd || S.pre) { S.cmd = 0; S.pre = 0; S.etat2 = "arrete"; return "Touche " + (k === "pl" ? "+" : "−") + " pendant la manœuvre : STOP (afficheur éteint : + = OPEN / STOP, − = CLOSE / STOP)."; }
         S.prec = S.prec || {}; const d = k === "pl" ? 1 : -1;
         if (c.P.type && ![3, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].includes(pn(A, "type", 0))) return "TYPE DE MOTEUR non réglé (ou non géré) : les moteurs ne sont pas actifs.";
@@ -212,7 +270,7 @@
           const pl = o.find(z => z.plage), sel = pl ? `<input type="number" min="${pl.plage[0]}" max="${pl.plage[1]}" value="${A.esc(v)}" onchange="this.value=Math.min(${pl.plage[1]},Math.max(${pl.plage[0]},Math.round(+this.value)||${pl.plage[0]}));CAB.param('${A.esc(code)}', this.value);CAB.parametres()" style="width:90px">` : `<select onchange="CAB.param('${A.esc(code)}', this.value);CAB.parametres()">${o.map(z => `<option value="${A.esc(z.v)}"${z.v === v ? " selected" : ""}>${A.esc(z.v)}${z.v === def ? " (usine)" : ""} · ${A.esc((z.d || "").slice(0, 48))}</option>`).join("")}</select>`;
           return `<label><b>${A.esc(code)}</b> ${A.esc(x.titre)}${pl ? ` <small>(${pl.plage[0]} à ${pl.plage[1]}, usine ${A.esc(def)})</small>` : ""}${sel}</label>`; };
         const actifs = Object.keys(c.P).filter(k => IT[c.P[k]]).map(ligne).join("");
-        return `<h3>Paramètres et logiques</h3><p class="note">D'après la fiche (${A.esc(SRC)}). Les menus de la carte (touches + − OK) ne sont pas simulés : réglez ici.</p><h4 class="cabh">Réglages qui agissent dans l'atelier</h4><div class="cabpar">${actifs}</div>
+        return `<h3>Paramètres et logiques</h3><p class="note">D'après la fiche (${A.esc(SRC)}). Les touches de la carte (OK, + , −) ouvrent aussi les menus de la carte : réglez ici ou sur la carte.</p><h4 class="cabh">Réglages qui agissent dans l'atelier</h4><div class="cabpar">${actifs}</div>
           <p class="hotn">${A.esc(c.nonSimules)}</p><div class="sga"><button class="mini" onclick="CAB.usineParams()">Réglages usine</button><button class="mini" onclick="CAB.fermer()">Fermer</button></div>`;
       },
       missions(A) {
