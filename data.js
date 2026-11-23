@@ -192,6 +192,10 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "2.96", date: "2026-11-23", titre: "Bornes escamotables et encadrés « Attention »", items: [
+    "Accueil : 4e type d'automatisme « Borne escamotable » qui regroupe le programmateur Fadini Elpro S40 et les fiches Fadini Talos et BFT Grizzly / Pillar B",
+    "Administration : « Encadrés Attention » : l'administrateur publie lui-même un encadré rouge (titre, texte, image, date) sur une marque, une carte ou un accessoire ; il s'affiche pour tous, aussi sans réseau, et se retire en un clic"
+  ] },
   { v: "2.95", date: "2026-11-23", titre: "Nouvelle marque Automatic Systems", items: [
     "Nouvelle marque Automatic Systems (logo sur l'accueil) : barrière levante BL12 avec sa logique de commande : raccordements X1 à X10, dip-switchs, sensibilité à l'impact, équilibrage des ressorts, fins de course, télécommandes, auto-fermeture, pannes et remèdes, pièces de rechange, schémas et notice PDF"
   ] },
