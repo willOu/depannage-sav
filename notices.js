@@ -1539,6 +1539,16 @@ window.NOTICES_PDF = {
 "m": 0
 }
 ],
+"as-bl12": [
+{
+"f": "notices/automatic-systems-bl12-mt-fr-13.pdf",
+"t": "Notice Automatic Systems BL12-MT-FR (rév. 13)",
+"p": 22,
+"pt": 22,
+"ko": 1244,
+"m": 0
+}
+],
 "fadini-talos": [
 {
 "f": "notices/notice-dinstallation-borne-talos.pdf",

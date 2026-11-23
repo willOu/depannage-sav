@@ -192,6 +192,9 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "2.95", date: "2026-11-23", titre: "Nouvelle marque Automatic Systems", items: [
+    "Nouvelle marque Automatic Systems (logo sur l'accueil) : barrière levante BL12 avec sa logique de commande : raccordements X1 à X10, dip-switchs, sensibilité à l'impact, équilibrage des ressorts, fins de course, télécommandes, auto-fermeture, pannes et remèdes, pièces de rechange, schémas et notice PDF"
+  ] },
   { v: "2.94", date: "2026-11-23", titre: "Roger : veille remise à l'usine par l'apprentissage", items: [
     "Page de la marque Roger : encadré « Attention » : sur les derniers moteurs Roger, l'apprentissage remet la mise en veille (paramètre L1) à sa valeur d'usine, il faut remettre L1 à 00 après l'apprentissage. Avec le tableau du paramètre L1 et les liens vers les cartes concernées"
   ] },
@@ -59937,6 +59940,303 @@ const MARQUES = [
       "Sont mémorisés : PULSOS TOTALES, PARO SUAVE AP / CR, M1 SENSIB., M1 ENC SENS., M1 LIM. PRES., TIEMPO APER et TIEMPO CIERRE (+10 % de sécurité), POLARIDAD ENC et, en VF1EA, ENC ABS POS I / F.",
       "Si la porte coupe la cellule S1 pendant sa course : INHIB. SEG1 = SI pour apprendre automatiquement la zone d'inhibition.",
       "Faire un essai avec le bouton TEST ou une entrée d'impulsion, puis mesurer les forces (EN 12453 / EN 12445)."
+    ]
+  }
+}
+  ]
+},
+/* ------------------------------------------------------------------ */
+{
+  id: "automatic-systems", nom: "Automatic Systems", couleur: "#c8001a",
+  cartes: [
+{
+  "id": "as-bl12",
+  "nom": "BL12",
+  "modeles": "Barrière levante électrique Automatic Systems BL12, lisse aluminium Ø 75 de 3 m (standard) ou 4 m, logique de commande 230 V (E/7001/421) ou 120 V (E/7001/388)",
+  "type": "Barrière levante 230 V, moteur asynchrone avec condensateur — pas d'afficheur : LED, bip, 3 dip-switchs, potentiomètre VR1",
+  "source": "Notice Automatic Systems BL12-MT-FR, révision 13 (16/03/2012)",
+  "codes": [
+    {
+      "code": "La lisse ne bouge pas",
+      "type": "symptome",
+      "titre": "Aucune manœuvre à la commande",
+      "action": "Vérifier : alimentation sur X1 (E-L-N), fusible 5 A, interrupteur de la carte sur I (ON), LED de mise sous tension allumée, cavaliers DET-COM et IR-COM sur X8 si boucle ou cellule absentes, boîte à boutons sur X10 (G-K-COM), télécommande bien affectée à cette barrière."
+    },
+    {
+      "code": "Axe d'entraînement bloqué",
+      "type": "symptome",
+      "titre": "Moteur qui force sans bouger la lisse",
+      "action": "Ôter le capot, dévisser la vis de l'axe d'un ou deux tours sans la sortir, commander une ouverture ou une fermeture, puis resserrer la vis une fois l'axe débloqué (fig. 9)."
+    },
+    {
+      "code": "Ne descend pas jusqu'à l'horizontale",
+      "type": "symptome",
+      "titre": "La lisse remonte ou s'arrête en descendant",
+      "action": "Vérifier l'équilibrage des ressorts, puis diminuer la sensibilité à l'impact (VR1 dans le sens horaire) : la compression des ressorts peut être prise pour un obstacle."
+    },
+    {
+      "code": "Ne monte pas jusqu'à la verticale",
+      "type": "symptome",
+      "titre": "Ouverture incomplète",
+      "action": "Vérifier l'équilibrage des ressorts (lisse en équilibre à 45°, bielle désaccouplée)."
+    },
+    {
+      "code": "Lisse qui remonte sans obstacle",
+      "type": "symptome",
+      "titre": "Inversion en descente",
+      "action": "Contact NF de la boucle (DET) ou de la cellule (IR) ouvert : véhicule détecté, détecteur en défaut ou fil coupé. Cavalier obligatoire sur l'entrée non utilisée."
+    },
+    {
+      "code": "LED de mise sous tension éteinte",
+      "type": "led",
+      "titre": "Carte non alimentée",
+      "action": "Interrupteur de la carte sur ON, fusible 5 A (5 × 20), alimentation 230 V sur X1."
+    },
+    {
+      "code": "LED ANT",
+      "type": "led",
+      "titre": "Réception radio",
+      "action": "S'allume quand la carte reçoit un signal de télécommande."
+    },
+    {
+      "code": "LED du capteur de fin de course",
+      "type": "led",
+      "titre": "Détection de la came",
+      "action": "L'éclairage de la LED du capteur devient moins intense quand il détecte l'épaulement de sa came (réglage à 2 mm)."
+    },
+    {
+      "code": "Gyrophare toujours éteint",
+      "type": "symptome",
+      "titre": "Pas de signalisation",
+      "action": "Le gyrophare (230 V, non fourni) est sur X4 et ne s'allume que lisse en mouvement."
+    }
+  ],
+  "afficheur": {
+    "intro": "Pas d'afficheur : LED de mise sous tension, LED de réception radio, avertisseur sonore 12 V (bips de la programmation radio), 3 dip-switchs, potentiomètre VR1 (sensibilité à l'impact).",
+    "ecrans": [],
+    "reperes": {},
+    "regles": [],
+    "autres": [
+      {
+        "titre": "Boîte à boutons",
+        "texte": "Ouverture prioritaire : une commande d'ouverture pendant la fermeture inverse le mouvement."
+      },
+      {
+        "titre": "Télécommande (option)",
+        "texte": "Chaque appui : arrêt si la lisse bouge, sinon mouvement inverse du précédent (1er appui monte, 2e arrête, 3e descend…)."
+      },
+      {
+        "titre": "Manivelle de secours",
+        "texte": "Fixée dans la porte : couper l'alimentation générale, introduire la manivelle par l'orifice à clapet du fût, tourner dans un sens ou l'autre, la retirer avant de remettre sous tension."
+      },
+      {
+        "titre": "Lisse dégondable",
+        "texte": "La lisse pivote horizontalement en cas de choc pour libérer le passage (secours, coupure de courant). On peut la verrouiller (perçage + goupille rétractable conseillée)."
+      }
+    ]
+  },
+  "bornier": {
+    "groupes": [
+      {
+        "nom": "Puissance",
+        "bornes": [
+          {
+            "n": "X1 : E · L · N",
+            "label": "Alimentation 230 V AC 50 Hz",
+            "desc": "Terre, phase, neutre (120 V en option). Câble 3G2,5 ; terre ≥ 1 mm² raccordée avant l'alimentation ; courant de fuite élevé : pas plusieurs barrières sur le même différentiel, pas de réseau isolé de la terre",
+            "t": "alim"
+          },
+          {
+            "n": "X2 : E · U · V · W",
+            "label": "Moteur",
+            "desc": "E terre, U commun, V et W un sens de rotation chacun. Moteur asynchrone 960 tr/min",
+            "t": "moteur"
+          },
+          {
+            "n": "X2 : C · C",
+            "label": "Condensateur moteur",
+            "desc": "14 µF 450 V AC (crée la 3e phase du moteur alimenté en monophasé)",
+            "t": "moteur"
+          },
+          {
+            "n": "X4 : D · D",
+            "label": "Gyrophare (option)",
+            "desc": "230 V AC (120 V en option), allumé lisse en mouvement ; non fourni par Automatic Systems",
+            "t": "sortie"
+          },
+          {
+            "n": "X5 : AC24V",
+            "label": "Sortie 24 V AC",
+            "desc": "Alimentation de détecteurs optionnels (ex. cellule IR)",
+            "t": "alim"
+          }
+        ]
+      },
+      {
+        "nom": "Commandes et sécurités",
+        "bornes": [
+          {
+            "n": "X10 : G · K · COM",
+            "label": "Boîte à boutons",
+            "desc": "G = fermeture, K = ouverture, COM = commun ; vers G-K-S de la boîte. Ne pas utiliser la borne T",
+            "t": "no"
+          },
+          {
+            "n": "X8 : DET · COM",
+            "label": "Boucle de détection (contact NF)",
+            "desc": "Inverse la descente quand un véhicule est détecté puis reprend après son départ ; lisse relevée : ferme après le passage. Cavalier DET-COM si non utilisée",
+            "t": "nf"
+          },
+          {
+            "n": "X8 : IR · COM",
+            "label": "Cellule infrarouge (contact NF)",
+            "desc": "Inverse la descente ; une nouvelle commande de fermeture est ensuite nécessaire. Cavalier IR-COM si non utilisée",
+            "t": "nf"
+          },
+          {
+            "n": "X8 : +12V",
+            "label": "Sortie 12 V DC",
+            "desc": "Alimentation des détecteurs",
+            "t": "alim"
+          },
+          {
+            "n": "X9 : CL · COM",
+            "label": "Fin de course fermeture (lisse horizontale)",
+            "desc": "Capteur inductif ; mode NF ou NO selon le dip 1",
+            "t": "nf"
+          },
+          {
+            "n": "X9 : OP · COM",
+            "label": "Fin de course ouverture (lisse verticale)",
+            "desc": "Capteur inductif",
+            "t": "nf"
+          },
+          {
+            "n": "X9 : +12V",
+            "label": "Alimentation des capteurs",
+            "desc": "12 V DC",
+            "t": "alim"
+          },
+          {
+            "n": "ANT",
+            "label": "Récepteur radio",
+            "desc": "Télécommandes en option (bouton AN pour les affecter)",
+            "t": "autre"
+          }
+        ]
+      }
+    ],
+    "fusibles": "Fusible 5 A, 5 × 20 mm (repère 2 de la figure 6). Interrupteur de la carte : I = ON, O = OFF.",
+    "notes": [
+      "Transformateurs : 230 V / 12 V et 230 V / 8,8 V 4 W (120 V en option).",
+      "Exemple de la notice : cellule IR alimentée en 24 V AC sur X5, sortie OUT/COM de la cellule sur IR/COM, cavalier DET-COM (boucle non utilisée)."
+    ]
+  },
+  "parametres": {
+    "intro": "3 dip-switchs (SW1) et un potentiomètre. Sérigraphie de la carte : 1 LMT.SW NC, 2 AUTO CLS, 3 PROGRAM.",
+    "navigation": [
+      "Pas de menu : dip-switchs, potentiomètre VR1 (FORCE ADJ) et bouton AN (LEARN)."
+    ],
+    "groupes": [
+      {
+        "nom": "Dip-switchs",
+        "items": [
+          {
+            "code": "1",
+            "def": "ON",
+            "titre": "Mode des capteurs de fin de course",
+            "valeurs": [
+              [
+                "ON",
+                "Normalement fermé (réglage d'usine)."
+              ],
+              [
+                "OFF",
+                "Normalement ouvert."
+              ]
+            ]
+          },
+          {
+            "code": "2",
+            "def": "—",
+            "titre": "Auto-fermeture",
+            "valeurs": [
+              [
+                "ON",
+                "Activée."
+              ],
+              [
+                "OFF",
+                "Désactivée."
+              ]
+            ]
+          },
+          {
+            "code": "3",
+            "def": "OFF",
+            "titre": "Programmation de la temporisation d'auto-fermeture",
+            "valeurs": [
+              [
+                "ON",
+                "Mode programmation (voir onglet Apprent.)."
+              ],
+              [
+                "OFF",
+                "Utilisation normale."
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "nom": "Réglages",
+        "items": [
+          {
+            "code": "VR1",
+            "def": "—",
+            "titre": "Sensibilité à l'impact",
+            "valeurs": [
+              [
+                "Sens antihoraire",
+                "Plus sensible."
+              ],
+              [
+                "Sens horaire",
+                "Moins sensible."
+              ]
+            ]
+          },
+          {
+            "code": "Auto-fermeture",
+            "def": "—",
+            "titre": "Temporisation avant refermeture",
+            "valeurs": [
+              [
+                "0–44 s",
+                "Programmée par apprentissage (onglet Apprent.)."
+              ]
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "apprentissage": {
+    "avant": [
+      "Équilibrer les ressorts : désaccoupler la bielle du motoréducteur, mettre la lisse à 45° à la main, régler les écrous des ressorts pour qu'elle reste en équilibre, recoupler la bielle. À refaire après quelques heures de service et à chaque changement de lisse.",
+      "Régler les fins de course : capteurs à 2 mm de l'épaulement de leur came ; lisse horizontale, tourner la came 1 jusqu'à la détection du capteur 1 (LED moins lumineuse), serrer ; lisse verticale, idem came 2 / capteur 2.",
+      "Régler la sensibilité à l'impact VR1 après l'équilibrage des ressorts."
+    ],
+    "etapes": [
+      "Télécommande (25 maximum) : appuyer sur AN (bip), appuyer et relâcher le bouton choisi de la télécommande (bip), appuyer de nouveau sur ce bouton (bip court puis long) : affectée.",
+      "Effacer toutes les télécommandes : maintenir AN jusqu'à ce que le bip cesse, puis éteindre et rallumer la carte avec son interrupteur.",
+      "Temporisation d'auto-fermeture (0 à 44 s) : dips 2 et 3 sur ON ; ouvrir (boîte à boutons ou bouton 1, 2 ou 3 de la télécommande) ; laisser la lisse levée le temps voulu ; refermer avec le même moyen ; remettre le dip 3 sur OFF.",
+      "Annuler l'auto-fermeture : dip 2 sur OFF, ou dips 2 et 3 sur ON, ouvrir, attendre la redescente automatique (45 s), dip 3 sur OFF."
+    ],
+    "apres": [
+      "Si les 4 boutons d'une télécommande commandent la même barrière, programmer l'auto-fermeture sur 1, 2 ou 3 l'applique aux trois ; le bouton 4 se programme à part.",
+      "Entretien annuel : contrôler tous les réglages, dépoussiérer l'intérieur, nettoyer les parties inox (produit Automatic Systems 0/6031/000).",
+      "Pièces : lisse 3 m E/7001/350, 4 m E/7001/569 · ressort E/7001/387 · bielle E/7001/383 · capteur de fin de course E/7001/384 · came 0/6980/590 · logique 230 V E/7001/421, 120 V E/7001/388 · moteur 230 V lisse 3 m E/7001/411, lisse 4 m E/6980/709 · télécommande E/7001/390 · détecteur de boucle DP134 0/7104/179."
     ]
   }
 }

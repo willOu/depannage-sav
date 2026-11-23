@@ -284,6 +284,14 @@
       S("sick-mrs1000-p2", "LED, montage et EasyTeach", 2, "Signification des LED, schéma de raccordement, câblage d'un bouton EasyTeach."),
       S("sick-mrs1000-p6", "Plan coté", 6, "Dimensions, trous de fixation M5, zone morte, plages de détection.")
     ],
+    "as-bl12": [
+      S("as-bl12-p11", "Logique de commande (fig. 6)", 11, "Connecteurs X1 à X10, fusible, interrupteur, dip-switchs SW1, bouton AN, potentiomètre VR1, LED."),
+      S("as-bl12-p09", "Connexions électriques", 9, "Alimentation, boîte à boutons, fins de course, boucle, cellules IR, gyrophare."),
+      S("as-bl12-p13", "Raccordement des détecteurs et fins de course", 13, "Boîte à boutons G-K-COM, réglage des capteurs à 2 mm de leur came (fig. 7)."),
+      S("as-bl12-p10", "Verrouillage de la lisse et ressorts", 10, "Goupille de verrouillage (fig. 4), écrous de réglage des ressorts d'équilibrage (fig. 5)."),
+      S("as-bl12-p08", "Installation", 8, "Matériel fourni, fixation par clames et chevilles M12, montage de la lisse."),
+      S("as-bl12-p18", "Socle en béton", 18, "Plan d'implantation CH5903 : socle, fourreaux d'alimentation 3G2,5 et de boucle.")
+    ],
     "fadini-elpro-s40": [
       S("fadini-s40-p10", "Carte Elpro S40", 10, "Bornier 1 à 66, fusibles, LED L1 à L15, dip, T1 / T2."),
       S("fadini-s40-p11", "LED et dip-switchs", 11, "Diagnostic, voyant, radio, photocellules ou boucle."),
