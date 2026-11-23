@@ -379,6 +379,7 @@ html{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 .dlinks{display:grid;gap:0;margin-top:6px}
 .rubs{display:none}
 @media (min-width:1101px) and (pointer:fine){.rubs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:stretch}.rub{background:var(--card);border:1px solid var(--line);border-left:5px solid var(--c);border-radius:14px;padding:16px 18px}.rub h3{margin:0 0 4px;font-size:20px}.rub>p{margin:0 0 6px;color:var(--muted)}.rub .dbtn{border:0;border-top:1px solid var(--line);border-radius:0;background:none;margin-top:0;padding:12px 2px}.rub .dbtn:hover{color:var(--brand)}.rub .dbtn[data-i]{display:flex;flex-direction:column;position:relative;padding-left:52px}.rub .dbtn[data-i]:before{content:attr(data-i);position:absolute;left:2px;top:11px;width:36px;height:36px;border-radius:10px;background:color-mix(in srgb,var(--c) 18%,transparent);display:flex;align-items:center;justify-content:center;font-size:19px}}
+.avis{border:2px solid #E5372E;background:color-mix(in srgb,#E5372E 10%,var(--card));border-radius:14px;padding:12px 14px;margin:12px 0}.avist{font-weight:800;font-size:16px;display:flex;align-items:center;gap:8px;color:#E5372E}.avisi{display:inline-flex;width:30px;height:30px;border-radius:50%;background:#E5372E;color:#fff;align-items:center;justify-content:center;font-size:17px;flex:none}.avis p{margin:8px 0}.avis img{display:block;width:100%;max-width:603px;height:auto;background:#fff;border-radius:8px;margin:8px 0}.avisc a{color:inherit;font-weight:700}.avisd{font-size:12px;color:var(--muted)}
 .dbtn{width:100%;margin-top:12px;background:var(--card);border:1px solid var(--line);border-left:5px solid var(--brand);border-radius:14px;padding:14px;text-align:left;cursor:pointer;font-weight:700}
 .dbtn small{display:block;font-weight:400;color:var(--muted)}
 .dtest{background:#fff4d6;color:#5a3d00;border:1px solid #e0b34a;border-radius:12px;padding:10px 12px;font-size:14px;margin-bottom:12px}
@@ -836,10 +837,20 @@ function noticeHtml(id){
   const l = (typeof NOTICES !== "undefined" && NOTICES[id]) || []; if (!l.length) return "";
   return `<details class="hot"><summary>📄 Notice sur le site du fabricant <span>· ${l.length}</span></summary>` + l.map(x => { let d = ""; try { d = new URL(x.u).hostname.replace(/^www\./, ""); } catch (e) {} return `<a class="hotl" href="${esc(x.u)}" target="_blank" rel="noopener"><b>${esc(x.t)}</b><small>${esc(d)} · s'ouvre en ligne</small></a>`; }).join("") + `<p class="hotn">Il faut du réseau pour ouvrir ces liens. Le fichier en ligne peut être une édition plus récente que la notice citée dans « Source » : en cas de différence, vérifiez.</p></details>`;
 }
+/* Encadrés « Attention » affichés sur la page d'une marque (infos SAV) */
+function avisMarque(m){
+  if (m.id !== "roger") return "";
+  const L1 = m.cartes.filter(c => (c.parametres && c.parametres.groupes || []).some(g => g.items.some(x => x.code === "L1")));
+  return `<div class="avis"><div class="avist"><span class="avisi" aria-hidden="true">⚠</span>Attention : mise en veille après l'apprentissage</div>
+    <p>Sur les derniers moteurs Roger, l'apprentissage remet la fonction de mise en veille (paramètre <b>L1</b>, « low power stand-by ») à sa valeur d'usine. <b>Pensez à remettre L1 à 00 après chaque apprentissage.</b></p>
+    <img src="images/roger-l1-low-power.png" alt="Paramètre L1 : configuration du mode low power stand-by (00 désactivé, 01 à 04 : veille après 5 à 20 minutes d'inactivité)" loading="lazy">
+    ${L1.length ? `<p class="avisc">Cartes de l'appli qui ont le paramètre L1 : ${L1.map(c => `<a href="#/c/${c.id}/param">${esc(c.nom)}</a>`).join(" · ")}</p>` : ""}
+    <p class="avisd">Info SAV du 23/11/2026</p></div>`;
+}
 function viewBrand(id){
   const m = MARQUES.find(x => x.id === id); if (!m) return viewHome();
   setHead(m.nom, true);
-  app.innerHTML = hotlineHtml(m) + `<h2>Cartes ${esc(m.nom)}</h2><div class="list">` + m.cartes.map(c => rowBoard({m, c})).join("") + `</div>` + accBrandHtml(m.nom);
+  app.innerHTML = hotlineHtml(m) + avisMarque(m) + `<h2>Cartes ${esc(m.nom)}</h2><div class="list">` + m.cartes.map(c => rowBoard({m, c})).join("") + `</div>` + accBrandHtml(m.nom);
 }
 
 let paramOpen = "";

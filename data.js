@@ -192,6 +192,9 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "2.94", date: "2026-11-23", titre: "Roger : veille remise à l'usine par l'apprentissage", items: [
+    "Page de la marque Roger : encadré « Attention » : sur les derniers moteurs Roger, l'apprentissage remet la mise en veille (paramètre L1) à sa valeur d'usine, il faut remettre L1 à 00 après l'apprentissage. Avec le tableau du paramètre L1 et les liens vers les cartes concernées"
+  ] },
   { v: "2.93", date: "2026-11-16", titre: "Nouvelles marques SMINN et SICK", items: [
     "Nouvelle marque SMINN (logo sur l'accueil) : fiche complète du coffret BOX L VF1D / VF1EA (moteur triphasé 230 V à variateur) : bornier 1 à 36, registre des pannes, menus et réglages d'usine, apprentissage, schémas et notice PDF",
     "Nouvelle marque SICK (logo sur l'accueil) : fiche accessoire du capteur LiDAR 3D MRS1000 (raccordements M12, LED, EasyTeach, caractéristiques) avec la notice de démarrage rapide"
