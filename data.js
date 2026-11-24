@@ -192,6 +192,12 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "2.97", date: "2026-11-24", titre: "Nouvelle marque Magnetic", items: [
+    "Nouvelle marque Magnetic (logo sur l'accueil) avec 5 fiches : logique MLC 10 / 11, barrières MAGSTOP MIB 20 / 30 / 40 et MTS 6 / 8, détecteur de boucle MID 1 et tambour de sécurité MPT-132",
+    "MLC : bornes 1 à 42 relevées sur le schéma, sélecteur rotatif 0 à F, programmes 1 à 8, modes des boucles A et B avec les relais K1 et K2, réglage du capteur angulaire, optimisation du freinage, resets et lectures (heures, manœuvres)",
+    "MPT-132 : entrées X2 et sorties X1, DIP S1 et S2, codes d'erreur du MBC-110 et clignotements de la LED du MMC-120",
+    "7 notices PDF Magnetic dans l'appli (les deux éditions du manuel MIB / MLC) et 14 schémas, avec le numéro du bureau France de Magnetic dans la fiche de la marque"
+  ] },
   { v: "2.96", date: "2026-11-23", titre: "Bornes escamotables et encadrés « Attention »", items: [
     "Accueil : 4e type d'automatisme « Borne escamotable » qui regroupe le programmateur Fadini Elpro S40 et les fiches Fadini Talos et BFT Grizzly / Pillar B",
     "Administration : « Encadrés Attention » : l'administrateur publie lui-même un encadré rouge (titre, texte, image, date) sur une marque, une carte ou un accessoire ; il s'affiche pour tous, aussi sans réseau, et se retire en un clic"
@@ -60245,6 +60251,1658 @@ const MARQUES = [
   }
 }
   ]
+},
+/* ------------------------------------------------------------------ */
+{
+  id: "magnetic", nom: "Magnetic", couleur: "#0a96d6",
+  cartes: [
+  {
+    "id": "magnetic-mlc",
+    "nom": "MLC 10 / MLC 11",
+    "modeles": "Logique de commande Magnetic MLC (Magnetic Lane Controller) des barrières MAGSTOP MIB 20/30/40, logiciel de base PCL 100S, jeu de paramètres standard S20000. MLC 11 obligatoire sur MIB 20",
+    "type": "Logique de barrière levante 100–240 V à microprocesseur, moteur couple, capteur angulaire (pas de fin de course), afficheur LCD 16 caractères, sélecteur rotatif 0–F et 2 touches (noire / blanche)",
+    "source": "Manuel d'utilisation MAGSTOP MIB 20/30/40 – MLC (581F,5000, éditions 1999 et 01.2008) et fiche MF 5131/F",
+    "codes": [
+      {
+        "code": "Attente RAZ (Reset)",
+        "type": "afficheur",
+        "titre": "La lisse reste ouverte après un retour secteur",
+        "action": "Comportement d'usine « Signal Reset » : si la lisse n'est pas fermée au retour du secteur, elle s'ouvre complètement et attend. L'afficheur montre R en 1re position et, régulièrement, « Attente RAZ ». Pour libérer : appui bref et simultané sur les touches noire et blanche, ou commande de fermeture, ou passage d'un véhicule sur la boucle de surveillance (ou dans la barrière lumineuse s'il n'y a pas de boucle). Le mode « Auto Reset » se choisit en position C du sélecteur (touche noire maintenue)."
+      },
+      {
+        "code": "La lisse ne bouge pas",
+        "type": "symptome",
+        "titre": "Aucune manœuvre",
+        "action": "Sélecteur rotatif bien en position 0 (les positions 1 à F sont réservées à la programmation). Alimentation et fusible (F 4 A H sur MLC 10, F 6,3 A H sur MLC 11). Prise secteur du fût enfichée. Entrée de sécurité IN5 : elle doit être un contact à ouverture, fermé au repos. Barrière en attente de Reset (voir ci-dessus). Après toute intervention, faire un démarrage à froid (touches noire + blanche 4 s)."
+      },
+      {
+        "code": "La lisse ne descend pas",
+        "type": "symptome",
+        "titre": "Fermeture impossible ou immédiatement interrompue",
+        "action": "Lire l'état des boucles sur l'afficheur (sélecteur en 0) : boucle occupée, « ?? » = défaut de boucle, « ! » = détecteur désactivé. Boucle de surveillance (A) occupée ou en défaut : la lisse reste ouverte tant que la boucle détecte. Contrôler IN5 (sécurité, cellule) et le mode de fonctionnement choisi (position 1 du sélecteur)."
+      },
+      {
+        "code": "?? sur l'afficheur",
+        "type": "afficheur",
+        "titre": "Défaut de boucle de détection",
+        "action": "Boucle coupée, en court-circuit ou hors plage. Contrôler à l'ohmmètre : résistance < 2 Ω, isolement par rapport à la terre > 1 MΩ, inductance 70–500 µH (3 à 5 tours en 0,75 mm²). Câble de liaison ≤ 15 m, torsadé environ 20 fois par mètre, surplus non enroulé dans le fût."
+      },
+      {
+        "code": "Boucle jamais détectée",
+        "type": "symptome",
+        "titre": "Le véhicule n'est pas vu",
+        "action": "Sélecteur en position 8 : l'afficheur donne l'état et la fréquence de la boucle A (touche blanche = boucle B). Fréquence de travail 20 000 à 50 000 Hz. Quand un véhicule entre sur la boucle, la fréquence doit monter d'au moins 1/1000 de sa valeur (plus elle monte, plus la détection est sûre). Sinon : augmenter la sensibilité (positions 4 et 5), vérifier le mode (positions 6 et 7), les armatures métalliques (≥ 100 mm de la boucle) et la boucle elle-même."
+      },
+      {
+        "code": "Boucles perturbées",
+        "type": "symptome",
+        "titre": "Détection intempestive avec un autre détecteur ou un 2e MLC proche",
+        "action": "Écarter les fréquences d'au moins 5 kHz (10 kHz conseillés par l'édition 1999). Les deux boucles d'un même MLC ne se perturbent jamais entre elles (détection alternée). Régler avec le DIP à 2 interrupteurs situé à droite sous le bornier 22 à 42 (gauche = boucle A, droite = boucle B ; ON = basse fréquence, OFF = haute fréquence). Débrancher la prise secteur avant de retirer le bornier. Revérifier ensuite les fréquences en position 8."
+      },
+      {
+        "code": "Type ≠ plaque",
+        "type": "afficheur",
+        "titre": "Le démarrage affiche un type de barrière ou une fréquence différents de la plaque signalétique",
+        "action": "Au démarrage, la 5e ligne (ex. « MIB 40  50Hz ») doit correspondre à la plaque de la barrière (face extérieure de la plaque de montage de la logique). Sinon : refaire le réglage du capteur angulaire (position 0 + touche noire), qui permet de choisir le type et la fréquence réseau."
+      },
+      {
+        "code": "Capteur 0560",
+        "type": "afficheur",
+        "titre": "Valeur du capteur angulaire hors plage",
+        "action": "Position 0 avec la touche noire maintenue : lisse ouverte, la valeur doit être entre 555 et 565. Hors plage, l'initialisation ne peut pas se terminer : refaire le réglage mécanique du capteur (voir onglet Apprent.). Valeur lisse fermée attendue entre 50 et 150."
+      },
+      {
+        "code": "Patientez 000",
+        "type": "afficheur",
+        "titre": "Optimisation du freinage qui n'aboutit pas",
+        "action": "Tant que 000 reste affiché à droite, le freinage intervient trop tôt et la lisse n'atteint pas sa position finale ; le MLC réduit le freinage par petits pas. Si l'optimisation n'est pas terminée après une cinquantaine de manœuvres, l'arrêter : la cause est souvent mécanique (ressorts, équilibrage de la lisse). Corriger puis recommencer. Fin correcte : « Freinage OK »."
+      },
+      {
+        "code": "Freinage mauvais",
+        "type": "symptome",
+        "titre": "Lisse qui rebondit ou freine mal (ressorts hors standard, lisse spéciale, béquille)",
+        "action": "Lire la position de freinage (position 4) et la comparer au tableau de l'onglet Paramètres. Si elle sort de la plage : contrôler les ressorts (lisse stable à 45°). Cas particuliers (ressorts hors standard, lisse spéciale, barrière avec montant d'appui) : position B (touche noire maintenue) pour décaler la correction de ±5 ou la couper et fixer la valeur de freinage à la fermeture."
+      },
+      {
+        "code": "Mode Test",
+        "type": "test",
+        "titre": "La lisse monte et descend sans arrêt",
+        "action": "Le mode test (position D, touche noire maintenue, valeur 9) est actif : l'afficheur montre « 9 00001 … ». Pour en sortir : sélecteur en position 1 puis en 0."
+      }
+    ],
+    "afficheur": {
+      "intro": "Afficheur LCD de 16 caractères, sélecteur rotatif (0 à F) et deux touches : noire = ouverture / défilement, blanche = fermeture / validation. Sélecteur en 0 = fonctionnement normal : toujours le remettre en 0 après une intervention.",
+      "ecrans": [],
+      "reperes": {},
+      "regles": [],
+      "autres": [
+        {
+          "titre": "Écran normal (sélecteur en 0)",
+          "texte": "Affiche le mode (1 à 8), l'état des entrées E1 à E5 (0 = repos, 1 = actif), le sens de rotation, la puissance du moteur (pleine, réduite ou veille « R »), l'état des boucles A et B (occupée / libre, « ! » = détecteur désactivé, « ?? » = défaut de boucle) et celui des relais K1 et K2."
+        },
+        {
+          "titre": "Touches en fonctionnement normal",
+          "texte": "Sélecteur en 0 : touche noire = ouverture, touche blanche = fermeture, directement sur la logique."
+        },
+        {
+          "titre": "Séquence au démarrage",
+          "texte": "« *** MAGNETIC *** », puis version matérielle et boot (ex. Hard A, Boot 0002), type MLC et jeu de paramètres (ex. MLC10-100 S20000), n° de logiciel (ex. 4096.0002), enfin type de barrière et fréquence réseau (ex. MIB 40 50Hz) qui doivent correspondre à la plaque signalétique."
+        },
+        {
+          "titre": "Reset 1 : démarrage à froid",
+          "texte": "Touches noire et blanche enfoncées ensemble pendant 4 s : redémarre le programme et compense les détecteurs. À faire après chaque intervention sur la barrière ou la logique ; même effet qu'une brève coupure secteur."
+        },
+        {
+          "titre": "Reset 2 : retour en position de base",
+          "texte": "Appui bref et simultané sur les deux touches quand l'afficheur montre « Attente RAZ »."
+        },
+        {
+          "titre": "Reset 3 : préréglage usine (position F)",
+          "texte": "Remet tous les paramètres à leurs valeurs d'usine. Exceptionnel : exige une reprogrammation complète par un technicien qualifié."
+        },
+        {
+          "titre": "Lectures utiles",
+          "texte": "Position 2 + touche noire : heures de fonctionnement (« Heures 01620.6 »). Position 3 + touche noire : manœuvres (« Manœuvres 08225 », mis à jour toutes les 10 manœuvres). Position 4 : positions de freinage ouverture / fermeture (ex. 079 085). Position 8 : état et fréquence des boucles."
+        }
+      ]
+    },
+    "bornier": {
+      "groupes": [
+        {
+          "nom": "Puissance et moteur",
+          "bornes": [
+            {
+              "n": "1 : L · 2 : N · 3-4 : PE",
+              "label": "Alimentation 100 à 240 V AC 50/60 Hz",
+              "desc": "Dans le fût, le secteur arrive sur le boîtier de raccordement (en bas à gauche) puis par le câble avec prise fourni : ne jamais raccorder le secteur directement au module de commande",
+              "t": "alim"
+            },
+            {
+              "n": "5 : M1 · 6 : M2 · 7 : M3",
+              "label": "Moteur couple",
+              "desc": "Fils du moteur : M1 bleu, M2 marron, M3 noir (selon le schéma de la fiche MLC)",
+              "t": "moteur"
+            },
+            {
+              "n": "8-9 : C0",
+              "label": "Condensateur de service",
+              "desc": "230 V / 50 Hz : MIB 20 = 10 µF · MIB 30 et MIB 40 = 3 µF. 115 V / 60 Hz : MIB 20 = 20 µF · MIB 30 et 40 = 10 µF",
+              "t": "moteur"
+            },
+            {
+              "n": "10-11 : CT",
+              "label": "Condensateur de couple",
+              "desc": "230 V / 50 Hz : MIB 20 = 6 µF · MIB 30 et 40 = 3 µF. 115 V / 60 Hz : MIB 20 = 16 µF · MIB 30 et 40 = 8 µF",
+              "t": "moteur"
+            }
+          ]
+        },
+        {
+          "nom": "Capteur et alimentation 24 V",
+          "bornes": [
+            {
+              "n": "22 · 23 · 24",
+              "label": "Capteur angulaire",
+              "desc": "Capteur monté sur l'arbre porte-lisse, il remplace les fins de course (fils rouge, blanc, noir). Une valeur de 555 à 565 lisse ouverte est attendue",
+              "t": "autre"
+            },
+            {
+              "n": "25 : 0 V · 26-27 : +24 V",
+              "label": "24 V DC externe",
+              "desc": "Sortie 24 V DC, 300 mA maximum, pour les entrées et le pupitre",
+              "t": "alim"
+            },
+            {
+              "n": "33 : +24 V · 34 : 0 V",
+              "label": "24 V du pupitre de commande",
+              "desc": "Fils rose (+24 V) et beige (0 V) du pupitre Magnetic (option)",
+              "t": "alim"
+            }
+          ]
+        },
+        {
+          "nom": "Entrées (contacts secs vers +24 V)",
+          "bornes": [
+            {
+              "n": "28 : IN1",
+              "label": "Ouverture externe",
+              "desc": "Contact libre de potentiel entre +24 V et IN1. Fonctions selon le programme (voir onglet Paramètres)",
+              "t": "no"
+            },
+            {
+              "n": "29 : IN2",
+              "label": "Ouverture prioritaire",
+              "desc": "Entrée prioritaire sur la fermeture (ex. levier pompiers). Programmes 5 à 8",
+              "t": "no"
+            },
+            {
+              "n": "30 : IN3",
+              "label": "Fermeture externe",
+              "desc": "Contact libre de potentiel entre +24 V et IN3",
+              "t": "no"
+            },
+            {
+              "n": "31 : IN4",
+              "label": "Boucle d'ouverture externe",
+              "desc": "Programmes 5 à 8. Ne jamais confondre une commande d'ouverture et une boucle d'ouverture : leur fonctionnement est différent",
+              "t": "no"
+            },
+            {
+              "n": "32 : IN5",
+              "label": "Dispositif de sécurité externe (cellule)",
+              "desc": "Doit se comporter comme un contact à ouverture (fermé au repos)",
+              "t": "nf"
+            }
+          ]
+        },
+        {
+          "nom": "Pupitre de commande et boucles",
+          "bornes": [
+            {
+              "n": "35 : Δ · 36 : ∇",
+              "label": "Pupitre MKI : ouvrir / fermer",
+              "desc": "Touches S6 (ouverture, fil bleu) et S7 (fermeture, fil gris) du pupitre Magnetic",
+              "t": "no"
+            },
+            {
+              "n": "37 : L1 · 38 : L2",
+              "label": "Voyants du pupitre",
+              "desc": "L1 = affichage ouvert (fil jaune), L2 = affichage fermé (fil vert)",
+              "t": "sortie"
+            },
+            {
+              "n": "39-40",
+              "label": "Boucle de détection A",
+              "desc": "Boucle de surveillance / fermeture : la lisse reste levée tant qu'un véhicule est dessus. Inductance 70–500 µH",
+              "t": "autre"
+            },
+            {
+              "n": "41-42",
+              "label": "Boucle de détection B",
+              "desc": "Boucle d'ouverture ou de présence. Inductance 70–500 µH",
+              "t": "autre"
+            }
+          ]
+        },
+        {
+          "nom": "Relais et sorties",
+          "bornes": [
+            {
+              "n": "16 · 17 · 18 : K1",
+              "label": "Relais multifonction 1 (inverseur)",
+              "desc": "250 V AC / 3 A maximum, libre de potentiel. Commande d'ouverture d'un portail ou fonction de la boucle A selon le mode choisi (position 6)",
+              "t": "sortie"
+            },
+            {
+              "n": "19 · 20 · 21 : K2",
+              "label": "Relais multifonction 2 (inverseur)",
+              "desc": "250 V AC / 3 A maximum. Impulsion de comptage, information « barrière fermée » ou fonction de la boucle B (position 7)",
+              "t": "sortie"
+            },
+            {
+              "n": "Sorties OUT1 · OUT2",
+              "label": "Collecteur ouvert : barrière ouverte / fermée",
+              "desc": "24 V DC, 50 mA maximum. Servent aussi au raccordement d'un pupitre Magnetic. Numéros de bornes non repérés sur le schéma de la fiche : voir le schéma joint à la barrière",
+              "t": "sortie"
+            },
+            {
+              "n": "12 à 15",
+              "label": "Bornes libres",
+              "desc": "Non affectées sur le schéma du jeu S20000",
+              "t": "autre"
+            }
+          ]
+        }
+      ],
+      "fusibles": "Fusible F 4 A H (MLC 10) ou F 6,3 A H (MLC 11).",
+      "notes": [
+        "Schéma valable pour le jeu de paramètres standard S20000. Avec un jeu spécial, le raccordement peut différer : respecter le schéma de câblage joint à la barrière.",
+        "Toutes les commandes se raccordent comme des contacts libres de potentiel. Avant de raccorder une sortie à collecteur ouvert, contacter l'usine Magnetic.",
+        "Extension possible : boîtier E/S (MLC 30) par la liaison PC-BUS, pupitre MKI, boîtier de liaison pour le comptage différentiel des places.",
+        "MLC 10 : 200 × 75 × 118 mm, 950 g, IP 20, 0 à 55 °C. MLC 11 : 1 050 g, avec découpe de refroidissement."
+      ]
+    },
+    "parametres": {
+      "intro": "Tout se règle avec le sélecteur rotatif et les deux touches. Les positions 1 à F sont les réglages courants ; la touche noire maintenue pendant la rotation du sélecteur donne accès aux fonctions étendues (réservées au SAV). Description du jeu standard S20000.",
+      "navigation": [
+        "1. Mettre le sélecteur rotatif sur la position voulue.",
+        "2. Appuyer ensemble sur les touches noire et blanche : un curseur apparaît sous la valeur.",
+        "3. Touche noire : faire défiler la valeur.",
+        "4. Touche blanche : mémoriser, le curseur passe à la position suivante à droite.",
+        "5. Pour finir, valider avec la touche noire ou abandonner avec la touche blanche.",
+        "6. Remettre le sélecteur en position 0 (fonctionnement normal)."
+      ],
+      "groupes": [
+        {
+          "nom": "Programme et temps (positions 1 à 3)",
+          "items": [
+            {
+              "code": "1",
+              "def": "—",
+              "titre": "Numéro de programme (mode de fonctionnement)",
+              "valeurs": [
+                [
+                  "1",
+                  "Commande par un commutateur : contact fermé = la barrière se ferme, ouvert = elle s'ouvre"
+                ],
+                [
+                  "2",
+                  "Homme mort : 2 boutons, ouverture par impulsion brève, fermeture en maintenant le bouton jusqu'à la fin"
+                ],
+                [
+                  "3",
+                  "Impulsions successives avec une seule touche (ouvre, ferme, ouvre…)"
+                ],
+                [
+                  "4",
+                  "Impulsions de 2 touches séparées (ouverture IN1, fermeture IN3)"
+                ],
+                [
+                  "5",
+                  "Automatique avec durée d'ouverture programmable : se ferme après le passage au-dessus de la boucle de sécurité et d'ouverture, ou à la fin du temps d'ouverture. La fermeture (IN3) est prioritaire sur l'impulsion et les boucles d'ouverture ; l'ouverture prioritaire (IN2) l'emporte sur la fermeture"
+                ],
+                [
+                  "6",
+                  "Comme le 5, mais se ferme dès que le véhicule a passé la boucle de sécurité ; la boucle d'ouverture est sans effet pendant ce temps (déconnexion en cas de passage en sens inverse)"
+                ],
+                [
+                  "7",
+                  "Automatique sans durée d'ouverture : se ferme uniquement après le passage du véhicule"
+                ],
+                [
+                  "8",
+                  "Cumule les options des programmes 6 et 7"
+                ]
+              ]
+            },
+            {
+              "code": "2",
+              "def": "—",
+              "titre": "Durée couple (puissance réduite en position bloquée)",
+              "valeurs": [
+                [
+                  "1 à 30 s",
+                  "Temps après lequel le moteur passe en puissance réduite lorsque la lisse est en position bloquée"
+                ]
+              ]
+            },
+            {
+              "code": "3",
+              "def": "—",
+              "titre": "Durée d'ouverture",
+              "valeurs": [
+                [
+                  "1 à 255 s",
+                  "Temps après lequel la lisse redescend automatiquement après le passage d'un véhicule"
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "nom": "Boucles de détection (positions 4 à 8)",
+          "items": [
+            {
+              "code": "4",
+              "def": "—",
+              "titre": "Sensibilité boucle A (surveillance)",
+              "valeurs": [
+                [
+                  "0 à 9",
+                  "0 = minimum, 9 = maximum"
+                ]
+              ]
+            },
+            {
+              "code": "5",
+              "def": "—",
+              "titre": "Sensibilité boucle B (ouverture / présence)",
+              "valeurs": [
+                [
+                  "0 à 9",
+                  "0 = minimum, 9 = maximum"
+                ]
+              ]
+            },
+            {
+              "code": "6",
+              "def": "—",
+              "titre": "Mode détecteur A et fonction du relais K1",
+              "valeurs": [
+                [
+                  "0",
+                  "Boucle désactivée, aucune surveillance ; K1 = impulsion à la demande d'ouverture"
+                ],
+                [
+                  "1",
+                  "Surveillance / fermeture ; K1 = impulsion à la demande d'ouverture"
+                ],
+                [
+                  "2",
+                  "Surveillance / fermeture ; K1 activé si véhicule sur la boucle A"
+                ],
+                [
+                  "3",
+                  "Surveillance / fermeture ; K1 = impulsion à l'activation de la boucle A"
+                ],
+                [
+                  "4",
+                  "Surveillance / fermeture ; K1 = impulsion à la désactivation de la boucle A"
+                ],
+                [
+                  "5 à 8",
+                  "Surveillance / fermeture ; K1 selon le sens de passage du véhicule (boucle A puis B)"
+                ],
+                [
+                  "9",
+                  "Boucle désactivée ; K1 activé si véhicule sur la boucle A (édition 2008)"
+                ]
+              ]
+            },
+            {
+              "code": "7",
+              "def": "—",
+              "titre": "Mode détecteur B et fonction du relais K2",
+              "valeurs": [
+                [
+                  "0",
+                  "Boucle désactivée ; K2 = information « barrière fermée »"
+                ],
+                [
+                  "1",
+                  "Ouverture (si sélectionnée) ; K2 = information « barrière fermée »"
+                ],
+                [
+                  "2",
+                  "Ouverture (si sélectionnée) ; K2 activé si véhicule sur la boucle B"
+                ],
+                [
+                  "3",
+                  "Ouverture (si sélectionnée) ; K2 = impulsion à l'activation de la boucle B"
+                ],
+                [
+                  "4",
+                  "Ouverture (si sélectionnée) ; K2 = impulsion à la désactivation de la boucle B"
+                ],
+                [
+                  "5 à 8",
+                  "Ouverture (si sélectionnée) ; K2 selon le sens de passage du véhicule"
+                ]
+              ]
+            },
+            {
+              "code": "8",
+              "def": "—",
+              "titre": "Fréquence des boucles (lecture)",
+              "valeurs": [
+                [
+                  "20 000 à 50 000 Hz",
+                  "Affiche l'état et la fréquence de la boucle A, touche blanche pour la boucle B. Réglage de la plage par le DIP à 2 interrupteurs situé sous le bornier 22 à 42"
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "nom": "Autres positions",
+          "items": [
+            {
+              "code": "9",
+              "def": "—",
+              "titre": "Feu rouge (option)",
+              "valeurs": [
+                [
+                  "—",
+                  "Temporisation de la commande du feu rouge, seulement si l'option a été commandée"
+                ]
+              ]
+            },
+            {
+              "code": "A",
+              "def": "—",
+              "titre": "Comptage (option)",
+              "valeurs": [
+                [
+                  "—",
+                  "Nombre de places de stationnement disponibles, seulement si l'option a été commandée"
+                ]
+              ]
+            },
+            {
+              "code": "D",
+              "def": "—",
+              "titre": "Défaut matériel",
+              "valeurs": [
+                [
+                  "Code hexadécimal",
+                  "Réservé à l'usage interne de Magnetic : à noter avant de contacter l'usine"
+                ]
+              ]
+            },
+            {
+              "code": "E",
+              "def": "—",
+              "titre": "Langue du dialogue",
+              "valeurs": [
+                [
+                  "Anglais · allemand · français · espagnol",
+                  "Langue des textes de l'afficheur"
+                ]
+              ]
+            },
+            {
+              "code": "F",
+              "def": "—",
+              "titre": "Préréglage usine",
+              "valeurs": [
+                [
+                  "Remise à zéro",
+                  "Remet les paramètres de fonctionnement aux valeurs d'usine. À n'utiliser qu'exceptionnellement : reprogrammation ensuite nécessaire"
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "nom": "Fonctions étendues (touche noire maintenue en tournant le sélecteur)",
+          "items": [
+            {
+              "code": "0 + noire",
+              "def": "—",
+              "titre": "Réglage du capteur angulaire",
+              "valeurs": [
+                [
+                  "Voir Apprent.",
+                  "Adapte la logique à la barrière et optimise le mouvement de la lisse ; choix du type de barrière et de la fréquence réseau"
+                ]
+              ]
+            },
+            {
+              "code": "1 + noire",
+              "def": "—",
+              "titre": "Angle de surveillance",
+              "valeurs": [
+                [
+                  "10° à 90° par pas de 5°",
+                  "Sous cet angle, la boucle de surveillance et les sécurités externes sont désactivées : évite qu'une barrière fermée soit rouverte sans autorisation. 0° = fermée, 90° = ouverte"
+                ]
+              ]
+            },
+            {
+              "code": "2 + noire",
+              "def": "—",
+              "titre": "Heures de fonctionnement",
+              "valeurs": [
+                [
+                  "Lecture",
+                  "Compteur d'heures sous tension, sans remise à zéro"
+                ]
+              ]
+            },
+            {
+              "code": "3 + noire",
+              "def": "—",
+              "titre": "Nombre de manœuvres",
+              "valeurs": [
+                [
+                  "Lecture",
+                  "Compteur sans remise à zéro, mis à jour toutes les 10 manœuvres : sert à estimer l'usure"
+                ]
+              ]
+            },
+            {
+              "code": "4 + noire",
+              "def": "—",
+              "titre": "Position de freinage (lecture)",
+              "valeurs": [
+                [
+                  "MIB 20 · 50 Hz",
+                  "Ouverture 100 à 220 · fermeture 80 à 170"
+                ],
+                [
+                  "MIB 20 · 60 Hz",
+                  "Ouverture 50 à 180 · fermeture 70 à 170"
+                ],
+                [
+                  "MIB 30 · 50 Hz",
+                  "Ouverture 40 à 240 · fermeture 60 à 280"
+                ],
+                [
+                  "MIB 30 · 60 Hz",
+                  "Ouverture 80 à 290 · fermeture 90 à 280"
+                ],
+                [
+                  "MIB 40 · 50 Hz",
+                  "Ouverture 40 à 150 · fermeture 60 à 180"
+                ],
+                [
+                  "MIB 40 · 60 Hz",
+                  "Ouverture 70 à 150 · fermeture 50 à 200"
+                ]
+              ]
+            },
+            {
+              "code": "B + noire",
+              "def": "—",
+              "titre": "Correction de la position de freinage (édition 2008)",
+              "valeurs": [
+                [
+                  "Ajust.frein. 1",
+                  "Optimisation activée : décalage « Service » de −5 à +5 (positif = freinage plus fort, négatif = plus faible)"
+                ],
+                [
+                  "Ajust.frein. 0",
+                  "Optimisation coupée à la fermeture : valeur fixe « Pos frein fe » (plus haute = freinage plus fort). Indispensable avec un montant d'appui ; à contrôler de temps en temps"
+                ]
+              ]
+            },
+            {
+              "code": "C + noire",
+              "def": "—",
+              "titre": "Comportement après coupure secteur",
+              "valeurs": [
+                [
+                  "Signal Reset",
+                  "Réglage d'usine : si la lisse n'est pas fermée au retour du secteur, elle s'ouvre et attend un Reset"
+                ],
+                [
+                  "Auto Reset",
+                  "Le MLC réagit tout de suite aux commandes ; sans signal, la barrière se ferme"
+                ]
+              ]
+            },
+            {
+              "code": "D + noire",
+              "def": "—",
+              "titre": "Mode test",
+              "valeurs": [
+                [
+                  "9",
+                  "Mouvement perpétuel haut / bas, sans commande externe. Sortie : sélecteur en 1 puis en 0"
+                ]
+              ]
+            },
+            {
+              "code": "E + noire",
+              "def": "—",
+              "titre": "Réglage des capteurs / commande directe du moteur",
+              "valeurs": [
+                [
+                  "Noire = sens et puissance, blanche = marche",
+                  "Le moteur tourne tant que la touche blanche est tenue : sert à placer la lisse dans n'importe quelle position pour régler les capteurs"
+                ]
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "apprentissage": {
+      "avant": [
+        "Contrôler les ressorts : secteur débranché, lisse déplacée à la main à 45° et lâchée : elle doit y rester. Sinon, visser ou dévisser les deux vis de réglage symétriquement (clips de blocage retirés puis remis).",
+        "Boucles posées selon la notice : symétriques par rapport à la lisse, ≥ 600 mm devant et derrière la lisse, environ 300 mm du bout de lisse et du fût, ≥ 100 mm des armatures.",
+        "Réglage du capteur angulaire à refaire après toute modification mécanique ou après remplacement de la logique ou du capteur. Risque de blessure : s'assurer que la lisse ouverte ne peut pas descendre toute seule."
+      ],
+      "etapes": [
+        "Première mise en service : débrancher la prise secteur du fût, lisse à la verticale à la main, sélecteur en 0, raccorder le secteur sur L, N, PE (tension = plaque), enficher la prise, surveiller la séquence de démarrage, Reset (touches noire + blanche brièvement), puis contrôler les réglages.",
+        "Capteur angulaire : lisse ouverte, sélecteur en 1, touche noire maintenue puis sélecteur en 0 : la valeur doit être entre 555 et 565. Sinon, desserrer la vis à 6 pans (clé de 2 mm) de l'arbre du capteur, tourner l'arbre vers 560, remonter le capteur (1 mm d'axe visible) et rebloquer.",
+        "Toujours vers 560 : appuyer ensemble sur noire et blanche. Choisir avec la touche noire le type de barrière et la fréquence réseau (= plaque), valider avec la blanche : « Fermer ? ».",
+        "Noire + blanche : le moteur ferme, la valeur basse s'affiche (« Patientez 115 », attendu entre 50 et 150) puis « Ouvrir la barrière ? ». Noire + blanche : la lisse s'ouvre, valeur haute vers 560, puis « Initialisation OK ».",
+        "Noire + blanche pour lancer l'optimisation du freinage : environ 30 manœuvres automatiques, à ne pas interrompre et sans véhicule dessous. « Freinage OK » = terminé : passer brièvement le sélecteur en 1 puis le remettre en 0, sans toucher aux touches.",
+        "Position de la lisse à corriger (après un choc) : lisse ouverte, sélecteur en 1, desserrer très légèrement les 2 vis du levier de blocage de la bride, ajuster la verticale, resserrer à la clé dynamométrique (72 Nm), sélecteur en 0."
+      ],
+      "apres": [
+        "Remettre le sélecteur rotatif en position 0 après chaque réglage, puis faire un Reset.",
+        "Contrôler les fréquences des boucles (position 8) et le comportement lors du passage d'un véhicule.",
+        "Entretien annuel (tous les 12 mois) : ressorts et position de la lisse, tampons de caoutchouc, fût, lisse et bride, autocollants, fonctionnement, sécurités et boucles, interrupteurs / position.",
+        "Avant de contacter le SAV Magnetic, noter la plaque signalétique du fût : n° de série, type, version."
+      ]
+    }
+  },
+  {
+    "id": "magnetic-mib",
+    "nom": "MIB 20 / 30 / 40",
+    "modeles": "Barrières MAGSTOP MIB 30 (passage 3,5 m, 1,4 s) et MIB 40 (passage 6 m, 4 s) pour parkings ; MIB 20 (2,5 m, 0,9 s) pour postes de péage. Commandées par la logique MLC",
+    "type": "Barrière levante à moteur couple, système de leviers et ressorts de compensation, capteur angulaire, fût acier RAL 2000",
+    "source": "Fiche MF 5121/F (09.2008) et manuel d'utilisation MIB 20/30/40 – MLC (581F,5000)",
+    "codes": [
+      {
+        "code": "Pas à 45°",
+        "type": "symptome",
+        "titre": "La lisse ne reste pas à 45° : ressorts mal réglés",
+        "action": "Contrôle : secteur débranché, lisse placée à la main à 45° puis lâchée, elle doit rester en place. Réglage : retirer les 2 clips de blocage, visser ou dévisser symétriquement les deux vis gauche et droite, remettre les clips. À refaire à chaque modification de la lisse (panneaux, raccourcissement)."
+      },
+      {
+        "code": "Lisse forcée ou décalée",
+        "type": "symptome",
+        "titre": "Position verticale à corriger",
+        "action": "Lisse ouverte (touche noire de la logique), sélecteur MLC en 1, desserrer très légèrement les 2 vis du levier de blocage de la bride, corriger, resserrer à la clé dynamométrique à 72 Nm, remettre le sélecteur en 0."
+      },
+      {
+        "code": "Vibre en fin de course",
+        "type": "symptome",
+        "titre": "Freinage ou butées",
+        "action": "Contrôler les tampons de caoutchouc (changement annuel conseillé) et la position de freinage lue sur le MLC (tableau de l'onglet Paramètres). Refaire l'optimisation du freinage si besoin (voir fiche MLC)."
+      },
+      {
+        "code": "Panne de secteur",
+        "type": "symptome",
+        "titre": "Ouverture à la main",
+        "action": "Le système de leviers verrouille la lisse dans les positions finales, mais en cas de coupure elle peut être déplacée à la main sans difficulté. Barrières à ouverture automatique (lisse < 3,5 m) : ressorts plus forts, la lisse s'ouvre seule et n'est pas bloquée en position basse."
+      },
+      {
+        "code": "Lisse de plus de 3,5 m",
+        "type": "symptome",
+        "titre": "Pas de lyre ou de poteau de réception",
+        "action": "À partir de 3,5 m, une lyre de repos pendulaire ou un poteau support est obligatoire. En cas de manque de hauteur, une lisse articulée existe (en option, avec plus-value)."
+      },
+      {
+        "code": "Condensation",
+        "type": "symptome",
+        "titre": "Corrosion dans le fût, moteur froid en hiver",
+        "action": "En position finale le moteur reste sous tension à puissance réduite : sa chaleur évite la condensation. Mise hors service prolongée : bloquer le système de levage en position ouverte (ou démonter la lisse) et revérifier ressorts et réglages à la remise en service."
+      }
+    ],
+    "afficheur": {
+      "intro": "Pas d'afficheur sur la barrière : tout se lit sur la logique MLC (voir la fiche MLC 10 / MLC 11).",
+      "ecrans": [],
+      "reperes": {},
+      "regles": [],
+      "autres": [
+        {
+          "titre": "Versions",
+          "texte": "Lisse « à droite » ou « à gauche » du fût, au choix à la livraison ; le changement de côté peut se faire sur place. Porte d'accès à la logique côté chaussée en standard, sur demande sur le côté ou derrière."
+        },
+        {
+          "titre": "Lisse",
+          "texte": "Profilé aluminium octogonal 100 × 55 mm, épaisseur 1,6 mm, RAL 9010 avec rubans réfléchissants rouges. Longueur de passage maximum 6 m. Plastique des écrous de fixation à remplacer chaque année si la lisse est montée avec contact de rupture (3 m maximum)."
+        },
+        {
+          "titre": "Moteur",
+          "texte": "Moteur couple sans fin de course ni débrayage, sans entretien, sur châssis en fonte d'aluminium avec arbre porte-lisse, leviers, motoréducteur et ressorts de compensation. Il peut être bloqué dans toutes les positions sans dommage."
+        }
+      ]
+    },
+    "bornier": {
+      "groupes": [
+        {
+          "nom": "Raccordement",
+          "bornes": [
+            {
+              "n": "Secteur 230 V (115 V en option)",
+              "label": "Alimentation de la barrière",
+              "desc": "Raccorder aux bornes L1, N, PE du boîtier de raccordement dans le fût, puis par le câble à prise fourni. Prévoir un disjoncteur différentiel et un coupe-circuit principal (phases et neutre)",
+              "t": "alim"
+            },
+            {
+              "n": "Logique MLC",
+              "label": "Toute la commande",
+              "desc": "Raccordements, boucles et accessoires : voir le bornier de la fiche MLC 10 / MLC 11. Les schémas de câblage faits en usine doivent être suivis impérativement",
+              "t": "bus"
+            }
+          ]
+        }
+      ],
+      "fusibles": "Fusible de la logique : F 4 A H (MLC 10) ou F 6,3 A H (MLC 11).",
+      "notes": [
+        "Puissance absorbée 120 W (MIB 20 : 240 W), 230/115 V, 50-60 Hz. Fût 350 × 350 × 1010 mm, 50 kg sans lisse, −20 à +50 °C.",
+        "Fondations : 800 mm de profondeur (hors gel), 500 × 600 mm, béton BH PC 250 avec armature, 4 chevilles M8 × 160 (entraxe 190 mm), gaines Ø 29 mm pour le secteur, les commandes et les boucles.",
+        "Distance mini de 500 mm entre le bout de la lisse et le bâtiment ou l'obstacle le plus proche ; contact visuel obligatoire entre les commandes et la barrière."
+      ]
+    },
+    "parametres": {
+      "intro": "Pas de paramètres propres à la barrière : ils se règlent sur la logique MLC. Valeurs de contrôle mécaniques ci-dessous.",
+      "navigation": [
+        "Réglages de la logique : voir la fiche MLC 10 / MLC 11 (sélecteur rotatif et touches noire / blanche)."
+      ],
+      "groupes": [
+        {
+          "nom": "Valeurs de contrôle",
+          "items": [
+            {
+              "code": "Ressorts",
+              "def": "—",
+              "titre": "Équilibrage",
+              "valeurs": [
+                [
+                  "45°",
+                  "La lisse doit rester à 45° quand le secteur est débranché"
+                ]
+              ]
+            },
+            {
+              "code": "Levier de blocage",
+              "def": "—",
+              "titre": "Couple de serrage des vis de la bride",
+              "valeurs": [
+                [
+                  "72 Nm",
+                  "Clé dynamométrique, après correction de la position de la lisse"
+                ]
+              ]
+            },
+            {
+              "code": "Capteur ouvert",
+              "def": "—",
+              "titre": "Valeur du capteur lisse ouverte",
+              "valeurs": [
+                [
+                  "555 à 565",
+                  "Lue en position 0 du MLC, touche noire maintenue"
+                ]
+              ]
+            },
+            {
+              "code": "Capteur fermé",
+              "def": "—",
+              "titre": "Valeur du capteur lisse fermée",
+              "valeurs": [
+                [
+                  "50 à 150",
+                  "Affichée pendant l'initialisation"
+                ]
+              ]
+            },
+            {
+              "code": "Freinage",
+              "def": "—",
+              "titre": "Positions de freinage (ouverture / fermeture)",
+              "valeurs": [
+                [
+                  "MIB 20 · 50 / 60 Hz",
+                  "100–220 / 80–170 · 50–180 / 70–170"
+                ],
+                [
+                  "MIB 30 · 50 / 60 Hz",
+                  "40–240 / 60–280 · 80–290 / 90–280"
+                ],
+                [
+                  "MIB 40 · 50 / 60 Hz",
+                  "40–150 / 60–180 · 70–150 / 50–200"
+                ]
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "apprentissage": {
+      "avant": [
+        "Couper le secteur avant d'ouvrir le fût. Le serrage des ressorts et du levier de blocage libère de fortes forces : n'intervenir sur le module d'entraînement qu'après avoir desserré les ressorts et bloqué ou démonté la lisse.",
+        "Fixer la bride sur l'arbre porte-lisse avec les 2 vis à six pans creux M10 × 25, puis la lisse avec le kit B."
+      ],
+      "etapes": [
+        "Poser le fût sur les fondations avec le kit A (cadre inox), écrous serrés modérément d'abord, puis alignement final.",
+        "Régler les ressorts (lisse stable à 45°) puis passer au réglage du capteur angulaire et à l'optimisation du freinage sur la logique MLC."
+      ],
+      "apres": [
+        "Maintenance tous les 12 mois : ressorts et position de la lisse, tampons caoutchouc, fût (dégâts, encrassement, peinture), lisse et bride, autocollants, fonctionnement, sécurités et boucles, interrupteurs / positions.",
+        "Garantie 2 ans après mise en service (3 ans maximum après livraison), hors pièces d'usure. N'utiliser que des pièces d'origine Magnetic."
+      ]
+    }
+  },
+  {
+    "id": "magnetic-mts",
+    "nom": "MTS 6 / 8",
+    "modeles": "Barrières MAGSTOP MTS 6 et MTS 8 (fût + lisse livrés séparément, deux clés d'accès au fût)",
+    "type": "Barrière levante à leviers et ressorts : notice de montage de 2 pages, schémas de raccordement dans la pochette de documents du fût",
+    "source": "Instructions d'utilisation et de montage BA 5103/F (04.2002)",
+    "codes": [
+      {
+        "code": "Pas à 45°",
+        "type": "symptome",
+        "titre": "La lisse ne reste pas à 45° : ressorts mal réglés",
+        "action": "Après ajout de panneaux ou de lampes sur la lisse, son poids augmente : retendre les ressorts pour que la lisse se tienne à peu près à 45° barrière hors tension. Si un ressort ne suffit pas, en ajouter un."
+      },
+      {
+        "code": "Non bloquée en bas",
+        "type": "symptome",
+        "titre": "Système de leviers mal réglé",
+        "action": "Le réglage est correct si la barrière est bloquée (A) quand le moteur est sous tension, lisse horizontale : les barres de raccordement (B) et les leviers du moteur (C) sont alors alignés, le moteur reste sous tension mais sa puissance absorbée est réduite."
+      },
+      {
+        "code": "Panne de courant",
+        "type": "symptome",
+        "titre": "Ouverture manuelle",
+        "action": "Sans courant, les ressorts poussent le système de leviers hors du point mort : la barrière peut s'ouvrir à la main."
+      },
+      {
+        "code": "Lisse ≥ 3,5 m",
+        "type": "symptome",
+        "titre": "Lyre pendulaire obligatoire",
+        "action": "Monter la lyre pendulaire selon le dessin 6. La flasque se fixe avec 2 vis M6 (SW 4), le côté le plus mince en bout de lisse (et non du côté de la fixation au fût)."
+      }
+    ],
+    "afficheur": {
+      "intro": "Notice de montage : pas d'affichage ni de logique décrits. Le raccordement électrique se fait par un électricien qualifié d'après les schémas de la pochette de documents fixée à l'intérieur de la porte du fût.",
+      "ecrans": [],
+      "reperes": {},
+      "regles": [],
+      "autres": [
+        {
+          "titre": "Matériel livré",
+          "texte": "1 fût, 2 clés d'accès (fixées sur l'arbre porte-lisse), 1 pochette de documents (côté intérieur de la porte). Emballage séparé : kit C (fixation au sol) avec 2 rails U, kit D (fixation de la lisse). Vérifier la livraison dès réception et signaler les dégâts de transport au transporteur."
+        }
+      ]
+    },
+    "bornier": {
+      "groupes": [
+        {
+          "nom": "Raccordement",
+          "bornes": [
+            {
+              "n": "Pochette de documents",
+              "label": "Schémas de raccordement de l'installation",
+              "desc": "Dans le fût, côté intérieur de la porte. Après raccordement de toutes les pièces, contrôler le bon fonctionnement de l'installation",
+              "t": "autre"
+            }
+          ]
+        }
+      ],
+      "fusibles": "Non précisé dans la notice.",
+      "notes": [
+        "Fondations en béton selon la fiche MF 5115 jointe, avec les gaines de câble nécessaires."
+      ]
+    },
+    "parametres": {
+      "intro": "Aucun paramètre électronique décrit dans cette notice. Valeurs de montage :",
+      "navigation": [],
+      "groupes": [
+        {
+          "nom": "Valeurs de montage",
+          "items": [
+            {
+              "code": "Levier des ressorts",
+              "def": "—",
+              "titre": "Couple des vis six pans (SW 10)",
+              "valeurs": [
+                [
+                  "125 Nm",
+                  "À revisser lisse à la verticale, par sécurité, après fixation de la lisse (MTS 8 : 4 vis, 2 leviers)"
+                ]
+              ]
+            },
+            {
+              "code": "Lisse",
+              "def": "—",
+              "titre": "Position basse d'usine",
+              "valeurs": [
+                [
+                  "Horizontale",
+                  "Réglée en usine ; réglage modifiable comme au paragraphe 4.2 (rotation de l'arbre porte-lisse de 90°)"
+                ]
+              ]
+            },
+            {
+              "code": "Lyre",
+              "def": "—",
+              "titre": "Lisse de 3 500 mm et plus",
+              "valeurs": [
+                [
+                  "Obligatoire",
+                  "Lyre pendulaire selon le dessin 6"
+                ]
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "apprentissage": {
+      "avant": [
+        "Couler les fondations selon la fiche MF 5115 avec les gaines de câble."
+      ],
+      "etapes": [
+        "Fixer le fût avec le kit C (figure 1) sans serrer les écrous : le positionnement définitif se fait à la fin.",
+        "Lisse courte : fixer la lisse sur l'arbre porte-lisse avec le kit D (figure 2), aligner la barrière et serrer les écrous aux fondations.",
+        "Lisse longue : soulever le capot après avoir dévissé les 3 vis papillon, dévisser les vis six pans de 10 (SW 10), tourner l'arbre porte-lisse de 90° pour fixer la lisse en position horizontale, puis la remettre à la verticale et revisser les vis du levier à 125 Nm."
+      ],
+      "apres": [
+        "Contrôler le réglage du levier (leviers alignés, barrière bloquée moteur sous tension) et l'équilibrage des ressorts."
+      ]
+    }
+  },
+  {
+    "id": "magnetic-mid1",
+    "nom": "MID 1",
+    "modeles": "Détecteur de boucle inductive Magnetic MID 1 (1 canal), montage sur rail DIN EN 50022-35",
+    "type": "Détecteur de boucle : relais de présence K1 (inverseur) et relais à impulsions K2 (contact à fermeture), 115 / 230-240 V AC ou 12 / 24 V DC",
+    "source": "Réglage appareil commande MID 1, notice BA 5181/F (01.2000)",
+    "codes": [
+      {
+        "code": "LED 1 Hz",
+        "type": "led",
+        "titre": "MID 1 : défaut de boucle",
+        "action": "Inductance hors plage admissible (70 à 1000 µH) : adapter la géométrie de la boucle ou le nombre de spires. Ou boucle coupée ou en court-circuit : contrôler la boucle et son câble d'alimentation. Le test se fait pendant la phase d'initialisation. Après correction, appuyer sur RESET."
+      },
+      {
+        "code": "LED fixe",
+        "type": "led",
+        "titre": "MID 1 : véhicule détecté",
+        "action": "L'amortissement de la boucle par le véhicule est indiqué par la LED ; le relais de présence K1 est actif. La LED s'éteint et K1 retombe dès que le véhicule quitte la boucle."
+      },
+      {
+        "code": "LED décroît",
+        "type": "led",
+        "titre": "MID 1 : initialisation en cours",
+        "action": "Normal à la mise sous tension et après RESET : la LED s'éteint à la fin. Écarter tout objet métallique (véhicule, outils) de la zone de la boucle pendant ce temps."
+      },
+      {
+        "code": "Véhicule non vu",
+        "type": "symptome",
+        "titre": "Un véhicule n'est pas reconnu : pas de détection",
+        "action": "Sensibilité trop faible : augmenter avec les DIP « 2 et 1 ». Sinon : pas de tension de service (contrôler le raccordement) ou fusibles défectueux (à remplacer)."
+      },
+      {
+        "code": "Détecte tout",
+        "type": "symptome",
+        "titre": "Détecte tous les objets métalliques : sensibilité trop haute",
+        "action": "Sensibilité réglée trop haute : diminuer avec les DIP « 2 et 1 »."
+      },
+      {
+        "code": "Détection fantôme",
+        "type": "symptome",
+        "titre": "Amortissement signalé sans véhicule",
+        "action": "Des détecteurs voisins fonctionnent sur la même fréquence : régler un détecteur sur FH (haute) et l'autre sur FL (basse), puis RESET."
+      }
+    ],
+    "afficheur": {
+      "intro": "Une seule LED (présence) et une touche RESET, deux blocs de DIP en face avant.",
+      "ecrans": [],
+      "reperes": {},
+      "regles": [],
+      "autres": [
+        {
+          "titre": "Mise en service",
+          "texte": "1. Choisir la plage de fréquence FH ou FL. 2. Sensibilité sur « min. ». 3. Choisir le mode du relais à impulsions. 4. Écarter les objets métalliques de la boucle. 5. Mettre sous tension : la LED clignote à fréquence décroissante puis s'éteint. 6. Placer un véhicule sur la boucle : la LED doit s'allumer et K1 se fermer (bornes 6 et 8) ; sinon augmenter la sensibilité."
+        },
+        {
+          "titre": "Mesure de la fréquence",
+          "texte": "Brancher l'appareil de mesure en parallèle sur les bornes 9 et 10. Pendant la mesure la LED peut clignoter et le détecteur ne fonctionne pas : appuyer sur RESET après la mesure."
+        }
+      ]
+    },
+    "bornier": {
+      "groupes": [
+        {
+          "nom": "Alimentation",
+          "bornes": [
+            {
+              "n": "1 : L · 2 : N · 3 : PE",
+              "label": "Alimentation alternative",
+              "desc": "115 V AC ou 230/240 V AC. Installation par du personnel spécialisé",
+              "t": "alim"
+            },
+            {
+              "n": "1 : + · 2 : − · 3 : libre",
+              "label": "Alimentation continue",
+              "desc": "12 V DC ou 24 V DC, borne 3 non occupée",
+              "t": "alim"
+            }
+          ]
+        },
+        {
+          "nom": "Relais et boucle",
+          "bornes": [
+            {
+              "n": "6 · 8 · 7 : K1",
+              "label": "Relais de présence",
+              "desc": "6 = commun, 8 = contact à fermeture (ferme quand un véhicule est sur la boucle), 7 = contact à ouverture (ouvre quand un véhicule est sur la boucle). Contacts sans potentiel 250 V AC / 3 A",
+              "t": "sortie"
+            },
+            {
+              "n": "4-5 : K2",
+              "label": "Relais à impulsions",
+              "desc": "Contact à fermeture sans potentiel, 250 V AC / 3 A, impulsion de 0,3 s",
+              "t": "sortie"
+            },
+            {
+              "n": "9-10",
+              "label": "Boucle inductive",
+              "desc": "Inductance 70 à 1000 µH. Câbles d'alimentation torsadés jusqu'au détecteur",
+              "t": "autre"
+            }
+          ]
+        }
+      ],
+      "fusibles": "Fusibles de l'appareil : à remplacer s'ils sont défectueux (valeur non indiquée dans la notice).",
+      "notes": [
+        "Emplois : barrières, portails, installations de lavage, feux, parkings, installations industrielles (vélos, voitures, chariots élévateurs, camions, autobus)."
+      ]
+    },
+    "parametres": {
+      "intro": "Réglages par DIP en face avant. Toute modification de la fréquence demande un RESET.",
+      "navigation": [
+        "Après un changement de fréquence : appuyer sur la touche RESET.",
+        "Après une mesure de fréquence : appuyer de nouveau sur RESET."
+      ],
+      "groupes": [
+        {
+          "nom": "DIP en face avant",
+          "items": [
+            {
+              "code": "FH / FL",
+              "def": "—",
+              "titre": "Fréquence de la boucle",
+              "valeurs": [
+                [
+                  "FH",
+                  "Fréquence haute"
+                ],
+                [
+                  "FL",
+                  "Fréquence basse : à utiliser sur le 2e détecteur quand deux MID 1 sont voisins (un en FH, l'autre en FL)"
+                ]
+              ]
+            },
+            {
+              "code": "2 et 1",
+              "def": "—",
+              "titre": "Sensibilité de réponse",
+              "valeurs": [
+                [
+                  "4 échelons",
+                  "De « min. » à « max. » avec les deux DIP : plus haut si un véhicule n'est pas vu, plus bas si tout est détecté"
+                ]
+              ]
+            },
+            {
+              "code": "Commutateur 2",
+              "def": "—",
+              "titre": "Mode du relais à impulsions K2",
+              "valeurs": [
+                [
+                  "Flanc montant",
+                  "K2 répond 0,3 s quand un véhicule arrive sur la boucle"
+                ],
+                [
+                  "Flanc descendant",
+                  "K2 répond 0,3 s quand le véhicule quitte la boucle"
+                ]
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "apprentissage": {
+      "avant": [
+        "Boucle posée sur la chaussée avec plusieurs spires, inductance entre 70 et 1000 µH, câbles d'alimentation torsadés."
+      ],
+      "etapes": [
+        "Mettre sous tension : initialisation avec test de la boucle (inductance admise, coupure, court-circuit). LED éteinte = détecteur prêt à régler la sensibilité.",
+        "Amener un véhicule sur la boucle, augmenter la sensibilité jusqu'à ce que la LED s'allume et que K1 soit actif."
+      ],
+      "apres": [
+        "Après chaque changement de fréquence ou mesure : RESET."
+      ]
+    }
+  },
+  {
+    "id": "magnetic-mpt132",
+    "nom": "MPT-132 (tambour de sécurité)",
+    "modeles": "Tambour de sécurité Magnetic MPT-132, colonne centrale 3 × 120°, modèles « entrée à gauche » et « entrée à droite », 325 kg, contrôleur de logique MBC-110 et calculateur moteur MMC-120",
+    "type": "Portillon d'accès tournant 230 V / 50 Hz, commande 42 / 30 V DC, 6 entrées optocouplées et 6 sorties relais, afficheur 7 segments à un caractère, 2 blocs de 8 DIP (S1 et S2)",
+    "source": "Instructions de service Tambour de sécurité MPT-132 (5817,5811FR, version 01)",
+    "codes": [
+      {
+        "code": "01",
+        "type": "erreur",
+        "titre": "Détection de collision (temps d'exécution trop long)",
+        "action": "Obstacle ou point dur pendant la course. Réinitialisation automatique. Le relais R1 (erreur générale) s'ouvre tant que l'erreur est présente."
+      },
+      {
+        "code": "02",
+        "type": "erreur",
+        "titre": "Entrée de cas d'urgence activée",
+        "action": "L'entrée IN1 n'a plus de signal : arrêt d'urgence, rupture de fil ou détection incendie. Le moteur est coupé immédiatement. Réinitialisation automatique au retour du signal."
+      },
+      {
+        "code": "05",
+        "type": "erreur",
+        "titre": "Passage dans le mauvais sens (Wrongway)",
+        "action": "Quelqu'un pousse dans le sens non autorisé : colonne bloquée puis libérée selon le niveau de sécurité (DIP S1.4). Réinitialisation automatique."
+      },
+      {
+        "code": "06",
+        "type": "erreur",
+        "titre": "Wrongway « high security »",
+        "action": "Plusieurs tentatives dans le mauvais sens avec S1.4 = ON : la colonne reste bloquée jusqu'à une réinitialisation manuelle (entrée IN5). Pas de réinitialisation automatique."
+      },
+      {
+        "code": "07",
+        "type": "erreur",
+        "titre": "Détection de vandalisme",
+        "action": "Réinitialisation automatique. Puissance absorbée jusqu'à 180 W dans ce cas ; buzzer actif si S1.2 est sur ON."
+      },
+      {
+        "code": "20",
+        "type": "erreur",
+        "titre": "Erreur au système d'assistance (MMC-120)",
+        "action": "Pas de réinitialisation automatique. Voir les codes du MMC-120 par les clignotements de sa LED rouge."
+      },
+      {
+        "code": "21",
+        "type": "erreur",
+        "titre": "Étage de sortie du MMC-120 ne peut pas être mis en marche",
+        "action": "Pas de réinitialisation automatique. Contrôler l'alimentation du MMC-120, le signal d'urgence IN1 et la liaison CAN."
+      },
+      {
+        "code": "22",
+        "type": "erreur",
+        "titre": "Erreur d'adresse de nœud (Nodeguarding) du MMC-120",
+        "action": "Liaison CAN avec le MMC-120 en défaut : contrôler le câble CAN et ses connecteurs."
+      },
+      {
+        "code": "41",
+        "type": "erreur",
+        "titre": "Mode de programme incorrect",
+        "action": "Contrôler les positions des DIP S1 et S2 (une modification n'est prise en compte qu'après coupure et remise sous tension)."
+      },
+      {
+        "code": "42",
+        "type": "erreur",
+        "titre": "Tambour bloqué par l'unité d'entraînement",
+        "action": "Pas de réinitialisation automatique : chercher une cause mécanique (blocage de la colonne, dispositif de verrouillage) ou moteur."
+      },
+      {
+        "code": "50 à 57",
+        "type": "erreur",
+        "titre": "Erreur de logiciel",
+        "action": "Pas de réinitialisation automatique : couper puis remettre sous tension (au moins 10 s). Si le code revient, contacter le distributeur ou Magnetic."
+      },
+      {
+        "code": "5D · 5E · 5F",
+        "type": "erreur",
+        "titre": "CRC EEPROM · CRC Flash · circuit de surveillance (Watchdog)",
+        "action": "Défaut interne de la commande, pas de réinitialisation automatique : couper puis remettre sous tension, sinon remplacer ou contacter Magnetic."
+      },
+      {
+        "code": "60 à 66",
+        "type": "erreur",
+        "titre": "Erreurs du bus CAN et du bus I²C",
+        "action": "60 pile de protocoles CAN, 61 bus-OFF, 62 initialisation du bus, 63 adresse CAN du MMC-120, 65 bus I²C, 66 pile CANopen. Contrôler le câblage CAN entre MBC-110 et MMC-120 et les connecteurs."
+      },
+      {
+        "code": "70 à 7E",
+        "type": "erreur",
+        "titre": "Micrologiciel ou matériel du MMC-120 incorrect",
+        "action": "70, 72, 74 : micrologiciel, application ou version incorrects, un téléchargement est nécessaire. 76 : matériel incorrect. 78 : logiciel impossible à effacer. 7A : pas de communication avec le chargeur d'amorçage. 7C : erreur de téléchargement. 7E : erreur d'activation. Voir la procédure de téléchargement (onglet Apprent.)."
+      },
+      {
+        "code": "Verte éteinte",
+        "type": "led",
+        "titre": "MMC-120 : pas de tension d'alimentation",
+        "action": "Vérifier la tension d'alimentation (électricien qualifié)."
+      },
+      {
+        "code": "Verte clignote",
+        "type": "led",
+        "titre": "MMC-120 : alimentation présente mais pas d'entrée de sécurité",
+        "action": "Pas de signal de sécurité sur l'entrée de cas d'urgence IN1 du MBC-110, ou liaison CAN entre MBC-110 et MMC-120 défectueuse."
+      },
+      {
+        "code": "Rouge fixe",
+        "type": "led",
+        "titre": "MMC-120 : erreur externe avec arrêt d'urgence",
+        "action": "Chercher l'erreur dans le MBC-110 ou le MMC-120."
+      },
+      {
+        "code": "Rouge clignote",
+        "type": "led",
+        "titre": "MMC-120 : le nombre de clignotements = le code d'erreur",
+        "action": "2 : erreur de résolveur (fiche mal connectée ou court-circuit). 4 : erreur de phase moteur (câble moteur débranché ou rompu). 5 : Lifeguarding CAN (communication avec le MBC-110 interrompue). 6 : court-circuit à la masse. 7 : court-circuit entre deux phases moteur. 8 : surtension du circuit intermédiaire (> 56 V). 9 : sous-tension (< 17 V). 11 : surchauffe du dissipateur (> 80 °C). 20 : protection I²t, moteur en surcharge."
+      },
+      {
+        "code": "Rouge + verte",
+        "type": "led",
+        "titre": "MMC-120 : programme d'application effacé",
+        "action": "Le téléchargement a été interrompu : le chargeur d'amorçage attend un nouveau programme (voir la notice, téléchargement du programme d'application)."
+      }
+    ],
+    "afficheur": {
+      "intro": "Afficheur 7 segments à un caractère sur le MBC-110, avec les LED rouges des entrées et vertes des sorties. Service normal : le point clignote à 0,5 Hz.",
+      "ecrans": [],
+      "reperes": {},
+      "regles": [],
+      "autres": [
+        {
+          "titre": "Lecture d'un code d'erreur",
+          "texte": "Chaque caractère s'affiche 2 s, avec une pause entre eux. Exemple : E05 = E, pause, 0, pause, 5, pause, puis la séquence recommence. L'affichage des erreurs est actif quand le DIP S1.8 est sur OFF (réglage d'usine)."
+        },
+        {
+          "titre": "Version du logiciel",
+          "texte": "DIP S1.7 sur ON : affiche en boucle u, puis le 1er chiffre avec point, puis le 2e (version 1.4 = u, 1., 4)."
+        },
+        {
+          "titre": "LED du MBC-110",
+          "texte": "LED rouge allumée = entrée activée. LED verte = sortie relais activée."
+        }
+      ]
+    },
+    "bornier": {
+      "groupes": [
+        {
+          "nom": "Puissance",
+          "bornes": [
+            {
+              "n": "L · N · PE",
+              "label": "Alimentation 230 V / 50 Hz",
+              "desc": "Seulement sur les bornes L, N, PE. Interrupteur principal 2 pôles au dos du boîtier-support (attendre 10 s entre arrêt et remise sous tension). Fusible amont 16 A maximum, interrupteur verrouillable, différentiel et disjoncteur fournis par le client",
+              "t": "alim"
+            },
+            {
+              "n": "X7 : 1-2 : 0 V · 3-4 : 24 V",
+              "label": "Sortie 24 V DC",
+              "desc": "300 mA maximum, pour les périphériques du client (alimente les contacts S2 à S7 reliés à la borne COM de X2)",
+              "t": "alim"
+            }
+          ]
+        },
+        {
+          "nom": "Entrées X2 (optocouplées)",
+          "bornes": [
+            {
+              "n": "X2 : 1 IN1+ · 2 IN1−",
+              "label": "Urgence (signal ASB du servorégulateur)",
+              "desc": "Logique inversée : la commande n'est alimentée qu'en présence d'un signal permanent. Arrêt d'urgence, rupture de fil, détection incendie. Si le signal disparaît le moteur est coupé immédiatement. Non modifiable",
+              "t": "nf"
+            },
+            {
+              "n": "X2 : 3 COM · 4 IN2",
+              "label": "Autorisation droite (S2)",
+              "desc": "Impulsion de libération vers la droite : la colonne tourne dans le sens horaire (vue du dessus)",
+              "t": "no"
+            },
+            {
+              "n": "X2 : 5 IN3",
+              "label": "Autorisation gauche (S3)",
+              "desc": "Impulsion de libération vers la gauche : la colonne tourne dans le sens antihoraire (vue du dessus)",
+              "t": "no"
+            },
+            {
+              "n": "X2 : 6 IN4",
+              "label": "Verrouiller (S4)",
+              "desc": "Blocage de l'installation : efface toutes les impulsions de libération et la durée d'ouverture",
+              "t": "no"
+            },
+            {
+              "n": "X2 : 7 IN5",
+              "label": "Reset manuel (S5)",
+              "desc": "Nécessaire seulement si « réinitialisation manuelle » (DIP S1.3) ou « security high » (DIP S1.4) est activé",
+              "t": "no"
+            },
+            {
+              "n": "X2 : 8 IN6",
+              "label": "Autorisation permanente droite (S6)",
+              "desc": "Libération permanente du passage vers la droite",
+              "t": "no"
+            },
+            {
+              "n": "X2 : 9 IN7",
+              "label": "Autorisation permanente gauche (S7)",
+              "desc": "Libération permanente du passage vers la gauche",
+              "t": "no"
+            }
+          ]
+        },
+        {
+          "nom": "Sorties relais X1",
+          "bornes": [
+            {
+              "n": "X1 : 1 R1 · 2 COM-R1",
+              "label": "Erreur générale / panne de tension",
+              "desc": "Contact ouvert tant que l'erreur est présente : temps d'exécution trop long, erreur CAN, erreur matérielle ou logicielle de l'étage de sortie, course de référence en cours, urgence activée, panne de tension, attente de reset manuel",
+              "t": "sortie"
+            },
+            {
+              "n": "X1 : 3 R2",
+              "label": "Tambour en position de repos / de blocage",
+              "desc": "Signal permanent tant que le tambour est en position fermée ou dans l'une des trois positions de blocage",
+              "t": "sortie"
+            },
+            {
+              "n": "X1 : 4 R3",
+              "label": "Affichage de passage libre (R3)",
+              "desc": "Signal permanent tant que le passage est libre. Le schéma (fig. 35) indique la droite, le tableau 6 de la notice indique la gauche : vérifier par un essai",
+              "t": "sortie"
+            },
+            {
+              "n": "X1 : 5 R4 · 6 COM R2-4",
+              "label": "Affichage de passage libre (R4)",
+              "desc": "Signal permanent tant que le passage est libre. Le schéma (fig. 35) indique la gauche, le tableau 6 la droite : vérifier par un essai. Borne 6 = commun de R2 à R4",
+              "t": "sortie"
+            },
+            {
+              "n": "X1 : 7 R5",
+              "label": "Impulsion de comptage (R5)",
+              "desc": "Impulsion de 500 ms au démarrage d'un passage. Côté droite sur le schéma, gauche dans le tableau 6 : vérifier par un essai",
+              "t": "sortie"
+            },
+            {
+              "n": "X1 : 8 R6 · 9 COM R5-6",
+              "label": "Impulsion de comptage (R6)",
+              "desc": "Impulsion de 500 ms au démarrage d'un passage. Côté gauche sur le schéma, droite dans le tableau 6 : vérifier par un essai. Borne 9 = commun de R5 et R6",
+              "t": "sortie"
+            }
+          ]
+        }
+      ],
+      "fusibles": "Fusible amont du client : 16 A maximum. Contacts de relais : 5 à 24 V, 10 mA à 1 A (max. 42 V / 1 A).",
+      "notes": [
+        "Numéros de bornes relevés sur le schéma de la notice (fig. 35) ; à confirmer avec le schéma électrique livré avec le tambour.",
+        "6 entrées avec LED rouges et 6 sorties avec LED vertes. Courant absorbé 0,2 A au repos, 0,3 A en mouvement, 1 A au démarrage (30 ms). Température −25 à +45 °C, IP 43 (IP 54 en option)."
+      ]
+    },
+    "parametres": {
+      "intro": "Deux blocs de 8 DIP sur le MBC-110. Toute modification n'est prise en compte qu'après une coupure de la tension d'alimentation et une remise en marche.",
+      "navigation": [
+        "Couper l'alimentation, régler les DIP, remettre sous tension."
+      ],
+      "groupes": [
+        {
+          "nom": "DIP S1",
+          "items": [
+            {
+              "code": "S1.1",
+              "def": "—",
+              "titre": "Enregistrement d'impulsions",
+              "valeurs": [
+                [
+                  "OFF",
+                  "N'enregistre pas : une impulsion libère le passage, les suivantes sont ignorées tant qu'il est ouvert"
+                ],
+                [
+                  "ON",
+                  "Enregistre jusqu'à 6 impulsions par sens ; le passage reste libre jusqu'à ce que le nombre retombe à zéro"
+                ]
+              ]
+            },
+            {
+              "code": "S1.2",
+              "def": "—",
+              "titre": "Buzzer",
+              "valeurs": [
+                [
+                  "OFF",
+                  "Inactif"
+                ],
+                [
+                  "ON",
+                  "Avertit pendant la course de référence, en cas de passage dans le mauvais sens, d'erreur ou de vandalisme, et confirme que la voie est libre"
+                ]
+              ]
+            },
+            {
+              "code": "S1.3",
+              "def": "—",
+              "titre": "Comportement après retour de tension",
+              "valeurs": [
+                [
+                  "OFF",
+                  "Réinitialisation automatique (course de référence immédiate)"
+                ],
+                [
+                  "ON",
+                  "Réinitialisation manuelle (attend une impulsion sur IN5)"
+                ]
+              ]
+            },
+            {
+              "code": "S1.4",
+              "def": "—",
+              "titre": "Security level",
+              "valeurs": [
+                [
+                  "OFF",
+                  "Low : le mauvais sens peut passer par poussées successives ; après le 4e blocage, blocage d'une minute"
+                ],
+                [
+                  "ON",
+                  "High : après quelques essais la colonne reste bloquée jusqu'à un reset manuel"
+                ]
+              ]
+            },
+            {
+              "code": "S1.5 · S1.6",
+              "def": "—",
+              "titre": "Durée d'ouverture",
+              "valeurs": [
+                [
+                  "OFF · OFF",
+                  "10 s"
+                ],
+                [
+                  "OFF · ON",
+                  "20 s"
+                ],
+                [
+                  "ON · OFF",
+                  "30 s"
+                ],
+                [
+                  "ON · ON",
+                  "Illimitée"
+                ]
+              ]
+            },
+            {
+              "code": "S1.7",
+              "def": "—",
+              "titre": "Version du logiciel",
+              "valeurs": [
+                [
+                  "OFF",
+                  "Affichage de service normal"
+                ],
+                [
+                  "ON",
+                  "Affiche la version du logiciel"
+                ]
+              ]
+            },
+            {
+              "code": "S1.8",
+              "def": "—",
+              "titre": "Configuration d'origine",
+              "valeurs": [
+                [
+                  "OFF",
+                  "Service normal"
+                ],
+                [
+                  "ON",
+                  "Remet tous les paramètres à leurs valeurs d'usine : couper, mettre S1.8 sur ON, remettre sous tension, attendre l'état de service normal puis remettre S1.8 sur OFF"
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "nom": "DIP S2",
+          "items": [
+            {
+              "code": "S2.1",
+              "def": "—",
+              "titre": "Préchauffage à l'arrêt",
+              "valeurs": [
+                [
+                  "OFF",
+                  "Inactivé"
+                ],
+                [
+                  "ON",
+                  "Activé"
+                ]
+              ]
+            },
+            {
+              "code": "S2.2 · S2.3",
+              "def": "—",
+              "titre": "Force de poussée pour démarrer le passage",
+              "valeurs": [
+                [
+                  "OFF · OFF",
+                  "Faible"
+                ],
+                [
+                  "OFF · ON",
+                  "Moyenne"
+                ],
+                [
+                  "ON · OFF",
+                  "Assez élevée"
+                ],
+                [
+                  "ON · ON",
+                  "Élevée"
+                ]
+              ]
+            },
+            {
+              "code": "S2.4 · S2.5",
+              "def": "—",
+              "titre": "Vitesse en service normal",
+              "valeurs": [
+                [
+                  "OFF · OFF",
+                  "Lente"
+                ],
+                [
+                  "OFF · ON",
+                  "Moyenne"
+                ],
+                [
+                  "ON · OFF",
+                  "Rapide"
+                ],
+                [
+                  "ON · ON",
+                  "Rapide"
+                ]
+              ]
+            },
+            {
+              "code": "S2.6",
+              "def": "—",
+              "titre": "Sens de rotation de la course de référence (vue du dessus)",
+              "valeurs": [
+                [
+                  "OFF",
+                  "Antihoraire"
+                ],
+                [
+                  "ON",
+                  "Horaire"
+                ]
+              ]
+            },
+            {
+              "code": "S2.7",
+              "def": "—",
+              "titre": "Exécution de l'obstacle du portillon",
+              "valeurs": [
+                [
+                  "OFF",
+                  "3 × 120°"
+                ],
+                [
+                  "ON",
+                  "Sans fonction"
+                ]
+              ]
+            },
+            {
+              "code": "S2.8",
+              "def": "—",
+              "titre": "Réserve",
+              "valeurs": [
+                [
+                  "—",
+                  "Prévu pour des extensions futures"
+                ]
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "apprentissage": {
+      "avant": [
+        "Fondation et tuyaux vides selon le plan de fondation, cadre de fondation et montage du boîtier-support (chapitre 5 de la notice).",
+        "Réglage de la position de blocage (position initiale) : voir le paragraphe 5.4.9 de la notice (PDF)."
+      ],
+      "etapes": [
+        "Mise sous tension par l'interrupteur principal du boîtier-support : le tambour fait une course de référence dans le sens réglé par S2.6.",
+        "Téléchargement d'un nouveau logiciel du MBC-110 : noter les 16 DIP, couper, mettre les 16 DIP sur ON, remettre sous tension (l'écran affiche P puis G, puis L avec un point clignotant), remettre les 16 DIP sur OFF (c = effacement, d = téléchargement, barre tournante = redémarrage), couper, remettre les DIP dans leur position d'origine et remettre sous tension."
+      ],
+      "apres": [
+        "Maintenance semestrielle : colonne centrale et éléments latéraux, boîtier-support, dispositif de verrouillage complémentaire, jeu et souplesse du palier inférieur, vissages de la bride de transmission, différentiel externe.",
+        "Maintenance annuelle (électricien) : câbles, fixation des branchements, lisibilité des panneaux et autocollants, fixations à la fondation."
+      ]
+    }
+  }
+]
 }
 ];
 
@@ -60283,6 +61941,10 @@ const HOTLINES = {
   ],
   lba: [
     { nom: "La Barrière Automatique — SAV (Limonest)", tel: "+33478860286", src: "notices LBA 4/6/7 (2017) et LBA 12 : « service après-vente »" }
+  ],
+  magnetic: [
+    { nom: "Magnetic Autocontrol — bureau France (Metz)", tel: "+33387174080", src: "fiche MIB 30/40 MF 5121 (09.2008) et manuel MIB/MLC 2008 : numéro à vérifier, édition ancienne" },
+    { nom: "Magnetic Autocontrol GmbH — Schopfheim (Allemagne, siège)", tel: "+4976226955", src: "notices Magnetic MPT-132, MLC et BA 5103" }
   ],
   elka: [],
   doitrand: []

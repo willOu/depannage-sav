@@ -1539,6 +1539,88 @@ window.NOTICES_PDF = {
 "m": 0
 }
 ],
+"magnetic-mlc": [
+  {
+    "f": "notices/magnetic-mib-mlc-manuel-2008.pdf",
+    "t": "Manuel MAGSTOP MIB 20/30/40 – MLC (581F,5000, éd. 01.2008)",
+    "p": 41,
+    "pt": 41,
+    "ko": 786,
+    "m": 0
+  },
+  {
+    "f": "notices/magnetic-mib-mlc-manuel-1999.pdf",
+    "t": "Manuel MAGSTOP MIB 20/30/40 – MLC (581F,5000, éd. 1999, version antérieure)",
+    "p": 31,
+    "pt": 31,
+    "ko": 341,
+    "m": 0
+  },
+  {
+    "f": "notices/magnetic-mlc-fiche-mf5131.pdf",
+    "t": "Fiche MLC MF 5131/F : caractéristiques et schéma des connexions",
+    "p": 2,
+    "pt": 2,
+    "ko": 428,
+    "m": 0
+  }
+],
+"magnetic-mib": [
+  {
+    "f": "notices/magnetic-mib-mlc-manuel-2008.pdf",
+    "t": "Manuel MAGSTOP MIB 20/30/40 – MLC (581F,5000, éd. 01.2008)",
+    "p": 41,
+    "pt": 41,
+    "ko": 786,
+    "m": 0
+  },
+  {
+    "f": "notices/magnetic-mib30-40-fiche-mf5121.pdf",
+    "t": "Fiche barrière MIB 30 / MIB 40 MF 5121/F : cotes et sécurité",
+    "p": 2,
+    "pt": 2,
+    "ko": 127,
+    "m": 0
+  },
+  {
+    "f": "notices/magnetic-mib-mlc-manuel-1999.pdf",
+    "t": "Manuel MAGSTOP MIB 20/30/40 – MLC (581F,5000, éd. 1999, version antérieure)",
+    "p": 31,
+    "pt": 31,
+    "ko": 341,
+    "m": 0
+  }
+],
+"magnetic-mts": [
+  {
+    "f": "notices/magnetic-mts6-8-ba5103.pdf",
+    "t": "Notice de montage MTS 6 / 8 (BA 5103/F)",
+    "p": 2,
+    "pt": 2,
+    "ko": 94,
+    "m": 0
+  }
+],
+"magnetic-mid1": [
+  {
+    "f": "notices/magnetic-mid1-ba5181.pdf",
+    "t": "Notice de réglage MID 1 (BA 5181/F)",
+    "p": 2,
+    "pt": 2,
+    "ko": 75,
+    "m": 0
+  }
+],
+"magnetic-mpt132": [
+  {
+    "f": "notices/magnetic-mpt132-instructions-de-service.pdf",
+    "t": "Instructions de service Tambour de sécurité MPT-132",
+    "p": 74,
+    "pt": 74,
+    "ko": 1303,
+    "m": 0
+  }
+],
 "as-bl12": [
 {
 "f": "notices/automatic-systems-bl12-mt-fr-13.pdf",

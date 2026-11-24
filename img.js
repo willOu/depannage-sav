@@ -284,6 +284,31 @@
       S("sick-mrs1000-p2", "LED, montage et EasyTeach", 2, "Signification des LED, schéma de raccordement, câblage d'un bouton EasyTeach."),
       S("sick-mrs1000-p6", "Plan coté", 6, "Dimensions, trous de fixation M5, zone morte, plages de détection.")
     ],
+    "magnetic-mlc": [
+      S("magnetic-mlc-p2", "Schéma des connexions MLC (jeu S20000)", 2, "Fiche MLC : bornes 1 à 21 (secteur, moteur, condensateurs, relais K1 et K2) et 22 à 42 (capteur, 24 V, entrées IN1 à IN5, pupitre, boucles A et B)."),
+      S("magnetic-mlc-p21", "Face avant de la logique MLC", 21, "Manuel 2008 : afficheur, sélecteur rotatif, touches noire et blanche, borniers des entrées et des sorties."),
+      S("magnetic-mlc-p24", "Positions du sélecteur et programmation", 24, "Manuel 2008 : positions 0 à F, programmes 1 à 8 et procédure de programmation."),
+      S("magnetic-mlc-p26", "Modes des boucles A et B", 26, "Manuel 2008 : fonction interne et fonction des relais K1 et K2 selon le mode."),
+      S("magnetic-mlc-p28", "Fonctions étendues", 28, "Manuel 2008 : touche noire + sélecteur, début du réglage du capteur angulaire."),
+      S("magnetic-mlc-p09", "Géométrie des boucles", 9, "Manuel 2008 : implantation de la boucle de surveillance par rapport à la lisse.")
+    ],
+    "magnetic-mib": [
+      S("magnetic-mib-p2", "Cotes et sécurité des barrières MIB 30 / 40", 2, "Fiche MF 5121 : cotes versions à droite / à gauche, lisse articulée, règles de sécurité.")
+    ],
+    "magnetic-mts": [
+      S("magnetic-mts-p1", "Montage du fût et de la lisse", 1, "Notice BA 5103 : kits C et D, fondations, lisses courtes et longues."),
+      S("magnetic-mts-p2", "Cas particuliers, lyre et levier", 2, "Notice BA 5103 : ressorts retendus, lyre pendulaire, réglage du levier.")
+    ],
+    "magnetic-mid1": [
+      S("magnetic-mid1-p1", "Raccordement du MID 1", 1, "Notice BA 5181 : alimentation, relais de présence K1, relais à impulsions K2, boucle."),
+      S("magnetic-mid1-p2", "Réglages et défauts du MID 1", 2, "Notice BA 5181 : fréquence FH / FL, sensibilité, mise en service, tableau des défauts.")
+    ],
+    "magnetic-mpt132": [
+      S("magnetic-mpt132-p46", "Connexions MBC-110 côté client", 46, "Fig. 35 : sorties de relais X1, 24 V X7, entrées X2."),
+      S("magnetic-mpt132-p50", "DIP S1", 50, "Enregistrement, buzzer, security level, durée d'ouverture, version, configuration d'origine."),
+      S("magnetic-mpt132-p53", "DIP S2", 53, "Préchauffage, force de poussée, vitesse, sens de la course de référence."),
+      S("magnetic-mpt132-p62", "Codes d'erreur du MBC-110", 62, "Tableau des messages d'erreur et réinitialisation automatique.")
+    ],
     "as-bl12": [
       S("as-bl12-p11", "Logique de commande (fig. 6)", 11, "Connecteurs X1 à X10, fusible, interrupteur, dip-switchs SW1, bouton AN, potentiomètre VR1, LED."),
       S("as-bl12-p09", "Connexions électriques", 9, "Alimentation, boîte à boutons, fins de course, boucle, cellules IR, gyrophare."),
