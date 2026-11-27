@@ -192,6 +192,10 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "2.99", date: "2026-11-27", titre: "Pages marques triées : cartes, moteurs, accessoires", items: [
+    "Chaque logo de l'accueil ouvre une page triée : Cartes de commande, Moteurs, Accessoires (par famille), avec une barre de filtre et les nombres",
+    "Les accessoires et moteurs des marques sont maintenant tous accessibles depuis leur logo"
+  ] },
   { v: "2.98", date: "2026-11-27", titre: "IST : pont radio TCO7SG-KIT", items: [
     "Nouvelle fiche accessoire IST TCO7SG-KIT : pont radio 868 MHz pour bords sensibles et sécurités (émetteur à piles + récepteur), avec bornier du récepteur, DIP et cavaliers JP1 / JP2 (8K2 ou contact sec), autotest, appairage, effacement de la mémoire, niveau de réception et voyants",
     "Notice PDF d'origine (5 langues, le français aux pages 3 à 9) et 5 schémas dans l'appli"

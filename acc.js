@@ -5052,15 +5052,46 @@
     });
     return out.sort((x, y) => x.nom.localeCompare(y.nom));
   };
-  window.accBrandHtml = function (nom) {
-    const l = accOf(nom);
-    return l.length ? `<h2>Accessoires ${esc(nom)}</h2><div class="list">${l.map(rowAcc).join("")}</div>` : "";
-  };
+  /* Page d'une marque : cartes, moteurs, accessoires (par famille), avec filtre en haut */
+  let BP = null;
+  const motType = a => { const t = norm(a.categorie + " " + a.nom); return /borne/.test(t) ? "Bornes escamotables" : /barriere/.test(t) ? "Barrières levantes" : /coulissant/.test(t) ? "Portails coulissants" : /battant|verin/.test(t) ? "Portails battants" : "Autres motorisations"; };
+  const MOT_ORDRE = ["Portails coulissants", "Portails battants", "Barrières levantes", "Bornes escamotables", "Autres motorisations"];
+  const grp = (l, keyOf, ordre) => { const g = {}; l.forEach(x => (g[keyOf(x)] = g[keyOf(x)] || []).push(x)); return (ordre || Object.keys(g).sort()).filter(k => g[k]).map(k => [k, g[k]]); };
+  const sect = (titre, n, inner) => `<h2>${esc(titre)} <span class="p">· ${n}</span></h2>${inner}`;
+  const sous = (titre, n, rows) => `<h3 class="sgt">${esc(titre)} · ${n}</h3><div class="list">${rows}</div>`;
+  function paintBP() {
+    const accs = accOf(BP.nom).slice().sort((x, y) => x.nom.localeCompare(y.nom, "fr", { numeric: true }));
+    const mot = accs.filter(x => familleOf(x) === "motor"), autres = accs.filter(x => familleOf(x) !== "motor");
+    const cartes = BP.cartes;
+    const tabs = [["all", "Tout", cartes.length + accs.length], cartes.length ? ["cartes", "Cartes de commande", cartes.length] : null, mot.length ? ["moteurs", "Moteurs", mot.length] : null, autres.length ? ["acc", "Accessoires", autres.length] : null].filter(Boolean);
+    if (!tabs.some(t => t[0] === BP.tab)) BP.tab = "all";
+    const t = BP.tab, all = t === "all";
+    let h = "";
+    if (tabs.length > 2) h += `<div class="bchips" role="tablist">` + tabs.map(([k, l, n]) => `<button class="bchip${t === k ? " on" : ""}" role="tab" aria-selected="${t === k}" onclick="setBP('${k}')">${esc(l)} (${n})</button>`).join("") + `</div>`;
+    if ((all || t === "cartes") && cartes.length) {
+      const g = grp(cartes, x => { const k = genreOf(x.c), e = GENRES.find(y => y[0] === k); return e ? e[2] : "Autres cartes"; }, GENRES.map(y => y[2]).concat("Autres cartes"));
+      h += sect("Cartes de commande", cartes.length, g.length > 1 && cartes.length > 6 ? g.map(([k, l]) => sous(k, l.length, l.map(rowBoard).join(""))).join("") : `<div class="list">${cartes.map(rowBoard).join("")}</div>`);
+    }
+    if ((all || t === "moteurs") && mot.length) {
+      const g = grp(mot, motType, MOT_ORDRE);
+      h += sect("Moteurs", mot.length, g.length > 1 ? g.map(([k, l]) => sous(k, l.length, l.map(rowAcc).join(""))).join("") : `<div class="list">${mot.map(rowAcc).join("")}</div>`);
+    }
+    if ((all || t === "acc") && autres.length) {
+      const ordre = FAMILLES.map(f => f[0]).filter(k => k !== "motor").concat("autre");
+      const g = grp(autres, familleOf, ordre);
+      h += sect("Accessoires", autres.length, g.length > 1 ? g.map(([k, l]) => sous(familleNom(k), l.length, l.map(rowAcc).join(""))).join("") : `<div class="list">${autres.map(rowAcc).join("")}</div>`);
+    }
+    app.innerHTML = BP.pre + h;
+    if (window.avisImages) avisImages(app);
+  }
+  window.brandPage = function (pre, nom, cartes) { BP = { pre, nom, cartes, tab: "all" }; paintBP(); };
+  window.setBP = function (k) { if (BP) { BP.tab = k; paintBP(); } };
+  window.accBrandHtml = function () { return ""; };
   window.viewAccBrand = function (slug) {
     const b = ACCESSOIRES.find(a => slugM(a.marque) === slug);
     if (!b) return viewHome();
     setHead(b.marque, true);
-    app.innerHTML = `<p class="note">Accessoires ${esc(b.marque)} : fiches issues des notices fabricant.</p><div class="list">${accOf(b.marque).map(rowAcc).join("")}</div>`;
+    brandPage(`<p class="note">Fiches ${esc(b.marque)} issues des notices fabricant.</p>`, b.marque, []);
   };
 
   /* Onglet « Notice » : transcription complète + pages d'origine en image */

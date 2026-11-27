@@ -230,7 +230,7 @@ body.hometabs main,body.hometabs #app{padding-bottom:84px}
 .cf select,.cf input{width:100%;box-sizing:border-box;padding:11px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-size:16px}
 .ci{position:relative;display:block}.ci input{padding-right:44px}.ci i{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-style:normal;color:var(--muted);font-weight:600;font-size:14px}
 .cres{margin-top:12px;background:var(--card);border:1px solid var(--line);border-left:5px solid var(--line);border-radius:12px;padding:12px 14px;font-size:15.5px;line-height:1.5}.cres.ok{border-left-color:#2e9d57}.cres.ko{border-left-color:#E5372E}.cres small{color:var(--muted)}
-.ctab{width:100%;margin-top:6px}.ctab th{text-align:left;font-size:12px;color:var(--muted)}.ctab tr.ok td:last-child{color:#2e9d57;font-weight:700}.ctab tr.ko td:last-child{color:#E5372E}.ctab tr.sel td{font-weight:800;background:var(--chip)}
+.sgt{font-size:12.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin:16px 2px 6px}.ctab{width:100%;margin-top:6px}.ctab th{text-align:left;font-size:12px;color:var(--muted)}.ctab tr.ok td:last-child{color:#2e9d57;font-weight:700}.ctab tr.ko td:last-child{color:#E5372E}.ctab tr.sel td{font-weight:800;background:var(--chip)}
 .al{display:grid;grid-template-columns:1fr 54px 96px auto;gap:6px;margin-top:8px}.al input{width:100%;box-sizing:border-box;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-size:15px}.al .aq{text-align:center}
 @media (max-width:400px){.al{grid-template-columns:1fr 46px 86px auto}}
 #aadd{margin-top:8px}
@@ -857,8 +857,9 @@ function avisMarque(m){
 function viewBrand(id){
   const m = MARQUES.find(x => x.id === id); if (!m) return viewHome();
   setHead(m.nom, true);
-  app.innerHTML = hotlineHtml(m) + avisMarque(m) + (window.avisHtml ? avisHtml("m:" + m.id) : "") + `<h2>Cartes ${esc(m.nom)}</h2><div class="list">` + m.cartes.map(c => rowBoard({m, c})).join("") + `</div>` + accBrandHtml(m.nom);
-  if (window.avisImages) avisImages(app);
+  const pre = hotlineHtml(m) + avisMarque(m) + (window.avisHtml ? avisHtml("m:" + m.id) : "");
+  if (window.brandPage) brandPage(pre, m.nom, m.cartes.map(c => ({m, c})));
+  else { app.innerHTML = pre + `<h2>Cartes ${esc(m.nom)}</h2><div class="list">` + m.cartes.map(c => rowBoard({m, c})).join("") + `</div>`; if (window.avisImages) avisImages(app); }
 }
 
 let paramOpen = "";
