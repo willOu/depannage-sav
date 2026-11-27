@@ -192,6 +192,12 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "3.00", date: "2026-11-27", titre: "Simulateur d'horloge Theben (top2 et top3 BLE RC)", items: [
+    "Nouveau : simulateur des horloges Theben TR 641 / 642 / 644 top2 (et RC) et top3 BLE RC, dans Formation. L'appareil de la photo avec ses 4 touches (MENU, ◀, ▶, OK) et son écran à segments, orange pour la top2, bleu pour la top3",
+    "Menus d'après les notices : PROGRAMME (standard P0, programmes spéciaux P1 à P16 avec plages de dates, impulsion, cycle, vérifier / modifier / effacer), SIMULATION, HEURE/DATE, MANUEL (permanent, manuel, temporisation, vacances, programme spécial), OPTIONS (astro, entrée externe, compteur d'heures, langue, PIN, rétroéclairage, réglages d'usine), mise en service",
+    "Choix 1, 2 ou 4 canaux ; temps accéléré (jusqu'à 1 jour par seconde) pour voir les sorties C1 à C4 commuter ; 3 exercices corrigés ; accès depuis la fiche de l'horloge",
+    "Ce que la notice ne décrit pas n'est pas simulé et l'écran l'indique (NON SIMULÉ) : aléatoire, règles de Pâques et du nouvel an chinois, module EM4, Bluetooth / OBELISK, impulsion astro, autres langues"
+  ] },
   { v: "2.99.1", date: "2026-11-27", titre: "Kit radio TCO7SG-KIT : marque PRASTEL", items: [
     "Le pont radio TCO7SG-KIT est rattaché à la marque PRASTEL (il était classé par erreur sous IST) ; la fiche, la notice et les schémas sont inchangés"
   ] },

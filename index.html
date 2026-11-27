@@ -551,6 +551,7 @@ body.atelier main{max-width:none}body.atelier #atl .list{grid-template-columns:1
 <script src="menu.js"></script> <!-- MENU -->
 <script src="live.js"></script> <!-- LIVE -->
 <script src="sim.js"></script> <!-- SIM -->
+<script src="horloge.js"></script> <!-- HOR -->
 <script src="cablage-casit.js"></script>
 <script src="cablage-bft.js"></script>
 <script src="cablage.js"></script> <!-- CAB -->
@@ -735,6 +736,7 @@ function viewHome(){
   T['#/calc/moteur'] = (()=>{ let h=''; h += `<button class="dbtn" onclick="go('#/calc/moteur')">Choisir une motorisation<small>selon le poids et la longueur du portail · Roger en premier · lien vers la carte de commande</small></button>`; /* CALC moteur */ return h; })();
   T['#/calc'] = (()=>{ let h=''; h += `<button class="dbtn" onclick="go('#/calc')">Calculs rapides : chute de tension, choix du moteur, conso 24 V<small>formules et hypothèses affichées</small></button>`; /* CALC */ return h; })();
   T['#/sim'] = (()=>{ let h=''; h += `<button class="dbtn" onclick="go('#/sim')">Simulateur de carte : s'entraîner sans portail<small>afficheur et touches Roger, dip-switch Casit · exercices corrigés</small></button>`; /* SIM */ return h; })();
+  T['#/hor'] = (()=>{ let h=''; h += `<button class="dbtn" onclick="go('#/hor')">Simulateur d'horloge Theben : programmer sans l'appareil<small>TR 641 / 642 / 644 top2 et top3 BLE RC · écran et touches comme la vraie · exercices</small></button>`; /* HOR */ return h; })();
   T['#/cab'] = (()=>{ let h=''; h += `<button class="dbtn" onclick="go('#/cab')">Atelier de câblage : câbler et tester une installation<small>Roger B70/1DCHP · on voit le courant passer · missions corrigées</small></button>`; /* CAB */ return h; })();
   T['#/quiz'] = (()=>{ let h=''; h += `<button class="dbtn" onclick="go('#/quiz')">Quiz de formation : codes erreur et borniers<small><b>BÊTA</b> · 10 questions tirées des fiches</small></button>`; /* QUIZ */ return h; })();
   T['#/cmp'] = (()=>{ let h=''; h += `<button class="dbtn" onclick="go('#/cmp')">Comparateur de borniers : remplacer une carte par une autre<small>bornes des deux cartes rangées par fonction · aide indicative</small></button>`; /* CMP */ return h; })();
@@ -746,18 +748,18 @@ function viewHome(){
   if (!homeMob()){
     document.body.classList.remove("hometabs");
     /* ordinateur : 4 rubriques avec paragraphe (la barre du bas reste réservée au téléphone et à la tablette) */
-    const RIC = {"#/ask":"💬","#/d":"🧭","#/scan":"📷","#/plan":"📐","#/rempl":"🔁","#/cmp":"⇄","#/a":"🔌","#/calc/moteur":"⚙️","#/calc":"🧮","#/sim":"🎛️","#/cab":"🔧","#/quiz":"❓"};
+    const RIC = {"#/ask":"💬","#/d":"🧭","#/scan":"📷","#/plan":"📐","#/rempl":"🔁","#/cmp":"⇄","#/a":"🔌","#/calc/moteur":"⚙️","#/calc":"🧮","#/sim":"🎛️","#/cab":"🔧","#/hor":"🕐","#/quiz":"❓"};
     const RUB = [
       ["Dépanner une installation","#e5372e","Vous avez un code, un symptôme ou une carte sous les yeux : trouvez la cause et la solution.",["#/ask","#/d","#/scan"]],
       ["Câbler et remplacer","#e07b00","Raccorder une carte, la remplacer par une autre, imprimer un schéma pour le chantier.",["#/plan","#/rempl","#/cmp"]],
       ["Choisir et calculer","#1f5fa8","Dimensionner une motorisation, vérifier une chute de tension ou la consommation 24 V.",["#/calc/moteur","#/calc","#/a"]],
-      ["Me former","#6d28d9","S'entraîner sans portail et tester ses connaissances sur les codes et les borniers.",["#/sim","#/cab","#/quiz"]]];
+      ["Me former","#6d28d9","S'entraîner sans portail et tester ses connaissances sur les codes et les borniers.",["#/sim","#/cab","#/hor","#/quiz"]]];
     h += `<h2>Que voulez-vous faire ?</h2><div class="rubs">` + RUB.map(r => `<section class="rub" style="--c:${r[1]}"><h3>${r[0]}</h3><p>${r[2]}</p>${r[3].map(k => T[k].replace('class="dbtn"', 'class="dbtn" data-i="' + RIC[k] + '"')).join("")}</section>`).join("") + `</div>` + rh + foot;
     app.innerHTML = h; return;
   }
   /* téléphone et tablette : 4 onglets en bas */
   const tab = Math.min(3, Math.max(0, +store.get("hometab", 0) || 0));
-  const SEC = [null, ["Dépanner", ["#/ask","#/scan","#/d","#/cmp"]], ["Outils", ["#/calc/moteur","#/calc","#/plan","#/rempl","#/a"]], ["Formation", ["#/sim","#/cab","#/quiz"]]];
+  const SEC = [null, ["Dépanner", ["#/ask","#/scan","#/d","#/cmp"]], ["Outils", ["#/calc/moteur","#/calc","#/plan","#/rempl","#/a"]], ["Formation", ["#/sim","#/cab","#/hor","#/quiz"]]];
   if (tab === 0) h += rh;
   else h = `<h2>${SEC[tab][0]}</h2>` + SEC[tab][1].map(k => T[k]).join("");
   app.innerHTML = h + (tab === 0 ? foot : "");
@@ -1220,6 +1222,7 @@ function route(){
   if (p[0] === "photos") return viewPhotosAdmin(p[1]); /* PHOTOS */
   if (p[0] === "sim") return viewSim(p[1]); /* SIM */
   if (p[0] === "cab") return viewCab(p[1]); /* CAB */
+  if (p[0] === "hor") return viewHor(p[1], p[2]); /* HOR */
   if (p[0] === "calc") return viewCalc(p[1]); /* CALC */
   if (p[0] === "plan") return viewPlan(p[1] ? decodeURIComponent(p[1]) : ""); /* PLAN */
   if (p[0] === "rempl") return viewRempl(p[1] && p[1] !== "-" ? decodeURIComponent(p[1]) : "", p[2] ? decodeURIComponent(p[2]) : ""); /* REMPL */
