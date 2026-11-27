@@ -2119,6 +2119,133 @@
       ]
     },
     {
+      "id": "ist-tco7sg-kit",
+      "nom": "TCO7SG-KIT",
+      "marque": "IST",
+      "couleur": "#4a5560",
+      "categorie": "Transmission radio de bande de sécurité 868 MHz (émetteur à piles + récepteur, contact sec ou 8K2)",
+      "modeles": "Pont radio IST TCO7SG-KIT : émetteur TCO7SG-TX (2 entrées) et récepteur TCO7SG-RX (2 sorties), appairés en usine, pour portails et portes coulissantes",
+      "source": "Notice d'utilisation IST TCO7SG-KIT (réf. ISTCO7SG-KIT_EU_1224), français / anglais / italien / espagnol / allemand, 39 p. — fichier fourni : ISTCO7SG_EU.pdf",
+      "resume": "Le TX, alimenté par 2 piles AA, lit l'état de 2 entrées (contact sec ou 8K2, par exemple un bord sensible mobile) et le transmet par radio 868 MHz au RX. Le RX, câblé sur les entrées de sécurité de la centrale, restitue 2 sorties relais (contact sec ou 8K2). La transmission est bidirectionnelle et chaque relais a une fonction d'autotest. Un RX mémorise jusqu'à 5 TX. Entrée 1 du TX = relais 1 du RX, entrée 2 = relais 2.",
+      "specs": [
+        [
+          "Alimentation RX",
+          "12-24 V AC/DC (maxi 28 V AC / 36 V DC)"
+        ],
+        [
+          "Consommation RX",
+          "Travail 90 mA, repos 50 mA"
+        ],
+        [
+          "Alimentation TX",
+          "2 piles AA 1,5 V alcalines, durée de vie environ 4 à 5 ans"
+        ],
+        [
+          "Consommation TX",
+          "En émission 12 mA, en veille 5 µA"
+        ],
+        [
+          "Fréquences",
+          "Fréquence 1 : 869,0 MHz · fréquence 2 : 868,3 MHz (2 choix possibles en cas de perturbation)"
+        ],
+        [
+          "Mémoire du RX",
+          "5 modules TX"
+        ],
+        [
+          "Portée radio",
+          "Jusqu'à 100 m dans des conditions optimales"
+        ],
+        [
+          "Entrées TX / sorties RX",
+          "2 entrées contact sec ou 8K2 / 2 sorties contact sec ou 8K2"
+        ],
+        [
+          "Capacité des contacts",
+          "0,5 A maxi à 24 V AC/DC"
+        ],
+        [
+          "Température",
+          "−20 °C à +55 °C (RX et TX)"
+        ],
+        [
+          "Dimensions et poids RX",
+          "80 × 73 × 30 mm, 56 g, IP54"
+        ],
+        [
+          "Dimensions et poids TX",
+          "160 × 55 × 26 mm, 173 g, IP66"
+        ]
+      ],
+      "raccordement": [
+        {
+          "n": "RX : + · −",
+          "label": "Alimentation du récepteur",
+          "desc": "12/36 V DC ou 9/28 V AC."
+        },
+        {
+          "n": "RX : 1-2",
+          "label": "Contact relais 1",
+          "desc": "Sortie vers l'entrée sécurité de la centrale. Suit l'entrée 1 du TX (bornier droit B1). Type de signal choisi par le cavalier JP1."
+        },
+        {
+          "n": "RX : 3-4",
+          "label": "Contact relais 2",
+          "desc": "Suit l'entrée 2 du TX (bornier gauche B2), ou une alarme de pile faible si DIP 3 = ON. Type de signal choisi par le cavalier JP2."
+        },
+        {
+          "n": "RX : 5 · 6",
+          "label": "Autotest relais 1",
+          "desc": "Autotest 1 − (borne 5) et 1 + (borne 6), reliés aux bornes TEST de la centrale. Autotest négatif (DIP 1 = ON) : test en appliquant 0 V DC sur l'entrée 5. Autotest positif (DIP 1 = OFF) : test en appliquant 10-24 V DC sur l'entrée 6."
+        },
+        {
+          "n": "RX : 7 · 8",
+          "label": "Autotest relais 2",
+          "desc": "Autotest 2 − (borne 7) et 2 + (borne 8). Négatif : 0 V DC sur l'entrée 7. Positif : 10-24 V DC sur l'entrée 8."
+        },
+        {
+          "n": "RX : GND · ANT",
+          "label": "Antenne",
+          "desc": "Bornier d'antenne du récepteur. Si le RX est monté dans un caisson métallique, prévoir une antenne extérieure."
+        },
+        {
+          "n": "TX : B1 (droit)",
+          "label": "Entrée 1",
+          "desc": "Commande le relais 1 du RX (bornes 1-2). Contact sec ou 8K2 selon DIP 3."
+        },
+        {
+          "n": "TX : B2 (gauche)",
+          "label": "Entrée 2",
+          "desc": "Commande le relais 2 du RX (bornes 3-4). Contact sec ou 8K2 selon DIP 1."
+        },
+        {
+          "n": "TX : entrée inutilisée",
+          "label": "À shunter",
+          "desc": "Une entrée non utilisée doit être shuntée et configurée en tout ou rien."
+        }
+      ],
+      "installation": [
+        "Retirer la languette isolante des piles du TX avant la première utilisation. Respecter la polarité, utiliser le type d'origine, ne pas recharger les piles, déposer les usagées dans les conteneurs prévus.",
+        "DIP du RX (valeur par défaut = OFF) : DIP 1 autotest (ON = négatif, OFF = positif) · DIP 2 buzzer (ON = inactif, OFF = actif) · DIP 3 relais 2 (ON = alarme pile faible d'un TX, OFF = sortie du TX) · DIP 4 fréquence (ON = fréquence 1, OFF = fréquence 2).",
+        "Cavaliers du RX : JP1 = relais 1, JP2 = relais 2, chacun à 2 positions. Contact 8K2 (position par défaut) : 8,2 kΩ sans alarme, contact fermé (0 Ω) en cas d'alarme ou sans alimentation. Contact sec : fermé sans alarme, ouvert en alarme ou sans alimentation.",
+        "DIP du TX (valeur par défaut = OFF) : DIP 1 entrée 2 (ON = 8K2, OFF = tout ou rien) · DIP 2 bande (ON = étroite, OFF = large) · DIP 3 entrée 1 (ON = 8K2, OFF = tout ou rien) · DIP 4 fréquence (ON = fréquence 1, OFF = fréquence 2). La fréquence (DIP 4) doit être la même sur le RX et le TX.",
+        "Environnement radio difficile : choisir la bande étroite (DIP 2 du TX = ON). Après toute modification du DIP 2, refaire l'appairage.",
+        "Appairage (kit déjà appairé en usine ; jusqu'à 5 TX par RX) : contrôler que DIP 4 est identique sur RX et TX. Sur le RX, appuyer sur PROG.RX plus de 2 s : 1 bip, les LED R, 1 et 2 restent allumées. Puis sur le TX, appuyer sur PROG.TX plus de 2 s : sa LED s'allume 2 s. Appairage réussi : le RX émet 2 bips et sa LED R clignote 2 fois, la LED du TX clignote 3 fois rapidement. Sans réponse, recommencer. Sortir du mode appairage sur le RX : appui bref sur PROG.RX (1 bip) ou attendre 60 s.",
+        "Un deuxième TX s'appaire de la même façon sur le même RX encore en mode appairage. Un TX appairé associe son entrée 1 au relais 1 et son entrée 2 au relais 2.",
+        "Effacer la mémoire du RX (efface tous les TX) : appui sur PROG.RX plus de 5 s (bips rapprochés, LED R, 1 et 2 clignotent vite), relâcher puis ré-appuyer brièvement : 2 bips, la LED R clignote 2 fois, effacement confirmé. Sans second appui, le module quitte le mode après 5 s.",
+        "Effacer la mémoire du TX (le met en sommeil, sans émission radio) : appui sur PROG.TX plus de 5 s (LED rapide), relâcher puis ré-appuyer brièvement : la LED clignote 1 fois lentement puis 3 fois rapidement.",
+        "Mode visualisation du RX (niveau de réception de chaque TX) : appui bref sur PROG.RX, LED4 clignote vite 5 fois, puis lentement selon le rang du TX, et LED1 clignote selon la réception : 0 = pas de réception, 1 = très faible, 2 = faible, 3 = moyen, 4 = bon, 5 = très bon. Dans ce mode les LED de contacts et le buzzer sont coupés, les relais fonctionnent normalement.",
+        "Mode visualisation du TX : appui bref sur PROG.TX. LED qui clignote vite = émetteur non appairé. LED qui clignote lentement = appairé, le nombre de clignotements est son rang dans la mémoire du RX."
+      ],
+      "notes": [
+        "LED du RX : contact TX fermé ou 8K2 présent = LED 1 (entrée 1) ou LED 2 (entrée 2) et relais allumés. Contact ouvert ou 8K2 absent = éteints avec 2 bips (entrée contact sec) ou 3 bips (entrée 8K2). Perte de réception d'un TX : LED qui clignote rapidement, relais coupé, 6 bips toutes les 30 s. Aucun TX programmé : LED R (bleue) allumée fixe. Normal : LED R clignote autant de fois que de TX en mémoire.",
+        "Pile du TX (avec DIP 3 du RX = ON) : presque basse = LED 2 allumée, LED R clignote d'abord très vite environ 10 fois puis lentement selon le n° du TX concerné, 4 bips toutes les 30 s. Trop basse = LED R, 1 et 2 clignotent selon le n° du TX, relais 2 coupé, 5 bips toutes les 30 s.",
+        "Avec DIP 3 = OFF, le relais 2 du RX suit l'entrée 2 du TX ; avec DIP 3 = ON il sert d'alarme de pile faible et n'est plus disponible pour l'entrée 2.",
+        "Notice en 5 langues : le français occupe les pages 3 à 9, les consignes de sécurité sont aux pages 38-39.",
+        "L'installation est à faire par du personnel qualifié, le produit dans une armoire non accessible à l'opérateur, avec une protection contre les surtensions et un sectionneur adaptés sur le réseau (consignes de sécurité de la notice)."
+      ]
+    },
+    {
       "id": "ist-bs10",
       "nom": "BS10",
       "marque": "IST",

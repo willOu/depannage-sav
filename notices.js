@@ -1193,6 +1193,16 @@ window.NOTICES_PDF = {
 "m": 0
 }
 ],
+"ist-tco7sg-kit": [
+{
+  "f": "notices/ist-tco7sg-kit-notice.pdf",
+  "t": "Notice d'utilisation IST TCO7SG-KIT (FR p. 3-9, 5 langues)",
+  "p": 39,
+  "pt": 39,
+  "ko": 4921,
+  "m": 0
+}
+],
 "ist-bs10": [
 {
 "f": "notices/fyese1.pdf",

@@ -192,6 +192,10 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "2.98", date: "2026-11-27", titre: "IST : pont radio TCO7SG-KIT", items: [
+    "Nouvelle fiche accessoire IST TCO7SG-KIT : pont radio 868 MHz pour bords sensibles et sécurités (émetteur à piles + récepteur), avec bornier du récepteur, DIP et cavaliers JP1 / JP2 (8K2 ou contact sec), autotest, appairage, effacement de la mémoire, niveau de réception et voyants",
+    "Notice PDF d'origine (5 langues, le français aux pages 3 à 9) et 5 schémas dans l'appli"
+  ] },
   { v: "2.97", date: "2026-11-24", titre: "Nouvelle marque Magnetic", items: [
     "Nouvelle marque Magnetic (logo sur l'accueil) avec 5 fiches : logique MLC 10 / 11, barrières MAGSTOP MIB 20 / 30 / 40 et MTS 6 / 8, détecteur de boucle MID 1 et tambour de sécurité MPT-132",
     "MLC : bornes 1 à 42 relevées sur le schéma, sélecteur rotatif 0 à F, programmes 1 à 8, modes des boucles A et B avec les relais K1 et K2, réglage du capteur angulaire, optimisation du freinage, resets et lectures (heures, manœuvres)",

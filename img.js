@@ -309,6 +309,13 @@
       S("magnetic-mpt132-p53", "DIP S2", 53, "Préchauffage, force de poussée, vitesse, sens de la course de référence."),
       S("magnetic-mpt132-p62", "Codes d'erreur du MBC-110", 62, "Tableau des messages d'erreur et réinitialisation automatique.")
     ],
+    "ist-tco7sg-kit": [
+      S("ist-tco7sg-p3", "Données techniques et principe", 3, "Notice p. 3 : fonctionnement TX/RX, caractéristiques du récepteur et de l'émetteur."),
+      S("ist-tco7sg-p4", "Récepteur : DIP, cavaliers, bornier", 4, "Notice p. 4 : DIP 1 à 4, cavaliers JP1/JP2 (8K2 ou contact sec), bornes 1 à 8, exemples d'autotest."),
+      S("ist-tco7sg-p5", "Émetteur : entrées, DIP, piles", 5, "Notice p. 5 : bornes B1/B2 et relais associés du RX, DIP 1 à 4, languette des piles."),
+      S("ist-tco7sg-p6", "Appairage", 6, "Notice p. 6 : étapes d'appairage RX puis TX et sortie du mode."),
+      S("ist-tco7sg-p8", "Visualisation et voyants", 8, "Notice p. 8 : niveau de réception, voyants du TX et du RX, pile faible.")
+    ],
     "as-bl12": [
       S("as-bl12-p11", "Logique de commande (fig. 6)", 11, "Connecteurs X1 à X10, fusible, interrupteur, dip-switchs SW1, bouton AN, potentiomètre VR1, LED."),
       S("as-bl12-p09", "Connexions électriques", 9, "Alimentation, boîte à boutons, fins de course, boucle, cellules IR, gyrophare."),
