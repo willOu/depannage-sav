@@ -1196,7 +1196,7 @@ window.NOTICES_PDF = {
 "ist-tco7sg-kit": [
 {
   "f": "notices/ist-tco7sg-kit-notice.pdf",
-  "t": "Notice d'utilisation IST TCO7SG-KIT (FR p. 3-9, 5 langues)",
+  "t": "Notice d'utilisation Prastel TCO7SG-KIT (FR p. 3-9, 5 langues)",
   "p": 39,
   "pt": 39,
   "ko": 4921,

@@ -192,6 +192,9 @@ const NOTICES = {
 };
 
 const CHANGELOG = [
+  { v: "3.00", date: "2026-11-27", titre: "Kit radio TCO7SG-KIT : marque PRASTEL", items: [
+    "Le pont radio TCO7SG-KIT est rattaché à la marque PRASTEL (il était classé par erreur sous IST) ; la fiche, la notice et les schémas sont inchangés"
+  ] },
   { v: "2.99", date: "2026-11-27", titre: "Pages marques triées : cartes, moteurs, accessoires", items: [
     "Chaque logo de l'accueil ouvre une page triée : Cartes de commande, Moteurs, Accessoires (par famille), avec une barre de filtre et les nombres",
     "Les accessoires et moteurs des marques sont maintenant tous accessibles depuis leur logo"

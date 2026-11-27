@@ -2121,11 +2121,11 @@
     {
       "id": "ist-tco7sg-kit",
       "nom": "TCO7SG-KIT",
-      "marque": "IST",
-      "couleur": "#4a5560",
+      "marque": "PRASTEL",
+      "couleur": "#1a6fb5",
       "categorie": "Transmission radio de bande de sécurité 868 MHz (émetteur à piles + récepteur, contact sec ou 8K2)",
-      "modeles": "Pont radio IST TCO7SG-KIT : émetteur TCO7SG-TX (2 entrées) et récepteur TCO7SG-RX (2 sorties), appairés en usine, pour portails et portes coulissantes",
-      "source": "Notice d'utilisation IST TCO7SG-KIT (réf. ISTCO7SG-KIT_EU_1224), français / anglais / italien / espagnol / allemand, 39 p. — fichier fourni : ISTCO7SG_EU.pdf",
+      "modeles": "Pont radio Prastel TCO7SG-KIT : émetteur TCO7SG-TX (2 entrées) et récepteur TCO7SG-RX (2 sorties), appairés en usine, pour portails et portes coulissantes",
+      "source": "Notice d'utilisation Prastel TCO7SG-KIT (réf. ISTCO7SG-KIT_EU_1224), français / anglais / italien / espagnol / allemand, 39 p. — fichier fourni : ISTCO7SG_EU.pdf",
       "resume": "Le TX, alimenté par 2 piles AA, lit l'état de 2 entrées (contact sec ou 8K2, par exemple un bord sensible mobile) et le transmet par radio 868 MHz au RX. Le RX, câblé sur les entrées de sécurité de la centrale, restitue 2 sorties relais (contact sec ou 8K2). La transmission est bidirectionnelle et chaque relais a une fonction d'autotest. Un RX mémorise jusqu'à 5 TX. Entrée 1 du TX = relais 1 du RX, entrée 2 = relais 2.",
       "specs": [
         [
